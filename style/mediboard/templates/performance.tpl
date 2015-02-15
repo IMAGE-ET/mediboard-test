@@ -75,39 +75,27 @@
     </ul>
   </li>
   
-  <li class="performance-function">
-    <span class="performance-count">{{$performance.functionCache.total}}</span>
-    <ul>
-      {{foreach from=$performance.functionCache.totals key=_function item=_hits}}
-      <li>
-        <strong>{{$_function}}</strong>
-        <span class="performance-count">{{$_hits}}</span>
-      </li>
+  <li class="performance-cache">
+    <span class="performance-count">{{$performance.cache.total}}</span>
+    <table>
+      {{foreach from=$performance.cache.totals key=_prefix item=_layers}}
+        <tr>
+          <td><strong>{{$_prefix}}</strong></td>
+        {{foreach from=$_layers key=_layer item=_count name=layers}}
+            {{if $_count}}
+              <td><span class="performance-count">{{$_count}}</span></td>
+              <td><tt>{{$_layer}}</tt></td>
+            {{else}}
+              <td colspan="2"></td>
+            {{/if}}
+        {{/foreach}}
+        </tr>
       {{foreachelse}}
-        <li class="empty">Aucune function cachée</li>
+        <tr><td class="empty">Aucun cache utilisé</td></tr>
       {{/foreach}}
-    </ul>
+    </table>
   </li>
-  
-  {{*
-  <li class="performance-ccam">
-    <span class="performance-count">{{$performance.ccam.cacheCount}}</span>
-    <ul>
-      <li>
-        <strong>light</strong> 
-        <span class="performance-count">{{$performance.ccam.useCount.1}}</span>
-      </li>
-      <li>
-        <strong>medium</strong> 
-        <span class="performance-count">{{$performance.ccam.useCount.2}}</span>
-      </li>
-      <li>
-        <strong>full</strong> 
-        <span class="performance-count">{{$performance.ccam.useCount.3}}</span>
-      </li>
-    </ul>
-  </li>
-  *}}
+
 
   <li class="performance-pagesize">
     <strong class="title">Taille de la page</strong>

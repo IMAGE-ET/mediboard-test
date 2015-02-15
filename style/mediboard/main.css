@@ -357,8 +357,8 @@ div.generated {
   background-image: url(../../images/icons/autoload.png);
 }
 
-#performance > li.performance-function:before {
-  background-image: url(../../images/icons/functions.png);
+#performance > li.performance-cache:before {
+  background-image: url(../../images/icons/cache.png);
 }
 
 #performance > li.performance-ccam:before {
@@ -403,7 +403,8 @@ div.generated {
   content: "x";
 }
 
-#performance > li > ul {
+#performance > li > ul,
+#performance > li > table {
   display: none;
   background: #eee;
 }
@@ -416,7 +417,8 @@ div.generated {
   background: #eee;
 }
 
-#performance > li:hover > ul {
+#performance > li:hover > ul,
+#performance > li:hover > table {
   border: 1px solid #ddd;
   border-bottom: none;
   display: block;

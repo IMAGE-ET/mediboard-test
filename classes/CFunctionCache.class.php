@@ -11,58 +11,50 @@
 
 /**
  * Utility class for function calls cache
- * Will only work with functions and static method, no this context allowed
- * Function paramaters are also discremenent on cache key
+ *
+ * @deprecated Use Cache object instead
  */
 class CFunctionCache {
-  static $data = array();
-  static $hits = array();
-  static $totals = array();
-  static $total = 0;
-
   /**
    * Inform whether formerly cached value of caller fonction is available
-   * 
+   *
+   * @param array $context Context as (methode name, array of params)
+   *
    * @return bool
+   * @deprecated Use Cache::exists() non-static method instead
    */
   static function exist($context) {
     list($function, $args) = $context;
-    $args = implode("-", $args);
-
-    if (!array_key_exists($function, self::$data) || !array_key_exists($args, self::$data[$function])) {
-      return false;
-    }
-    
-    return true;    
+    $cache = new Cache($function, $args, Cache::INNER);
+    return $cache->exists();
   }
 
   /**
    * Try to get a formerly cached value of caller fonction
-   * 
+   *
+   * @param array $context Context as (methode name, array of params)
+   *
    * @return mixed Cached value, null if no cached value available
+   * @deprecated Use Cache::get() non-static method instead
    */
   static function get($context) {
     list($function, $args) = $context;
-    $args = implode("-", $args);
-    self::$total++;
-    self::$totals[$function]++;
-    self::$hits  [$function][$args]++;
-    return self::$data[$function][$args];
+    $cache = new Cache($function, $args, Cache::INNER);
+    return $cache->get();
   }
 
   /**
    * Set the cached value for function caller with hashed arguments
-   * 
+   *
+   * @param array $context Context as (methode name, array of params)
    * @param mixed $value Value cache
    * 
    * @return mixed Cached value, useful for chaining returns
+   * @deprecated Use Cache::put() non-static method instead
    */
   static function set($context, $value) {
     list($function, $args) = $context;
-    $args = implode("-", $args);
-    self::$totals[$function] = 0;
-    self::$hits  [$function][$args] = 0;
-    self::$data  [$function][$args] = $value;
-    return $value;
+    $cache = new Cache($function, $args, Cache::INNER);
+    return $cache->put($value);
   }
 }

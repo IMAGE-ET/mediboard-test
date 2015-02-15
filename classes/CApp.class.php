@@ -534,14 +534,10 @@ class CApp {
     self::$performance["ip"]             = $_SERVER["SERVER_ADDR"];
 
     self::$performance["size"] = CHTMLResourceLoader::getOutputLength();
-    self::$performance["ccam"] = array (
-      "cacheCount" => class_exists("CCodeCCAM") ? CCodeCCAM::$cacheCount : 0,
-      "useCount"   => class_exists("CCodeCCAM") ? CCodeCCAM::$useCount   : 0
-    );
-    
-    self::$performance["functionCache"] = array(
-      "totals" => CFunctionCache::$totals,
-      "total"  => CFunctionCache::$total,
+
+    self::$performance["cache"] = array(
+      "totals" => Cache::$totals,
+      "total"  => Cache::$total,
     );
 
     $time = 0;

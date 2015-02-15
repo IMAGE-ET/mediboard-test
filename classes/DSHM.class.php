@@ -16,7 +16,7 @@ require_once __DIR__."/SHM.class.php";
  */
 abstract class DSHM extends SHM {
   /**
-   * Get a value from the shared memory, from the distributed cvache
+   * Get a value from the shared memory, using the distributed engine
    *
    * @param string $key The key of the value to get
    *
@@ -27,7 +27,7 @@ abstract class DSHM extends SHM {
   }
 
   /**
-   * Save a value in the shared memory, from the distributed cache
+   * Save a value in the shared memory, using the distributed engine
    *
    * @param string $key      The key to pu the value in
    * @param mixed  $value    The value to put in the shared memory
