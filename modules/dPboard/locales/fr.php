@@ -1,7 +1,6 @@
 <?php
 $locales['mod-dPboard-tab-ajax_export_interv_non_cotees'] = 'Export interventions non cotées';
 $locales['mod-dPboard-tab-ajax_list_interv_non_cotees'] = 'Interventions non cotées';
-$locales['mod-dPboard-tab-ajax_list_interv_non_cotees2'] = 'Interventions non cotées';
 $locales['mod-dPboard-tab-ajax_vw_month'] = 'Affichage mensuel';
 $locales['mod-dPboard-tab-ajax_worklist'] = 'Prescriptions et actes';
 $locales['mod-dPboard-tab-export_ical'] = 'Export ical';
