@@ -30,7 +30,7 @@
     <th>Actes cotés</th>
   </tr>
   <tr>
-    <th class="section" colspan="6">Interventions</th>
+    <th class="section" colspan="6">Interventions ({{$interventions|@count}} / {{$totals.interventions}})</th>
   </tr>
   
   {{foreach from=$interventions item=_interv}}
@@ -111,7 +111,7 @@
   {{/foreach}}
 
   <tr>
-    <th class="section" colspan="6">Consultations</th>
+    <th class="section" colspan="6">Consultations ({{$consultations|@count}} / {{$totals.consultations}})</th>
   </tr>
   {{foreach from=$consultations item=consult}}
     {{assign var=patient value=$consult->_ref_patient}}

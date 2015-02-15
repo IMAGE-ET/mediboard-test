@@ -608,6 +608,9 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->_acte_depassement        = $this->depassement;
     $this->_acte_depassement_anesth = $this->depassement_anesth;
+
+    $this->updateView();
+    $this->updateDatetimes();
   }
 
   /**
@@ -1253,7 +1256,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_view .= " [HP]";
     }
 
-    $this->_view .= " le " . CMbDT::format($this->_datetime, CAppUI::conf("date"));
+    $this->_view .= " le " . CMbDT::format($this->date, CAppUI::conf("date"));
 
     if ($this->_ref_patient) {
       $this->_view .= " de ". $this->_ref_patient->_view;
@@ -1271,7 +1274,7 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function updateDatetimes() {
     $plage = $this->_ref_plageop;
-    $date = $plage && $plage->_id ? $plage->date : $this->date;
+    $date = $this->date;
 
     // Calcul du nombre de jour entre la date actuelle et le jour de l'operation
     $this->_compteur_jour = CMbDT::daysRelative($date, CMbDT::date());

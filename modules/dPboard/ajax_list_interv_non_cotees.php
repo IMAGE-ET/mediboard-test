@@ -31,6 +31,11 @@ $where = array();
 $where["operations.date"] = "BETWEEN '$debut' AND '$fin'";
 $where["operations.annulee"] = "= '0'";
 
+/**
+ * Loading and analysis code above is duplicated for COperation and CConsultation
+ * @TODO Unifiy them as CCodables, for chrissake !!
+ */
+
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
   $in_prats = CSQLDataSource::prepareIn(array_keys($prats));
@@ -53,9 +58,9 @@ else {
 
 /** @var COperation[] $interventions */
 $operation = new COperation();
+$where[] = "LENGTH(codes_ccam) > 0";
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
-
-CStoredObject::massLoadFwdRef($interventions, "plageop_id");
+$totals["interventions"] = count($interventions);
 
 $where = array();
 if (!$all_prats) {
@@ -65,10 +70,13 @@ if (!$all_prats) {
 
 CStoredObject::massCountBackRefs($interventions, "actes_ccam", $where);
 
+// Préparation des interventions
+CDatedCodeCCAM::$cache_layers = Cache::INNER_OUTER;
 foreach ($interventions as $key => $_interv) {
-  $_plage = $_interv->loadRefPlageOp();
   $_interv->loadExtCodesCCAM();
+}
 
+foreach ($interventions as $key => $_interv) {
   $codes_ccam = $_interv->_ext_codes_ccam;
 
   // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
@@ -140,6 +148,7 @@ $where = array();
 $where["sejour.entree"] = " BETWEEN '$debut' AND '$fin'";
 $where["sejour.annule"] = "= '0'";
 $where["consultation.annule"] = "= '0'";
+$where[] = "LENGTH(consultation.codes_ccam) > 0";
 
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
@@ -152,6 +161,7 @@ else {
 /* @var CConsultation[] $consultations*/
 $consultation = new CConsultation();
 $consultations = $consultation->loadList($where, null, null, null, $ljoin);
+$totals["consultations"] = count($consultations);
 
 /** @var CPlageConsult[] $plages */
 $plages = CStoredObject::massLoadFwdRef($consultations, "plageconsult_id");
@@ -166,12 +176,6 @@ CStoredObject::massLoadFwdRef($chirs, "function_id");
 CStoredObject::massLoadBackRefs($consultations, "actes_ccam");
 
 foreach ($consultations as $key => $_consult) {
-  // On ignore les consultation ayant des actes NGAP
-  if ($_consult->countBackRefs("actes_ngap")) {
-    unset($consultations[$key]);
-    continue;
-  }
-
   // Chargemement des codes CCAM
   $_consult->loadExtCodesCCAM();
   $codes_ccam = $_consult->_ext_codes_ccam;
@@ -226,6 +230,7 @@ $consultations = CModelObject::naturalSort($consultations, array("_date"));
 
 $smarty = new CSmartyDP();
 
+$smarty->assign("totals"       , $totals);
 $smarty->assign("interventions", $interventions);
 $smarty->assign("consultations", $consultations);
 $smarty->assign("debut"        , $debut);
