@@ -77,15 +77,6 @@ class COldCodeCCAM {
   const MEDIUM = 2;
   const FULL   = 3;
 
-  // Utilisation du cache
-  static $useCache   = true;
-  static $cacheCount = 0;
-  static $useCount   = array(
-    self::LITE   => 0,
-    self::MEDIUM => 0,
-    self::FULL   => 0,
-  );
-
   /** @var CMbObjectSpec */
   static $spec = null;
 
@@ -164,21 +155,16 @@ class COldCodeCCAM {
    * @return COldCodeCCAM
    */
   static function get($code, $niv = self::MEDIUM) {
-    if (self::$useCache) {
-      self::$useCount[$niv]++;
-      if ($code_ccam = SHM::get("code_ccam-$code-$niv")) {
-        self::$cacheCount++;
-        return $code_ccam;
-      }
+    $cache = new Cache(__METHOD__, func_get_args(), Cache::INNER_OUTER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
+
     // Chargement
     $code_ccam = new COldCodeCCAM($code);
     $code_ccam->load($niv);
-    if (self::$useCache) {
-      SHM::put("code_ccam-$code-$niv", $code_ccam);
-    }
 
-    return $code_ccam;
+    return $cache->put($code_ccam, true);
   }
 
   /**

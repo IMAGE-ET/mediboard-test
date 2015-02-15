@@ -63,13 +63,6 @@ class CCodeCCAM extends CCCAM {
   public $_activite;
   public $_phase;
 
-  // Utilisation du cache
-  static $cacheCount     = 0;
-  static $useCount       = 0;
-  static $cacheCountLite = 0;
-  static $useCountLite   = 0;
-  static $cache = array();
-  static $cacheLite = array();
   /**
    * Constructeur à partir du code CCAM
    *
@@ -99,32 +92,19 @@ class CCodeCCAM extends CCCAM {
     return null;
   }
 
-  /**
-   * Chargement optimisé des codes CCAM
-   *
-   * @param string $code Code CCAM
-   *
-   * @return CCodeCCAM
-   */
+  static $cache_layers = Cache::INNER_OUTER;
+
   static function get($code) {
-    self::$useCount++;
-
-    if (isset(self::$cache[$code])) {
-      return self::$cache[$code];
-    }
-
-    if ($code_ccam = SHM::get("codeccam-$code")) {
-      self::$cacheCount++;
-      self::$cache[$code] = $code_ccam;
-      return $code_ccam;
+    $cache = new Cache(__METHOD__, func_get_args(), self::$cache_layers);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     // Chargement
     $code_ccam = new CCodeCCAM($code);
     $code_ccam->load();
-    SHM::put("codeccam-$code", $code_ccam, true);
-    self::$cache[$code] = $code_ccam;
-    return $code_ccam;
+
+    return $cache->put($code_ccam, true);
   }
 
   /**
@@ -395,16 +375,9 @@ class CCodeCCAM extends CCCAM {
    * @return array()
    */
   static function getCodeInfos($code) {
-    self::$useCountLite++;
-
-    if (isset(self::$cacheLite[$code])) {
-      return self::$cacheLite[$code];
-    }
-
-    if ($code_ccam = SHM::get("codeccamlite-$code")) {
-      self::$cacheCountLite++;
-      self::$cacheLite[$code] = $code_ccam;
-      return $code_ccam;
+    $cache = new Cache(__METHOD__, func_get_args(), self::$cache_layers);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     // Chargement
@@ -416,9 +389,8 @@ class CCodeCCAM extends CCCAM {
     $query = $ds->prepare($query, $code);
     $result = $ds->exec($query);
     $code_ccam = $ds->fetchArray($result);
-    SHM::put("codeccamlite-$code", $code_ccam);
-    self::$cacheLite[$code] = $code_ccam;
-    return $code_ccam;
+
+    return $cache->put($code_ccam, true);
   }
 
   /**

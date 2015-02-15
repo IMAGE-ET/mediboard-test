@@ -26,11 +26,6 @@ class CDentCCAM extends CCCAM {
   public $localisation;
   public $_libelle;
 
-  // Utilisation du cache
-  static $useCache       = true;
-  static $cacheCount     = 0;
-  static $useCount       = 0;
-
   /**
    * Mapping des données depuis la base de données
    *
@@ -50,12 +45,9 @@ class CDentCCAM extends CCCAM {
    * @return self[] Liste des dents
    */
   static function loadList() {
-    if (self::$useCache) {
-      self::$useCount++;
-      if ($listDents = SHM::get("dentsccam")) {
-        self::$cacheCount++;
-        return $listDents;
-      }
+    $cache = new Cache(__METHOD__, func_get_args(), Cache::INNER_OUTER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     $ds = self::getSpec()->ds;
@@ -74,11 +66,7 @@ class CDentCCAM extends CCCAM {
       $listDents[$row["DATEFIN"]][] = $dent;
     }
 
-    if (self::$useCache) {
-      SHM::put("dentsccam", $listDents);
-    }
-
-    return $listDents;
+    return $cache->put($listDents);
   }
 
   /**

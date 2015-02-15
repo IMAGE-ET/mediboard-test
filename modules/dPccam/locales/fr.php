@@ -1,6 +1,10 @@
 <?php
 $locales['CActe'] = 'Actes';
 $locales['CActeCCAM-title-modify'] = 'Modification Acte CCAM';
+$locales['CActeCCAM.rapport_exoneration.4'] = 'exo 4';
+$locales['CActeCCAM.rapport_exoneration.7'] = 'exo 7';
+$locales['CActeCCAM.rapport_exoneration.C'] = 'exo C';
+$locales['CActeCCAM.rapport_exoneration.R'] = 'exo R';
 $locales['CCAM'] = 'CCAM';
 $locales['CCodable'] = 'Codable';
 $locales['CCodable-actes'] = 'Actes';
@@ -363,7 +367,6 @@ $locales['mod-dPccam-tab-ajax_refresh_add_frais_divers'] = 'Rafraîchissement des
 $locales['mod-dPccam-tab-ajax_vw_detail_cccam'] = 'Détail du code';
 $locales['mod-dPccam-tab-code_selector_ccam'] = 'Recherche de code CCAM';
 $locales['mod-dPccam-tab-configure'] = 'Configuration';
-$locales['mod-dPccam-tab-empty_shared_memory'] = 'Vider la mémoire partagée';
 $locales['mod-dPccam-tab-httpreq_do_add_ccam'] = 'Importer la base de données CCAM';
 $locales['mod-dPccam-tab-httpreq_do_add_forfaits'] = 'Ajouter les types de forfait';
 $locales['mod-dPccam-tab-httpreq_do_add_ngap'] = 'Import de la base NGAP';
@@ -372,8 +375,6 @@ $locales['mod-dPccam-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = 'Mes favoris';
 $locales['mod-dPccam-tab-vw_idx_frais_divers_types'] = 'Types de frais divers';
-$locales['module-ccam-msg-cache-code_ccam-suppr'] = '%d codes CCAM supprimés du cache';
-$locales['module-ccam-msg-cache-code_ccam_lite-suppr'] = '%d codes CCAM minimaux supprimés du cache';
 $locales['module-dPccam-court'] = 'CCAM';
 $locales['module-dPccam-long'] = 'Aide au codage CCAM';
 $locales['pref-actes_comp_supp_favoris'] = 'Afficher les actes des chapitres 18 et 19 dans les favoris';

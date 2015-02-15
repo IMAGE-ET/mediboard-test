@@ -52,8 +52,6 @@ class CDatedCodeCCAM {
   public $_activite;
   public $_phase;
 
-  static $cache = array();
-
   /** @var CMbObjectSpec */
   public $_spec;
 
@@ -105,10 +103,12 @@ class CDatedCodeCCAM {
     else {
       $this->code = strtoupper($code);
     }
-    $this->date = $date ? $date : CMbDT::date();
+    $this->date = CMbDT::date($date);
 
     return null;
   }
+
+  static $cache_layers = Cache::OUTER;
 
   /**
    * Chargement optimisé des codes CCAM
@@ -124,10 +124,17 @@ class CDatedCodeCCAM {
       return COldCodeCCAM::get($code);
     }
 
+    // Cache by copy needed : OUTER
+    $date = CMbDT::date($date);
+    $cache = new Cache(__METHOD__, array($code, $date), self::$cache_layers);
+    if ($cache->exists()) {
+      return $cache->get();
+    }
+
     $code_ccam = new CDatedCodeCCAM($code, $date);
     $code_ccam->load();
 
-    return $code_ccam;
+    return $cache->put($code_ccam, true);
   }
 
   /**
@@ -139,6 +146,7 @@ class CDatedCodeCCAM {
   function load() {
     $this->_ref_code_ccam = CCodeCCAM::get($this->code);
     $this->_date = CMbDT::format($this->date, "%Y%m%d");
+
     if (!$this->getLibelles()) {
       return false;
     }
