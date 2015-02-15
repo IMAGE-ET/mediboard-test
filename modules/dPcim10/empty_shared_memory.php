@@ -11,5 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-$count = SHM::remKeys("code_cim-*");
-CAppUI::stepAjax("module-cim-msg-cache-code_cim-suppr", UI_MSG_OK, $count);
+$classes = array(
+  "CCodeCIM10",
+);
+
+foreach ($classes as $_class) {
+  $count = SHM::remKeys("$_class*");
+  CAppUI::stepAjax("module-system-msg-cache-removal", UI_MSG_OK, $count, $_class);
+}

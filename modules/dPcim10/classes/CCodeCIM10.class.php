@@ -62,16 +62,6 @@ class CCodeCIM10 {
   const MEDIUM = 2;
   const FULL   = 3;
 
-  static $cache = array();
-
-  static $cacheCount = 0;
-
-  static $useCount = array(
-    self::LITE   => 0,
-    self::MEDIUM => 0,
-    self::FULL   => 0,
-  );
-
   /** @var CMbObjectSpec */
   static $spec = null;
 
@@ -294,20 +284,15 @@ class CCodeCIM10 {
     return true;
   }
 
+  static $cache_layers = Cache::INNER_OUTER;
+
   /**
    * Chargement optimisé des codes
    */
   static function get($code, $niv = self::LITE, $lang = self::LANG_FR) {
-    self::$useCount[$niv]++;
-
-    $key_cache = "$code-$niv";
-    if (isset(self::$cache[$key_cache])) {
-      return self::$cache[$key_cache];
-    }
-    if ($code_cim = SHM::get("code_cim-$code-$niv")) {
-      self::$cacheCount++;
-      self::$cache[$key_cache] = $code_cim;
-      return $code_cim;
+    $cache = new Cache(__METHOD__, func_get_args(), self::$cache_layers);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     // Chargement
@@ -324,23 +309,7 @@ class CCodeCIM10 {
         $code_cim->loadRefs();
     }
 
-    SHM::put("code_cim-$code-$niv", $code_cim);
-    self::$cache[$key_cache] = $code_cim;
-
-    return $code_cim;
-  }
-
-  /**
-   * Should use clone with appropriate behaviour
-   * But a bit complicated to implement
-   *
-   * @return CCodeCIM10
-   */
-  function copy() {
-    $obj = unserialize(serialize($this));
-    $obj->_spec = self::$spec;
-
-    return $obj;
+    return $cache->put($code_cim, true);
   }
 
   function loadRefs() {
