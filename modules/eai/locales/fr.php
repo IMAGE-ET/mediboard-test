@@ -449,6 +449,7 @@ $locales['CExchangeDataFormat-_date_min-desc'] = 'Depuis le';
 $locales['CExchangeDataFormat-acquittement_valide-court'] = 'ACK valide';
 $locales['CExchangeDataFormat-acquittement_valide-desc'] = 'Acquittement valide ?';
 $locales['CExchangeDataFormat-confirm-IPP replaced'] = 'IPP remplacé dans le message';
+$locales['CExchangeDataFormat-confirm-NDA replaced'] = 'NDA remplacé dans le message';
 $locales['CExchangeDataFormat-confirm-exchange sent'] = 'Le message \'%s\' a été envoyé';
 $locales['CExchangeDataFormat-date_echange-court'] = 'Échange';
 $locales['CExchangeDataFormat-date_echange-desc'] = 'Date de l\'échange';

@@ -17,7 +17,7 @@
     <tr>
       <th>{{mb_label class=CExchangeDataFormat field="_date_min"}}</th>
       <td>
-        <input class="dateTime" type="hidden" name="date_min" value="" /> <br />
+        <input class="dateTime" type="hidden" name="date_min" value="{{$exchange->_date_min}}" /> <br />
         <script type="text/javascript">
           Main.add(function () {
             Calendar.regField(getForm('tools-{{$_tool_class}}-{{$_tool}}').date_min);
@@ -29,7 +29,7 @@
     <tr>
       <th>{{mb_label class=CExchangeDataFormat field="_date_max"}}</th>
       <td>
-        <input class="dateTime" type="hidden" name="date_max" value="" /> <br />
+        <input class="dateTime" type="hidden" name="date_max" value="{{$exchange->_date_max}}" /> <br />
         <script type="text/javascript">
           Main.add(function () {
             Calendar.regField(getForm('tools-{{$_tool_class}}-{{$_tool}}').date_max);
