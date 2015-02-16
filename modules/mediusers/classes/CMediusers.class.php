@@ -1820,9 +1820,9 @@ class CMediusers extends CPerson {
   }
 
   static function loadFromAdeli($adeli) {
-    $context = array(__METHOD__, func_get_args());
-    if (CFunctionCache::exist($context)) {
-      return CFunctionCache::get($context);
+    $cache = new Cache(__METHOD__, func_get_args(), Cache::INNER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     $mediuser                       = new CMediusers();
@@ -1830,7 +1830,7 @@ class CMediusers extends CPerson {
     $where["users_mediboard.adeli"] = " = '$adeli'";
     $mediuser->loadObject($where);
 
-    return CFunctionCache::set($context, $mediuser);
+    return $cache->put($mediuser, false);
   }
 
   function getLastLogin() {

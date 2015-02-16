@@ -310,6 +310,23 @@ class CGroups extends CEntity {
   }
 
   /**
+   * Lazy access to a given group, defaultly connected group
+   *
+   * @param integer $group_id The group id
+   *
+   * @return self
+   */
+  static function get($group_id = null) {
+    if ($group_id) {
+      $group = new self;
+
+      return $group->getCached($group_id);
+    }
+
+    return CGroups::loadCurrent();
+  }
+
+  /**
    * Load postes SSPI
    *
    * @param int  $permType  Permission level

@@ -24,21 +24,21 @@ class CHL7 {
    * @return string|null
    */
   static function getObjectTag($group_id = null) {
-    $context = array(get_called_class().":".__FUNCTION__, func_get_args());
-
-    if (CFunctionCache::exist($context)) {
-      return CFunctionCache::get($context);
-    }
-
-    $tag = self::getDynamicTag();
-
-    // Permettre des id externes en fonction de l'établissement
-    $group = CGroups::loadCurrent();
+    // Recherche de l'établissement
+    $group = CGroups::get($group_id);
     if (!$group_id) {
       $group_id = $group->_id;
     }
 
-    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag));
+    $cache = new Cache(get_called_class()."::".__FUNCTION__, array($group_id), Cache::INNER);
+
+    if ($cache->exists()) {
+      return $cache->get();
+    }
+
+    $tag = self::getDynamicTag();
+
+    return $cache->put(str_replace('$g', $group_id, $tag));
   }
 
   /**

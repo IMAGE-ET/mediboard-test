@@ -791,6 +791,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       return false;
     }
 
+    // Config
+    if ($this->type == "SSR" xor $sejour->type == "SSR") {
+      return false;
+    }
+
     if ($this->group_id != $sejour->group_id) {
       return false;
     }
@@ -2904,19 +2909,15 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return string|void
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
-    $context = array(__METHOD__, func_get_args());
-    if (CFunctionCache::exist($context)) {
-      return CFunctionCache::get($context);
-    }
-
-    // Permettre des IPP en fonction de l'établissement
+    // Recherche de l'établissement
+    $group = CGroups::get($group_id);
     if (!$group_id) {
-      $group = CGroups::loadCurrent();
       $group_id = $group->_id;
     }
-    else {
-      $group = new CGroups();
-      $group->load($group_id);
+
+    $cache = new Cache(__METHOD__, array($group_id, $type_tag), Cache::INNER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     // Gestion du tag NDA par son domaine d'identification
@@ -2927,7 +2928,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
       }
 
-      return CFunctionCache::set($context, $tag_NDA);
+      return $cache->put($tag_NDA, false);
     }
 
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
@@ -2944,7 +2945,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Pas de tag Num dossier
     if (null == $tag_NDA) {
-      return CFunctionCache::set($context, null);
+      return $cache->put(null, false);
     }
 
     // Préférer un identifiant externe de l'établissement
@@ -2954,7 +2955,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $group_id = $idex->id400;
     }
 
-    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag_NDA));
+    return $cache->put(str_replace('$g', $group_id, $tag_NDA), false);
   }
 
   /**

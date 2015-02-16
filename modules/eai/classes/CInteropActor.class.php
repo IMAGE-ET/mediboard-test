@@ -194,14 +194,15 @@ class CInteropActor extends CMbObject {
    * @return string
    */
   function getTag($group_id) {
-    $context = array(__METHOD__, func_get_args());
-    if (CFunctionCache::exist($context)) {
-      return CFunctionCache::get($context);
-    }
-
-    $group = CGroups::loadCurrent();
+    // Recherche de l'établissement
+    $group = CGroups::get($group_id);
     if (!$group_id) {
       $group_id = $group->_id;
+    }
+
+    $cache = new Cache(__METHOD__, array($group_id), Cache::INNER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     $ljoin["group_domain"] = "`group_domain`.`domain_id` = `domain`.`domain_id`";
@@ -215,7 +216,7 @@ class CInteropActor extends CMbObject {
     $domain = new CDomain();
     $domain->loadObject($where, null, null, $ljoin);
 
-    return CFunctionCache::set($context, $domain->tag);
+    return $cache->put($domain->tag, false);
   }
 
   /**

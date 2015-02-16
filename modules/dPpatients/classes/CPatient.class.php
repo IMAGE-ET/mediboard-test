@@ -1907,29 +1907,25 @@ class CPatient extends CPerson {
    * @return string|null
    */
   static function getTagIPP($group_id = null) {
-    $context = array(__METHOD__, func_get_args());
-    if (CFunctionCache::exist($context)) {
-      return CFunctionCache::get($context);
+    // Recherche de l'établissement
+    $group = CGroups::get($group_id);
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+
+    $cache = new Cache(__METHOD__, array($group_id), Cache::INNER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
 
     // Gestion du tag IPP par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
-      return CFunctionCache::set($context, CDomain::getMasterDomain("CPatient", $group_id)->tag);
+      return $cache->put(CDomain::getMasterDomain("CPatient", $group_id)->tag, false);
     }
 
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return CFunctionCache::set($context, null);
-    }
-
-    // Permettre des IPP en fonction de l'établissement
-    if (!$group_id) {
-      $group = CGroups::loadCurrent();
-      $group_id = $group->_id;
-    }
-    else {
-      $group = new CGroups();
-      $group->load($group_id);
+      return $cache->put(null, false);
     }
 
     // Si on est dans le cas d'un établissement gérant la numérotation
@@ -1945,7 +1941,7 @@ class CPatient extends CPerson {
       $group_id = $idex->id400;
     }
 
-    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag_ipp));
+    return $cache->put(str_replace('$g', $group_id, $tag_ipp), false);
   }
 
   /**
