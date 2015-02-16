@@ -18,7 +18,29 @@
 <style>
 
   .plage_recuse {
-    background-image: linear-gradient(135deg, transparent 30%, #{{$conf.dPhospi.colors.recuse}} 30%, #{{$conf.dPhospi.colors.recuse}} 70%, transparent 70%);
+    background-image: -ms-linear-gradient(135deg,
+    rgba(1,1,1,0) 30%,
+    #{{$conf.dPhospi.colors.recuse}} 30%,
+    #{{$conf.dPhospi.colors.recuse}} 70%,
+    rgba(1,1,1,0) 70%);
+
+    background-image: -webkit-linear-gradient(135deg,
+    rgba(1,1,1,0) 30%,
+    #{{$conf.dPhospi.colors.recuse}} 30%,
+    #{{$conf.dPhospi.colors.recuse}} 70%,
+    rgba(1,1,1,0) 70%);
+
+    background-image: -moz-linear-gradient(135deg,
+    rgba(1,1,1,0) 30%,
+    #{{$conf.dPhospi.colors.recuse}} 30%,
+    #{{$conf.dPhospi.colors.recuse}} 70%,
+    rgba(1,1,1,0) 70%);
+
+    background-image: linear-gradient(135deg,
+    rgba(1,1,1,0) 30%,
+    #{{$conf.dPhospi.colors.recuse}} 30%,
+    #{{$conf.dPhospi.colors.recuse}} 70%,
+    rgba(1,1,1,0) 70%);
   }
 </style>
 
