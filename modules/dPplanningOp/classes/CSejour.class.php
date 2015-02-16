@@ -778,7 +778,6 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return boolean
    */
   function collides(CSejour $sejour, $collides_update_sejour = true) {
-
     if ($this->_id && $sejour->_id && $this->_id == $sejour->_id) {
       return false;
     }
@@ -791,9 +790,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       return false;
     }
 
-    // Config
-    if ($this->type == "SSR" xor $sejour->type == "SSR") {
-      return false;
+    if (CAppUI::conf('dPplanningOp CSejour ssr_not_collides', $this->loadRefEtablissement()->_guid)) {
+      if ($this->type == "ssr" xor $sejour->type == "ssr") {
+        return false;
+      }
     }
 
     if ($this->group_id != $sejour->group_id) {

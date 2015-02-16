@@ -22,6 +22,7 @@ CConfiguration::register(
           "required_destination"          => "bool default|0",
           "required_from_when_transfert"  => "bool default|0",
           "required_uf_soins"             => "bool default|0",
+          "ssr_not_collides"              => "bool default|0",
         ),
         "COperation" => array(
           "multiple_label"                => "bool default|0",
