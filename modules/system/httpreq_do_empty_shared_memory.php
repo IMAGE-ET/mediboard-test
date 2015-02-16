@@ -36,15 +36,13 @@ else {
 //}
 
 // Remove child classes cache
-if (!SHM::get("child-classes")) {
-  CAppUI::stepAjax("ChildClasses-shm-none", UI_MSG_OK);
-}
-else {
-  if (!SHM::rem("child-classes")) {
-    CAppUI::stepAjax("ChildClasses-shm-rem-ko", UI_MSG_WARNING);
-  }
-  
-  CAppUI::stepAjax("ChildClasses-shm-rem-ok", UI_MSG_OK);
+$classes = array(
+  "CApp",
+);
+
+foreach ($classes as $_class) {
+  $count = SHM::remKeys("$_class*");
+  CAppUI::stepAjax("module-system-msg-cache-removal", UI_MSG_OK, $count, $_class);
 }
 
 // Remove configuration model

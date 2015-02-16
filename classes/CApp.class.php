@@ -284,7 +284,7 @@ class CApp {
    * 
    * @return void
    */
-  static function getAllClasses() {
+  static function includeAllClasses() {
     $root_dir = CAppUI::conf("root_dir");
     
     // Ordered paths
@@ -319,21 +319,18 @@ class CApp {
    * Return all child classes of a given class having given properties
    *
    * @param string $parent        [optional] Parent class
-   * @param array  $properties    [optional] No property checking if empty
    * @param bool   $active_module [optional] If true, filter on active modules
    *
    * @return array Class names
    * @todo Default parent class should probably be CModelObject
    */
-  static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
-    $childclasses = SHM::get("child-classes");
-
-    // Do not cache when we want all the classes
-    if ($parent && empty($properties) && isset($childclasses[$parent][$active_module])) {
-      return $childclasses[$parent][$active_module];
+  static function getChildClasses($parent = "CMbObject", $active_module = false) {
+    $cache = new Cache(__METHOD__, func_get_args(), Cache::INNER_OUTER);
+    if ($cache->exists()) {
+      return $cache->get();
     }
     
-    self::getAllClasses();
+    self::includeAllClasses();
     
     $classes = get_declared_classes();
     foreach ($classes as $key => $class) {
@@ -341,13 +338,6 @@ class CApp {
       if ($parent && !is_subclass_of($class, $parent)) {
         unset($classes[$key]);
         continue;
-      }
-  
-      // Filter on properties
-      foreach ($properties as $prop) {
-        if (!array_key_exists($prop, get_class_vars($class))) {
-          unset($classes[$key]);
-        }
       }
       
       // Filter on active module
@@ -361,25 +351,18 @@ class CApp {
     
     sort($classes);
     
-    // Caching
-    if ($parent && empty($properties)) {
-      $childclasses[$parent][$active_module] = $classes;
-      SHM::put("child-classes", $childclasses);
-    }
-    
-    return $classes;
+    return $cache->put($classes, true);
   }
   
   /**
    * Return all CMbObject child classes
    * 
-   * @param array $properties [optional] Filter on properties
    * @param array &$instances [optional] If not null, retrieve an array of all object instances
    * 
    * @return array Class names
    */
-  static function getMbClasses($properties = array(), &$instances = null) {
-    $classes = self::getChildClasses("CStoredObject", $properties);
+  static function getMbClasses(&$instances = null) {
+    $classes = self::getChildClasses("CStoredObject");
     
     foreach ($classes as $key => $class) {
       // In case we removed a class and it's still in the cache

@@ -22,7 +22,7 @@ $filter->group_id = $group_id;
 
 $exchanges_classes = array();
 foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
-  foreach (CApp::getChildClasses($_exchange_class, array(), true) as $_child_key => $_child_class) {
+  foreach (CApp::getChildClasses($_exchange_class, true) as $_child_key => $_child_class) {
     $exchanges_classes[$_exchange_class][] = $_child_class;
   }
   if ($_exchange_class == "CExchangeAny") {

@@ -34,7 +34,7 @@ $where["group_id"] = " = '$group_id'";
 $forceindex[] = "date_production";
 
 foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
-  foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_under_class) {    
+  foreach (CApp::getChildClasses($_exchange_class, true) as $under_key => $_under_class) {
     $exchange = new $_under_class;
     $exchange->_date_min = $_date_min;
     $exchange->_date_max = $_date_max;

@@ -16,8 +16,8 @@ CCanDo::checkEdit();
 $route_id   = CValue::get("route_id");
 $actor_guid = CValue::get("actor_guid");
 
-$list_receiver = CApp::getChildClasses("CInteropReceiver", array(), true);
-$list_sender   = CApp::getChildClasses("CInteropSender"  , array(), true);
+$list_receiver = CApp::getChildClasses("CInteropReceiver", true);
+$list_sender   = CApp::getChildClasses("CInteropSender"  , true);
 
 if ($actor_guid) {
   $actor = CMbObject::loadFromGuid($actor_guid);

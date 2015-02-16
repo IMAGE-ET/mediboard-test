@@ -11,7 +11,7 @@
 
 $csv = new CCSVFile();
 
-CApp::getMbClasses(null, $instances);
+CApp::getMbClasses($instances);
 
 foreach ($instances as $_class => $_instance) {
   if (!$_instance->_spec->table || !$_instance->_ref_module) {

@@ -416,7 +416,7 @@ class CExchangeSource extends CMbObject {
    * @return string[] Data format classes collection
    */
   static function getAll() {
-    return CApp::getChildClasses("CExchangeSource", array(), true);
+    return CApp::getChildClasses("CExchangeSource", true);
   }
 }
 

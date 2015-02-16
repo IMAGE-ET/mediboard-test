@@ -226,8 +226,8 @@ class Cache {
   /**
    * Put a value to the cache
    *
-   * @param mixed   $value    The value to set
-   * @param bool    $compress Compress data for copy strategy layers
+   * @param mixed $value    The value to set
+   * @param bool  $compress Compress data for copy strategy layers
    *
    * @return mixed The value, for return chaining
    */

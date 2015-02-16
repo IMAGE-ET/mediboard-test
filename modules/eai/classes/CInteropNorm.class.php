@@ -162,7 +162,7 @@ abstract class CInteropNorm {
    */
   static function getObjects() {
     $standards = array();
-    foreach (CApp::getChildClasses("CInteropNorm", array(), false) as $_interop_norm) {
+    foreach (CApp::getChildClasses("CInteropNorm", false) as $_interop_norm) {
       /** @var CInteropNorm $norm */
       $norm = new $_interop_norm;
 

@@ -80,7 +80,7 @@ class CInteropReceiver extends CInteropActor {
    * @return array CInteropReceiver collection 
    */
   static function getChildReceivers() {    
-    return CApp::getChildClasses("CInteropReceiver", array(), true);
+    return CApp::getChildClasses("CInteropReceiver", true);
   }
   
   /**

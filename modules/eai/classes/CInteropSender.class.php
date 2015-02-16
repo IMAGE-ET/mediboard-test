@@ -132,7 +132,7 @@ class CInteropSender extends CInteropActor {
    * @return array CInteropSender collection 
    */
   static function getChildSenders() {    
-    return CApp::getChildClasses("CInteropSender", array(), true);
+    return CApp::getChildClasses("CInteropSender", true);
   }
   
   /**
