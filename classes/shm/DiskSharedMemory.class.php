@@ -33,7 +33,7 @@ class DiskSharedMemory implements ISharedMemory {
    * @return string
    */
   private function __path($key) {
-    return CMbPath::sanitize($this->dir.$key);
+    return $this->dir . CMbPath::sanitizeBaseName($key);
   }
 
   /**

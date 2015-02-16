@@ -336,14 +336,14 @@ abstract class CMbPath {
   }
 
   /**
-   * Sanitize a path for various file systems
+   * Sanitize a base name for various file systems
    *
-   * @param $path
+   * @param $basename
    *
    * @return string
    */
-  static function sanitize($path) {
-    return strtr($path, ": ", "__");
+  static function sanitizeBaseName($basename) {
+    return strtr($basename, ": ", "__");
   }
   /**
    * Reduces a path, removing "folder/.." occurences
