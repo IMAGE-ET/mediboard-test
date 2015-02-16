@@ -37,15 +37,6 @@
     url.addFormData(form);
     url.modal();
   }
-
-  DisplayGraph.occupationParService = function() {
-    if (getForm("stats_params").service_id.value == 0) {
-      alert('Vous devez sélectionner un service pour visualiser ce graphique!');
-    }
-    else {
-      DisplayGraph.launchStats('occupationparservice')
-    }
-  }
 </script>
 
 <form name="stats_params" action="?" method="get" onsubmit="return false;">
@@ -193,16 +184,6 @@
         <br />
         <button type="button" class="list"
                 onclick="DisplayGraph.statsPatientsParTypeHospiParService()">
-          {{tr}}View{{/tr}}
-        </button>
-      </div>
-    </td>
-    <td>
-      <div class="small-info" style="text-align: center">
-        Répartition du nombre de patients par service, par heure, sur 24 heures.
-        <br />
-        <button type="button" class="stats"
-                onclick="DisplayGraph.occupationParService()">
           {{tr}}View{{/tr}}
         </button>
       </div>

@@ -398,6 +398,11 @@
     url.requestModal(null, null, {maxHeight: '600'});
   }
 
+  displayOccupationRate = function() {
+    var url = new Url('hospi', 'ajax_occupation_rate');
+    url.requestModal();
+  }
+
   Main.add(function(){
     Placement.tabs = Control.Tabs.create('placements_tabs', true);
     if (Placement.tabs.activeLink.key == "temporel") {
@@ -456,6 +461,9 @@
   {{/if}}
   <li>
     <button type="button" onclick="Placement.selectServices();" class="search">Services</button>
+  </li>
+  <li>
+    <button type="button" onclick="displayOccupationRate();" class="stats">{{tr}}dPhospi-action-display-occupation_rate{{/tr}}</button>
   </li>
   <li style="float: right">
     <button type="button" onclick="Placement.showLegend();" class="search">Légende</button>

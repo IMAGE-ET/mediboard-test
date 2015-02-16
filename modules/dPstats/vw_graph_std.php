@@ -193,9 +193,6 @@ switch ($type_graph) {
       $codes_ccam
     );
     break;
-  case 'occupationparservice':
-    $graph = graphOccupationLitParService($date_min, $service_id);
-    break;
   default:
     $graph = array();
 }
