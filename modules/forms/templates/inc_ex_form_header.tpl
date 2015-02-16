@@ -8,6 +8,8 @@
     {{$ex_object->_ref_reference_object_2}}
 
     {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
+      &ndash; {{tr}}CPatient-sexe{{/tr}} {{mb_value object=$ex_object->_ref_reference_object_2 field=sexe}}
+      &ndash; {{mb_value object=$ex_object->_ref_reference_object_2 field=_age}}
       {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
     {{/if}}
   </span>
