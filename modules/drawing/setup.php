@@ -34,7 +34,6 @@ class CSetupDrawing extends CSetup {
                 ADD INDEX (`creation_datetime`);";
     $this->addQuery($query);
 
-
     $this->makeRevision("0.2");
     $this->addPrefQuery("drawing_background", "ffffff");
 
@@ -53,6 +52,21 @@ class CSetupDrawing extends CSetup {
                 ADD INDEX (`object_class`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.5";
+    $this->makeRevision("0.5");
+    $this->delPrefQuery("drawing_advanced_mode");
+    $query = "ALTER TABLE `drawing_category`
+                ADD `group_id` INT (11) UNSIGNED,
+                ADD `function_id` INT (11) UNSIGNED,
+                ADD `user_id` INT (11) UNSIGNED,
+                DROP `object_id`,
+                DROP `object_class`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `drawing_category`
+                ADD INDEX (`group_id`),
+                ADD INDEX (`function_id`),
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.6";
   }
 }

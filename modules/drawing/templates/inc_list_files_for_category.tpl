@@ -23,5 +23,7 @@
         <img src="?m=files&amp;a=fileviewer&amp;file_id={{$_file->_id}}&amp;phpThumb=1" alt="" />
       </a>
     </li>
+  {{foreachelse}}
+    <li>Ce dossier ne possède pas d'image exploitable pour le dessin</li>
   {{/foreach}}
 </ul>

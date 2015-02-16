@@ -24,6 +24,8 @@ $draw->loadRefsNotes();
 $draw->getBinaryContent();
 
 $user = CMediusers::get();
+$user->loadRefFunction();
+$functions = $user->loadRefsSecondaryFunctions();
 $admin = $user->isAdmin();
 
 $files_in_context = array();
@@ -63,8 +65,19 @@ if (!$draw->_id) {
 $file_categories = CFilesCategory::listCatClass($draw->_class);
 
 $category = new CDrawingCategory();
+$where = array("user_id" => " = '$user->_id'");
+$categories_user = $category->loadList($where);
+$where = array("function_id" => " = '$user->function_id'");
+$categories_function = $category->loadList($where);
+$where = array("group_id" => " = '$user->_ref_function->group_id'");
+$categories_group = $category->loadList($where);
 /** @var CDrawingCategory[] $categories */
-$categories = $category->loadList(null, "name ASC");
+$categories = $categories_user + $categories_function + $categories_group;
+foreach($functions as $_function) {
+  $where = array("function_id" => " = '$_function->_id'");
+  $categories_function = $category->loadList($where);
+  $categories = array_merge($categories, $categories_function);
+}
 
 foreach ($categories as $_category) {
   $_category->countFiles();

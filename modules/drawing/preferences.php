@@ -13,6 +13,5 @@
 
 // Préférences par Module
 CPreferences::$modules["drawing"] = array (
-  "drawing_background",
-  "drawing_advanced_mode"
+  "drawing_background"
 );

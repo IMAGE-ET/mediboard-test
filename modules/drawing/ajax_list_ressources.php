@@ -22,7 +22,7 @@ if (!$user_id && !$function_id) {
   $user_id = CMediusers::get()->_id;
 }
 $user->load($user_id);
-$user->_ref_drawing_cat = $user->loadBackRefs('drawing_categories');
+$user->_ref_drawing_cat = $user->loadBackRefs('drawing_category_user');
 
 /** @var CDrawingCategory $_cat */
 foreach ($user->_ref_drawing_cat as $_cat) {
@@ -40,7 +40,7 @@ $function = new CFunctions();
 $function->load($function_id);
 $functions[$function->_id] = $function;
 foreach ($functions as $_function) {
-  $_function->_ref_drawing_cat = $_function->loadBackRefs('drawing_categories');
+  $_function->_ref_drawing_cat = $_function->loadBackRefs('drawing_category_function');
   /** @var CDrawingCategory $_cat */
   foreach ($_function->_ref_drawing_cat as $_cat) {
     $_cat->loadRefsFiles();
@@ -50,7 +50,7 @@ foreach ($functions as $_function) {
 
 // group
 $group = $function->loadRefGroup();
-$group->_ref_drawing_cat = $group->loadBackRefs('drawing_categories');
+$group->_ref_drawing_cat = $group->loadBackRefs('drawing_category_group');
 /** @var CDrawingCategory $_cat */
 foreach ($group->_ref_drawing_cat as $_cat) {
   $_cat->loadRefsFiles();

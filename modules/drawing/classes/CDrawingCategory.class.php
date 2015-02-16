@@ -14,11 +14,15 @@
 /**
  * Description
  */
-class CDrawingCategory extends CMbMetaObject {
+class CDrawingCategory extends CMbObject {
   /**
    * @var integer Primary key
    */
   public $drawing_category_id;
+
+  public $group_id;
+  public $function_id;
+  public $user_id;
 
   public $name;
   public $description;
@@ -33,8 +37,8 @@ class CDrawingCategory extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table  = "drawing_category";
     $spec->key    = "drawing_category_id";
-    $spec->uniques["name"] = array("name");
-    return $spec;  
+    $spec->xor["owner"] = array("user_id", "function_id", "group_id");
+    return $spec;
   }
 
   /**
@@ -77,6 +81,10 @@ class CDrawingCategory extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
+    $props["user_id"]          = "ref class|CMediusers purgeable show|1";
+    $props["function_id"]      = "ref class|CFunctions purgeable";
+    $props["group_id"]         = "ref class|CGroups purgeable";
+
     $props["name"] = "str notNull";
     $props["description"] = "text";
     $props["creation_datetime"] = "dateTime notNull";

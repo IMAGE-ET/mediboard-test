@@ -13,15 +13,14 @@
 
 CCanDo::checkAdmin();
 
-$id = CValue::get("id");
-$object_id = CValue::get("object_id");
-$object_class = CValue::get("object_class");
+$id       = CValue::get("id");
+$mode_id  = CValue::get("mode_id");
+$mode     = CValue::get("mode");
 
 $cat = new CDrawingCategory();
 $cat->load($id);
 if (!$cat->_id) {
-  $cat->object_class  = $object_class;
-  $cat->object_id     = $object_id;
+  $cat->$mode  = $mode_id;
 }
 $nb_files = $cat->loadRefsFiles();
 

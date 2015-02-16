@@ -64,12 +64,11 @@
         </td>
       </tr>
       <tr>
-        <th>{{if $app->user_prefs.drawing_advanced_mode}}
-            Ombre<br/>du texte {{/if}}
+        <th>
+            Ombre<br/>du texte
         </th>
         <td>
-          <input type="text" value="#000000 0 0 10px" name="bgcolor_text_cv" id="bgcolor_text_cv"   {{if !$app->user_prefs.drawing_advanced_mode}}
-            style="display: none;" {{/if}}            />
+          <input type="text" value="#000000 0 0 10px" name="bgcolor_text_cv" id="bgcolor_text_cv" />
         </td>
       </tr>
       <tr>
