@@ -30,7 +30,8 @@ class APCSharedMemory implements ISharedMemory {
    * @see parent::get()
    */
   function get($key) {
-    return apc_fetch($key);
+    $value = apc_fetch($key);
+    return $value !== false ? $value : null;
   }
 
   /**

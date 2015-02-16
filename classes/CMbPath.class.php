@@ -334,8 +334,17 @@ abstract class CMbPath {
     
     return unlink($path);
   }
-  
-  
+
+  /**
+   * Sanitize a path for various file systems
+   *
+   * @param $path
+   *
+   * @return string
+   */
+  static function sanitize($path) {
+    return strtr($path, ": ", "__");
+  }
   /**
    * Reduces a path, removing "folder/.." occurences
    *

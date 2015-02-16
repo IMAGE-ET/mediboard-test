@@ -26,6 +26,17 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   /**
+   * Produce the path string based on key
+   *
+   * @param $key string
+   *
+   * @return string
+   */
+  private function __path($key) {
+    return CMbPath::sanitize($this->dir.$key);
+  }
+
+  /**
    * @see parent::init()
    */
   function init() {
@@ -40,25 +51,28 @@ class DiskSharedMemory implements ISharedMemory {
    * @see parent::get()
    */
   function get($key) {
-    if (file_exists($this->dir.$key)) {
-      return unserialize(file_get_contents($this->dir.$key));
+    $path = $this->__path($key);
+    if (file_exists($path)) {
+      return unserialize(file_get_contents($path));
     }
-    return false;
+    return null;
   }
 
   /**
    * @see parent::put()
    */
   function put($key, $value) {
-    return file_put_contents($this->dir.$key, serialize($value)) !== false;
+    $path = $this->__path($key);
+    return file_put_contents($path, serialize($value)) !== false;
   }
 
   /**
    * @see parent::rem()
    */
   function rem($key) {
-    if (is_writable($this->dir.$key)) {
-      return unlink($this->dir.$key);
+    $path = $this->__path($key);
+    if (is_writable($path)) {
+      return unlink($path);
     }
 
     return false;
@@ -68,7 +82,8 @@ class DiskSharedMemory implements ISharedMemory {
    * @see parent::exists()
    */
   function exists($key) {
-    return file_exists($this->dir.$key);
+    $path = $this->__path($key);
+    return file_exists($path);
   }
 
   /*function clear() {
@@ -97,14 +112,13 @@ class DiskSharedMemory implements ISharedMemory {
    * @see parent::modDate()
    */
   function modDate($key) {
-    $filename = $this->dir.$key;
-    clearstatcache(true, $filename);
-
-    if (!file_exists($filename)) {
+    $path = $this->__path($key);
+    clearstatcache(true, $path);
+    if (!file_exists($path)) {
       return null;
     }
 
-    return strftime(CMbDT::ISO_DATETIME, filemtime($filename));
+    return strftime(CMbDT::ISO_DATETIME, filemtime($path));
   }
 
   /**
@@ -119,14 +133,14 @@ class DiskSharedMemory implements ISharedMemory {
       "compressed"        => null
     );
 
-    $filename = $this->dir.$key;
-    clearstatcache(true, $filename);
+    $path = $this->__path($key);
+    clearstatcache(true, $path);
 
-    if (!file_exists($filename)) {
+    if (!file_exists($path)) {
       return false;
     }
 
-    $stats = stat($filename);
+    $stats = stat($path);
 
     $cache_info["modification_date"] = strftime(CMbDT::ISO_DATETIME, $stats["mtime"]);
     $cache_info["mem_size"]          = $stats["size"];
