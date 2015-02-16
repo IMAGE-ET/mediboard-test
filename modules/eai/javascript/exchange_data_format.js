@@ -135,8 +135,13 @@ ExchangeDataFormat = {
   },
 
   defineMasterIdexMissing : function(exchange_guid){
-    new Url("eai", "ajax_define_master_idex_missing")
+    var url = new Url("eai", "ajax_define_master_idex_missing")
       .addParam("exchange_guid", exchange_guid)
-      .requestModal(400, 150, ExchangeDataFormat.refreshExchange.curry(exchange_guid));
+      .requestModal(400, 150);
+
+    ExchangeDataFormat.modal = url.modalObject;
+    ExchangeDataFormat.modal.observe("afterClose", function(){
+      ExchangeDataFormat.refreshExchange(exchange_guid);
+    });
   }
 }
