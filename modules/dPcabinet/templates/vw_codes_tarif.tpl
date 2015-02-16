@@ -1,7 +1,24 @@
 {{mb_script module=cabinet script=tarif}}
 
 <script>
-Main.add(function () {
+
+refreshQte = function(){
+  var form = getForm("modifTarif");
+  var url = new Url("tarmed", "ajax_vw_tarif_code_tarmed");
+  url.addParam("type", "qte");
+  url.addParam("code", $V(form.code_tarmed));
+  url.requestUpdate('qtemax');
+}
+
+refreshCodeRef = function(){
+  var form = getForm("modifTarif");
+  var url = new Url("tarmed", "ajax_vw_tarif_code_tarmed");
+  url.addParam("type", "code_ref");
+  url.addParam("code", $V(form.code_tarmed));
+  url.requestUpdate('code_ref_ActeTarmed');
+}
+
+  Main.add(function () {
   var form = getForm("modifTarif");
   {{if "tarmed"|module_active && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
     // Autocomplete Tarmed
@@ -12,6 +29,8 @@ Main.add(function () {
       select: "newcode",
       updateElement: function(selected) {
         $V(form.code_tarmed, selected.down(".newcode").getText(), false);
+        refreshQte();
+        refreshCodeRef();
       }
     });
     // Autocomplete Caisse
@@ -59,8 +78,11 @@ Main.add(function () {
               getForm("modifTarif")["quantite_{{$nom}}"].addSpinner({min:0, step:1});
             });
           </script>
+          {{if $nom == "tarmed"}}
+            <strong id="qtemax"></strong>
+          {{/if}}
         </td>
-        <td>
+        <td {{if $nom == "tarmed"}}id="code_ref_ActeTarmed"{{/if}}>
           {{if $nom == "tarmed"}}
             {{assign var=nom_code value=_codes_$nom}}
             <select name="code_ref_{{$nom}}">

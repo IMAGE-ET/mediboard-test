@@ -28,6 +28,7 @@ class CFactureItem extends CMbMetaObject {
   public $montant_depassement;
   public $reduction;
   public $quantite;
+  public $cote;
   public $coeff;
   public $pm;
   public $pt;
@@ -70,6 +71,7 @@ class CFactureItem extends CMbMetaObject {
     $specs["montant_depassement"] = "currency";
     $specs["reduction"]  = "currency";
     $specs["quantite"]  = "num notNull";
+    $specs["cote"]      = "enum list|left|right";
     $specs["coeff"]     = "currency notNull";
     $specs["pm"]        = "currency";
     $specs["pt"]        = "currency";

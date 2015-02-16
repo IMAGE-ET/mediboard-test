@@ -425,6 +425,13 @@ class CSetupdPfacturation extends CSetup {
           AND facture_etablissement.praticien_id = users_mediboard.user_id
           AND functions_mediboard.function_id = users_mediboard.function_id";
     $this->addQuery($query);
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+
+    //Facture d'établissement de séjour
+    $query = "ALTER TABLE `factureitem`
+                ADD `cote` ENUM ('left','right');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.44";
   }
 }

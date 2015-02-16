@@ -655,7 +655,13 @@ class CSetupmediusers extends CSetup {
     $query = "ALTER TABLE `users_mediboard`
               ADD `inami` BIGINT (11) UNSIGNED ZEROFILL AFTER `rpps`;";
     $this->addQuery($query);
+    $this->makeRevision('0.58');
 
-    $this->mod_version = '0.58';
+    $query = "ALTER TABLE `users_mediboard`
+                ADD `electronic_bill` ENUM ('0','1') DEFAULT '0',
+                ADD `specialite_tarmed` MEDIUMINT (4) UNSIGNED ZEROFILL;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.59';
   }
 }

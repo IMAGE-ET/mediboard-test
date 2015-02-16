@@ -138,4 +138,29 @@
     <th>{{mb_label object=$object field="debut_bvr"}}</th>
     <td>{{mb_field object=$object field="debut_bvr"}}</td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$object field="electronic_bill"}}</th>
+    <td>{{mb_field object=$object field="electronic_bill"}}</td>
+  </tr>
+
+  {{if $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+    <script>
+      Main.add(function () {
+        var form = getForm("mediuser");
+        var url = new Url("tarmed", "ajax_specialite_autocomplete");
+        url.autoComplete(form.specialite_tarmed, null, {
+          minChars: 0,
+          dropdown: true,
+          select: "newspec",
+          updateElement: function(selected) {
+            $V(form.specialite_tarmed, selected.down(".newspec").getText(), false);
+          }
+        });
+      });
+    </script>
+    <tr>
+      <th>{{mb_label object=$object field="specialite_tarmed"}}</th>
+      <td>{{mb_field object=$object field="specialite_tarmed" style="width:200px;"}}</td>
+    </tr>
+  {{/if}}
 {{/if}}

@@ -641,11 +641,12 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes Tarmed codés
    *
-   * @param int $num_facture numéro de la facture concernée
+   * @param int  $num_facture numéro de la facture concernée
+   * @param bool $show_alerte chargement des alertes
    *
    * @return array
    */
-  function loadRefsActesTarmed($num_facture = null){
+  function loadRefsActesTarmed($num_facture = null, $show_alerte = false){
     $this->_ref_actes_tarmed = array();
     $totaux = array("base" => 0, "dh" => 0);
 
@@ -692,8 +693,9 @@ class CCodable extends CMbObject {
         $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode();
         $_acte_tarmed->loadRefExecutant();
         $_acte_tarmed->loadRefTarmed();
-        $_acte_tarmed->countActesAssocies();
-        $_acte_tarmed->loadAlertes();
+        if ($show_alerte) {
+          $_acte_tarmed->loadAlertes();
+        }
         $totaux["base"] += $_acte_tarmed->montant_base * $_acte_tarmed->quantite;
         $totaux["dh"]   += $_acte_tarmed->montant_depassement;
       }
