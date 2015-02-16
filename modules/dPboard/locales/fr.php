@@ -21,6 +21,7 @@ $locales['mod-dPboard-tab-vw_stats_consultations'] = 'Consultations';
 $locales['mod-dPboard-tab-vw_stats_prescriptions'] = 'Prescriptions';
 $locales['mod-dPboard-tab-vw_trace_cotes'] = 'Vérification des côtés';
 $locales['mod-dPboard-tab-vw_week'] = 'Vue semaine';
+$locales['module-dPboard-court'] = 'Tableau de bord';
 $locales['module-dPboard-long'] = 'Tableau de bord';
 $locales['pref-allow_other_users_board'] = 'Ce praticien peut voir les tableaux de bord des autres praticiens';
 $locales['pref-allow_other_users_board-desc'] = 'Limiter cet utilisateur à voir dans le tableau de bord les autres praticiens';
