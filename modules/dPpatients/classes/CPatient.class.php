@@ -1913,7 +1913,7 @@ class CPatient extends CPerson {
       $group_id = $group->_id;
     }
 
-    $cache = new Cache(__METHOD__, array($group_id), Cache::OUTER);
+    $cache = new Cache(__METHOD__, array($group_id), Cache::INNER);
     if ($cache->exists()) {
       return $cache->get();
     }
