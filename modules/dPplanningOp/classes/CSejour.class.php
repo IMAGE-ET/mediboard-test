@@ -3880,6 +3880,12 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
 
       $template->addProperty("Sejour - Accouchement - Heure de naissance", $naissance->getFormattedValue("_heure"));
+      $date_naiss = $naissance->date_time;
+      $date_naiss_word = CMbDT::format($date_naiss, "%A")." ".CMbString::toWords(CMbDT::format($date_naiss, "%d"))." ".CMbDT::format($date_naiss, "%B")." ".CMbString::toWords(CMbDT::format($date_naiss, "%Y"));
+      $heure_naiss_word = CMbString::toWords(CMbDT::format($date_naiss, "%H"))." heures ".CMbString::toWords(CMbDT::format($date_naiss, "%M"))." minutes";
+      $template->addProperty("Sejour - Accouchement - Date de naissance (lettre)" , $date_naiss_word);
+      $template->addProperty("Sejour - Accouchement - Heure de naissance (lettre)", $heure_naiss_word);
+
       $template->addProperty("Sejour - Accouchement - Sexe de l'enfant", $enfant->getFormattedValue("sexe"));
       $template->addProperty("Sejour - Accouchement - Poids (kg)", $constantes_enfant->poids . " kg");
       $template->addProperty("Sejour - Accouchement - Poids (g)", $constantes_enfant->_poids_g. " g");
