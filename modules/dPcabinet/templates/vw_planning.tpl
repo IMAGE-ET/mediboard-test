@@ -139,6 +139,31 @@ Main.add(function () {
     </th>
     <td style="min-width: 350px;">
       <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
+
+      <div style="float: right; position:relative;">
+        <button class="search" onclick="$('legend_planning').toggle();">{{tr}}Legend{{/tr}}</button>
+        <div style="display: none; position:absolute; box-shadow: 0 0 3px grey; top: 20px; right:0; width:150px; border:solid 1px black; background-color: white;" id="legend_planning">
+          <table style="width:100%;">
+            <tr>
+              <td style="background-color: rgb(221, 221, 221); width:30px;"></td>
+              <td>Plage de consultation</td>
+            </tr>
+            <tr>
+              <td style="background-color: rgb(255, 170, 170)"></td>
+              <td>Plage remplacée par un autre praticien</td>
+            </tr>
+            <tr>
+              <td style="background-color: rgb(238, 221, 204)"></td>
+              <td>Plage pour le compte d'un autre praticien</td>
+            </tr>
+
+            <tr>
+              <td style="background-image: url('images/icons/ray_blue.gif'); background-color:  rgb(221, 221, 221)"></td>
+              <td>Plage accessible par un tiers</td>
+            </tr>
+          </table>
+        </div>
+      </div>
       {{if $chirSel && $chirSel != -1}}
         <button type="button" class="lookup"
                 {{if !$count_si_desistement}}disabled="disabled"{{/if}}
