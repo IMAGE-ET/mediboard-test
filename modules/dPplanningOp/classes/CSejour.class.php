@@ -3693,7 +3693,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $this->loadRefsAffectations();
     $this->_ref_last_affectation->loadView();
-    $template->addProperty("Hospitalisation - Dernière affectation", $this->_ref_last_affectation->_view);
+    $last_affectation = $this->_ref_last_affectation;
+    $template->addProperty("Hospitalisation - Dernière affectation", $last_affectation->_view);
+    $template->addProperty("Hospitalisation - Dernière affectation (Service)", $last_affectation->loadRefService()->_view);
+    $template->addProperty("Hospitalisation - Dernière affectation (Secteur)", $last_affectation->_ref_service->loadRefSecteur()->nom);
 
     $affectations = array();
     if (count($this->_ref_affectations)) {

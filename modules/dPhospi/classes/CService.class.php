@@ -43,6 +43,8 @@ class CService extends CMbObject {
 
   /** @var CGroups */
   public $_ref_group;
+  /** @var CSecteur */
+  public $_ref_secteur;
 
   /** @var CValidationRepas[] */
   public $_ref_validrepas;
@@ -304,6 +306,13 @@ class CService extends CMbObject {
    */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
+  }
+
+  /**
+   * @return CSecteur
+   */
+  function loadRefSecteur() {
+    return $this->_ref_secteur = $this->loadFwdRef("secteur_id", true);
   }
 
   /**
