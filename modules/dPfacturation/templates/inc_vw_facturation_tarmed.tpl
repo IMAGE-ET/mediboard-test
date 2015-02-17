@@ -24,7 +24,7 @@
   {{/if}}
 </script>
 
-{{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && !$facture->annule}}
+{{if $facture->cloture && !$facture->annule}}
   <tr>
     <td colspan="8">
       {{if $conf.dPfacturation.Other.edit_bill_alone}}

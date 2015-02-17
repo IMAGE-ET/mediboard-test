@@ -27,6 +27,7 @@ $dPconfig["dPfacturation"] = array (
     "add_first_relance"       => "0",
     "add_second_relance"      => "0",
     "add_third_relance"       => "0",
+    "nb_generate_pdf_relance" => "20",
     "message_relance1_assur"  => "",
     "message_relance2_assur"  => "",
     "message_relance3_assur"  => "",
