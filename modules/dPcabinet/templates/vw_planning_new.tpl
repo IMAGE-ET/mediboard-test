@@ -187,6 +187,16 @@
   }
 </script>
 
+<style>
+  .event.rdvfull {
+    z-index: 400;
+  }
+
+  .event.rdvfree {
+    z-index: 300;
+  }
+</style>
+
 <form name="cutCopyConsultFrm" method="post">
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" />
