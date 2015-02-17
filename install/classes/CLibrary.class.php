@@ -592,3 +592,15 @@ $library->versionFile = "vis.min.js";
 $library->versionString = "@version 3.7.2";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary();
+$library->name = "requirejs";
+$library->url = "https://github.com/jrburke/r.js";
+$library->fileName = "requirejs.zip";
+$library->description = "JavaScript file and module loader";
+$library->sourceDir = "requirejs";
+$library->targetDir = "requirejs";
+$library->versionFile = "require.js";
+$library->versionString = "RequireJS 2.1.16";
+
+CLibrary::$all[$library->name] = $library;
