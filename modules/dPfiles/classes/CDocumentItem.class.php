@@ -55,7 +55,7 @@ class CDocumentItem extends CMbMetaObject {
     $props["author_id"]        = "ref class|CMediusers";
     $props["private"]          = "bool default|0";
     $props["annule"]           = "bool default|0 show|0";
-    $props["doc_size"]         = "num pos show|0";
+    $props["doc_size"]         = "num min|0 show|0";
     $type_doc = "";
     if (CModule::getActive("cda")) {
       $jdv_type = CCdaTools::loadJV("CI-SIS_jdv_typeCode.xml");
