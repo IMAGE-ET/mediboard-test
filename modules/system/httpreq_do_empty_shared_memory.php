@@ -37,7 +37,7 @@ else {
 
 // Remove child classes cache
 $classes = array(
-  "CApp",
+  "CApp"
 );
 
 foreach ($classes as $_class) {

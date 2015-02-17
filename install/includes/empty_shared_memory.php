@@ -39,7 +39,7 @@ if (!SHM::rem("class-paths")) {
 echo "Table des classes supprimée<br />";
 
 $classes = array(
-  "CApp",
+  "CApp"
 );
 
 foreach ($classes as $_class) {

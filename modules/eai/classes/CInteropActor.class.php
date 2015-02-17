@@ -193,7 +193,7 @@ class CInteropActor extends CMbObject {
    *
    * @return string
    */
-  function getTag($group_id) {
+  function getTag($group_id = null) {
     // Recherche de l'établissement
     $group = CGroups::get($group_id);
     if (!$group_id) {

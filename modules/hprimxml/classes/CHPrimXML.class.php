@@ -72,7 +72,7 @@ class CHPrimXML extends CInteropNorm {
       $group_id = $group->_id;
     }
 
-    $cache = new Cache(get_called_class()."::".__FUNCTION__, array($group_id), Cache::INNER);
+    $cache = new Cache(__METHOD__, array($group_id), Cache::INNER);
 
     if ($cache->exists()) {
       return $cache->get();
