@@ -16,7 +16,7 @@ CCanDo::checkRead();
 $error_type    = CValue::getOrSession("error_type", array());
 $text          = CValue::getOrSession("text");
 $server_ip     = CValue::getOrSession("server_ip");
-$datetime_min  = CValue::getOrSession("_datetime_min");
+$datetime_min  = CValue::getOrSession("_datetime_min", CMbDT::dateTime('-1 WEEK'));
 $datetime_max  = CValue::getOrSession("_datetime_max");
 $order_by      = CValue::getOrSession("order_by");
 $group_similar = CValue::getOrSession("group_similar", "similar");
