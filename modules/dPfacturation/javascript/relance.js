@@ -20,6 +20,15 @@ Relance = {
     var url = new Url('facturation', 'ajax_edit_relance');
     url.addParam('relance_id', relance_id);
     url.requestModal(500, 300);
+  },
+  printRelance: function(facture_class, facture_id, type_pdf, relance_id) {
+    var url = new Url('facturation', 'ajax_edit_bvr');
+    url.addParam('facture_class', facture_class);
+    url.addParam('facture_id'   , facture_id);
+    url.addParam('relance_id'   , relance_id);
+    url.addParam('type_pdf'     , type_pdf);
+    url.addParam('suppressHeaders', '1');
+    url.popup(1000, 600);
   }
 };
 

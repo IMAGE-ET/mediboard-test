@@ -21,6 +21,7 @@
     {{mb_include module=system template=inc_config_num var=add_first_relance}}
     {{mb_include module=system template=inc_config_num var=add_second_relance}}
     {{mb_include module=system template=inc_config_num var=add_third_relance}}
+    {{mb_include module=system template=inc_config_num var=nb_generate_pdf_relance}}
     <tr>
       <th class="category" colspan="2">Relance Assurance</th>
     </tr>

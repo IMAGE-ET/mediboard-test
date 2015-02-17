@@ -1085,14 +1085,16 @@ class CEditPdf{
     //Auteur de la facture
     $this->adresse_prat = $this->traitements($this->function_prat->adresse);
     $this->group_adrr = $this->traitements($this->group->adresse);
-    
+
+    /*
     if (strlen($this->function_prat->cp)>4) {
       $this->function_prat->cp =  substr($this->function_prat->cp, 1);
     }
     if (strlen($this->patient->cp)>4) {
       $this->patient->cp =  substr($this->patient->cp, 1);
     }
-    
+    */
+
     //Assurance
     $assur = array();
     $assurance_patient = null;
