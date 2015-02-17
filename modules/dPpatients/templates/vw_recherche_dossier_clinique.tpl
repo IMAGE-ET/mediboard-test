@@ -169,7 +169,7 @@ Main.add(function() {
 
 <form name="rechercheDossierClinique" method="get" action="?" target="_blank"
       onsubmit="Control.Modal.close(); var url = Url.update(this, null, {openModal: true}); modal_results = url.modalObject; return false;">
-  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="m" value="patients" />
   <input type="hidden" name="a" value="ajax_recherche_dossier_clinique" />
   <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
   <input type="hidden" name="export" value="0"/>
@@ -211,7 +211,8 @@ Main.add(function() {
             <td>
               {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()"}}
               <input type="text" name="_pat_name" style="width: 15em;" readonly="readonly" onfocus="PatSelector.init()" />
-              <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>  
+              <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+              <button class="cancel notext" type="button" onclick="$V(this.form.patient_id, ''); $V(this.form._pat_name, '')">{{tr}}Delete{{/tr}}</button>
             </td>
           </tr>
           
