@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
  */
 
-DrawObject = {
+DrawObject = window.DrawObject || {
   canvas : null,
   canvas_element : 'canvas',
 

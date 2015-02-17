@@ -13,6 +13,10 @@
       <button style="float:left;" class="new" type="button" onclick="File.createMozaic('{{$object_guid}}', '', reloadAfterUploadFile);">{{tr}}CFile-create-mozaic{{/tr}}</button>
     {{/if}}
 
+    {{if "drawing"|module_active}}
+      <button style="float:left;" class="drawing" type="button" onclick="editDrawing(null, null, '{{$object_guid}}', reloadAfterUploadFile);">{{tr}}CDrawingItem.new{{/tr}}</button>
+    {{/if}}
+
     {{if $app->user_prefs.directory_to_watch}}
       <button class="new yopletbutton" style="float: left" type="button" disabled="disabled"
         onclick="File.applet.modalOpen('{{$object_guid}}')">

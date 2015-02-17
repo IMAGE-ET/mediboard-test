@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
  */
 
-DrawingItem = {
+DrawingItem = window.DrawingItem || {
   editModal : function(_id, src_file_id, context_guid, callback) {
     var url = new Url("drawing", "ajax_draw");
     url.addParam('id', _id);

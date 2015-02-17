@@ -13,9 +13,14 @@
          {{tr}}Edit{{/tr}}
        </button>
     {{/if}}
+    {{if $_doc_item->file_type == "image/fabricjs"}}
+      <button class="edit {{$notext}}" type="button" onclick="editDrawing({{$elementId}}, null, null, reloadAfterUploadFile);">
+        {{tr}}Edit{{/tr}}
+      </button>
+    {{/if}}
 
     <!-- Téléchargement du fichier -->
-    {{if $_doc_item->_class=="CFile"}}
+    {{if $_doc_item->_class=="CFile" && $_doc_item->file_type != "image/fabricjs"}}
       <a class="button download notext"
         href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
         target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>

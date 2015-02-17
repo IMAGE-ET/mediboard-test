@@ -140,15 +140,17 @@
     // keyboard down
     //document.observe('keydown', keyBoardEvent);
 
-    // init
-    DrawObject.init('canvas');
-    {{if $draw->_id}}
-      DrawObject.loadDraw({{$draw->_binary_content|smarty:nodefaults}});
-    {{else}}
-      DrawObject.canvas.backgroundColor = '#'+Preferences.drawing_background;
-      DrawObject.canvas.renderAll();
-    {{/if}}
-    DrawObject.refresh();
+    require(["lib/fabricjs/fabric.js"], function(util) {
+      // init
+      DrawObject.init('canvas');
+      {{if $draw->_id}}
+        DrawObject.loadDraw({{$draw->_binary_content|smarty:nodefaults}});
+      {{else}}
+        DrawObject.canvas.backgroundColor = '#'+Preferences.drawing_background;
+        DrawObject.canvas.renderAll();
+      {{/if}}
+      DrawObject.refresh();
+    });
 });
 </script>
 

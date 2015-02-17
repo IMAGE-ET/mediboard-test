@@ -71,8 +71,13 @@ if ($file_id = CValue::get("file_id")) {
     header("Location: images/pictures/accessdenied.png");
     return;
   }
-  
-  if (CValue::get("phpThumb")) {
+
+  // is the file a drawing draft ?
+  if ($file->file_type == "image/fabricjs") {
+    header("Location: modules/drawing/images/draft.png");
+    CApp::rip();
+  }
+  elseif (CValue::get("phpThumb")) {
     
     $w  = CValue::get("w" , "");
     $h  = CValue::get("h" , "");

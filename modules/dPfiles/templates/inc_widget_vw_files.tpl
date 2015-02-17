@@ -9,8 +9,8 @@
   <input type="hidden" name="object_guid" value="{{$object->_guid}}">
 
     <button class="trash" type="button" style="float: right;" onclick="File.removeAll(this, '{{$object->_guid}}')">
-    {{tr}}Delete-all{{/tr}}
-  </button>
+      {{tr}}Delete-all{{/tr}}
+    </button>
 
   </form>
 {{/if}}
@@ -22,6 +22,10 @@
 
   {{if $mozaic}}
     <button class="new" onclick="File.createMozaic('{{$object->_class}}-{{$object->_id}}', '')">{{tr}}CFile-create-mozaic{{/tr}}</button>
+  {{/if}}
+
+  {{if "drawing"|module_active}}
+    <button class="drawing notext" type="button" onclick="editDrawing(null, null, '{{$object->_guid}}');">{{tr}}CDrawingItem.new{{/tr}}</button>
   {{/if}}
 
   {{if $app->user_prefs.directory_to_watch}}

@@ -889,6 +889,20 @@ function uploadFile(object_guid, file_category_id, _rename, named) {
   url.requestModal(700, 300);
 }
 
+editDrawing = function(_id, src_file_id, context_guid, callback) {
+  var url = new Url("drawing", "ajax_draw");
+  url.addParam('id', _id);
+  url.addParam('src_file_id', src_file_id);
+  url.addParam('context_guid', context_guid);
+  url.requestModal("1024","680");
+
+  if (callback) {
+    url.modalObject.observe('afterClose', function(a) {
+      callback();
+    });
+  }
+};
+
 function popChgPwd() {
   new Url("admin", "chpwd").requestModal(400);
 }
