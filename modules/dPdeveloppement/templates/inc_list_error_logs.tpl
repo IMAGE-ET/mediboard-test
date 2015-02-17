@@ -26,7 +26,7 @@ Main.add(function(){
       <input type="hidden" name="m" value="developpement" />
       <input type="hidden" name="dosql" value="do_error_log_multi_delete" />
       <input type="hidden" name="log_ids" value="{{'-'|implode:$list_ids}}" />
-      <button class="trash compact" onclick="return confirm('Voulez-vous supprimer ces {{$list_ids|@count}} journaux d\'erreur ?');">
+      <button class="trash" onclick="return confirm('Voulez-vous supprimer ces {{$list_ids|@count}} journaux d\'erreur ?');">
         {{tr}}Delete{{/tr}}
       </button>
     </form>
@@ -34,8 +34,8 @@ Main.add(function(){
     <form name="manage-logs-db" action="" method="post" onsubmit="return onSubmitFormAjax(this, filterLogDB.curry(this))">
       <input type="hidden" name="m" value="developpement" />
       <input type="hidden" name="dosql" value="do_error_log_purge" />
-      <button class="trash compact" onclick="return confirm('Voulez-vous vider complètement les journaux d\'erreur ?')">
-        {{tr}}Reset{{/tr}}
+      <button class="trash" onclick="return confirm('Voulez-vous vider complètement les journaux d\'erreur ?')">
+        {{tr}}common-action-Purge{{/tr}}
       </button>
     </form>
   </div>
