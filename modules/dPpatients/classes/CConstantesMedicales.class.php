@@ -60,6 +60,8 @@ class CConstantesMedicales extends CMbObject {
   public $_unite_cetonemie;
   public $_unite_hemoglobine;
 
+  public $_valued_cst = array();
+
   static $_specs_converted = false;
   static $_latest_values = array();
   static $_computed_constants_compounds = array();
@@ -194,7 +196,7 @@ class CConstantesMedicales extends CMbObject {
     ),
     "_poids_ideal"              => array(
       "type" => "physio",
-      "unit" => "",
+      "unit" => "kg",
       "min" => 0, "max" => 150,
       "plot" => true,
       "readonly" => true
@@ -1572,6 +1574,23 @@ class CConstantesMedicales extends CMbObject {
     }
 
     return $value;
+  }
+
+  /**
+   * Récupération des constantes ayant une valeur
+   *
+   * @return array
+   */
+  function getValuedConstantes() {
+    $this->_valued_cst = array();
+    foreach(self::$list_constantes as $name => $cst) {
+      if($this->$name !== null) {
+        $this->_valued_cst[$name] = array(
+          "value"       => $this->$name,
+          "description" => $cst
+        );
+      }
+    }
   }
 
   /**
