@@ -2782,7 +2782,11 @@ class CSetupdPpatients extends CSetup {
                 ADD `coloration` INT(1) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.31';
+    $this->makeRevision('2.31');
+
+    $this->addPrefQuery('constantes_show_comments_tooltip', '0');
+
+    $this->mod_version = '2.32';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
