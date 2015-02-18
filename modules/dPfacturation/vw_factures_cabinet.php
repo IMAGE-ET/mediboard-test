@@ -14,7 +14,7 @@ $month_deb          = CMbDT::date("-$rectif DAYS"  , CMbDT::date());
 $date_min           = CValue::getOrSession("_date_min", $month_deb);
 $date_max           = CValue::getOrSession("_date_max", CMbDT::date());
 $etat               = CValue::getOrSession("etat", "ouvert");
-$etat_cloture       = CValue::getOrSession("etat_cloture" , 1);
+$etat_cloture       = CValue::getOrSession("etat_cloture" , 0);
 $etat_relance       = CValue::getOrSession("etat_relance" , 0);
 $facture_id         = CValue::getOrSession("facture_id");
 $patient_id         = CValue::getOrSession("patient_id");
@@ -22,7 +22,7 @@ $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 $type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
-$numero             = CValue::getOrSession("numero", "1");
+$numero             = CValue::getOrSession("numero", "0");
 $search_easy        = CValue::getOrSession("search_easy", "0");
 $page               = CValue::get("page", "0");
 
