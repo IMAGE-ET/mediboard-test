@@ -154,11 +154,11 @@ class CMbObject extends CStoredObject {
    * @return int|null Files count, null if unavailable
    */
   function loadRefsFiles() {
+    $this->_nb_cancelled_files = 0;
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
       return null;
     }
 
-    $this->_nb_cancelled_files = 0;
     // Read permission
     foreach ($this->_ref_files as $_file) {
       /** @var CFile $_file */
@@ -192,11 +192,11 @@ class CMbObject extends CStoredObject {
    * @return int|null Files count, null if unavailable
    */
   function loadRefsDocs() {
+    $this->_nb_cancelled_docs = 0;
     if (null == $this->_ref_documents = $this->loadBackRefs("documents", "nom")) {
       return null;
     }
 
-    $this->_nb_cancelled_docs = 0;
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
       if (!$_doc->canRead()) {
