@@ -581,6 +581,8 @@ $library->targetDir = "dagre-d3-0.3.2";
 $library->versionFile = "dagre-d3.js";
 $library->versionString = "0.3.2";
 
+CLibrary::$all[$library->name] = $library;
+
 $library = new CLibrary();
 $library->name = "visjs";
 $library->url = "http://visjs.org/";
@@ -590,6 +592,18 @@ $library->sourceDir = "vis";
 $library->targetDir = "visjs";
 $library->versionFile = "vis.min.js";
 $library->versionString = "@version 3.7.2";
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary();
+$library->name = "favico.js";
+$library->url = "http://lab.ejci.net/favico.js/";
+$library->fileName = "favico.tar.gz";
+$library->description = "Make a use of your favicon with badges, images or videos";
+$library->sourceDir = "favico";
+$library->targetDir = "favico";
+$library->versionFile = "readme.md";
+$library->versionString = "Version 0.3.4";
 
 CLibrary::$all[$library->name] = $library;
 
