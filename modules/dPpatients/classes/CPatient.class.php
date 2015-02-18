@@ -2345,6 +2345,7 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - VST",    $const_med->_vst);
     $template->addProperty("Patient - température", $const_med->temperature."°");
     $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
+    $template->addProperty("Patient - Saturation (spo2)"  ,$const_med->spo2);
 
     // Assuré social
     $template->addProperty("Patient - Assuré social - nom", $this->assure_nom);

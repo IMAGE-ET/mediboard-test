@@ -657,6 +657,7 @@ class CDossierMedical extends CMbMetaObject {
       }
     }
     $template->addProperty("$champ - Antécédents - tous par appareil", implode($separator, $parts), null, false);
+    $template->addProperty("$champ - Antécédents - Absence de traitement", $this->absence_traitement ? $this->getLocale("absence_traitement") : "");
 
     // Traitements
     $this->loadRefsTraitements();
