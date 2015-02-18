@@ -947,6 +947,9 @@ class CEditPdf{
     if ($this->facture->statut_pro == "invalide") {
       $loi = "LAI";
     }
+    if ($this->facture->statut_pro == "militaire") {
+      $loi = "AMF";
+    }
     
     $assurance_patient = $this->destinataire[0];
     $assur_nom = "";
