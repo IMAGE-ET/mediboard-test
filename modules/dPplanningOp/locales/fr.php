@@ -732,6 +732,7 @@ $locales['COperation.labo.'] = 'Non spécifié';
 $locales['COperation.labo.0'] = 'Non';
 $locales['COperation.labo.1'] = 'Oui';
 $locales['COperation.labo.?'] = '?';
+$locales['COperation.list'] = 'Liste des interventions';
 $locales['COperation.more'] = 'Des interventions';
 $locales['COperation.none'] = 'Pas d\'intervention';
 $locales['COperation.none_non_cotee'] = 'Aucune intervention non cotée';
