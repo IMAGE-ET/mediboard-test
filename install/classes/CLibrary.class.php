@@ -534,7 +534,6 @@ $library->versionString = "1.4.2";
 
 CLibrary::$all[$library->name] = $library;
 
-
 $library = new CLibrary;
 $library->name          = "Fabricjs library";
 $library->url           = "http://fabricjs.com/";
@@ -603,13 +602,19 @@ $library->description = "Make a use of your favicon with badges, images or video
 $library->sourceDir = "favico";
 $library->targetDir = "favico";
 $library->versionFile = "readme.md";
-$library->versionString = "Version 0.3.4";
+$library->versionString = "Version 0.3.6";
+
+$patch = new CLibraryPatch();
+$patch->dirName = "favico";
+$patch->sourceName = "favico.js";
+$patch->targetDir = "";
+$library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary();
 $library->name = "requirejs";
-$library->url = "https://github.com/jrburke/r.js";
+$library->url = "http://requirejs.org/";
 $library->fileName = "requirejs.zip";
 $library->description = "JavaScript file and module loader";
 $library->sourceDir = "requirejs";
