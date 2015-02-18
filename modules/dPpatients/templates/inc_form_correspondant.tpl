@@ -184,8 +184,8 @@
       }
       else if ($V(elt) == "employeur") {
         {{if $conf.ref_pays == 2}}
-          showElem(["num_assure"]);
-          hideElem(["ean", "ean_base", "type_pec", "employeur", "ean_id", "assure_id"]);
+          showElem(["num_assure", "ean"]);
+          hideElem(["ean_base", "type_pec", "employeur", "ean_id", "assure_id"]);
         {{/if}}
         showElem(["date_debut", "date_fin"]);
         hideElem(["prenom"]);
@@ -350,7 +350,7 @@
 
     {{* Switzerland *}}
     {{if $conf.ref_pays == 2}}
-      <tr id="ean" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
+      <tr id="ean" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur"}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="ean"}}</th>
         <td>{{mb_field object=$correspondant field="ean"}}</td>
       </tr>
