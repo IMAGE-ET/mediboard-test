@@ -804,7 +804,7 @@ abstract class CSQLDataSource {
     return $this->exec($query);
   }
   
-  function insertMulti($table, $data, $step){
+  function insertMulti($table, $data, $step, $trim = true){
     $counter = 0;
     
     $keys = array_keys(reset($data));
@@ -820,12 +820,23 @@ abstract class CSQLDataSource {
       
       $_query = array();
       foreach ($_data as $_value) {
-        $_value = trim($_value);
-        if ($_value === "") {
-          $_query[] = "NULL";
+        if ($trim) {
+          $_value = trim($_value);
+
+          if ($_value === "") {
+            $_query[] = "NULL";
+          }
+          else {
+            $_query[] = "'".$this->escape($_value)."'";
+          }
         }
         else {
-          $_query[] = "'".$this->escape($_value)."'";
+          if ($_value === null) {
+            $_query[] = "NULL";
+          }
+          else {
+            $_query[] = "'".$this->escape($_value)."'";
+          }
         }
       }
       
