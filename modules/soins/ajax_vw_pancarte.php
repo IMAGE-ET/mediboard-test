@@ -100,7 +100,7 @@ else {
     $where["affectation.entree"] = " < '$date 23:59:59'";
     $where["affectation.sortie"] = " > '$date 00:00:00'";
   }
-  $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+  $prescriptions = $prescription->loadList($where, null, null, "prescription.prescription_id", $ljoin);
 }
 
 // Recuperation de l'heure courante
