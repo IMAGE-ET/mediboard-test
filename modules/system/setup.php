@@ -2030,6 +2030,11 @@ class CSetupsystem extends CSetup {
                 ADD `hidden` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.79";
+    $this->makeRevision("1.1.79");
+    $query = "ALTER TABLE `configuration`
+                CHANGE `value` `value` VARCHAR(1024)";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.80";
   }
 }
