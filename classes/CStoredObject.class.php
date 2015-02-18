@@ -2244,11 +2244,12 @@ class CStoredObject extends CModelObject {
    *
    * @param self[] $objects      Array of objects
    * @param string $field        Field to load
-   * @param string $object_class Rstrict to explicit object class in case of meta reference
+   * @param string $object_class Restrict to explicit object class in case of meta reference
+   * @param bool   $keep_sorted  Keep the same order as the one in $objects
    *
    * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
    */
-  static function massLoadFwdRef($objects, $field, $object_class = null) {
+  static function massLoadFwdRef($objects, $field, $object_class = null, $keep_sorted = false) {
     if (!count($objects)) {
       return array();
     }
@@ -2320,10 +2321,19 @@ class CStoredObject extends CModelObject {
       return array();
     }
 
-
     $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+    $list = $fwd->loadList($where);
 
-    return $fwd->loadList($where);
+    if (!$keep_sorted) {
+      return $list;
+    }
+
+    $list_sorted = array();
+    foreach ($fwd_ids as $_fwd_id) {
+      $list_sorted[$_fwd_id] = $list[$_fwd_id];
+    }
+
+    return $list_sorted;
   }
 
   /**
@@ -2619,7 +2629,7 @@ class CStoredObject extends CModelObject {
         }
       }
     }
-    
+
     // Add seek clauses
     if (count($keywords) && count($seekables)) {
       foreach ($keywords as $index => $keyword) {
