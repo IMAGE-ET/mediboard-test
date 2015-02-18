@@ -11,7 +11,7 @@
         {{$_datetime|substr:0:18|date_format:$conf.datetime}}
         
         {{if $_constante.comment}}
-          {{if $app->user_prefs.constantes_show_comments_tooltip}}
+          {{if @$app->user_prefs.constantes_show_comments_tooltip}}
             <img src="style/mediboard/images/buttons/comment.png" title="{{$_constante.comment}}">
           {{else}}
             <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
