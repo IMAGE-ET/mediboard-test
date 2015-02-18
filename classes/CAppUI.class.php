@@ -1104,9 +1104,9 @@ class CAppUI {
       if (empty(self::$locales_loaded[$_lang_prefix])) {
         $shared_name = "locales-".self::$lang."-".$_prefix;
 
-        $_loc = SHM::get($shared_name);
+        if (SHM::exists($shared_name)) {
+          $_loc = SHM::get($shared_name);
 
-        if ($_loc !== false) {
           if (empty(self::$locales[$_prefix])) {
             self::$locales[$_prefix] = $_loc;
           }
