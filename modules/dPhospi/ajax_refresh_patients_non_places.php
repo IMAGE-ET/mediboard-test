@@ -44,11 +44,13 @@ foreach ($listNotAff["Non placés"] as $key => $_sejour) {
     unset($listNotAff["Non placés"][$key]);
   }
   else {
-    $_sejour->loadRefPatient();
+    $_sejour->loadRefPatient()->loadRefDossierMedical(false);
   }
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPrestation();
 }
+$dossiers = CMbArray::pluck($listNotAff["Non placés"], "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 // Chargement des affectations dans les couloirs (sans lit_id)
 $where = array();
@@ -64,10 +66,14 @@ $listNotAff["Couloir"] = $affectation->loadList($where, "entree ASC", null, null
 foreach ($listNotAff["Couloir"] as $_aff) {
   /* @var CAffectation $_aff*/
   $_aff->loadView();
-  $_aff->loadRefSejour();
-  $_aff->_ref_sejour->checkDaysRelative($date);
-  $_aff->_ref_sejour->loadRefPrestation();
+  $sejour = $_aff->loadRefSejour();
+  $sejour->loadRefPatient()->loadRefDossierMedical(false);
+  $sejour->checkDaysRelative($date);
+  $sejour->loadRefPrestation();
 }
+
+$dossiers = CMbArray::pluck($listNotAff["Couloir"], "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 // Création du template
 $smarty = new CSmartyDP();
