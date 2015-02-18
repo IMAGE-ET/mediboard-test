@@ -42,7 +42,7 @@ else {
   $where = array();
   $where["praticien_id"] = " = '$prat_id'";
   $where["cloture"]      = "BETWEEN '$date_min' AND '$date_max'";
-  $factures = $facture->loadList($where, "facture_id DESC", null, "patient_id");
+  $factures = $facture->loadList($where, "facture_id DESC", null, "facture_id");
 }
 
 $facture_pdf = new CEditPdf();
