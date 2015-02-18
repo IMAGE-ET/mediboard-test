@@ -15,7 +15,7 @@
         {{/if}}
         <small style="background-color:#{{$_zone->_ref_emplacement->color}};">{{$_zone}}</small>
         {{foreach from=$chambres_affectees item=_affectation}}
-          {{if $_affectation->_ref_lit->_ref_chambre->nom==$_zone && $_affectation->_ref_lit->_ref_chambre->service_id == $key}}
+          {{if $_affectation->_ref_lit && $_affectation->_ref_lit->_ref_chambre->nom==$_zone && $_affectation->_ref_lit->_ref_chambre->service_id == $key}}
             {{mb_include module=hospi template=inc_vw_patient_affectation}}
           {{/if}}
         {{/foreach}}
