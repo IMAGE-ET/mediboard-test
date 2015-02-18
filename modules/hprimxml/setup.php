@@ -502,7 +502,8 @@ class CSetuphprimxml extends CSetup {
 
     $this->makeRevision("0.58");
     $query = "ALTER TABLE `echange_hprim`
-                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0';";
+                ADD `master_idex_missing` ENUM ('0','1') DEFAULT '0',
+                ADD INDEX (`master_idex_missing`);";
     $this->addQuery($query);
 
     $this->mod_version = "0.59";

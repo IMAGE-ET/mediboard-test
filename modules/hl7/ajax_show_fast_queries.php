@@ -33,6 +33,7 @@ $hl7_message->parse($er7);
 $xml = $hl7_message->toXML(null ,false);
 
 $MSH = $xml->queryNode("MSH");
+$EVN = $xml->queryNode("EVN");
 $PID = $xml->queryNode("PID");
 $PV1 = $xml->queryNode("PV1");
 $PV2 = $xml->queryNode("PV2");
@@ -48,7 +49,8 @@ $names = array(
   "nom"             => "",
   "nom_jeune_fille" => ""
 );
-  
+
+$prenom = null;
 $PID5 = $xml->query("PID.5", $PID);
 foreach ($PID5 as $_PID5) {
   // Nom(s)
@@ -62,6 +64,10 @@ $queries = array(
   "Message" => array(
     "control_id" => $xml->queryTextNode("MSH.10", $MSH),
     "datetime"   => CMbDT::dateToLocale($xml->queryTextNode("MSH.7/TS.1", $MSH)),
+  ),
+  "EVN" => array(
+    "planned_event"  => CMbDT::dateToLocale($xml->queryTextNode("EVN.2/TS.1", $EVN)),
+    "event_occurred" => CMbDT::dateToLocale($xml->queryTextNode("EVN.6/TS.1", $EVN)),
   ),
   "CPatient" => array(
     "nom"             => $names["nom"],

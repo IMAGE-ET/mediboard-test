@@ -1290,7 +1290,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // A11 : suppression de l'entrée et/ou annulation du séjour si on a pas de mouvement de pré-admission
     if ($event_code == "A11") {
       $movements = $newVenue->loadRefsMovements(array("original_trigger_code" => " = 'A05'"));
-      if ($movements) {
+      if (!$movements) {
         $newVenue->annule = 1;
       }
     }
@@ -1425,7 +1425,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Récupération de la date de réalisation de l'évènement
     // Dans le cas spécifique de quelques évènements, on récupère le code sur le ZBE
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
-    if (array_key_exists("ZBE", $data) && CMbArray::in($event_code, array("A01", "A02", "A04", "A15", "Z80", "Z84"))) {
+    if (array_key_exists("ZBE", $data) && $data["ZBE"] && CMbArray::in($event_code, array("A01", "A02", "A04", "A15", "Z80", "Z84"))) {
       $datetime = $this->queryTextNode("ZBE.2/TS.1", $data["ZBE"]);
     }
 
@@ -1433,13 +1433,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Cas d'une suppression de mutation ou d'une permission d'absence
       case "A12":
       case "A52":
-        if (!$movement) {
-          return null;
-        }
+        // Quand on a un mouvement (provenant d'un ZBE)
+        if (array_key_exists("ZBE", $data) && $data["ZBE"]) {
+          if (!$movement) {
+            return null;
+          }
 
-        $affectation->load($movement->affectation_id);
-        if (!$affectation->_id) {
-          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+          $affectation->load($movement->affectation_id);
+          if (!$affectation->_id) {
+            return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+          }
+        }
+        // Cas de l'international
+        else {
+          $affectation->entree = $datetime;
+          $affectation->loadMatchingObject();
+
+          if (!$affectation->_id) {
+            return null;
+          }
         }
 
         // Pas de synchronisation

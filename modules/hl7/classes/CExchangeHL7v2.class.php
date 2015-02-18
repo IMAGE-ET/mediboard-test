@@ -464,7 +464,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
       if (strpos($acq, "UNICODE") !== false) {
         $acq = utf8_decode($acq);
       }
-      
+
       // quick regex
       // ERR|~~~207^0^0^E201||207|E|code^libelle|||commentaire
       $pattern = "/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|([^\|]*)\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms";

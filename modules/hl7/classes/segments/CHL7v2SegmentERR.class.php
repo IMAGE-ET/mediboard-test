@@ -118,12 +118,20 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
             null,
             null,
             null,
+            // Code Identifying Error
             array(
+              // Identifier
               $acknowledgment->hl7_error_code,
+              // Text
+              CHL7v2TableEntry::getDescription("357", $acknowledgment->hl7_error_code),
+              // Name of Coding System
               null,
-              null,
+              // Alternate Identifier
               $acknowledgment->_mb_error_code,
-              CAppUI::tr("CHL7Event-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+              // Alternate Text
+              CAppUI::tr("CHL7Event-$acknowledgment->ack_code-$acknowledgment->_mb_error_code"),
+              // Name of Alternate Coding System
+              null
             )
           )
         );
@@ -140,7 +148,12 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       );
       
       // ERR-3
-      $data[] = $acknowledgment->hl7_error_code;
+      $data[] = array(
+        array(
+          $acknowledgment->hl7_error_code,
+          CHL7v2TableEntry::getDescription("357", $acknowledgment->hl7_error_code),
+        )
+      );
       // ERR-4
       $data[] = $acknowledgment->severity;
       // ERR-5 

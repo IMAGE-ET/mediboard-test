@@ -181,6 +181,24 @@ abstract class CHL7v2 {
   }
 
   /**
+   * Return the Mediboard value from an HL7 value
+   *
+   * @param array  $table The table to get the value from
+   * @param string $value The HL7 value
+   *
+   * @return string The Mediboard value
+   */
+  static function getTableDescription($table, $value) {
+    $data = self::getTable($table, false, true);
+
+    if (empty($data)) {
+      return null;
+    }
+
+    return CValue::read($data, $value, false);
+  }
+
+  /**
    * Returns a structured HL7 version
    *
    * @param string $version The version string

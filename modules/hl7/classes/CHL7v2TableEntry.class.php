@@ -71,16 +71,48 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
     $this->_view      = $this->description;
     $this->_shortview = $this->number;
   }
-  
+
+  /**
+   * Get HL7 value
+   *
+   * @param string $table   Table HL7
+   * @param string $mbValue Mediboard value
+   *
+   * @return string
+   */
   static function mapTo($table, $mbValue) {
     return CHL7v2::getTableHL7Value($table, $mbValue);
   }
-  
+
+  /**
+   * Get Mediboard value
+   *
+   * @param string $table    Table HL7
+   * @param string $hl7Value HL7 value
+   *
+   * @return string
+   */
   static function mapFrom($table, $hl7Value) {
     if ($value = CHL7v2::getTableMbValue($table, $hl7Value)) {
       return $value;
     }
     
+    return null;
+  }
+
+  /**
+   * Get table description
+   *
+   * @param string $table    Table HL7
+   * @param string $hl7Value HL7 value
+   *
+   * @return string
+   */
+  static function getDescription($table, $hl7Value) {
+    if ($value = CHL7v2::getTableDescription($table, $hl7Value)) {
+      return $value;
+    }
+
     return null;
   }
 }
