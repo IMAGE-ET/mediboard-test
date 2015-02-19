@@ -186,41 +186,52 @@
                 <td style="text-align: center;">
                   {{if array_key_exists($_day, $_codages_by_prat)}}
                     {{assign var=count_actes value=0}}
+                    {{assign var=total value=0}}
                     {{foreach from=$_codages_by_prat.$_day item=_codage name=codages_by_day}}
                       {{assign var=codage_locked value=$_codage->locked}}
-                      <form name="formCodage-{{$_praticien_id}}-{{$_day}}_{{$_codage}}" data-date="{{$_codage->date}}" data-praticien_id="{{$_codage->praticien_id}}" action="?" method="post"
-                      onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_day.first}}
-                                    , {
-                                      onComplete: loadCodagesCCAM.curry({{$_codage->codable_id}},'{{$_codage->date}}')}{{/if}});">
-                        <input type="hidden" name="m" value="ccam" />
-                        <input type="hidden" name="dosql" value="do_codageccam_aed" />
-                        <input type="hidden" name="del" value="0" />
-                        <input type="hidden" name="locked" value="{{$_codage->locked}}"/>
-                        {{mb_key object=$_codage}}
+                      {{math assign=count_actes equation="x+y" x=$count_actes y=$_codage->_ref_actes_ccam|@count}}
+                      {{math assign=total equation="x+y" x=$total y=$_codage->_total}}
+                      {{if $_codage->_ref_actes_ccam|@count != 0}}
+                        <form name="formCodage-{{$_praticien_id}}-{{$_day}}_{{$_codage}}" data-date="{{$_codage->date}}" data-praticien_id="{{$_codage->praticien_id}}" action="?" method="post"
+                        onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_day.first}}
+                                      , {
+                                        onComplete: loadCodagesCCAM.curry({{$_codage->codable_id}},'{{$_codage->date}}')}{{/if}});">
+                          <input type="hidden" name="m" value="ccam" />
+                          <input type="hidden" name="dosql" value="do_codageccam_aed" />
+                          <input type="hidden" name="del" value="0" />
+                          <input type="hidden" name="locked" value="{{$_codage->locked}}"/>
+                          {{mb_key object=$_codage}}
 
-                        <div style="position: relative; min-height: 22px; {{if $smarty.foreach.codages_by_day.first && !$smarty.foreach.codages_by_day.last}}border-bottom: 1pt dotted #93917e;{{/if}}">
-                          <span style="position: absolute; right: 0%; top: 50%; height: 20px; margin-top: -10px; float: right;">
-                            <button type="button" class="notext copy" onclick="duplicateCodage({{$_codage->_id}});" title="{{tr}}CCodageCCAM-action-duplicate{{/tr}}">
-                              {{tr}}CCodageCCAM-action-duplicate{{/tr}}
-                            </button>
-                          </span>
-                          <span onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}}, '{{$_day}}');"
-                                onmouseover="ObjectTooltip.createEx(this, '{{$_codage->_guid}}');" style="font-size: 0.85em;">
-                            {{math assign=count_actes equation="x+y" x=$count_actes y=$_codage->_ref_actes_ccam|@count}}
-                              {{foreach from=$_codage->_ref_actes_ccam item=_act name=codages}}
-                                {{if !$smarty.foreach.codages.first || !$smarty.foreach.codages_by_day.first}}
-                                  <br/>
+                          <div style="position: relative; min-height: 22px; vertical-align: middle;{{if $smarty.foreach.codages_by_day.first && !$smarty.foreach.codages_by_day.last}}border-bottom: 1pt dotted #93917e;{{/if}}">
+                            <span style="position: absolute; right: 0%; top: 40%; height: 20px; margin-top: -10px; float: right;">
+                              <button type="button" class="notext copy" onclick="duplicateCodage({{$_codage->_id}});" title="{{tr}}CCodageCCAM-action-duplicate{{/tr}}">
+                                {{tr}}CCodageCCAM-action-duplicate{{/tr}}
+                              </button>
+                            </span>
+                            <span onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}}, '{{$_day}}');"
+                                  onmouseover="ObjectTooltip.createEx(this, '{{$_codage->_guid}}');" style="font-size: 0.85em;">
+                                {{foreach from=$_codage->_ref_actes_ccam item=_act name=codages}}
+                                  {{if !$smarty.foreach.codages.first || !$smarty.foreach.codages_by_day.first}}
+                                    <br/>
+                                  {{/if}}
+                                {{$_act->code_acte}} <span class="circled ok">{{$_act->code_activite}}-{{$_act->code_phase}}</span>
+                                {{/foreach}}
+                                {{if $smarty.foreach.codages_by_day.last && $count_actes == 0}}
+                                  {{tr}}CActeCCAM.none{{/tr}}
                                 {{/if}}
-                              {{$_act->code_acte}} <span class="circled ok">{{$_act->code_activite}}-{{$_act->code_phase}}</span>
-                              {{/foreach}}
-                              {{if $smarty.foreach.codages_by_day.last && $count_actes == 0}}
-                                {{tr}}CActeCCAM.none{{/tr}}
-                              {{/if}}
-                          </span>
-                        </div>
-                      </form>
+                            </span>
+                          </div>
+                        </form>
+                      {{/if}}
                     {{/foreach}}
-                    <div style="border-top: 1pt dotted #93917e;">
+
+                    {{if $total != 0}}
+                      <div style="font-size: 0.85em;">
+                        Total : {{$total|number_format:2:',':' '}} {{$conf.currency_symbol|html_entity_decode}}
+                      </div>
+                    {{/if}}
+
+                    <div{{if $count_actes !=0}} style="border-top: 1pt dotted #93917e;"{{/if}}>
                       {{if !$codage_locked}}
                         <button type="button" class="notext edit" onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_praticien_id}}, '{{$_day}}')"
                                 title="{{tr}}Edit{{/tr}}">
