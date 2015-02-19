@@ -96,11 +96,11 @@ if ($temp != "") {
 $sejours_chambre = array ();
 $sejour = new CSejour();
 /** @var CSejour[] $sejours */
-$sejours = $sejour->loadList($where_temp, null, null, null, $ljoin, "entree");
+$sejours = $sejour->loadList($where_temp, null, null, "sejour_id", $ljoin, "entree");
 
 if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
   $where["sejour.uhcd"] = " = '1'";
-  $sejours_uhcd = $sejour->loadList($where, null, null, null, $ljoin, "entree");
+  $sejours_uhcd = $sejour->loadList($where, null, null, "sejour_id", $ljoin, "entree");
   foreach ($sejours_uhcd as $sejour_uhcd) {
     $sejours[$sejour_uhcd->_id] = $sejour_uhcd;
   }
