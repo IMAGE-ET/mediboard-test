@@ -63,6 +63,15 @@ class CFBExportReader {
   }
 
   /**
+   * Close file handle
+   *
+   * @return void
+   */
+  function close(){
+    fclose($this->handle);
+  }
+
+  /**
    * Read unsiged byte
    *
    * @return int
