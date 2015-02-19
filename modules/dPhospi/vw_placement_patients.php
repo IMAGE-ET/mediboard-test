@@ -205,8 +205,8 @@ foreach ($listNotAff["Non placés"] as $key => $_sejour) {
   }
   $_sejour->loadRefPrestation();
 }
-$dossiers = CMbArray::pluck($listNotAff["Non placés"], "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
-CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+$dossiers = CMbArray::pluck($listNotAff["Non placés"], "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 
 // Chargement des affectations dans les couloirs (sans lit_id)
