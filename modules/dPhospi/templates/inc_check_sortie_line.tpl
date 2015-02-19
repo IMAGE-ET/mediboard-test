@@ -97,6 +97,9 @@
           {{$sejour->sortie|date_format:$conf.time}} / {{mb_value object=$sejour field="mode_sortie"}}
         {{/if}}
       {{/if}}
+      {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_sortie_id}}
+        <br/>{{mb_value object=$sejour field="etablissement_sortie_id"}}
+      {{/if}}
     </div>
     <div class="not-printable" style="text-align: center">
       {{if $affectation}}
@@ -110,15 +113,17 @@
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
         {{mb_key object=$sejour}}
-        {{mb_field object=$sejour field=entree_prevue hidden=true}}
-        {{if $sejour->confirme}}
-          {{mb_value object=$sejour field=sortie}}
-          / {{mb_value object=$sejour field="mode_sortie"}}
-        {{else}}
-          {{mb_value object=$sejour field=sortie_prevue}} / {{mb_value object=$sejour field="mode_sortie"}}<br/>
-          <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-          {{mb_field object=$sejour field=sortie_prevue hidden=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
-        {{/if}}
+        <span {{if $sejour->mode_sortie}}onmouseover="ObjectTooltip.createDOM(this, 'confirme_sortie_{{$sejour->_id}}');"{{/if}}>
+          {{mb_field object=$sejour field=entree_prevue hidden=true}}
+          {{if $sejour->confirme}}
+            {{mb_value object=$sejour field=sortie}}
+            / {{mb_value object=$sejour field="mode_sortie"}}
+          {{else}}
+            {{mb_value object=$sejour field=sortie_prevue}} / {{mb_value object=$sejour field="mode_sortie"}}<br/>
+            <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
+            {{mb_field object=$sejour field=sortie_prevue hidden=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
+          {{/if}}
+        </span>
         {{if $sejour->sortie_reelle}}
           / <strong>Effectuée</strong>
         {{else}}
@@ -127,6 +132,12 @@
             Modifier
           </button>
         {{/if}}
+        {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_sortie_id}}
+          <br/>{{mb_value object=$sejour field="etablissement_sortie_id"}}
+        {{/if}}
+        <div id="confirme_sortie_{{$sejour->_id}}" style="display: none">
+          {{mb_include module=planningOp template=inc_vw_sortie_sejour}}
+        </div>
       </form>
     </div>
   </td>
