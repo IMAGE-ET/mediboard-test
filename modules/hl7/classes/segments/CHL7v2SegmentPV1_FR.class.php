@@ -117,9 +117,14 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
         }
 
         $sejour->loadNPA($group->_id);
-        $data[] = $sejour->_NPA ? array(
+        $sejour->loadNDA($group->_id);
+
+        $NPA    = $sejour->_NPA;
+        $number = $NPA ? $NPA : $sejour->_NDA;
+
+        $data[] = $number ? array(
           array(
-            $sejour->_NPA,
+            $number,
             null,
             null,
             // PID-3-4 Autorité d'affectation
