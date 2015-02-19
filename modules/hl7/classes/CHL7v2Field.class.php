@@ -22,6 +22,8 @@ class CHL7v2Field extends CHL7v2Entity {
   public $required;
   public $forbidden;
   public $unbounded;
+
+    /** @var CHL7v2Entity[] */
   public $items         = array();
 
 

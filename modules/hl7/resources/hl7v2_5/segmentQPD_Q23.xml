@@ -13,10 +13,15 @@
       <description>Query Tag</description>
       <datatype>ST</datatype>
     </field>
-    <field minOccurs="0" maxOccurs="0">
+    <field minOccurs="1" maxOccurs="0">
       <name>QPD.3</name>
-      <description>User Parameters (in Successive Fields)</description>
-      <datatype>ST</datatype>
+      <description>Person Identifiers</description>
+      <datatype>CX</datatype>
+    </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.4</name>
+      <description>What Domains Returned</description>
+      <datatype>CX</datatype>
     </field>
   </elements>
 </segment>

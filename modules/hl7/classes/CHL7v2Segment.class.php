@@ -180,7 +180,23 @@ class CHL7v2Segment extends CHL7v2Entity {
    * @return CHL7v2DOMDocument
    */
   function getSpecs(){
-    return $this->getMessage()->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
+    $message = $this->getMessage();
+    $message_type = isset($message->name[0][1]) ? $message->name[0][1] : null;
+
+    if (!$message_type) {
+      $message_type = substr($message->event_name, -3, 3);
+    }
+
+    // Load a message-specific segment if exists
+    if ($message_type) {
+      $spec = $message->getSchema(self::PREFIX_SEGMENT_NAME, "{$this->name}_{$message_type}");
+
+      if ($spec) {
+        return $spec;
+      }
+    }
+
+    return $message->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
 
   /**

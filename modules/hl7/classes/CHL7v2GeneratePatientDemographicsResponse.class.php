@@ -92,7 +92,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
         $domain = new CDomain();
         if ($namespace_id) {
-          $domain->tag = $namespace_id;
+          $domain->namespace_id = $namespace_id;
         }
         if ($universal_id) {
           $domain->OID = $universal_id;
@@ -115,13 +115,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
         $domain = new CDomain();
         if ($namespace_id) {
-          $domain->tag = $namespace_id;
+          $domain->namespace_id = $namespace_id;
         }
         if ($universal_id) {
           $domain->OID = $universal_id;
         }
 
-        if ($domain->tag || $domain->OID) {
+        if ($domain->namespace_id || $domain->OID) {
           $domain->loadMatchingObject();
 
           $where[] = $ds->prepare("id_pat_list.tag = %", $domain->tag);
@@ -133,6 +133,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     // Requête sur un NDA
     $identifier_list = $this->getRequestSejourIdentifierList($data["QPD"]);
     if (count(array_filter($identifier_list)) > 0) {
+        $ljoin[100] = "sejour ON `patients`.`patient_id` = `sejour`.`patient_id`";
       $ljoin[10] = "id_sante400 AS id_sej_list ON id_sej_list.object_id = sejour.sejour_id";
       $where[] = "`id_sej_list`.`object_class` = 'CSejour'";
       // Requête sur un IPP
@@ -154,13 +155,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
         $domain = new CDomain();
         if ($namespace_id) {
-          $domain->tag = $namespace_id;
+          $domain->namespace_id = $namespace_id;
         }
         if ($universal_id) {
           $domain->OID = $universal_id;
         }
 
-        if ($domain->tag || $domain->OID) {
+        if ($domain->namespace_id || $domain->OID) {
           $domain->loadMatchingObject();
         }
 
@@ -177,20 +178,18 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
         $domain = new CDomain();
         if ($namespace_id) {
-          $domain->tag = $namespace_id;
+          $domain->namespace_id = $namespace_id;
         }
         if ($universal_id) {
           $domain->OID = $universal_id;
         }
 
-        if ($domain->tag || $domain->OID) {
+        if ($domain->namespace_id || $domain->OID) {
           $domain->loadMatchingObject();
 
           $where[] = $ds->prepare("id_sej_list.tag = %", $domain->tag);
         }
       }
-
-      $request_admit= true;
     }
 
     foreach ($this->getRequestSejour($data["QPD"]) as $field => $value) {
@@ -222,13 +221,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
       $domain = new CDomain();
       if ($domains_returned_namespace_id) {
-        $domain->tag = $domains_returned_namespace_id;
+        $domain->namespace_id = $domains_returned_namespace_id;
       }
       if ($domains_returned_universal_id) {
         $domain->OID = $domains_returned_universal_id;
       }
 
-      if ($domain->tag || $domain->OID) {
+      if ($domain->namespace_id || $domain->OID) {
         $domain->loadMatchingObject();
       }
 
@@ -243,7 +242,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
       if ($domains_returned_namespace_id) {
         $ljoin[20+$i] = "id_sante400 AS id$i ON id$i.object_id = patients.patient_id";
-        $where[]   = $ds->prepare("id$i.tag = %", $domains_returned_namespace_id);
+        $where[]   = $ds->prepare("id$i.tag = %", $domain->tag);
 
         $i++;
       }
@@ -282,7 +281,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
     else {
-      $ljoin[] = "patients ON `patients`.`patient_id` = `sejour`.`patient_id`";
+      $ljoin[100] = "patients ON `patients`.`patient_id` = `sejour`.`patient_id`";
 
       /** @var $sejour CSejour */
       $sejour = new CSejour();
@@ -380,10 +379,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getRequestSejourIdentifierList(DOMNode $node) {
     $QPD = array(
-      "id_number"         => $this->getDemographicsFields($node, "CSejour", "18.1"),
-      "namespace_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.1"),
-      "universal_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.2"),
-      "universal_id_type" => $this->getDemographicsFields($node, "CSejour", "18.4.3"),
+      "id_number"         => $this->getDemographicsFields($node, "CPatient", "18.1"),
+      "namespace_id"      => $this->getDemographicsFields($node, "CPatient", "18.4.1"),
+      "universal_id"      => $this->getDemographicsFields($node, "CPatient", "18.4.2"),
+      "universal_id_type" => $this->getDemographicsFields($node, "CPatient", "18.4.3"),
     );
 
     return $QPD;
