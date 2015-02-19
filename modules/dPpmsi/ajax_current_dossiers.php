@@ -10,7 +10,6 @@
  * @link     http://www.mediboard.org */
 
 CCanDo::checkRead();
-
 $date = CValue::getOrSession("date", CMbDT::date());
 // Selection des salles
 $listSalles = new CSalle;
@@ -18,6 +17,10 @@ $listSalles = $listSalles->loadGroupList();
 
 $totalOp = 0;
 $counts = array (
+  "sejours" => array (
+    "total" => 0,
+    "facturees" => 0,
+  ),
   "operations" => array (
     "total" => 0,
     "facturees" => 0,
@@ -26,8 +29,12 @@ $counts = array (
     "total" => 0,
     "facturees" => 0,
   ),
+
 );
 
+/**
+ * Comptage des Interventions planifiées
+ */
 $plage = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
@@ -50,6 +57,9 @@ foreach ($plages as $_plage) {
   $totalOp += count($_plage->_ref_operations);
 }
 
+/**
+ * Comptage des Interventions hors plages
+ */
 $operation = new COperation;
 $where = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
@@ -69,11 +79,36 @@ foreach ($horsplages as $_operation) {
   }
 }
 
+/**
+ * Comptage des séjours
+ */
+
+$group = CGroups::loadCurrent();
+$next = CMbDT::date("+1 day", $date);
+$sejour = new CSejour;
+$where = array();
+$where["entree"] = "< '$next'";
+$where["sortie"] = "> '$date'";
+$where["group_id"]      = "= '$group->_id'";
+$where["annule"]        = "= '0'";
+$order = array();
+$order[] = "sortie";
+$order[] = "entree";
+
+/** @var CSejour[] $listSejours */
+$count = $sejour->countList($where);
+$listSejours = $sejour->loadList($where, $order);
+foreach ($listSejours as $_sejour) {
+  $counts["sejours"]["total"]++;
+  if ($_sejour->facture) {
+    $counts["sejours"]["facturees"]++;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"     , $date);
 $smarty->assign("counts"   , $counts);
 $smarty->assign("totalOp"  , $totalOp);
-
-$smarty->display("inc_vw_list_interv.tpl");
+$smarty->display("current_dossiers/inc_current_dossiers.tpl");

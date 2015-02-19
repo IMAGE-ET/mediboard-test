@@ -1,23 +1,12 @@
 <!-- $Id$ -->
 {{mb_script module=planningOp script=ccam_selector}}
+{{mb_script module=pmsi script=impression}}
 
 
 <script type="text/javascript">
-function checkPrint(form) {
-  if (checkForm(form)) {
-    popPrint(form);
-  }
-}
 
-  
-function popPrint(form) {
-  var url = new Url('pmsi', 'print_planning');
-  url.addFormData(form);
-  url.popup(900, 550, 'Planning');
-}
-
-function changeDate(input, sMin, sMax){
-  var form = input.form;
+function changeDate(sMin, sMax){
+  var form = getForm("paramFrm");
   $V(form._date_min, sMin);
   $V(form._date_max, sMax);
   $V(form._date_min_da, Date.fromDATE(sMin).toLocaleDate());
@@ -25,13 +14,13 @@ function changeDate(input, sMin, sMax){
 }
 
 function changeDateCal(form) {
-  form.select_days[0].checked = false;
-  form.select_days[1].checked = false;
+  form.select_days.checked = false;
+
 }
 </script>
 
 
-<form name="paramFrm" action="?m=pmsi" method="post" onsubmit="return checkPrint(this)">
+<form name="paramFrm" action="?m=pmsi" method="post" onsubmit="return impression.checkPrint(this)">
 <input type="hidden" name="_class" value="COperation" />
 <input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
@@ -43,12 +32,12 @@ function changeDateCal(form) {
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal(this)" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal(this.form)" register=true}} </td>
           <td rowspan="2">
-            <input type="radio" name="select_days" onclick="changeDate(this, '{{$yesterday}}','{{$yesterday}}');" value="yesterday" /> 
+            <input type="radio" name="select_days" onclick="changeDate('{{$yesterday}}','{{$yesterday}}');" value="yesterday" />
             <label for="select_days_yesterday">Jour précédent</label>
             <br />
-            <input type="radio" name="select_days" onclick="changeDate(this, '{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+            <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" />
             <label for="select_days_day">Jour courant</label>
           </td>
         </tr>
@@ -190,7 +179,7 @@ function changeDateCal(form) {
   </tr>
   <tr>
     <td colspan="2">
-      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkPrint(this.form)">Afficher</button></td></tr></table>
+      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="impression.checkPrint(this.form)">Afficher</button></td></tr></table>
     </td>
   </tr>
 </table>

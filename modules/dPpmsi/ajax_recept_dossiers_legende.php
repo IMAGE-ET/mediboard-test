@@ -11,9 +11,6 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", CMbDT::date());
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("date", $date);
-$smarty->display("vw_list_hospi.tpl");
+$smarty->display("reception_dossiers/inc_recept_dossiers_legende.tpl");

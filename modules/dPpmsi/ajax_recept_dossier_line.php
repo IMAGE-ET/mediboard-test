@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPpmsi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    OXOL, see http://www.mediboard.org/public/OXOL
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -23,4 +23,4 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("_sejour" , $sejour);
 
-$smarty->display("inc_vw_recept_sejour.tpl");
+$smarty->display("reception_dossiers/inc_recept_dossier_line.tpl");

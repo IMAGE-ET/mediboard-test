@@ -7,9 +7,9 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+<!-- Onglet dossiers en cours volet Intervention hors plage -->
 
-{{mb_include module=system template=inc_pagination total=$countOp current=$pageOp change_page="changePageOp" step=$step}}
-
+{{mb_include module=system template=inc_pagination total=$countUrg current=$pageUrg change_page="changePageUrg" step=$step}}
 
 <table class=" main tbl">
   <tr>
@@ -32,8 +32,8 @@
     <th>{{mb_title class=Coperation field=anapath}}</th>
   </tr>
   <tbody>
-    {{foreach from=$operations item=_operation}}
-      {{mb_include template=inc_list_interv}}
-    {{/foreach}}
+  {{foreach from=$urgences item=_operation}}
+    {{mb_include template=current_dossiers/inc_current_interv_line}}
+  {{/foreach}}
   </tbody>
 </table>

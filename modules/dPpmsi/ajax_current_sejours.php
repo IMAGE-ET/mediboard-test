@@ -59,4 +59,4 @@ $smarty->assign("page"       , $page);
 $smarty->assign("count"      , $count);
 $smarty->assign("step"       , $step);
 
-$smarty->display("inc_vw_list_hospi.tpl");
+$smarty->display("current_dossiers/inc_current_sejours.tpl");

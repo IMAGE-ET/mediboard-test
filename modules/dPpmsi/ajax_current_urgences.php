@@ -42,9 +42,11 @@ CMediusers::massLoadFwdRef($chirurgiens, "function_id");
 foreach ($horsplages as $_operation) {
   $_operation->loadRefChir()->loadRefFunction();
   $_operation->loadExtCodesCCAM();
+  $_operation->loadRefsDocItems();
 
   $_operation->_ref_sejour = $sejours[$_operation->sejour_id];
   $_operation->_ref_sejour->_ref_patient = $patients[$_operation->_ref_sejour->patient_id];
+  $_operation->_ref_sejour->loadRefsDocItems();
 }
 
 // Création du template
@@ -56,4 +58,4 @@ $smarty->assign("pageUrg", $page);
 $smarty->assign("countUrg", $count);
 $smarty->assign("step", $step);
 
-$smarty->display("inc_list_urgences.tpl");
+$smarty->display("current_dossiers/inc_current_urgences.tpl");

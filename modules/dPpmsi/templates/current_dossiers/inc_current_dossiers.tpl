@@ -1,52 +1,52 @@
 {{*
  * $Id$
  *  
- * @category Pmsi
+ * @category Hospi
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
-{{mb_script module="pmsi"           script="PMSI"}}
+{{mb_script module="pmsi" script="PMSI"}}
 <script type="text/javascript">
   Main.add(function () {
+    var form = getForm("changeDate");
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
-    Control.Tabs.create("tabs-category", true, {
+    Control.Tabs.create("tabs-dossiers", true, {
       afterChange: function (container) {
         switch (container.id) {
+          case "sejours"  :
+            PMSI.loadCurrentSejours(form);
+            break;
           case "operations"  :
-            var form = getForm("changeDate");
-            PMSI.loadOperations(form);
+            PMSI.loadCurrentOperations(form);
             break;
           case "urgences" :
-            var form = getForm("changeDate");
-            PMSI.loadUrgences(form);
+            PMSI.loadCurrentUrgences(form);
             break;
           default :
-            var form = getForm("changeDate");
-            PMSI.loadOperations(form);
+            PMSI.loadCurrentOperations(form);
             break;
         }
       }
     });
   });
-
   changePageOp = function (page) {
-    PMSI.loadOperations(getForm("changeDate"),page);
+    PMSI.loadCurrentOperations(getForm("changeDate"),page);
   };
 
   changePageUrg  = function (page) {
-    PMSI.loadUrgences(getForm("changeDate"),page);
+    PMSI.loadCurrentUrgences(getForm("changeDate"),page);
   };
 </script>
 
-<ul id="tabs-category" class="control_tabs">
+<ul id="tabs-dossiers" class="control_tabs">
   {{foreach from=$counts key=category item=count}}
-    <li onmousedown="">
+    <li>
       <a href="#{{$category}}"
          {{if !$count.total}}class="empty"{{/if}}
         {{if $count.facturees != $count.total}}class="wrong"{{/if}}>
-        {{tr}}COperation-{{$category}}{{/tr}}
+        {{tr}}{{if $category === "sejours"}}CSejour{{else}}COperation-{{$category}}{{/if}}{{/tr}}
         <small>
           {{if $count.facturees == $count.total}}
             ({{$count.total}})
@@ -58,5 +58,6 @@
     </li>
   {{/foreach}}
 </ul>
+<div id="sejours" style="display: none;"></div>
 <div id="operations" style="display: none;"></div>
 <div id="urgences" style="display: none;"></div>

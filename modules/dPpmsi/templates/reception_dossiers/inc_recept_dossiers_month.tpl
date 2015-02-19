@@ -9,9 +9,9 @@
 <table class="tbl" style="text-align: center;">
   <tr>
     <th class="title" colspan="4">
-      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$lastmonth}}'); Reception.reloadAll()">&lt;&lt;&lt;</a>
+      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$lastmonth}}'); Reception.reloadAllReceptDossiers()">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
-      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$nextmonth}}'); Reception.reloadAll()">&gt;&gt;&gt;</a>
+      <a style="display: inline" href="#1" onclick="$V(getForm('selType').date, '{{$nextmonth}}'); Reception.reloadAllReceptDossiers()">&gt;&gt;&gt;</a>
     </th>
   </tr>
 

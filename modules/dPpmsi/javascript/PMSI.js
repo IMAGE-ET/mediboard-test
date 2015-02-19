@@ -224,7 +224,14 @@ PMSI = {
     oSelect.value = "";
   },
 
-  listHospi: function (form , change_page) {
+  loadCurrentDossiers: function (form) {
+    var url = new Url("pmsi", "ajax_current_dossiers");
+    url.addFormData(form);
+    url.requestUpdate("list-dossiers");
+    return false;
+  },
+
+  loadCurrentSejours: function (form , change_page) {
     if (form) {
       $V(form.page, change_page);
     }
@@ -232,20 +239,13 @@ PMSI = {
       form = getForm("changeDate");
       $V(form.page, change_page);
     }
-    var url = new Url("pmsi", "ajax_list_hospi");
+    var url = new Url("pmsi", "ajax_current_sejours");
     url.addFormData(form);
-    url.requestUpdate("list-hospi");
+    url.requestUpdate("sejours");
     return false;
   },
 
-  listInterv: function (form) {
-    var url = new Url("pmsi", "ajax_list_interv");
-    url.addFormData(form);
-    url.requestUpdate("list-interv");
-    return false;
-  },
-
-  loadOperations: function (form , change_page) {
+  loadCurrentOperations: function (form , change_page) {
     if (form) {
       $V(form.pageOp, change_page);
     }
@@ -254,13 +254,13 @@ PMSI = {
       $V(form.pageOp, change_page);
     }
 
-    var url = new Url("pmsi", "ajax_list_operations");
+    var url = new Url("pmsi", "ajax_current_operations");
     url.addFormData(form);
     url.requestUpdate("operations");
     return false;
   },
 
-  loadUrgences: function (form, change_page) {
+  loadCurrentUrgences: function (form, change_page) {
     if (form) {
       $V(form.pageUrg, change_page);
     }
@@ -269,14 +269,14 @@ PMSI = {
       $V(form.pageUrg, change_page);
     }
 
-    var url = new Url("pmsi", "ajax_list_urgences");
+    var url = new Url("pmsi", "ajax_current_urgences");
     url.addFormData(form);
     url.requestUpdate("urgences");
     return false;
   },
 
   changePageHospi : function (page) {
-    PMSI.listHospi(null, page);
+    PMSI.loadCurrentSejours(null, page);
   },
 
   loadDossierSejour : function(patient_id, sejour_id) {

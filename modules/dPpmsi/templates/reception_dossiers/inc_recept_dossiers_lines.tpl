@@ -5,7 +5,7 @@
     var form = getForm("selType");
     $V(form.order_col, order_col);
     $V(form.order_way, order_way);
-    Reception.reloadListSejours();
+    Reception.reloadListDossiers();
   }
 
   Main.add(function() {
@@ -23,19 +23,19 @@
 <table class="tbl" id="completion">
   <tr>
     <th class="title" colspan="10">
-      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$hier}}'); Reception.reloadAll()">&lt;&lt;&lt;</a>
+      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$hier}}'); Reception.reloadAllReceptDossiers()">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateCompletion" action="?" method="get">
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('selType').date, this.value); Reception.reloadAll()" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('selType').date, this.value); Reception.reloadAllReceptDossiers()" />
       </form>
-      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$demain}}'); Reception.reloadAll()">&gt;&gt;&gt;</a>
+      <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$demain}}'); Reception.reloadAllReceptDossiers()">&gt;&gt;&gt;</a>
       <br />
 
       <em style="float: left; font-weight: normal;">
         {{$sejours|@count}} sortie(s) ce jour
       </em>
 
-      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="$V(getForm('selType').filterFunction, this.value); Reception.reloadListSejours();">
+      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="$V(getForm('selType').filterFunction, this.value); Reception.reloadListDossiers();">
         <option value=""> &mdash; Toutes les fonctions</option>
         {{mb_include module=mediusers template=inc_options_function list=$functions selected=$filterFunction}}
       </select>
@@ -62,7 +62,7 @@
 
   {{foreach from=$sejours item=_sejour}}
     <tr class="sejour sejour-type-default sejour-type-{{$_sejour->type}}" id="{{$_sejour->_guid}}">
-      {{mb_include module=pmsi template="inc_vw_recept_sejour"}}
+      {{mb_include module=pmsi template="reception_dossiers/inc_recept_dossier_line"}}
     </tr>
   {{foreachelse}}
     <tr>

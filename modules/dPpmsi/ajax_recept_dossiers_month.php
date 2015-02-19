@@ -145,4 +145,4 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('bank_holidays', $bank_holidays);
 $smarty->assign('days'         , $days);
 
-$smarty->display("vw_recept_month_sejour.tpl");
+$smarty->display("reception_dossiers/inc_recept_dossiers_month.tpl");

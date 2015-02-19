@@ -3,7 +3,7 @@ Reception = {
   form: null,
 
   showLegend: function() {
-    new Url("pmsi", "vw_legende").requestModal();
+    new Url("pmsi", "ajax_recept_dossiers_legende").requestModal();
   },
 
   toggleMultipleServices: function(elt) {
@@ -14,15 +14,15 @@ Reception = {
     elt_service_id.size = status ? 5 : 1;
   },
 
-  reloadAll: function() {
+  reloadAllReceptDossiers: function() {
     Reception.reloadMonthSejours();
-    Reception.reloadListSejours();
+    Reception.reloadListDossiers();
   },
 
 
   reloadMonthSejours: function() {
     var form = getForm(Reception.form);
-    var url = new Url("pmsi" , "vw_recept_month_sejour");
+    var url = new Url("pmsi" , "ajax_recept_dossiers_month");
     url.addParam("date"      , $V(form.date));
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
@@ -33,12 +33,12 @@ Reception = {
     url.addParam("tri_recept"  , $V(form.tri_recept));
     url.addParam("tri_complet" , $V(form.tri_complet));
     url.addParam("period"    , $V(form.period));
-    url.requestUpdate('allSejours');
+    url.requestUpdate('allDossiers');
   },
 
-  reloadListSejours: function() {
+  reloadListDossiers: function() {
     var form = getForm(Reception.form);
-    var url = new Url("pmsi", "vw_recept_list_sejour");
+    var url = new Url("pmsi", "ajax_recept_dossiers_lines");
     url.addParam("date"      , $V(form.date));
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
@@ -49,14 +49,14 @@ Reception = {
     url.addParam("tri_recept" , $V(form.tri_recept));
     url.addParam("tri_complet", $V(form.tri_complet));
     url.addParam("period"    , $V(form.period));
-    url.requestUpdate('listSejours');
+    url.requestUpdate('listDossiers');
   },
 
   filterSortie: function(tri_recept, tri_complet) {
     var form = getForm(Reception.form);
     $V(form.tri_recept  , tri_recept);
     $V(form.tri_complet , tri_complet);
-    Reception.reloadAll();
+    Reception.reloadAllReceptDossiers();
   },
 
   filter: function(input, table) {
@@ -80,12 +80,12 @@ Reception = {
     old_selected.removeClassName("selected");
     var elt_tr = elt.up("tr");
     elt_tr.addClassName("selected");
-    Reception.reloadListSejours();
+    Reception.reloadListDossiers();
   },
 
   subitEtatPmsi: function(form, sejour_id) {
     return onSubmitFormAjax(form, function() {
-      var url = new Url("pmsi", "ajax_recept_sejour");
+      var url = new Url("pmsi", "ajax_recept_dossier_line");
       url.addParam("sejour_id", sejour_id);
       url.requestUpdate('CSejour-'+sejour_id);
       Reception.reloadMonthSejours();

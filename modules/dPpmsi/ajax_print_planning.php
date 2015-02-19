@@ -177,4 +177,4 @@ $smarty = new CSmartyDP();
 $smarty->assign("filter"  , $filter);
 $smarty->assign("plagesop", $plagesop);
 
-$smarty->display("print_planning.tpl");
+$smarty->display("print_plannings/inc_print_planning.tpl");

@@ -50,14 +50,17 @@ COperation::massCountDocItems($operations);
 $chirurgiens = COperation::massLoadFwdRef($operations, "chir_id");
 CMediusers::massLoadFwdRef($chirurgiens, "function_id");
 
+/** @var COperation[] $operations */
 foreach ($operations as $_operation) {
   // Détails de l'opérations
   $_operation->loadRefChir()->loadRefFunction();
   $_operation->loadExtCodesCCAM();
+  $_operation->loadRefsDocItems();
 
   // Détails du séjour
   $_operation->_ref_sejour               = $sejours[$_operation->sejour_id];
   $_operation->_ref_sejour->_ref_patient = $patients[$_operation->_ref_sejour->patient_id];
+  $_operation->_ref_sejour->loadRefsDocItems();
 }
 
 
@@ -70,4 +73,4 @@ $smarty->assign("pageOp", $page);
 $smarty->assign("countOp", $count);
 $smarty->assign("step", $step);
 
-$smarty->display("inc_list_operations.tpl");
+$smarty->display("current_dossiers/inc_current_operations.tpl");

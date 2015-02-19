@@ -45,4 +45,4 @@ $smarty->assign("date"          , $date);
 $smarty->assign("period"        , CValue::getOrSession("period"));
 $smarty->assign("filterFunction", CValue::getOrSession("filterFunction"));
 
-$smarty->display("vw_recept_sejour.tpl");
+$smarty->display("reception_dossiers/vw_recept_dossiers.tpl");

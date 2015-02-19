@@ -8,6 +8,8 @@
  * @link     http://www.mediboard.org
  *}}
 
+<!-- Onglet dossiers en cours volet Séjour -->
+
 {{mb_include module=system template=inc_pagination total=$count current=$page change_page="PMSI.changePageHospi" step=$step}}
 <table class="tbl">
   <tr>

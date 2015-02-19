@@ -144,4 +144,4 @@ $smarty->assign("date_demain"   , $date_demain);
 $smarty->assign("date_actuelle" , $date_actuelle);
 $smarty->assign("period"        , $period);
 
-$smarty->display("vw_recept_list_sejour.tpl");
+$smarty->display("reception_dossiers/inc_recept_dossiers_lines.tpl");
