@@ -27,6 +27,31 @@
       </fieldset>
     </td>
   </tr>
+  {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
+    {{assign var=sejour value=$consult->_ref_sejour}}
+    <tr>
+      <td class="halfPane">
+        <fieldset>
+          <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>
+          <div id="files-CSejour">
+            <script>
+              File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files-CSejour');
+            </script>
+          </div>
+        </fieldset>
+      </td>
+      <td class="halfPane">
+        <fieldset>
+          <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>
+          <div id="documents-CSejour">
+            <script>
+              Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->_praticien_id}}','documents-CSejour');
+            </script>
+          </div>
+        </fieldset>
+      </td>
+    </tr>
+  {{/if}}
   <tr>
     <td class="halfPane">
       {{if "dPprescription"|module_active && "dPcabinet CPrescription view_prescription_externe"|conf:"CGroups-$g"}}
@@ -53,29 +78,4 @@
       </fieldset>
     </td>
   </tr>
-  {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
-  {{assign var=sejour value=$consult->_ref_sejour}}
-  <tr>
-    <td class="halfPane">
-      <fieldset>
-        <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
-        <div id="files-CSejour">
-          <script>
-            File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files-CSejour');
-          </script>
-        </div>
-      </fieldset>
-    </td>
-    <td class="halfPane">
-      <fieldset>
-        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
-        <div id="documents-CSejour">
-          <script>
-            Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->_praticien_id}}','documents-CSejour');
-          </script>
-        </div>
-      </fieldset>
-    </td>
-  </tr>
-  {{/if}}
 </table>
