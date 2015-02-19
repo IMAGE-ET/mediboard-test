@@ -140,7 +140,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $this->addAttribute($this->documentElement, "xmlns", "urn:hl7-org:v2xml");
     $this->addAttribute($this->documentElement, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     $this->addAttribute($this->documentElement, "xsi:schemaLocation", "urn:hl7-org:v2xml $name.xsd");
-}
+  }
 
   /**
    * Add element
@@ -411,11 +411,16 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @return void
    */
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
+    $control_identifier_type_code = CValue::read($sender->_configs, "control_identifier_type_code");
+
     // Notre propre RI
-    if (($this->queryTextNode("CX.5", $node) == "RI") &&
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))
-    ) {
+    if ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id")) {
+      if ($control_identifier_type_code && $this->queryTextNode("CX.5", $node) != "RI") {
+        return;
+      }
+
       $data["RI"] = $this->queryTextNode("CX.1", $node);
+
       return;
     }
 
