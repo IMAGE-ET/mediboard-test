@@ -58,7 +58,7 @@ $smarty->assign("services_ids_hospi", $services_ids_hospi);
 $smarty->assign("services_ids", $services_ids);
 $smarty->assign("all_services", $all_services);
 $smarty->assign("services_allowed", $services_allowed);
-$smarty->assign("group_id"    , CGroups::loadCurrent()->_id);
+$smarty->assign("group_id"    , $group_id);
 $smarty->assign("secteurs"    , $secteurs);
 $smarty->assign("ajax_request" , $ajax_request);
 

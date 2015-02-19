@@ -90,7 +90,10 @@ class CItemPrestation extends CMbMetaObject {
    */
   function loadRefObject() {
     $this->_ref_object = new $this->object_class;
-    return $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    $this->_shortview = $this->_ref_object->nom.' - '.$this->nom;
+
+    return $this->_ref_object;
   }
 
   /**

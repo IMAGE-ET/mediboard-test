@@ -1,8 +1,6 @@
 <form name="Edit-CSecteur" action="" method="post" onsubmit="return submit_Ajax(this, 'secteurs')">
-  <input type="hidden" name="m" value="hospi" />
-  <input type="hidden" name="dosql" value="do_secteur_aed" />
-  <input type="hidden" name="del" value="0" />
   {{mb_key object=$secteur}}
+  {{mb_class object=$secteur}}
   {{mb_field object=$secteur field=group_id hidden=true}}
   
   <table class="form">

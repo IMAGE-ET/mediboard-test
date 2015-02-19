@@ -1,10 +1,7 @@
 <!-- Formulaire d'un service -->
-<form name="edit{{$service->_guid}}" action="" method="post" onsubmit="return submit_Ajax(this, 'services')">
-  <input type="hidden" name="m" value="hospi" />
-  <input type="hidden" name="dosql" value="do_service_aed" />
-  <input type="hidden" name="del" value="0" />
+<form name="edit{{$service->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Control.Modal.close();}});">
   {{mb_key object=$service}}
-  
+  {{mb_class object=$service}}
   <table class="form">
     {{mb_include module=system template=inc_form_table_header_uf object=$service tag=$tag_service}}
     
@@ -17,7 +14,10 @@
       <th>{{mb_label object=$service field=nom}}</th>
       <td>{{mb_field object=$service field=nom}}</td>
     </tr>
-
+    <tr>
+      <th>{{mb_label object=$service field=code}}</th>
+      <td>{{mb_field object=$service field=code}}</td>
+    </tr>
     <tr>
       <th>{{mb_label object=$service field=is_soins_continue}}</th>
       <td>{{mb_field object=$service field=is_soins_continue}}</td>

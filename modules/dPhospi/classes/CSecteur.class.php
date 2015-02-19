@@ -64,6 +64,6 @@ class CSecteur extends CMbObject {
    * @return CService[]
    */
   function loadRefsServices() {
-    return $this->_ref_services = $this->loadBackRefs("services");
+    return $this->_ref_services = $this->loadBackRefs("services", "nom");
   }
 }

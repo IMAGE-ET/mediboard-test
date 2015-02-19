@@ -2,7 +2,7 @@
   
 <tr>
   <td class="halfPane">
-    <a href="#" onclick="showInfrastructure('secteur_id', '0', 'infrastructure_secteur')" class="button new">
+    <a href="#" onclick="Infrastructure.showInfrastructure('secteur_id', '0', 'infrastructure_secteur')" class="button new">
       {{tr}}CSecteur-title-create{{/tr}}
     </a>
     
@@ -21,7 +21,7 @@
       {{foreach from=$secteurs item=_secteur}}
       <tr {{if $_secteur->_id == $secteur->_id}} class="selected" {{/if}}>
         <td>
-          <a href="#" onclick="showInfrastructure('secteur_id', '{{$_secteur->_id}}', 'infrastructure_secteur')">
+          <a href="#" onclick="Infrastructure.showInfrastructure('secteur_id', '{{$_secteur->_id}}', 'infrastructure_secteur')">
             {{mb_value object=$_secteur field=nom}}
           </a>
         </td>

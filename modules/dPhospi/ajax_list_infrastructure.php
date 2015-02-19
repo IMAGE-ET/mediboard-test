@@ -38,61 +38,18 @@ $where = array();
 $where["group_id"] = "= '$group->_id'";
 
 if ($type_name == "services") {
-  // Chargement du service à ajouter/editer
+  // Chargement des services
   $service = new CService();
-  $service->group_id = $group->_id;
-  $service->load($service_id);
-  $service->loadRefsNotes();
-
   /** @var CService[] $services */
   $services = $service->loadListWithPerms(PERM_READ, $where, "nom");
 
   foreach ($services as $_service) {
-    foreach ($_service->loadRefsChambres() as $_chambre) {
-      $_chambre->loadRefs();
-    }
+    // Chargement des chambres et lits
+    $_service->loadRefsLits(true);
   }
 
   $smarty->assign("services"    , $services);
-  $smarty->assign("service"     , $service);
-  $smarty->assign("tag_service" , CService::getTagService($group->_id));
   $smarty->display("inc_vw_idx_services.tpl");
-}
-
-if ($type_name == "chambres") {
-  // Récupération de la chambre à ajouter/editer
-  $chambre = new CChambre();
-  $chambre->load($chambre_id);
-  $chambre->loadRefsNotes();
-  $chambre->loadRefService();
-  foreach ($chambre->loadRefsLits() as $_lit) {
-    $_lit->loadRefsNotes();
-  }
-  
-  if (!$chambre->_id) {
-    CValue::setSession("lit_id", 0);
-  }
-
-  // Chargement du lit à ajouter/editer
-  $lit = new CLit();
-  $lit->load($lit_id);
-  $lit->loadRefChambre();
-
-  $service = new CService();
-  $services = $service->loadListWithPerms(PERM_READ, $where, "nom");
-
-  foreach ($services as $_service) {
-    foreach ($_service->loadRefsChambres() as $_chambre) {
-      $_chambre->loadRefs();
-    }
-  }
-
-  $smarty->assign("services"    , $services);
-  $smarty->assign("chambre"     , $chambre);
-  $smarty->assign("tag_chambre" , CChambre::getTagChambre($group->_id));
-  $smarty->assign("lit"         , $lit);
-  $smarty->assign("tag_lit"     , CLit::getTagLit($group->_id));
-  $smarty->display("inc_vw_idx_chambres.tpl");
 }
 
 if ($type_name == "UF") {

@@ -13,7 +13,7 @@
  * Gère les services d'hospitalisation
  * - contient de chambres
  */
-class CService extends CMbObject {
+class CService extends CInternalStructure {
   // DB Table key
   public $service_id;
 
@@ -25,7 +25,6 @@ class CService extends CMbObject {
   // DB Fields
   public $nom;
   public $type_sejour;
-  public $description;
   public $cancelled;
   public $hospit_jour;
   public $urgence;
@@ -106,7 +105,6 @@ class CService extends CMbObject {
     $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
 
     $props["nom"]                 = "str notNull seekable";
-    $props["description"]         = "text seekable";
     $props["urgence"]             = "bool default|0";
     $props["uhcd"]                = "bool default|0";
     $props["hospit_jour"]         = "bool default|0";
@@ -128,6 +126,26 @@ class CService extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
+  }
+
+  /**
+   * @see parent::mapEntityTo()
+   */
+  function mapEntityTo () {
+    $this->_name = $this->nom;
+    $this->user_id = $this->responsable_id;
+  }
+
+  /**
+   * @see parent::mapEntityFrom()
+   */
+  function mapEntityFrom () {
+    if ($this->_name != null) {
+      $this->nom = $this->_name;
+    }
+    if ($this->user_id != null) {
+      $this->responsable_id = $this->user_id;
+    }
   }
 
   /**
@@ -183,8 +201,9 @@ class CService extends CMbObject {
     if (!$annule) {
       $where["annule"] = "= '0'";
     }
+    $order = "ISNULL(rank), rank, nom";
 
-    return $this->_ref_chambres = $this->_back["chambres"] = $chambre->loadList($where, "nom");
+    return $this->_ref_chambres = $this->_back["chambres"] = $chambre->loadList($where, $order);
   }
 
   /**
@@ -205,17 +224,16 @@ class CService extends CMbObject {
       $where["chambre.annule"] = "= '0'";
     }
 
-    $lits = $lit->loadList($where, "chambre.nom, lit.nom", null, null, $ljoin);
+    $order = "ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank,lit.nom ";
 
-    $this->_ref_chambres = self::massLoadFwdRef($lits, "chambre_id");
+    $lits = $lit->loadList($where, $order, null, null, $ljoin);
+    $this->_ref_chambres = self::massLoadFwdRef($lits, "chambre_id", null, true);
 
     foreach ($lits as $_lit) {
       $_chambre = $_lit->loadRefChambre();
       $_chambre->_ref_service = $this;
       $_chambre->_ref_lits[$_lit->_id] = $_lit;
     }
-
-    array_multisort(CMbArray::pluck($this->_ref_chambres, "nom"), SORT_ASC, $this->_ref_chambres);
 
     return $lits;
   }

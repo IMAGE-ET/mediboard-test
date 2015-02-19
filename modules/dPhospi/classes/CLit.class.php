@@ -25,7 +25,8 @@ class CLit extends CMbObject {
   public $nom;
   public $nom_complet;
   public $annule;
-  
+  public $rank;
+
   // Form Fields
   public $_overbooking;
   public $_selected_item;
@@ -86,6 +87,7 @@ class CLit extends CMbObject {
     $specs["nom"]         = "str notNull seekable";
     $specs["nom_complet"] = "str seekable";
     $specs["annule"]      = "bool default|0";
+    $specs["rank"]        = "num max|999";
     return $specs;
   }
 

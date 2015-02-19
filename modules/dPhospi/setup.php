@@ -866,6 +866,50 @@ class CSetupdPhospi extends CSetup {
     $query = "ALTER TABLE `service`
                 ADD `use_brancardage` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    $this->mod_version = "0.97";
+
+
+    $this->makeRevision("0.97");
+    $query = "ALTER TABLE `lit`
+                ADD `rank` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `lit`
+                ADD INDEX (`rank`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `chambre`
+                ADD `rank` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `chambre`
+                ADD INDEX (`rank`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.98");
+    $query = "ALTER TABLE `service`
+                ADD `typologie` VARCHAR (255),
+                ADD `code` VARCHAR (80) NOT NULL,
+                ADD `short_name` VARCHAR (255),
+                ADD `user_id` INT (11) UNSIGNED,
+                ADD `opening_reason` TEXT,
+                ADD `opening_date` DATE,
+                ADD `closing_reason` TEXT,
+                ADD `closing_date` DATE,
+                ADD `activation_date` DATE,
+                ADD `inactivation_date` DATE;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `service` SET `code` = `nom`";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `service`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`opening_date`),
+                ADD INDEX (`closing_date`),
+                ADD INDEX (`activation_date`),
+                ADD INDEX (`inactivation_date`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.99";
   }
 }

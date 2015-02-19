@@ -7,7 +7,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="#" onclick="showInfrastructure('uf_id', '0', 'infrastructure_uf')" class="button new">
+      <a href="#" onclick="Infrastructure.showInfrastructure('uf_id', '0', 'infrastructure_uf')" class="button new">
         {{tr}}CUniteFonctionnelle-title-create{{/tr}}
       </a>
 
@@ -38,7 +38,7 @@
             {{foreach from=$_ufs item=_uf}}
             <tr {{if $_uf->_id == $uf->_id}}class="selected"{{/if}}>
               <td>
-                <a href="#" onclick="showInfrastructure('uf_id', '{{$_uf->_id}}', 'infrastructure_uf')">
+                <a href="#" onclick="Infrastructure.showInfrastructure('uf_id', '{{$_uf->_id}}', 'infrastructure_uf')">
                   {{mb_value object=$_uf field=code}}
                 </a>
               </td>

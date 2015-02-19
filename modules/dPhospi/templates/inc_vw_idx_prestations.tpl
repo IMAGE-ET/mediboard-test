@@ -4,7 +4,7 @@
 
 <tr>
   <td class="halfPane">
-    <a href="#" onclick="showInfrastructure('prestation_id', '0', 'infrastructure_prestation')" class="button new">
+    <a href="#" onclick="Infrastructure.showInfrastructure('prestation_id', '0', 'infrastructure_prestation')" class="button new">
       {{tr}}CPrestation-title-create{{/tr}}
     </a>
 
@@ -24,7 +24,7 @@
       <tr {{if $_prestation->_id == $prestation->_id}} class="selected" {{/if}}>
         <td>{{mb_value object=$_prestation field=code}}</td>
         <td>
-          <a href="#" onclick="showInfrastructure('prestation_id', '{{$_prestation->_id}}', 'infrastructure_prestation')">
+          <a href="#" onclick="Infrastructure.showInfrastructure('prestation_id', '{{$_prestation->_id}}', 'infrastructure_prestation')">
             {{mb_value object=$_prestation field=nom}}
           </a>
         </td>

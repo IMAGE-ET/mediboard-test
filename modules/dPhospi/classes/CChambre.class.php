@@ -32,6 +32,7 @@ class CChambre extends CMbObject {
   public $is_waiting_room;        //salle d'attente
   public $is_examination_room;    // salle d'examen
   public $is_sas_dechoc;          // sas de dechoquage
+  public $rank;
 
   // Form Fields
   public $_nb_lits_dispo;
@@ -91,6 +92,7 @@ class CChambre extends CMbObject {
     $specs["is_waiting_room"]     = "bool";
     $specs["is_examination_room"] = "bool";
     $specs["is_sas_dechoc"]       = "bool";
+    $specs["rank"]                = "num max|999";
     return $specs;
   }
 
@@ -137,14 +139,11 @@ class CChambre extends CMbObject {
     if (!$annule) {
       $where["annule"] = " ='0'";
     }
-    
-    if ($this->lits_alpha) {
-      $order = "lit.nom ASC";
-    }
-    else {
-      $order = "lit.nom DESC";
-    }
-    
+
+    $order = "ISNULL(lit.rank), lit.rank, ";
+    $order .= ($this->lits_alpha) ? "lit.nom ASC" : "lit.nom DESC";
+
+
     return $this->_ref_lits = $this->_back["lits"] = $lit->loadList($where, $order);
   }
 

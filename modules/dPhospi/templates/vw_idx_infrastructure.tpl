@@ -9,17 +9,6 @@ Main.add(function () {
   Control.Tabs.create('tabs-chambres', true);
 });
 
-function showInfrastructure(type_id, valeur_id, update_name){
-  var url = new Url("dPhospi", "inc_vw_infrastructure");
-  url.addParam(type_id, valeur_id);
-  url.requestUpdate(update_name);
-}
-function showLit(type_id, valeur_id, type_id2, valeur_id2, update_name){
-  var url = new Url("dPhospi", "inc_vw_infrastructure");
-  url.addParam(type_id, valeur_id);
-  url.addParam(type_id2, valeur_id2);
-  url.requestUpdate(update_name);
-}
 function submit_Ajax(form, update_name){
   return onSubmitFormAjax(form, {
     onComplete : function() {
@@ -36,13 +25,12 @@ function viewStatUf(uf_id){
   url.requestModal(400, 300);
 }
 </script>
-
+{{mb_script module=hospi script=infrastructure ajax=true}}
 {{mb_script module=hospi script=affectation_uf}}
 
 <ul id="tabs-chambres" class="control_tabs">
   <li><a href="#secteurs">{{tr}}CSecteur{{/tr}} {{if $secteurs|@count}}({{$secteurs|@count}}){{/if}}</a></li>
   <li><a href="#services">{{tr}}CService{{/tr}} {{if $services|@count}}({{$services|@count}}){{/if}}</a></li>
-  <li><a href="#chambres">{{tr}}CChambre{{/tr}} {{if $nb_chambre}}({{$nb_chambre}}){{/if}}</a></li>
   <li><a href="#UF">{{tr}}CUniteFonctionnelle{{/tr}}</a></li>
   <li><a href="#prestations">{{tr}}CPrestation{{/tr}} {{if $prestations|@count}}({{$prestations|@count}}){{/if}}</a></li>
   <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
@@ -55,10 +43,6 @@ function viewStatUf(uf_id){
 
 <div id="services" style="display: none;">
   {{mb_include template="inc_vw_idx_services"}}
-</div>
-
-<div id="chambres" style="display: none;">
-  {{mb_include template="inc_vw_idx_chambres"}}
 </div>
 
 <div id="UF" style="display: none;">

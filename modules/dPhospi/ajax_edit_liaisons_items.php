@@ -22,6 +22,7 @@ CMbObject::massLoadFwdRef($lits_liaisons_items, "item_prestation_id");
 
 foreach ($lits_liaisons_items as $_lit_liaison_item) {
   $_lit_liaison_item->loadRefItemPrestation();
+  $_lit_liaison_item->_ref_item_prestation->loadRefObject();
 }
 
 $smarty = new CSmartyDP;

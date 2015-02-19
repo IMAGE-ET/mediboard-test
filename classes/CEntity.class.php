@@ -50,7 +50,7 @@ class CEntity extends CMbObject {
     $props["_name"]             = "str notNull";
     $props["short_name"]        = "str";
     $props["description"]       = "text";
-    $props["user_id"]       = "ref class|CMediusers";
+    $props["user_id"]           = "ref class|CMediusers";
     $props["opening_reason"]    = "text";
     $props["opening_date"]      = "date";
     $props["closing_reason"]    = "text";

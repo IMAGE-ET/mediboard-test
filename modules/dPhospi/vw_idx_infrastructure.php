@@ -30,43 +30,15 @@ $secteur->load($secteur_id);
 $secteur->loadRefsNotes();
 $secteur->loadRefsServices();
 
-// Chargement du service à ajouter / éditer
-$service = new CService();
-$service->group_id = $group->_id;
-$service->load($service_id);
-$service->loadRefsNotes();
-
-// Récupération de la chambre à ajouter / éditer
-$chambre = new CChambre();
-$chambre->load($chambre_id);
-$chambre->loadRefsNotes();
-$chambre->loadRefService();
-foreach ($chambre->loadRefsLits(true) as $_lit) {
-  $_lit->loadRefsNotes();
-}
-
-if (!$chambre->_id) {
-  CValue::setSession("lit_id", 0);
-}
-
-// Chargement du lit à ajouter / éditer
-$lit = new CLit();
-$lit->load($lit_id);
-$lit->loadRefChambre();
-
 // Récupération des chambres/services/secteurs
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
 
-$nb_chambre = 0;
 /** @var CService[] $services */
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
-  foreach ($_service->loadRefsChambres() as $_chambre) {
-    $_chambre->loadRefsLits();
-    $nb_chambre++;
-  }
+  $_service->loadRefsLits(true);
 }
 
 $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
@@ -118,15 +90,8 @@ $praticiens = CAppUI::$user->loadPraticiens();
 $smarty = new CSmartyDP();
 
 $smarty->assign("services"      , $services);
-$smarty->assign("service"       , $service);
-$smarty->assign("tag_service"   , CService::getTagService($group->_id));
 $smarty->assign("secteurs"      , $secteurs);
 $smarty->assign("secteur"       , $secteur);
-$smarty->assign("chambre"       , $chambre);
-$smarty->assign("nb_chambre"    , $nb_chambre);
-$smarty->assign("tag_chambre"   , CChambre::getTagChambre($group->_id));
-$smarty->assign("lit"           , $lit);
-$smarty->assign("tag_lit"       , CLit::getTagLit($group->_id));
 $smarty->assign("ufs"           , $ufs);
 $smarty->assign("uf"            , $uf);
 $smarty->assign("ums"           , $ums);
