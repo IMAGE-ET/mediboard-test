@@ -787,3 +787,19 @@ ul.control_tabs_vertical li a.active {
 span.circled.color-th{
   border-color:#bbb;
 }
+
+table.tbl tr.alternate:hover:nth-of-type(odd) td {
+  background-color: #fff2dd;
+}
+
+div.folder.selected {
+  background-color: rgba(182, 181, 185, 0.70);
+}
+
+div.folder:hover {
+  background-color: rgba(182, 181, 185, 0.50)
+}
+
+div.folder.selected:hover {
+  background-color: rgba(182, 181, 185, 0.90);
+}

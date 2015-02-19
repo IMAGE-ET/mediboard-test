@@ -327,3 +327,19 @@ ul.control_tabs_vertical li a.active:hover {
 span.circled.color-th{
   border-color:#ae0040;
 }
+
+table.tbl tr.alternate:hover:nth-of-type(odd) td {
+  background-color: #fdd;
+}
+
+div.folder.selected {
+  background-color: #FFC3BE;
+}
+
+div.folder:hover {
+  background-color: #FFDDDD;
+}
+
+div.folder.selected:hover {
+  background-color: #FFA7A3;
+}

@@ -653,3 +653,11 @@ table.constantes th {
   border-right: none !important;
   border-bottom: none !important;
 }
+
+table.tbl tr.alternate:nth-of-type(odd) td {
+  background-color: #ebebeb;
+}
+
+table.tbl tr.alternate:hover:nth-of-type(odd) td {
+  background-color: #f8f8f8;
+}
