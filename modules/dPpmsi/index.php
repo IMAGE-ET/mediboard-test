@@ -10,15 +10,12 @@
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
-
-$module->registerTab("vw_dossier_pmsi"    , TAB_EDIT);
-$module->registerTab("vw_list_hospi"      , TAB_READ);
-$module->registerTab("vw_list_interv"     , TAB_READ);
-$module->registerTab("form_print_planning", TAB_READ);
-if (CAppUI::conf("ref_pays") == "2") {
-  $module->registerTab("vw_idx_sortie"     , TAB_READ);
-}
-
 if (CAppUI::conf("dPpmsi display see_recept_dossier", CGroups::loadCurrent())) {
-  $module->registerTab("vw_recept_sejour"     , TAB_READ);
+  $module->registerTab("vw_recept_dossiers" , TAB_READ);
+}
+$module->registerTab("vw_dossier_pmsi"    , TAB_EDIT);
+$module->registerTab("vw_current_dossiers", TAB_READ);
+$module->registerTab("vw_print_planning", TAB_READ);
+if (CAppUI::conf("ref_pays") == "2") {
+  $module->registerTab("vw_idx_sortie"    , TAB_READ);
 }
