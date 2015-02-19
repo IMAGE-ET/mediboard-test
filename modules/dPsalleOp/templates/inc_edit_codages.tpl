@@ -240,8 +240,10 @@
   <tr>
     <td>
       {{if $codages|@count != 1}}
+        {{assign var=total value=0}}
         <ul id="codages-tab" class="control_tabs">
           {{foreach from=$codages item=_codage}}
+            {{math assign=total equation="x+y" x=$total y=$_codage->_total}}
             <li>
               <a href="#codage-{{$_codage->_id}}">
                 {{tr}}CCodageCCAM.activite_anesth.{{$_codage->activite_anesth}}{{/tr}}&nbsp;&nbsp;
@@ -252,6 +254,9 @@
               </a>
             </li>
           {{/foreach}}
+          <li>
+            Total activités : {{$total|number_format:2:',':' '}} {{$conf.currency_symbol|html_entity_decode}}
+          </li>
         </ul>
 
         <hr class="control_tabs" />
