@@ -36,6 +36,7 @@ $where["group_id"] = "= '$group->_id'";
 $order = "nom";
 
 /** @var CService[] $services */
+$service= new CService();
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
   $_service->loadRefsLits(true);
