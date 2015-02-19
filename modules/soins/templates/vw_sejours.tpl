@@ -54,11 +54,12 @@
 
   refreshLineSejour = function(sejour_id) {
     var url = new Url("soins", "vw_sejours");
-    url.addParam("sejour_id", sejour_id);
-    url.addParam("service_id", "{{$service_id}}");
-    url.addParam("function_id", "{{$function->_id}}");
-    url.addParam("praticien_id", "{{$praticien->_id}}");
+    url.addParam("sejour_id"       , sejour_id);
+    url.addParam("service_id"      , "{{$service_id}}");
+    url.addParam("function_id"     , "{{$function->_id}}");
+    url.addParam("praticien_id"    , "{{$praticien->_id}}");
     url.addParam("show_affectation", '{{$show_affectation}}');
+    url.addParam("select_view"     , '{{$select_view}}');
     url.requestUpdate("line_sejour_"+sejour_id, { onComplete: function(){
       {{if "dPImeds"|module_active}}
       ImedsResultsWatcher.loadResults();
