@@ -23,6 +23,7 @@ $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture");
 $numero             = CValue::getOrSession("numero", 0);
 $search_easy        = CValue::getOrSession("search_easy", 0);
+$xml_etat           = CValue::getOrSession("xml_etat" , "");
 $page               = CValue::get("page", "0");
 
 // Liste des chirurgiens
@@ -70,6 +71,9 @@ if ($search_easy == 5) {
 }
 if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
+}
+if ($xml_etat != "") {
+  $where["facture"] =" = '$xml_etat' ";
 }
 $facture = new CFactureEtablissement();
 $total_factures = $facture->countList($where, null, $ljoin);
@@ -140,6 +144,7 @@ $smarty->assign("num_facture"   , $num_facture);
 $smarty->assign("numero"        , $numero);
 $smarty->assign("search_easy"   , $search_easy);
 $smarty->assign("page"          , $page);
-$smarty->assign("total_factures" , $total_factures);
+$smarty->assign("total_factures", $total_factures);
+$smarty->assign("xml_etat"      , $xml_etat);
 
 $smarty->display("vw_factures.tpl");

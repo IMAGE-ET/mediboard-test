@@ -26,6 +26,7 @@
   {{if !$conf.dPfacturation.Other.use_search_easy}}
     url.addElement(oForm.etat_cloture);
     url.addElement(oForm.numero);
+    url.addElement(oForm.xml_etat);
     {{if $conf.dPfacturation.CRelance.use_relances}}
       url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
     {{/if}}
@@ -89,7 +90,19 @@ Main.add(function () {
               </option>
             </select>
           </td>
-          <td colspan="2"></td>
+          <th>{{mb_title object=$facture field=facture}}</th>
+          <td>
+            <select name="xml_etat">
+              <option value="" {{if !$xml_etat}} selected="selected" {{/if}}>-- Toutes</option>
+              <option value="-1" {{if $xml_etat == "-1"}} selected="selected" {{/if}}>
+                {{tr}}CFactureEtablissement.facture.-1{{/tr}}</option>
+              <option value="0" {{if $xml_etat == "0"}} selected="selected" {{/if}}>
+                {{tr}}CFactureEtablissement.facture.0{{/tr}}</option>
+              <option value="1" {{if $xml_etat == "1"}} selected="selected" {{/if}}>
+                {{tr}}CFactureEtablissement.facture.1{{/tr}}</option>
+              </option>
+            </select>
+          </td>
         {{else}}
           <th>{{mb_label object=$facture field=type_facture}}</th>
           <td>

@@ -30,6 +30,9 @@ if (CAppUI::conf("ref_pays") == "2") {
             "use_date_consult_traitement" => "bool default|0",
             "see_diag_justificatif"       => "bool default|1",
           ),
+          "CEditBill" => array(
+            "store_envoi_xml" => "bool default|0",
+          ),
         )
       )
     )

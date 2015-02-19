@@ -28,20 +28,31 @@
   <tr>
     <td colspan="8">
       {{if $conf.dPfacturation.Other.edit_bill_alone}}
-        <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr');">Edition des BVR</button>
-        <button class="print" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'justificatif');">Justificatif de remboursement</button>
+        <button class="printPDF" style="float:left;" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr');">Edition des BVR</button>
+        <button class="print" style="float:left;" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'justificatif');">Justificatif de remboursement</button>
       {{else}}
-        <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'impression');">Edition des documents</button>
+        <button class="printPDF" style="float:left;" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'impression');">Edition des documents</button>
       {{/if}}
 
       {{if $facture->_ref_reglements|@count}}
         {{if ($facture->_ref_assurance_maladie->_id && $facture->type_facture == "maladie" && $facture->_ref_assurance_maladie->type_pec == "TS")
         || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && "tarmed coefficient pt_maladie"|conf:"CGroups-$g") }}
-          <button class="printPDF" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_TS');">Facture Patient</button>
+          <button class="printPDF" style="float:left;" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_TS');">Facture Patient</button>
         {{/if}}
       {{/if}}
       {{*Modification temporaire!! bvr_justif=impression*}}
-      <button class="print" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_justif');">Impression</button>
+      <button class="print" style="float:left;" onclick="Facture.printFacture('{{$facture->_id}}', '{{$facture->_class}}', 'bvr_justif');">Impression</button>
+
+      <div class="small-warning" style="float:left;{{if $facture->facture == 0}}display:none;{{/if}}">
+        Facture XML {{if $facture->facture == 1}}envoyée{{else}}en echec d'envoi{{/if}}
+        <form name="facture_extourne" method="post" action="">
+          {{mb_class object=$facture}}
+          {{mb_key   object=$facture}}
+          <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
+          <input type="hidden" name="facture" value="0"/>
+          <button type="button" class="change" onclick="Facture.modifCloture(this.form);">Forcer le renvoi</button>
+        </form>
+      </div>
 
       {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
         <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">

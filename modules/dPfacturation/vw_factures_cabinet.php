@@ -24,6 +24,7 @@ $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
 $numero             = CValue::getOrSession("numero", "0");
 $search_easy        = CValue::getOrSession("search_easy", "0");
+$xml_etat           = CValue::getOrSession("xml_etat", "");
 $page               = CValue::get("page", "0");
 
 //Patient sélectionné
@@ -65,6 +66,9 @@ if ($num_facture) {
   $ljoin = array();
   $where = array();
   $where["facture_id"] =" = '$num_facture' ";
+}
+if ($xml_etat != "") {
+  $where["facture"] =" = '$xml_etat' ";
 }
 
 $facture = new CFactureCabinet();
@@ -143,6 +147,7 @@ $smarty->assign("num_facture"   , $num_facture);
 $smarty->assign("numero"        , $numero);
 $smarty->assign("search_easy"   , $search_easy);
 $smarty->assign("page"          , $page);
-$smarty->assign("total_factures" , $total_factures);
+$smarty->assign("total_factures", $total_factures);
+$smarty->assign("xml_etat"      , $xml_etat);
 
 $smarty->display("vw_factures.tpl");
