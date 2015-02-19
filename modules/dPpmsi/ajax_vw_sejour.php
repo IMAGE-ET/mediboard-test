@@ -108,6 +108,7 @@ foreach ($sejour->_ref_operations as $_operation) {
       foreach ($_codages_by_prat as $_codage) {
         $_codage->loadPraticien()->loadRefFunction();
         $_codage->loadActesCCAM();
+        $_codage->getTarifTotal();
         foreach ($_codage->_ref_actes_ccam as $_acte) {
           $_acte->getTarif();
         }

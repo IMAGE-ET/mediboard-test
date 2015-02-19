@@ -33,6 +33,7 @@ foreach ($codages as $_codage) {
   $_codage->loadPraticien()->loadRefFunction();
   $_codage->_ref_praticien->isAnesth();
   $_codage->loadActesCCAM();
+  $_codage->getTarifTotal();
   $_codage->checkRules();
 
   foreach ($_codage->_ref_actes_ccam as $_acte) {

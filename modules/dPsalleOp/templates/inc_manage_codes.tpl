@@ -126,8 +126,10 @@
             <th class="category">Actions</th>
           </tr>
           {{foreach from=$subject->_ref_codages_ccam item=_codages_by_prat name=codages}}
+            {{assign var=total value=0}}
             {{foreach from=$_codages_by_prat item=_codage name=codages_by_prat}}
-              <tr {{if !$smarty.foreach.codages.last && $smarty.foreach.codages_by_prat.last}}style="border-bottom: 1pt dotted #93917e;"{{/if}}>
+              {{math assign=total equation="x+y" x=$total y=$_codage->_total}}
+              <tr>
                 {{if $smarty.foreach.codages_by_prat.first}}
                   <td rowspan="{{$_codages_by_prat|@count}}">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_codage->_ref_praticien}}</td>
                 {{/if}}
@@ -233,6 +235,16 @@
                   </td>
                 {{/if}}
               </tr>
+              {{if $smarty.foreach.codages_by_prat.last && $total != 0}}
+                <tr{{if !$smarty.foreach.codages.last}} style="border-bottom: 1pt dotted #93917e;"{{/if}}>
+                  <td colspan="2" style="text-align: right;">
+                    Montant total :
+                  </td>
+                  <td style="text-align: left;">
+                    {{$total|number_format:2:',':' '}} {{$conf.currency_symbol|html_entity_decode}}
+                  </td>
+                </tr>
+              {{/if}}
             {{/foreach}}
           {{foreachelse}}
             <tr>

@@ -51,6 +51,11 @@ class CCodageCCAM extends CMbObject {
   protected $_apply_rules = true;
 
   /**
+   * @var float The total price
+   */
+  public $_total;
+
+  /**
    * @var CCodable
    */
   public $_ref_codable;
@@ -125,6 +130,7 @@ class CCodageCCAM extends CMbObject {
     $props['locked']           = 'bool notNull default|0';
     $props['activite_anesth']  = 'bool notNull default|0';
     $props['date']             = 'date notNull';
+    $props['_total']           = 'currency';
 
     return $props;
   }
@@ -288,6 +294,15 @@ class CCodageCCAM extends CMbObject {
     }
 
     return $this->_ref_actes_ccam;
+  }
+
+  public function getTarifTotal() {
+    $this->loadActesCCAM();
+    $this->_total = 0;
+
+    foreach ($this->_ref_actes_ccam as $_acte) {
+      $this->_total += $_acte->getTarif();
+    }
   }
 
   /**

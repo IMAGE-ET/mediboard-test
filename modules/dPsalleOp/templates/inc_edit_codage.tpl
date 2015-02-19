@@ -194,6 +194,15 @@
         {{tr}}CActeCCAM.none{{/tr}}
       </td>
     </tr>
+  {{else}}
+    <tr>
+      <th class="category" colspan="6" style="text-align: right;">
+        Montant total
+      </th>
+      <th class="category" colspan="6" style="text-align: left;">
+        {{mb_value object=$codage field=_total}}
+      </th>
+    </tr>
   {{/if}}
 </table>
 
