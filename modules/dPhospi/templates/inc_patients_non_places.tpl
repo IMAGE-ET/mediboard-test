@@ -71,15 +71,6 @@
                 </em>
               {{/if}}
               <div style="float:left;{{if !$conf.dPhospi.show_age_patient}}display:none;{{/if}}">({{$_patient->_age}})&nbsp;</div>
-
-               {{if "dPhospi vue_tempo show_imc_patient"|conf:"CGroups-$g" && $_patient->_ref_constantes_medicales->poids}}
-                 <div style="float:left;">
-                   - {{mb_value object=$_patient->_ref_constantes_medicales field=poids}} kg
-                 {{if $_patient->_ref_constantes_medicales->_imc}}
-                   ({{mb_value object=$_patient->_ref_constantes_medicales field=_imc}})
-                 {{/if}}
-                 </div>
-               {{/if}}
               {{$_sejour->libelle|lower}}
               {{$_sejour->_type_admission}}
              </div>
