@@ -28,13 +28,14 @@ Main.add(function() {
 
 <form name="exportCotationSalleOp" method="get" target="_blank">
   <input type="hidden" name="m" value="board" />
-  <input type="hidden" name="a" value="ajax_export_interv_non_cotees" />
+  <input type="hidden" name="a" value="ajax_list_interv_non_cotees" />
   <input type="hidden" name="dialog" value="1" />
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="debut" />
   <input type="hidden" name="fin" />
   <input type="hidden" name="all_prats" value="{{$all_prats}}"/>
   <input type="hidden" name="chirSel" value="{{$chirSel}}"/>
+  <input type="hidden" name="export" value="1"/>
 </form>
 
 <form name="changeDate" method="get" action="?">

@@ -15,6 +15,7 @@ $all_prats = CValue::get("all_prats", 0);
 $fin       = CValue::get("fin", CMbDT::date());
 $fin       = CMbDT::date("+1 day", $fin);
 $debut     = CValue::get("debut", CMbDT::date("-1 week", $fin));
+$export    = CValue::get("export", 0);
 
 $mediuser = CMediusers::get();
 if ($mediuser->isPraticien()) {
@@ -227,15 +228,121 @@ foreach ($consultations as $key => $_consult) {
 }
 
 $consultations = CModelObject::naturalSort($consultations, array("_date"));
+if (!$export) {
+  $smarty = new CSmartyDP();
 
-$smarty = new CSmartyDP();
+  $smarty->assign("totals"       , $totals);
+  $smarty->assign("interventions", $interventions);
+  $smarty->assign("consultations", $consultations);
+  $smarty->assign("debut"        , $debut);
+  $smarty->assign("fin"          , $fin);
+  $smarty->assign("all_prats"    , $all_prats);
+  $smarty->assign("board"        , CValue::get("board", 0));
 
-$smarty->assign("totals"       , $totals);
-$smarty->assign("interventions", $interventions);
-$smarty->assign("consultations", $consultations);
-$smarty->assign("debut"        , $debut);
-$smarty->assign("fin"          , $fin);
-$smarty->assign("all_prats"    , $all_prats);
-$smarty->assign("board"        , CValue::get("board", 0));
+  $smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
+}
+else {
+  $csv = new CCSVFile();
 
-$smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
+  $line = array(
+    "Praticiens",
+    "Patient",
+    "Evènement",
+    "Actes Non cotés",
+    "Codes prévus",
+    "Actes cotés"
+  );
+  if (!$all_prats) {
+    unset($line[0]);
+  }
+  $csv->writeLine($line);
+
+  foreach ($interventions as $_interv) {
+    $line = array();
+    if ($all_prats) {
+      $chir = $_interv->_ref_chir->_view;
+      if ($_interv->_ref_anesth->_id) {
+        $chir .= "\n" . $_interv->_ref_anesth->_view;
+      }
+      $line[] = $chir;
+    }
+    $line[] = $_interv->_ref_patient->_view;
+
+    $interv = $_interv->_view;
+    if ($_interv->_ref_sejour->libelle) {
+      $interv .= "\n".$_interv->_ref_sejour->libelle;
+    }
+    if ($_interv->libelle) {
+      $interv .= "\n".$_interv->libelle;
+    }
+    $line[] = $interv;
+
+    $line[] = (!$_interv->_count_actes && !$_interv->_ext_codes_ccam) ? "Aucun prévu" : $_interv->_actes_non_cotes."acte(s)";
+
+    $actes = "";
+    foreach ($_interv->_ext_codes_ccam as $code) {
+      $actes .= $actes == "" ? "" : "\n";
+      $actes .= "$code->code";
+    }
+    $line[] = $actes;
+
+    $actes_cotes = "";
+    foreach ($_interv->_ref_actes_ccam as $_acte) {
+      $code .= $actes_cotes == "" ? "" : "\n";
+      $code .= $_acte->code_acte."-".$_acte->code_activite."-".$_acte->code_phase;
+      if ($_acte->modificateurs) {
+        $code .= " MD:".$_acte->modificateurs;
+      }
+      if ($_acte->montant_depassement) {
+        $code .= " DH:".$_acte->montant_depassement;
+      }
+      $actes_cotes .= "$code";
+    }
+    $line[] = $actes_cotes;
+
+    $csv->writeLine($line);
+  }
+
+  foreach ($consultations as $_consult) {
+    $line = array();
+
+    if ($all_prats) {
+      $line[] = $_consult->_ref_chir->_view;
+    }
+
+    $line[] = $_consult->_ref_patient->_view;
+
+    $view = "Consultation le ".CMbDT::format($_consult->_datetime, "%d/%m/%Y");
+    if ($_consult->_ref_sejour && $_consult->_ref_sejour->libelle) {
+      $view .= $_consult->_ref_sejour->libelle;
+    }
+    $line[] = $view;
+
+    $line[] = (!$_consult->_count_actes && !$_consult->_ext_codes_ccam) ? "Aucun prévu" : $_consult->_actes_non_cotes."acte(s)";
+
+    $actes = "";
+    foreach ($_consult->_ext_codes_ccam as $code) {
+      $actes .= $actes == "" ? "" : "\n";
+      $actes .= "$code->code";
+    }
+    $line[] = $actes;
+
+    $actes_cotes = "";
+    foreach ($_consult->_ref_actes_ccam as $_acte) {
+      $code .= $actes_cotes == "" ? "" : "\n";
+      $code .= $_acte->code_acte."-".$_acte->code_activite."-".$_acte->code_phase;
+      if ($_acte->modificateurs) {
+        $code .= " MD:".$_acte->modificateurs;
+      }
+      if ($_acte->montant_depassement) {
+        $code .= " DH:".$_acte->montant_depassement;
+      }
+      $actes_cotes .= "$code";
+    }
+    $line[] = $actes_cotes;
+
+    $csv->writeLine($line);
+  }
+
+  $csv->stream("export-intervention_non_cotes-".$debut."-".$fin);
+}
