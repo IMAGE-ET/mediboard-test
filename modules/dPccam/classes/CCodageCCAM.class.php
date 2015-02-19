@@ -454,23 +454,24 @@ class CCodageCCAM extends CMbObject {
   }
 
   /**
-   * Check if the modifier K has been checked on the linked acts of the given act
+   * Check if a modifier has been checked on the linked acts of the given act
    *
+   * @param string    $mod  The modifier
    * @param CActeCCAM &$act the act
    *
    * @return boolean
    */
-  public static function isModifierKchecked(&$act) {
-    $act->getLinkedActes();
+  public static function isModifierchecked($mod, &$act) {
+    $act->getLinkedActes(false);
 
-    $modifier_K = false;
+    $modifier = false;
     foreach ($act->_linked_actes as $_linked_act) {
-      if (in_array('K', $_linked_act->_modificateurs)) {
-        $modifier_K = true;
+      if (in_array($mod, $_linked_act->_modificateurs)) {
+        $modifier = true;
       }
     }
 
-    return $modifier_K;
+    return $modifier;
   }
 
   /**
@@ -538,7 +539,13 @@ class CCodageCCAM extends CMbObject {
           elseif (!in_array($discipline, $spe_gyneco)) {
             $_modifier->_state = 'not_recommended';
           }
-          if (self::isModifierKchecked($act)) {
+          if (self::isModifierchecked('K', $act)) {
+            $checked = true;
+          }
+          break;
+        case 'L':
+          if (self::isModifierchecked('L', $act)) {
+            $_modifier->_state = 'prechecked';
             $checked = true;
           }
           break;
@@ -564,6 +571,12 @@ class CCodageCCAM extends CMbObject {
           }
           else {
             $_modifier->_state = 'not_recommended';
+          }
+          break;
+        case 'R':
+          if (self::isModifierchecked('R', $act)) {
+            $_modifier->_state = 'prechecked';
+            $checked = true;
           }
           break;
         case 'S':
