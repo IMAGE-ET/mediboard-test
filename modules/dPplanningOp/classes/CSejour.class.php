@@ -4454,14 +4454,14 @@ class CSejour extends CFacturable implements IPatientRelated {
             $dates[$prev_liaison_id]["fin"] = CMbDT::date($_sous_item->niveau == "nuit" ? "-1 day" : "", $date);
           }
           if ($_liaison->_id == $last_liaison->_id) {
-            $dates[$_liaison->_id]["debut"] = CMbDT::date(($_sous_item->_id && $_sous_item->niveau == "nuit" && $date != CMbDT::date($this->entree)) ? "-1 day" : "", $date);
+            $dates[$_liaison->_id]["debut"] = CMbDT::date($date);
             $dates[$_liaison->_id]["fin"] = CMbDT::date($this->sortie);
             continue;
           }
         }
 
         $prev_liaison_id = $_liaison->_id;
-        $dates[$_liaison->_id]["debut"] = CMbDT::date(($_sous_item->_id && $_sous_item->niveau == "nuit" && $date != CMbDT::date($this->entree)) ? "-1 day" : "", $date);
+        $dates[$_liaison->_id]["debut"] = CMbDT::date($date);
       }
     }
 
@@ -4493,6 +4493,10 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_item_souhait = $_liaison->loadRefItem();
         $_item_realise = $_liaison->loadRefItemRealise();
         $sous_item = $_liaison->loadRefSousItem();
+
+        if (!$_item_souhait->facturable) {
+          continue;
+        }
 
         if (!$_item_realise->_id) {
           continue;
