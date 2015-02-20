@@ -50,7 +50,7 @@
       <div class="compact">
         {{if $line->sans_planif && $line->_class == "CPrescriptionLineMedicament"}}
           {{if $line->max_par_prise}}
-            {{mb_label object=$line field=max_par_prise}} : {{mb_value object=$line field=max_par_prise}} {{mb_value object=$line field=unite_prise}} <br />
+            {{mb_label object=$line field=max_par_prise}} : {{mb_value object=$line field=max_par_prise}} {{mb_value object=$line field=unite_prise}}<br />
           {{/if}}
           {{if $line->max_par_jour}}
             {{mb_label object=$line field=max_par_jour}} : {{mb_value object=$line field=max_par_jour}} {{mb_value object=$line field=unite_prise}}<br />
@@ -58,10 +58,17 @@
           {{if $line->delay_prise}}
             {{mb_label object=$line field=delay_prise}} : {{mb_value object=$line field=delay_prise}} h<br />
           {{/if}}
+          {{if $line->default_quantity}}
+            {{mb_label object=$line field=default_quantity}} : {{mb_value object=$line field=default_quantity}} {{mb_value object=$line field=unite_prise}}<br />
+          {{/if}}
         {{else}}
-          {{foreach from=$line->_ref_prises item=_prise}}
-            {{$_prise}}<br />
-          {{/foreach}}
+          {{if is_numeric($unite_prise)}}
+            {{$line->_prises_for_plan.$unite_prise}}
+          {{else}}
+            {{foreach from=$line->_prises_for_plan.$unite_prise item=_prise key=prise_truc}}
+              {{$_prise}}<br />
+            {{/foreach}}
+          {{/if}}
         {{/if}}
       </div>
       {{if $mode_dupa}}
@@ -107,7 +114,7 @@
     {{if $mode_lite}}
       <td class="text">
         {{assign var=last_adm value=$line->_ref_last_administration}}
-        {{if $last_adm->_id && ($last_adm->unite_prise == $unite_prise || $last_adm->prise_id == $unite_prise)}}
+        {{if $last_adm->_id && ($last_adm->unite_prise == $unite_prise || $last_adm->prise_id == $unite_prise || $unite_prise == "aucune_prise")}}
           <div class="compact">
             {{$line->_ref_last_administration->quantite}}
             {{if $line instanceof CPrescriptionLineElement}}
@@ -119,10 +126,10 @@
               {{$line->_ref_produit->_unite_administration}}
             {{/if}}
             <br />
-            le {{$line->_ref_last_administration->dateTime|date_format:$conf.date}} <br />
-            à {{$line->_ref_last_administration->dateTime|date_format:$conf.time}}
+            le {{$last_adm->dateTime|date_format:$conf.date}} <br />
+            à {{$last_adm->dateTime|date_format:$conf.time}}
           </div>
-        {{elseif !$line->_ref_administrations|@count}}
+        {{elseif !$last_adm->_id|@count}}
           <div class="empty">{{tr}}CAdministration.none_short{{/tr}}</div>
         {{/if}}
       </td>
@@ -171,8 +178,15 @@
 
           {{* Hatching de la case si arrêt et que la case est dans les bornes de l'arrêt *}}
           {{assign var=hatching_arret value=""}}
+          {{assign var=moment_to_hour value=$postes_to_hour.$_moment}}
           {{if $line->date_arret && $line->time_arret}}
-            {{if "$_date $_moment:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+            {{if "$_date $moment_to_hour:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+              {{assign var=hatching_arret value="1"}}
+            {{/if}}
+          {{/if}}
+
+          {{if $line->_fin_reelle}}
+            {{if "$_date $moment_to_hour:00:00" >= $line->_fin_reelle}}
               {{assign var=hatching_arret value="1"}}
             {{/if}}
           {{/if}}
@@ -359,13 +373,14 @@
       {{/if}}
       {{if $mode_lite}}
         <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
-          {{if $_line_item->_ref_last_administration->_id}}
+          {{assign var=last_adm value=$_line_item->_ref_last_administration}}
+          {{if $last_adm->_id}}
             <div class="compact">
-              {{$_line_item->_ref_last_administration->quantite}} {{$_line_item->_ref_last_administration->unite_prise}} <br />
-              le {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.date}} <br />
-              à {{$_line_item->_ref_last_administration->dateTime|date_format:$conf.time}}
+              {{$last_adm->quantite}} {{$last_adm->unite_prise}} <br />
+              le {{$last_adm->dateTime|date_format:$conf.date}} <br />
+              à {{$last_adm->dateTime|date_format:$conf.time}}
             </div>
-          {{elseif !$_line_item->_ref_administrations|@count}}
+          {{elseif !$last_adm->_id}}
             <div class="empty">{{tr}}CAdministration.none_short{{/tr}}</div>
           {{/if}}
         </td>
@@ -394,8 +409,20 @@
 
             {{* Hatching de la case si arrêt et que la case est dans les bornes de l'arrêt *}}
             {{assign var=hatching_arret value=""}}
+            {{assign var=moment_to_hour value=$postes_to_hour.$_moment}}
+
             {{if $line->date_arret && $line->time_arret}}
-              {{if "$_date $_moment:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+              {{if "$_date $moment_to_hour:00:00" >= "`$line->date_arret` `$line->time_arret`"}}
+                {{assign var=hatching_arret value="1"}}
+              {{/if}}
+            {{/if}}
+            {{if $line->date_retrait && $line->time_retrait}}
+              {{if "$_date $moment_to_hour:00:00" >= "`$line->date_retrait` `$line->time_retrait`"}}
+                {{assign var=hatching_arret value="1"}}
+              {{/if}}
+            {{/if}}
+            {{if $line->_fin_reelle}}
+              {{if "$_date $moment_to_hour:00:00" >= $line->_fin_reelle}}
                 {{assign var=hatching_arret value="1"}}
               {{/if}}
             {{/if}}
