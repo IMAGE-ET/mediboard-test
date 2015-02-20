@@ -104,6 +104,12 @@ class CPrinceXMLConverter extends CHtmlToPDFConverter {
         }";
     }
 
+    // Autoprint
+    $style .= "
+    @prince-pdf {
+      prince-pdf-open-action: print
+    }";
+
     $pos_end_style = strpos($this->html, "</style>");
 
     $begin_doc = substr($this->html, 0, $pos_end_style);
