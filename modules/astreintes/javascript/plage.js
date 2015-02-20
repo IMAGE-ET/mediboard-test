@@ -12,10 +12,10 @@ PlageAstreinte = {
   },
 
   loadUser: function(user_id, plage_id) {
-    var url = new Url("astreintes", "ajax_plage_astreinte");
-    url.addParam("plage_id", plage_id);
-    url.addParam("user_id", user_id);
-    url.requestUpdate("vw_user");
+    new Url("astreintes", "ajax_plage_astreinte")
+      .addParam("plage_id", plage_id)
+      .addParam("user_id", user_id)
+      .requestUpdate("vw_user");
 
     var user = $("u"+user_id);
     if (user) user.addUniqueClassName("selected");
@@ -23,10 +23,10 @@ PlageAstreinte = {
 
   // Select plage and open form
   edit: function(plage_id, user_id) {
-    var url = new Url("astreintes", "ajax_edit_plage_astreinte");
-    url.addParam("plage_id", plage_id);
-    url.addParam("user_id", user_id);
-    url.requestUpdate("edit_plage");
+    new Url("astreintes", "ajax_edit_plage_astreinte")
+      .addParam("plage_id", plage_id)
+      .addParam("user_id", user_id)
+      .requestUpdate("edit_plage");
 
     var plage = $("p"+plage_id);
     if (plage) plage.addUniqueClassName("selected");
@@ -43,9 +43,9 @@ PlageAstreinte = {
   },
 
   content: function() {
-    var url = new Url("astreintes", "vw_planning_astreinte");
-    url.addParam("affiche_nom", 0);
-    url.requestUpdate("planningconge");
+    new Url("astreintes", "vw_planning_astreinte")
+      .addParam("affiche_nom", 0)
+      .requestUpdate("planningconge");
   },
 
   modal: function(plage_id, date, hourstart, minutestart, callback) {

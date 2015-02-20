@@ -30,11 +30,11 @@ class CPlageAstreinte extends CPlageCalendaire {
 
   // Object References
   public $_num_astreinte;
+
   /** @var CMediusers $_ref_user */
   public $_ref_user;
-  public $_type;
+  /** @var CGroups $_ref_group  */
   public $_ref_group;
-
 
   // Form fields
   public $_duree;   //00:00:00
@@ -130,6 +130,7 @@ class CPlageAstreinte extends CPlageCalendaire {
       return true;
     }
 
+    /* @todo À quoi sert ce droit ? */
     if (CModule::getCanDo("astreintes")->read && $permType <= PERM_READ) {
       return true;
     }
@@ -143,8 +144,7 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return string
    */
   function getDuree() {
-    $duree = CMbDate::duration($this->start, $this->end, 0);
-    return $this->_duree = $duree;
+    return $this->_duree = CMbDate::duration($this->start, $this->end, 0);
   }
 
   /**
@@ -153,8 +153,7 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return float
    */
   function getHours() {
-    $duree = CMbDT::minutesRelative($this->start, $this->end)/60;
-    return $this->_hours = $duree;
+    return $this->_hours = CMbDT::minutesRelative($this->start, $this->end)/60;
   }
 
   /**
@@ -172,7 +171,10 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return mixed
    */
   function loadRefColor() {
-    $this->_font_color = CColorSpec::get_text_color(CAppUI::conf("astreintes astreinte_".$this->type."_color")) > 130 ? '000000' :  'ffffff';
+    $color = CAppUI::conf("astreintes astreinte_".$this->type."_color");
+
+    $this->_font_color = CColorSpec::get_text_color($color) > 130 ? '000000' :  'ffffff';
+
     return $this->_color = CAppUI::conf("astreintes astreinte_".$this->type."_color");
   }
 
@@ -183,11 +185,12 @@ class CPlageAstreinte extends CPlageCalendaire {
    */
   function loadRefUser() {
     /** @var CMediusers $user */
-    $user = $this->loadFwdRef("user_id", true);
-    $user->loadRefFunction();
-    $this->_num_astreinte = $user->_user_astreinte;
-    $this->_type = $user->_user_type;
-    return $this->_ref_user = $user;
+    $mediuser = $this->loadFwdRef("user_id", true);
+    $mediuser->loadRefFunction();
+
+    $this->_num_astreinte = $mediuser->_user_astreinte;
+
+    return $this->_ref_user = $mediuser;
   }
 
   /**

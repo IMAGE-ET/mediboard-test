@@ -103,7 +103,8 @@
          <div class="insertion">
          {{foreach from=$plagesastreinte item=_plage2}}
            {{if $_plage2->user_id == $indice}}
-             <div id = "plage{{$_plage2->_id}}" class = "plage" style="{{if $_plage2->_ref_user->_user_type_view !="Administrator"}}background:#ffaeae;{{else}}background:#aed0ff;{{/if}}">
+             <div id = "plage{{$_plage2->_id}}" class = "plage"
+                  style="{{if $_plage2->_ref_user->user_type != "1"}}background:#ffaeae;{{else}}background:#aed0ff;{{/if}}">
                <div class="content">
                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
                    {{if $_plage2->libelle}}<strong>{{$_plage2->libelle}}</strong>{{else}}<em>Pas de libelle</em>{{/if}}
