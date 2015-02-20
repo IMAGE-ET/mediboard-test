@@ -241,6 +241,7 @@
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
     File.use_mozaic = 1;
+    window.currentSejourId = '{{$sejour->_id}}';
 
     tab_sejour = Control.Tabs.create('tab-sejour', false, {
       afterChange: function(container) {

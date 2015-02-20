@@ -15,6 +15,8 @@
   {{mb_return}}
 {{/if}}
 
+<div class="small-error" id="sejour-load-error" style="display: none;">Une erreur s'est produite durant le chargement du dossier, veuillez réessayer.</div>
+
 <script>
   addManualPlanification = function(date, time, key_tab, object_id, object_class, original_date, quantite){
     var prise_id = !isNaN(key_tab) ? key_tab : '';
@@ -258,6 +260,11 @@
   {{/if}}
 
   Main.add(function () {
+    if (window.currentSejourId && window.currentSejourId != '{{$sejour->_id}}') {
+      $("sejour-load-error").show();
+      return;
+    }
+
     PlanSoins.anciennete = {{"dPprescription general alerte_refresh_plan"|conf:"CGroups-$g"}}
 
     {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
