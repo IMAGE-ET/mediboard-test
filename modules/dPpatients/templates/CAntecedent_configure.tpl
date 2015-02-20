@@ -10,7 +10,7 @@
     $$('input.manda_types_class').each(function(_elt) {
       var _val = _elt.value;
       if (!fieldTypes.include(_val)) {
-        $(_elt).checked = false;
+        $V(_elt, false);
         $(_elt).up('div').hide();
       }
       else {
@@ -117,11 +117,6 @@
           </label>
         </div>
         {{/foreach}}
-      </td>
-    </tr>
-    <tr>
-      <td class="button" colspan="6">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
   </table>
