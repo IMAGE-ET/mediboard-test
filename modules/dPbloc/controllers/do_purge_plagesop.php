@@ -23,7 +23,7 @@ $where = array(
 );
 
 if ($practitioner_id) {
-  $where['chir_id'] = $ds->prepare('= ?', $practitioner_id);
+  $where['plagesop.chir_id'] = $ds->prepare('= ?', $practitioner_id);
 }
 
 $count = $plage_op->countList($where, null, $ljoin);
