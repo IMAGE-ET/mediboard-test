@@ -123,6 +123,7 @@ switch ($freq_poste) {
 
     for ($i = intval($first_key) % $freq_poste ; $i < 24 ; $i += $freq_poste) {
       $postes["Poste $count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
+      $postes_to_hour[str_pad($i, 2, "0", STR_PAD_LEFT)] = str_pad($i, 2, "0", STR_PAD_LEFT);
       $moments["poste-$count"] = str_pad($i, 2, "0", STR_PAD_LEFT);
       $count++;
       $periods[] = $i;
@@ -136,6 +137,13 @@ switch ($freq_poste) {
       "Poste 2" => CAppUI::conf("soins plan_soins hour_midi" , $group->_guid),
       "Poste 3" => CAppUI::conf("soins plan_soins hour_soir" , $group->_guid),
       "Poste 4" => CAppUI::conf("soins plan_soins hour_nuit" , $group->_guid));
+
+    $postes_to_hour = array(
+      "matin" => str_pad($postes["Poste 1"], 2, "0", STR_PAD_LEFT),
+      "midi"  => str_pad($postes["Poste 2"], 2, "0", STR_PAD_LEFT),
+      "soir"  => str_pad($postes["Poste 3"], 2, "0", STR_PAD_LEFT),
+      "nuit"  => str_pad($postes["Poste 4"], 2, "0", STR_PAD_LEFT),
+    );
 
     $moments = array(
       "poste-1" => "matin",
@@ -435,5 +443,6 @@ $smarty->assign("colspan"        , $colspan);
 $smarty->assign("risques_cis"    , $risques_cis);
 $smarty->assign("mode_lite"      , $mode_lite);
 $smarty->assign("page_break"     , $page_break);
+$smarty->assign("postes_to_hour" , $postes_to_hour);
 
 $smarty->display("offline_plan_soins.tpl");

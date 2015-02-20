@@ -232,12 +232,21 @@
 
     {{* Lignes d'éléments *}}
     {{if $prescription->_ref_lines_elt_for_plan|@count}}
-      <tbody class="line_print">
-        <tr>
-          <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
-        </tr>
-      </tbody>
-      {{foreach from=$prescription->_ref_lines_elt_for_plan item=elements_chap}}
+      {{if !$mode_lite}}
+        <tbody class="line_print">
+          <tr>
+            <th colspan="{{$th_chap_colspan}}" class="section">Elements</th>
+          </tr>
+        </tbody>
+      {{/if}}
+      {{foreach from=$prescription->_ref_lines_elt_for_plan item=elements_chap key=chap}}
+        {{if $mode_lite}}
+          <tbody class="line_print">
+            <tr>
+              <th colspan="{{$th_chap_colspan}}" class="section">{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}}</th>
+            </tr>
+          </tbody>
+        {{/if}}
         {{foreach from=$elements_chap item=elements_cat}}
           {{foreach from=$elements_cat item=_element}}
             {{foreach from=$_element key=unite_prise item=line}}
