@@ -33,7 +33,7 @@
         {{mb_field object=$_lit field=nom_complet  onchange="this.form.onsubmit()"}}
       </form>
     </td>
-    <td>
+    <td {{if $_lit->annule}}class="cancelled"{{/if}}>
       <form name="editLitAnnule{{$_lit->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Infrastructure.reloadLitLine('{{$_lit->_id}}', '{{$chambre->_id}}')}})">
         {{mb_key object=$_lit}}
         {{mb_class object=$_lit}}

@@ -28,7 +28,7 @@
   {{else}}
     <td class="narrow compact" style="text-align:center">
       {{foreach from=$_chambre->_ref_lits item=_lit}}
-        <span>
+        <span {{if $_lit->annule}}class="cancelled"{{/if}}>
           {{mb_value object=$_lit field=nom}} -
           {{if $_lit->nom_complet}}
             {{mb_value object=$_lit field=nom_complet}}
