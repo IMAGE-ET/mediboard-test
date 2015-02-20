@@ -4429,9 +4429,12 @@ class CSejour extends CFacturable implements IPatientRelated {
       $_item_realise = $_item_liaison->loadRefItemRealise();
 
       if ($_item_souhait->object_class == "CPrestationPonctuelle") {
-        $this->_ref_prestations[$_item_liaison->date][] = $_item_souhait;
-        $_item_souhait->_quantite = $_item_liaison->quantite;
         $_item_souhait->loadRefObject();
+        $this->_ref_prestations[$_item_liaison->date][] = array(
+          "quantite" => $_item_liaison->quantite,
+          "item" => $_item_souhait,
+          "sous_item_facture" => ""
+        );
       }
       else {
         $liaisons_j[$_item_realise->object_id ? : $_item_souhait->object_id][$_item_liaison->date] = $_item_liaison;
@@ -4494,15 +4497,16 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_item_realise = $_liaison->loadRefItemRealise();
         $sous_item = $_liaison->loadRefSousItem();
 
-        if (!$_item_souhait->facturable) {
-          continue;
-        }
-
         if (!$_item_realise->_id) {
           continue;
         }
 
         $item_facture = $_item_realise;
+
+        // On ne facture pas si surclassé
+        if ($_item_souhait->rank < $_item_realise->rank) {
+          continue;
+        }
 
         // Si ce qui est réalisé est supérieur au demandé (rank inférieur), c'est le souhait qui est facturé
         if ($_item_realise->rank < $_item_souhait->rank) {
