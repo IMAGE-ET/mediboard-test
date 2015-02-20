@@ -25,7 +25,7 @@
         </span>
         <span class="compact">
           {{if $_service->description}}
-            - {{$_service->description}}
+            - {{$_service->description|spancate:150}}
           {{/if}}
         </span>
       </td>
