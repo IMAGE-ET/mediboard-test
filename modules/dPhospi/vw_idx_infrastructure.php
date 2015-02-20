@@ -40,6 +40,9 @@ $service= new CService();
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
   $_service->loadRefsLits(true);
+  if (empty($_service->_ref_chambres)) {
+    $_service->loadRefsChambres();
+  }
 }
 
 $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);

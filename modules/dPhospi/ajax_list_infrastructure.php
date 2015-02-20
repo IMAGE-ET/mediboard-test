@@ -46,6 +46,10 @@ if ($type_name == "services") {
   foreach ($services as $_service) {
     // Chargement des chambres et lits
     $_service->loadRefsLits(true);
+    // si pas de lits dans les chambres
+    if (empty($this->_ref_chambres)) {
+      $this->loadRefsChambres();
+    }
   }
 
   $smarty->assign("services"    , $services);
@@ -95,7 +99,7 @@ if ($type_name == "prestations") {
   $prestation->group_id = $group->_id;
   $prestation->load($prestation_id);
   $prestation->loadRefsNotes();
-  
+
   // Récupération des prestations
   $order = "group_id, nom";
 
