@@ -1710,8 +1710,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   /**
    * Enregistrement UF médicale et/ou soins sur le séjour
    *
-   * @param CSejour $newVenue Admit
    * @param array   $data     Datas
+   * @param CSejour $newVenue Admit
    *
    * @return null
    */
@@ -2639,7 +2639,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $EI_3 = $this->queryTextNode("EI.3", $ZBE_1);
 
       // Notre propre identifiant de mouvement
-      if ($EI_3 == CAppUI::conf("hl7 assigning_authority_universal_id")) {
+      if ($EI_2 == CAppUI::conf("hl7 assigning_authority_namespace_id") ||
+          $EI_3 == CAppUI::conf("hl7 assigning_authority_universal_id")) {
         $own_movement = $EI_1;
         break;
       }

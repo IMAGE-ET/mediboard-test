@@ -191,7 +191,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $sejour->loadNDA($group->_id);
     $identifiers = array();
 
-    $NDA = null;
+    $NDA = $sejour->_NDA;
     if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
       $NDA = "===NDA_MISSING===";
     }
