@@ -4520,7 +4520,9 @@ class CSejour extends CFacturable implements IPatientRelated {
         $dates_liaison = $dates[$_liaison->_id];
 
         $quantite = CMbDT::daysRelative($dates_liaison["debut"], $dates_liaison["fin"]);
-        if (!$sous_item->_id || $sous_item->niveau == "jour") {
+
+        // On incrémente la quantité si ce n'est pas la dernière liaison ou que le sous-item est de type jour
+        if ($dates_liaison["fin"] != CMbDT::date($this->sortie) || (!$sous_item->_id || $sous_item->niveau == "jour")) {
           $quantite += 1;
         }
 
