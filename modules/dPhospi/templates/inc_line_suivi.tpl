@@ -95,7 +95,7 @@
   <td class="narrow  text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_praticien}}
     <br />
-    {{mb_field object=$_suivi field=debut}}
+    {{mb_value object=$_suivi field=debut}}
   </td>
   <td colspan="4" {{if $_suivi->_count.transmissions}} class="arretee" {{/if}}>
     {{if !$readonly}}

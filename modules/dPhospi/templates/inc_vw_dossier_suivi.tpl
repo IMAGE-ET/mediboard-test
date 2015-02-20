@@ -108,7 +108,7 @@
   }
 
   addTransmissionAdm = function(line_id, line_class) {
-    var oFormTransmission = getForm("addTransmissionFrm");
+    var oFormTransmission = getForm("addTransmissionSuiviFrm");
     $V(oFormTransmission.object_id, line_id);
     $V(oFormTransmission.object_class, line_class);
     $V(oFormTransmission.text, "Réalisé");
@@ -216,6 +216,18 @@
     </tr>
   </table>
 {{/if}}
+
+<form name="addTransmissionSuiviFrm" method="post" action="?">
+  <input type="hidden" name="m" value="hospi" />
+  <input type="hidden" name="dosql" value="do_transmission_aed" />
+  <input type="hidden" name="object_id" />
+  <input type="hidden" name="object_class" />
+  <input type="hidden" name="text" />
+  <input type="hidden" name="type" value="data" />
+  <input type="hidden" name="user_id" value="{{$app->_ref_user->_id}}" />
+  <input type="hidden" name="date" value="now" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+</form>
 
 <button type="button" class="search" onclick="Modal.open('legend_suivi')" style="float: right;">Légende</button>
 

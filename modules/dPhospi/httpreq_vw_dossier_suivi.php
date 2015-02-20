@@ -105,6 +105,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     $list_trans_const[$_trans_const->_datetime] = $_trans_const;
   }
   elseif ($_trans_const instanceof CPrescriptionLineElement || $_trans_const instanceof CPrescriptionLineComment) {
+    $list_trans_const["$_trans_const->debut $_trans_const->time_debut"] = $_trans_const;
     $_trans_const->loadRefPraticien();
     continue;
   }
