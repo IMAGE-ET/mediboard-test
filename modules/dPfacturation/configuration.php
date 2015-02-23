@@ -29,6 +29,7 @@ if (CAppUI::conf("ref_pays") == "2") {
             "etab_adresse2" => "str",
             "use_date_consult_traitement" => "bool default|0",
             "see_diag_justificatif"       => "bool default|1",
+            "canton"       => "enum list|AG|AI|AR|BE|BL|BS|FR|GE|GL|GR|JU|LU|NE|NW|OW|SG|SH|SO|SZ|TI|TG|UR|VD|VS|ZG|ZH|LI|A|D|F|I default|GE localize",
           ),
           "CEditBill" => array(
             "store_envoi_xml" => "bool default|0",
