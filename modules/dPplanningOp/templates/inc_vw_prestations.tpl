@@ -50,9 +50,14 @@
     switchToNew(input);
   };
 
-  onSubmitLiaisons = function(form) {
+  onSubmitLiaisons = function(form, callback) {
     return onSubmitFormAjax(form, function() {
-      form.up('div.modal').down('button.change').click();
+      if (Object.isFunction(callback)) {
+        callback();
+      }
+      else {
+        Prestations.urlPresta.refreshModal();
+      }
     });
   };
 
@@ -208,7 +213,7 @@
                 {{/foreach}}
                 <tr>
                   <td class="button" colspan="2">
-                    <button type="button" class="tick" onclick="this.form.onsubmit();Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
+                    <button type="button" class="tick" onclick="onSubmitLiaisons(this.form, Control.Modal.close)">{{tr}}Validate{{/tr}}</button>
                     <button type="button" class="cancel" onclick="closeModal('edit_{{$_date}}')">{{tr}}Close{{/tr}}</button>
                   </td>
                 </tr>
