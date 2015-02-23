@@ -32,7 +32,7 @@ $musers = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $function_id, null, 
 $planning               = new CPlanningWeek(0, 0, count($musers), count($musers), false, "auto");
 $planning->title        = "Planning du " . htmlentities(CMbDT::format($date, "%A %d %B %Y"));
 $planning->guid         = "planning_j_n";
-$planning->dragndrop    = 0;
+$planning->dragndrop    = 1;
 $planning->hour_divider = 12;
 $planning->show_half    = true;
 
@@ -128,7 +128,7 @@ foreach ($musers as $_user) {
           $heure = CMbDT::format($_timing, "%H:%M");
           $debute = "$i $_timing";
           $title = "<strong>$heure</strong>";
-          $event = new CPlanningEvent($debute, $debute, $_plage->_freq, $title, $color, true, null, null, false);
+          $event = new CPlanningEvent($debute, $debute, $_plage->_freq, $title, $color, true, "droppable", null, false);
           $event->type        = "rdvfree";
           $event->plage["id"] = $_plage->_id;
           if ($_plage->locked == 1) {
@@ -203,7 +203,7 @@ foreach ($musers as $_user) {
           $color,
           true,
           null,
-          null,
+          $_consult->_guid,
           false
         );
       }
@@ -235,7 +235,7 @@ foreach ($musers as $_user) {
       }
 
       if ($_consult->patient_id) {
-        $event->draggable /*= $event->resizable */ = 0;
+        $event->draggable /*= $event->resizable */ = 1;
         $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
       }
 

@@ -43,5 +43,32 @@
         return false;
       }
     };
+
+    planning.onEventChange = function(e) {
+      window.action_in_progress = true;
+      if (!window.save_to) {
+        refreshPlanning();
+        return;
+      }
+      var time = e.getTime();
+      var hour = time.start.toTIME();
+
+      var form = getForm("editConsult");
+      var consultation_id = e.draggable_guid.split("-")[1];
+      var plageconsult_id = window.save_to.get("plageconsult_id");
+
+      $V(form.consultation_id, consultation_id);
+      $V(form.plageconsult_id, plageconsult_id);
+      $V(form.heure, hour);
+      onSubmitFormAjax(form, {onComplete: refreshPlanning });
+      window.save_to = null;
+    };
+
+    $$(".droppable").each(function(elt) {
+      Droppables.add(elt, {
+        onDrop: function(from, to) {
+          window.save_to = to;
+        }});
+    });
   });
 </script>

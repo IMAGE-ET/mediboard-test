@@ -88,6 +88,14 @@
   <input type="hidden" name="arrivee" />
 </form>
 
+<form name="editConsult" method="post">
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="consultation_id" />
+  <input type="hidden" name="plageconsult_id" />
+  <input type="hidden" name="heure" />
+</form>
+
 <form method="get" name="filter_day" onsubmit="return onSubmitFormAjax(this, {}, 'planning')">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="a" value="ajax_vw_journee_new" />
