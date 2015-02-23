@@ -47,8 +47,8 @@ if ($type_name == "services") {
     // Chargement des chambres et lits
     $_service->loadRefsLits(true);
     // si pas de lits dans les chambres
-    if (empty($this->_ref_chambres)) {
-      $this->loadRefsChambres();
+    if (empty($_service->_ref_chambres)) {
+      $_service->loadRefsChambres();
     }
   }
 
