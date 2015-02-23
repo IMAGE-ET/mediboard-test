@@ -229,6 +229,11 @@
     {{if "dPprescription"|module_active && "dPprescription show_chapters med"|conf:"CGroups-$g"}}
       <tr id="tp_base_med{{$addform}}">
         <td class="text">
+          <script>
+            Main.add(function() {
+              getForm('editLineTP{{$addform}}').produit.focus();
+            });
+          </script>
           <!-- Formulaire d'ajout de traitements -->
           <form name="editLineTP{{$addform}}" action="?m=cabinet" method="post">
             <input type="hidden" name="m" value="prescription" />
