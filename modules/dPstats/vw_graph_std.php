@@ -15,7 +15,6 @@ CCanDo::checkRead();
 CAppUI::requireModuleFile("dPstats", "graph_patparservice");
 CAppUI::requireModuleFile("dPstats", "graph_patpartypehospi");
 CAppUI::requireModuleFile("dPstats", "graph_joursparservice");
-CAppUI::requireModuleFile("dPstats", "graph_occupationparservice");
 
 // map Graph Bloc
 CAppUI::requireModuleFile("dPstats", "graph_activite");
