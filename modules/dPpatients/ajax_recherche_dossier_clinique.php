@@ -545,6 +545,8 @@ if ($one_field) {
       $dossier_medical = $pat->loadRefDossierMedical(false);
       $pat->_refs_antecedents = $dossier_medical->loadRefsAntecedents();
       $pat->_refs_allergies   = $dossier_medical->loadRefsAllergies();
+      $pat->_ext_codes_cim    = $dossier_medical->_ext_codes_cim;
+
     }
     
     if (isset($_result["prescription_line_medicament_id"])) {
@@ -600,7 +602,11 @@ if ($export) {
     "Age à l'époque",
     "Dossier Médical",
     "Evenement",
-    "Prescription"
+    "Prescription",
+    "DCI",
+    "Code ATC",
+    "Libellé ATC",
+    "Commentaire / Motif"
   );
   $csv->writeLine($titles);
   
@@ -627,6 +633,13 @@ if ($export) {
         $dossier_medical .= $_allergie->_view . "\n";
       }
     }
+
+    if (isset($_patient->_ext_codes_cim) && count($_patient->_ext_codes_cim)) {
+      $dossier_medical .= "Diagnosctics CIM:\n";
+      foreach ($_patient->_ext_codes_cim as $_ext_code_cim) {
+        $dossier_medical .= "$_ext_code_cim->code: $_ext_code_cim->libelle \n";
+      }
+    }
     
     $object_view = "";
     
@@ -650,7 +663,7 @@ if ($export) {
     $content_line = "";
     
     if (isset($_patient->_distant_line)) {
-      $content_line = $_patient->_distant_line->_view;
+      $content_line = $_patient->_distant_line;
     }
 
     $data_line = array(
@@ -658,7 +671,11 @@ if ($export) {
       $_patient->_age_epoque,
       $dossier_medical,
       $object_view,
-      $content_line
+      $content_line->_view,
+      $content_line->_ref_produit->_dci_view,
+      $content_line->_ref_produit->_ref_ATC_5_code,
+      $content_line->_ref_produit->_ref_ATC_5_libelle,
+      $content_line->commentaire
     );
 
     $csv->writeLine($data_line);

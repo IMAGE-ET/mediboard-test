@@ -40,20 +40,15 @@
 
 <table class="main tbl">
   <tr>
-    <th>
-      {{mb_label class=CSejour field=patient_id}}
-    </th>
-    <th>
-      Age à l'époque
-    <th>
-      Dossier Médical
-    </th>
-    <th>
-      Evénement
-    </th>
-    <th>
-      Prescription
-    </th>
+    <th>{{mb_label class=CSejour field=patient_id}}</th>
+    <th>Age à l'époque</th>
+    <th>Dossier Médical</th>
+    <th>Evénement</th>
+    <th>Prescription</th>
+    <th>DCI</th>
+    <th>Code ATC</th>
+    <th>Libelle ATC</th>
+    <th>Commentaire / Motif</th>
   </tr>
   {{foreach from=$list_patient item=_patient}}
     <tr>
@@ -116,6 +111,18 @@
              {{/foreach}}
             </ul>
           {{/if}}
+          {{if isset($_patient->_ext_codes_cim|smarty:nodefaults) && $_patient->_ext_codes_cim|@count}}
+            <strong>
+              Diagnostics CIM :
+            </strong>
+            <ul>
+              {{foreach from=$_patient->_ext_codes_cim item=_ext_code_cim}}
+                <li>
+                  {{$_ext_code_cim->code}} : {{$_ext_code_cim->libelle}}
+                </li>
+              {{/foreach}}
+            </ul>
+          {{/if}}
         {{/if}}
       </td>
       <td>
@@ -136,18 +143,31 @@
           &mdash;
         {{/if}}
       </td>
-      <td>
-        {{if isset($_patient->_distant_line|smarty:nodefaults)}}
-          {{assign var=line value=$_patient->_distant_line}}
+
+      {{if isset($_patient->_distant_line|smarty:nodefaults)}}
+        {{assign var=line value=$_patient->_distant_line}}
+        <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
             {{$line->_ucd_view}}
           </span>
-        {{else}}
-          &mdash;
-        {{/if}}
-      </td>
+        </td>
+        <td class="text">
+          {{$line->_ref_produit->_dci_view}}
+        </td>
+        <td>
+          {{$line->_ref_produit->_ref_ATC_5_code}}
+        </td>
+        <td>
+          {{$line->_ref_produit->_ref_ATC_5_libelle}}
+        </td>
+        <td>
+          {{$line->commentaire}}
+        </td>
+      {{else}}
+        <td colspan="5">&mdash;</td>
+      {{/if}}
     </tr>
-  {{foreachelse}}
+    {{foreachelse}}
     <tr>
       <td class="empty" colspan="5">
         Aucun résultat
