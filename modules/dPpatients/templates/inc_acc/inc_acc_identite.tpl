@@ -381,6 +381,10 @@ Main.add(function() {
             <th>{{mb_label object=$patient field="_assuranceCC_id"}}</th>
             <td>{{mb_field object=$patient field="_assuranceCC_id"}}</td>
           </tr>
+          <tr style="display:none;">
+            <th>{{mb_label object=$patient field="_invalid_assurance"}}</th>
+            <td>{{mb_field object=$patient field="_invalid_assurance"}}</td>
+          </tr>
           <tr>
             <th>{{mb_label object=$patient field="_assuranceCC_ean"}}</th>
             <td>{{mb_field object=$patient field="_assuranceCC_ean"}}</td>
