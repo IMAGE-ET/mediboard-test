@@ -1018,7 +1018,7 @@ class CEditPdf{
       array(""          , "N° AVS"          , $this->patient->avs),
       array(""          , "N° assuré"       , $_ref_assurance),
       array(""          , "Nom entreprise"  , $nom_entreprise),
-      array(""          , "Canton"          , "GE"),
+      array(""          , "Canton"          , CAppUI::conf("dPfacturation CEditPdf canton", CGroups::loadCurrent())),
       array(""          , "Copie"           , "Non"),
       array(""          , "Type de remb."   , $this->type_rbt),
       array(""          , "Loi"             , $loi),
