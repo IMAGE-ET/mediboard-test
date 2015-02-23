@@ -115,7 +115,7 @@
         Patients non placés
       {{/if}}
       ({{$sejours|@count}}) le {{$date|date_format:$conf.longdate}}
-      <form name="changeDate">
+      <form name="changeDate" method="get" onsubmit="return false;">
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('TypeHospi').date, $V(getForm('changeDate').date));"/>
       </form>
 
@@ -129,7 +129,7 @@
   {{if !$print}}
     <tr>
       {{if $service->_id || $function->_id || $praticien->_id || $show_affectation}}
-        <th rowspan="2">{{mb_title class=CLit field=chambre_id}}</th>
+        <th rowspan="2">{{mb_title class=CLit field=nom}}</th>
       {{/if}}
       <th colspan="2" rowspan="2">{{mb_title class=CPatient field=nom}}<br />({{mb_title class=CPatient field=nom_jeune_fille}})</th>
       {{if "dPImeds"|module_active}}

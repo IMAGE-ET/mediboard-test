@@ -120,16 +120,20 @@ if (!isset($sejours)) {
   else {
     // Chargement du service
     $service->load($service_id);
-    
+
     // Chargement des sejours pour le service selectionné
     $affectation = new CAffectation();
 
     $ljoin = array();
+    $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
+    $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 
     $where = array();
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
     $where["sejour.praticien_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
+    $order = "ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
+
     if ($_type_admission) {
       $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp', 'ssr')" : "= '$_type_admission'";
     }
@@ -263,7 +267,7 @@ if (!isset($sejours)) {
     else {
       $sejours = array();
       if ($service_id || $praticien_id || $function_id) {
-        $affectations = $affectation->loadList($where, null, null, "affectation.sejour_id", $ljoin);
+        $affectations = $affectation->loadList($where, $order, null, "affectation.sejour_id", $ljoin);
 
         CMbObject::massLoadFwdRef($affectations, "sejour_id");
 
@@ -275,8 +279,6 @@ if (!isset($sejours)) {
           $sejour->_ref_curr_affectation = $_affectation;
         }
 
-        $sorter = CMbArray::pluck($affectations, "_ref_lit", "_view");
-        array_multisort($sorter, SORT_ASC, $affectations);
         $sejours = CMbArray::pluck($affectations, "_ref_sejour");
       }
     }
