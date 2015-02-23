@@ -62,8 +62,17 @@
 
 <ul id="tab-{{if $accordDossier}}{{$object_class}}{{$object_id}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
-  {{assign var=docCount value=$_cat.items|@count}}
-  {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
+
+  {{assign var=docCount value=0}}
+  {{assign var=docCountCancelled value=0}}
+  {{foreach from=$_cat.items item=_docitem}}
+    {{if !$_docitem->annule}}
+      {{math equation=x+1 x=$docCount assign=docCount}}
+    {{else}}
+      {{math equation=x+1 x=$docCountCancelled assign=docCountCancelled}}
+    {{/if}}
+  {{/foreach}}
+  {{if $docCount || $docCountCancelled || $conf.dPfiles.CFilesCategory.show_empty}}
     <li>
       <a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}} id="tab_category_{{$_cat_id}}">
         {{$_cat.name}}
@@ -80,8 +89,6 @@
   </li>
 {{/if}}
 </ul>
-
-<hr class="control_tabs" />
 
 {{mb_include module=files template=inc_files_add_toolbar mozaic=1}}
 

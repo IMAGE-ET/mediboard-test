@@ -13,8 +13,16 @@
   <script type="text/javascript">
     // Mise à jour des compteurs des documents
     Main.add(function() {
-      var countDocItemTotal = {{math equation="x+y" x=$object->_ref_documents|@count y=$object->_ref_files|@count}};
-      var countDocItemCat = {{$list|@count}};
+      var countDocItemTotal = {{$nbItems}};
+
+      {{assign var=count_docitems value=0}}
+      {{foreach from=$list item=_item}}
+        {{if !$_item->annule}}
+          {{math equation=x+1 x=$count_docitems assign=count_docitems}}
+        {{/if}}
+      {{/foreach}}
+
+      var countDocItemCat = {{$count_docitems}};
       var button = $("docItem_{{$object->_guid}}");
       var tab = $("tab_category_{{$category_id}}");
       var countTab = tab.down("small");

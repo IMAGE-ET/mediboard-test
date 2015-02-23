@@ -75,7 +75,9 @@ foreach ($affichageFile as $_cat) {
 
   foreach ($_cat["items"] as $_item) {
     /** @var CDocumentItem $_item */
-    $nbItems++;
+    if (!$_item->annule) {
+      $nbItems++;
+    }
     $category = $_item->loadRefCategory();
     $category->countReadFiles();
     $_item->canDo();
