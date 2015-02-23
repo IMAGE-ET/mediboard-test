@@ -215,7 +215,9 @@
 
                       {{if $show_age_patient}}({{$patient->_age}}){{/if}}
 
-                      {{if "dPhospi vue_tempo show_imc_patient"|conf:"CGroups-$g"}}
+                      {{assign var=service_id_imc value=$object->service_id}}
+                      {{if ($service_id_imc && "dPhospi vue_temporelle show_imc_patient"|conf:"CService-$service_id_imc")
+                      || (!$service_id_imc  && "dPhospi vue_temporelle show_imc_patient"|conf:"CGroups-$g")}}
                         {{if $patient->_ref_constantes_medicales->poids}}
                           - {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
                         {{/if}}

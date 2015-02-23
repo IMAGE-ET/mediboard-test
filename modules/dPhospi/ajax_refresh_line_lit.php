@@ -139,9 +139,10 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
-if (CAppUI::conf("dPhospi vue_tempo show_imc_patient", CGroups::loadCurrent())) {
-  foreach ($patients as $patient) {
-    $patient->loadRefLatestConstantes(null, array("poids", "taille"));
+foreach ($affectations as $_affectation_imc) {
+  /* @var CAffectation $_affectation_imc*/
+  if (CAppUI::conf("dPhospi vue_temporelle show_imc_patient", "CService-".$_affectation_imc->service_id)) {
+    $_affectation_imc->loadRefSejour()->loadRefPatient()->loadRefLatestConstantes(null, array("poids", "taille"));
   }
 }
 

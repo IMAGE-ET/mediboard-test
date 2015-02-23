@@ -212,15 +212,17 @@ $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($sejours, "prestation_id");
-$patients_other = CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 $services = CMbObject::massLoadFwdRef($sejours, "service_id");
 
-if (CAppUI::conf("dPhospi vue_tempo show_imc_patient", CGroups::loadCurrent())) {
-  foreach ($patients_other as $_patient) {
-    $_patient->loadRefLatestConstantes(null, array("poids", "taille"));
+foreach ($sejours as $_sejour_imc) {
+  /* @var CAffectation $_affectation_imc*/
+  $conf_imc = $_sejour_imc->service_id ? "CService-".$_sejour_imc->service_id : CGroups::loadCurrent();
+  if (CAppUI::conf("dPhospi vue_temporelle show_imc_patient", $conf_imc)) {
+    $_sejour_imc->loadRefPatient()->loadRefLatestConstantes(null, array("poids", "taille"));
   }
 }
+
 $sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
@@ -261,9 +263,10 @@ $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($_sejours, "patient_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
 
-if (CAppUI::conf("dPhospi vue_tempo show_imc_patient", CGroups::loadCurrent())) {
-  foreach ($patients as $patient) {
-    $patient->loadRefLatestConstantes(null, array("poids", "taille"));
+foreach ($affectations as $_affectation_imc) {
+  /* @var CAffectation $_affectation_imc*/
+  if (CAppUI::conf("dPhospi vue_temporelle show_imc_patient", "CService-".$_affectation_imc->service_id)) {
+    $_affectation_imc->loadRefSejour()->loadRefPatient()->loadRefLatestConstantes(null, array("poids", "taille"));
   }
 }
 
