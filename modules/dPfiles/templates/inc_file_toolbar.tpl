@@ -13,7 +13,7 @@
          {{tr}}Edit{{/tr}}
        </button>
     {{/if}}
-    {{if $_doc_item->file_type == "image/fabricjs" && $_doc_item->_class=="CFile"}}
+    {{if $_doc_item->_class=="CFile" && $_doc_item->file_type == "image/fabricjs"}}
       <button class="edit {{$notext}}" type="button" onclick="editDrawing({{$elementId}}, null, null, reloadAfterUploadFile);">
         {{tr}}Edit{{/tr}}
       </button>
