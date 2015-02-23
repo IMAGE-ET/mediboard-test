@@ -195,7 +195,8 @@ class CEvenementSSR extends CMbObject {
       if ($rhs->facture == 1) {
         CAppUI::stepAjax(CAppUI::tr("CRHS.charged"), UI_MSG_WARNING);
       }
-      
+
+      $this->loadView();
       // Complétion de la ligne RHS
       foreach ($this->loadRefsActesCdARR() as $_acte_cdarr) {
         $ligne = new CLigneActivitesRHS();
