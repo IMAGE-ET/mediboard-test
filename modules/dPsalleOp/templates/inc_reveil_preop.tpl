@@ -121,7 +121,7 @@
            </span>
         </td>
       {{/if}}
-      <td class="button">
+      <td style="text-align: center;">
         {{if $modif_operation}}
           <form name="editDebutPreopFrm{{$_operation->_id}}" action="?" method="post">
             <input type="hidden" name="m" value="planningOp" />
