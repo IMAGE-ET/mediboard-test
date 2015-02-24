@@ -96,7 +96,7 @@
           <button title="{{tr}}Delete{{/tr}}" class="trash" type="button" onclick="Antecedent.remove(this.form, {{$reload}}); Antecedent.closeTooltip('{{$object->_guid}}');">
             {{tr}}Delete{{/tr}}
           </button>
-        {{elseif $object->annule == 0}}
+        {{elseif $object->annule == 0 && $dossier_medical->object_class == "CPatient"}}
           <button title="{{tr}}Delete{{/tr}}" class="duplicate" type="button" onclick="Antecedent.duplicate(this.form); Antecedent.closeTooltip('{{$object->_guid}}');">
             {{tr}}Cancel{{/tr}} {{tr}}and{{/tr}} {{tr}}Modify{{/tr}}
           </button>
