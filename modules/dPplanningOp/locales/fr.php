@@ -482,6 +482,7 @@ $locales['COperation-event-entree_reveil'] = 'Entrée réveil';
 $locales['COperation-event-fin_intervention'] = 'Timing fin intervention';
 $locales['COperation-event-liaison'] = 'Liaison';
 $locales['COperation-event-perop'] = 'Peropératoire';
+$locales['COperation-event-preop'] = 'Préopératoire';
 $locales['COperation-event-sortie_reveil'] = 'Sortie réveil';
 $locales['COperation-exam_extempo'] = 'Exam. extempo. prévu';
 $locales['COperation-exam_extempo-court'] = 'Extempo';

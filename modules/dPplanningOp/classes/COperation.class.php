@@ -253,6 +253,10 @@ class COperation extends CCodable implements IPatientRelated {
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
+      "preop" => array(
+        "reference1" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CPatient", "sejour_id.patient_id"),
+      ),
       "perop" => array(
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
