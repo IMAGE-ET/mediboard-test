@@ -1877,6 +1877,7 @@ class CConstantesMedicales extends CMbObject {
     $selection = array_keys(CConstantesMedicales::$list_constantes);
     $cumuls_day = array();
     $reset_hours = array();
+    $cumul_names = array();
 
     if (!$full) {
       $conf_constantes = array_filter(CConstantesMedicales::getRanksFor());
@@ -1886,6 +1887,7 @@ class CConstantesMedicales extends CMbObject {
         foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
           if ($_constante_medicale->$_name != '' && !empty($_params["cumul_in"])) {
             $selection = array_merge($selection, $_params["cumul_in"]);
+            $cumul_names = array_merge($selection, $_params["cumul_in"]);
           }
         }
       }
@@ -1908,7 +1910,7 @@ class CConstantesMedicales extends CMbObject {
       }
 
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
-        if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
+        if (in_array($_name, $selection) || in_array($_name, $cumul_names) || $_constante_medicale->$_name != '') {
           $value = null;
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
             // cumul
