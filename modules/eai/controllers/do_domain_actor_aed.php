@@ -32,7 +32,8 @@ else {
 if ($msg = $domain->store()) {
   CAppUI::stepAjax(CAppUI::tr("CDomain") . CAppUI::tr("CMbObject-msg-store-failed") . $msg, UI_MSG_ERROR);
 }
-
-($disassociated == 1) ? CAppUI::stepAjax("CDomain-actor-disassociated-desc") : CAppUI::stepAjax("CDomain-actor-associated");
+else {
+  ($disassociated == 1) ? CAppUI::stepAjax("CDomain-actor-disassociated-desc") : CAppUI::stepAjax("CDomain-actor-associated");
+}
 
 CApp::rip();

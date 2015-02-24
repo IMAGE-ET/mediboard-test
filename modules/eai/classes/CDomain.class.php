@@ -57,7 +57,9 @@ class CDomain extends CMbObject {
     
     $spec->table = 'domain';
     $spec->key   = 'domain_id';
-    
+
+    $spec->uniques["actor"] = array ("actor_id", "actor_class", "active");
+
     return $spec;
   }
 
@@ -112,7 +114,7 @@ class CDomain extends CMbObject {
       }
     }
 
-    parent::store();
+    return parent::store();
   }
   
   /**

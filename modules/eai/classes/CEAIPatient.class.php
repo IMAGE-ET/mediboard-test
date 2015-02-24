@@ -101,8 +101,8 @@ class CEAIPatient extends CEAIMbObject {
       return $IPP->store();  
     }
 
-    // Génération de l'IPP ? 
-    // Non
+    // Génération de l'IPP ?
+    /* @todo sip_idex_generator doit être remplacé par isIPPSupplier */
     if ($sender->_configs && !$group->_configs["sip_idex_generator"]) {
       if (!$IPP->id400) {
         return null;
@@ -153,6 +153,26 @@ class CEAIPatient extends CEAIMbObject {
         return $IPP->store();  
       }
     }
+  }
+
+  /**
+   * Recording RI sender
+   *
+   * @param string         $RI_sender Idex value
+   * @param CPatient       $patient   Patient
+   * @param CInteropSender $sender    Sender
+   *
+   * @return null|string null if successful otherwise returns and error message
+   */
+  static function storeRISender($RI_sender, CPatient $patient, CInteropSender $sender) {
+    $domain = $sender->loadRefDomain();
+
+    $idex = new CIdSante400();
+    $idex->object_class = "CPatient";
+    $idex->object_id    = $patient->_id;
+    $idex->tag          = $domain->tag;
+    $idex->id400        = $RI_sender;
+    return $idex->store();
   }
 
   /**

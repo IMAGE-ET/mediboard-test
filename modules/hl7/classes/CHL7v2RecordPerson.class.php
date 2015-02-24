@@ -25,7 +25,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    */
   function getContentNodes() {
     $data = parent::getContentNodes();
-    
+
     $this->queryNodes("NK1", null, $data, true);
 
     $this->queryNodes("ROL", null, $data, true);
@@ -92,7 +92,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $sender       = $this->_ref_sender;
 
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
-    //$patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
+    $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
     $patientPI       = CValue::read($data['personIdentifiers'], "PI");
       
     $IPP = new CIdSante400();
@@ -228,6 +228,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $codes = array ("I102", $code_IPP);
       
       $comment = CEAIPatient::getComment($newPatient);
+    }
+
+    if ($patientRISender) {
+      CEAIPatient::storeRISender($patientRISender, $newPatient, $sender);
     }
 
     if ($sender->_configs["ins_integrated"]) {

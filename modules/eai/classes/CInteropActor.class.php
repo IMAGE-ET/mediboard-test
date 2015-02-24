@@ -92,6 +92,9 @@ class CInteropActor extends CMbObject {
   /** @var CEAITransformation[] */
   public $_ref_eai_transformations;
 
+  /** @var CDomain */
+  public $_ref_domain;
+
   /** @var string */
   public $_type_echange;
 
@@ -158,7 +161,7 @@ class CInteropActor extends CMbObject {
     $backProps = parent::getBackProps();
     
     $backProps["messages_supported"]    = "CMessageSupported object_id";
-    $backProps["domains"]               = "CDomain actor_id";
+    $backProps["domain"]                = "CDomain actor_id";
     $backProps["dicom_exchanges"]       = "CExchangeDicom receiver_id";
     $backProps["routes_receiver"]       = "CEAIRoute receiver_id";
     $backProps["mvsante_exchange"]      = "CExchangeMVSante receiver_id";
@@ -278,6 +281,17 @@ class CInteropActor extends CMbObject {
    */
   function loadRefsEAITransformation($where = array()) {
     return $this->_ref_eai_transformations = $this->loadBackRefs("actor_transformations", null, null, null, null, null, null, $where);
+  }
+
+  /**
+   * Load domain
+   *
+   * @param array $where Additional where clauses
+   *
+   * @return CDomain[]
+   */
+  function loadRefDomain($where = array()) {
+    return $this->_ref_domain = $this->loadUniqueBackRef("domain", null, null, null, null, null, null, $where);
   }
 
   /**
