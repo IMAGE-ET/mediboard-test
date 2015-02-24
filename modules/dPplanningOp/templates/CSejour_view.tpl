@@ -147,6 +147,10 @@
       {{if "web100T"|module_active}}
         {{mb_include module=web100T template=inc_button_iframe notext="" _sejour=$sejour}}
       {{/if}}
+
+      {{if "forms"|module_active}}
+        {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event_name=modification cssStyle="display: inline-block;"}}
+      {{/if}}
     </td>
   </tr>
 </table>

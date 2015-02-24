@@ -193,6 +193,26 @@
         </tr>
         {{/if}}
 
+        {{if "forms"|module_active}}
+          <tr>
+            <th class="title">
+              {{tr}}CMbObject-back-ex_links_meta{{/tr}}
+            </th>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">
+              {{unique_id var=unique_id_sejour_forms}}
+
+              <script type="text/javascript">
+                Main.add(function(){
+                  ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_sejour_forms}}", 0.5);
+                });
+              </script>
+
+              <div id="{{$unique_id_sejour_forms}}"></div>
+            </td>
+          </tr>
+        {{/if}}
       </table>
     </td>
   </tr>

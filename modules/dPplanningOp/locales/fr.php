@@ -1288,6 +1288,7 @@ $locales['CSejour-etablissement_entree_id-desc'] = 'Etablissement de transfert d
 $locales['CSejour-etablissement_sortie_id'] = 'Transfert de sortie';
 $locales['CSejour-etablissement_sortie_id-court'] = 'Transferts de sortie';
 $locales['CSejour-etablissement_sortie_id-desc'] = 'Etablissement de transfert du patient après sa sortie';
+$locales['CSejour-event-modification'] = 'Modification';
 $locales['CSejour-event-suivi_clinique'] = 'Suivi clinique';
 $locales['CSejour-exec_tarif'] = 'Exécution';
 $locales['CSejour-exec_tarif-court'] = 'Exécution';

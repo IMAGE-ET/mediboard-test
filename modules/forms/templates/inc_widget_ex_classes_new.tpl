@@ -21,13 +21,13 @@
     <legend>Formulaire {{tr}}{{$object->_class}}-event-{{$event_name}}{{/tr}}</legend>
 {{/if}}
 
-<table class="layout" {{if !$form_name}} style="border: 1px solid #000; display: none;" {{/if}}>
+<table class="layout" style="{{if !$form_name}} border: 1px solid #000; display: none; {{/if}} width: 400px; max-width: 700px;">
   {{foreach from=$ex_objects key=_ex_class_id item=_ex_objects}}
     <tr>
-      <td style="text-align: right; {{if !$form_name}} font-weight: bold; {{/if}} vertical-align: middle;">
+      <td style="text-align: right; {{if !$form_name}} font-weight: bold; vertical-align: middle; white-space: normal; min-width: 200px; {{/if}}">
         {{$ex_classes.$_ex_class_id->name}}
       </td>
-      <td style="text-align: left;">
+      <td style="text-align: left; white-space: normal;">
         {{foreach from=$_ex_objects item=_ex_object}}
           {{if $_ex_object->_id}}
             <button type="button" class="edit" title="{{mb_value object=$_ex_object field=owner_id}}"
