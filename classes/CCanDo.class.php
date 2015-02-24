@@ -15,12 +15,24 @@
  * Allow to check permissions on a module with redirect helpers
  */ 
 class CCanDo {
+  /** @var bool */
   public $read;
+
+  /** @var bool */
   public $edit;
+
+  /** @var bool */
   public $view;
+
+  /** @var bool */
   public $admin;
+
+  /** @var string  */
+  public $context;
+
+  /** @var  string|array Should not be used, find another redirection behavioural session mangagement */
   public $setValues;
-  
+
   /**
    * Redirection facility
    *  
@@ -45,45 +57,61 @@ class CCanDo {
         }
       }
     }
-    
-    $dialog          = CValue::get("dialog");
-    $suppressHeaders = CValue::get("suppressHeaders");
-    $ajax            = CValue::get("ajax");
-    CAppUI::redirect("m=system&a=$action&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
+
+    $action_params = "";
+    foreach (array("wsdl", "info", "ajax", "raw", "dialog") as $_action_type) {
+      $_action_flag = CValue::get($_action_type);
+      if ($_action_flag) {
+        $action_params .=  "&$_action_type=$_action_flag";
+      }
+    }
+
+    $context_param = $this->context ? "&context=$this->context" : "";
+
+    CAppUI::redirect("m=system&a=$action" . $context_param . $action_params . $params);
   }
-  
-  /** 
+
+  /**
    * Check if the connected user has READ rights on the current page
-   * 
+   *
+   * @param null $setValues
+   *
    * @return void
    */
   function needsRead($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->read) {
+      $this->context .= " read permission";
       $this->redirect();
     }
   }
   
   /** 
    * Check if the connected user has EDIT rights on the current page
-   * 
+   *
+   * @param null $setValues
+   *
    * @return void
    */
   function needsEdit($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->edit) {
+      $this->context .= " edit permission";
       $this->redirect();
     }
   }
   
   /** 
    * Check if the connected user has ADMIN rights on the current page
-   * 
+   *
+   * @param null $setValues
+   *
    * @return void
    */
   function needsAdmin($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->admin) {
+      $this->context .= " admin permission";
       $this->redirect();
     }
   }
@@ -91,7 +119,7 @@ class CCanDo {
   function needsObject(CMbObject $object, $setValues = null){
     $this->setValues = $setValues;
     if (!$object->_id) {
-      $params = "&object_guid=$object->_class-?";
+      $params = "&object_guid=$object->_guid";
       $this->redirect("object_not_found", $params);
     }
   }

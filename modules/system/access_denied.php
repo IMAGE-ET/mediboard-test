@@ -9,8 +9,12 @@
  * @version    $Revision$
  */
 
-?>
+$context = CValue::get("context");
 
+echo <<<HTML
 <div class="small-info">
-Vous n'êtes pas autorisé à accéder à cette information !
+Vous n'êtes pas autorisé à accéder <label title="$context">à cette information</label> !
 </div>
+HTML;
+
+
