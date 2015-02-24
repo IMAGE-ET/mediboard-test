@@ -52,5 +52,18 @@ Antecedent = {
     }
 
     url.requestModal(700, 400);
+  },
+
+  closeTooltip: function(object_guid) {
+    $(object_guid+'_tooltip').up('.tooltip').remove();
+  },
+
+  duplicate: function(form) {
+    $V(form.dosql, 'do_duplicate_antecedent_aed');
+    onSubmitFormAjax(form, {onComplete: function(){
+      if (onComplete) {
+        $V(form.dosql, 'do_antecedent_aed');
+      }
+    }});
   }
 };

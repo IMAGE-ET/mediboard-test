@@ -74,13 +74,14 @@
         
         <input type="hidden" name="antecedent_id" value="{{$object->_id}}" />
         <input type="hidden" name="annule" value="" />
-        
+        <input type="hidden" name="reload" value="{{$reload}}" />
+
         {{if $object->annule == 0}}
-          <button title="{{tr}}Cancel{{/tr}}" class="cancel" type="button" onclick="Antecedent.cancel(this.form, {{$reload}}); $('{{$object->_guid}}_tooltip').up('.tooltip').remove();">
+          <button title="{{tr}}Cancel{{/tr}}" class="cancel" type="button" onclick="Antecedent.cancel(this.form, {{$reload}}); Antecedent.closeTooltip('{{$object->_guid}}');">
             {{tr}}Cancel{{/tr}}
           </button>
         {{else}}
-          <button title="{{tr}}Restore{{/tr}}" class="tick" type="button" onclick="Antecedent.restore(this.form, {{$reload}}); $('{{$object->_guid}}_tooltip').up('.tooltip').remove();">
+          <button title="{{tr}}Restore{{/tr}}" class="tick" type="button" onclick="Antecedent.restore(this.form, {{$reload}}); Antecedent.closeTooltip('{{$object->_guid}}');">
             {{tr}}Restore{{/tr}}
           </button>
         {{/if}}
@@ -92,8 +93,12 @@
             {{tr}}Edit{{/tr}}
           </button>
           {{/if}}
-          <button title="{{tr}}Delete{{/tr}}" class="trash" type="button" onclick="Antecedent.remove(this.form, {{$reload}}); $('{{$object->_guid}}_tooltip').up('.tooltip').remove();">
+          <button title="{{tr}}Delete{{/tr}}" class="trash" type="button" onclick="Antecedent.remove(this.form, {{$reload}}); Antecedent.closeTooltip('{{$object->_guid}}');">
             {{tr}}Delete{{/tr}}
+          </button>
+        {{elseif $object->annule == 0}}
+          <button title="{{tr}}Delete{{/tr}}" class="duplicate" type="button" onclick="Antecedent.duplicate(this.form); Antecedent.closeTooltip('{{$object->_guid}}');">
+            {{tr}}Cancel{{/tr}} {{tr}}and{{/tr}} {{tr}}Modify{{/tr}}
           </button>
         {{/if}}
       </form>
