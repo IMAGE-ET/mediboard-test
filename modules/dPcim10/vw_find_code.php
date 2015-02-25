@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -34,6 +34,9 @@ $listLevel1 = $cim10->getSommaire($lang);
 $listLevel2 = array();
 
 $master = array();
+
+$keys = trim($keys);
+$code = trim($code);
 
 if ($code || $keys) {
   $master = $cim10->findCodes($code, $keys, $lang);
