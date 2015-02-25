@@ -880,11 +880,12 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * check for a sectorisation rules to find a service_id
-   * if 0 rules, no work
-   * if 1 rule, => service_id of the rule
-   * if more than rules are found, if they all lead to the same service, we use this service
+   * this feature will find the first sectorisation rule following his priority
    *
-   * @return bool
+   * if 0 rules, no work
+   * if 1 rule found, we redirect to the service_id
+   *
+   * @return bool it worked =)
    */
   function getServiceFromSectorisationRules() {
     if (!CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation") || $this->service_id) {
@@ -895,12 +896,12 @@ class CSejour extends CFacturable implements IPatientRelated {
     $praticien = $this->loadRefPraticien();
 
     $where = array();
-    $where["type_admission"] = " = '$this->type' OR `type_admission` IS NULL";
-    $where["praticien_id"] = " = '$this->praticien_id' OR `praticien_id` IS NULL";
-    $where["function_id"] = " = '$praticien->function_id' OR `function_id` IS NULL";
-    $where["date_min"] = " <= '$this->entree' OR `date_min` IS NULL";
-    $where["date_max"] = " >= '$this->entree' OR `date_max` IS NULL";
-    $where["group_id"] = " = '$this->group_id'";
+    $where["type_admission"]  = " = '$this->type' OR `type_admission` IS NULL";
+    $where["praticien_id"]    = " = '$this->praticien_id' OR `praticien_id` IS NULL";
+    $where["function_id"]     = " = '$praticien->function_id' OR `function_id` IS NULL";
+    $where["date_min"]        = " <= '$this->entree' OR `date_min` IS NULL";
+    $where["date_max"]        = " >= '$this->entree' OR `date_max` IS NULL";
+    $where["group_id"]        = " = '$this->group_id'";
 
     if ($this->type_pec) {
       $where["type_pec"] = " = '$this->type_pec' OR `type_pec` IS NULL";
@@ -913,29 +914,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     $regle = new CRegleSectorisation();
 
     /** @var CRegleSectorisation[] $regles */
-    $regles = $regle->loadList($where);
-    $count  = count($regles);
+    $regle->loadObject($where, "priority DESC");
 
     // one or more rules, lets do the work
-    if ($count > 0) {
-      //check if all result = same service
-      $first = reset($regles);
-      $result = 0;
-      foreach ($regles as $_regle) {
-        if ($_regle->service_id == $first->service_id) {
-          $result++;
-        }
-      }
-
-      //too much results & differents result
-      if ($result != $count) {
-        CAppUI::setMsg("CRegleSectorisation-number%d-rules-unable-to-resolve", UI_MSG_WARNING, $count);
-        return false;
-      }
-
-      $first->loadRefService();
-      $this->service_id = $first->service_id;
-      CAppUI::setMsg("CRegleSectorisation-rule%d-rule%s", UI_MSG_OK, $count, $first->_ref_service->nom);
+    if ($regle->_id) {
+      $regle->loadRefService();
+      $this->service_id = $regle->service_id;
+      CAppUI::setMsg("CRegleSectorisation-rule%d-rule%s", UI_MSG_OK, 1, $regle->_ref_service->nom);
       return true;
     }
 

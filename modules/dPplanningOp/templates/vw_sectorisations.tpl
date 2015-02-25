@@ -26,7 +26,6 @@
   </div>
 {{/if}}
 
-
 <button class="new" onclick="editSRF(0)">{{tr}}CRegleSectorisation-title-create{{/tr}}</button>
 
 <form method="get" action="" name="showInactive">
@@ -39,7 +38,8 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}Actions{{/tr}}</th>
+    <th class="narrow">{{tr}}Actions{{/tr}}</th>
+    <th class="narrow">{{tr}}CRegleSectorisation-priority{{/tr}}</th>
     <th>{{tr}}CFunctions{{/tr}}</th>
     <th>{{tr}}CMediusers{{/tr}}</th>
     <th>{{tr}}CRegleSectorisation-duree_min{{/tr}}</th>
@@ -49,7 +49,6 @@
     <th>{{tr}}CRegleSectorisation-type_admission{{/tr}}</th>
     <th>{{tr}}CRegleSectorisation-type_pec{{/tr}}</th>
     <th>Direction</th>
-
   </tr>
   {{foreach from=$regles item=_regle}}
     <tr {{if $_regle->_inactive}}class="hatching"{{/if}}>
@@ -57,6 +56,7 @@
         <button class="edit notext" onclick="editSRF('{{$_regle->_id}}', 0)">{{tr}}Edit{{/tr}}</button>
         <button class="duplicate notext" onclick="editSRF('{{$_regle->_id}}', 1)">{{tr}}Duplicate{{/tr}}</button>
       </td>
+      <td style="text-align: center"><strong>{{mb_value object=$_regle field=priority}}</strong></td>
       <td>{{if $_regle->_ref_function->_id}}{{mb_include module="mediusers" template="inc_vw_function" function=$_regle->_ref_function}}{{/if}}</td>
       <td>{{if $_regle->_ref_praticien->_id}}{{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$_regle->_ref_praticien}}{{/if}}</td>
       <td>{{if $_regle->duree_min}}{{mb_value object=$_regle field=duree_min}} {{tr}}night{{/tr}}(s){{/if}}</td>

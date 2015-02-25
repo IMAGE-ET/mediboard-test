@@ -13,6 +13,7 @@
 class CRegleSectorisation extends CMbObject {
   public $regle_id;
 
+  public $priority;
   public $service_id;
   public $function_id;
   public $praticien_id;
@@ -50,8 +51,8 @@ class CRegleSectorisation extends CMbObject {
     $types_pec        = $sejour->_specs["type_pec"]->_list;
 
     $props = parent::getProps();
+    $props["priority"]          = "num default|0 notNull";
     $props["service_id"]        = "ref class|CService seekable notNull";
-
     $props["function_id"]       = "ref class|CFunctions";
     $props["praticien_id"]      = "ref class|CMediusers";
     $props["duree_min"]         = "num";
@@ -87,7 +88,7 @@ class CRegleSectorisation extends CMbObject {
   /**
    * Load the praticien by his _id
    *
-   * @return CMbObject
+   * @return CMediusers
    */
   function loadRefPraticien() {
     return $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
@@ -96,7 +97,7 @@ class CRegleSectorisation extends CMbObject {
   /**
    * load service by id
    *
-   * @return CMbObject
+   * @return CService
    */
   function loadRefService() {
     return $this->_ref_service = $this->loadFwdRef("service_id", true);
@@ -105,7 +106,7 @@ class CRegleSectorisation extends CMbObject {
   /**
    * load function by id
    *
-   * @return CMbObject
+   * @return CFunctions
    */
   function loadRefFunction() {
     return $this->_ref_function = $this->loadFwdRef("function_id", true);
@@ -114,7 +115,7 @@ class CRegleSectorisation extends CMbObject {
   /**
    * load group
    *
-   * @return CMbObject
+   * @return CGroups
    */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);

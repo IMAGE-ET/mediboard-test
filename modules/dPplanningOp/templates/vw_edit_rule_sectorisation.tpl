@@ -9,8 +9,20 @@
   * @link     http://www.mediboard.org
 *}}
 
-
-
+<script>
+  changePrio = function(more) {
+    var oform = getForm('editRegleSectorisation');
+    var old_value = $V(oform.priority);
+    if (more) {
+      $V(oform.priority, parseInt(old_value) + 1);
+    }
+    else {
+      if (old_value >= 1) {
+        $V(oform.priority, old_value - 1);
+      }
+    }
+  }
+</script>
 
 <form name="editRegleSectorisation" method="post" action="">
   {{mb_key object=$rule}}
@@ -19,17 +31,30 @@
     <input type="hidden" name="tab" value="vw_sectorisations" />
   <table class="form">
     {{if $clone == true && !$rule->_id}}
-    <tr>
-      <th colspan="2"><div class="small-warning">{{tr}}CRegleSectorisation-msg-duplicate-rule{{/tr}}</div></th>
-    </tr>
+      <tr>
+        <th colspan="2"><div class="small-warning">{{tr}}CRegleSectorisation-msg-duplicate-rule{{/tr}}</div></th>
+      </tr>
     {{/if}}
+
+    <tr>
+      <th class="title" colspan="2">{{tr}}CRegleSectorisation-priority{{/tr}}</th>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$rule field=priority}}</th>
+      <td>
+        <button type="button" class="remove" onclick="changePrio();"></button>
+        {{mb_field object=$rule field=priority}}
+        <button type="button" class="add" onclick="changePrio(1)"></button>
+      </td>
+    </tr>
+
     <tr>
       <th class="title" colspan="2">{{tr}}CRegleSectorisation-service_id{{/tr}}</th>
     </tr>
     <tr>
       <th>{{mb_label object=$rule field=service_id}}</th>
       <td>
-        <select name="service_id" class="notNull">
+        <select name="service_id" class="notNull" style="width:15em;">
           {{foreach from=$services item=_service}}
             <option value="{{$_service->_id}}" {{if $_service->_id == $rule->service_id}}selected="selected" {{/if}}>{{$_service}}</option>
           {{/foreach}}
@@ -42,9 +67,9 @@
     </tr>
 
     <tr>
-      <th>{{mb_label object=$rule field=group_id for="group_id"}}</th>
+      <th>{{mb_label object=$rule field=group_id}}</th>
       <td>
-        <select name="group_id" class="notNull">
+        <select name="group_id" class="notNull" style="width:15em;">
           {{foreach from=$groups item=_group}}
             <option value="{{$_group->_id}}" {{if $_group->_id == $rule->group_id}}selected="selected" {{/if}}>{{$_group}}</option>
           {{/foreach}}
@@ -55,13 +80,13 @@
     <tr>
       <th>{{mb_label object=$rule field=function_id}}</th>
       <td>
-        <select name="function_id">
-        <option value="">{{tr}}CRegleSectorisation-function_id.all{{/tr}}</option>
-        {{foreach from=$functions item=_function}}
-          <option value="{{$_function->_id}}" {{if $_function->_id == $rule->function_id}}selected="selected" {{/if}}>
-            {{$_function->_view}}
-          </option>
-        {{/foreach}}
+        <select name="function_id"  style="width:15em;">
+          <option value="">{{tr}}CRegleSectorisation-function_id.all{{/tr}}</option>
+          {{foreach from=$functions item=_function}}
+            <option value="{{$_function->_id}}" {{if $_function->_id == $rule->function_id}}selected="selected" {{/if}}>
+              {{$_function->_view}}
+            </option>
+          {{/foreach}}
         </select>
       </td>
     </tr>
@@ -71,7 +96,7 @@
       {{mb_label object=$rule field="praticien_id"}}
       </th>
       <td>
-        <select name="praticien_id">
+        <select name="praticien_id" style="width:15em;">
           <option value="">{{tr}}CMediusers.all{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$rule->praticien_id}}
         </select>

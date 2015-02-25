@@ -1909,6 +1909,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `orientation` ENUM('HDT','HO','SC','SI','REA','UHCD','MED','CHIR','OBST','FUGUE','SCAM','PSA','REO');";
     $this->addQuery($query);
 
-    $this->mod_version = '2.06';
+    $this->makeRevision("2.06");
+    $query = "ALTER TABLE `regle_sectorisation`
+                ADD `priority` INT (11) NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.07';
   }
 }

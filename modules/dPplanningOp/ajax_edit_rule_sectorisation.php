@@ -27,7 +27,7 @@ $users = $user->loadPraticiens(PERM_EDIT);
 
 //functions
 $function = new CFunctions();
-$functions = $function->loadList();
+$functions = $function->loadList(null, "text");
 
 //services
 $service = new CService();
