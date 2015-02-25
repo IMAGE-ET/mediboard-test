@@ -1897,13 +1897,11 @@ class CSetupdPplanningOp extends CSetup {
       $this->addQuery($query, true);
     }
     $this->makeRevision("2.04");
-
     $query = "ALTER TABLE `sejour`
                 ADD `handicap` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
     $this->makeRevision('2.05');
-
     $query = "ALTER TABLE `mode_sortie_sejour`
                 ADD `destination` ENUM('1','2','3','4','6','7'),
                 ADD `orientation` ENUM('HDT','HO','SC','SI','REA','UHCD','MED','CHIR','OBST','FUGUE','SCAM','PSA','REO');";
