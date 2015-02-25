@@ -4604,44 +4604,52 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CStoredObject[]
    */
   function loadLiaisonsForPrestation($prestation_id, $date_min = null, $date_max = null) {
-    $item_liaison = new CItemLiaison();
-    $where    = array();
-    $order    = "date ASC";
-    $limit    = null;
-    $groupby  = "item_liaison.date";
-    $ljoin    = array();
+    $this->_liaisons_for_prestation = array();
 
     if ($prestation_id == "all") {
-      $prestation_id = null;
-      $groupby = "item_prestation_id";
+      $presta = new CPrestationJournaliere();
+      $prestation_id = $presta->loadIds();
+    }
+    else {
+      $prestation_id = array($prestation_id);
     }
 
-    $where["sejour_id"] = "= '$this->_id'";
-    $ljoin["item_prestation"] =
-      "  item_prestation.item_prestation_id = item_liaison.item_souhait_id
-      OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
-
-    $where["object_class"] = " = 'CPrestationJournaliere'";
-    if ($prestation_id) {
-      $where["object_id"] = " = '$prestation_id'";
+    if (!$date_max) {
+      $date_max = $date_min;
     }
 
-    //min != max
-    if ($date_min && $date_max && ($date_min != $date_max)) {
-      $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
-    }
+    $where = array(
+      "sejour_id" => "= '$this->_id'"
+    );
+    $ljoin = array(
+      "item_prestation" =>
+      "item_prestation.item_prestation_id = item_liaison.item_souhait_id
+      OR item_prestation.item_prestation_id = item_liaison.item_realise_id"
+    );
 
-    //unique date, presta for the day
-    $unique_date = false;
-    if ($date_min && (!$date_max || $date_min == $date_max)) {
-      $unique_date = true;
-      $where['date'] = "<= '$date_min'";  //get the last prestation for sejour (current day might not be defined)
-      $groupby = null;
-      $order = "date DESC";
-    }
+    foreach ($prestation_id as $_presta_id) {
+      $item_liaison = new CItemLiaison();
+      if ($date_min && $date_max) {
+        $where["date"] = "BETWEEN '$date_min' AND '$date_max'";
+      }
+      $where["object_id"] = "= '$_presta_id'";
 
-    /** @var  CItemLiaison[] _liaisons_for_prestation */
-    $this->_liaisons_for_prestation = $item_liaison->loadList($where, $order, $limit, $groupby, $ljoin);
+      $liaisons = $item_liaison->loadList($where, null, null, null, $ljoin);
+
+      // S'il n'y a pas de liaison (ou que la première liaison est après la date de début)
+      // et qu'une période est donnée, on cherche la dernière liaison disponible
+      // avant la date de début
+      $first_liaison = reset($liaisons);
+      if ($date_min && $date_max && (!count($liaisons) || $first_liaison->date > $date_min)) {
+        $where["date"] = "< '$date_min'";
+        $item_liaison->loadObject($where, "date DESC", null, $ljoin);
+        $liaisons = array_merge($liaisons, array($item_liaison));
+      }
+
+      foreach ($liaisons as $_liaison) {
+        $this->_liaisons_for_prestation[$_liaison->_id] = $_liaison;
+      }
+    }
 
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
@@ -4654,24 +4662,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $_liaison->loadRefItemRealise();
     }
 
-    // Pour une date unique, tri de la dernière liaison a posteriori
-    if ($unique_date) {
-      $temp_liaisons = array();
-
-      foreach ($this->_liaisons_for_prestation as $_liaison) {
-        $key = $_liaison->_ref_item->object_id;
-        if ($_liaison->item_realise_id) {
-          $key = $_liaison->_ref_item_realise->object_id;
-        }
-        $temp_liaisons[$key][] = $_liaison;
-      }
-      $this->_liaisons_for_prestation = array();
-      foreach ($temp_liaisons as $_liaisons_by_prestation) {
-        // On prend la première liaison de la collection car tri par date décroissante
-        $first_liaison = reset($_liaisons_by_prestation);
-        $this->_liaisons_for_prestation[$first_liaison->_id] = $first_liaison;
-      }
-    }
+    array_multisort(CMbArray::pluck($this->_liaisons_for_prestation, "date"), SORT_ASC, $this->_liaisons_for_prestation);
 
     return $this->_liaisons_for_prestation;
   }
