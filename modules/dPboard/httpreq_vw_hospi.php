@@ -45,7 +45,7 @@ foreach ($listSejours as $_sejour) {
   $_sejour->loadRefPraticien();
   $_sejour->loadRefPatient();
   $_sejour->loadRefsOperations();
-  $_sejour->loadRefCurrAffectation($date);
+  $_sejour->loadRefCurrAffectation("$date ".CMbDT::time());
   $_sejour->_ref_curr_affectation->loadRefLit();
   $_sejour->_ref_curr_affectation->_ref_lit->loadCompleteView();
 }
