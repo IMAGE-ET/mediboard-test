@@ -22,6 +22,8 @@ class CModeSortieSejour extends CMbObject {
   public $group_id;
   public $libelle;
   public $actif;
+  public $destination;
+  public $orientation;
 
   /**
    * @see parent::getSpec()
@@ -38,14 +40,16 @@ class CModeSortieSejour extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["code"]     = "str notNull";
-
     $sejour = new CSejour();
-    $props["mode"]     = $sejour->_props["mode_sortie"]." notNull";
+    $rpu = new CRPU();
 
-    $props["group_id"] = "ref notNull class|CGroups";
-    $props["libelle"]  = "str";
-    $props["actif"]    = "bool default|1";
+    $props["code"]        = "str notNull";
+    $props["mode"]        = $sejour->_props["mode_sortie"]." notNull";
+    $props["group_id"]    = "ref notNull class|CGroups";
+    $props["libelle"]     = "str";
+    $props["actif"]       = "bool default|1";
+    $props['destination'] = $sejour->_props['destination'];
+    $props['orientation'] = $rpu->_props['orientation'];
 
     return $props;
   }

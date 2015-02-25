@@ -134,11 +134,20 @@
           {{assign var=mode_sortie value="mutation"}}
         {{/if}}
         {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
+          <script type="text/javascript">
+            applyModeSortie = function(elt) {
+              $V(elt.form.mode_sortie, elt.options[elt.selectedIndex].get('mode'));
+              $V(elt.form.destination, elt.options[elt.selectedIndex].get('destination'));
+              if (elt.form.orientation !== undefined)
+              $V(elt.form.orientation, elt.options[elt.selectedIndex].get('orientation'));
+            }
+          </script>
+
           {{mb_field object=$sejour field=mode_sortie hidden=true class=$class_mode_sortie onchange="$onchange_mode_sortie"}}
-          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;" onchange="$V(this.form.mode_sortie, this.options[this.selectedIndex].get('mode'));">
+          <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" style="width: 16em;" onchange="applyModeSortie(this);">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$list_mode_sortie item=_mode}}
-              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
+              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" data-destination="{{$_mode->destination}}" data-orientation="{{$_mode->orientation}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
                 {{$_mode}}
               </option>
             {{/foreach}}
