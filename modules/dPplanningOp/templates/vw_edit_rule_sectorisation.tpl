@@ -12,7 +12,7 @@
 <script>
   changePrio = function(more) {
     var oform = getForm('editRegleSectorisation');
-    var old_value = $V(oform.priority);
+    var old_value = $V(oform.priority) || 0;
     if (more) {
       $V(oform.priority, parseInt(old_value) + 1);
     }
