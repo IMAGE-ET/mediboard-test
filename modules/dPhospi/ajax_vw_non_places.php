@@ -43,7 +43,7 @@ $where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($se
 $order = null;
 switch ($triAdm) {
   case "date_entree":
-    $order = "entree ASC";
+    $order = "entree ASC, sortie ASC";
     break;
 
   case "praticien":
@@ -223,7 +223,14 @@ $suivi_affectation = false;
 
 // Chargement des affectations dans les couloirs (sans lit_id)
 $where = array();
-$ljoin = array();
+
+$ljoin = array(
+  "sejour"          => "sejour.sejour_id = affectation.sejour_id",
+  "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+  "users"           => "users_mediboard.user_id = users.user_id",
+  "patients"        => "sejour.patient_id = patients.patient_id"
+);
+
 $where["lit_id"] = "IS NULL";
 if (is_array($services_ids) && count($services_ids)) {
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
@@ -250,7 +257,7 @@ if ($item_prestation_id && $prestation_id) {
 
 $affectation = new CAffectation();
 
-$affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
+$affectations = $affectation->loadList($where, $order, null, null, $ljoin);
 $_sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($_sejours, "patient_id");
