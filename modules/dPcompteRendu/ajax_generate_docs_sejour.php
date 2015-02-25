@@ -13,6 +13,8 @@
 
 CCanDo::checkRead();
 
+CApp::setTimeLimit(150);
+
 $modele_id   = CValue::post("modele_id");
 $sejours_ids = CValue::post("sejours_ids");
 
@@ -23,12 +25,21 @@ $where = array();
 $where["sejour_id"] = "IN ($sejours_ids)";
 
 $sejours = $sejour->loadList($where);
-CMbObject::massLoadFwdRef($sejours, "patient_id");
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 
 /** @var $sejours CSejour[] */
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
+  $_sejour->loadRefPraticien();
 }
+
+CSejour::massLoadNDA($sejours);
+CPatient::massLoadIPP($patients);
+
+CStoredObject::massCountBackRefs($sejours, "affectations");
+CStoredObject::massCountBackRefs($sejours, "consultations");
+CStoredObject::massCountBackRefs($sejours, "files");
 
 // Tri par nom de patient
 $sorter = CMbArray::pluck($sejours, "_ref_patient", "nom");
@@ -68,10 +79,9 @@ foreach ($sejours as $_sejour) {
 
   if ($msg = $compte_rendu->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
+    continue;
   }
-  else {
-    $nbDoc[$compte_rendu->_id] = 1;
-  }
+  $nbDoc[$compte_rendu->_id] = 1;
 }
 
 echo CApp::fetch("dPcompteRendu", "print_docs", array("nbDoc" => $nbDoc));
