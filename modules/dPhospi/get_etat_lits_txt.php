@@ -11,7 +11,7 @@
 
 /*
  * Pour acceder à cette page ==>
- * http://localhost/mediboard/index.php?m=dPhospi&a=get_etat_lits_txt&dialog=1&suppressHeaders=1&login=user:password;
+ * http://localhost/mediboard/index.php?m=dPhospi&raw=get_etat_lits_txt&login=user:password;
  * renvoi :
  * NOM;Prénom;patient_id;service_id;chambre_id;lit_id;sexe(m ou f);naissance(YYYYMMJJ);
  * entree(YYYYMMDD);entree(HHMM);sortie(YYYYMMDD);sortie(HHMM);type_hospi(comp ou ambu)
@@ -22,10 +22,16 @@
  * NOM;Prénom;patient_id;NOM_NAISSANCE,service_id;chambre_id;LIT_NOM;lit_id;sexe;naissance;entree;entree;sortie;sortie;type_hospi
  */
 
+/*
+ * Ajout du paramètre IPP pour avoir :
+ * NOM;Prénom;patient_id;NOM_NAISSANCE,service_id;chambre_id;LIT_NOM;lit_id;sexe;naissance;entree;entree;sortie;sortie;type_hospi
+ */
+
 // Date actuelle
 $date       = CValue::get("date", CMbDT::dateTime());
 $detail_lit = CValue::get("detail_lit", 0);
-$with_ambu  = CValue::get("with_ambu", 1);
+$with_ambu  = CValue::get("with_ambu" , 1);
+$IPP        = CValue::get("IPP"       , 0);
 
 // Affectation a la date $date
 $affectation = new CAffectation();
@@ -67,10 +73,11 @@ foreach ($affectations as $key => $_affectation) {
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien();
   $patient = $_affectation->_ref_sejour->loadRefPatient();
+  $patient->loadIPP();
 
   $list_affectations[$key]["nom"]          = $patient->nom;
   $list_affectations[$key]["prenom"]       = $patient->prenom;
-  $list_affectations[$key]["id"]           = $patient->_id;
+  $list_affectations[$key]["id"]           = $IPP ? $patient->_IPP : $patient->_id;
   $list_affectations[$key]["service"]      = $lit->_ref_chambre->_ref_service->_id;
   $list_affectations[$key]["chambre"]      = $lit->_ref_chambre->_id;
   $list_affectations[$key]["lit"]          = $lit->_id;
