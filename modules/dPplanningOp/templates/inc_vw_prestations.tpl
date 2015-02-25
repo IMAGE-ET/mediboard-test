@@ -189,7 +189,7 @@
                     {{assign var=liaison value=$empty_liaison}}
                   {{/if}}
                   <tr>
-                    <th class="category" colspan="2">
+                    <th class="section" colspan="2">
                       {{mb_include module=system template=inc_object_history object=$liaison}}
                       {{$_prestation}}
                     </th>
