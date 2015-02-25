@@ -43,7 +43,7 @@ $where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($se
 $order = null;
 switch ($triAdm) {
   case "date_entree":
-    $order = "entree ASC";
+    $order = "entree ASC, sortie ASC";
     break;
 
   case "praticien":
@@ -210,10 +210,11 @@ if ($item_prestation_id && $prestation_id) {
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
-CMbObject::massLoadFwdRef($sejours, "prestation_id");
-CMbObject::massLoadFwdRef($praticiens, "function_id");
-$services = CMbObject::massLoadFwdRef($sejours, "service_id");
+$praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CStoredObject::massLoadFwdRef($sejours, "prestation_id");
+CStoredObject::massLoadFwdRef($praticiens, "function_id");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$services = CStoredObject::massLoadFwdRef($sejours, "service_id");
 
 foreach ($sejours as $_sejour_imc) {
   /* @var CAffectation $_affectation_imc*/
@@ -230,7 +231,14 @@ $suivi_affectation = false;
 
 // Chargement des affectations dans les couloirs (sans lit_id)
 $where = array();
-$ljoin = array();
+
+$ljoin = array(
+  "sejour"          => "sejour.sejour_id = affectation.sejour_id",
+  "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+  "users"           => "users_mediboard.user_id = users.user_id",
+  "patients"        => "sejour.patient_id = patients.patient_id"
+);
+
 $where["lit_id"] = "IS NULL";
 if (is_array($services_ids) && count($services_ids)) {
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
@@ -257,11 +265,11 @@ if ($item_prestation_id && $prestation_id) {
 
 $affectation = new CAffectation();
 
-$affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
-$_sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+$affectations = $affectation->loadList($where, $order, null, null, $ljoin);
+$_sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
-$patients = CMbObject::massLoadFwdRef($_sejours, "patient_id");
-CMbObject::massLoadBackRefs($patients, "dossier_medical");
+$patients = CStoredObject::massLoadFwdRef($_sejours, "patient_id");
+CStoredObject::massLoadBackRefs($patients, "dossier_medical");
 
 foreach ($affectations as $_affectation_imc) {
   /* @var CAffectation $_affectation_imc*/
