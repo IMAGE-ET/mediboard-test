@@ -45,10 +45,8 @@ if ($type_name == "services") {
 
   foreach ($services as $_service) {
     // Chargement des chambres et lits
-    $_service->loadRefsLits(true);
-    // si pas de lits dans les chambres
-    if (empty($_service->_ref_chambres)) {
-      $_service->loadRefsChambres();
+    foreach ($_service->loadRefsChambres() as $_chambre) {
+      $_chambre->loadRefsLits(true);
     }
   }
 

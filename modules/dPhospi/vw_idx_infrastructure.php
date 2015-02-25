@@ -39,9 +39,8 @@ $order = "nom";
 $service= new CService();
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
-  $_service->loadRefsLits(true);
-  if (empty($_service->_ref_chambres)) {
-    $_service->loadRefsChambres();
+  foreach ($_service->loadRefsChambres() as $_chambre) {
+    $_chambre->loadRefsLits(true);
   }
 }
 
