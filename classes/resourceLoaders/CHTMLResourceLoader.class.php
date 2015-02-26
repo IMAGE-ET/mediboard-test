@@ -150,7 +150,7 @@ abstract class CHTMLResourceLoader {
    * 
    * @return void
    */
-  static function output(){
+  static function output($options = array()){
     if (self::$_aio) {
       $path = CAppUI::getTmpPath("embed-".md5(uniqid("", true)));
 
@@ -173,7 +173,7 @@ abstract class CHTMLResourceLoader {
         CApp::rip();
       }
       else {
-        self::allInOne();
+        self::allInOne(null, $options);
       }
     }
     else {
@@ -447,7 +447,7 @@ abstract class CHTMLResourceLoader {
    * 
    * @return void|string
    */
-  private static function allInOne($path = null) {
+  private static function allInOne($path = null, $options = array()) {
     if ($path) {
       self::$_path = rtrim($path, "/\\")."/";
     }
@@ -455,12 +455,14 @@ abstract class CHTMLResourceLoader {
     CApp::setMemoryLimit("256M");
     
     self::$_fp_out = CMbPath::getTempFile();
-    
+
     $re_img    = "/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)(>|$)/i";
     $re_link   = "/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i";
     $re_script = "/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i";
     $re_a      = "/<a([^>]*)href\s*=\s*[\"']embed:([^\"']+)[\"']([^>]*)>/i";
-    
+
+    $ignore_scripts = !empty($options["ignore_scripts"]);
+
     // End Output Buffering
     ob_end_clean();
 
@@ -472,7 +474,10 @@ abstract class CHTMLResourceLoader {
 
       $line = preg_replace_callback($re_img,    array('self', 'replaceImgSrc'), $line);
       $line = preg_replace_callback($re_link,   array('self', 'replaceStylesheet'), $line);
-      $line = preg_replace_callback($re_script, array('self', 'replaceScriptSrc'), $line);
+
+      if (!$ignore_scripts) {
+        $line = preg_replace_callback($re_script, array('self', 'replaceScriptSrc'), $line);
+      }
 
       if (self::$_path) {
         $line = preg_replace_callback($re_a, array('self', 'replaceAEmbed'), $line);

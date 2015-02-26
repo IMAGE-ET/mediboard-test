@@ -625,7 +625,7 @@ class CApp {
    *
    * @return bool|string
    */
-  private static function serverCall($url, $post = null) {
+  static function serverCall($url, $post = null) {
     CSessionHandler::writeClose();
     global $rootName, $version;
     $session_name = preg_replace("/[^a-z0-9]/i", "", $rootName);

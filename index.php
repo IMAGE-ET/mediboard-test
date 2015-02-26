@@ -352,6 +352,9 @@ CMbPerformance::end();
 CMbPerformance::writeHeader();
 
 // Output HTML
-CHTMLResourceLoader::output();
+$aio_options = array(
+  "ignore_scripts" => CValue::get("_aio_ignore_scripts")
+);
+CHTMLResourceLoader::output($aio_options);
 
 CApp::rip();

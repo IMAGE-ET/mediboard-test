@@ -4837,6 +4837,69 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_users_sejour;
   }
 
+  /**
+   * Make a PDF document archive of the sejour (based on soins/print_dossier_soins)
+   *
+   * @param string $title File title
+   *
+   * @return bool
+   *
+   * @throws CMbException
+   */
+  function makePDFarchive($title = "Dossier complet") {
+    if (!CModule::getActive("soins")) {
+      return false;
+    }
+
+    $query = array(
+      "m"                   => "soins",
+      "a"                   => "print_dossier_soins",
+      "sejour_id"           => $this->_id,
+      "dialog"              => 1,
+      "offline"             => 1,
+      "limit"               => 10000,
+      "_aio"                => 1,
+      "_aio_ignore_scripts" => 1,
+    );
+
+    $base = $_SERVER["SCRIPT_NAME"] . "?" . http_build_query($query, "", "&");
+
+    $result = CApp::serverCall("http://127.0.0.1$base");
+
+    $content = $result["body"];
+
+    $date = CMbDT::dateTime();
+
+    $file = new CFile();
+    $file->setObject($this);
+    $file->file_name = "$title - $date.pdf";
+    $file->file_type = "application/pdf";
+    $file->fillFields();
+    $file->updateFormFields();
+    $file->forceDir();
+    $file->author_id = CAppUI::$user->_id;
+
+    $compte_rendu = new CCompteRendu();
+    $compte_rendu->_orientation = "portrait";
+
+    $format = CCompteRendu::$_page_formats["a4"];
+    $page_width  = round((72 / 2.54) * $format[0], 2);
+    $page_height = round((72 / 2.54) * $format[1], 2);
+    $compte_rendu->_page_format = array(0, 0, $page_width, $page_height);
+
+    $content = str_replace("<!DOCTYPE html>", "", $content);
+
+    CHtmlToPDFConverter::init("CWkHtmlToPDFConverter");
+    $pdf = CHtmlToPDFConverter::convert($content, $compte_rendu->_page_format, $compte_rendu->_orientation);
+
+    $file->putContent($pdf);
+
+    if ($msg = $file->store()) {
+      throw new CMbException($msg);
+    }
+
+    return true;
+  }
 }
 
 if (CAppUI::conf("ref_pays") == 2) {
