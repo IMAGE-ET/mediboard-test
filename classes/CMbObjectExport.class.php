@@ -33,6 +33,9 @@ class CMbObjectExport {
   /** @var bool */
   public $empty_values = true;
 
+  /** @var callable Callback executed when object is exported */
+  protected $object_callback;
+
   /**
    * Trim no break space and 0xFF chars
    * 
@@ -59,6 +62,17 @@ class CMbObjectExport {
     
     $this->object = $object;
     $this->backrefs_tree = isset($backrefs_tree) ? $backrefs_tree : $object->getExportedBackRefs();
+  }
+
+  /**
+   * Callback exexuted on each object
+   *
+   * @param callable $callback The callback
+   *
+   * @return void
+   */
+  function setObjectCallback(callable $callback) {
+    $this->object_callback = $callback;
   }
 
   /**
@@ -116,7 +130,7 @@ class CMbObjectExport {
     $object_node->setAttribute('id', $object->_guid);
     $object_node->setIdAttribute('id', true);
     $doc->documentElement->appendChild($object_node);
-    
+
     $db_fields = $object->getPlainFields();
     
     foreach ($db_fields as $key => $value) {
@@ -156,6 +170,10 @@ class CMbObjectExport {
         }
       }
     }
+
+    if ($this->object_callback && is_callable($this->object_callback)) {
+      call_user_func($this->object_callback, $object, $object_node, $depth);
+    }
     
     // Collections
     if (!isset($this->backrefs_tree[$object->_class])) {
@@ -167,11 +185,26 @@ class CMbObjectExport {
         continue;
       }
       
-      $object->makeBackSpec($backName);
+      $_backspec = $object->makeBackSpec($backName);
+
+      // Add fwd ref field value for each object in the collection
+      if ($_backspec) {
+        $_class = $_backspec->class;
+        if (!isset($this->fwdrefs_tree[$_class])) {
+          $this->fwdrefs_tree[$_class] = array();
+        }
+
+        if (!array_key_exists($_backspec->field, $this->fwdrefs_tree[$_class])) {
+          $this->fwdrefs_tree[$_class][] = $_backspec->field;
+        }
+      }
+
       $objects = $object->loadBackRefs($backName);
-      
-      foreach ($objects as $_object) {
-        $this->_toDOM($_object, $depth-1);
+
+      if ($objects) {
+        foreach ($objects as $_object) {
+          $this->_toDOM($_object, $depth-1);
+        }
       }
     }
   }
