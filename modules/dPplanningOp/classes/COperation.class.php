@@ -860,8 +860,13 @@ class COperation extends CCodable implements IPatientRelated {
       $do_update_time = true;
     }
 
-    if ($this->fieldModified("annulee", "1") && $this->loadRefCommande()->_id && $this->_ref_commande_mat->etat != "annulee") {
-      $this->_ref_commande_mat->cancelledOp();
+    if ($this->loadRefCommande()->_id && $this->_ref_commande_mat->etat != "annulee") {
+      if ($this->fieldModified("annulee", "1")) {
+        $this->_ref_commande_mat->cancelledOp();
+      }
+      if ($this->fieldModified("materiel") || $this->fieldModified("date")) {
+        $this->_ref_commande_mat->modifiedOp($this->materiel);
+      }
     }
 
     // Standard storage

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 class CCommandeMaterielOp extends CMbObject {
@@ -71,8 +71,28 @@ class CCommandeMaterielOp extends CMbObject {
     $this->_view .= " pour ". $this->loadRefOperation()->loadRefPatient();
   }
 
+
+  /**
+   * Changement de l'état de la commande en : à annuler
+   *
+   * @return void|string
+   */
   function cancelledOp() {
     $this->etat = 'a_annuler';
+    if ($msg = $this->store()) {
+      return $msg;
+    }
+  }
+
+  /**
+   * Changement de l'état de la commande en : à annuler
+   *
+   * @param string $materiel Matériel de l'intervention
+   *
+   * @return void|string
+   */
+  function modifiedOp($materiel) {
+    $this->etat = $materiel ? 'modify' : 'annulee';
     if ($msg = $this->store()) {
       return $msg;
     }

@@ -46,6 +46,7 @@ if ($userSel->_id) {
   foreach ($list_urgences as $_urg) {
     $_urg->canDo();
     $_urg->loadRefsFwd();
+    $_urg->loadRefCommande();
     $_sejour = $_urg->_ref_sejour;
     $_urg->loadRefsDocs();
     foreach ($_urg->_ref_documents as $_document) {

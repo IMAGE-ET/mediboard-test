@@ -271,11 +271,17 @@
         <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">
           Dossier bloc
         </button>
-        <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)">
+        <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)" style="float: left;">
           {{if $_operation->salle_id}}Effectué en salle {{$_operation->_ref_salle}}{{/if}}
           {{mb_include template=inc_vw_operation}}
           ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})  
         </a>
+        {{assign var=commande value=$_operation->_ref_commande_mat}}
+        {{if $commande && $commande->_id}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$commande->_guid}}')" style="float: left;">
+&nbsp;&nbsp;{{tr}}CCommandeMaterielOp.long{{/tr}} {{mb_value object=$commande field=etat}}
+              </span>
+        {{/if}}
       </td>
     </tr>
   
