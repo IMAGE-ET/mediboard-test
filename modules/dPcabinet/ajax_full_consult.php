@@ -54,6 +54,12 @@ $userSel->load($consult->_ref_plageconsult->chir_id);
 $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
+// assign to session the current consultation praticien
+$chirSession = CValue::session("chirSel");
+if ($chirSession != $userSel->_id && $canUserSel) {
+  CValue::setSession("chirSel", $userSel->_id);
+}
+
 $anesth = new CTypeAnesth();
 $anesth = $anesth->loadGroupList();
 
