@@ -120,11 +120,11 @@
     {{if $mode->_class == 'CModeSortieSejour'}}
       <tr>
         <th>{{mb_label object=$mode field=destination}}</th>
-        <td>{{mb_field object=$mode field=destination}}</td>
+        <td>{{mb_field object=$mode  emptyLabel="Choose" field=destination}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$mode field=orientation}}</th>
-        <td>{{mb_field object=$mode field=orientation}}</td>
+        <td>{{mb_field object=$mode  emptyLabel="Choose" field=orientation}}</td>
       </tr>
     {{/if}}
 
