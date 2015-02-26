@@ -220,7 +220,6 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
 }
 
 $prat_available = $praticiens;
-
 if (!$prats_selected) {
   $prats_selected = array_keys($praticiens);
 }
@@ -231,7 +230,7 @@ $diff = array_diff(array_keys($praticiens), $prats_selected);
 foreach($diff as $_key) {
   if (isset($praticiens[$_key])) {
     unset($praticiens[$_key]);
-    unset($listPlages[$key_prat]);
+    unset($listPlages[$_key]);
   }
 }
 
