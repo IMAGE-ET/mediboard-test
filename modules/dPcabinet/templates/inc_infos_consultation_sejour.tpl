@@ -32,7 +32,7 @@
           {{assign var=lit_id  value=$sejour->_ref_curr_affectation->lit_id}}
           <div id="patient_pret-{{$sejour->_id}}">
             {{mb_include module=brancardage template=inc_exist_brancard colonne="demande_brancard" sejour_id=$sejour->_id
-            brancardage=null see_sejour=true destination="CService" destination_guid="" origine_guid="CLit-$lit_id"}}
+            brancardage=null see_sejour=true destination="CService" destination_guid="" origine_guid="CLit-$lit_id" reveil=true}}
           </div>
         </td>
       </tr>
