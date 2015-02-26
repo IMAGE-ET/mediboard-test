@@ -118,7 +118,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $action_movement;
     
     // ZBE-5: Indicator "Historical Movement" (ID) 
-    $data[] = $movement->_current ? "Y" : "N";
+    $data[] = $movement->_current ? "N" : "Y";
     
     // ZBE-6: Original trigger event code (ID) (optional)
     $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->original_trigger_code : null;
