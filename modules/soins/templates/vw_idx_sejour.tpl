@@ -24,7 +24,10 @@
   function paramUserSejour(sejour_id) {
     var url = new Url("planningOp", "vw_affectations_sejour");
     url.addParam("sejour_id",sejour_id);
-    url.requestModal();
+    url.requestModal(null, null, {
+      onClose : function() {
+        getForm("selService").submit();
+      }});
   }
 
   function popEtatSejour(sejour_id) {
@@ -356,29 +359,15 @@
                     {{tr}}Lookup{{/tr}}
                   </button>
                   {{if @$modules.dPplanningOp->_can->admin}}
-                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});" style="margin-right: 5px;"
+                    <button class="mediuser_black notext" onclick="paramUserSejour({{$curr_affectation->sejour_id}});"
+                            style="margin-right: 5px;{{if !$sejour->_ref_users_sejour|@count}}opacity: 0.6;{{/if}}"
                             onmouseover="ObjectTooltip.createDOM(this, 'affectation_CSejour-{{$sejour->_id}}')";></button>
-                    <span class="countertip" style="margin-top:1px;margin-left: -10px;">
-                      <span class="{{if !$sejour->_ref_users_sejour|@count}}empty{{/if}}">{{$sejour->_ref_users_sejour|@count}}</span>
-                    </span>
-                    <div style="display: none" id="affectation_CSejour-{{$curr_affectation->sejour_id}}">
-                      <table class="tbl">
-                        {{foreach from=$sejour->_ref_users_by_type item=_users key=type}}
-                          <tr>
-                            <th>{{tr}}CUserSejour.{{$type}}{{/tr}}</th>
-                          </tr>
-                          {{foreach from=$_users item=_user}}
-                            <tr>
-                              <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user->_ref_user}}</td>
-                            </tr>
-                          {{foreachelse}}
-                            <tr>
-                              <td class="empty">{{tr}}CUserSejour.none{{/tr}}</td>
-                            </tr>
-                          {{/foreach}}
-                        {{/foreach}}
-                      </table>
-                    </div>
+                    {{if $sejour->_ref_users_sejour|@count}}
+                      <span class="countertip" style="margin-top:1px;margin-left: -10px;">
+                        <span>{{$sejour->_ref_users_sejour|@count}}</span>
+                      </span>
+                    {{/if}}
+                    {{mb_include module=planningOp template=vw_user_sejour_table}}
                   {{/if}}
                 </td>
 

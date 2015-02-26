@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -41,5 +41,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->assign("users" , $users);
 $smarty->assign("user_sejour" , $user_sejour);
+$smarty->assign("refresh" , CValue::get("refresh", 0));
 
 $smarty->display("vw_affectations_sejour.tpl");

@@ -23,6 +23,7 @@ $ecap             = CValue::get('ecap', false);
 $date             = CValue::get('date', CMbDT::date());
 $mode             = CValue::get('mode', 'day');
 $lite_view        = CValue::get("lite_view");
+$my_patient       = CValue::getOrSession("my_patient");
 
 // Mode Dossier de soins, chargement de la liste des service, praticiens, functions
 $services = array();
@@ -290,7 +291,9 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massCountBackRefs($sejours, "tasks", array("realise" => " = '0'"), array(), "taches_non_realisees");
 
+$count_my_patient = 0;
 foreach ($sejours as $sejour) {
+  $count_my_patient += count($sejour->loadRefsUserSejour($userCourant));
   $sejour->loadRefPatient(1)->loadIPP();
   $sejour->loadRefPraticien(1);
   $sejour->checkDaysRelative($date);
@@ -402,6 +405,17 @@ $praticien->load($praticien_id);
 $_sejour = new CSejour();
 $_sejour->_type_admission = $_type_admission;
 
+if ($count_my_patient && $my_patient && ($userCourant->isSageFemme() || $userCourant->isAideSoignant() || $userCourant->isInfirmiere())) {
+  foreach ($sejours as $key_sejour => $_sejour) {
+    if (!count($_sejour->_ref_users_sejour)) {
+      unset($sejours[$key_sejour]);
+    }
+  }
+}
+if (!$count_my_patient && $my_patient) {
+  $my_patient = 0;
+}
+
 $smarty = new CSmartyDP();
 $smarty->assign("service"         , $service);
 $smarty->assign("service_id"      , $service_id);
@@ -417,6 +431,9 @@ $smarty->assign("print"           , $print);
 $smarty->assign("_sejour"         , $_sejour);
 $smarty->assign('ecap'            , $ecap);
 $smarty->assign('mode'            , $mode);
+
+$smarty->assign("my_patient"      , $my_patient);
+$smarty->assign("count_my_patient", $count_my_patient);
 
 $smarty->assign("select_view"     , $select_view);
 if ($select_view) {

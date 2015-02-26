@@ -91,6 +91,14 @@
       </label>
     {{/foreach}}
 
+    {{if $app->_ref_user->isInfirmiere() || $app->_ref_user->isAideSoignant() || $app->_ref_user->isSageFemme()}}
+      <label style="float: right;">
+        Mes patients ({{$count_my_patient}})
+        <input type="hidden" name="my_patient" value="{{$my_patient}}" onchange="this.form.submit();"/>
+        <input type="checkbox" name="change_patient" value="{{if $my_patient == 1}}0{{else}}1{{/if}}" {{if $my_patient == 1}}checked{{/if}} onchange="$V(this.form.my_patient, this.checked?1:0);"/>
+      </label>
+    {{/if}}
+
     <br/>
 
     <input type="hidden" name="date" value="{{$date}}" onchange="this.form.submit()" />

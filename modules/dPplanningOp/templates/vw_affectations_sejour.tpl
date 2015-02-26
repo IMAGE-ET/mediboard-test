@@ -1,32 +1,33 @@
-<script>
-  addUser = function(form, sejour_id) {
-    return onSubmitFormAjax(form, function() {
-      Control.Modal.close();
-      var url = new Url("planningOp", "vw_affectations_sejour");
-      url.addParam("sejour_id", sejour_id);
-      url.requestModal();
-    });
-  }
-
-  delUser = function(form, sejour_id) {
-    var options = {
-      typeName:'l\'association',
-      ajax: 1
-    };
-    var ajax = {
-      onComplete: function() {
-        Control.Modal.close();
+{{if !$refresh}}
+  <script>
+    addUser = function(form, sejour_id) {
+      return onSubmitFormAjax(form, function() {
         var url = new Url("planningOp", "vw_affectations_sejour");
         url.addParam("sejour_id", sejour_id);
-        url.requestModal();
-      }
-    };
-    confirmDeletion(form, options, ajax);
-  }
+        url.addParam("refresh", 1);
+        url.requestUpdate('refresh_'+sejour_id);
+      });
+    }
 
-</script>
+    delUser = function(form, sejour_id) {
+      var options = {
+        typeName:'l\'association',
+        ajax: 1
+      };
+      var ajax = {
+        onComplete: function() {
+          var url = new Url("planningOp", "vw_affectations_sejour");
+          url.addParam("sejour_id", sejour_id);
+          url.addParam("refresh", 1);
+          url.requestUpdate('refresh_'+sejour_id);
+        }
+      };
+      confirmDeletion(form, options, ajax);
+    }
+  </script>
+{{/if}}
 
-<table class="tbl" id="">
+<table class="tbl" id="refresh_{{$sejour->_id}}">
   <tr>
     <th class="title" colspan="2">Affectation de personnel pour:<br/>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_view}}</span>
