@@ -5,9 +5,30 @@
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{mb_default var=prescription value=$sejour->_ref_prescription_sejour}}
 
+<script>
+  function paramUserSejour(sejour_id) {
+    var url = new Url("planningOp", "vw_affectations_sejour");
+    url.addParam("sejour_id",sejour_id);
+    url.requestModal(null, null, {
+      onClose : function() {
+        refreshLineSejour(sejour_id);
+      }});
+  }
+</script>
+
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
   <td class="text {{if $sejour->isolement}}isolement{{/if}} {{if !$affectation->_id}}compact{{/if}}">
+    {{if @$modules.dPplanningOp->_can->admin}}
+      <button class="mediuser_black notext" onclick="paramUserSejour({{$affectation->sejour_id}});"
+              onmouseover="ObjectTooltip.createDOM(this, 'affectation_{{$sejour->_guid}}')";
+        {{if $sejour->_ref_users_sejour|@count == 0}}style="opacity: 0.6;" {{/if}}></button>
+      {{if $sejour->_ref_users_sejour|@count}}
+        <span class="countertip">{{$sejour->_ref_users_sejour|@count}}</span>
+      {{/if}}
+      {{mb_include module=planningOp template=vw_user_sejour_table}}
+    {{/if}}
+
     {{if $affectation->_id && $affectation->lit_id}}
       {{if $show_full_affectation}}
         {{$affectation->_ref_lit->_view}}
