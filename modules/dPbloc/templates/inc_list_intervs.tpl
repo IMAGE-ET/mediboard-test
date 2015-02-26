@@ -137,6 +137,10 @@
         <em>{{mb_label object=$_op field=materiel}}</em> :
         {{mb_value object=$_op field=materiel}}
       {{/if}}
+      {{if $_op->exam_per_op}}
+        <br /><em>{{mb_label object=$_op field=exam_per_op}}</em> :
+        {{mb_value object=$_op field=exam_per_op}}
+      {{/if}}
       {{mb_include module=bloc template=inc_rques_intub operation=$_op}}
     </td>
     <td class="narrow" style="vertical-align: top;">

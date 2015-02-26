@@ -37,6 +37,7 @@
       presence_postop  : "{{$_protocole->presence_postop}}",
       examen           : "{{$_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
       materiel         : "{{$_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
+      exam_per_op      : "{{$_protocole->exam_per_op|smarty:nodefaults|escape:"javascript"}}",
       convalescence    : "{{$_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
       depassement      : "{{$_protocole->depassement}}",
       forfait          : "{{$_protocole->forfait}}",

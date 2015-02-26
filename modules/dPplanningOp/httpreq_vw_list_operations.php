@@ -147,6 +147,7 @@ if ($userSel->_id) {
         $_doc->canDo();
       }
       $_op->canDo();
+      $_op->loadRefCommande();
       $_sejour->canDo();
       $_sejour->loadRefsFwd();
       $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();

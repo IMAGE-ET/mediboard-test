@@ -359,7 +359,12 @@ Main.add(function() {
                 <th>{{mb_label object=$interv field=materiel}}</th>
                 <td>{{mb_field object=$interv field=materiel prop=str}}</td>
               </tr>
-              
+
+              <tr>
+                <th>{{mb_label object=$interv field=exam_per_op}}</th>
+                <td>{{mb_field object=$interv field=exam_per_op prop=str}}</td>
+              </tr>
+
               <tr>
                 <th>{{mb_label object=$interv field=codes_ccam}}</th>
                 <td>

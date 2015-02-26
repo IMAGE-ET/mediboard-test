@@ -101,6 +101,7 @@ if ($selOp->_id) {
 
   $selOp->loadRefChir()->loadRefFunction();
   $selOp->loadRefPatient();
+  $selOp->loadRefCommande();
 
   $date = CMbDT::date($selOp->_datetime);
 

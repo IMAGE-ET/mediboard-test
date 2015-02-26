@@ -382,13 +382,13 @@ updateListCPI = function(form) {
         <tr>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="examen"}}</td>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="materiel"}}</td>
-          <td class="text" style="width: 33%;">{{mb_label object=$protocole field="rques_operation"}}</td>
+          <td class="text" style="width: 33%;">{{mb_label object=$protocole field="exam_per_op"}}</td>
         </tr>
 
         <tr>
           <td>{{mb_field object=$protocole field="examen" rows="3"}}</td>
           <td>{{mb_field object=$protocole field="materiel" rows="3"}}</td>
-          <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
+          <td>{{mb_field object=$protocole field="exam_per_op" rows="3"}}</td>
         </tr>
   
         <tr>
@@ -401,6 +401,11 @@ updateListCPI = function(form) {
           <td>{{mb_field object=$protocole field="depassement" size="4"}}</td>
           <td>{{mb_field object=$protocole field="forfait" size="4"}}</td>
           <td>{{mb_field object=$protocole field="fournitures" size="4"}}</td>
+        </tr>
+        <tr>
+          <td colspan="3">{{mb_label object=$protocole field="rques_operation"}}
+              {{mb_field object=$protocole field="rques_operation"}}
+          </td>
         </tr>
       </table>
     </td>

@@ -45,6 +45,7 @@ class CProtocole extends CMbObject {
   public $temp_operation;
   public $examen;
   public $materiel;
+  public $exam_per_op;
   public $duree_hospi;
   public $duree_heure_hospi;
   public $rques_operation; // Operation->rques
@@ -134,6 +135,7 @@ class CProtocole extends CMbObject {
     $props["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $props["examen"]          = "text confidential seekable";
     $props["materiel"]        = "text confidential seekable";
+    $props["exam_per_op"]     = "text confidential seekable";
     $props["duree_hospi"]     = "num notNull min|0 max|36500";
     $props["duree_heure_hospi"] = "num min|0 max|23 default|0";
     $props["rques_operation"] = "text confidential";

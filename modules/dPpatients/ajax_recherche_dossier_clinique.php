@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CApp::setMemoryLimit("768M");
@@ -79,7 +79,8 @@ $fields = array(
   ),
   "COperation" => array(
     "materiel" => "LIKE", 
-    "examen" => "LIKE", 
+    "exam_per_op" => "LIKE",
+    "examen" => "LIKE",
     //"rques" => "LIKE",
     "_libelle_interv" => null,
     "codes_ccam" => null,
@@ -242,6 +243,7 @@ switch ($section) {
         empty($interv_data["_rques_interv"]) &&
         empty($interv_data["examen"]) &&
         empty($interv_data["materiel"]) &&
+        empty($interv_data["exam_per_op"]) &&
         empty($interv_data["codes_ccam"]) &&
         empty($sejour_data["entree"]) &&
         empty($sejour_data["sortie"]) &&

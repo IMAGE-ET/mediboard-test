@@ -66,6 +66,15 @@
   </tr>
   {{/if}}
 
+  {{if $operation->exam_per_op}}
+  <tr>
+    <td class="text" colspan="2">
+      <strong>{{tr}}COperation-exam_per_op-court{{/tr}} :</strong>
+      {{$operation->exam_per_op|nl2br}}
+    </td>
+  </tr>
+  {{/if}}
+
   {{if $operation->rques}}
   <tr>
     <td class="text" colspan="2">

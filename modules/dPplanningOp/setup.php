@@ -1912,6 +1912,45 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `priority` INT (11) NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = '2.07';
+    $this->makeRevision("2.07");
+    
+    $query = "CREATE TABLE `operation_commande` (
+                `commande_materiel_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `operation_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `etat` ENUM ('a_commander','commandee','modify','recue','annulee','a_annuler') NOT NULL DEFAULT 'a_commander',
+                `date` DATE,
+                `commentaire` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `operation_commande`
+                ADD INDEX (`operation_id`),
+                ADD INDEX (`date`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `operations`
+                ADD `exam_per_op` TEXT;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `protocole`
+                ADD `exam_per_op` TEXT;";
+    $this->addQuery($query);
+    $this->makeRevision("2.08");
+
+    $query = "INSERT INTO `operation_commande` (`operation_id` ,`etat`,`date`)
+        SELECT o.operation_id, 'commandee', p.date
+        FROM operations o, plagesop p
+        WHERE o.commande_mat = '1'
+        AND o.annulee = '0'
+        AND o.plageop_id = p.plageop_id;";
+    $this->addQuery($query);
+
+    $query = "INSERT INTO `operation_commande` (`operation_id` ,`etat`,`date`)
+        SELECT o.operation_id, 'a_annuler', p.date
+        FROM operations o, plagesop p
+        WHERE o.commande_mat = '1'
+        AND o.annulee = '1'
+        AND o.plageop_id = p.plageop_id;";
+    $this->addQuery($query);
+    $this->mod_version = '2.09';
   }
 }

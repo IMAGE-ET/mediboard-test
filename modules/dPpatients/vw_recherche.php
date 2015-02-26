@@ -30,6 +30,7 @@ $type                  = CValue::getOrSession("type");
 $convalescence_sejour  = CValue::getOrSession("convalescence_sejour");
 $remarque_sejour       = CValue::getOrSession("remarque_sejour");
 $materiel_intervention = CValue::getOrSession("materiel_intervention");
+$examen_per_op         = CValue::getOrSession("examen_per_op");
 $examen_intervention   = CValue::getOrSession("examen_intervention");
 $remarque_intervention = CValue::getOrSession("remarque_intervention");
 $libelle_intervention  = CValue::getOrSession("libelle_intervention");
@@ -252,6 +253,9 @@ if ($recherche_intervention == "and") {
   if ($materiel_intervention) {
     $where_intervention["materiel"]   = "LIKE '%$materiel_intervention%'";
   }
+  if ($examen_per_op) {
+    $where_intervention["exam_per_op"]   = "LIKE '%$examen_per_op%'";
+  }
   if ($examen_intervention) {
     $where_intervention["examen"]     = "LIKE '%$examen_intervention%'";
   }  
@@ -270,6 +274,9 @@ if ($recherche_intervention == "or") {
   if ($materiel_intervention) {
     $where_materiel = "`materiel` LIKE '%$materiel_intervention%'";
     $where_intervention[] = $where_materiel;
+  }
+  if ($examen_per_op) {
+    $where_intervention[] = "`exam_per_op` LIKE '%$examen_per_op%'";
   }
   if ($examen_intervention) {
     $where_examen = "`examen` LIKE '%$examen_intervention%'";
@@ -350,6 +357,7 @@ $smarty->assign("type"                  , $type);
 $smarty->assign("convalescence_sejour"  , $convalescence_sejour);
 $smarty->assign("remarque_sejour"       , $remarque_sejour);
 $smarty->assign("materiel_intervention" , $materiel_intervention);
+$smarty->assign("examen_per_op"         , $examen_per_op);
 $smarty->assign("examen_intervention"   , $examen_intervention);
 $smarty->assign("remarque_intervention" , $remarque_intervention);
 $smarty->assign("libelle_intervention"  , $libelle_intervention);

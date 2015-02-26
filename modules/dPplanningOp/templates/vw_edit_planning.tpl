@@ -115,6 +115,7 @@ ProtocoleSelector.init = function(){
   this.sLibelle       = "libelle";
   this.sTime_op       = "_time_op";
   this.sMateriel      = "materiel";
+  this.sExamenPerop   = "exam_per_op";
   this.sExamen        = "examen";
   this.sDepassement   = "depassement";
   this.sForfait       = "forfait";

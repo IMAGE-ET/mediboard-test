@@ -167,7 +167,17 @@ Main.add(function(){
             &mdash;
             {{/if}}
           </td>
-        </tr>       
+        </tr>
+        <tr>
+          <th>{{mb_label object=$operation field=exam_per_op}}</th>
+          <td class="text">
+            {{if $operation->exam_per_op}}
+              {{mb_value object=$operation field=exam_per_op}}
+            {{else}}
+            &mdash;
+            {{/if}}
+          </td>
+        </tr>
         <tr>
           <th>Remarques</th>
           <td class="text">

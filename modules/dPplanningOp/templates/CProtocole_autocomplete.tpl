@@ -38,6 +38,7 @@
     presence_postop  : "{{$match->presence_postop|truncate:5:''}}",
     examen           : "{{$match->examen|smarty:nodefaults|escape:"javascript"}}",
     materiel         : "{{$match->materiel|smarty:nodefaults|escape:"javascript"}}",
+    exam_per_op      : "{{$match->exam_per_op|smarty:nodefaults|escape:"javascript"}}",
     convalescence    : "{{$match->convalescence|smarty:nodefaults|escape:"javascript"}}",
     depassement      : "{{$match->depassement}}",
     forfait          : "{{$match->forfait}}",

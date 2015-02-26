@@ -1,34 +1,28 @@
 {{*
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  *}}
  
-<script type="text/javascript">
+<script>
 Main.add(function () {
   Control.Tabs.create('tabs-commande_mat', true);
 });
 </script>
 
 <ul id="tabs-commande_mat" class="control_tabs">
-  <li>
-    {{assign var=op_count value=$operations[0]|@count}}
-    <a href="#commande_mat_0" {{if !$op_count}}class="empty"{{/if}}>
-      {{tr}}COperation.commande_mat.0{{/tr}} 
-      <small>({{$op_count}})</small>
-    </a>
-  </li>
-  <li>
-    {{assign var=op_count value=$operations[1]|@count}}
-    <a href="#commande_mat_1" {{if !$op_count}}class="empty"{{/if}}>
-      A annuler
-      <small>({{$op_count}})</small>
-    </a>
-  </li>
+  {{foreach from=$operations key=commande_mat item=_operations}}
+    <li>
+      <a href="#commande_mat_{{$commande_mat}}" {{if !$_operations|@count}}class="empty"{{/if}}>
+        {{tr}}CCommandeMaterielOp.etat.{{$commande_mat}}.title{{/tr}}
+        <small>({{$_operations|@count}})</small>
+      </a>
+    </li>
+  {{/foreach}}
 </ul>
 
 <hr class="control_tabs" />

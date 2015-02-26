@@ -52,6 +52,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $exam_extempo;
   public $examen;
   public $materiel;
+  public $exam_per_op;
   public $commande_mat;
   public $info;
   public $type_anesth;
@@ -205,6 +206,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_workflow;
   /** @var CLiaisonLibelleInterv[] */
   public $_ref_liaison_libelles;
+  /** @var CCommandeMaterielOp */
+  public $_ref_commande_mat;
 
   // Filter Fields
   public $_date_min;
@@ -319,6 +322,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["examen"]               = "text helped";
     $props["exam_extempo"]         = "bool";
     $props["materiel"]             = "text helped seekable show|0";
+    $props["exam_per_op"]          = "text helped seekable show|0";
     $props["commande_mat"]         = "bool show|0";
     $props["info"]                 = "bool";
     $props["type_anesth"]          = "ref class|CTypeAnesth";
@@ -493,6 +497,7 @@ class COperation extends CCodable implements IPatientRelated {
     $backProps["liaison_libelle"]          = "CLiaisonLibelleInterv operation_id";
     $backProps["affectations_personnel"]   = "CAffectationPersonnel object_id";
     $backProps["workflow"]                 = "COperationWorkflow operation_id";
+    $backProps["commande_op"]              = "CCommandeMaterielOp operation_id";
     return $backProps;
   }
 
@@ -853,6 +858,10 @@ class COperation extends CCodable implements IPatientRelated {
         $this->fieldModified('date') || $this->fieldModified('time_operation')
     ) {
       $do_update_time = true;
+    }
+
+    if ($this->fieldModified("annulee", "1") && $this->loadRefCommande()->_id && $this->_ref_commande_mat->etat != "annulee") {
+      $this->_ref_commande_mat->cancelledOp();
     }
 
     // Standard storage
@@ -1675,6 +1684,7 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
     $template->addProperty("Opération - matériel"             , $this->materiel);
+    $template->addProperty("Opération - exam per-op"          , $this->exam_per_op);
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
     $template->addProperty("Opération - Score ASA"            , $this->getFormattedValue("ASA"));
@@ -1974,4 +1984,14 @@ class COperation extends CCodable implements IPatientRelated {
   function loadLiaisonLibelle () {
     return $this->_ref_liaison_libelles = $this->loadBackRefs("liaison_libelle", "numero");
   }
+
+  /**
+   * Charge la commande de l'opération
+   *
+   * @return CCommandeMaterielOp
+   */
+  function loadRefCommande() {
+    return $this->_ref_commande_mat = $this->loadUniqueBackRef("commande_op");
+  }
+
 }

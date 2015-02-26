@@ -1,17 +1,20 @@
 <?php 
 /**
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkEdit();
-
-$bloc_id   = CValue::getOrSession("bloc_id");
+$bloc_id      = CValue::getOrSession("bloc_id");
+$date_min     = CValue::getOrSession("_date_min", CMbDT::date("-7 day"));
+$date_max     = CValue::getOrSession("_date_max", CMbDT::date());
+$praticien_id = CValue::getOrSession("praticien_id");
+$function_id  = CValue::getOrSession("function_id");
 
 // Récupération des salles
 $salle = new CSalle();
@@ -27,28 +30,39 @@ $in_salles = CSQLDataSource::prepareIn(array_keys($salles));
 $where[] = "plagesop.salle_id $in_salles  OR operations.salle_id $in_salles";
 
 $where["materiel"] = "!= ''";
-$date_min = CMbDT::date("-7 day");
-$where["operations.date"] = ">= '$date_min'";
+$where[] = " operations.date BETWEEN '$date_min' AND '$date_max'";
+if ($praticien_id) {
+  $where["operations.chir_id"] = " = '$praticien_id'";
+}
+elseif ($function_id) {
+  $mediuser = new CMediusers();
+  $users = $mediuser->loadProfessionnelDeSante(PERM_READ, $function_id);
+  $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($users));
+}
 
 $order = "operations.date, rank";
 
-$operation = new COperation;
+$operation = new COperation();
+$ops = $operation->loadList($where, $order, null, "operation_id", $ljoin);
 
-$where["commande_mat"] = "!= '1'";
-$where["annulee"]      = "!= '1'";
-$operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
+$operations = array();
+$commande = new CCommandeMaterielOp();
+foreach ($commande->_specs["etat"]->_list as $spec) {
+  $operations[$spec] = array();
+}
 
-$where["commande_mat"] = "= '1'";
-$where["annulee"]      = "= '1'";
-$operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
-
-foreach ($operations as $_operations) {
-  /** @var COperation[] $_operations */
-  foreach ($_operations as $_operation) {
-    $_operation->loadRefPatient();
-    $_operation->loadRefChir()->loadRefFunction();
-    $_operation->loadRefPlageOp();
-    $_operation->loadExtCodesCCAM();
+foreach ($ops as $_op) {
+  /** @var COperation $_op */
+  $_op->loadRefPatient();
+  $_op->loadRefChir()->loadRefFunction();
+  $_op->loadRefPlageOp();
+  $_op->loadExtCodesCCAM();
+  $_op->loadRefCommande();
+  if (!$_op->_ref_commande_mat->_id && !$_op->annulee) {
+    $operations["a_commander"][$_op->_id] = $_op;
+  }
+  elseif ($_op->_ref_commande_mat->_id) {
+    $operations[$_op->_ref_commande_mat->etat][$_op->_id] = $_op;
   }
 }
 

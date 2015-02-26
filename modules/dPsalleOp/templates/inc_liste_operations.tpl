@@ -239,6 +239,9 @@
             {{if $conf.dPbloc.CPlageOp.view_required_tools && $_operation->materiel}}
               <strong>Mat. à P.</strong> : {{$_operation->materiel}}<br/>
             {{/if}}
+            {{if $conf.dPbloc.CPlageOp.view_required_tools && $_operation->exam_per_op}}
+              <strong>Exam per-op</strong> : {{$_operation->exam_per_op}}<br/>
+            {{/if}}
             {{if $conf.dPbloc.CPlageOp.view_anesth_type && $_operation->type_anesth}}
               <strong>T Anesth.</strong> : {{mb_value object=$_operation field=type_anesth}}<br/>
             {{/if}}

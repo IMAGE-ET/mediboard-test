@@ -134,19 +134,20 @@ function changePageDossierMed(page) {
           <!-- materiel a prevoir / examens per-op -->
           <th>{{mb_label object=$intervention field="materiel"}}</th>
           <td><input type="text" name="materiel_intervention" value="{{$materiel_intervention|stripslashes}}"/></td>
-          <!-- bilan pre-op -->
-          <th>{{mb_label object=$intervention field="examen"}}</th>
-          <td><input type="text" name="examen_intervention" value="{{$examen_intervention|stripslashes}}"/></td>
+          <!-- Exam per op -->
+          <th>{{mb_label object=$intervention field="exam_per_op"}}</th>
+          <td><input type="text" name="examen_per_op" value="{{$examen_per_op|stripslashes}}"/></td>
         </tr>
         <tr>
           <th>{{mb_label object=$intervention field="rques"}}</th>
           <td><input type="text" name="remarque_intervention" value="{{$remarque_intervention|stripslashes}}"/></td>
-          <th>{{mb_label object=$intervention field="libelle"}}</th>
-          <td><input type="text" name="libelle_intervention" value="{{$libelle_intervention|stripslashes}}"/></td>
+          <!-- bilan pre-op -->
+          <th>{{mb_label object=$intervention field="examen"}}</th>
+          <td><input type="text" name="examen_intervention" value="{{$examen_intervention|stripslashes}}"/></td>
         </tr> 
         <tr>
           <th>Codes CCAM</th>
-          <td colspan="4">
+          <td>
             <input type="text" name="ccam_intervention" value="{{$ccam_intervention|stripslashes}}"/>
             <button class="search notext" type="button" onclick="CCAMSelector.init()">Rechercher</button>
             
@@ -159,9 +160,9 @@ function changePageDossierMed(page) {
                 this.pop();
               }
             </script>
-          
-         
           </td>
+          <th>{{mb_label object=$intervention field="libelle"}}</th>
+          <td><input type="text" name="libelle_intervention" value="{{$libelle_intervention|stripslashes}}"/></td>
         </tr>  
         {{/if}}
       

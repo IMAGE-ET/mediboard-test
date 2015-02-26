@@ -94,6 +94,9 @@
   {{if $operation->materiel}}
     <span>{{mb_value object=$operation field=materiel}}</span>
   {{/if}}
+  {{if $operation->exam_per_op}}
+    <span>{{mb_value object=$operation field=exam_per_op}}</span>
+  {{/if}}
 
 
   {{if $chir_2->_id}}

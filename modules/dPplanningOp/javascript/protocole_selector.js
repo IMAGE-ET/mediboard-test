@@ -15,6 +15,7 @@ ProtocoleSelector = {
   sDuree_prevu_heure : null,
   sTime_op         : null,
   sMateriel        : null,
+  sExamenPerop     : null,
   sExamen          : null,
   sDepassement     : null,
   sForfait         : null,
@@ -98,6 +99,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sTypeAnesth],        protocole.type_anesth);
       $V(oOpForm[this.sTime_op],           protocole._time_op);
       $V(oOpForm[this.sMateriel],          protocole.materiel);
+      $V(oOpForm[this.sExamenPerop],       protocole.exam_per_op);
       $V(oOpForm[this.sExamen],            protocole.examen);
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
       $V(oOpForm[this.sDuree_preop],       protocole.duree_preop);

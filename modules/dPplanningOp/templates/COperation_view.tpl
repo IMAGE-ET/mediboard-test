@@ -91,6 +91,13 @@
     </td>
   </tr>
   {{/if}}
+  {{if $object->exam_per_op}}
+  <tr>
+    <td colspan="3" class="text">
+      {{mb_label object=$object field=exam_per_op}} : {{mb_value object=$object field=exam_per_op}}
+    </td>
+  </tr>
+  {{/if}}
   {{if $object->rques}}
   <tr>
     <td colspan="3" class="text">

@@ -189,6 +189,12 @@
     <td>{{mb_value object=$operation field=materiel}}</td>
   </tr>
   {{/if}}
+  {{if $conf.dPplanningOp.COperation.fiche_materiel && $operation->exam_per_op}}
+  <tr>
+    <th>{{mb_label object=$operation field=exam_per_op}}</th>
+    <td>{{mb_value object=$operation field=exam_per_op}}</td>
+  </tr>
+  {{/if}}
 
   {{if $conf.dPplanningOp.COperation.fiche_rques && $operation->rques}}
   <tr>

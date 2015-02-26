@@ -78,7 +78,7 @@
       {{if $selOp->_ref_sejour->rques || $selOp->rques || ($consult_anesth->_id && $consult_anesth->_intub_difficile)}}
         {{if !$selOp->materiel}}
           <td class="text big-warning" colspan="2">
-            {{else}}
+        {{else}}
           <td class="text big-warning halfPane">
         {{/if}}
         {{if $selOp->_ref_sejour->rques}}
@@ -105,9 +105,21 @@
             {{else}}
           <td class="text big-info halfPane">
         {{/if}}
+
         {{if $selOp->materiel}}
           <strong>{{mb_label object=$selOp field=materiel}}</strong>
+          {{assign var=commande value=$selOp->_ref_commande_mat}}
+          {{if $commande->_id}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$commande->_guid}}')">
+              &nbsp;&nbsp;{{tr}}CCommandeMaterielOp.long{{/tr}} {{mb_value object=$commande field=etat}}
+            </span>
+          {{/if}}
           {{mb_value object=$selOp field=materiel}}
+        {{/if}}
+
+        {{if $selOp->exam_per_op}}
+          <strong>{{mb_label object=$selOp field=exam_per_op}}</strong>
+          {{mb_value object=$selOp field=exam_per_op}}
         {{/if}}
         </td>
       {{/if}}

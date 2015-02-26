@@ -379,9 +379,10 @@
   <tr>
     <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}
-    <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
-      {{mb_label object=$op field="materiel"}}
-    </td>
+      <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
+        {{mb_label object=$op field="materiel"}}
+      </td>
+      <td class="text">{{mb_label object=$op field="exam_per_op"}}</td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}
       <td class="text" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
@@ -393,6 +394,10 @@
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
         {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOpEasy"
         aidesaisie="validateOnBlur: 0"}}
+    </td>
+    <td style="width: 33%;">
+      {{mb_field object=$op field="exam_per_op" onchange="Value.synchronize(this);" form="editOpEasy"
+      aidesaisie="validateOnBlur: 0"}}
     </td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}

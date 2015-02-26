@@ -8,10 +8,14 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-<script type="text/javascript">
+{{mb_script module=dPplanningOp script=commande_mat}}
+<script>
   refreshLists = function() {
     location.reload();
   };
+  Main.add(function () {
+    Control.Tabs.create('tabs-commande_mat', true);
+  });
 </script>
 
 <h1>
@@ -20,21 +24,14 @@
 	 au {{mb_value object=$filter field=_date_max}} 
 </h1>
 
-<script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-commande_mat', true);
-});
-</script>
-
 <ul id="tabs-commande_mat" class="control_tabs">
   {{foreach from=$operations key=commande_mat item=_operations}}
-  <li>
-    {{assign var=op_count value=$_operations|@count}}
-  	<a href="#commande_mat_{{$commande_mat}}" {{if !$op_count}}class="empty"{{/if}}>
-			{{tr}}COperation.commande_mat.{{$commande_mat}}{{/tr}} 
-      <small>({{$op_count}})</small>
-		</a>
-	</li>
+    <li>
+      <a href="#commande_mat_{{$commande_mat}}" {{if !$_operations|@count}}class="empty"{{/if}}>
+        {{tr}}CCommandeMaterielOp.etat.{{$commande_mat}}{{/tr}}
+        <small>({{$_operations|@count}})</small>
+      </a>
+    </li>
   {{/foreach}}
 </ul>
 <span style="float: right">{{$bloc}}</span>
