@@ -32,7 +32,7 @@ $consult = new CConsultation();if ($current_m == "dPurgences") {
     CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
     CAppUI::redirect("m=urgences&tab=0");
   }
-  
+
   $user = CAppUI::$user;
   $group = CGroups::loadCurrent();
   $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
@@ -54,6 +54,12 @@ $userSel->load($consult->_ref_plageconsult->chir_id);
 $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
+// assign to session the current consultation praticien
+$chirSession = CValue::session("chirSel");
+if ($chirSession != $userSel->_id && $canUserSel) {
+  CValue::setSession("chirSel", $userSel->_id);
+}
+
 $anesth = new CTypeAnesth();
 $anesth = $anesth->loadGroupList();
 
@@ -64,21 +70,21 @@ $consult->_ref_chir =& $userSel;
 
 // Chargement de la consultation
 if ($consult->_id) {
-  $consult->loadRefs();  
-  
+  $consult->loadRefs();
+
   // Chargement de la consultation d'anesthésie
-  
+
   // Chargement de la vue de chacun des dossiers
   foreach ($consult->_refs_dossiers_anesth as $_dossier) {
     $_dossier->loadRefConsultation();
     $_dossier->loadRefOperation()->loadRefPlageOp();
   }
-  
+
   // Si on a passé un id de dossier d'anesth
   if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
     $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
   }
-  
+
   if (!is_array($consultAnesth) && $consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
@@ -90,22 +96,22 @@ if ($consult->_id) {
       $consultAnesth->_ref_sejour->loadRefPraticien();
     }
   }
- 
+
   // Chargement du patient
   $patient = $consult->_ref_patient;
   $patient->loadRefs();
-  $patient->loadRefsNotes();  
+  $patient->loadRefsNotes();
   $patient->loadRefPhotoIdentite();
   $patient->countBackRefs("consultations");
   $patient->countBackRefs("sejours");
   $patient->countINS();
-  
+
   // Chargement de ses consultations
   foreach ($patient->_ref_consultations as $_consultation) {
     $_consultation->loadRefsFwd();
     $_consultation->_ref_chir->loadRefFunction()->loadRefGroup();
   }
-  
+
   // Chargement de ses séjours
   foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadRefsFwd();
@@ -115,7 +121,7 @@ if ($consult->_id) {
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
     }
   }
-  
+
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
 }
@@ -133,9 +139,9 @@ if ($consult->_id && CModule::getActive("fse")) {
   if ($fse) {
     $fse->loadIdsFSE($consult);
     $fse->makeFSE($consult);
-    
+
     $cps = CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
-    
+
     CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
   }
 }
@@ -192,7 +198,7 @@ if ($consult->_ref_sejour && $sejour->_id) {
     if ($sejour->_ref_curr_affectation->_ref_service->radiologie == "1") {
       $services = array_merge($services, CService::loadServicesImagerie());
     }
-    
+
     // UHCD pour un séjour "comp" et en UHCD
     if ($sejour->type == "comp" && $sejour->UHCD) {
       $services = CService::loadServicesUHCD();
@@ -278,38 +284,38 @@ if ($consult->_is_dentiste) {
     $etudiant->loadRefFunction();
     $actes_dentaires  = $_devenir->countRefsActesDentaires();
   }
-  
+
   $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
 }
 
 if ($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date, true, $consult->_id);
-  
+
   $secs = range(0, 60-1, 1);
   $mins = range(0, 15-1, 1);
-  
+
   $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
   $smarty->assign("secs"                  , $secs);
   $smarty->assign("mins"                  , $mins);
   $smarty->assign("consult_anesth"        , $consultAnesth);
-  $smarty->display("../../dPcabinet/templates/inc_full_consult.tpl");  
+  $smarty->display("../../dPcabinet/templates/inc_full_consult.tpl");
 }
 else {
   $where = array();
   $where["entree"] = "<= '".CMbDT::dateTime()."'";
   $where["sortie"] = ">= '".CMbDT::dateTime()."'";
   $where["function_id"] = "IS NOT NULL";
-  
+
   $affectation = new CAffectation();
   /** @var CAffectation[] $blocages_lit */
   $blocages_lit = $affectation->loadList($where);
-  
+
   $where["function_id"] = "IS NULL";
-  
+
   foreach ($blocages_lit as $blocage) {
     $blocage->loadRefLit()->loadRefChambre()->loadRefService();
     $where["lit_id"] = "= '$blocage->lit_id'";
-    
+
     if ($affectation->loadObject($where)) {
       $sejour = $affectation->loadRefSejour();
       $patient = $sejour->loadRefPatient();
@@ -320,6 +326,6 @@ else {
   }
   $smarty->assign("blocages_lit"  , $blocages_lit);
   $smarty->assign("consult_anesth", null);
-  
+
   $smarty->display("../../dPcabinet/templates/inc_full_consult.tpl");
 }
