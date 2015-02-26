@@ -135,14 +135,14 @@
 {{/if}}
 
 <td style="text-align: center;">
-  {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+  {{if $dossier_medical && $dossier_medical->_id && $dossier_medical->_count_allergies}}
     <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}', 'allergies');" />
     {{mb_include module=system template=inc_vw_counter_tip count=$dossier_medical->_count_allergies}}
   {{/if}}
 </td>
 <td style="text-align: center;">
-  {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
-    {{if $sejour->_ref_dossier_medical->_id}}
+  {{if $dossier_medical && $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
+    {{if $sejour->_ref_dossier_medical && $sejour->_ref_dossier_medical->_id}}
       {{assign var=dossier_medical value=$sejour->_ref_dossier_medical}}
     {{/if}}
     <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createEx(this, '{{$dossier_medical->_guid}}', 'antecedents');" />
