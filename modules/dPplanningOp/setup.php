@@ -1951,6 +1951,17 @@ class CSetupdPplanningOp extends CSetup {
         AND o.annulee = '1'
         AND o.plageop_id = p.plageop_id;";
     $this->addQuery($query);
-    $this->mod_version = '2.09';
+
+    $this->makeRevision('2.09');
+
+    $query = "ALTER TABLE `mode_sortie_sejour`
+                CHANGE `destination` `destination` ENUM('0', '1','2','3','4','6','7');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sejour`
+                CHANGE `destination` `destination` ENUM('0', '1','2','3','4','6','7');";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.10';
   }
 }
