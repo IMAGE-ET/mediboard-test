@@ -51,7 +51,7 @@
 
   <br/>
   <span onmouseover='ObjectTooltip.createEx(this, "{{$patient->_guid}}")'>
-    <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}">{{$patient->_view}} ({{$patient->sexe}})<br/></span>
+    <span class="{{if !$sejour->entree_reelle && !$conf.reservation.use_color_patient}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}">{{$patient->_view}} ({{$patient->sexe}})<br/></span>
     [{{mb_value object=$patient field=naissance}}] {{$lit}}
   </span>
 
