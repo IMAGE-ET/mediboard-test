@@ -2,7 +2,9 @@
 <form name="edit{{$chambre->_guid}}" action="" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close.curry()});">
   {{mb_key object=$chambre}}
   {{mb_class object=$chambre}}
-
+  {{if !$chambre->_id}}
+    <input type="hidden" name="callback"  value="Infrastructure.addeditChambreCallback"/>
+  {{/if}}
   <table class="form">
     {{mb_include module=system template=inc_form_table_header_uf object=$chambre tag=$tag_chambre}}
 
@@ -29,7 +31,7 @@
 
     <tr>
       <th>{{mb_label object=$chambre field=rank}}</th>
-      <td>{{mb_field object=$chambre field=rank}}</td>
+      <td>{{mb_field object=$chambre field=rank increment=true form="edit`$chambre->_guid`"}}</td>
     </tr>
 
     <tr>

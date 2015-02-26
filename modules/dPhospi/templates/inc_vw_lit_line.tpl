@@ -14,7 +14,7 @@
         {{mb_key object=$_lit}}
         {{mb_class object=$_lit}}
         <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
-        {{mb_field object=$_lit field=rank onchange="this.form.onsubmit()"}}
+        {{mb_field object=$_lit field=rank onchange="this.form.onsubmit()" increment=true form="editLitRankFilter`$_lit->_guid`"}}
       </form>
     </td>
     <td class="text" style="width: 10%">
@@ -74,10 +74,15 @@
   <!--Enregistrement manuel du formulaire -->
   <tr id="line_lit-{{$_lit->_guid}}">
     <td class="narrow" style="width: 5%">
-      <label><input type="number" size="3" onchange="Infrastructure.setValueFormLit('rank', this.value)" style="width: 30px"/></label>
+      <label><input id="input_rank" type="number" size="3" onchange="Infrastructure.setValueFormLit('rank', this.value)" style="width: 30px"/></label>
+    <script>
+      Main.add(function () {
+        $('input_rank').addSpinner({min:0});
+      });
+    </script>
     </td>
     <td class="text" style="width: 10%">
-      <label><input type="text" size="10" onchange="Infrastructure.setValueFormLit('nom', this.value)"/></label>
+      <label><input type="text" size="10" onchange="Infrastructure.setValueFormLit('nom', this.value); Infrastructure.setValueFormLit('code', this.value)"/></label>
     </td>
     <td class="text" style="width: 10%">
       <label><input type="text" size="25" onchange="Infrastructure.setValueFormLit('nom_complet', this.value)"/></label>
@@ -86,14 +91,9 @@
       <label><input type="radio" name="__annule" value="1" onclick="Infrastructure.setValueFormLit('annule', this.value)"/> Oui </label>
       <label><input type="radio" name="__annule" value="0" onclick="Infrastructure.setValueFormLit('annule', this.value)" checked/> Non </label>
     </td>
+
     <td></td>
-    <td>
-      {{mb_include module=system template=inc_object_notes      object=$_lit}}
-      {{mb_include module=system template=inc_object_idsante400 object=$_lit}}
-      {{mb_include module=system template=inc_object_history    object=$_lit}}
-      {{mb_include module=system template=inc_object_uf         object=$_lit }}
-      {{mb_include module=system template=inc_object_idex       object=$_lit tag=$tag_lit}}
-    </td>
+    <td></td>
 
     <td class="button">
       <form name="editLit"  method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Infrastructure.reloadLitLine('{{$_lit->_id}}', '{{$chambre->_id}}')}})">

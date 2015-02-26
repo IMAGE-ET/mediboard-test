@@ -33,7 +33,7 @@
     <tbody class="serviceEffect" id="{{$_service->_guid}}" style="display:none;">
     <tr>
       <th class="category" colspan="8">
-        <button class="button add compact" onclick="Infrastructure.addeditChambre('0', 'services', {{$_service->_id}})" style="float:left;"> {{tr}}CChambre-title-create{{/tr}}</button>
+        <button class="button add compact" onclick="Infrastructure.addeditChambre('0', {{$_service->_id}})" style="float:left;"> {{tr}}CChambre-title-create{{/tr}}</button>
         {{tr}}CChambre-all{{/tr}} du service {{$_service->_view}}</th>
     </tr>
     <tr>

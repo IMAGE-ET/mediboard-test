@@ -26,7 +26,7 @@ Infrastructure = window.Infrastructure || {
     }});
   },
 
-  addeditChambre: function (chambre_id, update_name, service_id) {
+  addeditChambre: function (chambre_id, service_id) {
     var width = 900;
     var height = 600;
     if (chambre_id == 0) {
@@ -43,6 +43,10 @@ Infrastructure = window.Infrastructure || {
       url.addParam("type_name", 'services');
       url.requestUpdate('list_services');
     }});
+  },
+
+  addeditChambreCallback: function(chambre_id, obj) {
+  Infrastructure.addeditChambre(chambre_id, obj.service_id);
   },
 
   addLit: function(chambre_id, lit_id, update_name) {

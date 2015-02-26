@@ -16,7 +16,7 @@
     {{/if}}
   </td>
   <td class="narrow" style="text-align:center">
-    <a href="#" onclick="Infrastructure.addeditChambre('{{$_chambre->_id}}', 'services', {{$_service->_id}})">
+    <a href="#" onclick="Infrastructure.addeditChambre('{{$_chambre->_id}}', {{$_service->_id}})">
       {{mb_value object=$_chambre field=nom}}
     </a>
   </td>
