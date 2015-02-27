@@ -17,7 +17,7 @@
   </tr>
   {{foreach from=$services item=_service}}
     <tr id="{{$_service->_guid}}-trigger">
-      <td colspan="8">
+      <td colspan="8" {{if $_service->cancelled}}class="cancelled"{{/if}}>
         <button class="button edit notext compact" onclick="Event.stop(event); Infrastructure.addeditService('{{$_service->_id}}')"></button>
         {{mb_value object=$_service field=nom}}
         <span>
