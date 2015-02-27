@@ -1632,11 +1632,6 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->sortie_reelle = "";
     }
 
-    // Signaler l'action de validation de l'entrée
-    if ($this->_modifier_entree === '1') {
-      $this->entree_reelle = CMbDT::dateTime();
-    }
-
     if ($this->_modifier_entree === '0') {
       $this->entree_reelle = "";
     }

@@ -123,7 +123,7 @@
     {{else}}
       <tr>
         <th>{{mb_label object=$sejour field=mode_entree}}</th>
-        <td>{{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 1); showSecondary();" typeEnum=radio}}</td>
+        <td>{{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, '0'); showSecondary();" typeEnum=radio}}</td>
       </tr>
 
       <tr id="empty_entree_id_{{$sejour->_id}}">
