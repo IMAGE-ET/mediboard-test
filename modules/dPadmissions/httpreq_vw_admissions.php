@@ -118,11 +118,17 @@ $praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CStoredObject::massLoadFwdRef($praticiens, "function_id");
 CStoredObject::massLoadBackRefs($sejours, "affectations");
 
-// Chargement optimisée des prestations
+// Chargement optimisé des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
 
-CStoredObject::massCountBackRefs($sejours, "notes");
-CStoredObject::massCountBackRefs($patients, "dossier_medical");
+CStoredObject::massLoadBackRefs($sejours, "notes");
+CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+
+$operations = CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC", array("annulee" => "= '0'"));
+CStoredObject::massLoadBackRefs($operations, "actes_ngap", "lettre_cle DESC");
+
+$order = "code_association, code_acte,code_activite, code_phase, acte_id";
+CStoredObject::massLoadBackRefs($operations, "actes_ccam", $order);
 
 /** @var COperation[] $operations_total */
 $operations_total = array();
@@ -158,13 +164,19 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
   $operations = $_sejour->loadRefsOperations($whereOperations);
-  $operations_total = array_merge($operations, $operations_total);
+  $operations_total += $operations;
 }
 
 // Optimisation du chargement des interventions
 /** @var CConsultAnesth[] $dossiers_anesth_total */
 $dossiers_anesth_total = array();
-CMbObject::massCountBackRefs($operations_total, "dossiers_anesthesie");
+
+$ljoin = array(
+  "consultation" => "consultation.consultation_id = consultation_anesth.consultation_id",
+  "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id"
+);
+CStoredObject::massLoadBackRefs($operations_total, "dossiers_anesthesie", "date DESC", null, $ljoin);
+
 foreach ($operations_total as $operation) {
   $operation->loadRefsActes();
   $consult_anesth = $operation->loadRefsConsultAnesth();
@@ -172,8 +184,8 @@ foreach ($operations_total as $operation) {
 }
 
 // Optimisation du chargement des dossiers d'anesthésie
-$consultations = CMbObject::massLoadFwdRef($dossiers_anesth_total, "consultation_id");
-CMbObject::massLoadFwdRef($consultations, "plageconsult_id");
+$consultations = CStoredObject::massLoadFwdRef($dossiers_anesth_total, "consultation_id");
+CStoredObject::massLoadFwdRef($consultations, "plageconsult_id");
 foreach ($dossiers_anesth_total as $dossier_anesth) {
   $consultation = $dossier_anesth->loadRefConsultation();
   $consultation->loadRefPlageConsult();

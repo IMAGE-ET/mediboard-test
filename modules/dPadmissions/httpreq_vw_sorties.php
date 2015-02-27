@@ -118,8 +118,19 @@ CStoredObject::massLoadBackRefs($sejours, "affectations");
 // Chargement optimisée des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
 
-CStoredObject::massCountBackRefs($sejours, "notes");
-CStoredObject::massCountBackRefs($patients, "dossier_medical");
+CStoredObject::massLoadBackRefs($sejours, "notes");
+CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+
+$operations = CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC", array("annulee" => "= '0'"));
+CStoredObject::massLoadBackRefs($operations, "actes_ngap", "lettre_cle DESC");
+
+$order = "code_association, code_acte,code_activite, code_phase, acte_id";
+CStoredObject::massLoadBackRefs($operations, "actes_ccam", $order);
+
+// Chargement des NDA
+CSejour::massLoadNDA($sejours);
+// Chargement des IPP
+CPatient::massLoadIPP($patients);
 
 $maternite_active = CModule::getActive("maternite");
 
@@ -130,18 +141,12 @@ foreach ($sejours as $sejour_id => $_sejour) {
     unset($sejours[$sejour_id]);
     continue;
   }
-  
+
   // Chargement du patient
-  $_sejour->loadRefPatient(1)->loadIPP();
-  
-  // Chargment du numéro de dossier
-  $_sejour->loadNDA();
-  
+  $_sejour->loadRefPatient();
+
   // Chargements des notes sur le séjour
   $_sejour->loadRefsNotes();
-  
-  // Chargement des prestations
-  $_sejour->countPrestationsSouhaitees();
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

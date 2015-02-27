@@ -55,18 +55,16 @@ else {
 
 /** @var CConsultation[] $listConsultations */
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
+$dossiers_anesth = CStoredObject::massLoadBackRefs($listConsultations, "consult_anesth");
 
 // Optimisation des chargements
-$patients  = CMbObject::massLoadFwdRef($listConsultations, "patient_id");
-$plages    = CMbObject::massLoadFwdRef($listConsultations, "plageconsult_id");
-
-$dossiers_anesth_total = array();
+CStoredObject::massLoadFwdRef($listConsultations, "patient_id");
+CStoredObject::massLoadFwdRef($listConsultations, "plageconsult_id");
 
 foreach ($listConsultations as $_consult) {
+  $dossiers_anesth_consult = $_consult->loadRefsDossiersAnesth();
 
-  $dossiers_anesth = $_consult->loadRefsDossiersAnesth();
-
-  if (!count($dossiers_anesth)) {
+  if (!count($dossiers_anesth_consult)) {
     unset($listConsultations[$_consult->_id]);
     continue;
   }
@@ -74,16 +72,12 @@ foreach ($listConsultations as $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPlageconsult();
   $_consult->_ref_chir->loadRefFunction();
-
-  foreach ($dossiers_anesth as $_dossier) {
-    $dossiers_anesth_total[$_dossier->_id] = $_dossier;
-  }
 }
 
-$operations = CMbObject::massLoadFwdRef($dossiers_anesth_total, "operation_id");
-$sejours    = CMbObject::massLoadFwdRef($dossiers_anesth_total, "sejour_id");
-$plages     = CMbObject::massLoadFwdRef($operations, "plageop_id");
-$sejours    = CMbObject::massLoadFwdRef($operations, "sejour_id");
+$operations = CStoredObject::massLoadFwdRef($dossiers_anesth, "operation_id");
+CStoredObject::massLoadFwdRef($dossiers_anesth, "sejour_id");
+CStoredObject::massLoadFwdRef($operations, "plageop_id");
+CStoredObject::massLoadFwdRef($operations, "sejour_id");
 
 /** @var CSejour[] $sejours_total */
 $sejours_total = array();
@@ -130,20 +124,23 @@ foreach ($listConsultations as $_consult) {
   }
 }
 
-$patients   = CMbObject::massLoadFwdRef($sejours_total, "patient_id");
-$praticiens = CMbObject::massLoadFwdRef($sejours_total, "praticien_id");
+CStoredObject::massLoadFwdRef($sejours_total, "patient_id");
+CStoredObject::massLoadFwdRef($sejours_total, "praticien_id");
+CStoredObject::massLoadBackRefs($sejours_total, "notes");
+CStoredObject::massLoadBackRefs($sejours_total, "affectations", "sortie DESC");
 
-CMbObject::massCountBackRefs($sejours_total, "notes");
+// Chargement des NDA
+CSejour::massLoadNDA($sejours_total);
+
+// Chargement optimisé des prestations
+CSejour::massCountPrestationSouhaitees($sejours_total);
+
 foreach ($sejours_total as $_sejour) {
-  if ($_sejour->_id) {
-    $_sejour->loadRefPatient();
-    $_sejour->loadRefPraticien();
-    $_sejour->loadNDA();
-    $_sejour->loadRefsNotes();
-    $_sejour->countPrestationsSouhaitees();
-    $_sejour->loadRefFirstAffectation();
-    $_sejour->getDroitsCMU();
-  }
+  $_sejour->loadRefPatient();
+  $_sejour->loadRefPraticien();
+  $_sejour->loadRefsNotes();
+  $_sejour->loadRefFirstAffectation();
+  $_sejour->getDroitsCMU();
 }
 
 // Création du template

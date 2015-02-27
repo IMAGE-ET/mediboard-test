@@ -70,12 +70,21 @@ $order = "entree, sortie";
 
 /** @var CAffectation[] $affectations */
 $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
-$sejours      = CMbObject::massLoadFwdRef($affectations, "sejour_id");
-$praticiens   = CMbObject::massLoadFwdRef($sejours     , "praticien_id");
-$functions    = CMbObject::massLoadFwdRef($praticiens  , "function_id");
-$lits         = CMbObject::massLoadFwdRef($affectations, "lit_id");
-$chambres     = CMbObject::massLoadFwdRef($lits        , "chambre_id");
-$services     = CMbObject::massLoadFwdRef($chambres    , "service_id");
+$sejours      = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
+$patients     = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens   = CStoredObject::massLoadFwdRef($sejours     , "praticien_id");
+$functions    = CStoredObject::massLoadFwdRef($praticiens  , "function_id");
+$lits         = CStoredObject::massLoadFwdRef($affectations, "lit_id");
+$chambres     = CStoredObject::massLoadFwdRef($lits        , "chambre_id");
+$services     = CStoredObject::massLoadFwdRef($chambres    , "service_id");
+
+CStoredObject::massLoadBackRefs($sejours, "notes");
+
+// Chargement des NDA
+CSejour::massLoadNDA($sejours);
+
+// Chargement des IPP
+CPatient::massLoadIPP($patients);
 
 foreach ($affectations as $affectation_id => $affectation) {
   $affectation->loadView();
@@ -89,14 +98,10 @@ foreach ($affectations as $affectation_id => $affectation) {
     unset($sejours[$sejour->_id]);
     continue;
   }
-  
+
   // Chargement du patient
   $sejour->loadRefPatient();
-  $sejour->_ref_patient->loadIPP();
-  
-  // Chargement du numéro de dossier
-  $sejour->loadNDA();
-  
+
   // Chargement des notes sur le séjour
   $sejour->loadRefsNotes();
 }
