@@ -495,7 +495,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         // PID-3-4 Autorité d'affectation
         $this->getAssigningAuthority("domain", null, null, $_domain),
-        "RI"
+        $actor->_configs["build_identifier_authority"] == "PI_AN" ? "PI": "RI"
       );
     }
   }

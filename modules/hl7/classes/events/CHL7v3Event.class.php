@@ -43,7 +43,10 @@ class CHL7v3Event extends CHL7Event {
     // Génération de l'échange
     $this->generateExchange();
 
-    $this->dom = new CHL7v3MessageXML("utf-8", $this->version);
+    // Dans le cas où l'on charge un message XML HL7v3 standard
+    if (!$this->dom) {
+      $this->dom = new CHL7v3MessageXML("utf-8", $this->version);
+    }
   }
 
   /**

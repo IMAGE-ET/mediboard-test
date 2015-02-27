@@ -35,7 +35,7 @@
 
             <tr>
               <th>Langue</th>
-              <td> <input tabindex="30" type="text" name="language" value="" size="25" /> </td>
+              <td> <input tabindex="30" type="text" name="language" value="" size="25" placeholder="fr-FR" /> </td>
             </tr>
           </table>
 
@@ -45,7 +45,7 @@
 
     <tr>
       <td class="button">
-        <button class="search singleclick" onclick="$V(this.form.value_set_type, 'ITI48')">
+        <button class="search singleclick" onclick="$V(this.form.value_set_type, 'RetrieveValueSet')">
           {{tr}}Search{{/tr}}
         </button>
       </td>

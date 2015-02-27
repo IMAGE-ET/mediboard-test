@@ -84,7 +84,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
   /**
    * Send event
    *
-   * @param CHL7v3Event                            $evenement      Event type
+   * @param CHL7v3Event                            $event          Event
    * @param CMbObject|CXDSQueryRegistryStoredQuery $mbObject       Object
    * @param array                                  $headers        Headers
    * @param boolean                                $soapVar        XML message ?
@@ -93,17 +93,17 @@ class CReceiverHL7v3 extends CInteropReceiver {
    * @throws Exception
    * @return null|string
    */
-  function sendEvent($evenement, CMbObject $mbObject, $headers, $soapVar = false, $message_return = false) {
-    $evenement->_receiver = $this;
+  function sendEvent($event, CMbObject $mbObject, $headers = array(), $soapVar = false, $message_return = false) {
+    $event->_receiver = $this;
 
-    if (!$this->isMessageSupported(get_class($evenement))) {
+    if (!$this->isMessageSupported(get_class($event))) {
       return false;
     }
 
     $this->loadConfigValues();
-    $evenement->build($mbObject);
+    $event->build($mbObject);
 
-    $exchange = $evenement->_exchange_hl7v3;
+    $exchange = $event->_exchange_hl7v3;
 
     if (!$exchange->message_valide) {
       return null;
@@ -114,19 +114,18 @@ class CReceiverHL7v3 extends CInteropReceiver {
     }
 
     if ($message_return) {
-      return $evenement->message;
+      return $event->message;
     }
 
-    $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}");
-
-    if (!$source->_id || !$source->active) {
-      return null;
-    }
-
-    $msg = $evenement->message;
+    $msg = $event->message;
     if ($soapVar) {
       $msg = preg_replace("#^<\?xml[^>]*>#", "", $msg);
       $msg = new SoapVar($msg, XSD_ANYXML);
+    }
+
+    $source = CExchangeSource::get("$this->_guid-C{$event->event_type}");
+    if (!$source->_id || !$source->active) {
+      return null;
     }
 
     if ($headers) {
@@ -135,7 +134,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
 
     $source->setData($msg, null, $exchange);
     try {
-      $event_name = isset($evenement->_event_name) ? $evenement->_event_name : null;
+      $event_name = isset($event->_event_name) ? $event->_event_name : null;
       $source->send($event_name);
     }
     catch (Exception $e) {
@@ -150,7 +149,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
       return null;
     }
 
-    if (!$ack = self::createAcknowledgment($evenement->event_type, $ack_data)) {
+    if (!$ack = self::createAcknowledgment($event->event_type, $ack_data)) {
       $exchange->store();
       return null;
     }
