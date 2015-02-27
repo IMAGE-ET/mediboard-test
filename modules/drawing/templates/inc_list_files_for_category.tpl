@@ -20,7 +20,7 @@
          data-file_path="{{$_file->_file_path}}"
          data-file_type="{{$_file->file_type}}"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}');">
-        <img src="?m=files&amp;a=fileviewer&amp;file_id={{$_file->_id}}&amp;phpThumb=1" alt="" />
+        <img src="?m=files&amp;a=fileviewer&amp;file_id={{$_file->_id}}&amp;phpThumb=1&amp;&suppressHeaders=1" alt="" />
       </a>
     </li>
   {{foreachelse}}

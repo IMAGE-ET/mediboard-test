@@ -59,6 +59,8 @@ if (!$draw->_id) {
   else {
     $draw->setObject($user);
   }
+
+  $draw->loadTargetObject();
 }
 
 

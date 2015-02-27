@@ -32,7 +32,7 @@ if ($file_id) {
 
   //@TODO le faire marcher avec du datauri
   if (strpos($file->file_type, "svg") !== false) {
-    echo json_encode("?m=files&a=fileviewer&file_id=$file->_id&phpTumb=1");
+    echo json_encode("?m=files&a=fileviewer&file_id=$file->_id&phpTumb=1&suppressHeaders=1");
     CApp::rip();
     //echo CApp::json(file_get_contents($file->_file_path));
   }

@@ -92,7 +92,8 @@
     var is_svg = element.get('file_type').indexOf('svg') != -1;
     if (is_svg) {
       //old
-      DrawObject.insertImg("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1&suppressHeaders=1");
+      //DrawObject.insertImg("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1&suppressHeaders=1");
+      DrawObject.insertSVG("?m=files&a=fileviewer&file_id="+file_id+"&phpThumb=1&suppressHeaders=1");
     }
     else {
       //new
