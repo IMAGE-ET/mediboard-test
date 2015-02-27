@@ -52,6 +52,9 @@ $where["archived"] = " = '1'";
 $nbArchived = $mail->countList(array_merge($where, $whereGlob));
 
 $where = array();
+$where["favorite"] = " = '0'";
+$where["archived"] = " = '0'";
+$where["sent"] = " = '0'";
 $where["date_read"] = " IS NULL";
 $nbUnseen = $mail->countList(array_merge($where, $whereGlob));
 
