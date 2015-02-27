@@ -98,7 +98,7 @@ for($h = 0; $h < 24; $h++) {
   $series['total_lits_dispo']['data'][] = array($h, $total_lits_dispo);
 
   /* Récupération du nombre lits occupés */
-  $query = "SELECT COUNT(DISTINCT `sejour_id`) FROM `affectation`
+  $query = "SELECT COUNT(DISTINCT `lit_id`) FROM `affectation`
       WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
       AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL";
   $result = $ds->fetchRow($ds->exec($query));
@@ -128,8 +128,8 @@ foreach ($services_ids as $_service_id) {
 
 
 $options = array(
-  'title' => utf8_encode('Répartition du nombre de patients par heure'),
-  'subtitle' => utf8_encode('Services : ' . implode(', ', $services_names) . ', Date : ' . CMbDT::format($date, '%d/%m/%Y')),
+  'title' => utf8_encode('Répartition du nombre de patients par heure, le ' . CMbDT::format($date, CAppUI::conf('date'))),
+  'subtitle' => utf8_encode('Services : ' . implode(', ', $services_names)),
   'shadowSize' => 0,
   'xaxis' => array(
     'ticks' => $ticks,
