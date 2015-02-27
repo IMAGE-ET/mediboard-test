@@ -33,7 +33,7 @@
             <description>Country</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="3" table="0190">
+        <field minOccurs="0" maxOccurs="0" length="25" table="0190">
             <name>XAD.7</name>
             <description>Address Type</description>
             <datatype>ID</datatype>
@@ -43,7 +43,7 @@
             <description>Other Geographic Designation</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20" table="0289">
+        <field minOccurs="0" maxOccurs="0" length="50" table="0289">
             <name>XAD.9</name>
             <description>County/Parish Code</description>
             <datatype>IS</datatype>
