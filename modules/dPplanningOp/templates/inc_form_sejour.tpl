@@ -273,6 +273,21 @@ function openAntecedents() {
   url.modal();
 }
 
+/**
+ * Sélectionne l'UF de soins si aucune n'est déjà choisie, en fonction de l'uf associée au service
+ *
+ * @param {HTMLSelectElement} select
+ */
+function updateUFSoins(select) {
+  var option = select.options[select.selectedIndex];
+  var uf_soins_id;
+  if (option && (uf_soins_id = option.get("uf_soins_id"))) {
+    if (!$V(select.form.uf_soins_id)) {
+      $V(select.form.uf_soins_id, uf_soins_id);
+    }
+  }
+}
+
 PatSelector.init = function(){
   window.bOldPat = $V(getForm("editSejour").patient_id);
   this.sForm     = "editSejour";
@@ -410,7 +425,7 @@ afterModifPatient = function(patient_id, patient) {
       if(sejours_collision instanceof Array) {
         return;
       }
-      for (sejour_id in sejours_collision){
+      for (var sejour_id in sejours_collision){
         var entree = sejours_collision[sejour_id]["entree"];
         var sortie = sejours_collision[sejour_id]["sortie"];
         if ((entree <= date_plage) && (sortie >= date_plage)) {
@@ -450,19 +465,12 @@ afterModifPatient = function(patient_id, patient) {
 Main.add( function(){
   var form = getForm("editSejour");
 
-  dates = {
+  var dates = {
     current: {
       start: "{{$sejour->_date_entree_prevue}}",
       stop: "{{$sejour->_date_sortie_prevue}}"
     },
     spots: []
-  };
-
-  var options = {
-    exactMinutes: false, 
-    minInterval: {{$conf.dPplanningOp.CSejour.min_intervalle}},
-    minHours: {{$conf.dPplanningOp.CSejour.heure_deb}},
-    maxHours: {{$conf.dPplanningOp.CSejour.heure_fin}}
   };
 
   // Object.value takes the internal functions too :(
@@ -827,10 +835,11 @@ Main.add( function(){
       {{$sejour->_ref_curr_affectation->_ref_service }} - {{$sejour->_ref_curr_affectation}}
     {{else}}
       <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
-        onchange="Value.synchronize(this, 'editSejour');">
+        onchange="Value.synchronize(this, 'editSejour'); updateUFSoins(this)">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listServices item=_service}}
-        <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
+        <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected {{/if}}
+                data-uf_soins_id="{{if $_service->_ref_uf_soins}}{{$_service->_ref_uf_soins->_id}}{{/if}}">
           {{$_service->_view}}
         </option>
         {{/foreach}}

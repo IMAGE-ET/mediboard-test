@@ -202,6 +202,9 @@ $where["externe"]   = "= '0'";
 $where["cancelled"] = "= '0'";
 $service = new CService();
 $services = $service->loadGroupList($where);
+foreach ($services as $_service) {
+  $_service->loadRefUFSoins();
+}
 
 $sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {

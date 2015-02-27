@@ -115,6 +115,9 @@ $where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ, $where, $order);
+foreach ($listServices as $_service) {
+  $_service->loadRefUFSoins();
+}
 
 if (CModule::getActive("maternite")) {
   $sejour->loadRefGrossesse();

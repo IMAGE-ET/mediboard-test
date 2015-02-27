@@ -54,6 +54,15 @@ class CService extends CInternalStructure {
   /** @var  @var CAffectation[] */
   public $_ref_affectations_couloir;
 
+  /** @var CUniteFonctionnelle[] */
+  public $_ref_ufs;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_soins;
+
+  /** @var CAffectationUniteFonctionnelle[] */
+  public $_ref_affectations_uf;
+
   /**
    * @see parent::getSpec()
    */
@@ -175,7 +184,7 @@ class CService extends CInternalStructure {
    * @param null   $groupby Group by clause
    * @param array  $ljoin   Left join clause
    *
-   * @return self[]
+   * @return static[]
    */
   function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
@@ -536,5 +545,53 @@ class CService extends CInternalStructure {
    */
   function getDynamicTag() {
     return CAppUI::conf("dPhospi tag_service");
+  }
+
+  /**
+   * @return CAffectationUniteFonctionnelle[]
+   */
+  function loadRefAffectationsUF() {
+    /** @var CAffectationUniteFonctionnelle[] $affectations_uf */
+    $affectations_uf = $this->loadBackRefs("ufs");
+    CStoredObject::massLoadFwdRef($affectations_uf, "uf_id");
+
+    foreach ($affectations_uf as $_aff_uf) {
+      $_aff_uf->loadRefUniteFonctionnelle();
+    }
+
+    return $this->_ref_affectations_uf = $affectations_uf;
+  }
+
+  /**
+   * @return CUniteFonctionnelle[]
+   */
+  function loadRefsUFs() {
+    if ($this->_ref_ufs === null) {
+      $affectations_uf = $this->loadRefAffectationsUF();
+
+      $this->_ref_ufs = array();
+      foreach ($affectations_uf as $_affectation_uf) {
+        $_uf                       = $_affectation_uf->_ref_uf;
+        $this->_ref_ufs[$_uf->_id] = $_uf;
+      }
+    }
+
+    return $this->_ref_ufs;
+  }
+
+  /**
+   * @return CUniteFonctionnelle|null
+   */
+  function loadRefUFSoins() {
+    $ufs = $this->loadRefsUFs();
+
+    $this->_ref_uf_soins = null;
+    foreach ($ufs as $_uf) {
+      if ($_uf->type === "soins") {
+        $this->_ref_uf_soins = $_uf;
+      }
+    }
+
+    return $this->_ref_uf_soins;
   }
 }

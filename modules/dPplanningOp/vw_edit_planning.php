@@ -172,6 +172,10 @@ $where["cancelled"]  = "= '0'";
 $service = new CService();
 $services = $service->loadGroupList($where);
 
+foreach ($services as $_service) {
+  $_service->loadRefUFSoins();
+}
+
 // Compter les prestations journalières
 $count_prestations = CPrestationJournaliere::countCurrentList();
 
