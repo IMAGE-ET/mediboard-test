@@ -416,6 +416,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Initialise le mouvement 
     $movement->sejour_id = $sejour->_id;
 
+    $receiver = $sejour->_receiver;
+    $configs  = $receiver->_configs;
+
     $affectation_id = null;
     if ($affectation) {
       $current_log       = $affectation->_ref_current_log;
@@ -429,8 +432,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (($service->uhcd || $service->radiologie || $service->urgence) ||
           ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id))
       ) {
-        $affectation_id = $affectation->_id;
-        $affectation    = null;
+        switch ($configs["send_first_affectation"]) {
+          case 'Z99':
+            $affectation_id = $affectation->_id;
+            $affectation    = null;
+            break;
+
+          default:
+            $movement->affectation_id = $affectation->_id;
+        }
       }
       else {
         $movement->affectation_id = $affectation->_id;  
