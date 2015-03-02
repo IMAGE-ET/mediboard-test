@@ -111,7 +111,7 @@
           {{assign var=commande value=$selOp->_ref_commande_mat}}
           {{if $commande->_id}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$commande->_guid}}')">
-              &nbsp;&nbsp;{{tr}}CCommandeMaterielOp.long{{/tr}} {{mb_value object=$commande field=etat}}
+              &nbsp;&nbsp;{{tr}}COperation-materiel-court{{/tr}} {{mb_value object=$commande field=etat}}
             </span>
           {{/if}}
           {{mb_value object=$selOp field=materiel}}

@@ -194,7 +194,7 @@
           {{assign var=commande value=$_operation->_ref_commande_mat}}
           {{if $commande && $commande->_id}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$commande->_guid}}')" style="float: left;">
-&nbsp;&nbsp;{{tr}}CCommandeMaterielOp.long{{/tr}} {{mb_value object=$commande field=etat}}
+&nbsp;&nbsp;{{tr}}COperation-materiel-court{{/tr}} {{mb_value object=$commande field=etat}}
               </span>
           {{/if}}
         </td>
@@ -279,7 +279,7 @@
         {{assign var=commande value=$_operation->_ref_commande_mat}}
         {{if $commande && $commande->_id}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$commande->_guid}}')" style="float: left;">
-&nbsp;&nbsp;{{tr}}CCommandeMaterielOp.long{{/tr}} {{mb_value object=$commande field=etat}}
+&nbsp;&nbsp;{{tr}}COperation-materiel-court{{/tr}} {{mb_value object=$commande field=etat}}
               </span>
         {{/if}}
       </td>
