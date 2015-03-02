@@ -26,51 +26,9 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * @return bool
    */
   static function checkHandled($object) {
-    switch ($object->_class) {
-      case 'CCompteRendu':
-        /** @var CCompteRendu $object */
-        $object->completeField("author_id");
-        $object->loadRefAuthor();
-        $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
-        break;
-      case 'CConsultAnesth':
-        /** @var CConsultAnesth $object */
-        $object->loadRefChir();
-        $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
-        break;
-      case 'CConsultation':
-        /** @var CConsultation $object */
-      case 'CPrescriptionLineMedicament':
-        /** @var CPrescriptionLineMedicament $object */
-      case 'CPrescriptionLineMix':
-        /** @var CPrescriptionLineMix $object */
-      case 'CPrescriptionLineElement':
-        /** @var CPrescriptionLineElement $object */
-        $object->loadRefPraticien();
-        $group = $object->_ref_praticien->loadRefFunction()->loadRefGroup();
-        break;
-      case 'CObservationMedicale':
-      case 'CTransmissionMedicale':
-        /** @var CTransmissionMedicale $object */
-        $object->completeField("user_id");
-        $object->loadRefUser();
-        $group       = $object->_ref_user->loadRefFunction()->loadRefGroup();
-        break;
 
-      case 'CFile':
-        /** @var CFile $object */
-        $object->completeField("author_id");
-        $object->loadRefAuthor();
-        $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
-        break;
-      default:
-        if ($object->_class instanceof CExObject) {
-          $group = $object->loadRefGroup();
-        }
-        else {
-          return false;
-        }
-    }
+    $group = self::loadRefGroup($object);
+
     if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
       self::$handled = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
     }
@@ -165,6 +123,22 @@ class CSearchObjectHandler extends CMbObjectHandler {
     $search_indexing->object_class = $object->_class;
     $search_indexing->object_id    = ($object->_id) ? $object->_id : $object->_save_id ;
 
+    $group = self::loadRefGroup($object);
+    if (!CAppUI::conf("search active_handler active_handler_search", $group)) {
+      return false;
+    }
+    $search_indexing->store();
+    return true;
+  }
+
+  /**
+   * Load Group from CMbObject
+   *
+   * @param CMbObject $object CMbObject
+   *
+   * @return CGroups
+   */
+  function loadRefGroup ($object) {
     switch ($object->_class) {
       case 'CCompteRendu':
         /** @var CCompteRendu $object */
@@ -173,6 +147,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
         $group       = $object->_ref_author->loadRefFunction()->loadRefGroup();
         break;
       case 'CConsultAnesth':
+      case 'COperation':
         /** @var CConsultAnesth $object */
         $object->loadRefChir();
         $group = $object->_ref_chir->loadRefFunction()->loadRefGroup();
@@ -201,14 +176,10 @@ class CSearchObjectHandler extends CMbObjectHandler {
           $group = $object->loadRefGroup();
         }
         else {
-          return false;
+          return new CGroups();
         }
 
     }
-    if (!CAppUI::conf("search active_handler active_handler_search", $group)) {
-      return false;
-    }
-    $search_indexing->store();
-    return true;
+    return $group;
   }
 }

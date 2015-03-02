@@ -17,6 +17,7 @@
           {{mb_include module=system template=inc_config_str var=client_host}}
           {{mb_include module=system template=inc_config_str var=client_port}}
           {{mb_include module=system template=inc_config_str var=index_name}}
+          {{mb_include module=system template=inc_config_str var=nb_replicas}}
           {{mb_include module=system template=inc_config_str var=interval_indexing}}
           <tr>
             <td class="button" colspan="2">
