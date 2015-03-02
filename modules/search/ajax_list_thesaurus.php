@@ -12,23 +12,56 @@
 $user  = CMediusers::get();
 $user->loadRefFunction()->loadRefGroup();
 $start         = (int)CValue::get("start_thesaurus", 0);
+$choose         = CValue::get("_choose");
 
 $entry = new CSearchThesaurusEntry();
-$where ["user_id"] = " = $user->_id";
+$entry->getDS();
+
+$where = array();
+$types = array();
+$group = CGroups::loadCurrent();
+
+if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
+  $types = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
+}
+
+$contextes         = CValue::get("contextes");
+$contextes = ($contextes) ? $contextes : CSearchLog::loadContextes();
+$where["contextes"] = $entry->_spec->ds->prepareIn($contextes);
+
+
+
+if ($choose) {
+  $select_choose = explode(" ", $choose);
+  $chaine = " = $select_choose[1]";
+  $data = $ds->prepare($chaine);
+  switch ($select_choose[0]) {
+    case "user_id":
+      $where ["user_id"] = $data;
+      break;
+
+    case "function_id":
+      $where ["function_id"] = $data;
+      break;
+
+    case "group_id":
+      $where ["group_id"] = $data;
+      break;
+
+    default:
+  }
+}
+else {
+  $where ["user_id"] = " = $user->_id";
+}
+
 $step = 10;
 $limit = "$start , $step";
-$entry->user_id =  "$user->_id";
 $thesaurus = $entry->loadList($where, null, $limit);
 $nbThesaurus = $entry->countList($where);
 foreach ($thesaurus as $_thesaurus) {
   /** @var $_thesaurus  CSearchThesaurusEntry*/
   $_thesaurus->loadRefsTargets();
-}
-
-$types = array();
-$group = CGroups::loadCurrent();
-if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
-  $types = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
 }
 
 $smarty = new CSmartyDP();

@@ -27,11 +27,11 @@
       <td>
         {{if $_entry->group_id}}
           <img src="images/icons/group.png" title="Favori pour {{mb_value object=$_entry field=group_id}}">
-        {{/if}}
-        {{if $_entry->function_id}}
+
+        {{elseif $_entry->function_id}}
           <img src="images/icons/user-function.png" title="Favori pour {{$user->_ref_function}}">
-        {{/if}}
-        {{if $_entry->user_id}}
+
+        {{elseif $_entry->user_id}}
           <img src="images/icons/user.png" title="Favori pour {{$user->_view}}">
         {{/if}}
       </td>

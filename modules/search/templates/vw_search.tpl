@@ -15,7 +15,7 @@
     Calendar.regField(form._min_date);
     Calendar.regField(form._max_date);
     Calendar.regField(form._date);
-    Search.getAutocompleteUser(form);
+    Search.getAutocompleteUser(form, App.m);
     Thesaurus.getAutocompleteFavoris(form);
   });
 

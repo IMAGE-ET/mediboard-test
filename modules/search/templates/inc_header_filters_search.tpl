@@ -13,6 +13,7 @@
 {{mb_default var=display_contextes value=false}}
 {{mb_default var=query value=true}}
 {{mb_default var=expand value=true}}
+{{mb_default var=submit value=false}}
 
 <script>
   function insertTag(guid, name) {
@@ -53,11 +54,11 @@
                   <table>
                     <tr>
                       <td>
-                        <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0')" value="{{$date}}"/>
+                        <input type="hidden" class="date" id="_min_date" name="_min_date" onchange="$V(this.form.start, '0'); {{if $submit}}this.form.onsubmit();{{/if}}"/>
                         <b>&raquo;</b>
-                        <input type="hidden" class="date" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0')" />
+                        <input type="hidden" class="date" id="_max_date" name="_max_date" onchange="$V(this.form.start, '0') ; {{if $submit}}this.form.onsubmit();{{/if}}"/>
                         <strong>{{tr}}or{{/tr}}</strong>
-                        Jour seul : <input type="hidden" class="date" id="_date" name="_date" onchange="$V(this.form.start, '0')" />
+                        Jour seul : <input type="hidden" class="date" id="_date" name="_date" onchange="$V(this.form.start, '0') ; {{if $submit}}this.form.onsubmit();{{/if}}"/>
                       </td>
                     </tr>
                   </table>

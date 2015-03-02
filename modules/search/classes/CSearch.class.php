@@ -46,12 +46,34 @@ class CSearch {
    */
   function createClient ($hosts = null) {
     if (!$hosts) {
-      $hosts = array (
-        'host' => CAppUI::conf("search client_host"),
-        'port' => CAppUI::conf("search client_port"),
+      $connections["connections"] = $this->getServerAddresses();
+    }
+    else {
+      $connections["connections"] = $hosts;
+    }
+
+    $this->_client = new Client($connections);
+  }
+
+  /**
+   * Get the list of server addresses
+   *
+   * @return array
+   */
+  private function getServerAddresses(){
+
+    $conf_host = trim(CAppUI::conf("search client_host"));
+    $conf_port = trim(CAppUI::conf("search client_port"));
+
+    $servers = preg_split("/\s*,\s*/", $conf_host);
+    $list = array();
+    foreach ($servers as $_server) {
+      $list[] =  array (
+        'host' => $_server,
+        'port' => $conf_port,
       );
     }
-    $this->_client = new Client($hosts);
+    return $list;
   }
 
   /**
@@ -69,6 +91,7 @@ class CSearch {
     }
     if (!$params) {
       $params = self::$settings_default;
+      $params["number_of_replicas"] = CAppUI::conf("search nb_replicas");
     }
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
@@ -643,6 +666,30 @@ class CSearch {
     $text = mb_convert_encoding($text, "UTF-8", "Windows-1252");
     $text = CMbString::normalizeUtf8($text);
     return $text;
+  }
+
+  /**
+   * Method testing if we able to connect to server ES
+   *
+   * @param CGRoups $group The group
+   *
+   * @return void
+   */
+  function testConnection ($group) {
+    try{
+      $this->createClient();
+      $index = $this->loadIndex();
+      $search = new \Elastica\Search($this->_client);
+      $search->addIndex($index);
+      $this->_client->getCluster();
+    } catch (Exception $e) {
+      if (CAppUI::conf("search active_handler active_handler_search", $group)) {
+        CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_ERROR);
+      }
+      else {
+        CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas configuré, veuillez prendre contact avec un administrateur", UI_MSG_ERROR);
+      }
+    }
   }
 
   // static settings

@@ -246,10 +246,9 @@ Thesaurus = window.Thesaurus || {
       minChars: 2,
       method: "get",
       dropdown: true,
-      updateElement: function (selected) {
+      updateElement: function (selected, element_input) {
         if(selected.down("span", "1").getText() != "") {
           var _name = selected.down("span", "1").getText();
-          var element_input = form.elements.words;
           $V(element_input, _name);
           $V(form.elements.aggregate, selected.down().get("aggregate"));
           var types = selected.down().get("types");
@@ -260,5 +259,12 @@ Thesaurus = window.Thesaurus || {
         }
       }
     });
+  },
+
+  filterListThesaurus: function (form) {
+    var url = new Url('search',  'ajax_list_thesaurus');
+    url.addFormData(form);
+    url.requestUpdate('list_thesaurus_entry');
+    return false;
   }
 };

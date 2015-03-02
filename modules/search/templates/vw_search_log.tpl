@@ -14,7 +14,7 @@
     Calendar.regField(form._min_date);
     Calendar.regField(form._max_date);
     Calendar.regField(form._date);
-    Search.getAutocompleteUser(form);
+    Search.getAutocompleteUser(form, "log");
     window.user_tag_token.add('{{$app->user_id}}');
     insertTag('{{$app->_ref_user->_guid}}', '{{$app->_ref_user}}');
   });

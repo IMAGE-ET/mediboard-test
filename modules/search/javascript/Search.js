@@ -299,7 +299,7 @@ Search = window.Search || {
       {"results" : this.export_csv, "accept_utf8" : "1"});
   },
 
-  getAutocompleteUser: function (form) {
+  getAutocompleteUser: function (form, contexte) {
     var element = form.elements.user_id,
       tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
 
@@ -307,8 +307,19 @@ Search = window.Search || {
     var url = new Url("mediusers", "ajax_users_autocomplete");
     url.addParam("object_class", "CMediusers");
     url.addParam("input_field", element_input.name);
-    url.addParam("edit", "1");
-    url.addParam("praticiens", "1");
+
+    switch (contexte) {
+      case "pharmacie" :
+      case "prescription" :
+      case "dPboard" : url.addParam("edit", "1");
+        url.addParam("praticiens", "1");
+        break;
+      case "log" :
+      case "pmsi" :
+        break;
+      default : url.addParam("praticiens", "1"); break;
+    }
+
     url.autoComplete(element_input, null, {
       minChars: 2,
       method: "get",

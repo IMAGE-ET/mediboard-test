@@ -16,7 +16,7 @@
     Calendar.regField(form._max_date);
     Calendar.regField(form._date);
     Thesaurus.getAutocompleteFavoris(form);
-    Search.getAutocompleteUser(form);
+    Search.getAutocompleteUser(form, '{{$contexte}}');
   });
 
   changePage = function(start) {

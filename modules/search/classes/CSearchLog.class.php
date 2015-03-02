@@ -125,9 +125,11 @@ class CSearchLog extends CSearch {
 
     $users_id = explode('|', $specific_user);
     $user_req = implode(' || ', $users_id);
-    $words    = $words . " user_id:(" .$user_req . ")";
-
+    if ($user_req) {
+      $words = $words . " user_id:(" . $user_req . ")";
+    }
     return $words;
+
   }
 
   /**
@@ -148,7 +150,7 @@ class CSearchLog extends CSearch {
     // Define a Query. We want a string query.
 
     $queryString  = new Elastica\Query\QueryString($words);
-
+    $queryString->setDefaultOperator("and");
     // Create the actual search object with some data.
     $query        = new Elastica\Query($queryString);
 
@@ -296,7 +298,7 @@ class CSearchLog extends CSearch {
    *
    * @return array
    */
-  function loadContextes () {
+  static function loadContextes () {
     return self::$names_mapping;
   }
 
