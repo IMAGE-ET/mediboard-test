@@ -930,6 +930,55 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   }
 
+
+  /**
+   * affect a lit if unique lit id is defined
+   *
+   * @return string
+   */
+  function createAffectationLitUnique() {
+    // Unique affectation de lit
+    if ($this->_unique_lit_id) {
+      // Une affectation maximum
+      if (count($this->_ref_affectations) > 1) {
+        foreach ($this->_ref_affectations as $_affectation) {
+          if ($msg = $_affectation->delete()) {
+            return "Impossible de supprimer une ancienne affectation: $msg";
+          }
+        }
+      }
+
+      // Affectation unique sur le lit
+      $this->loadRefsAffectations();
+      $unique = $this->_ref_first_affectation;
+      $unique->sejour_id = $this->_id;
+      $unique->entree = $this->entree;
+      $unique->sortie = $this->sortie;
+      $unique->lit_id = $this->_unique_lit_id;
+      if ($msg = $unique->store()) {
+        return "Impossible d'affecter un lit unique: $msg";
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  function createAffectationService() {
+    if (!$this->countBackRefs("affectations")
+      && $this->service_id
+      && CAppUI::conf("dPhospi CAffectation sejour_default_affectation", CGroups::loadCurrent())) {
+      $affectation = new CAffectation();
+      $affectation->sejour_id = $this->_id;
+      $affectation->service_id = $this->service_id;
+      $affectation->entree = $this->entree;
+      $affectation->sortie = $this->sortie;
+      if ($msg = $affectation->store()) {
+        return "Impossible d'affecter un couloir : $msg";
+      }
+    }
+  }
+
   /**
    * @see parent::store()
    */
@@ -1256,28 +1305,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
-    // Unique affectation de lit
-    if ($this->_unique_lit_id) {
-      // Une affectation maximum
-      if (count($this->_ref_affectations) > 1) {
-        foreach ($this->_ref_affectations as $_affectation) {
-          if ($msg = $_affectation->delete()) {
-            return "Impossible de supprimer une ancienne affectation: $msg";
-          }
-        }
-      }
-
-      // Affectation unique sur le lit
-      $this->loadRefsAffectations();
-      $unique = $this->_ref_first_affectation;
-      $unique->sejour_id = $this->_id;
-      $unique->entree = $this->_entree;
-      $unique->sortie = $this->_sortie;
-      $unique->lit_id = $this->_unique_lit_id;
-      if ($msg = $unique->store()) {
-        return "Impossible d'affecter un lit unique: $msg";
-      }
-    }
+    // try to assign an affectation
+    $this->createAffectationLitUnique();
+    $this->createAffectationService();
 
     // Génération du NDA ?
     if ($this->_generate_NDA) {
