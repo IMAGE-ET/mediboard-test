@@ -55,7 +55,9 @@ function storeObject($object) {
   if ($msg = $object->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
     echo CAppUI::getMsg();
-    CApp::rip();
+    // Il peut y avoir un msg de retour postérieur à la création de l'objet
+    // On continue donc le processus de création de la naissance
+    //CApp::rip();
   }
   
   CAppUI::setMsg(CAppUI::tr(get_class($object) . $title), UI_MSG_OK);
