@@ -45,6 +45,7 @@ $smarty->assign('praticien_id', $praticien_id);
 $smarty->assign('praticien', $codage->loadPraticien());
 $smarty->assign('codable_class', $codable->_class);
 $smarty->assign('codable_id', $codable->_id);
+$smarty->assign('date', $date);
 $smarty->assign('lock', $lock);
 
 if (CAppUI::conf('ccam CCodable lock_codage_ccam') == 'password' && $user->_id != $codage->praticien_id) {
