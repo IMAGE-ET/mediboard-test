@@ -657,7 +657,6 @@ class CDossierMedical extends CMbMetaObject {
       }
     }
     $template->addProperty("$champ - Antécédents - tous par appareil", implode($separator, $parts), null, false);
-    $template->addProperty("$champ - Antécédents - Absence de traitement", $this->absence_traitement ? $this->getLocale("absence_traitement") : "");
 
     // Traitements
     $this->loadRefsTraitements();
@@ -705,6 +704,7 @@ class CDossierMedical extends CMbMetaObject {
       
       $template->addListProperty("$champ - Traitements", $list);
     }
+    $template->addProperty("$champ - Traitements - Absence de traitement", $this->absence_traitement ? $this->getLocale("absence_traitement") : "");
     
     // Etat dentaire
     $etats = array();
