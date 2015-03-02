@@ -161,7 +161,7 @@
       <tr>
         <th></th>
         <td>
-          <button type="button" class="switch" onclick="Session.window.close(); $('main').show(); UserSwitch.popup();">
+          <button type="button" class="switch" onclick="Session.window.close(); UserSwitch.popup();">
             {{tr}}User switch{{/tr}}
           </button>
         </td>
