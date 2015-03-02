@@ -9,7 +9,7 @@ ActesCCAM = {
       Reglement.reload(false);
     }
 
-    if (DevisCodage) {
+    if (window.DevisCodage) {
       DevisCodage.refresh('{{$object->_id}}');
     }
   },
@@ -25,7 +25,7 @@ ActesCCAM = {
     url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
     url_actes.requestUpdate('ccam');
 
-    if (DevisCodage) {
+    if (window.DevisCodage) {
       DevisCodage.refresh('{{$object->_id}}');
     }
   },
