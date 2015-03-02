@@ -382,10 +382,6 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     if (in_array($this->type, array('header', 'footer'))) {
       $html = str_ireplace('<hr class="pagebreak" />', '', $html);
     }
-    elseif ($this->object_id) {
-      $html = preg_replace('/(<div id="header">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $html);
-      $html = preg_replace('/(<div id="footer">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $html);
-    }
 
     $content->content = $html;
 
