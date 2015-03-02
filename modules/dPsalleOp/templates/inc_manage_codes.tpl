@@ -21,20 +21,30 @@
     window.urlCodage = url;
   };
 
-  lockCodages = function(praticien_id) {
-    var forms = $$('form[data-praticien_id=' + praticien_id + ']');
-    forms.each(function(form) {
-      $V(form.locked, 1);
-      form.onsubmit();
-    });
+  lockCodages = function(praticien_id, codable_class, codable_id) {
+    var url = new Url('ccam', 'ajax_check_lock_codage');
+    url.addParam('praticien_id', praticien_id);
+    url.addParam('codable_class', codable_class);
+    url.addParam('codable_id', codable_id);
+    url.addParam('lock', 1);
+    {{if $conf.dPccam.CCodable.lock_codage_ccam == 'password'}}
+      url.requestModal(null, null, {onClose: ActesCCAM.notifyChange.curry(codable_id, praticien_id)});
+    {{else}}
+      url.requestUpdate('systemMsg', {onComplete: ActesCCAM.notifyChange.curry(codable_id, praticien_id)})
+    {{/if}}
   };
 
-  unlockCodages = function(praticien_id) {
-    var forms = $$('form[data-praticien_id=' + praticien_id + ']');
-    forms.each(function(form) {
-      $V(form.locked, 0);
-      form.onsubmit();
-    });
+  unlockCodages = function(praticien_id, codable_class, codable_id) {
+    var url = new Url('ccam', 'ajax_check_lock_codage');
+    url.addParam('praticien_id', praticien_id);
+    url.addParam('codable_class', codable_class);
+    url.addParam('codable_id', codable_id);
+    url.addParam('lock', 0);
+    {{if $conf.dPccam.CCodable.lock_codage_ccam == 'password'}}
+      url.requestModal(null, null, {onClose: ActesCCAM.notifyChange.curry(codable_id, praticien_id)});
+    {{else}}
+      url.requestUpdate('systemMsg', {onComplete: ActesCCAM.notifyChange.curry(codable_id, praticien_id)})
+    {{/if}}
   };
 
   deleteCodages = function(praticien_id) {
@@ -218,11 +228,13 @@
                     {{/if}}
 
                     {{if $_codage->locked}}
-                      <button type="button" class="notext unlock" onclick="unlockCodages({{$_codage->praticien_id}})">
+                      <button type="button" class="notext unlock"
+                              onclick="unlockCodages({{$_codage->praticien_id}}, '{{$_codage->codable_class}}', {{$_codage->codable_id}})">
                         {{tr}}Unlock{{/tr}}
                       </button>
                     {{else}}
-                      <button type="button" class="notext lock" onclick="lockCodages({{$_codage->praticien_id}})">
+                      <button type="button" class="notext lock"
+                              onclick="lockCodages({{$_codage->praticien_id}}, '{{$_codage->codable_class}}', {{$_codage->codable_id}})">
                         {{tr}}Lock{{/tr}}
                       </button>
                     {{/if}}

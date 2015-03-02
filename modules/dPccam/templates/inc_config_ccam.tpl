@@ -29,6 +29,7 @@
     {{mb_include module=system template=inc_config_bool var=precode_modificateur_7}}
     {{mb_include module=system template=inc_config_bool var=precode_modificateur_J}}
     {{mb_include module=system template=inc_config_bool var=add_acte_comp_anesth_auto}}
+    {{mb_include module=system template=inc_config_enum var=lock_codage_ccam values='open|password'}}
 
     <tr>
       <td class="button" colspan="2">

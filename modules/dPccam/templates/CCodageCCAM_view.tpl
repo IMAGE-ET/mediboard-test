@@ -108,11 +108,13 @@
       {{/if}}
 
       {{if $codage->locked}}
-        <button type="button" class="notext unlock" onclick="unlockCodages({{$codage->praticien_id}}{{if $codage->codable_class == 'CSejour'}}, '{{$codage->date}}'{{/if}})">
+        <button type="button" class="notext unlock"
+                onclick="unlockCodages({{$codage->praticien_id}}, '{{$codage->codable_class}}', {{$codage->codable_id}}{{if $codage->codable_class == 'CSejour'}}, '{{$codage->date}}'{{/if}})">
           {{tr}}Unlock{{/tr}}
         </button>
       {{else}}
-        <button type="button" class="notext lock" onclick="lockCodages({{$codage->praticien_id}}{{if $codage->codable_class == 'CSejour'}}, '{{$codage->date}}'{{/if}})">
+        <button type="button" class="notext lock"
+                onclick="lockCodages({{$codage->praticien_id}}, '{{$codage->codable_class}}', {{$codage->codable_id}}{{if $codage->codable_class == 'CSejour'}}, '{{$codage->date}}'{{/if}})">
           {{tr}}Lock{{/tr}}
         </button>
       {{/if}}

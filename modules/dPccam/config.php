@@ -16,5 +16,6 @@ $dPconfig["dPccam"] = array (
       "COperation" => "0",
       "CSejour" => "0"
     ),
+    'lock_codage_ccam' => 'open'
   ),
 );
