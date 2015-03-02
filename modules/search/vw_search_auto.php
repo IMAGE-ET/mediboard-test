@@ -49,6 +49,9 @@ if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
   $types = explode("|", CAppUI::conf("search active_handler active_handler_search_types", $group));
 }
 
+$test_search = new CSearch();
+$test_search->testConnection($group);
+
 // On récupère les favoris
 if ($_ref_object instanceof CSejour) {
   $date  = CMbDT::format($_ref_object->entree_reelle, "%Y-%m-%d");

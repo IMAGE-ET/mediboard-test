@@ -10,6 +10,9 @@
  * @link     http://www.mediboard.org */
 
 CCanDo::checkAdmin();
+$group = CGroups::loadCurrent();
+$test_search = new CSearch();
+$test_search->testConnection($group);
 
 try{
   // récupération du client

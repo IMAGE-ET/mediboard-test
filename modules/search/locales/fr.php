@@ -174,6 +174,7 @@ $locales['config-search-active_handler-active_handler_search_types.CConsultation
 $locales['config-search-active_handler-active_handler_search_types.CExObject'] = 'Formulaire';
 $locales['config-search-active_handler-active_handler_search_types.CFile'] = 'Fichier';
 $locales['config-search-active_handler-active_handler_search_types.CObservationMedicale'] = 'Observation Médicale';
+$locales['config-search-active_handler-active_handler_search_types.COperation'] = 'Intervention';
 $locales['config-search-active_handler-active_handler_search_types.CPrescription'] = 'Prescription';
 $locales['config-search-active_handler-active_handler_search_types.CPrescriptionLineElement'] = 'Ligne d\'élements';
 $locales['config-search-active_handler-active_handler_search_types.CPrescriptionLineMedicament'] = 'Ligne de médicaments';
@@ -202,6 +203,8 @@ $locales['config-search-interval_indexing'] = 'Pas d\'indexation';
 $locales['config-search-interval_indexing-desc'] = 'Pas d\'indexation pour le serveur ElasticSearch';
 $locales['config-search-mdp'] = 'Mot de passe';
 $locales['config-search-mdp-desc'] = 'Mot de passe';
+$locales['config-search-nb_replicas'] = 'Nombre de réplicas';
+$locales['config-search-nb_replicas-desc'] = 'Nombre de réplicas pour les shards';
 $locales['config-search-transport'] = 'Transport';
 $locales['config-search-transport-desc'] = 'Transport des données';
 $locales['config-search-user'] = 'Utilisateur';

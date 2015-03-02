@@ -29,6 +29,8 @@ if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
 }
 
 $log = new CSearchLog();
+$log->testConnection($group);
+
 $contextes = $log->loadContextes();
 
 // Création du template
