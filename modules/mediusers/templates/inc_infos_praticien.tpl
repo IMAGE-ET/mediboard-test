@@ -146,7 +146,7 @@
   {{if $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
     <script>
       Main.add(function () {
-        var form = getForm("mediuser");
+        var form = getForm("{{$name_form}}");
         var url = new Url("tarmed", "ajax_specialite_autocomplete");
         url.autoComplete(form.specialite_tarmed, null, {
           minChars: 0,
