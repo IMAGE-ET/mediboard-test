@@ -28,6 +28,9 @@
                   <button onclick="admitForSejour('{{$_sejour->_id}}')" type="button" class="tick notext">{{tr}}CSejour-admit{{/tr}}</button>
                 {{/if}}
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">{{$_sejour}}</span>
+                {{foreach from=$_sejour->_ref_operations item=_op}}
+                  <p style="padding-left:10px;"><span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">&mdash; {{$_op}}</span></p>
+                {{/foreach}}
               </td>
             </tr>
           {{foreachelse}}
