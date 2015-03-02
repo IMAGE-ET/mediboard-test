@@ -2385,6 +2385,22 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
 
+    if (CModule::getActive("maternite")) {
+      $allaitement = $this->loadLastAllaitement();
+      $template->addDateProperty("Patient - Allaitement - Début", $allaitement->date_debut);
+      $template->addDateProperty("Patient - Allaitement - Fin"  , $allaitement->date_fin);
+
+      $grossesse = $this->loadLastGrossesse();
+      $template->addDateProperty("Patient - Grossesse - Terme prévu", $grossesse->terme_prevu);
+      $template->addDateProperty("Patient - Grossesse - Date des dernières règles", $grossesse->date_dernieres_regles);
+      $template->addProperty("Patient - Grossesse - En cours", $grossesse->getFormattedValue("active"));
+      $template->addProperty("Patient - Grossesse - Multiple", $grossesse->getFormattedValue("multiple"));
+      $template->addProperty("Patient - Grossesse - Allaitement maternel", $grossesse->getFormattedValue("allaitement_maternel"));
+      $template->addProperty("Patient - Grossesse - Fausse couche"    , $grossesse->getFormattedValue('fausse_couche'), null, false);
+      $template->addProperty("Patient - Grossesse - Lieu d'accouchement", $grossesse->getFormattedValue("lieu_accouchement"));
+      $template->addProperty("Patient - Grossesse - Remarques", $grossesse->rques);
+    }
+
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Patient");
     }

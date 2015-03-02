@@ -646,6 +646,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
     $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
 
+    $template->addProperty("Anesthésie - Type d'anesthésie"         , $this->getFormattedValue("type_anesth"));
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'), null, false);
     $template->addProperty("Anesthésie - Intubation"                , CAppUI::tr("CConsultAnesth-_intub_" . ($this->_intub_difficile ? "difficile" : "pas_difficile")));
 
@@ -669,6 +670,53 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
+
+    // Constantes médicales dans le contexte de la consultation
+    $this->loadRefConsultation();
+    $patient = $this->loadRefPatient();
+    $patient->loadRefLatestConstantes(null, null, $this->_ref_consultation, false);
+    $const_dates = $patient->_latest_constantes_dates;
+    $const_med = $patient->_ref_constantes_medicales;
+    $const_med->updateFormFields();
+
+    $grid_complet = CConstantesMedicales::buildGridLatest($const_med, $const_dates, true);
+    $grid_minimal = CConstantesMedicales::buildGridLatest($const_med, $const_dates, false);
+    $grid_valued  = CConstantesMedicales::buildGridLatest($const_med, $const_dates, false, true);
+
+    $smarty = new CSmartyDP("modules/dPpatients");
+
+    // Horizontal
+    $smarty->assign("constantes_medicales_grid", $grid_complet);
+    $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl", '', '', 0);
+    $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz);
+
+    $smarty->assign("constantes_medicales_grid" , $grid_minimal);
+    $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl", '', '', 0);
+    $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
+
+    $smarty->assign("constantes_medicales_grid" , $grid_valued);
+    $constantes_valued_horiz  = $smarty->fetch("print_constantes.tpl", '', '', 0);
+    $constantes_valued_horiz  = preg_replace('`([\\n\\r])`', '', $constantes_valued_horiz);
+
+    // Vertical
+    $smarty->assign("constantes_medicales_grid", $grid_complet);
+    $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
+    $constantes_complet_vert  = preg_replace('`([\\n\\r])`', '', $constantes_complet_vert);
+
+    $smarty->assign("constantes_medicales_grid" , $grid_minimal);
+    $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
+    $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
+
+    $smarty->assign("constantes_medicales_grid" , $grid_valued);
+    $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
+    $constantes_valued_vert   = preg_replace('`([\\n\\r])`', '', $constantes_valued_vert);
+
+    $template->addProperty("Anesthésie - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
+    $template->addProperty("Anesthésie - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
+    $template->addProperty("Anesthésie - Constantes - mode avec valeurs horizontal", $constantes_valued_horiz, '', false);
+    $template->addProperty("Anesthésie - Constantes - mode complet vertical"  , $constantes_complet_vert, '', false);
+    $template->addProperty("Anesthésie - Constantes - mode minimal vertical"  , $constantes_minimal_vert, '', false);
+    $template->addProperty("Anesthésie - Constantes - mode avec valeurs vertical"  , $constantes_valued_vert, '', false);
 
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Anesthésie");
