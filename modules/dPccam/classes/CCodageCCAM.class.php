@@ -538,7 +538,7 @@ class CCodageCCAM extends CMbObject {
           elseif (!in_array($discipline, $spe_gyneco)) {
             $_modifier->_state = 'not_recommended';
           }
-          if (self::isModifierKchecked($act)) {
+          if (self::isModifierKchecked($act) && !$act->montant_depassement) {
             $checked = true;
           }
           break;
