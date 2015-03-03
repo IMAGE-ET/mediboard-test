@@ -258,7 +258,7 @@ class CUser extends CPerson {
    */
   function loadRefMediuser() {
     $mediuser = new CMediusers();
-    if ($mediuser->isInstalled()) {
+    if (CModule::getInstalled("mediusers")) {
       $mediuser->load($this->_id);
       $this->_ref_mediuser = $mediuser;
     }
