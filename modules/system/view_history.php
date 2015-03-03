@@ -120,7 +120,7 @@ $dossiers_medicaux_shared = CAppUI::conf("dPetablissement dossiers_medicaux_shar
 if (!$stats) {
   $index = isset($where["object_id"]) ? "object_id" : null;
   /** @var CUserLog[] $list */
-  $list       = $log->loadList($where, "user_log_id DESC", "$start, 100", null, null, $index);
+  $list       = $log->loadList($where, "date DESC, user_log_id DESC", "$start, 100", null, null, $index);
   $list_count = $log->countList($where, null, null, $index);
 
   $group_id = CGroups::loadCurrent()->_id;
