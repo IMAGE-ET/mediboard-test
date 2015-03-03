@@ -504,16 +504,16 @@ class CApp {
    * @return void
    */
   static function preparePerformance(){
-    arsort(CMbObject::$cachableCounts);
-    arsort(CMbObject::$objectCounts);
+    arsort(CStoredObject::$cachableCounts);
+    arsort(CStoredObject::$objectCounts);
     arsort(self::$performance["autoload"]);
 
     self::$performance["genere"]         = round(self::$chrono->total, 3);
     self::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();
-    self::$performance["objets"]         = CMbObject::$objectCount;
+    self::$performance["objets"]         = CStoredObject::$objectCount;
     self::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
-    self::$performance["cachableCounts"] = CMbObject::$cachableCounts;
-    self::$performance["objectCounts"]   = CMbObject::$objectCounts;
+    self::$performance["cachableCounts"] = CStoredObject::$cachableCounts;
+    self::$performance["objectCounts"]   = CStoredObject::$objectCounts;
     self::$performance["ip"]             = $_SERVER["SERVER_ADDR"];
 
     self::$performance["size"] = CHTMLResourceLoader::getOutputLength();
