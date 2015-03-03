@@ -19,6 +19,7 @@
     data-fax="{{$match->fax}}"
     data-ean="{{$match->ean}}"
     data-ean_base="{{$match->ean_base}}"
+    data-ean_id="{{$match->ean_id}}"
     data-type_pec="{{$match->type_pec}}"
     data-urssaf="{{$match->urssaf}}"
     data-parente="{{$match->parente}}"

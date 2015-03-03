@@ -236,6 +236,7 @@ class CPatient extends CPerson {
   public $_assure_end_date;
   public $_assuranceCC_id;
   public $_invalid_assurance;
+  public $_assurance_assure_id;
 
   // Navigation Fields
   public $_dossier_cabinet_url;
