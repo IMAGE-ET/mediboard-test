@@ -124,11 +124,20 @@ if (!$stats) {
   $list_count = $log->countList($where, null, null, $index);
 
   $group_id = CGroups::loadCurrent()->_id;
-  CMbObject::massLoadFwdRef($list, "user_id");
-  CMbObject::massLoadFwdRef($list, "object_id");
+  $users = CStoredObject::massLoadFwdRef($list, "user_id");
+  CStoredObject::massLoadFwdRef($list, "object_id");
+
+  // Mass loading des mediusers et des fonctions
+  $mediuser = new CMediusers();
+  $mediusers = $mediuser->loadList(array("user_id" => CSQLDataSource::prepareIn(array_keys($users))));
+  CStoredObject::massLoadFwdRef($mediusers, "function_id");
 
   foreach ($list as $_log) {
-    $function = $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
+    $_log->loadRefUser();
+
+    $function = isset($mediusers[$_log->user_id]) ?
+      $mediusers[$_log->user_id]->loadRefFunction() :
+      $_log->_ref_user->loadRefMediuser()->loadRefFunction();
 
     if (!$is_admin && !$dossiers_medicaux_shared && $function->group_id != $group_id) {
       unset($list[$_log->_id]);
