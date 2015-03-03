@@ -1,9 +1,9 @@
-{{if $debugMode && !$offline}}
-  {{mb_include template=../../../style/mediboard/templates/performance}}
+{{if $infosystem && !$offline}}
+  {{mb_include style=mediboard template=performance}}
 {{/if}}
 
     </td>
   </tr>
 </table>
 
-{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common_end nodebug=true}}

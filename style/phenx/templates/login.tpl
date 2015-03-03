@@ -46,4 +46,4 @@
   </div>
 {{/if}}
 
-{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common_end nodebug=true}}

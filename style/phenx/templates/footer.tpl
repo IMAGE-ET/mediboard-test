@@ -3,8 +3,8 @@
   </tr>
 </table>
 
-{{if $debugMode && !$offline}}
+{{if $infosystem && !$offline}}
   {{mb_include style=mediboard template=performance}}
 {{/if}}
 
-{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common_end nodebug=true}}
