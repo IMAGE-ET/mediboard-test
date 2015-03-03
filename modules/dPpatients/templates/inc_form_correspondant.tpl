@@ -42,9 +42,10 @@
         $V(form.remarques, selected.get("remarques"));
 
         {{if $conf.ref_pays == 2}}
-        $V(form.ean, selected.get("ean"));
-        $V(form.ean_base, selected.get("ean_base"));
-        $V(form.type_pec, selected.get("type_pec"));
+          $V(form.ean, selected.get("ean"));
+          $V(form.ean_base, selected.get("ean_base"));
+          $V(form.ean_id, selected.get("ean_id"));
+          $V(form.type_pec, selected.get("type_pec"));
         {{/if}}
       }
     };
