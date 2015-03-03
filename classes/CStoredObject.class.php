@@ -510,10 +510,10 @@ class CStoredObject extends CModelObject {
   /**
    * Gets the can-read boolean permission
    *
-   * @deprecated
    * @todo Should not be used, use canDo()->read instead
-   * @return CCanDo 
-   */ 
+   * @return bool
+   * @deprecated Do not overload, overload getPerm() instead
+   */
   function canRead() {
     return $this->_canRead = $this->getPerm(PERM_READ);
   }
@@ -521,10 +521,10 @@ class CStoredObject extends CModelObject {
   /**
    * Gets the can-edit boolean permission
    *
-   * @deprecated
    * @todo Should not be used, use canDo()->edit instead
    * @return bool
-   */ 
+   * @deprecated Do not overload, overload getPerm() instead
+   */
   function canEdit() {
     return $this->_canEdit = $this->getPerm(PERM_EDIT);
   }
@@ -563,10 +563,13 @@ class CStoredObject extends CModelObject {
    * @return CCanDo 
    */
   function canDo() {
-    $canDo = new CCanDo;
-    $canDo->read  = $this->canRead();
-    $canDo->edit  = $this->canEdit();
-    return $this->_can = $canDo;
+    $can = new CCanDo;
+    $can->read  = $this->getPerm(PERM_READ);
+    $can->edit  = $this->getPerm(PERM_EDIT);
+
+    // Do not give too much information on wanted object
+    $can->context = $this->_guid;
+    return $this->_can = $can;
   }
   
   /**

@@ -285,14 +285,17 @@ class CModule extends CMbObject {
    * @see parent::canDo()
    */
   function canDo(){
-    if (!$this->_can) {
-      $canDo = new CCanDo;
-      $canDo->read  = $this->canRead();
-      $canDo->edit  = $this->canEdit();
-      $canDo->view  = $this->canView();
-      $canDo->admin = $this->canAdmin();
-      return $this->_can = $canDo;
+    if ($this->_can) {
+      return $this->_can;
     }
+
+    parent::canDo();
+
+    $this->_can->view  = $this->canView();
+    $this->_can->admin = $this->canAdmin();
+
+    // Module view can be shown information
+    $this->_can->context = "module $this->_view";
     return $this->_can;
   }
 
