@@ -231,7 +231,7 @@
                       <img src="images/pictures/overweight.png" />
                     {{/if}}
                     {{if $mode_vue_reelle == "classique"}}
-                      <div class="compact" style="width: 10px;">
+                      <span class="compact" style="width: 10px;">
                         {{if $systeme_presta == "expert"}}
                           {{if $prestation_id && $object->_liaisons_for_prestation|@count}}
                             {{if $is_aff}}
@@ -248,7 +248,7 @@
                         {{/if}}
                         <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
                         {{$sejour->_motif_complet|spancate:40:"...":true}}
-                      </div>
+                      </span>
                     {{/if}}
                   {{elseif !$object->function_id}}
                     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
