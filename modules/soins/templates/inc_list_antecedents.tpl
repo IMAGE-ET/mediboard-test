@@ -19,7 +19,7 @@
       </tr>
       {{foreach from=$cat item=ant}}
         <tr>
-          <td>
+          <td class="text">
             {{if $dossier_medical->object_class == 'CSejour'}}
               <strong>
             {{/if}}
