@@ -19,9 +19,11 @@ class CView {
   /** @var stdClass Parameters values */
   public static $params;
   /** @var string[] Parameters properties */
-  public static $props;
+  public static $props = array();
 
   public static $slavestate = false;
+
+  public static $protected_names = array("m", "a", "tab", "dialog", "raw", "ajax", "info");
 
   /**
    * Get a REQUEST parameter
@@ -72,6 +74,18 @@ class CView {
    */
   static public function checkParam($name, $prop, $value) {
     self::$params->$name =& $value;
+
+    // Check the name
+    if (in_array($name, self::$protected_names)) {
+      $error = "View parameter '$name' is a protected name and should NOT be used.";
+      trigger_error($error, E_USER_WARNING);
+    }
+
+    // Check the name
+    if (array_key_exists($name, self::$props)) {
+      $error = "View parameter '$name' is already in use.";
+      trigger_error($error, E_USER_WARNING);
+    }
 
     // Get Specification
     self::$props[$name] = $prop;

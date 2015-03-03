@@ -26,9 +26,9 @@
         <li>
           <strong>{{$dsn}}</strong>
           <span class="performance-count">{{$dataSource.count}}</span> /
-          <span class="performance-time">{{$dataSource.time*1000|string_format:"%.3f"}} ms</span>
+          <span class="performance-time">{{$dataSource.time*1000|string_format:'%.3f'}} ms</span>
           -
-          <span class="performance-time">{{$dataSource.timeFetch*1000|string_format:"%.3f"}} ms</span>
+          <span class="performance-time">{{$dataSource.timeFetch*1000|string_format:'%.3f'}} ms</span>
         </li>
       {{/foreach}}
     </ul>
@@ -93,6 +93,13 @@
       {{foreachelse}}
         <tr><td class="empty">Aucun cache utilisé</td></tr>
       {{/foreach}}
+      <tr>
+        <td class="button">
+          <button class="search" onclick="new Url('system', 'latest_cache_hits').requestModal(800);">
+            {{tr}}Details{{/tr}}
+          </button>
+        </td>
+      </tr>
     </table>
   </li>
 
