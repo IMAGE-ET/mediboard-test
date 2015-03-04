@@ -22,13 +22,21 @@ class CStoredObject extends CModelObject {
   static $objectCache    = array();
   static $cachableCounts = array();
 
-  /**
-   * @var CCanDo
-   */
+  /** @var CCanDo */
   public $_can;
-  
-  public $_canRead; // read permission for the object
-  public $_canEdit; // write permission for the object
+
+  /**
+   * @var bool Read permission for the object
+   * @deprecated
+   */
+  public $_canRead;
+
+  /**
+   * @var bool Edit permission for the object
+   * @deprecated
+   */
+  public $_canEdit;
+
   public $_external; // true if object is has remote ids
   public $_totalSeek;
   public $_totalWithPerms;
@@ -564,8 +572,8 @@ class CStoredObject extends CModelObject {
    */
   function canDo() {
     $can = new CCanDo;
-    $can->read  = $this->getPerm(PERM_READ);
-    $can->edit  = $this->getPerm(PERM_EDIT);
+    $can->read  = $this->_canRead = $this->getPerm(PERM_READ);
+    $can->edit  = $this->_canEdit = $this->getPerm(PERM_EDIT);
 
     // Do not give too much information on wanted object
     $can->context = $this->_guid;
