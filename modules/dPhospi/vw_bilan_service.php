@@ -319,6 +319,9 @@ if ($do) {
               }
               // Administrations effectuees
               foreach ($_prescription_line_mix->_ref_lines as $_perf_line) {
+                if (!$_perf_line->stupefiant && $do_stupefiants) {
+                  continue;
+                }
                 $list_lines[$_perf_line->_class][$_perf_line->_id] = $_perf_line;
                 if (is_array($_perf_line->_administrations)) {
                   foreach ($_perf_line->_administrations as $_date => $_adm_by_hour) {
