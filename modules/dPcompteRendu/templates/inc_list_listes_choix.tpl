@@ -2,13 +2,13 @@
 
 <script>
   Main.add(Control.Tabs.create.curry("tabs-owner", true));
-</script>   
+</script>
 
 <ul id="tabs-owner" class="control_tabs">
   {{foreach from=$listes key=owner item=_listes}}
   <li>
     <a href="#owner-{{$owner}}" {{if !$_listes|@count}}class="empty"{{/if}}>
-      {{$owners.$owner}} 
+      {{$owners.$owner}}
       <small>({{$_listes|@count}})</small>
     </a>
    </li>
@@ -24,7 +24,7 @@
 
   {{foreach from=$listes key=owner item=_listes}}
     <tbody id="owner-{{$owner}}" style="display: none;">
-      {{if $can->admin}}
+      {{if $can->edit}}
         <tr>
           <td colspan="3" class="button">
             {{assign var=owner_object value=$owners.$owner}}
