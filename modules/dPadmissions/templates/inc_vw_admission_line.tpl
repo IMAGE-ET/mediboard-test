@@ -51,6 +51,10 @@
   {{/if}}
 </td>
 
+<td>
+  <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
+</td>
+
 <td colspan="2" class="text">
   {{if $canPlanningOp->read}}
     <div style="float: right;">
@@ -105,7 +109,6 @@
     {{mb_include module=dPsante400 template=inc_manually_ipp_nda sejour=$_sejour patient=$patient
                     callback=reloadAdmissionLine.curry("`$_sejour->_id`")}}
   {{/if}}
-  <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
@@ -165,7 +168,7 @@
   {{/if}}
 </td>
 
-<td>
+<td class="text">
   {{foreach from=$_sejour->_ref_operations item=_op}}
     {{assign var=dossier_anesth value=$_op->_ref_consult_anesth}}
     {{if $dossier_anesth->_id}}

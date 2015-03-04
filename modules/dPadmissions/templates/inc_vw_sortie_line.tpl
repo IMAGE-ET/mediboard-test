@@ -44,6 +44,10 @@
   {{/if}}
 </td>
 
+<td>
+  <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
+</td>
+
 <td class="text CPatient-view" colspan="2">
   {{if $canPlanningOp->read}}
     <div style="float: right;">
@@ -71,8 +75,6 @@
       {{mb_include module=system template=inc_object_notes object=$_sejour}}
     </div>
   {{/if}}
-
-  <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
 
   {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
 

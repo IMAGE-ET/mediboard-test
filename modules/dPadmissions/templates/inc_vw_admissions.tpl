@@ -51,16 +51,18 @@
   </tr>
 
   <tr>
-    <th style="width: 13%">{{tr}}CSejour-admit{{/tr}}</th>
-    <th>
+    <th style="width: 10%">{{tr}}CSejour-admit{{/tr}}</th>
+    <th class="narrow">
       <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint(this.checked)"/>
+    </th>
+    <th style="width: 40%;">
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th class="narrow">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
     </th>
 
-    <th>
+    <th style="width: 20%;">
       {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
 
@@ -84,10 +86,10 @@
         {{tr}}CSejour-entree_preparee-all{{/tr}}
       {{/if}}
     </th>
-    <th>Anesth.</th>
-    <th>Couv.</th>
+    <th style="width: 20%;"> Anesth.</th>
+    <th class="narrow">Couv.</th>
     {{if $conf.dPadmissions.show_dh}}
-    <th>DH</th>
+    <th class="narrow">DH</th>
     {{/if}}
   </tr>
 

@@ -56,8 +56,10 @@
 
   <tr>
     <th class="narrow">Effectuer la sortie</th>
-    <th>
+    <th class="narrow">
       <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint(this.checked)"/>
+    </th>
+    <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th class="narrow">
