@@ -63,7 +63,8 @@
           -
           <span style="font-size: 0.6em;">
             {{$sejour->_motif_complet|spancate:30:"...":false}}
-            {{if $sejour->libelle && $sejour->_ref_operations|@count}}
+            {{* N'afficher le libellé d'intervention que lorsqu'il y en a qu'une *}}
+            {{if $sejour->libelle && $sejour->_ref_operations|@count == 1}}
               &mdash;
               {{foreach from=$sejour->_ref_operations item=_op name=op}}
                 {{$_op->libelle|spancate:30:"...":false}} {{if !$smarty.foreach.op.last}};{{/if}}
