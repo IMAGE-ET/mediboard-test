@@ -52,7 +52,7 @@ if ($indexFile) {
   $smartyStyle->assign("mediboardStyle"       , CCSSLoader::loadFiles());
   $smartyStyle->assign("mediboardScript"      , CJSLoader::loadFiles());
   $smartyStyle->assign("messages"             , $messages);
-  $smartyStyle->assign("debugMode"            , CAppUI::pref("INFOSYSTEM"));
+  $smartyStyle->assign("infosystem"           , CAppUI::pref("INFOSYSTEM"));
   $smartyStyle->assign("errorMessage"         , CAppUI::getMsg());
   $smartyStyle->assign("uistyle"              , $uistyle);
   

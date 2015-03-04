@@ -9,8 +9,6 @@
  * @version    $Id$
  */
 
-$debug = CAppUI::pref("INFOSYSTEM");
-
 // HTTP Redirections
 if (CAppUI::conf("http_redirections")) {
   if (!CAppUI::$instance->user_id || CValue::get("login")) {
@@ -434,20 +432,35 @@ if (!$suppressHeaders || $ajax) {
 if (!$suppressHeaders) {
   //$address = get_remote_address();
 
+  if ($infosystem = CAppUI::pref("INFOSYSTEM")) {
+    $latest_cache_key = "$user->_guid-latest_cache";
+    $latest_cache = array(
+      "meta" => array(
+        "module" => $m,
+        "action" => $action,
+        "user"   => $user->_view,
+      ),
+      "totals" => Cache::$totals,
+      "hits"   => Cache::$hits,
+    );
+    SHM::put($latest_cache_key, $latest_cache, true);
+  }
+
   $tplFooter = new CSmartyDP("style/$uistyle");
-  $tplFooter->assign("offline"       , false);
-  $tplFooter->assign("debugMode"     , $debug);
-  $tplFooter->assign("performance"   , CApp::$performance);
-  //$tplFooter->assign("userIP"        , $address["client"]);
-  $tplFooter->assign("errorMessage"  , CAppUI::getMsg());
-  $tplFooter->assign("navigatory_history"   , CViewHistory::getHistory());
+  $tplFooter->assign("offline"           , false);
+  $tplFooter->assign("performance"       , CApp::$performance);
+  $tplFooter->assign("infosystem"        , $infosystem);
+  $tplFooter->assign("errorMessage"      , CAppUI::getMsg());
+  $tplFooter->assign("navigatory_history", CViewHistory::getHistory());
   $tplFooter->display("footer.tpl");
+
+
 }
 
 // Ajax performance
 if ($ajax) {
   $tplAjax = new CSmartyDP("modules/system");
   $tplAjax->assign("performance", CApp::$performance);
-  $tplAjax->assign("requestID"            , CValue::get("__requestID"));
+  $tplAjax->assign("requestID"  , CValue::get("__requestID"));
   $tplAjax->display("ajax_errors.tpl");
 }
