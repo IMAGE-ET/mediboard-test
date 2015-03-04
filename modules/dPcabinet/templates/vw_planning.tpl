@@ -4,11 +4,18 @@
   // default value
   var target_plage_consult = '{{$plageSel->_id}}';
 
+  Consultation.onCloseEdit = function() {
+    if (target_plage_consult) {
+      refreshPlageConsult(target_plage_consult);
+    }
+  };
+
 showConsultations = function (oTd, plageconsult_id){
   oTd = $(oTd);
   oTd.up("table").select(".event").invoke("removeClassName", "selected");
   oTd.up(".event").addClassName("selected");
   refreshPlageConsult(plageconsult_id);
+  target_plage_consult = plageconsult_id;
 };
 
 refreshPlageConsult = function (plageconsult_id) {
