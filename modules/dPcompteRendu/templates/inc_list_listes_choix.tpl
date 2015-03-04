@@ -24,7 +24,7 @@
 
   {{foreach from=$listes key=owner item=_listes}}
     <tbody id="owner-{{$owner}}" style="display: none;">
-      {{if $can->admin}}
+      {{if $can->edit}}
         <tr>
           <td colspan="3" class="button">
             {{assign var=owner_object value=$owners.$owner}}
