@@ -252,7 +252,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
    */
   static function canCreate(CMbObject $object) {
     $file = new CFile();
-    return $object->canRead() && $file->loadPermClass()->permission >= PERM_EDIT;
+    return $object->canRead() && $file->canClass()->edit;
   }
 
   /**

@@ -32,7 +32,7 @@ $file = new CFile();
 
 $smarty = new CSmartyDP();
 $smarty->assign("object",        $object);
-$smarty->assign("canDoFiles",    $file->loadPermClass());
+$smarty->assign("can_files",     $file->canClass());
 $smarty->assign("name_readonly", $name_readonly);
 $smarty->assign("mozaic",        $use_mozaic);
 

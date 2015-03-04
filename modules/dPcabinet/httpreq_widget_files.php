@@ -30,7 +30,7 @@ $file = new CFile;
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
-$smarty->assign("canDoFiles", $file->loadPermClass());
+$smarty->assign("can_files", $file->canClass());
 $smarty->assign("name_readonly", $name_readonly);
 
 $smarty->display($only_files ? "inc_widget_list_files.tpl" : "inc_widget_vw_files.tpl");

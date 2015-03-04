@@ -214,7 +214,7 @@ $smarty->assign("listDay"       , $list_plages);
 $smarty->assign("nb_canceled"   , $nb_canceled);
 $smarty->assign("board"         , $board);
 $smarty->assign("nb_printers"   , $nb_printers);
-$smarty->assign("can_doc"       , $compte_rendu->loadPermClass());
+$smarty->assign("can_create_docs", $compte_rendu->canClass()->edit);
 $smarty->assign("nb_modeles_etiquettes_sejour", $nb_modeles_etiquettes_sejour);
 $smarty->assign("nb_modeles_etiquettes_operation", $nb_modeles_etiquettes_operation);
 

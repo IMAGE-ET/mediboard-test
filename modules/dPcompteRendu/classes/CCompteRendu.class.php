@@ -816,7 +816,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   static function canCreate(CMbObject $object) {
     $cr = new CCompteRendu();
-    return $object->canRead() && $cr->loadPermClass()->permission >= PERM_EDIT;
+    return $object->canRead() && $cr->canClass()->edit;
   }
 
   /**

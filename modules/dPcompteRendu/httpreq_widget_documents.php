@@ -81,6 +81,6 @@ $smarty->assign("mode"                 , CValue::get("mode"));
 $smarty->assign("notext"               , "notext");
 $smarty->assign("nb_printers"          , $nb_printers);
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
-$smarty->assign("can_doc"              , $compte_rendu->canCreate($object));
+$smarty->assign("can_create_docs"      , $compte_rendu->canCreate($object));
 
 $smarty->display($only_docs ? "inc_widget_list_documents.tpl" : "inc_widget_documents.tpl");
