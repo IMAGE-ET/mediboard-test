@@ -921,17 +921,18 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
     // alors pas d'enregistrement
     if (in_array($this->type, array("footer", "header"))) {
-      $doc = new CCompteRendu;
+      $doc = new CCompteRendu();
       $where = 'object_class != "'. $this->object_class.
-          '" and ( header_id ="' . $this->_id .
-          '" or footer_id ="' . $this->_id . '")';;
+          '" and (header_id ="' . $this->_id .
+          '" or footer_id ="' . $this->_id . '")' .
+          '  and object_id IS NULL';
       if ($doc->countList($where)) {
         return "Des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
       }
     }
     // Si c'est un document dont le type de l'en-tête, de l'introduction, de la conclusion
     // ou du pied de page ne correspond pas à son nouveau type, alors pas d'enregistrement
-    if (!$this->object_id) {
+    if (!$this->object_id && $this->type == "body") {
       $this->loadComponents();
       if ($this->header_id) {
         if ($this->_ref_header->object_class != $this->object_class) {
