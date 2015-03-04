@@ -321,37 +321,28 @@
             <img src="images/icons/premed.png" />
           {{/if}}
         </div>
-        {{if $mode_lite && $smarty.foreach.lines_items.first}}
-          {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
+        {{if $smarty.foreach.lines_items.first || $mode_dupa}}
+          {{if $mode_lite}}
             <br />
-            ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
-            {{if $line->_frequence}}
+          {{elseif $mode_dupa}}
+            <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
+              <div class="compact">
+                <div style="white-space: nowrap;">
+          {{/if}}
+          {{if $line->_frequence}}
+            {{if $line->type_line == "perfusion"}}Débit initial : {{/if}}
+            {{$line->_frequence}}
+            {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
               <br />
-              {{if $line->type_line == "perfusion"}}Débit initial: {{/if}}
-              {{$line->_frequence}}
-              {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
-                <br />
-                Dernier débit : {{$line->_last_variation->debit}} ml/h
-              {{/if}}
+              ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
+            {{/if}}
+            {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
+              <br />
+              Dernier débit : {{$line->_last_variation->debit}} ml/h
             {{/if}}
           {{/if}}
         {{/if}}
         {{if $mode_dupa}}
-          <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
-          <div class="compact">
-            <div style="white-space: nowrap;">
-              {{if $line->_frequence}}
-                {{if $line->type_line == "perfusion"}}Débit initial : {{/if}}
-                {{$line->_frequence}}
-                {{if $line->volume_debit && $line->duree_debit && $line->type_line != "oxygene"}}
-                  <br />
-                  ({{mb_value object=$line field=volume_debit}} ml en {{mb_value object=$line field=duree_debit}} h)
-                {{/if}}
-                {{if $line->type_line == "perfusion" && $line->_last_variation->debit}}
-                  <br />
-                  Dernier débit : {{$line->_last_variation->debit}} ml/h
-                {{/if}}
-              {{/if}}
             </div>
             <em>{{mb_value object=$line field=commentaire}}</em>
           </div>
