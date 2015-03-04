@@ -37,6 +37,7 @@ ListConsults = {
 };
 
 Consultation = window.Consultation || {
+  onCloseEditModal : null,
   editRDV: function(consult_id, chir_id, plage_id) {
     var url = new Url("dPcabinet", "edit_planning", "tab");
     url.addParam("consultation_id", consult_id);
@@ -62,6 +63,9 @@ Consultation = window.Consultation || {
       width: "95%",
       height: "95%"
     });
+    if (Consultation.onCloseEditModal) {
+      url.modalObject.observe("afterClose", Consultation.onCloseEditModal);
+    }
   },
   
   edit: function(consult_id, fragment) {
