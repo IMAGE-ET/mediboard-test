@@ -301,6 +301,7 @@ class CGroups extends CEntity {
     $blocs = $bloc->loadListWithPerms($permType, $where, $order);
 
     if ($load_salles) {
+      CStoredObject::massLoadBackRefs($blocs, "salles", "nom");
       foreach ($blocs as $_bloc) {
         $_bloc->loadRefsSalles();
       }
@@ -584,6 +585,6 @@ class CGroups extends CEntity {
    * @return CLegalEntity
    */
   function loadRefLegalEntity () {
-    return $this->_ref_legal_entity = $this->loadFwdRef("legal_entity_id");
+    return $this->_ref_legal_entity = $this->loadFwdRef("legal_entity_id", true);
   }
 }

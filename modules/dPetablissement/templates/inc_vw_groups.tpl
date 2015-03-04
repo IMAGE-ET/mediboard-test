@@ -1,12 +1,12 @@
+{{mb_script module=patients script=autocomplete ajax=1}}
 
 <script>
-Main.add(function () {
-  InseeFields.initCPVille("group", "cp", "ville", "tel");
-});
+  Main.add(function() {
+    InseeFields.initCPVille("group", "cp", "ville", "tel");
+  });
 </script>
 
-
-<form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="group" method="post" onsubmit="return checkForm(this);">
 
 {{mb_class object=$group}}
 {{mb_key   object=$group}}

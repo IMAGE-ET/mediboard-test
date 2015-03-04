@@ -31,11 +31,10 @@
 </script>
 
 
-<form name="legal_entity" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-
+<form name="legal_entity" method="post" onsubmit="return checkForm(this);">
   {{mb_class object=$legal_entity}}
   {{mb_key   object=$legal_entity}}
-  <input type="hidden" name="user_id" value="{{$legal_entity->user_id}}"/>
+  {{mb_field object=$legal_entity field=user_id hidden=1}}
 
   <table class="main form">
     <tr>
@@ -91,7 +90,7 @@
     <tr>
       <th>{{tr}}CLegalEntity-mediuser view{{/tr}}</th>
       <td>
-        <input type="text" name="mediuser_view" {{if $legal_entity->user_id}}value="{{$legal_entity->_ref_user}}"{{/if}}/>
+        <input type="text" name="mediuser_view" value="{{$legal_entity->_ref_user}}" />
         <button type="button" class="erase notext"
                 onclick="$V(this.form.elements.user_id, ''); $V(this.form.elements.mediuser_view, '');"
                 style="display: inline-block !important;"></button>
@@ -150,7 +149,7 @@
           <option value="">{{tr}}Choose{{/tr}}</option>
           {{foreach from=$legal_status item=_status}}
             {{assign var=code value=$_status->_id}}
-            <option title="{{$_status->name}}" value="{{$_status->_id}}" {{if $legal_entity->legal_status_code == $code}}selected{{/if}}>{{$code}} - {{$_status->short_name}}</option>
+            <option value="{{$_status->_id}}" {{if $legal_entity->legal_status_code == $code}}selected{{/if}}>{{$code}} - {{$_status->short_name}}</option>
           {{/foreach}}
         </select>
       </td>
@@ -162,7 +161,7 @@
           <button class="modify" type="submit" name="modify">
             {{tr}}Save{{/tr}}
           </button>
-          <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'entité juridique', objName: $V(this.form._name)})">
+          <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form, {typeName:'l\'entité juridique', objName: $V(this.form._name)})">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}
@@ -172,6 +171,5 @@
         {{/if}}
       </td>
     </tr>
-
   </table>
 </form>

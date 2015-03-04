@@ -10,10 +10,10 @@
 
 {{mb_script module=etablissement script=Group}}
 
-<script type="text/javascript">
-changePage = function(page){
-  $V(getForm("filter-etab_externes").elements.start, page);
-}
+<script>
+  changePage = function(page) {
+    $V(getForm("filter-etab_externes").elements.start, page);
+  }
 </script>
 
 <table class="main">
@@ -75,7 +75,7 @@ changePage = function(page){
           </tr>
           {{foreachelse}}
           <tr>
-            <td class="empty" colspan="3">{{tr}}CEtabExterne.none{{/tr}}</td>
+            <td class="empty" colspan="5">{{tr}}CEtabExterne.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>

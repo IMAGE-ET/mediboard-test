@@ -1,18 +1,17 @@
+{{mb_script module=patients script=autocomplete ajax=1}}
 
-{{mb_script module=patients script=autocomplete}}
+<script>
+  Main.add(function () {
+    InseeFields.initCPVille('etabExterne', 'cp', 'ville', 'tel');
 
-<script type="text/javascript">
-Main.add(function () {
-  InseeFields.initCPVille('etabExterne', 'cp', 'ville', 'tel');
-  
-  var row = $('{{$etab_externe->_guid}}-row');
-  if (row) {
-    row.addUniqueClassName('selected'); 
-  }
-});
+    var row = $('{{$etab_externe->_guid}}-row');
+    if (row) {
+      row.addUniqueClassName('selected');
+    }
+  });
 </script>
 
-<form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="etabExterne" method="post" onsubmit="return checkForm(this);">
   {{mb_class object=$etab_externe}}
   {{mb_key   object=$etab_externe}}
   
