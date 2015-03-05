@@ -15,6 +15,9 @@ CCanDo::checkRead();
 
 CApp::setTimeLimit(300);
 
+// On libère la session afin de ne pas bloquer l'utilisateur
+CSessionHandler::writeClose();
+
 $modele_id   = CValue::post("modele_id");
 $sejours_ids = CValue::post("sejours_ids");
 
