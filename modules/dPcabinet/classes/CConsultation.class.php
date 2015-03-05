@@ -704,7 +704,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $this->loadRefsActesCCAM(1);
     foreach ($this->_ref_actes_ccam as $acteCCAM) {
       $count_actes++;
-      $secteur1_CCAM += $acteCCAM->montant_base;
+      $secteur1_CCAM += round($acteCCAM->getTarif(), 2);
       $secteur2_CCAM += $acteCCAM->montant_depassement;
     }
 
