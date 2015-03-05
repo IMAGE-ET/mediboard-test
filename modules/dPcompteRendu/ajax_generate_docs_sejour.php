@@ -13,7 +13,7 @@
 
 CCanDo::checkRead();
 
-CApp::setTimeLimit(150);
+CApp::setTimeLimit(300);
 
 $modele_id   = CValue::post("modele_id");
 $sejours_ids = CValue::post("sejours_ids");
