@@ -224,12 +224,26 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     exec($command.$options);
 
     $this->result = file_get_contents($result);
-    
+
+    // Ajout de l'auto-print (en attendant la gestion au niveau de la lib)
+    $this->result = self::addAutoPrint($this->result);
+
     // Supression des fichiers temporaires
     @unlink($this->temp_name);
     @unlink($this->header);
     @unlink($this->footer);
     @unlink($this->file);
     @unlink($result);
+  }
+
+  static $from_autoprint = "/Pages 2 0 R";
+  static $to_autoprint = "/Pages 2 0 R\n/OpenAction << /Type /Action /S /Named /N /Print >>";
+
+  static function addAutoPrint($content) {
+    return str_replace(self::$from_autoprint, self::$to_autoprint, $content);
+  }
+
+  static function removeAutoPrint($content) {
+    return str_replace(self::$to_autoprint, self::$from_autoprint, $content);
   }
 }

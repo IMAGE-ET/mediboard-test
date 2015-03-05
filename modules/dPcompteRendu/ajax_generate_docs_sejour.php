@@ -13,7 +13,10 @@
 
 CCanDo::checkRead();
 
-CApp::setTimeLimit(150);
+CApp::setTimeLimit(300);
+
+// On libère la session afin de ne pas bloquer l'utilisateur
+CSessionHandler::writeClose();
 
 $modele_id   = CValue::post("modele_id");
 $sejours_ids = CValue::post("sejours_ids");
@@ -25,6 +28,7 @@ $where = array();
 $where["sejour_id"] = "IN ($sejours_ids)";
 
 $sejours = $sejour->loadList($where);
+/** @var CPatient[] $patients */
 $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
 CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 
@@ -69,7 +73,8 @@ foreach ($sejours as $_sejour) {
   $compte_rendu->fast_edit_pdf = $modele->fast_edit_pdf;
   $compte_rendu->private = $modele->private;
   $compte_rendu->_source = $source;
-  
+  $compte_rendu->factory = $modele->factory;
+
   $templateManager = new CTemplateManager();
   $templateManager->isModele = false;
   $templateManager->document = $source;

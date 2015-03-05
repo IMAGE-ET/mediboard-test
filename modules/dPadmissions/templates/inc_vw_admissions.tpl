@@ -26,7 +26,7 @@
 
 <table class="tbl" id="admissions">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="11">
       <a href="#1" style="display: inline" onclick="$V(getForm('selType').date, '{{$hier}}'); reloadFullAdmissions()">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateAdmissions" action="?" method="get">

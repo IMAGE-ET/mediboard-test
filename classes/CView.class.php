@@ -81,7 +81,7 @@ class CView {
       trigger_error($error, E_USER_WARNING);
     }
 
-    // Check the name
+    // Check duplicates
     if (array_key_exists($name, self::$props)) {
       $error = "View parameter '$name' is already in use.";
       trigger_error($error, E_USER_WARNING);

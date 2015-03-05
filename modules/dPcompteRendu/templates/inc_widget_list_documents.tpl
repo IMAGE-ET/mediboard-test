@@ -65,7 +65,7 @@
         <input type="hidden" name="file_category_id" value="{{$document->file_category_id}}" />
         <button type="button" class="print notext"
           onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-            Document.printPDF({{$document->_id}}, '{{$document->factory}}');
+            Document.printPDF({{$document->_id}});
           {{else}}
             Document.print({{$document->_id}});
           {{/if}}">

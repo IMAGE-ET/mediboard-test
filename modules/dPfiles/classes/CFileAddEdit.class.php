@@ -114,8 +114,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $merge_files = CValue::post("_merge_files");
 
       if ($merge_files) {
-        CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
-        $pdf = new PDFMerger;
+        $pdf = new CMbPDFMerger();
 
         $this->_obj = new $this->_obj->_class;
 
@@ -151,7 +150,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
           }
           // Sinon création d'un cfile
           else {
-            $other_file = new CFile;
+            $other_file = new CFile();
             $other_file->bind($file);
             $other_file->file_name = $file["name"];
             $other_file->file_type = $file["type"];

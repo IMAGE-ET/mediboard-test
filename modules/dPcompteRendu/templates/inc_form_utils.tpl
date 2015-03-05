@@ -33,8 +33,7 @@
 </form>
 
 <!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" method="post"
-      target="{{if in_array($compte_rendu->factory, array("CDomPDFConverter", "CPrinceXMLConverter"))}}download_pdf{{else}}_blank{{/if}}"
+<form style="display: none;" name="download-pdf-form" method="post" target="download_pdf"
       action="?m=compteRendu&a=ajax_pdf" onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />

@@ -26,9 +26,9 @@
         {{if $_docitem instanceof CCompteRendu}}
         <button type="button" class="print notext"
                 onclick="{{if $pdf_thumbnails && $pdf_and_thumbs}}
-                Document.printPDF({{$_docitem->_id}}, '{{$_docitem->factory}}');
+                Document.printPDF({{$_docitem->_id}});
                 {{else}}
-                Document.print({{$_docitem->_id}})
+                Document.print({{$_docitem->_id}});
                 {{/if}}">{{tr}}Print{{/tr}}</button>
           <a href="#document-{{$_docitem->_id}}" style="display: inline;"
              onclick="Document.edit('{{$_docitem->_id}}')">

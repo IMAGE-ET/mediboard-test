@@ -31,7 +31,7 @@
       <button type="button" class="print notext"
         onclick="
         {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-          Document.printPDF('{{$_doc_item->_id}}', '{{$_doc_item->factory}}');
+          Document.printPDF('{{$_doc_item->_id}}');
         {{else}}
           Document.print('{{$_doc_item->_id}}');
         {{/if}}">

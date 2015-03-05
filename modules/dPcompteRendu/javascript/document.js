@@ -216,29 +216,19 @@ Document = {
     oIframe.src = sUrl;
   },
   
-  printPDF: function(document_id, factory) {
+  printPDF: function(document_id) {
     var url = new Url("compteRendu", "ajax_pdf");
     url.addParam("suppressHeaders", 1);
 
-    switch (factory) {
-      case "CDomPDFConverter":
-        if (this.iframe) {
-          this.iframe.remove();
-        }
-
-        this.iframe = Element.getTempIframe();
-        url.pop(0, 0, "Download PDF", null, null, {
-          compte_rendu_id: document_id,
-          stream: 1,
-          update_date_print: 1}, this.iframe);
-        break;
-      case "CWkHtmlToPDF":
-      default:
-        url.popup(600, 400, "Download PDF", null, {
-          compte_rendu_id: document_id,
-          stream: 1,
-          update_date_print: 1});
+    if (this.iframe) {
+      this.iframe.remove();
     }
+
+    this.iframe = Element.getTempIframe();
+    url.pop(0, 0, "Download PDF", null, null, {
+      compte_rendu_id: document_id,
+      stream: 1,
+      update_date_print: 1}, this.iframe);
   },
   
   printSelDocs: function(object_id, object_class) {

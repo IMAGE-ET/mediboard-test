@@ -11,11 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
+$nbDoc = CView::get("nbDoc", "str");
+CView::checkin();
 
-$nbDoc     = CValue::get("nbDoc");
 $documents = array();
-$pdf       = new PDFMerger();
+$pdf = new CMbPDFMerger();
 
 CMbArray::removeValue("0", $nbDoc);
 
@@ -42,7 +42,7 @@ foreach ($compte_rendu->loadList($where) as $_compte_rendu) {
 // Stream du PDF au client avec ouverture automatique
 // Si aucun pdf, alors PDFMerger génère une exception que l'on catche
 try {
-  $pdf->merge('browser', 'documents.pdf');
+  $pdf->merge("browser", "documents.pdf");
 }
 catch(Exception $e) {
   CApp::rip();

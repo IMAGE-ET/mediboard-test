@@ -6,13 +6,13 @@
     url.addParam('function_id', User["function"]["id"]);
     url.addParam('object_class', 'CSejour');
     url.addParam('object_id', '');
-    url.autoComplete(form.modele_keywords, null, {
+    url.autoComplete(form.keywords_modele, null, {
       minChars: 2,
       afterUpdateElement: function(input, selected) {
         var modele_id = selected.down('.id').innerHTML;
         var modele_name = selected.down('div').innerHTML;
         $V(form.modele_id, modele_id);
-        $V(form.modele_keywords, modele_id != 0 ? modele_name : '');
+        $V(form.keywords_modele, modele_id != 0 ? modele_name : '');
       },
       dropdown: true,
       width: '250px'
@@ -37,7 +37,7 @@
         Choix du modèle :
       </th>
       <td>
-        <input type="text" name="modele_keywords"  value="" class="autocomplete str" autocomplete="off" />
+        <input type="text" name="keywords_modele"  value="" class="autocomplete str" autocomplete="off" />
         <button type="button" class="print"
                 onclick="if (Admissions.printForSelection($V(this.form.modele_id))) { Admissions.afterPrint(); }">{{tr}}Print{{/tr}}</button>
         <input type="hidden" name="modele_id" value="" />

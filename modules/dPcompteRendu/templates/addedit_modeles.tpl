@@ -150,7 +150,7 @@
 </div>
 
 {{if $pdf_thumbnails && $pdf_and_thumbs}}
-  <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
+  <form style="display: none;" name="download-pdf-form" target="download_pdf" method="post"
     action="?m=compteRendu&a=ajax_pdf"
     onsubmit="PageFormat.completeForm();">
     <input type="hidden" name="content" value="" />
@@ -165,6 +165,14 @@
     <input type="hidden" name="stream" value="1" />
   </form>
 {{/if}}
+
+<iframe name="download_pdf"
+  {{if $smarty.session.browser.name == "msie"}}
+    style="width: 0; height: 0; position: absolute; top: -1000px;"
+  {{else}}
+    style="width: 1px; height: 1px;"
+  {{/if}}>
+</iframe>
 
 <form name="editFrm" action="?m={{$m}}" method="post" 
  onsubmit="Url.ping(submitCompteRendu); return false;"
