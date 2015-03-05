@@ -488,33 +488,29 @@ class CStoredObject extends CModelObject {
   }
 
   /**
-   * Load class level permission
+   * Load class level can do
    *
-   * @return CPermObject
+   * @return CCanDo
    */
-  function loadPermClass() {
+  function canClass() {
+    $can = new CCanDo();
+
+    // Defined at class level in permissions object for user
     global $userPermsObjects;
-    
     if (isset($userPermsObjects[$this->_class][0])) {
-      return $userPermsObjects[$this->_class][0];
+      $perm = $userPermsObjects[$this->_class][0];
+      $can->read = $perm->permission >= PERM_READ;
+      $can->edit = $perm->permission >= PERM_EDIT;
+      return $can;
     }
-    
-    $perm = new CPermObject();
-    $perm_module = CModule::getCanDo(CModelObject::$module_name[$this->_class]);
-    
-    if ($perm_module->admin || $perm_module->edit) {
-      $perm->permission = PERM_EDIT;
-    }
-    elseif ($perm_module->read) {
-      $perm->permission = PERM_READ;
-    }
-    else {
-      $perm->permission = PERM_DENY;
-    }
-    
-    return $perm;
+
+    // Otherwise fall back on module definition
+    $can_module = CModule::getCanDo(CModelObject::$module_name[$this->_class]);
+    $can->read = $can_module->read;
+    $can->edit = $can_module->admin || $can_module->edit;
+    return $can;
   }
-  
+
   /**
    * Gets the can-read boolean permission
    *
