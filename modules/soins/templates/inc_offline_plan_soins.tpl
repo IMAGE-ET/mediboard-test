@@ -53,7 +53,7 @@
                 &mdash; <strong>LIT : </strong> {{$sejour->_ref_curr_affectation}}
               {{/if}}
             </td>
-            <td style="width: 25%; vertical-align: top;">
+            <td style="width: 25%; vertical-align: top;" class="text">
               Civilité : {{mb_value object=$patient field=civilite}} {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
                ({{$patient->_annees}} ans)
                {{if $patient->_ref_constantes_medicales->poids}}({{$patient->_ref_constantes_medicales->poids}} kg){{/if}}
@@ -61,7 +61,7 @@
               <br />
               Né(e) le : {{mb_value object=$patient field=naissance}}
             </td>
-            <td style="vertical-align: top;">
+            <td style="vertical-align: top;" class="text">
               NDA : {{$sejour->_NDA}}
               <br />
               {{if $sejour->libelle}}
