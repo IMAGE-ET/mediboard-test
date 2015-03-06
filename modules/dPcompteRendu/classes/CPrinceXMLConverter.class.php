@@ -133,5 +133,6 @@ class CPrinceXMLConverter extends CHtmlToPDFConverter {
 
     unlink($result);
     unlink($this->file);
+    unlink($this->temp_name);
   }
 }

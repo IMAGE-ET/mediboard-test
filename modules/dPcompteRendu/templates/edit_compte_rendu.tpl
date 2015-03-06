@@ -192,9 +192,7 @@
 <!-- Zone de confirmation de verrouillage du document -->
 {{mb_include module=compteRendu template=inc_area_lock}}
 
-{{if $smarty.session.browser.name == "msie"}}
-  <iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;"></iframe>
-{{/if}}
+<iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;"></iframe>
 
 <form name="editFrm" action="?m={{$m}}" method="post"
       onsubmit="Url.ping(function() {
@@ -336,10 +334,6 @@
         </a>
         {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
-      {{/if}}
-
-      {{if $smarty.session.browser.name != "msie"}}
-        <iframe name="download_pdf" style="width: 1px; height: 1px;"></iframe>
       {{/if}}
 
       {{mb_label object=$compte_rendu field=nom}}
