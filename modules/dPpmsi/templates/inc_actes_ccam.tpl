@@ -212,6 +212,9 @@
             </td>
             <td>
               {{mb_value object=$acte field=_tarif_base}}
+              {{if $acte->_tarif_base != $acte->_tarif_base2}}
+                ({{mb_value object=$acte field=_tarif_base2}})
+              {{/if}}
             </td>
             <td>
               {{if $read_only}}
