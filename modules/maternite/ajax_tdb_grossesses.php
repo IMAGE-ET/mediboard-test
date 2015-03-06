@@ -14,10 +14,10 @@
 CCanDo::checkRead();
 
 $date  = CValue::get("date", CMbDT::date());
-
-$date_min = CMbDT::date("-".CAppUI::conf("maternite CGrossesse min_check_terme", CGroups::loadCurrent())." DAYS", $date); //CMbDT::date("-7 days", $date);
-$date_max = CMbDT::date("+".CAppUI::conf("maternite CGrossesse max_check_terme", CGroups::loadCurrent())." DAYS", $date); //CMbDT::date("+21 days", $date);
 $group = CGroups::loadCurrent();
+
+$date_min = CMbDT::date("-".CAppUI::conf("maternite CGrossesse min_check_terme", $group)." DAYS", $date);
+$date_max = CMbDT::date("+".CAppUI::conf("maternite CGrossesse max_check_terme", $group)." DAYS", $date);
 
 $where = array();
 $ljoin = array();
@@ -31,7 +31,8 @@ $grossesses = $grossesse->loadGroupList($where, "terme_prevu ASC, nom ASC", null
 
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 CMbObject::massCountBackRefs($grossesses, "sejours");
-CMbObject::massCountBackRefs($grossesses, "consultations");
+$consultations = CMbObject::massLoadBackRefs($grossesses, "consultations");
+CMbObject::massLoadFwdRef($consultations, "plageconsult_id");
 
 /** @var CGrossesse[] $grossesses */
 foreach ($grossesses as $_grossesse) {

@@ -28,7 +28,9 @@ $listSejours = $sejour->loadList($where, $order, null, null, null);
 
 $grossesses = CMbObject::massLoadFwdRef($listSejours, "grossesse_id");
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
-CMbObject::massLoadBackRefs($grossesses, "naissances");
+$naissances = CMbObject::massLoadBackRefs($grossesses, "naissances");
+$sejours_enfant = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
+CMbObject::massLoadFwdRef($sejours_enfant, "patient_id");
 
 foreach ($listSejours as $_sejour) {
   $grossesse = $_sejour->loadRefGrossesse();

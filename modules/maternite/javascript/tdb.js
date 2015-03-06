@@ -189,18 +189,20 @@ Tdb = {
         tables = [target];
       }
       for (var a = 0; a < tables.length; a++) {
+        var key = tables[a];
+        var elt = key == 'hospitalisation_tab' ? "tbody" : "tr";
         if (!value) {
-          $(tables[a]).select(".CPatient-view").each(function(e) {
-            e.up("tr").show();
+          $(key).select(".CPatient-view").each(function(e) {
+            e.up(elt).show();
           });
         }
         else {
-          $(tables[a]).select(".CPatient-view").each(function (e) {
+          $(key).select(".CPatient-view").each(function (e) {
             if (!e.innerHTML.like(value)) {
-              e.up("tr").hide();
+              e.up(elt).hide();
             }
             else {
-              e.up("tr").show();
+              e.up(elt).show();
             }
           });
         }

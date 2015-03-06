@@ -22,7 +22,7 @@
   };
 </script>
 
-<form method="post" name="change_cesar" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadListCesar});">
+<form method="post" name="change_cesar" onsubmit="return onSubmitFormAjax(this, reloadListCesar);">
   {{mb_class object=$naissance}}
   <input type="hidden" name="naissance_id" value="" />
   <input type="hidden" name="by_caesarean" value="0" />

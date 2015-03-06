@@ -36,6 +36,7 @@
     <th class="narrow">Act. Enf.</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
+    <tbody>
     {{assign var=nb_naissance value=$_sejour->_ref_grossesse->_ref_naissances|@count}}
     {{if  $nb_naissance == 0}}
       {{assign var=nb_naissance value=1}}
@@ -108,6 +109,7 @@
         <td colspan="2"></td>
       </tr>
     {{/foreach}}
+    </tbody>
   {{foreachelse}}
     <tr>
       <td colspan="7" class="empty">{{tr}}CSejour.none{{/tr}}</td>

@@ -29,7 +29,7 @@
 
   reloadHistorique = function() {
     var target = $('list_historique');
-    if (target){
+    if (target) {
       var url = new Url('maternite', 'ajax_grossesse_history');
       url.addParam('grossesse_id', '{{$grossesse->_id}}');
       url.requestUpdate('list_historique');
@@ -53,9 +53,9 @@
   };
 
   afterCreationConsultNow = function(_id) {
-    var url = new Url("dPcabinet", "edit_consultation", "tab");
+    var url = new Url("dPcabinet", "edit_consultation");
     url.addParam("selConsult", _id);
-    url.modal({width: '95%',height: '95%', onclose: reloadHistorique});
+    url.modal({width: '95%',height: '95%', afterClose: reloadHistorique});
   };
 
   editSejour = function(_id, grossesse_id, patiente_id) {
