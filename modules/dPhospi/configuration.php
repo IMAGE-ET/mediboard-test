@@ -17,6 +17,7 @@ CConfiguration::register(
       "dPhospi" => array(
         "CAffectation" => array(
           "create_affectation_tolerance" => "num min|2 max|120 default|2",
+          "sejour_default_affectation"   => "bool default|0",
         ),
         "vue_tableau" =>  array(
           "show_labo_results" => "bool default|1",
