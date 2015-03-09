@@ -9,9 +9,15 @@
     {{foreach from=$cste_grid.grid item=_constante key=_datetime}}
       <th style="text-align: center; vertical-align: top; font-size: 0.9em;" class="text">
         {{$_datetime|substr:0:18|date_format:$conf.datetime}}
-        
+
         {{if $_constante.comment}}
-          <img src="style/mediboard/images/buttons/comment.png" title="{{$_constante.comment}}">
+          {{if @$app->user_prefs.constantes_show_comments_tooltip}}
+            <img src="style/mediboard/images/buttons/comment.png" title="{{$_constante.comment}}">
+          {{else}}
+            <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
+              {{$_constante.comment}}
+            </div>
+          {{/if}}
         {{/if}}
       </th>
     {{/foreach}}

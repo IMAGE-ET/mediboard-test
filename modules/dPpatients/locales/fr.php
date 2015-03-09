@@ -3794,3 +3794,5 @@ $locales['pref-update_patient_from_vitale_behavior-desc'] = 'Permet de choisir l
 $locales['pref-update_patient_from_vitale_behavior-never'] = 'Jamais';
 $locales['pref-vCardExport'] = 'Afficher les boutons d\'export vCard';
 $locales['pref-vCardExport-desc'] = 'Afficher les boutons d\'export vCard';
+$locales['pref-constantes_show_comments_tooltip'] = 'Afficher les commentaires des constantes en tooltip';
+$locales['pref-constantes_show_comments_tooltip-desc'] = 'Afficher les commentaires des constantes sous forme de tooltip, dans le mode tableau';

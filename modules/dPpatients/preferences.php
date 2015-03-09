@@ -18,4 +18,5 @@ CPreferences::$modules["dPpatients"] = array (
   "sort_atc_by_date",
   'update_patient_from_vitale_behavior',
   'new_date_naissance_selector',
+  'constantes_show_comments_tooltip',
 );
