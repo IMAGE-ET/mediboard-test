@@ -1,45 +1,39 @@
-<table class="main">
-  
-<tr>
-  <td class="halfPane">
-    <a href="#" onclick="Infrastructure.showInfrastructure('secteur_id', '0', 'infrastructure_secteur')" class="button new">
-      {{tr}}CSecteur-title-create{{/tr}}
-    </a>
-    
-    <!-- Liste des secteurs -->
-    <table class="tbl">
-      <tr>
-        <th colspan="3" class="title">
-          {{tr}}CSecteur.all{{/tr}}
-        </th>
-      </tr>
-      <tr>
-        <th>{{mb_title class=CSecteur field=nom}}</th>
-        <th>{{mb_title class=CSecteur field=description}}</th>
-      </tr>
-  
-      {{foreach from=$secteurs item=_secteur}}
-      <tr {{if $_secteur->_id == $secteur->_id}} class="selected" {{/if}}>
-        <td>
-          <a href="#" onclick="Infrastructure.showInfrastructure('secteur_id', '{{$_secteur->_id}}', 'infrastructure_secteur')">
-            {{mb_value object=$_secteur field=nom}}
-          </a>
-        </td>
-        <td class="text">{{mb_value object=$_secteur field=description}}</td>
-      </tr>
-      {{foreachelse}}
-        <tr>
-          <td class="empty" colspan="2">
-            {{tr}}CSecteur.none{{/tr}}
-          </td>
-        </tr>
+<table class="tbl">
+  <tr>
+    <th colspan="4" class="title">
+      <button type="button" onclick="Infrastructure.addeditSecteur('0')" class="button new compact" style="float:left;">
+        {{tr}}CSecteur-title-create{{/tr}}
+      </button>
+      {{tr}}CSecteur.all{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th></th>
+    <th>{{mb_title class=CSecteur field=nom}}</th>
+    <th>{{tr}}CService.all{{/tr}}</th>
+    <th>{{mb_title class=CSecteur field=description}}</th>
+  </tr>
+
+  {{foreach from=$secteurs item=_secteur}}
+  <tr>
+    <td class="narrow">
+      <button class="button edit notext compact" onclick="Infrastructure.addeditSecteur('{{$_secteur->_id}}')"></button>
+    </td>
+    <td class="text" style="width: 20%">{{mb_value object=$_secteur field=nom}}</td>
+    <td class="narrow columns-2">
+      {{foreach from=$_secteur->_ref_services item=_service}}
+        <div class="compact">{{mb_value object=$_service field=nom}}</div>
+        {{foreachelse}}
+        {{tr}}CService.none{{/tr}}
       {{/foreach}}
-    </table>
-  </td> 
+    </td>
+    <td class="text">{{mb_value object=$_secteur field=description}}</td>
 
-  <td class="halfPane" id="infrastructure_secteur">
-    {{mb_include module=hospi template=inc_vw_secteur}}
-  </td>
-</tr>
-
+  </tr>
+  {{foreachelse}}
+    <tr>
+      <td class="empty" colspan="2">{{tr}}CSecteur.none{{/tr}}</td>
+    </tr>
+  {{/foreach}}
 </table>
+

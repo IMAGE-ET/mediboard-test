@@ -910,6 +910,91 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`inactivation_date`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.99";
+    $this->makeRevision("0.99");
+
+    $query = "ALTER TABLE `secteur`
+                CHANGE `group_id` `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `typologie` VARCHAR (255),
+                ADD `code` VARCHAR (80) NOT NULL,
+                ADD `short_name` VARCHAR (255),
+                ADD `user_id` INT (11) UNSIGNED,
+                ADD `opening_reason` TEXT,
+                ADD `opening_date` DATE,
+                ADD `closing_reason` TEXT,
+                ADD `closing_date` DATE,
+                ADD `activation_date` DATE,
+                ADD `inactivation_date` DATE";
+    $this->addQuery($query);
+
+    $query = "UPDATE `secteur` SET `code` = `nom`";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `secteur`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`opening_date`),
+                ADD INDEX (`closing_date`),
+                ADD INDEX (`activation_date`),
+                ADD INDEX (`inactivation_date`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.00");
+    $query = "ALTER TABLE `chambre`
+                CHANGE `rank` `rank` MEDIUMINT (9),
+                ADD `typologie` VARCHAR (255),
+                ADD `code` VARCHAR (80) NOT NULL,
+                ADD `short_name` VARCHAR (255),
+                ADD `description` TEXT,
+                ADD `user_id` INT (11) UNSIGNED,
+                ADD `opening_reason` TEXT,
+                ADD `opening_date` DATE,
+                ADD `closing_reason` TEXT,
+                ADD `closing_date` DATE,
+                ADD `activation_date` DATE,
+                ADD `inactivation_date` DATE;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `chambre` SET `code` = `nom`";
+    $this->addQuery($query);
+    $query = "UPDATE `chambre` SET `description` = `caracteristiques`";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `chambre`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`opening_date`),
+                ADD INDEX (`closing_date`),
+                ADD INDEX (`activation_date`),
+                ADD INDEX (`inactivation_date`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.01");
+    $query = "ALTER TABLE `lit`
+                CHANGE `chambre_id` `chambre_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                CHANGE `rank` `rank` MEDIUMINT (9),
+                ADD `typologie` VARCHAR (255),
+                ADD `code` VARCHAR (80) NOT NULL,
+                ADD `short_name` VARCHAR (255),
+                ADD `description` TEXT,
+                ADD `user_id` INT (11) UNSIGNED,
+                ADD `opening_reason` TEXT,
+                ADD `opening_date` DATE,
+                ADD `closing_reason` TEXT,
+                ADD `closing_date` DATE,
+                ADD `activation_date` DATE,
+                ADD `inactivation_date` DATE;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `lit` SET `code` = `nom`";
+    $this->addQuery($query);
+    $query = "UPDATE `lit` SET `description` = `nom_complet`";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `lit`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`opening_date`),
+                ADD INDEX (`closing_date`),
+                ADD INDEX (`activation_date`),
+                ADD INDEX (`inactivation_date`);";
+    $this->addQuery($query);
+    $this->mod_version = "1.02";
   }
 }

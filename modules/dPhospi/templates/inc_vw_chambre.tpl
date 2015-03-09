@@ -1,3 +1,12 @@
+{{*
+ * $Id$
+ *
+ * @category Hospi
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org*}}
+
 {{mb_script module=dPhospi script=infrastructure ajax=true}}
 <form name="edit{{$chambre->_guid}}" action="" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close.curry()});">
   {{mb_key object=$chambre}}
@@ -5,12 +14,13 @@
   {{if !$chambre->_id}}
     <input type="hidden" name="callback"  value="Infrastructure.addeditChambreCallback"/>
   {{/if}}
+  <input type="hidden" name="code" value="{{$chambre->nom}}" />
   <table class="form">
     {{mb_include module=system template=inc_form_table_header_uf object=$chambre tag=$tag_chambre}}
 
     <tr>
       <th>{{mb_label object=$chambre field=nom}}</th>
-      <td>{{mb_field object=$chambre field=nom}}</td>
+      <td>{{mb_field object=$chambre field=nom onchange="Infrastructure.setValueForm('edit`$chambre->_guid`', 'code', this.value)"}}</td>
     </tr>
 
     <tr>

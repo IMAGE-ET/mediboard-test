@@ -15,13 +15,11 @@ $use_uf         = CValue::get("uf_id");
 $uf_id          = CValue::getOrSession("uf_id");
 $use_prestation = CValue::get("prestation_id");
 $prestation_id  = CValue::getOrSession("prestation_id");
-$use_secteur    = CValue::get("secteur_id");
-$secteur_id     = CValue::getOrSession("secteur_id");
-
 $group = CGroups::loadCurrent();
 
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
+$praticiens = CAppUI::$user->loadPraticiens();
 
 if ($use_uf != null) {
   // Chargement de l'uf à ajouter/éditer
@@ -64,18 +62,9 @@ if ($use_prestation != null) {
   $prestations = $prestation->loadList(null, $order);
   foreach ($prestations as $_prestation) {
     $_prestation->loadRefGroup();
+    $_prestation->loadRefsNotes();
   }
 }
-
-if ($use_secteur != null) {
-  $secteur = new CSecteur;
-  $secteur->group_id = $group->_id;
-  $secteur->load($secteur_id);
-  $secteur->loadRefsNotes();
-  $secteur->loadRefsServices();
-}
-
-$praticiens = CAppUI::$user->loadPraticiens();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -92,8 +81,4 @@ if ($use_uf != null) {
 elseif ($use_prestation != null) {
   $smarty->assign("prestation", $prestation);
   $smarty->display("inc_vw_prestation.tpl");
-}
-elseif ($use_secteur != null) {
-  $smarty->assign("secteur", $secteur);
-  $smarty->display("inc_vw_secteur.tpl");
 }

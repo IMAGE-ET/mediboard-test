@@ -12,7 +12,7 @@
 /**
  * Secteur d'établissement, regroupe des services
  */
-class CSecteur extends CMbObject {
+class CSecteur extends CInternalStructure {
   // DB Table key
   public $secteur_id;
   
@@ -65,5 +65,21 @@ class CSecteur extends CMbObject {
    */
   function loadRefsServices() {
     return $this->_ref_services = $this->loadBackRefs("services", "nom");
+  }
+
+  /**
+   * @see parent::mapEntityTo()
+   */
+  function mapEntityTo () {
+    $this->_name = $this->nom;
+  }
+
+  /**
+   * @see parent::mapEntityFrom()
+   */
+  function mapEntityFrom () {
+    if ($this->_name != null) {
+      $this->nom = $this->_name;
+    }
   }
 }

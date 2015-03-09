@@ -16,6 +16,22 @@ Infrastructure = window.Infrastructure || {
     url.requestUpdate(update_name);
   },
 
+  addeditSecteur :function (secteur_id) {
+    var width = 800;
+    var height = 400;
+    if (secteur_id == 0) {
+      width = 300;
+      height = 200;
+    }
+    var url = new Url("dPhospi", "ajax_addedit_secteur");
+    url.addParam('secteur_id', secteur_id);
+    url.requestModal(width, height, {onClose: function () {
+      var url = new Url("dPhospi", "ajax_list_infrastructure");
+      url.addParam("type_name", 'secteurs');
+      url.requestUpdate('secteurs');
+    }});
+  },
+
   addeditService :function (service_id) {
     var url = new Url("dPhospi", "ajax_addedit_service");
     url.addParam('service_id', service_id);
@@ -45,8 +61,8 @@ Infrastructure = window.Infrastructure || {
     }});
   },
 
-  addeditChambreCallback: function(chambre_id, obj) {
-  Infrastructure.addeditChambre(chambre_id, obj.service_id);
+  addeditChambreCallback : function(chambre_id, obj) {
+    Infrastructure.addeditChambre(chambre_id, obj.service_id);
   },
 
   addLit: function(chambre_id, lit_id, update_name) {
@@ -90,8 +106,8 @@ Infrastructure = window.Infrastructure || {
     url.requestUpdate(container);
   },
 
-  setValueFormLit : function(name_input, value_input) {
-  var form = getForm("editLit");
+  setValueForm : function(name_form, name_input, value_input) {
+    var form = getForm(name_form);
     $V(form[name_input], value_input);
   }
 

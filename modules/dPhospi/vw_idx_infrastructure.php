@@ -16,19 +16,11 @@ $service_id    = CValue::getOrSession("service_id");
 $chambre_id    = CValue::getOrSession("chambre_id");
 $lit_id        = CValue::getOrSession("lit_id");
 $uf_id         = CValue::getOrSession("uf_id");
-$prestation_id = CValue::getOrSession("prestation_id");
 
 $group = CGroups::loadCurrent();
 
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
-
-// Chargement du secteur à ajouter / éditer
-$secteur = new CSecteur;
-$secteur->group_id = $group->_id;
-$secteur->load($secteur_id);
-$secteur->loadRefsNotes();
-$secteur->loadRefsServices();
 
 // Récupération des chambres/services/secteurs
 $where = array();
@@ -43,8 +35,13 @@ foreach ($services as $_service) {
     $_chambre->loadRefsLits(true);
   }
 }
-
+// Chargement du secteur à ajouter / éditer?$secteur = new CSecteur;
+$secteur= new CSecteur();
 $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
+foreach ($secteurs as $_secteur) {
+  /** @var CSecteur $_secteur */
+  $_secteur->loadRefsServices();
+}
 
 // Chargement de l'uf à ajouter/éditer
 $uf = new CUniteFonctionnelle();
@@ -76,17 +73,6 @@ if (CSQLDataSource::get("sae") && CModule::getActive("atih")) {
   $ums_infos = $um_infos->loadList($where);
 }
 
-// Chargement de la prestation à ajouter/éditer
-$prestation = new CPrestation();
-$prestation->group_id = $group->_id;
-$prestation->load($prestation_id);
-$prestation->loadRefsNotes();
-
-// Récupération des prestations
-$presta = new CPrestation;
-$presta->group_id = $group->_id;
-$prestations = $presta->loadMatchingList("nom");
-
 $praticiens = CAppUI::$user->loadPraticiens();
 
 // Création du template
@@ -99,8 +85,6 @@ $smarty->assign("ufs"           , $ufs);
 $smarty->assign("uf"            , $uf);
 $smarty->assign("ums"           , $ums);
 $smarty->assign("ums_infos"     , $ums_infos);
-$smarty->assign("prestations"   , $prestations);
-$smarty->assign("prestation"    , $prestation);
 $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 

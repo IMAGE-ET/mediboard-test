@@ -14,7 +14,7 @@
  * @abstract Gère les chambre d'hospitalisation
  * - contient des lits
  */
-class CChambre extends CMbObject {
+class CChambre extends CInternalStructure {
   
   static $_prefixe;
   
@@ -121,6 +121,26 @@ class CChambre extends CMbObject {
    */
   function loadRefsFwd() {
     $this->loadRefService();
+  }
+
+  /**
+   * @see parent::mapEntityTo()
+   */
+  function mapEntityTo () {
+    $this->_name = $this->nom;
+    $this->description = $this->caracteristiques;
+  }
+
+  /**
+   * @see parent::mapEntityFrom()
+   */
+  function mapEntityFrom () {
+    if ($this->_name != null) {
+      $this->nom = $this->_name;
+    }
+    if ($this->description != null) {
+      $this->caracteristiques = $this->description;
+    }
   }
 
   /**

@@ -5,25 +5,23 @@
     </th>
   </tr>
   <tr>
-    <th class="category" class="narrow"></th>
-    <th class="category">{{mb_label class=CService field=nom}}</th>
-    <th class="category text">{{mb_label class=CService field=description}}</th>
+    <td class="columns-2">
+      <ul id="itemTags" class="tags" style="float: none">
+        {{foreach from=$secteur->_ref_services item=_service}}
+          <li class="tag">
+            <button type="button" class="delete"  style="display: inline-block !important;"
+                    onclick="removeService('{{$_service->_id}}')">
+            </button>
+            <span> {{mb_value object=$_service field=nom}}</span>
+            <span class="compact">{{mb_value object=$_service field=description}}</span>
+          </li>
+          <br/>
+          {{foreachelse}}
+          <span class="empty">{{tr}}CService.none{{/tr}}</span>
+        {{/foreach}}
+      </ul>
+    </td>
   </tr>
-  {{foreach from=$secteur->_ref_services item=_service}}
-    <tr>
-      <td>
-        <button type="button" class="cancel notext" onclick="removeService('{{$_service->_id}}')"></button>
-      </td>
-      <td>
-        {{mb_value object=$_service field=nom}}
-      </td>
-      <td>
-        {{mb_value object=$_service field=description}}
-      </td>
-    </tr>
-  {{foreachelse}}
-    <tr>
-      <td class="empty" colspan="2">{{tr}}CService.none{{/tr}}</td>
-    </tr>
-  {{/foreach}}
 </table>
+
+

@@ -12,7 +12,7 @@
 /**
  * Gère les lits d'hospitalisation
  */
-class CLit extends CMbObject {
+class CLit extends CInternalStructure {
   static $_prefixe = null;
   
   // DB Table key
@@ -89,6 +89,26 @@ class CLit extends CMbObject {
     $specs["annule"]      = "bool default|0";
     $specs["rank"]        = "num max|999";
     return $specs;
+  }
+
+  /**
+   * @see parent::mapEntityTo()
+   */
+  function mapEntityTo () {
+    $this->_name = $this->nom;
+    $this->description = $this->nom_complet;
+  }
+
+  /**
+   * @see parent::mapEntityFrom()
+   */
+  function mapEntityFrom () {
+    if ($this->_name != null) {
+      $this->nom = $this->_name;
+    }
+    if ($this->description != null) {
+      $this->nom_complet = $this->description;
+    }
   }
 
   /**

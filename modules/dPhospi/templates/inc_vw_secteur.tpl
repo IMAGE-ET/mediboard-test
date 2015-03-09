@@ -1,14 +1,15 @@
-<form name="Edit-CSecteur" action="" method="post" onsubmit="return submit_Ajax(this, 'secteurs')">
+<form name="Edit-CSecteur" action="" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Control.Modal.close();}});">
   {{mb_key object=$secteur}}
   {{mb_class object=$secteur}}
   {{mb_field object=$secteur field=group_id hidden=true}}
-  
+  {{mb_field object=$secteur field=code hidden=true value=$secteur->nom}}
+
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$secteur}}
-  
+
     <tr>
       <th>{{mb_label object=$secteur field=nom}}</th>
-      <td>{{mb_field object=$secteur field=nom}}</td>
+      <td>{{mb_field object=$secteur field=nom onchange="Infrastructure.setValueForm('Edit-CSecteur', 'code', this.value)"}}</td>
     </tr>
     
     <tr>
@@ -53,7 +54,7 @@
         }
       });
     });
-    
+
     removeService = function(service_id) {
       var oForm = getForm('delService');
       $V(oForm.service_id, service_id);
@@ -61,7 +62,7 @@
         oForm.onsubmit();
       }
     }
-    
+
     reloadServices = function() {
       var url = new Url('dPhospi', 'ajax_services_secteur');
       url.addParam('secteur_id', '{{$secteur->_id}}');
@@ -75,13 +76,13 @@
     <input type="hidden" name="secteur_id" value="{{$secteur->_id}}" />
     <input type="text"   name="_service_autocomplete"/>
   </form>
-  
+
   <form name="delService" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadServices})">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_service_aed" />
     <input type="hidden" name="service_id" value="" />
     <input type="hidden" name="secteur_id" value="" />
   </form>
-  
+
   {{mb_include module=hospi template=inc_services_secteur}}
 {{/if}}
