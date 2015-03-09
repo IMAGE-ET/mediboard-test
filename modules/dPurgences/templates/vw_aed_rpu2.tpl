@@ -160,6 +160,16 @@
               {{/if}}
             </td>
           </tr>
+
+          {{if "maternite"|module_active && @$modules.maternite->_can->read && (!$patient || $patient->sexe != "m")}}
+            <tr>
+              <th>{{tr}}CGrossesse{{/tr}}</th>
+              <td>
+                {{mb_include module=maternite template=inc_input_grossesse object=$sejour patient=$patient}}
+              </td>
+            </tr>
+          {{/if}}
+
           <tr>
             <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
             <td>
