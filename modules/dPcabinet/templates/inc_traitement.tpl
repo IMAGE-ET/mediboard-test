@@ -161,7 +161,7 @@
       </td>
     </tr>
     <tr>
-      <td class="text" style="height: 40px"><button class="edit">Represcrire</button></td>
+      <td class="text" style="height: 40px"><button class="edit">Represcrire en modifiant</button></td>
       <td>
         <ul>
           <li>Represcription du traitement personnel</li>
@@ -335,7 +335,7 @@
                         Arrêter
                       </button>
                       <button type="button" class="edit" onclick="addToTokenPoso{{$addform}}(0);submitAndCallback(this.form, 'modifyLineTP');">
-                        Represcrire
+                        Represcrire en modifiant
                       </button>
                       {{if $sejour_id}}
                         <button type="button" class="right" onclick="addToTokenPoso{{$addform}}(0); if (checkPosos()) { submitAndCallback(this.form, 'poursuivreLineTP'); }">

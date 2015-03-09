@@ -333,13 +333,13 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type liste
    *
-   * @param string $field Nom du champ
-   * @param array  $items Liste de valeurs
-   *
+   * @param string $field       Nom du champ
+   * @param array  $items       Liste de valeurs
+   * @param boolean $htmlescape [optional]
    * @return void
    */
-  function addListProperty($field, $items = null) {
-    $this->addProperty($field, $this->makeList($items), null, false);
+  function addListProperty($field, $items = null, $htmlescape = true) {
+    $this->addProperty($field, $this->makeList($items, $htmlescape), null, false);
   }
 
   /**
@@ -357,11 +357,12 @@ class CTemplateManager {
   /**
    * Génération de la source html pour la liste d'items
    *
-   * @param array $items liste d'items
+   * @param array   $items      liste d'items
+   * @param boolean $htmlescape [optional]
    *
    * @return string|null
    */
-  function makeList($items) {
+  function makeList($items, $htmlescape = true) {
     if (!$items) {
       return null;
     }
@@ -372,7 +373,9 @@ class CTemplateManager {
     }
 
     // Escape content
-    $items = array_map(array("CMbString", "htmlEntities"), $items);
+    if ($htmlescape) {
+      $items = array_map(array("CMbString", "htmlEntities"), $items);
+    }
 
     // HTML production
     switch ($default = CAppUI::pref("listDefault")) {
