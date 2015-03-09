@@ -289,13 +289,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
 header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
-$ie_mode = CAppUI::conf("browser_enable_ie9");
-$map = array(
-  0 => 9, // Force IE9 min
-  1 => 9,
-  2 => "edge",
-);
-header("X-UA-Compatible: IE=".CValue::read($map, $ie_mode)); // Force IE document mode
+header("X-UA-Compatible: IE=edge"); // Force IE document mode
 
 // Show errors to admin
 ini_set("display_errors", CAppUI::pref("INFOSYSTEM"));

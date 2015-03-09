@@ -149,8 +149,6 @@
     </tr>
     {{/foreach}}
     
-    {{mb_include module=system template=inc_config_enum var=browser_enable_ie9 m=null values="1|2"}}
-    
     <tr>
       <th colspan="2" class="title">
         Mode migration
