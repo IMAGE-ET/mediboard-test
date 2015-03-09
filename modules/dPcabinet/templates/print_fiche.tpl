@@ -260,7 +260,7 @@
         </tr>
         {{/if}}
         <tr>
-          <td colspan="2">
+          <td colspan="2" class="text">
             Né{{if $patient->sexe != "m"}}e{{/if}} le {{mb_value object=$patient field=naissance}}
             ({{$patient->_age}})
             - sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}<br />
@@ -269,6 +269,9 @@
             {{if $const_med->taille}}<strong>{{$const_med->taille}} cm</strong> - {{/if}}
             {{if $const_med->_imc}}IMC : <strong>{{$const_med->_imc}}</strong>
               {{if $const_med->_imc_valeur}}({{$const_med->_imc_valeur}}){{/if}}
+            {{/if}}
+            {{if $const_med->_poids_ideal}}
+              - Poids idéal : <strong>{{$const_med->_poids_ideal}} kg</strong>
             {{/if}}
           </td>
         </tr>
