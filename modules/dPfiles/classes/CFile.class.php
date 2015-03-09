@@ -1011,6 +1011,39 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
     return $body;
   }
+
+  /**
+   * Shrink a PDF. If destination path, the file is overwritten
+   *
+   * @param string $file_path Path to the PDF to shrink
+   * @param string $dest_path Optional file path destination
+   *
+   * @return bool
+   */
+  static function shrinkPDF($file_path, $dest_path = "") {
+    if (!is_file($file_path)) {
+      return false;
+    }
+
+    $move_to_original = false;
+    if (!$dest_path) {
+      $dest_path = dirname($file_path) . "/copy_" . basename($file_path);
+      $move_to_original = true;
+    }
+
+    $root_dir = CAppUI::conf("root_dir");
+
+    $command = $root_dir . "/modules/dPfiles/script/shrinkpdf.sh " . escapeshellarg($file_path) . " " . escapeshellarg($dest_path);
+
+    exec($command , $output, $res);
+
+    if ($res === 0 && $move_to_original) {
+      unlink($file_path);
+      rename($dest_path, $file_path);
+    }
+
+    return $res === 0;
+  }
 }
 
 // We have to replace the backslashes with slashes because of PHPthumb on Windows

@@ -53,7 +53,7 @@ else {
   }
   else {
     $where = array();
-    $where["file_size"] = " = '0'";
+    $where["doc_size"] = " = '0'";
 
     /** @var CFile[] $files */
     $files = $file->loadList($where, null, $nb_files);
