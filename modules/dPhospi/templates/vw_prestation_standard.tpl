@@ -1,5 +1,5 @@
 {{mb_include template=inc_warning_config_prestations wanted=standard}}
-
+{{mb_script module=dPhospi script=infrastructure}}
 <table class="main">
 
 <tr>

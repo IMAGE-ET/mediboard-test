@@ -32,7 +32,6 @@ function viewStatUf(uf_id){
   <li><a href="#secteurs">{{tr}}CSecteur{{/tr}} {{if $secteurs|@count}}({{$secteurs|@count}}){{/if}}</a></li>
   <li><a href="#services">{{tr}}CService{{/tr}} {{if $services|@count}}({{$services|@count}}){{/if}}</a></li>
   <li><a href="#UF">{{tr}}CUniteFonctionnelle{{/tr}}</a></li>
-  <li><a href="#prestations">{{tr}}CPrestation{{/tr}} {{if $prestations|@count}}({{$prestations|@count}}){{/if}}</a></li>
   <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
 </ul>
 <hr class="control_tabs" />
@@ -47,8 +46,4 @@ function viewStatUf(uf_id){
 
 <div id="UF" style="display: none;">
   {{mb_include template="inc_vw_idx_ufs"}}
-</div>
-
-<div id="prestations" style="display: none;">
-  {{mb_include template="inc_vw_idx_prestations"}}
 </div>
