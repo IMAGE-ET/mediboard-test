@@ -52,5 +52,17 @@ Sejour = {
       height    : "95%",
       afterClose: callback
     });
+  },
+
+  showDossierPmsi : function (sejour_id, patient_id, callback) {
+    callback = callback || this.modalCallback;
+    var url = new Url("dPpmsi", "vw_dossier_pmsi");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("patient_id", patient_id);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: callback
+    });
   }
 };

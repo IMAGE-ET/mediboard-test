@@ -7,6 +7,13 @@
 
 {{mb_script module=planningOp script=prestations ajax=1}}
 {{mb_script module=hospi script=modele_etiquette ajax=1}}
+
+{{if @$modules.dPpmsi->_can->edit}}
+  {{mb_script module=pmsi script=pmsi ajax=true}}
+  {{mb_script module=planningOp script=cim10_selector ajax=true}}
+  {{mb_script module=patients script=pat_selector ajax=true}}
+{{/if}}
+
 {{assign var=sejour       value=$object}}
 {{assign var=patient      value=$object->_ref_patient}}
 {{assign var=operations   value=$object->_ref_operations}}
@@ -114,6 +121,12 @@
       <button type="button" class="search" onclick="Sejour.showDossierSoinsModal('{{$sejour->_id}}')">
         {{tr}}module-soins-court{{/tr}}
       </button>
+      {{/if}}
+
+      {{if @$modules.dPpmsi->_can->edit}}
+        <button type="button" class="search" onclick="Sejour.showDossierPmsi('{{$sejour->_id}}', '{{$patient->_id}}');">
+          {{tr}}mod-dPpmsi-tab-vw_dossier_pmsi{{/tr}}
+        </button>
       {{/if}}
 
       {{if $sejour->type == "ssr" && @$modules.ssr->_can->read}}
