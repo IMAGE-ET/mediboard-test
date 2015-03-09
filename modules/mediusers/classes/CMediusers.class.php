@@ -360,6 +360,10 @@ class CMediusers extends CPerson {
     $backProps["remplacements"]                    = "CPlageConge replacer_id";
     $backProps["sejours"]                          = "CSejour praticien_id";
     $backProps["services"]                         = "CService responsable_id";
+    $backProps["services_entity"]                  = "CService user_id";
+    $backProps["secteurs"]                         = "CSecteur user_id";
+    $backProps["groups"]                           = "CGroups user_id";
+    $backProps["legal_entities"]                   = "CLegalEntity user_id";
     $backProps["tarifs"]                           = "CTarif chir_id";
     $backProps["techniciens"]                      = "CTechnicien kine_id";
     $backProps["temps_hospi"]                      = "CTempsHospi praticien_id";
