@@ -1,9 +1,7 @@
 <script>
   Main.add(function() {
-    if (window.tabsConsult || window.tabsConsultAnesth) {
-      var count_items = {{$object->_ref_files|@count}};
-      count_items += $("documents-fdr").select("a").length;
-      Control.Tabs.setTabCount("fdrConsult", count_items);
+    if (window.updateCountTab) {
+      updateCountTab();
     }
   });
 </script>

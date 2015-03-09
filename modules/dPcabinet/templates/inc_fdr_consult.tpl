@@ -1,6 +1,29 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
 
+<script>
+  updateCountTab = function() {
+    var count_items = 0;
+    var items = ["documents-fdr", "files-fdr", "documents-CSejour", "files-CSejour"];
+    for (i in items) {
+      var item = items[i];
+      if (Object.isFunction(item)) {
+        continue;
+      }
+      var elt = $(item);
+      if (elt) {
+        count_items += elt.select(".docitem").length;
+      }
+    }
+    var tab_presc = $("prescription-CConsultation-fdr");
+    if (tab_presc && tab_presc.down("table")) {
+      count_items++;
+    }
+
+    Control.Tabs.setTabCount("fdrConsult", count_items);
+  }
+</script>
+
 <table class="form">
   <tr>
     {{mb_ternary var=object test=$consult->_refs_dossiers_anesth|@count value=$consult->_ref_consult_anesth other=$consult}}

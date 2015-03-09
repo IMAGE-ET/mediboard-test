@@ -2623,7 +2623,16 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
         case "fdrConsult":
           $consult->countDocs();
           $consult->countFiles();
+          $consult->loadRefsPrescriptions();
           $tabs_count[$_tab] = $consult->_nb_docs + $consult->_nb_files;
+          if (isset($consult->_ref_prescriptions["externe"])) {
+            $tabs_count[$_tab]++;
+          }
+          if ($sejour->_id) {
+            $sejour->countDocs();
+            $sejour->countFiles();
+            $tabs_count[$_tab] += $sejour->_nb_docs + $sejour->_nb_files;
+          }
           break;
         case "reglement":
           $consult->loadRefFacture()->loadRefsReglements();

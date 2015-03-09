@@ -1,9 +1,7 @@
 <script>
   Main.add(function() {
-    if (window.tabsConsult || window.tabsConsultAnesth) {
-      var count_items = {{$object->_ref_documents|@count}};
-      count_items += $("files-fdr").select("a[class=action]").length;
-      Control.Tabs.setTabCount("fdrConsult", count_items);
+    if (window.updateCountTab) {
+      updateCountTab();
     }
   });
 </script>
@@ -35,7 +33,7 @@
   
   {{foreach from=$object->_ref_documents item=document}}
   <tr {{if $document->annule}}style="display: none;" class="doc_cancelled"{{/if}}>
-    <td class="text {{if $document->annule}}cancelled{{/if}}">
+    <td class="text docitem {{if $document->annule}}cancelled{{/if}}">
       {{if $document->_can->read}}
         <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
       {{/if}}

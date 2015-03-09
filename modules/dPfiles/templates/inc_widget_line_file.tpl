@@ -1,6 +1,6 @@
 <table class="form">
   <tr {{if $_file->annule}}style="display: none;" class="file_cancelled"{{/if}}>
-    <td class="text {{if $_file->annule}}cancelled{{/if}}">
+    <td class="text docitem {{if $_file->annule}}cancelled{{/if}}">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
          onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>
