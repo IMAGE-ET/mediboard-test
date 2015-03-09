@@ -301,6 +301,7 @@ class CActeCCAM extends CActe {
    * @return void
    */
   function setFullCode($code){
+    ml('CActeCCAM::setFullCode()');
     $details = explode("-", $code);
     if (count($details) > 2) {
       $this->code_acte     = $details[0];
@@ -581,7 +582,7 @@ class CActeCCAM extends CActe {
 
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
       // Si on crée un nouvel acte, on relance l'analyse du codage
-      if (!$oldObject->_id) {
+      if (!$oldObject->_id && !$this->code_association) {
         $codage->updateRule(true);
         if ($msg = $codage->store()) {
           return $msg;
