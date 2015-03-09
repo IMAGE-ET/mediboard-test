@@ -150,7 +150,7 @@ $reglement = new CReglement();
 
 // Chargement des banques
 $banques = array();
-if ($consult->_du_restant_patient) {
+if ($consult->_du_restant_patient || $consult->_du_restant_tiers) {
   $banque = new CBanque();
   $banques = $banque->loadList(null, "nom ASC");
 }
