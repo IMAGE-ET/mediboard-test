@@ -73,4 +73,11 @@
     <td colspan="10" class="empty">Pas d'admission ce mois</td>
   </tr>
   {{/foreach}}
+
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong>{{$totaux.num1|smarty:nodefaults}}</strong></td>
+    <td><strong>{{$totaux.num3|smarty:nodefaults}}</strong></td>
+    <td><strong>{{$totaux.num2|smarty:nodefaults}}</strong></td>
+  </tr>
 </table>

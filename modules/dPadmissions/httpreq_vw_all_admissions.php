@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -151,6 +150,18 @@ if (CAppUI::conf("ref_pays") == "2") {
   }
 }
 
+$totaux = array(
+  "num1" => "0",
+  "num2" => "0",
+  "num3" => "0",
+);
+
+foreach ($days as $day) {
+  $totaux["num1"] += $day["num1"];
+  $totaux["num2"] += $day["num2"];
+  $totaux["num3"] += $day["num3"];
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -165,5 +176,6 @@ $smarty->assign('date'         , $date);
 $smarty->assign('lastmonth'    , $lastmonth);
 $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
+$smarty->assign('totaux'       , $totaux);
 
 $smarty->display('inc_vw_all_admissions.tpl');
