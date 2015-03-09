@@ -93,7 +93,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       "cesarienne"            => "En césarienne (v. 2014-01)",
     ),
     2 => array(
-      "normal_ch"            => "Au bloc opératoire (v. 2014-08)",
+      "normal_ch"             => "Au bloc opératoire (v. 2014-08)",
+      "endoscopie"            => "En endoscopie digestive (v. 2013-01)",
     ),
   );
 
