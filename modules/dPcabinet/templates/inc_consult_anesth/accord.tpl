@@ -104,6 +104,12 @@
     url.requestUpdate("Exams");
   }
 
+  function loadResultLabo () {
+    var url = new Url("Imeds", "httpreq_vw_patient_results");
+    url.addParam("patient_id", "{{$consult->_ref_patient->_id}}");
+    url.requestUpdate('labo');
+  }
+
   Main.add(function () {
     tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false, {
       afterChange: function (container) {
@@ -118,6 +124,9 @@
             if (window.guessScoreApfel) {
               guessScoreApfel();
             }
+            break;
+          case 'labo' :
+            loadResultLabo();
             break;
 
           default:
@@ -196,6 +205,14 @@
       Réglements <small>({{$tabs_count.reglement}})</small>
     </a>
   </li>
+
+  {{if "dPImeds"|module_active && (!$consult->_ref_consult_anesth->_ref_sejour || !$consult->_ref_consult_anesth->_ref_sejour->_id)}}
+    <li>
+      <a href="#labo">
+        {{tr}}Labo{{/tr}}
+      </a>
+    </li>
+  {{/if}}
 </ul>
 
 <!-- Tabs -->
@@ -239,3 +256,7 @@
   Reglement.user_id = '{{$userSel->_id}}';
   Reglement.register(false);
 </script>
+
+{{if "dPImeds"|module_active && (!$consult->_ref_consult_anesth->_ref_sejour || !$consult->_ref_consult_anesth->_ref_sejour->_id)}}
+  <div id="labo" style="display: none;"></div>
+{{/if}}

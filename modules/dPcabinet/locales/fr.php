@@ -1743,6 +1743,7 @@ $locales['Cplageconsult-msg-creation_failed_nb%d'] = 'Plage(s) en erreur : %d';
 $locales['Cplageconsult-msg-creation_skipped_nb%d'] = 'Plage(s) déjà existante(s) : %d';
 $locales['Cplageconsult-msg-extend_finished_nb%d_week'] = 'Plage prolongée avec succès sur %d semaines';
 $locales['Filter-by-function'] = 'Filtrer par fonction';
+$locales['Labo'] = 'Labo';
 $locales['Period.weekly'] = 'Semainier';
 $locales['RDV-config'] = 'Prise de RDV';
 $locales['Reglement'] = 'Règlement';
