@@ -24,8 +24,8 @@ $montantTotalActes = 0;
 $praticien = new CMediusers();
 $praticien->load($_prat_id);
 
-$date_min = CMbDT::date("-1 day", $_date_min);
-$date_max = CMbDT::date("+1 day", $_date_max);
+$date_min = "$_date_min 00:00:00";
+$date_max = "$_date_max 23:59:59";
 
 $ljoin = array();
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
