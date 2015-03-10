@@ -1808,27 +1808,42 @@ class CCodageCCAM extends CMbObject {
    */
   protected function checkRuleEG7() {
     $chapters_dentaire = array(
-      '06.02.03.01.',
-      '07.01.04.01',
-      '07.01.08.01',
-      '07.01.14.',
-      '07.02.02.',
+      '07.01.04.01.',
+      '07.01.08.01.',
+      '07.02.02.01.',
+      '07.02.02.03.',
+      '07.02.02.04.',
+      '07.02.02.05.',
+      '07.02.02.06.',
+      '07.02.02.08.',
+      '07.02.02.09.',
+      '07.02.02.10.',
+      '07.02.02.11.',
+      '07.02.02.12.',
+      '07.02.02.15.',
       '07.02.03.',
       '07.02.05.',
       '07.02.06.10.',
-      '11.02.05.',
-      '11.05.02.',
+      '11.02.05.02.',
+      '11.02.05.03.',
+      '11.02.05.04.',
       '18.02.07.01.',
       '18.02.07.06.'
     );
     $exclude_codes = array('HJQD001');
+    $includes_codes = array('LBGA280', 'LBGA441', 'LBGA354',
+      'LBGA049', 'LBGA004', 'LBGA003', 'LBGA002', 'LBGA006',
+      'LBGA007', 'LBGA008', 'LBGA009', 'LBGA139', 'LBGA052',
+      'HBLD057', 'HBLD078', 'HBLD056', 'LBGA168', 'HBLD084',
+      'HBLD084', 'HBMP001', 'LBLD014'
+    );
 
     $nb_bucco_dentaires = 0;
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chapters = $_act->_ref_code_ccam->chapitres;
       if (
         !in_array($_act->code_acte, $exclude_codes) && ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_dentaire)) ||
-          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)))
+          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)) || in_array($_act->code_acte, $includes_codes))
       ) {
         $nb_bucco_dentaires++;
       }
@@ -1854,26 +1869,41 @@ class CCodageCCAM extends CMbObject {
   protected function applyRuleEG7(&$act) {
     $ordered_acts_eg7 = $this->_ordered_acts;
     $chapters_dentaire = array(
-      '06.02.03.01.',
-      '07.01.04.01',
-      '07.01.08.01',
-      '07.01.14.',
-      '07.02.02.',
+      '07.01.04.01.',
+      '07.01.08.01.',
+      '07.02.02.01.',
+      '07.02.02.03.',
+      '07.02.02.04.',
+      '07.02.02.05.',
+      '07.02.02.06.',
+      '07.02.02.08.',
+      '07.02.02.09.',
+      '07.02.02.10.',
+      '07.02.02.11.',
+      '07.02.02.12.',
+      '07.02.02.15.',
       '07.02.03.',
       '07.02.05.',
       '07.02.06.10.',
-      '11.02.05.',
-      '11.05.02.',
+      '11.02.05.02.',
+      '11.02.05.03.',
+      '11.02.05.04.',
       '18.02.07.01.',
       '18.02.07.06.'
     );
     $exclude_codes = array('HJQD001');
+    $includes_codes = array('LBGA280', 'LBGA441', 'LBGA354',
+      'LBGA049', 'LBGA004', 'LBGA003', 'LBGA002', 'LBGA006',
+      'LBGA007', 'LBGA008', 'LBGA009', 'LBGA139', 'LBGA052',
+      'HBLD057', 'HBLD078', 'HBLD056', 'LBGA168', 'HBLD084',
+      'HBLD084', 'HBMP001', 'LBLD014'
+    );
 
     foreach ($this->_ref_actes_ccam_facturables as $_act) {
       $chapters = $_act->_ref_code_ccam->chapitres;
       if (
         !in_array($_act->code_acte, $exclude_codes) && ((isset($chapters[2]) && in_array($chapters[2]['rang'], $chapters_dentaire)) ||
-          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)))
+          (isset($chapters[3]) && in_array($chapters[3]['rang'], $chapters_dentaire)) || in_array($_act->code_acte, $includes_codes))
       ) {
         unset($ordered_acts_eg7[$_act->_id]);
         if ($_act->_id == $act->_id) {
@@ -1894,7 +1924,7 @@ class CCodageCCAM extends CMbObject {
     }
 
     $nb_bucco_dentaires = $this->_check_rules['EG7']['nb_bucco_dentaires'];
-    if (($nb_bucco_dentaires == 2 && !count($ordered_acts_eg7)) || (count($ordered_acts_eg7) == 1)) {
+    if (!count($ordered_acts_eg7) || count($ordered_acts_eg7) == 1) {
       $act->_guess_facturable = '1';
       $act->_guess_association = '4';
       $act->_guess_regle_asso = 'EG7';
