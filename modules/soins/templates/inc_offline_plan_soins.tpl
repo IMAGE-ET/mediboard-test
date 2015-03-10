@@ -38,10 +38,9 @@
       <td colspan="{{$th_chap_colspan}}">
         <table class="main">
           <tr>
-            <td class="text" style="width: 25%; vertical-align: top;">
+            <td class="text" style="width: 20%; vertical-align: top;">
               Impression du {{$now|date_format:$conf.longdate}} à {{$now|date_format:$conf.time}} <br />
 
-              <br />
               <strong>SERVICE :</strong>
 
               {{if isset($service|smarty:nodefaults)}}
@@ -53,7 +52,7 @@
                 &mdash; <strong>LIT : </strong> {{$sejour->_ref_curr_affectation}}
               {{/if}}
             </td>
-            <td style="width: 25%; vertical-align: top;" class="text">
+            <td style="width: 23%; vertical-align: top;" class="text">
               Civilité : {{mb_value object=$patient field=civilite}} {{mb_value object=$patient field=nom}} ({{mb_value object=$patient field=nom_jeune_fille}}) {{mb_value object=$patient field=prenom}}
                ({{$patient->_annees}} ans)
                {{if $patient->_ref_constantes_medicales->poids}}({{$patient->_ref_constantes_medicales->poids}} kg){{/if}}
@@ -61,11 +60,11 @@
               <br />
               Né(e) le : {{mb_value object=$patient field=naissance}}
             </td>
-            <td style="vertical-align: top;" class="text">
+            <td style="width: 23%; vertical-align: top;" class="text">
               NDA : {{$sejour->_NDA}}
               <br />
               {{if $sejour->libelle}}
-                Motif : {{$sejour->libelle}}
+                Motif : {{$sejour->libelle|spancate:25:"...":true}}
                 <br />
               {{/if}}
               Date d'entrée : {{$sejour->entree|date_format:$conf.date}} à {{$sejour->entree|date_format:$conf.time}}
@@ -82,7 +81,7 @@
                 <br />
                 Côté : {{mb_value object=$last_op field=cote}}
                 <br />
-                Libellé : {{mb_value object=$last_op field=libelle}}
+                Libellé : {{$last_op->libelle|spancate:75:"...":true}}
               {{/if}}
             </td>
           </tr>
