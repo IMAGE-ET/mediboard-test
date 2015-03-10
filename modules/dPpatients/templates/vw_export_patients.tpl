@@ -17,13 +17,22 @@
     if ($V(form.auto)) {
       form.onsubmit();
     }
-  }
+  };
+
+  updatePraticienCount = function(){
+    var form = getForm("export-patients");
+    $('praticien-count').update($V(form.elements["praticien_id[]"]).length);
+  };
+
+  Main.add(function(){
+    updatePraticienCount();
+  })
 </script>
 
 <table class="main layout">
   <tr>
-    <th class="narrow">
-      <form name="export-patients" method="post" onsubmit="return onSubmitFormAjax(this, null, 'export-log')">
+    <td class="narrow">
+      <form name="export-patients" method="post" onsubmit="return onSubmitFormAjax(this, {useDollarV: true}, 'export-log')">
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="dosql" value="do_export_patients" />
 
@@ -38,16 +47,17 @@
           </tr>
 
           <tr>
-            <th>
-              <label for="praticien_id">Praticien</label>
+            <th rowspan="3">
+              <label for="praticien_id">Praticiens</label>
             </th>
-            <td>
-              <select name="praticien_id">
-                <option value="">&ndash;</option>
+            <td rowspan="3">
+              <select name="praticien_id[]" multiple size="10" onclick="updatePraticienCount()">
                 {{foreach from=$praticiens item=_prat}}
-                  <option value="{{$_prat->_id}}" {{if $_prat->_id == $praticien->_id}}selected{{/if}}>{{$_prat}}</option>
+                  <option value="{{$_prat->_id}}" {{if in_array($_prat->_id,$praticien_id)}}selected{{/if}}>{{$_prat}}</option>
                 {{/foreach}}
               </select>
+              <br />
+              <span id="praticien-count">0</span> praticiens sélectionnés
             </td>
 
             <th>
@@ -65,7 +75,9 @@
             <td>
               <input type="text" name="start" value="{{$start}}" size="4" />
             </td>
+          </tr>
 
+          <tr>
             <th>
               <label for="start">Pas</label>
             </th>
@@ -73,11 +85,17 @@
               <input type="text" name="step" value="{{$step}}" size="4" />
             </td>
           </tr>
+
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="2">
+              <button class="change">{{tr}}Export{{/tr}}</button>
+            </td>
+          </tr>
         </table>
 
-        <button class="change">{{tr}}Export{{/tr}}</button>
       </form>
-    </th>
+    </td>
     <td id="export-log"></td>
   </tr>
 </table>

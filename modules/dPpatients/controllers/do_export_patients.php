@@ -28,14 +28,14 @@ if (!is_dir($directory)) {
   return;
 }
 
+$directory = str_replace("\\\\", "\\", $directory);
+
 CValue::setSession("praticien_id", $praticien_id);
 CValue::setSession("step", $step);
 CValue::setSession("start", $start);
 CValue::setSession("directory", $directory);
 
 $step = min($step, 1000);
-
-$praticien = CMediusers::get($praticien_id);
 
 CStoredObject::$useObjectCache = false;
 
@@ -109,6 +109,7 @@ $fwdrefs_tree = array(
 );
 
 $patient = new CPatient();
+$ds = $patient->getDS();
 
 $order = array(
   "patients.nom",
@@ -124,7 +125,7 @@ $ljoin_consult = array(
 );
 
 $where_consult = array(
-  "plageconsult.chir_id = '$praticien_id'",
+  "plageconsult.chir_id" => $ds->prepareIn($praticien_id),
 );
 
 $patient_ids_consult = $patient->loadIds($where_consult, $order, null, "patients.patient_id", $ljoin_consult);
@@ -134,7 +135,7 @@ $ljoin_sejour = array(
 );
 
 $where_sejour = array(
-  "sejour.praticien_id = '$praticien_id'",
+  "sejour.praticien_id" => $ds->prepareIn($praticien_id),
 );
 
 $patient_ids_sejour  = $patient->loadIds($where_sejour,  $order, null, "patients.patient_id", $ljoin_sejour);

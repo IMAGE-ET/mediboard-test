@@ -13,20 +13,22 @@
 
 CCanDo::checkAdmin();
 
-$praticien_id = CValue::getOrSession("praticien_id");
-$step = CValue::getOrSession("step", 100);
-$start = CValue::getOrSession("start", 0);
-$directory = CValue::getOrSession("directory");
+$praticien_id = CValue::postOrSession("praticien_id");
+$step         = CValue::postOrSession("step", 100);
+$start        = CValue::postOrSession("start", 0);
+$directory    = CValue::postOrSession("directory");
 
 $praticien = new CMediusers();
-$praticien->load($praticien_id);
-
 $praticiens = $praticien->loadPraticiens();
 
 $smarty = new CSmartyDP();
 
+if (!$praticien_id) {
+  $praticien_id = array();
+}
+
 $smarty->assign("praticiens", $praticiens);
-$smarty->assign("praticien", $praticien);
+$smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("step", $step);
 $smarty->assign("start", $start);
 $smarty->assign("directory", $directory);

@@ -4865,13 +4865,13 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Make a PDF document archive of the sejour (based on soins/print_dossier_soins)
    *
-   * @param string $title File title
+   * @param string $title   File title
+   * @param bool   $replace Replace existing file
    *
    * @return bool
-   *
    * @throws CMbException
    */
-  function makePDFarchive($title = "Dossier complet") {
+  function makePDFarchive($title = "Dossier complet", $replace = false) {
     if (!CModule::getActive("soins")) {
       return false;
     }
@@ -4893,12 +4893,26 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $content = $result["body"];
 
-    $date = CMbDT::dateTime();
-
     $file = new CFile();
     $file->setObject($this);
-    $file->file_name = "$title - $date.pdf";
+    $file->file_name = "$title.pdf";
     $file->file_type = "application/pdf";
+
+    if ($file->loadMatchingObject()) {
+      if ($replace) {
+        $file->delete();
+
+        // New file
+        $file = new CFile();
+        $file->setObject($this);
+        $file->file_name = "$title.pdf";
+        $file->file_type = "application/pdf";
+      }
+      else {
+        return true;
+      }
+    }
+
     $file->fillFields();
     $file->updateFormFields();
     $file->forceDir();
@@ -4915,6 +4929,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $content = str_replace("<!DOCTYPE html>", "", $content);
 
     CHtmlToPDFConverter::init("CWkHtmlToPDFConverter");
+    //CHtmlToPDFConverter::init("CPrinceXMLConverter");
     $pdf = CHtmlToPDFConverter::convert($content, $compte_rendu->_page_format, $compte_rendu->_orientation);
 
     $file->putContent($pdf);
