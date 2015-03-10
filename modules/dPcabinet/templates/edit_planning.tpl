@@ -302,6 +302,9 @@
   <input type="hidden" name="_force_create_sejour" value="0" />
   <input type="hidden" name="_line_element_id" value="{{$line_element_id}}" />
 
+  {{if !$consult->_id}}
+    <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
+  {{/if}}
 
   {{if $consult->_id && !$dialog}}
     <a class="button search" href="?m={{$m}}&tab=edit_consultation&selConsult={{$consult->_id}}" style="float: right;">
