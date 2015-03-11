@@ -51,34 +51,37 @@ File = {
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   },
   
-  refresh: function(object_id, object_class, only_files) {
+  refresh: function(object_id, object_class, only_files, show_actions) {
     var div_id = printf("files-%s-%s", object_id, object_class);
     if (!$(div_id)) {
       return;
     }
-    var url = new Url("dPfiles", "httpreq_widget_files");
+    var url = new Url("files", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("mozaic", File.use_mozaic);
+    if (!Object.isUndefined(show_actions)) {
+      url.addParam("show_actions", show_actions);
+    }
 
     if (only_files == undefined || only_files == 1) {
       url.addParam("only_files", 1);
       var elt = $("list_"+object_class+object_id);
-      if (elt.up(".name_readonly")) {
-        url.addParam("name_readonly", 1);
-      }
-      url.requestUpdate("list_"+object_class+object_id);
+      var target = "list_"+object_class+object_id;
     }
     else {
       var elt = $("files-"+object_id+"-"+object_class);
-      if (elt.up(".name_readonly")) {
-        url.addParam("name_readonly", 1);
-      }
-      url.requestUpdate("files-"+object_id+"-"+object_class);
+      var target = "files-"+object_id+"-"+object_class;
     }
+
+    if (elt.up(".name_readonly")) {
+      url.addParam("name_readonly", 1);
+    }
+
+    url.requestUpdate(target);
   },
   
-  register: function(object_id, object_class, container) {
+  register: function(object_id, object_class, container, show_actions) {
     var div = document.createElement("div");
     div.style.minWidth = "200px";
     div.style.minHeight = "50px";
@@ -86,7 +89,7 @@ File = {
     $(container).insert(div);
     
     Main.add(function() {
-      File.refresh(object_id, object_class, 0);
+      File.refresh(object_id, object_class, 0, show_actions);
     });
   },
 

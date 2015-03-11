@@ -15,6 +15,7 @@ $object        = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 $only_files    = CValue::get("only_files", 0);
 $name_readonly = CValue::get("name_readonly", 0);
 $use_mozaic    = CValue::get("mozaic", 0);
+$show_actions  = CValue::get("show_actions", 1);
 
 CSessionHandler::writeClose();
 
@@ -35,5 +36,6 @@ $smarty->assign("object",        $object);
 $smarty->assign("can_files",     $file->canClass());
 $smarty->assign("name_readonly", $name_readonly);
 $smarty->assign("mozaic",        $use_mozaic);
+$smarty->assign("show_actions",  $show_actions);
 
 $smarty->display($only_files ? "inc_widget_list_files.tpl" : "inc_widget_vw_files.tpl");
