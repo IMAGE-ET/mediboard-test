@@ -43,7 +43,7 @@
       </form>
     </td>
 
-    <td class="text" id="edit_liaisons_items-{{$_lit->_id}}" style="width: 40%">
+    <td class="text" id="edit_liaisons_items-{{$_lit->_id}}" style="width: 30%">
       {{if $_lit->_id}}
         <script type="text/javascript">
           Main.add(function() {
