@@ -364,13 +364,16 @@ class CAffectation extends CMbObject {
         "item_prestation.item_prestation_id = item_liaison.item_souhait_id
       OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
 
-      $filter_entree = $this->_ref_prev->_id ? CMbDT::date("+1 day", $this->entree) : CMbDT::date($this->entree);
+      $filter_entree =
+        $this->_ref_prev->_id && CMbDT::date($this->_ref_prev->sortie) > CMbDT::date($this->entree) ?
+          CMbDT::date("+1 day", $this->entree) :
+          CMbDT::date($this->entree);
       foreach ($liaisons_lit as $_liaison) {
         $item_liaison = new CItemLiaison();
         $_item = $_liaison->loadRefItemPrestation();
 
         // Recherche d'une liaison :
-        // - date de début si première affectation
+        // - date de début si première affectation ou dans la même journée
         // - le jour suivant sinon, car il doit y avoir un passage d'une case pour le calcul des prestations
         $where["item_prestation.object_id"] = "= '$_item->object_id'";
         $where["date"] = "= '" . $filter_entree . "'";
