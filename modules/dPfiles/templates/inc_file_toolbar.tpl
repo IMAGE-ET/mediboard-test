@@ -21,8 +21,7 @@
 
     <!-- Téléchargement du fichier -->
     {{if $_doc_item->_class=="CFile" && $_doc_item->file_type != "image/fabricjs"}}
-      <a class="button download notext"
-        href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
+      <a class="button download notext" href="?m=files&raw=fileviewer&file_id={{$_doc_item->_id}}"
         target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>
     {{/if}}
 
@@ -44,7 +43,7 @@
     <!-- Deletion -->
     {{if $_doc_item->_class=="CCompteRendu"}}
       <form name="editDoc{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="dPcompteRendu" />
+      <input type="hidden" name="m" value="compteRendu" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
       <input type="hidden" name="compte_rendu_id" value="{{$_doc_item->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -54,7 +53,7 @@
 
     {{if $_doc_item->_class=="CFile"}}
       <form name="editFile{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="dPfiles" />
+      <input type="hidden" name="m" value="files" />
       <input type="hidden" name="dosql" value="do_file_aed" />
       <input type="hidden" name="file_id" value="{{$_doc_item->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -77,8 +76,12 @@
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}
-    {{if $_doc_item instanceof CFile && $_doc_item->annule == "0"}}
-      <button type="button" class="cancel notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Annuler{{/tr}}</button>
+    {{if $_doc_item instanceof CFile}}
+      {{if $_doc_item->annule == "0"}}
+        <button type="button" class="archive notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Archive{{/tr}}</button>
+      {{else}}
+        <button type="button" class="undo notext" onclick="restoreFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Restore{{/tr}}</button>
+      {{/if}}
     {{/if}}
 
     <!-- Send File -->

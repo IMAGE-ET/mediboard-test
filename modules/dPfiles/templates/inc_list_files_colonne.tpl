@@ -102,21 +102,21 @@
 {{foreach from=$list item=_doc_item}}
   <div style="float: left; width: 220px; position: relative; {{if $_doc_item->annule}}display: none;{{/if}}"
   class="{{if $_doc_item->annule}}file_cancelled{{/if}} {{if $_doc_item->_count_dmp_document}}dmp-sent{{/if}}">
-    <table class="tbl {{if $_doc_item->annule}}hatching{{/if}}">
+    <table class="tbl">
       <tbody class="hoverable">
-        <tr>
-          <td rowspan="2" style="width: 70px; height: 112px; text-align: center" class="{{if $_doc_item->annule}}cancelled{{/if}}">
+        <tr class="{{if $_doc_item->annule}}hatching{{/if}}">
+          <td rowspan="2" style="width: 70px; height: 112px; text-align: center">
             <div></div>
             {{assign var="elementId" value=$_doc_item->_id}}
             {{if $_doc_item->_class=="CCompteRendu"}}
               {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
                 {{assign var="file_id"  value=$_doc_item->_ref_file->_id}}
-                {{assign var="srcImg"   value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=64&h=92"}}
+                {{assign var="srcImg"   value="?m=files&raw=fileviewer&file_id=$file_id&phpThumb=1&w=64&h=92"}}
               {{else}}
                 {{assign var="srcImg" value="images/pictures/medifile.png"}}
               {{/if}}
             {{else}}
-              {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&w=64&h=92"}}
+              {{assign var="srcImg" value="?m=files&raw=fileviewer&file_id=$elementId&phpThumb=1&w=64&h=92"}}
             {{/if}}
 
             <a href="#" {{if !$app->touch_device}}ondblclick{{else}}onclick{{/if}}="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
@@ -125,7 +125,7 @@
           </td>
 
           <!-- Tooltip -->
-          <td class="text {{if $_doc_item->annule}}cancelled{{/if}}" style="height: 35px; overflow: auto">
+          <td class="text" style="height: 35px; overflow: auto">
             {{if $_doc_item instanceof CCompteRendu && $_doc_item->_is_locked}}
               <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'locker')"/>
             {{/if}}
@@ -137,9 +137,9 @@
             </span>
           </td>
         </tr>
-        <tr>
+        <tr class="{{if $_doc_item->annule}}hatching{{/if}}">
           <!-- Toolbar -->
-          <td class="button {{if $_doc_item->annule}}cancelled{{/if}}" style="height: 1px;">
+          <td class="button" style="height: 1px;">
             {{mb_include module=files template=inc_file_toolbar notext=notext}}
           </td>
         </tr>
@@ -147,5 +147,5 @@
     </table>
   </div>
 {{foreachelse}}
-  <div class="empty">Aucun document</div>
+  <div class="empty">{{tr}}CMbObject-back-documents.empty{{/tr}}</div>
 {{/foreach}}

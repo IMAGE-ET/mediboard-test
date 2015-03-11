@@ -1,6 +1,6 @@
 <table class="form">
-  <tr {{if $_file->annule}}style="display: none;" class="file_cancelled"{{/if}}>
-    <td class="text docitem {{if $_file->annule}}cancelled{{/if}}">
+  <tr {{if $_file->annule}}style="display: none;" class="file_cancelled hatching"{{/if}}>
+    <td class="text docitem">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
          onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>
@@ -16,7 +16,7 @@
         <input type="hidden" name="m" value="dPfiles" />
         <input type="hidden" name="dosql" value="do_file_aed" />
         <input type="text" style="display: none;" name="file_name" size="50" value="{{$_file->file_name}}""/>
-        <script type="text/javascript">
+        <script>
           var form = getForm("editName-{{$_file->_guid}}");
           var evt = Prototype.Browser.Gecko ? "keypress" : "keydown";
           Event.observe(form.file_name, evt, File.switchFile.curry('{{$_file->_id}}', form));
@@ -35,7 +35,7 @@
       <td class="button" style="width: 1px">
         <form name="Delete-{{$_file->_guid}}" action="?" enctype="multipart/form-data" method="post"
           onsubmit="return checkForm(this)">
-          <input type="hidden" name="m" value="dPfiles" />
+          <input type="hidden" name="m" value="files" />
           <input type="hidden" name="dosql" value="do_file_aed" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="annule" value="0" />
@@ -53,6 +53,10 @@
             {{if !$_file->annule}}
               <button class="archive notext compact" type="button" onclick="File.cancel(this.form, '{{$object_id}}', '{{$object_class}}')">
                 {{tr}}Archive{{/tr}}
+              </button>
+            {{else}}
+              <button class="undo notext compact" type="button" onclick="File.restore(this.form, '{{$object_id}}', '{{$object_class}}')">
+                {{tr}}Restore{{/tr}}
               </button>
             {{/if}}
 

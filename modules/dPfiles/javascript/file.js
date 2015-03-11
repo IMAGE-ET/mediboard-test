@@ -23,6 +23,10 @@ File = {
     return false;
   },
 
+  restore: function(form, object_id, object_class) {
+    return onSubmitFormAjax(form, File.refresh.curry(object_id, object_class, 0));
+  },
+
   remove: function(oButton, object_id, object_class){
     var oOptions = {
       typeName: 'le fichier',

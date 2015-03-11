@@ -111,6 +111,10 @@ cancelFile = function(form, category_id) {
   return false;
 };
 
+restoreFile = function(form, category_id) {
+  return onSubmitFormAjax(form, reloadAfterDeleteFile.curry(category_id));
+};
+
 // used for move a file
 File_Attach = {
   object_class      : null,
