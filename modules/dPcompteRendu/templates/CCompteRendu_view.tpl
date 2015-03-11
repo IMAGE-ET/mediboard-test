@@ -8,16 +8,21 @@
 {{mb_script module=compteRendu script=document ajax=1}}
 
 {{mb_script module=compteRendu script=document}}{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
-{{assign var="document" value=$object}}
-{{if !$document->object_id}}
-<table class="tbl">
-  <tr>
-    <th class="title">{{tr}}CCompteRendu-modele-one{{/tr}}</th>
-  </tr>
-</table>
-{{/if}}
+{{assign var=document value=$object}}
 
 <table class="tbl">
+  <tr>
+    <th class="title text">
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history}}
+      {{mb_include module=system template=inc_object_notes}}
+      {{$object}}
+    </th>
+  </tr>
+</table>
+
+<table class="tbl">
+  <tbody class="hoverable">
   <tr>
     {{assign var=file value=$document->_ref_file}}
     {{if $document->object_id && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs && $file->_id}}
@@ -36,7 +41,9 @@
     {{/if}}
   
     <td rowspan="2" style="vertical-align: top;">
-      {{mb_include module=system template=CMbObject_view}}
+      {{foreach from=$object->_specs key=prop item=spec}}
+        {{mb_include module=system template=inc_field_view}}
+      {{/foreach}}
     </td>
   </tr>
   
@@ -55,4 +62,5 @@
       {{/if}}
     </td>
   </tr>
+  </tbody>
 </table>
