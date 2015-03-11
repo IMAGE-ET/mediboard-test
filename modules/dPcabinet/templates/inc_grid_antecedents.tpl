@@ -1,5 +1,5 @@
 <script>
-  function addAntecedent(event, rques, type, appareil, input) {
+  function addAntecedent(event, rques, date, type, appareil, input) {
     if (event && event.ctrlKey) {
       window.save_params = { 'input': input, 'type': type, 'appareil': appareil};
       var complete_atcd = $('complete_atcd');
@@ -18,9 +18,12 @@
         oForm.rques.value = rques;
         oForm.type.value = type;
         oForm.appareil.value = appareil;
+        if (oForm.date) {
+          oForm.date.value = date;
+        }
+
         window.opener.onSubmitAnt(oForm);
 
-        //input.checked = 'checked';
         input.disabled = 'disabled';
 
         $(input).up('td').setStyle({cursor: 'default', opacity: 0.3});
@@ -28,6 +31,18 @@
     }
     window.focus();
   }
+
+  completeAtcd = function() {
+    var form = getForm("completeAtcdFom");
+    addAntecedent(null, $V(form.rques), $V(form.date), window.save_params.type, window.save_params.appareil, window.save_params.input);
+    emptyDate(form);
+  };
+
+  emptyDate = function(form) {
+    form.select("input.date").each(function(input) {
+      $V(input, "");
+    });
+  };
 
   var oFormAntFrmGrid;
 
@@ -103,7 +118,9 @@
         },
         revert: true });
       });
-    });
+
+    Calendar.regProgressiveField($('date_atcd'));
+  });
 </script>
 
 <form name="editPref" method="post">
@@ -113,28 +130,33 @@
   <input type="hidden" name="pref[order_mode_grille]" value="{{$order_mode_grille|@json}}" />
 </form>
 
-<div id="complete_atcd" style="display: none; width: 400px; height: 180px;">
- <table class="form">
-   <tr>
-     <th class="title">
-       Compléter l'antécédent
-     </th>
-   </tr>
-   <tr>
-     <td>
-       <textarea></textarea>
-     </td>
-   </tr>
-   <tr>
-     <td class="button">
-       <button type="button" class="tick"
-         onclick="Control.Modal.close(); addAntecedent(null, $V($('complete_atcd').down('textarea')), window.save_params.type, window.save_params.appareil, window.save_params.input)">
-           {{tr}}Validate{{/tr}}
-        </button>
-       <button type="button" class="close" onclick="Control.Modal.close(); window.save_params.input.checked = ''">{{tr}}Close{{/tr}}</button>
-     </td>
-   </tr>
- </table> 
+<div id="complete_atcd" style="display: none; width: 500px; height: 180px;">
+  <form name="completeAtcdFom" method="get">
+    <table class="form">
+      <tr>
+        <th class="title" colspan="3">
+          Compléter l'antécédent
+        </th>
+      </tr>
+      <tr>
+        <th style="height: 100%;" class="narrow">{{mb_label class=CAntecedent field=date}}</th>
+        <td class="narrow">
+          <input type="hidden" name="date" class="date" id="date_atcd" />
+        </td>
+        <td>
+          <textarea name="rques"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="button">
+          <button type="button" class="tick" onclick="Control.Modal.close(); completeAtcd();">
+            {{tr}}Validate{{/tr}}
+           </button>
+          <button type="button" class="close" onclick="Control.Modal.close(); window.save_params.input.checked = ''; emptyDate(this.form);">{{tr}}Close{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
 
 <!-- Antécédents -->

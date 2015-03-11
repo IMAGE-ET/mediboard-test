@@ -43,7 +43,7 @@
                 style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}">
               <label onmouseover="ObjectTooltip.createDOM(this, 'tooltip_{{$curr_aide->_guid}}')">
                 <input type="checkbox" {{if $checked}}checked disabled{{/if}} id="aide_{{$curr_aide->_guid}}"
-                       onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/>
+                       onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '', '{{$type}}', '{{$appareil}}', this)"/>
                 {{$curr_aide->name}}
               </label>
               <div style="display: none" id="tooltip_{{$curr_aide->_guid}}">
@@ -56,7 +56,7 @@
                   <tr>
                     <td class="button">
                       <button type="button" class="edit"
-                              onclick="var event = {ctrlKey: true}; addAntecedent(event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', $('aide_{{$curr_aide->_guid}}'))">Compléter</button>
+                              onclick="var event = {ctrlKey: true}; addAntecedent(event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '', '{{$type}}', '{{$appareil}}', $('aide_{{$curr_aide->_guid}}'))">Compléter</button>
                     </td>
                   </tr>
                 </table>
