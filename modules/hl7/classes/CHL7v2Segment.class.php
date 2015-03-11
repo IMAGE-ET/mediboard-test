@@ -403,7 +403,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
     }
 
-    $IPP = null;
+    $IPP = $patient->_IPP;
     if (!$patient->_IPP && !CValue::read($actor->_configs, "send_not_master_IPP")) {
       $IPP = "===IPP_MISSING===";
     }
