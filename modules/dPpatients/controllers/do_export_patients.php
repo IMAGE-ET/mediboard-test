@@ -19,7 +19,7 @@ $start        = CValue::post("start");
 $directory    = CValue::post("directory");
 
 if (!$praticien_id) {
-  CAppUI::stepAjax("Veuillez choisir un praticien", UI_MSG_WARNING);
+  CAppUI::stepAjax("Veuillez choisir au moins un praticien", UI_MSG_WARNING);
   return;
 }
 
@@ -204,6 +204,6 @@ foreach ($patients as $_patient) {
 CAppUI::stepAjax("%d patients exportés", UI_MSG_OK, count($patient_ids));
 
 if (count($patient_ids)) {
-  CAppUI::js("nextStep()");
+  CAppUI::js("nextStepPatients()");
 }
 
