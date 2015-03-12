@@ -524,6 +524,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Admission hospitalisé / externe
       case 'A01':
       case 'A04':
+        $sejour->_admit = true;
+
         // Date de l'admission
         return $sejour->entree_reelle;
 

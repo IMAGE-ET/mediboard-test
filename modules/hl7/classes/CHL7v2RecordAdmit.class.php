@@ -1614,7 +1614,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
         else {
           // On recherche l'affectation "courante"
-          $affectation = $newVenue->getCurrAffectation($datetime);
+          // Si qu'une affectation sur le séjour
+          $newVenue->loadRefsAffectations();
+          if (count($newVenue->_ref_affectations) == 1) {
+            $affectation = reset($newVenue->_ref_affectations);
+          }
+          else {
+            // On recherche l'affectation "courante"
+            $affectation = $newVenue->getCurrAffectation($datetime);
+          }
 
           // Sinon on récupère et on met à jour la première affectation
           if (!$affectation->_id) {

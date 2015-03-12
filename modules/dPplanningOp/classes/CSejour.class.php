@@ -178,6 +178,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_en_mutation;
   public $_unique_lit_id;
   public $_no_synchro;
+  public $_admit                   = false;
   public $_generate_NDA            = true;
   public $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
 

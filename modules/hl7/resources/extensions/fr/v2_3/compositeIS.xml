@@ -3,7 +3,7 @@
     <name>IS</name>
     <description>String Data</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0" length="20">
+        <field minOccurs="0" maxOccurs="0" length="50">
             <name>IS.1</name>
             <description>Value</description>
             <datatype>String</datatype>

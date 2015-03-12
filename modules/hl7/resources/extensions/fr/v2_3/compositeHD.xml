@@ -3,7 +3,7 @@
     <name>HD</name>
     <description>Hierarchic Designator</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0" length="20" table="0300">
+        <field minOccurs="0" maxOccurs="0" length="50" table="0300">
             <name>HD.1</name>
             <description>Namespace ID</description>
             <datatype>IS</datatype>
