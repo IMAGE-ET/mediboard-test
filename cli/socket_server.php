@@ -113,13 +113,14 @@ $argc = $_SERVER["argc"];
 if (count($argv) < 5) {
   echo <<<EOT
 Usage: {$argv[0]} <type> <root_url> <username> <password> [--port port]
-  <type>          The type of the server, (dicom or mllp)
-  <root_url>      The root url for mediboard, ie https://localhost/mediboard
-  <username>      The name of the user requesting, ie cron
-  <password>      The password of the user requesting, ie ****
-  [--port <port>] The port to listen on (default: 7001)
-  [--cert <cert>] The SSL certificate if the connection is secured (default: none)
+  <type>              The type of the server, (dicom or mllp)
+  <root_url>          The root url for mediboard, ie https://localhost/mediboard
+  <username>          The name of the user requesting, ie cron
+  <password>          The password of the user requesting, ie ****
+  [--port <port>]     The port to listen on (default: 7001)
+  [--cert <cert>]     The SSL certificate file if the connection is secured, with both public and pricate key (PEM) (default: none)
   [--passphrase <passphrase>] The SSL passphrase (default: none)
+  [--cafile <cafile>] The SSL certificate authority file (PEM) (default: none)
 
 EOT;
   exit(0);
@@ -135,6 +136,7 @@ $options = array(
   "port"       => 7001,
   "cert"       => null,
   "passphrase" => null,
+  "cafile"     => null,
 );
 
 for ($i = 3; $i < $argc; $i++) {
@@ -146,6 +148,7 @@ for ($i = 3; $i < $argc; $i++) {
     case "--port":
     case "--cert":
     case "--passphrase":
+    case "--cafile":
       $options[substr($argv[$i], 2)] = $argv[++$i];
       break;
   }
@@ -157,6 +160,11 @@ if ($options["cert"] && !is_readable($options["cert"])) {
   die;
 }
 
+if ($options["cafile"] && !is_readable($options["cafile"])) {
+  outln("SSL CAfile not readable: '{$options['cafile']}', exiting.");
+  die;
+}
+
 register_shutdown_function("on_shutdown");
 
 // Write a flag file with the PID and the port
@@ -165,9 +173,13 @@ file_put_contents($pid_file, $options["port"] . "\n" . $server_type);
 
 try {
   outln("Starting $server_type Server on port ".$options["port"]." with user '".$options["username"]."'");
-  
+
   if ($options["cert"]) {
     outln("SSL certificate: '{$options['cert']}'");
+  }
+
+  if ($options["cafile"]) {
+    outln("SSL certificate authority: '{$options['cafile']}'");
   }
 
   /** @var CSocketBasedServer $handler  */
@@ -176,8 +188,9 @@ try {
     $options["username"], 
     $options["password"], 
     $options["port"], 
-    $options["cert"], 
-    $options["passphrase"]
+    $options["cert"],
+    $options["passphrase"],
+    $options["cafile"]
   );
   
   $handler->run();

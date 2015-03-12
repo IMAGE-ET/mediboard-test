@@ -66,13 +66,20 @@ class CSocketBasedServer {
    * @var int
    */
   protected $port = null;
-  
+
   /**
    * The SSL certificate path (PEM format)
-   * 
+   *
    * @var string
    */
   protected $certificate = null;
+
+  /**
+   * The SSL certificate authority file path (PEM format)
+   *
+   * @var string
+   */
+  protected $certificate_authority = null;
   
   /**
    * The SSL passphrase
@@ -119,22 +126,22 @@ class CSocketBasedServer {
   /**
    * The socket based server constructor
    *
-   * @param string  $call_url    The Mediboard root URL to call
-   * @param string  $username    The Mediboard user name
-   * @param string  $password    The Mediboard user password
-   * @param integer $port        The port number to listen on
-   * @param string  $certificate The path to the SSL/TLS certificate
-   * @param string  $passphrase  The SSL/TLS certificate passphrase
-   *
-   * @return CSocketBasedServer
+   * @param string  $call_url              The Mediboard root URL to call
+   * @param string  $username              The Mediboard user name
+   * @param string  $password              The Mediboard user password
+   * @param integer $port                  The port number to listen on
+   * @param string  $certificate           The path to the SSL/TLS certificate
+   * @param string  $passphrase            The SSL/TLS certificate passphrase
+   * @param string  $certificate_authority The SSL/TLS certificate authority file
    */
-  function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null){
+  function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null, $certificate_authority = null){
     $this->call_url    = rtrim($call_url, " /");
     $this->username    = $username;
     $this->password    = $password;
     $this->port        = $port;
     $this->certificate = $certificate;
     $this->passphrase  = $passphrase;
+    $this->certificate_authority = $certificate_authority;
     
     $this->server = new SocketServer(AF_INET, SOCK_STREAM, SOL_TCP);
   }
@@ -221,6 +228,17 @@ class CSocketBasedServer {
    */
   function setPassphrase($passphrase) {
     $this->passphrase = $passphrase;
+  }
+
+  /**
+   * Set the certificate authority file
+   *
+   * @param string $certificate_authority The certificate authority file
+   *
+   * @return null
+   */
+  function setCertificateAuthority($certificate_authority) {
+    $this->certificate_authority = $certificate_authority;
   }
   
   /**
@@ -314,9 +332,13 @@ class CSocketBasedServer {
         if (function_exists("quit")) {
           quit("restart");
         }
+        break;
       
       case "__STATS__":
         return json_encode($this->getStats());
+
+      default:
+        // do nothing
     }
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
@@ -345,6 +367,8 @@ class CSocketBasedServer {
       
       $start = microtime(true);
 
+      $this->displayMessage($buffer);
+
       // We must keep m=$module in the GET because of user permissions
       $url = "$this->call_url/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
@@ -362,6 +386,16 @@ class CSocketBasedServer {
     }
     
     return "";
+  }
+  /**
+   * Displays the received message in the output
+   *
+   * @param string $message Message to display
+   *
+   * @return void
+   */
+  function displayMessage($message) {
+
   }
 
   /**
@@ -527,7 +561,7 @@ class CSocketBasedServer {
 EOT;
     $this->started_datetime = $time;
 
-    $server = $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase);
+    $server = $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase, $this->certificate_authority);
     
     $server->setRequestHandler(array($this, "handle"));
     $server->setOnOpenHandler(array($this, "onOpen"));

@@ -8,9 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-include_once('ajax_connexion_mllp.php');
+require_once 'ajax_connexion_mllp.php';
 
-$exchange_source->setData("Hello world !");
+/** @var CSourceMLLP $exchange_source */
+$exchange_source->setData("Hello world !\n");
 
 try {
   $exchange_source->send();

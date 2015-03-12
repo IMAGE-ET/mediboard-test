@@ -85,17 +85,17 @@ class CSourceMLLP extends CExchangeSource {
     $context = stream_context_create();
     
     if ($this->ssl_enabled && $this->ssl_certificate && is_readable($this->ssl_certificate)) {
-      $address = "tcp://$address";
+      $address = "tls://$address";
       
-      stream_context_set_option($context, 'ssl', 'local_cert', $this->ssl_certificate); 
-      
+      stream_context_set_option($context, 'ssl', 'local_cert', $this->ssl_certificate);
+
       if ($this->ssl_passphrase) {
         $ssl_passphrase = $this->getPassword($this->ssl_passphrase, "iv_passphrase");
         stream_context_set_option($context, 'ssl', 'passphrase', $ssl_passphrase);
       }
     }
     
-    $this->_socket_client = @stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
+    $this->_socket_client = stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
     if (!$this->_socket_client) {
       throw new CMbException("CSourceMLLP-unreachable-source", $this->name);
     }

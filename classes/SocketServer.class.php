@@ -124,11 +124,12 @@ class SocketServer {
    * Please reffer to {@link socket_create()} manual for more details, as this
    * is just a wrapper of that function.
    *
-   * @see socket_create()
-   * @throws Exception If {@link socket_create()} failed
    * @param integer $domain   Protocol family to be used by the socket.
    * @param integer $type     Type of communication to be used by the socket.
    * @param integer $protocol Protocol within the specified $domain.
+   *
+   * @see socket_create()
+   * @throws Exception If {@link socket_create()} failed
    */
   public function __construct($domain, $type, $protocol) {
   }
@@ -149,7 +150,8 @@ class SocketServer {
   /**
    * Set welcome message for new clients.
    *
-   * @param string|null $msg
+   * @param string|null $msg Welcome message
+   *
    * @return SocketServer self-reference
    */
   public function setMotd($msg) {
@@ -165,8 +167,11 @@ class SocketServer {
    * Close socket, if it was opened and then throws {@link Exception}. If
    * $msg is not specified or NULL, last sockt error will be used as message.
    *
-   * @throws Exception
    * @param string $msg (optional)
+   *
+   * @throws Exception
+   *
+   * @return void
    */
   private function __raiseError($msg = null) {
     if (null === $msg) {
@@ -197,9 +202,6 @@ class SocketServer {
     if (PHP_NORMAL_READ !== $mode && PHP_BINARY_READ !== $mode) {
       $this->__raiseError('Unknown read mode.');
     }
-    else {
-      
-    }
   }
 
   
@@ -212,7 +214,6 @@ class SocketServer {
   public function setAutoClose($autoClose = true) {
     $this->__autoClose = (boolean)$autoClose;
   }
-
   
   /**
    * Binds a name to a socket.
@@ -232,22 +233,44 @@ class SocketServer {
    *        remote host to which a connection should be made.
    * @return SocketServer self-reference
    */
-  public function bind($address, $port = null, $certificate = null, $passphrase = null) {
+  public function bind($address, $port = null, $certificate = null, $passphrase = null, $certificate_authority) {
     $context = stream_context_create();
-    
+
+    $protocol = "tcp";
+
     if ($certificate) {
+      $protocol = "tls";
+
       stream_context_set_option($context, 'ssl', 'local_cert', $certificate); 
-      
+      //stream_context_set_option($context, 'ssl', 'local_pk', "private.key");
+
       if ($passphrase) {
         stream_context_set_option($context, 'ssl', 'passphrase', $passphrase); 
       }
-      
-      //stream_context_set_option($context, 'ssl', 'allow_self_signed', true); 
-      //stream_context_set_option($context, 'ssl', 'verify_peer', false); 
+
+      stream_context_set_option($context, 'ssl', 'cafile', $certificate_authority);
+
+      stream_context_set_option($context, 'ssl', 'allow_self_signed', false);
+      stream_context_set_option($context, 'ssl', 'verify_peer', true);
+      //stream_context_set_option($context, 'ssl', 'peer_name', "CN=foobar");
+
+      //stream_context_set_option($context, 'ssl', 'capture_peer_cert', true);
+      //stream_context_set_option($context, 'ssl', 'capture_peer_cert_chain', true);
+
+      //stream_context_set_option($context, 'ssl', 'peer_certificate', true);
+      //stream_context_set_option($context, 'ssl', 'peer_certificate_chain', "ca.pem");*/
+
+      //stream_context_set_option($context, 'ssl', 'SNI_enabled', true);
+      //stream_context_set_option($context, 'ssl', 'SNI_server_name', "CN=foobar");
     }
-    
-    $this->__socket = @stream_socket_server("tcp://$address:$port", $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
-    //stream_socket_enable_crypto($this->__socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+
+    $this->__socket = stream_socket_server(
+      "$protocol://$address:$port",
+      $errno,
+      $errstr,
+      STREAM_SERVER_BIND | STREAM_SERVER_LISTEN,
+      $context
+    );
     
     if (false === $this->__socket) {
       $this->__raiseError($errstr);
@@ -268,12 +291,14 @@ class SocketServer {
    * handler with {@link SocketServer::setRequestHandler()} before running a
    * server.
    *
+   * @param integer $backlog (optional) A maximum of incoming connections.
+   *
    * @see SocketServer::bind()
    * @see SocketServer::setRequestHandler()
    * @throws Exception If {@link $__handler} was not set
    * @throws Exception If socket was not binded
    * @throws Exception If {@link socket_listen()} failed
-   * @param integer $backlog (optional) A maximum of incoming connections.
+   *
    * @return void
    */
   public function run($backlog = null) {
@@ -298,11 +323,13 @@ class SocketServer {
    * - Server will be stopped upon $func will return boolean false.
    * - Else returned value will be sent as a response.
    *
-   * @throws Exception If specified $func can't be called
    * @param mixed $func Request handler function or method. Can be either
    *        the name of a function stored in a string variable, or an object
    *        and the name of a method within the object, like this:
    *        array($SomeObject, 'MethodName')
+   *
+   * @throws Exception If specified $func can't be called
+   *
    * @return SocketServer self-reference
    */
   public function setRequestHandler($func) {
@@ -332,11 +359,13 @@ class SocketServer {
    * }
    * </code>
    *
-   * @throws Exception If specified $func can't be called
    * @param mixed $func onOpen handler function or method. Can be either
    *        the name of a function stored in a string variable, or an object
    *        and the name of a method within the object, like this:
    *        array($SomeObject, 'MethodName')
+   *
+   * @throws Exception If specified $func can't be called
+   *
    * @return SocketServer self-reference
    */
   public function setOnOpenHandler($func) {
@@ -354,9 +383,11 @@ class SocketServer {
    *
    * Will execute open handler with specified resource id, address, and port.
    *
-   * @see SocketServer::setOnOpenHandler()
-   * @param integer $id
+   * @param integer  $id     Socket ID
    * @param resource $socket
+   *
+   * @see SocketServer::setOnOpenHandler()
+   *
    * @return void
    */
   private function __open($id, $socket) {
@@ -538,7 +569,10 @@ class SocketServer {
       
       // Register new client in the pool
       if (in_array($this->__socket, $active)) {
-        $conn = stream_socket_accept($this->__socket, 5);
+        $peername = "";
+        $conn = stream_socket_accept($this->__socket, 5, $peername);
+
+        echo "Peername: $peername\n";
         
         if (is_resource($conn)) {
           if (null !== $this->__motd) {

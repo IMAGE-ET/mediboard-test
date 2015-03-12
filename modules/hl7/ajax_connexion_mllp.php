@@ -15,6 +15,7 @@ if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
   CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
 }
 
+/** @var CSourceMLLP $exchange_source */
 $exchange_source = CExchangeSource::get($exchange_source_name, "mllp", true, null, false);
 
 if (!$exchange_source) {

@@ -41,6 +41,14 @@ class CMLLPServer extends CSocketBasedServer{
   }
 
   /**
+   * @see parent::displayMessage
+   */
+  function displayMessage($message) {
+    echo " ----- Message reçu :\n";
+    echo preg_replace("/[\r\n]+/", "\n", $message);
+  }
+
+  /**
    * Format the buffer
    *
    * @param string $buffer The buffer
