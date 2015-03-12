@@ -10,13 +10,16 @@
  * @link     http://www.mediboard.org
  */
 
+CCAnDo::checkAdmin();
+
 $object_guid = CValue::post("object_guid");
 $object = CMbObject::loadFromGuid($object_guid);
 
 // Chargement de la ligne à rendre active
 foreach ($object->loadBackRefs("files") as $_file) {
   $_POST["file_id"] = $_file->_id;
-  $do = new CFileAddEdit;
+  $_POST["del"] = "1";
+  $do = new CFileAddEdit();
   $do->redirect = null;
   $do->doIt();
 }
