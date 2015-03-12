@@ -67,7 +67,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $tmp = array();
 
       // IN1
-      $this->queryNode("IN1", $_insurance, $tmp, true);
+      $this->queryNodes("IN1", $_insurance, $tmp, true);
 
       $data["insurances"][] = $tmp;
     }
@@ -1343,7 +1343,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Couverture
     if (array_key_exists("insurances", $data)) {
       foreach ($data["insurances"] as $_insurance) {
-        $this->getIN1($_insurance["IN1"], $newVenue);
+        if (array_key_exists("IN1", $_insurance)) {
+          foreach ($_insurance["IN1"] as $_IN1) {
+            $this->getIN1($_IN1, $newVenue);
+          }
+        }
       }
     }
     
