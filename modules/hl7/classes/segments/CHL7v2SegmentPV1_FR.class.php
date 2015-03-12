@@ -97,7 +97,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     if ($receiver->_configs["build_PV1_5"] == "none") {
       $data[] = null;
     }
-    else if ($sejour->_etat != "preadmission" || $sejour->_admit !== true) {
+    else if ($sejour->_etat != "preadmission" && $sejour->_admit !== true) {
       $data[] = null;
     }
     else {
