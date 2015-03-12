@@ -69,7 +69,11 @@ Infrastructure = window.Infrastructure || {
     var url = new Url("dPhospi", "ajax_addedit_lit");
     url.addParam('chambre_id', chambre_id);
     url.addParam('lit_id', lit_id);
-    url.requestUpdate(update_name, {insertion:"bottom"});
+    if (!$('line_lit-CLit-none')) {
+      url.requestUpdate(update_name, {insertion:"bottom", onComplete: function (){
+        $('nom').focus();
+      }});
+    }
   },
 
   reloadLitLine: function (lit_id , chambre_id) {

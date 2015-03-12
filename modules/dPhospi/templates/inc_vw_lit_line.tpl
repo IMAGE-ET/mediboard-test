@@ -75,29 +75,42 @@
   <!--Enregistrement manuel du formulaire -->
   <tr id="line_lit-{{$_lit->_guid}}">
     <td class="narrow" style="width: 5%">
-      <label><input id="input_rank" type="number" size="3" onchange="Infrastructure.setValueForm('editLit', 'rank', this.value)" style="width: 30px"/></label>
-    <script>
-      Main.add(function () {
-        $('input_rank').addSpinner({min:0});
-      });
-    </script>
+      <form name="saveRankLit{{$_lit->_guid}}"  method="post" onsubmit="getForm('editLit{{$_lit->_guid}}').onsubmit(); return false;">
+
+        <label><input id="input_rank" type="number" size="3" onchange="Infrastructure.setValueForm('editLit', 'rank', this.value);" style="width: 30px"/></label>
+        <script>
+          Main.add(function () {
+            $('input_rank').addSpinner({min:0});
+          });
+        </script>
+        <button type="submit" style="display:none;"></button>
+      </form>
     </td>
     <td class="text" style="width: 10%">
-      <label><input type="text" size="10" onchange="Infrastructure.setValueForm('editLit', 'nom', this.value); Infrastructure.setValueForm('editLit', 'code', this.value)"/></label>
+      <form name="saveNomLit{{$_lit->_guid}}"  method="post" onsubmit="getForm('editLit{{$_lit->_guid}}').onsubmit(); return false;">
+        <label><input type="text" size="10" id="nom" onchange="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'nom', this.value); Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'code', this.value);"/></label>
+        <button type="submit" style="display:none;"></button>
+      </form>
     </td>
     <td class="text" style="width: 10%">
-      <label><input type="text" size="25" onchange="Infrastructure.setValueForm('editLit', 'nom_complet', this.value)"/></label>
+      <form name="saveNomCompletLit{{$_lit->_guid}}"  method="post" onsubmit="getForm('editLit{{$_lit->_guid}}').onsubmit(); return false;">
+        <label><input type="text" size="25" onchange="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'nom_complet', this.value);"/></label>
+        <button type="submit" style="display:none;"></button>
+      </form>
     </td>
     <td>
-      <label><input type="radio" name="__annule" value="1" onclick="Infrastructure.setValueForm('editLit', 'annule', this.value)"/> Oui </label>
-      <label><input type="radio" name="__annule" value="0" onclick="Infrastructure.setValueForm('editLit', 'annule', this.value)" checked/> Non </label>
+      <form name="saveAnnuleLit{{$_lit->_guid}}"  method="post" onsubmit="getForm('editLit{{$_lit->_guid}}').onsubmit(); return false;">
+        <label><input type="radio" name="__annule" value="1" onclick="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'annule', this.value);"/> Oui </label>
+        <label><input type="radio" name="__annule" value="0" onclick="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'annule', this.value);" checked/> Non </label>
+        <button type="submit" style="display:none;"></button>
+      </form>
     </td>
 
     <td></td>
     <td></td>
 
     <td class="button">
-      <form name="editLit"  method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Infrastructure.reloadLitLine('{{$_lit->_id}}', '{{$chambre->_id}}')}})">
+      <form name="editLit{{$_lit->_guid}}"  method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Infrastructure.reloadLitLine('{{$_lit->_id}}', '{{$chambre->_id}}')}})">
         {{mb_key object=$_lit}}
         {{mb_class object=$_lit}}
         <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
