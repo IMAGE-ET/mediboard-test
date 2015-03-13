@@ -25,6 +25,9 @@ switch ($action) {
 
   case 'archive':
     $usermessagedest->archived = $value;
+    if (!$usermessagedest->datetime_read) {
+      $usermessagedest->datetime_read = CMbDT::dateTime();
+    }
     break;
 
   case 'star':
