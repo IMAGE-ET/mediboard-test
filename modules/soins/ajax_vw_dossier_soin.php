@@ -112,12 +112,11 @@ if (CModule::getActive("dPprescription")) {
   $prescription->calculAllPlanifSysteme();
 
   // Chargement des configs de service
-  if ($sejour->_duree == 0) {
+  $sejour->loadRefCurrAffectation($date);
+
+  if (!$sejour->_ref_curr_affectation->_id) {
     $sejour->loadRefsAffectations();
     $sejour->_ref_curr_affectation = $sejour->_ref_last_affectation;
-  }
-  else {
-    $sejour->loadRefCurrAffectation($date);
   }
 
   if ($sejour->_ref_curr_affectation->_id) {
