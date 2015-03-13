@@ -41,7 +41,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
 
-    if ($event->code == "Q22") {
+    if ($event->code == "Q22" || $event->code == "ZV1") {
       $data = $this->buildIHEPDQQuery();
     }
     elseif ($event->code == "Q23") {
@@ -72,8 +72,6 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
       // QPD-8 : What domains returned (CX)
       $data[] = null;
     }
-
-    mbTrace($data);
 
     $this->fill($data);
   }
