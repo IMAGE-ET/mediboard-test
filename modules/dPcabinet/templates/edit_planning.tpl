@@ -527,7 +527,7 @@
                           </span>
                           {{/if}}
                           <br />
-                          <a class="button new" id="addedit_button_new_rdv_same_patient" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0&date_planning={{$consult->_date}}&chir_id={{$chir->_id}}">Nouveau RDV pour ce patient</a>
+                          <a class="button new" id="addedit_button_new_rdv_same_patient" href="?m=dPcabinet&amp;a=edit_planning&amp;dialog={{$dialog}}&amp;pat_id={{$consult->patient_id}}&amp;consultation_id=0&amp;date_planning={{$consult->_date}}&amp;chir_id={{$chir->_id}}">Nouveau RDV pour ce patient</a>
                         {{/if}}
 
                       </td>
