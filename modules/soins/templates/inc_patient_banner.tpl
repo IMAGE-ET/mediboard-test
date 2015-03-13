@@ -39,7 +39,7 @@
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-        <h2 style="color: #fff; font-weight: bold; text-align: center;">
+        <h2 class="title">
           <span style="font-size: 0.8em;" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
             {{$patient->_view}}
           </span>

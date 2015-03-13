@@ -426,6 +426,12 @@ table.tbl tr.clear th {
   border: none;
 }
 
+table.tbl th.title h2 {
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
 /* Form tables */
 table.form {
   width: 100%;
