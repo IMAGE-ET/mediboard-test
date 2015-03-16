@@ -36,7 +36,7 @@ class CHL7v3EventSVS extends CHL7v3Event implements CHL7EventSVS {
    * @return void
    */
   function build($object) {
-    $this->dom = new CSVSMessageXML("utf-8", $this->version);
+    $this->dom = new CHL7v3MessageXML("utf-8", $this->version);
 
     parent::build($object);
   }

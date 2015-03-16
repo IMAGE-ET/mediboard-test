@@ -52,9 +52,11 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
     $factory->old_version = $this->old_version;
     $factory->old_id      = $this->old_id;
     $factory->receiver    = $this->_receiver;
+    $cda = null;
+
     $cda = $factory->generateCDA();
     try {
-      CCdaTools::validateCDA($cda);
+      //CCdaTools::validateCDA($cda);
     }
     catch (CMbException $e) {
       throw $e;
@@ -63,6 +65,7 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
     $xds           = CXDSFactory::factory($factory);
     $xds->type     = $this->type;
     $xds->doc_uuid = $this->uuid;
+
     switch ($this->hide) {
       case "0":
         $xds->hide_ps = true;
@@ -73,6 +76,7 @@ class CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest
       default:
         $xds->hide_patient = false;
     }
+
     $xds->extractData();
     $xds->xcn_mediuser         = $this->xcn_mediuser      ? $this->xcn_mediuser      : $xds->xcn_mediuser;
     $xds->xon_etablissement    = $this->xon_etablissement ? $this->xon_etablissement : $xds->xon_etablissement;

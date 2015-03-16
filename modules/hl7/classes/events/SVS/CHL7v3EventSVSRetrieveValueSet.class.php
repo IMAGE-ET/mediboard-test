@@ -34,7 +34,8 @@ class CHL7v3EventSVSRetrieveValueSet extends CHL7v3EventSVS implements CHL7Event
 
     $data   = $object->_data;
 
-    $dom = new CSVSMessageXML("utf-8", $this->version);
+    $dom = new CHL7v3MessageXML("utf-8", $this->version);
+    //$dom->addNameSpaces();
 
     $RetrieveValueSetRequest = $dom->addElement($dom, "RetrieveValueSetRequest");
 
@@ -44,7 +45,7 @@ class CHL7v3EventSVSRetrieveValueSet extends CHL7v3EventSVS implements CHL7Event
     $dom->addValueSet($ValueSet, "lang"   , "language", $data);
 
     $this->message = $dom->saveXML();
-mbTrace($this->message);
+
     $this->updateExchange(false);
   }
 }

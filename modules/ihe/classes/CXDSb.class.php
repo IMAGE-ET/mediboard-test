@@ -17,15 +17,19 @@
  */
 class CXDSb extends CIHE {
   /** @var array */
+  static $interaction_ITI18 = array (
+    // Patient Registry Get Demographics Query
+    "RegistryStoredQuery"
+  );
+
+  /** @var array */
   static $interaction_ITI41 = array (
     // Patient Registry Get Demographics Query
     "ProvideAndRegisterDocumentSetRequest"
   );
 
-  /** @var array */
-  static $interaction_ITI18 = array (
-    // Patient Registry Get Demographics Query
-    "RegistryStoredQuery"
+  static $interaction_ITI43 = array(
+    "RetrieveDocumentSet"
   );
 
   /** @var array */
@@ -34,14 +38,11 @@ class CXDSb extends CIHE {
     "UpdateDocumentSet"
   );
 
-  static $interaction_ITI43 = array(
-    "RetrieveDocumentSet"
-  );
-
   /** @var array */
   static $evenements = array (
     // Patient Registry Get Demographics Query
     "ProvideAndRegisterDocumentSetRequest" => "CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest",
+
     "RegistryStoredQuery"                  => "CHL7v3EventXDSbRegistryStoredQuery",
     "UpdateDocumentSet"                    => "CHL7v3EventXDSbUpdateDocumentSet",
     "RetrieveDocumentSet"                  => "CHL7v3EventXDSbRetrieveDocumentSet",
@@ -91,6 +92,31 @@ class CXDSb extends CIHE {
     $classname = "CHL7v3Event{$exchange->type}{$exchange->sous_type}";
 
     return new $classname;
+  }
+
+  /**
+   * Retrieve transaction name,
+   *
+   * @param string $code Event code
+   *
+   * @return string Transaction name
+   */
+  static function getTransaction($code) {
+    if (in_array($code, self::$interaction_ITI18)) {
+      return "ITI18";
+    }
+
+    if (in_array($code, self::$interaction_ITI41)) {
+      return "ITI41";
+    }
+
+    if (in_array($code, self::$interaction_ITI43)) {
+      return "ITI43";
+    }
+
+    if (in_array($code, self::$interaction_ITI57)) {
+      return "ITI57";
+    }
   }
 
   /**

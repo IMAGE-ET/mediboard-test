@@ -187,6 +187,10 @@ class CSourceSOAP extends CExchangeSource {
       $options["return_mode"] = $this->return_mode;
     }
 
+    if ($this->soap_version) {
+      $options["soap_version"] = $this->soap_version;
+    }
+
     if ($this->xop_mode) {
       $options["xop_mode"] = true;
     }

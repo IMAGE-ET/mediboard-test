@@ -108,13 +108,13 @@ class CSOAPClient {
     }
 
     switch ($this->type_client) {
-      case 'CNuSOAPClient' :
+      case 'CNuSOAPClient':
         $this->client = new CNuSOAPClient(
           $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile
         );
         break;
         
-      default :
+      default:
         $this->client = new CMbSOAPClient(
           $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile, $wsdl_external,
           $socket_timeout
@@ -163,7 +163,7 @@ class CSOAPClient {
     if (!is_array($arguments)) {
       $arguments = array($arguments);
     }
-    
+
     /* @todo Lors d'un appel d'une méthode RPC le tableau $arguments contient un élement vide array( [0] => )
      * posant problème lors de l'appel d'une méthode du WSDL sans argument */
     if (isset($arguments[0]) && empty($arguments[0])) {

@@ -77,6 +77,24 @@ class CHL7v3MessageXML extends CMbXMLDocument {
   }
 
   /**
+   * Add value set
+   *
+   * @param DOMNode $elParent Parent element
+   * @param string  $attName  Attribute name
+   * @param string  $attValue Attribute value
+   * @param array   $data     Data
+   *
+   * @return void
+   */
+  function addValueSet($elParent, $attName, $attValue, $data = array()) {
+    if (!$value = CMbArray::get($data, $attValue)) {
+      return;
+    }
+
+    $this->addAttribute($elParent, $attName, $value);
+  }
+
+  /**
    * Importe un DOMDocument à l'intérieur de l'élément spécifié
    *
    * @param DOMElement  $nodeParent  DOMElement

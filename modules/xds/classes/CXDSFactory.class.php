@@ -376,8 +376,7 @@ class CXDSFactory {
    *
    * @return string
    */
-  function getPerson($praticien) {
-
+  function getPerson(CMediusers $praticien) {
     if (!$praticien->adeli && !$praticien->rpps) {
       return null;
     }
@@ -531,7 +530,7 @@ class CXDSFactory {
 
     $comp4 = $oid;
     $comp4 = "&$comp4&ISO";
-    $comp1 = $patient->_id;
+    $comp1 = $patient->_IPP ? $patient->_IPP : $patient->_id;
     $comp5 = "PI";
 
     $result = "$comp1^^^$comp4^$comp5";

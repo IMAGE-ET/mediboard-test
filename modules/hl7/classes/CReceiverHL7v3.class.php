@@ -181,4 +181,27 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $class_name = "C$event_type";
     return $class_name::getAcknowledgment($ack_data);
   }
+
+  /**
+   * Send the event ProvideAndRegisterDocumentSetRequest
+   *
+   * @param CDocumentItem $document_item Document
+   *
+   * @throws Exception
+   * @return mixed
+   */
+  function sendEventProvideAndRegisterDocumentSetRequest(CDocumentItem $document_item) {
+    $iti41 = new CHL7v3EventXDSbProvideAndRegisterDocumentSetRequest();
+    $iti41->type = $this->libelle;
+
+    $iti41->_event_name = "ProvideAndRegisterDocumentSetRequest";
+
+    $headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b");
+    try {
+      $this->sendEvent($iti41, $document_item, $headers, true);
+
+    } catch (CMbException $e) {
+      $e->stepAjax(UI_MSG_WARNING);
+    }
+  }
 }

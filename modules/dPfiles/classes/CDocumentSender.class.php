@@ -15,30 +15,42 @@
  */
 abstract class CDocumentSender {
   /**
-   * @see parent::send()
+   * Function send
+   *
+   * @param CDocumentItem $docItem Document
+   *
+   * @return void
    */
   function send(CDocumentItem $docItem) {
-
   }
 
   /**
-   * @see parent::cancel()
+   * Function cancel
+   *
+   * @param CDocumentItem $docItem Document
+   *
+   * @return void
    */
   function cancel(CDocumentItem $docItem) {
-
   }
 
   /**
-   * @see parent::resend()
+   * Function resend
+   *
+   * @param CDocumentItem $docItem Document
+   *
+   * @return void
    */
   function resend(CDocumentItem $docItem) {
-
   }
 
   /**
-   * @see parent::getSendProblem()
+   * Get send problem
+   *
+   * @param CDocumentItem $docItem Document
+   *
+   * @return void
    */
   function getSendProblem(CDocumentItem $docItem) {
-
   }
 }

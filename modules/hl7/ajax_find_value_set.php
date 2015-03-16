@@ -29,7 +29,7 @@ $transaction = CSVS::getTransaction($value_set_type);
 $event_name  = CMbArray::get(CSVS::$evenements, $value_set_type);
 
 /** @var CHL7v3Event $event */
-$event       = new $event_name;
+$event              = new $event_name;
 $event->_event_name = "ValueSetRepository_RetrieveValueSet";
 
 $data = array(
@@ -41,9 +41,12 @@ $data = array(
 $object = new CMbObject();
 $object->_data = $data;
 
-$headers = CSVSAdressing::createWSAddressing()->saveXML();
+$headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2008:$value_set_type");
 
-mbTrace($headers);
 foreach ($receivers as $_receiver) {
+  if (!$_receiver->isMessageSupported($event_name)) {
+    continue;
+  }
+
   mbTrace($_receiver->sendEvent($event, $object, $headers, true));
 }

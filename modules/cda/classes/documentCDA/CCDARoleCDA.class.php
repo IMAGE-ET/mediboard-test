@@ -82,10 +82,12 @@ class CCDARoleCDA extends CCDADocumentCDA {
     $patientRole = new CCDAPOCD_MT000040_PatientRole();
     $patient = self::$cda_factory->patient;
 
-    $ii = new CCDAII();
-    $ii->setRoot("1.2.250.1.213.1.4.2");
-    $ii->setExtension($patient->_ref_last_ins->ins);
-    $patientRole->appendId($ii);
+    if ($patient->_ref_last_ins) {
+      $ii = new CCDAII();
+      $ii->setRoot("1.2.250.1.213.1.4.2");
+      $ii->setExtension($patient->_ref_last_ins->ins);
+      $patientRole->appendId($ii);
+    }
 
     $ii = new CCDAII();
     $ii->setRoot(CMbOID::getOIDOfInstance($patient, self::$cda_factory->receiver));

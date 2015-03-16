@@ -9,7 +9,7 @@
   <col style="width: 50%" />
     
   {{assign var=class value=""}}
-  {{mb_include module=system template=inc_config_enum var=system_sender values="|CEcDocumentSender|CMedinetSender|CDMPSender"}}
+  {{mb_include module=system template=inc_config_enum var=system_sender values="|CEcDocumentSender|CMedinetSender|CDMPSender|CDocumentSourceSender"}}
   {{assign var=class value=CDocumentSender}}
   {{mb_include module=system template=inc_config_str var=auto_max_load}}
   {{mb_include module=system template=inc_config_str var=auto_max_send}}
