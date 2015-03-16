@@ -85,7 +85,7 @@
           </label>
         </td>
         <td>
-          <table class="form">
+          <table class="main">
             <tr>
               <th>{{tr}}CFunctions{{/tr}}</th>
               <td>
@@ -117,7 +117,7 @@
         </td>
 
         <td>
-          <table class="form">
+          <table class="main">
             <tr>
               <th><label>Verrouillage</th></label>
               <td>

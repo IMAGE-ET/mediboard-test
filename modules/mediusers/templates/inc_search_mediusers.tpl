@@ -12,5 +12,3 @@
 {{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
 
 {{mb_include template=vw_list_mediusers}}
-
-{{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
