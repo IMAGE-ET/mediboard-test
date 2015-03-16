@@ -54,10 +54,12 @@ foreach ($operations as $_operation) {
   // Détails de l'opérations
   $_operation->loadRefChir()->loadRefFunction();
   $_operation->loadExtCodesCCAM();
+  $_operation->loadRefsDocItems();
 
   // Détails du séjour
   $_operation->_ref_sejour               = $sejours[$_operation->sejour_id];
   $_operation->_ref_sejour->_ref_patient = $patients[$_operation->_ref_sejour->patient_id];
+  $_operation->_ref_sejour->loadRefsDocItems();
 }
 
 

@@ -38,6 +38,7 @@ if ($sejour->patient_id == $patient->_id) {
   $sejour->loadExtDiagnostics();
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
+  $sejour->loadSuiviMedical();
   foreach ($sejour->_ref_operations as $_op) {
     $_op->loadRefPraticien();
     $_op->loadRefPlageOp();
