@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 // Récupération des paramètres
@@ -65,12 +65,12 @@ if ($type == "fermeture_salle") {
   if ($salle->_ref_plages) {
     foreach ($salle->_ref_plages as $_plage) {
       foreach ($_plage->_ref_operations as $_operation) {
-        if (!$_operation->sortie_salle) {
+        if (!$_operation->sortie_salle && !$_operation->annulee) {
           $nb_op_no_close++;
         }
       }
       foreach ($_plage->_unordered_operations as $_operation) {
-        if (!$_operation->sortie_salle) {
+        if (!$_operation->sortie_salle && !$_operation->annulee) {
           $nb_op_no_close++;
         }
       }
