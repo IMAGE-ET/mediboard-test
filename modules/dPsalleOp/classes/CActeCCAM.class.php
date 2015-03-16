@@ -301,7 +301,6 @@ class CActeCCAM extends CActe {
    * @return void
    */
   function setFullCode($code){
-    ml('CActeCCAM::setFullCode()');
     $details = explode("-", $code);
     if (count($details) > 2) {
       $this->code_acte     = $details[0];
