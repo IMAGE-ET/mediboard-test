@@ -18,6 +18,7 @@ $input       = CValue::get($input_field);
 $limit       = CValue::get('limit', 30);
 $wholeString = CValue::get('wholeString', 'false') == 'true';
 $where       = CValue::get('where', array());
+$whereComplex = CValue::get('whereComplex', array());
 $min_occurences = CValue::get('min_occurences', 1);
 
 /** @var CMbObject $object */
@@ -26,6 +27,10 @@ $ds = $object->_spec->ds;
 
 foreach ($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
+}
+
+foreach ($whereComplex as $key => $value) {
+  $where[$key] = stripslashes($value);
 }
 
 $input = str_replace("\\'", "'", $input);
