@@ -2916,8 +2916,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    $sender  = $this->_ref_sender;
     $patient = $newVenue->_ref_patient;
+    if (!$patient->_id) {
+      return;
+    }
 
     $GT1_2  = $this->queryTextNode("GT1.2/CX.1", $node);
 
@@ -2934,14 +2936,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $ville   = $this->queryTextNode("XAD.3", $GT1_5);
     $cp      = $this->queryTextNode("XAD.5", $GT1_5);
 
-    $GT1_6 = $this->queryNodes("GT1.6", $node)->item(0);
+    $GT1_6 = $this->queryNodes("GT1.6", $node);
 
-    $tel = null;
-    if ($GT1_6) {
-      $tel = $this->queryTextNode("XTN.12", $GT1_6);
+    $tel      = null;
+    $ean      = null;
+    $ean_base = null;
+    foreach ($GT1_6 as $_GT1_6) {
+      if (!$tel) {
+        $tel = $this->queryTextNode("XTN.12", $_GT1_6);
+      }
 
       if (!$tel) {
-        $tel = $this->queryTextNode("XTN.1", $GT1_6);
+        $tel = $this->queryTextNode("XTN.1", $_GT1_6);
+      }
+
+      $XTN_4 = $this->queryTextNode("XTN.4", $_GT1_6);
+      // EAN base => Ean Dest
+      if (preg_match('/^Ean Dest=(\d+)$/', $XTN_4, $matches) === 1) {
+        $ean_base = CMbArray::get($matches, 1);
+      }
+
+      // EAN => Code Ean
+      if (preg_match('/^Code Ean=(\d+)$/', $XTN_4, $matches) === 1) {
+        $ean = CMbArray::get($matches, 1);
       }
     }
 
@@ -2976,6 +2993,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $corres_patient->ville    = $ville;
     $corres_patient->tel      = $tel;
 
+    $corres_patient->ean      = $ean;
+    $corres_patient->ean_base = $ean_base;
+
+    if ($ean) {
+      $where = array(
+        "patient_id" => "IS NULL",
+        "relation"   => "= 'assurance'",
+        "ean"        => "= '$ean'"
+      );
+
+      $assurance = new CCorrespondantPatient();
+      $assurance->loadObject($where);
+
+      $corres_patient->type_pec = $assurance->type_pec;
+    }
+
     if ($GT1_13) {
       $corres_patient->date_debut = CMbDT::date($GT1_13);
     }
@@ -2984,14 +3017,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $corres_patient->date_fin   = CMbDT::date($GT1_14);
     }
 
+    $sender = $this->_ref_sender;
     // Notifier les autres destinataires autre que le sender
     $corres_patient->_eai_sender_guid = $sender->_guid;
 
     if ($msg = $corres_patient->store()) {
       $corres_patient->repair();
-
       $corres_patient->_eai_sender_guid = $sender->_guid;
-
       $corres_patient->store();
     }
   }

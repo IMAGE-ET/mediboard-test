@@ -109,7 +109,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
         return;
       }
       $receiver = CMbObject::loadFromGuid($cn_receiver_guid);
-      if (!$receiver->_id) {
+      if (!$receiver || !$receiver->_id) {
         return;
       }
       $receivers[$receiver->_class][] = $receiver;
