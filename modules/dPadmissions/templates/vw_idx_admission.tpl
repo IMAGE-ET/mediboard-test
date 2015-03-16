@@ -158,21 +158,32 @@
     $V(form.elements.mode_entree, selected.get("mode"));
   }
 
+  {{assign var=auto_refresh_frequency value=$conf.dPadmissions.auto_refresh_frequency_admissions}}
+
   Main.add(function() {
     Admissions.table_id = "listAdmissions";
     var form = getForm("selType");
 
     var totalUpdater = new Url("admissions", "httpreq_vw_all_admissions");
-    Admissions.totalUpdater = totalUpdater.periodicalUpdate('allAdmissions', {frequency: 120});
-
     var listUpdater = new Url("admissions", "httpreq_vw_admissions");
-    Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', {
-      frequency: 120,
-      onCreate: function() {
-        WaitingMessage.cover($('listAdmissions'));
-        Admissions.rememberSelection();
-      }
-    });
+    {{if $auto_refresh_frequency != 'never'}}
+      Admissions.totalUpdater = totalUpdater.periodicalUpdate('allAdmissions', {frequency: {{$auto_refresh_frequency}}});
+
+      Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', {
+        frequency: {{$auto_refresh_frequency}},
+        onCreate: function() {
+          WaitingMessage.cover($('listAdmissions'));
+          Admissions.rememberSelection();
+        }
+      });
+    {{else}}
+      totalUpdater.requestUpdate('allAdmissions');
+      listUpdater.requestUpdate('listAdmissions', {
+        onCreate: function() {
+          WaitingMessage.cover($('listAdmissions'));
+          Admissions.rememberSelection();
+        }});
+    {{/if}}
   });
 </script>
 
