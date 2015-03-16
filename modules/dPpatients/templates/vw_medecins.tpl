@@ -59,12 +59,14 @@
         {{tr}}Merge{{/tr}}
       </button>
     </th>
+
     {{if $is_admin && $conf.dPpatients.CPatient.function_distinct}}
       <th>{{mb_title class=CMedecin field=function_id}}</th>
     {{/if}}
     {{else}}
       <th>{{tr}}Import{{/tr}}</th>
     {{/if}}
+    <th class="category narrow"></th>
     <th>{{mb_title class=CMedecin field=nom}}</th>
     <th class="narrow">{{mb_title class=CMedecin field=sexe}}</th>
     <th>{{mb_title class=CMedecin field=adresse}}</th>
@@ -102,14 +104,16 @@
         </td>
       {{/if}}
 
+      <td>
+        {{if !$annuaire}}
+        <button type="button" class="edit notext"
+                onclick="Medecin.editMedecin('{{$_medecin->_id}}',refreshPageMedecin)">
+        </button>
+        {{/if}}
+      </td>
+
       <td class="text">
-        {{if !$annuaire}}
-            <a href="#" onclick="Medecin.editMedecin('{{$_medecin->_id}}', refreshPageMedecin);">
-        {{/if}}
-          {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
-        {{if !$annuaire}}
-            </a>
-        {{/if}}
+        {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
       </td>
       <td {{if $_medecin->sexe == 'u'}}class="empty" {{/if}}>{{mb_value object=$_medecin field=sexe}}</td>
       <td class="text compact">{{$_medecin->adresse}}<br/>
@@ -131,8 +135,6 @@
     <tr><td colspan="20" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-{{mb_include module=system template=inc_pagination current=$start_med step=$step_med total=$count_medecins change_page=refreshPageMedecin}}
 
 {{if !$annuaire}}
   </form>
