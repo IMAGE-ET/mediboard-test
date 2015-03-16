@@ -969,4 +969,15 @@ class CProduct extends CMbObject {
       "balance" => $balance,
     );
   }
+
+  /**
+   * Charge l'atc dans la pharmacie
+   *
+   * @return void
+   */
+  function loadMedicamentATC() {
+    $med = CMedicamentProduit::get($this->code);
+    $this->_classe_atc = $med->_ref_ATC_5_code;
+  }
+
 }
