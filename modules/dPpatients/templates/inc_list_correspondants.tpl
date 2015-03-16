@@ -11,6 +11,10 @@
 <table style="width: 100%;" class="tbl">
   <thead>
     <tr>
+      {{if !$readonly}}
+        <th class="category narrow"></th>
+      {{/if}}
+
       <th class="category">{{tr}}CCorrespondantPatient{{/tr}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=naissance}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=adresse}}</th>
@@ -24,10 +28,6 @@
       <th class="category">{{mb_title class=CCorrespondantPatient field=remarques}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=date_debut}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=date_fin}}</th>
-
-      {{if !$readonly}}
-        <th class="category narrow"></th>
-      {{/if}}
     </tr>
   </thead>
   {{if $nb_correspondants > 0}}
@@ -40,6 +40,19 @@
         </tr>
         {{foreach from=$_correspondants item=_correspondant}}
           <tr {{if $_correspondant->_is_obsolete}}class="hatching"{{/if}}>
+            {{if !$readonly}}
+              <td>
+                <button {{if $_correspondant->_is_obsolete}}disabled{{/if}} type="button" class="edit notext"
+                        onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
+                </button>
+                {{if $_correspondant->_is_obsolete}}
+                  <button type="button" class="duplicate notext"
+                          onclick="Correspondant.duplicate('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
+                  </button>
+                {{/if}}
+              </td>
+            {{/if}}
+
             <td class="text noted">
               <div style="float: right;">
                 {{mb_include module=system template=inc_object_notes object=$_correspondant}}
@@ -86,19 +99,6 @@
             </td>
             <td>{{mb_value object=$_correspondant field=date_debut}}</td>
             <td>{{mb_value object=$_correspondant field=date_fin}}</td>
-
-            {{if !$readonly}}
-            <td>
-              <button {{if $_correspondant->_is_obsolete}}disabled{{/if}} type="button" class="edit notext"
-                onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
-              </button>
-              {{if $_correspondant->_is_obsolete}}
-                <button type="button" class="duplicate notext"
-                        onclick="Correspondant.duplicate('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
-                </button>
-              {{/if}}
-            </td>
-            {{/if}}
           </tr>
         {{foreachelse}}
           <tr>

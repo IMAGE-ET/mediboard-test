@@ -12,6 +12,7 @@
 
 <table class="tbl">
   <tr>
+    <th class="category narrow"></th>
     {{if $is_admin}}
       <th>{{mb_title class=CCorrespondantPatient field=function_id}}</th>
     {{/if}}
@@ -39,6 +40,12 @@
   {{foreach from=$correspondants item=_correspondant}}
 
     <tr>
+      <td>
+        <button type="button" class="edit notext"
+                onclick="Correspondant.edit('{{$_correspondant->_id}}', null, refreshPageCorrespondant)">
+        </button>
+      </td>
+
       {{if $is_admin}}
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_correspondant->_ref_function->_guid}}')">
@@ -47,9 +54,7 @@
         </td>
       {{/if}}
       <td>
-        <a href="#" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, refreshPageCorrespondant)">
           {{mb_value object=$_correspondant field=nom}}
-        </a>
       </td>
       <td>
         {{mb_value object=$_correspondant field=prenom}}
@@ -106,5 +111,3 @@
     </tr>
   {{/foreach}}
 </table>
-
-{{mb_include module=system template=inc_pagination current=$start_corres step=$step_corres total=$nb_correspondants change_page=refreshPageCorrespondant}}
