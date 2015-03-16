@@ -286,7 +286,7 @@ toggleGroupLabelEdit = function(link) {
                       {{/if}}
 
                       {{if $_field->hidden}}
-                        <img src="./images/icons/hidden.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                        <img src="./images/icons/hidden.png" title="{{tr}}CExClassField-hidden{{/tr}}"/>
                       {{elseif $_field->predicate_id}}
                         <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
                       {{/if}}
