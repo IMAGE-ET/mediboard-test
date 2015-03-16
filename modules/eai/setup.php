@@ -508,7 +508,56 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`master_idex_missing`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $query = "CREATE TABLE `syslog_receiver` (
+                `syslog_receiver_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `OID`                VARCHAR(255),
+                `synchronous`        ENUM('0','1') NOT NULL DEFAULT '1',
+                `monitor_sources`    ENUM('0','1') NOT NULL DEFAULT '1',
+                `nom`                VARCHAR(255) NOT NULL,
+                `libelle`            VARCHAR(255),
+                `group_id`           INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                `actif`              ENUM('0','1') NOT NULL DEFAULT '0',
+                INDEX(`group_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.31");
+    $query = "CREATE TABLE `syslog_exchange` (
+                `syslog_exchange_id`      INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `identifiant_emetteur`    VARCHAR(255),
+                `initiateur_id`           INT(11) UNSIGNED,
+                `group_id`                INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                `date_production`         DATETIME NOT NULL,
+                `sender_id`               INT(11) UNSIGNED,
+                `sender_class`            VARCHAR(255),
+                `receiver_id`             INT(11) UNSIGNED,
+                `type`                    VARCHAR(255),
+                `sous_type`               VARCHAR(255),
+                `date_echange`            DATETIME,
+                `message_content_id`      INT(11) UNSIGNED,
+                `acquittement_content_id` INT(11) UNSIGNED,
+                `statut_acquittement`     VARCHAR(255),
+                `message_valide`          ENUM('0','1') DEFAULT '0',
+                `acquittement_valide`     ENUM('0','1') DEFAULT '0',
+                `id_permanent`            VARCHAR(255),
+                `object_id`               INT(11) UNSIGNED,
+                `object_class`            VARCHAR(255),
+                `reprocess`               TINYINT(4) UNSIGNED DEFAULT '0',
+                `master_idex_missing`     ENUM('0','1') DEFAULT '0',
+                INDEX(`initiateur_id`),
+                INDEX(`group_id`),
+                INDEX(`date_production`),
+                INDEX(`sender_id`),
+                INDEX(`receiver_id`),
+                INDEX(`date_echange`),
+                INDEX(`message_content_id`),
+                INDEX(`acquittement_content_id`),
+                INDEX(`object_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.32";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

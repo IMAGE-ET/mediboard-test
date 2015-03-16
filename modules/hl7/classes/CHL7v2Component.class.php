@@ -156,6 +156,8 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return void
    */
   function parse($data) {
+    parent::parse($data);
+
     $keep_original = $this->getField()->keep();
 
     // Is composite

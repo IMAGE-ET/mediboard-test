@@ -110,6 +110,14 @@
               {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourcePOP"}}
             {{/if}}
           </div>
+
+          <div id="CSyslogSource-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSyslogSource)}}block{{else}}none{{/if}};">
+            {{if !"eai"|module_active}}
+              {{mb_include module=system template=module_missing mod=eai}}
+            {{else}}
+              {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSyslogSource"}}
+            {{/if}}
+          </div>
         </td>
       </tr>
     </table>

@@ -49,7 +49,7 @@ class CHL7v2Segment extends CHL7v2Entity {
    * @see parent::parse
    */
   function parse($data) {
-    //parent::parse($data);
+    parent::parse($data);
     
     $message = $this->getMessage();
 

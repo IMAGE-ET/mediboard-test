@@ -2035,6 +2035,47 @@ class CSetupsystem extends CSetup {
                 CHANGE `value` `value` VARCHAR(1024)";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.80";
+    $this->makeRevision('1.1.80');
+    $query = "CREATE TABLE `syslog_source` (
+                `syslog_source_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name`             VARCHAR(255) NOT NULL,
+                `role`             ENUM('prod','qualif') NOT NULL DEFAULT 'qualif',
+                `host`             TEXT NOT NULL,
+                `user`             VARCHAR(255),
+                `password`         VARCHAR(50),
+                `iv`               VARCHAR(255),
+                `type_echange`     VARCHAR(255),
+                `active`           ENUM('0','1') NOT NULL DEFAULT '1',
+                `loggable`         ENUM('0','1') NOT NULL DEFAULT '1',
+                `libelle`          VARCHAR(255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision('1.1.81');
+    $query = "ALTER TABLE `syslog_source`
+                ADD `port` INT(11) DEFAULT '514' NOT NULL,
+                ADD `protocol` ENUM('TCP', 'UDP', 'TLS') DEFAULT 'TCP' NOT NULL;";
+    $this->addQuery($query);
+
+    $this->makeRevision('1.1.82');
+    $query = "ALTER TABLE `syslog_source`
+                ADD `timeout` TINYINT(4) DEFAULT '5';";
+    $this->addQuery($query);
+
+    $this->makeRevision('1.1.83');
+    $query = "ALTER TABLE `syslog_source`
+              ADD `ssl_enabled`     ENUM ('0','1') NOT NULL DEFAULT '0',
+              ADD `ssl_certificate` VARCHAR(255),
+              ADD `ssl_passphrase`  VARCHAR(255);";
+    $this->addQuery($query);
+
+    $this->makeRevision('1.1.84');
+    $query = "ALTER TABLE `syslog_source`
+                CHANGE `password` `password` VARCHAR(255),
+                CHANGE `iv`       `iv`       VARCHAR(16) AFTER `password`,
+                ADD `iv_passphrase`          VARCHAR(16) AFTER `ssl_passphrase`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.85";
   }
 }

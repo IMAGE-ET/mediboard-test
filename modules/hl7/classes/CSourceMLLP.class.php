@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-class CSourceMLLP extends CExchangeSource {
+class CSourceMLLP extends CSocketSource {
   /**
    * Start of an MLLP message
    */
@@ -28,8 +28,6 @@ class CSourceMLLP extends CExchangeSource {
   public $ssl_passphrase;
   public $iv_passphrase;
   
-  private $_socket_client = null;
-
   /**
    * @see parent::getSpec()
    */
@@ -152,5 +150,19 @@ class CSourceMLLP extends CExchangeSource {
   
   function getResponseTime() {
     $this->_response_time = url_response_time($this->host, $this->port);
+  }
+
+  /**
+   * @see parent::isSecured()
+   */
+  function isSecured() {
+    return ($this->ssl_enabled && $this->ssl_certificate && is_readable($this->ssl_certificate));
+  }
+
+  /**
+   * @see parent::getProtocol()
+   */
+  function getProtocol() {
+    return 'tcp';
   }
 }
