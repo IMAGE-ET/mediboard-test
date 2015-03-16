@@ -79,12 +79,7 @@ class CSyslogITI22 extends CSyslogAuditMessage {
   /** @var DOMElement */
   public $query_parameters_participant_object_detail;
 
-  /** @var boolean IS MEDIBOARD sending actor? */
-  public $_is_source;
-
-  public function __construct(CExchangeHL7v2 $exchange) {
-    parent::__construct();
-
+  public function setExchange(CExchangeHL7v2 $exchange) {
     $msg = $exchange->getMessage();
 
     $this->hl7_msg          = $msg;
@@ -100,10 +95,15 @@ class CSyslogITI22 extends CSyslogAuditMessage {
     $msg = $exchange->getMessage();
 
     if (self::isSource($msg->toXML()->getMSHEvenementXML())) {
-      return new CSyslogZV1Consumer($exchange);
+      $object = new CSyslogZV1Consumer();
+    }
+    else {
+      $object = new CSyslogZV1Supplier();
     }
 
-    return new CSyslogZV1Supplier($exchange);
+    $object->setExchange($exchange);
+
+    return $object;
   }
 
   static function isSource($msh_data) {

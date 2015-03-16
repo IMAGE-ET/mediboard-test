@@ -12,14 +12,14 @@
  */
 
 /**
- * ITI-21 Patient Demographics Consumer audit message
+ * ITI-41 Patient Demographics Consumer audit message
  *
- * Patient Demographics Query
+ * Patient Demographics and Visit Query
  *
- * Look up and return patient demographic information in a single patient demographics source,
- * based upon matches with full or partial demographic information entered by the user.
+ * Look up and return patient demographic and visit information in a single patient demographics source,
+ * based upon matches with full or partial demographic/visit information entered by the user.
  */
-class CSyslogITI21 extends CSyslogAuditMessage {
+class CSyslogITI41 extends CSyslogAuditMessage {
   const AUDIT_SOURCE_ID = 'MEDIBOARD';
 
   /** @var CHL7v2Message */
@@ -64,20 +64,14 @@ class CSyslogITI21 extends CSyslogAuditMessage {
   /** @var DOMElement */
   public $audit_source_identification;
 
-  /** @var DOMElement[] */
-  public $participant_object_identification = array();
+  /** @var DOMElement */
+  public $participant_object_identification;
 
   /** @var DOMElement */
-  public $query_parameters;
+  public $submission_set;
 
   /** @var DOMElement */
-  public $query_parameters_participant_object_id_type_code;
-
-  /** @var DOMElement */
-  public $query_parameters_participant_object_query;
-
-  /** @var DOMElement */
-  public $query_parameters_participant_object_detail;
+  public $submission_set_participant_object_id_type_code;
 
   public function setExchange(CExchangeHL7v2 $exchange) {
     $msg = $exchange->getMessage();
@@ -95,10 +89,11 @@ class CSyslogITI21 extends CSyslogAuditMessage {
     $msg = $exchange->getMessage();
 
     if (self::isSource($msg->toXML()->getMSHEvenementXML())) {
-      $object = new CSyslogQ22Consumer();
+      $object = new CSyslogProvideAndRegisterDocumentSetResponse();
     }
     else {
-      $object = new CSyslogQ22Supplier();
+      // Not implemented yet
+      return false;
     }
 
     $object->setExchange($exchange);
@@ -145,7 +140,7 @@ class CSyslogITI21 extends CSyslogAuditMessage {
   public function setEventIdentification() {
     $event_identification = $this->msg_xml->addElement($this->audit_message, 'EventIdentification');
 
-    $this->msg_xml->addAttribute($event_identification, 'EventActionCode', 'E');
+    $this->msg_xml->addAttribute($event_identification, 'EventActionCode', 'C');
     $this->msg_xml->addAttribute(
       $event_identification,
       'EventDateTime',
@@ -174,7 +169,7 @@ class CSyslogITI21 extends CSyslogAuditMessage {
   public function setEventID() {
     $event_identification_event_id = $this->msg_xml->addElement($this->event_identification, 'EventID');
 
-    $this->setEVAttributes($event_identification_event_id, '110112', 'Query', 'DCM');
+    $this->setEVAttributes($event_identification_event_id, '110107', 'Import', 'DCM');
 
     $this->event_identification_event_id = $event_identification_event_id;
   }
@@ -182,7 +177,7 @@ class CSyslogITI21 extends CSyslogAuditMessage {
   public function setEventTypeCode() {
     $event_identification_event_type_code = $this->msg_xml->addElement($this->event_identification, 'EventTypeCode');
 
-    $this->setEVAttributes($event_identification_event_type_code, 'ITI-21', 'Patient Demographics Query', 'IHE Transactions');
+    $this->setEVAttributes($event_identification_event_type_code, 'ITI-41', 'Provide and Register Document Set-b', 'IHE Transactions');
 
     $this->event_identification_event_type_code = $event_identification_event_type_code;
   }
@@ -246,44 +241,26 @@ class CSyslogITI21 extends CSyslogAuditMessage {
     $this->setEVAttributes($participant_object_id_type_code, '2', 'Patient Number', 'RFC-3881');
   }
 
-  public function setQueryParameters() {
+  public function setSubmissionSet() {
     $participant_object_identification = $this->msg_xml->addElement($this->audit_message, 'ParticipantObjectIdentification');
 
     $this->msg_xml->addAttribute($participant_object_identification, 'ParticipantObjectID', '');
     $this->msg_xml->addAttribute($participant_object_identification, 'ParticipantObjectTypeCode', '2');
-    $this->msg_xml->addAttribute($participant_object_identification, 'ParticipantObjectTypeCodeRole', '24');
+    $this->msg_xml->addAttribute($participant_object_identification, 'ParticipantObjectTypeCodeRole', '20');
 
-    $this->query_parameters = $participant_object_identification;
+    $this->submission_set = $participant_object_identification;
 
-    $this->setQueryParametersParticipantObjectIDTypeCode();
-    $this->setQueryParametersParticipantObjectQuery();
-    $this->setQueryParametersParticipantObjectDetail();
+    $this->setSubmissionSetParticipantObjectIDTypeCode();
   }
 
-  public function setQueryParametersParticipantObjectIDTypeCode() {
-    $participant_object_id_type_code = $this->msg_xml->addElement($this->query_parameters, 'ParticipantObjectIDTypeCode');
+  public function setSubmissionSetParticipantObjectIDTypeCode() {
+    $participant_object_id_type_code = $this->msg_xml->addElement($this->submission_set, 'ParticipantObjectIDTypeCode');
 
-    $this->setEVAttributes($participant_object_id_type_code, 'ITI-21', 'Patient Demographics Query', 'IHE Transactions');
+    $this->setEVAttributes(
+      $participant_object_id_type_code,
+      'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd', 'submission set classificationNode', 'IHE XDS Metadata');
 
-    $this->query_parameters_participant_object_id_type_code = $participant_object_id_type_code;
-  }
-
-  public function setQueryParametersParticipantObjectQuery() {
-    $participant_object_query = $this->msg_xml->addElement($this->query_parameters, 'ParticipantObjectQuery', base64_encode($this->hl7_msg->data));
-
-    $this->query_parameters_participant_object_query = $participant_object_query;
-  }
-
-  public function setQueryParametersParticipantObjectDetail() {
-    $participant_object_detail = $this->msg_xml->addElement($this->query_parameters, 'ParticipantObjectDetail');
-
-    $MSH    = $this->hl7_xml->queryNode("MSH", null, $foo, true);
-    $MSH_10 = $this->hl7_xml->queryTextNode("MSH.10", $MSH);
-
-    $this->msg_xml->addAttribute($participant_object_detail, 'type', 'MSH-10');
-    $this->msg_xml->addAttribute($participant_object_detail, 'value', base64_encode($MSH_10));
-
-    $this->query_parameters_participant_object_detail = $participant_object_detail;
+    $this->submission_set_participant_object_id_type_code = $participant_object_id_type_code;
   }
 
   public function setEVAttributes(DOMElement $dom_node, $csd_code, $original_text, $code_system_name) {
