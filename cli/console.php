@@ -31,4 +31,5 @@ $application->add(new ReleaseMakeXML());
 $application->add(new DeployMeP());
 $application->add(new DeployMeQ());
 $application->add(new DeployMaJ());
+$application->add(new ESReindex());
 $application->run();
