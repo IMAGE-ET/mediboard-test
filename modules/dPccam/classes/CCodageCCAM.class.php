@@ -542,7 +542,7 @@ class CCodageCCAM extends CMbObject {
           }
           break;
         case "J":
-          $checked = $codable->_class == 'COperation' && CAppUI::conf("dPccam CCodable precode_modificateur_J");
+          $checked = $codable->_class == 'COperation' && CAppUI::pref('precode_modificateur_J');
           $_modifier->_state = $checked ? 'prechecked' : null;
           break;
         case 'K':
@@ -625,7 +625,7 @@ class CCodageCCAM extends CMbObject {
           }
           break;
         case "7":
-          $checked = CAppUI::conf("dPccam CCodable precode_modificateur_7") &&
+          $checked = CAppUI::pref('precode_modificateur_7') &&
             $codable->_class == 'COperation' && (isset($codable->anesth_id) || $act->_ref_executant->isAnesth());
           if ($checked) {
             $_modifier->_state = 'prechecked';

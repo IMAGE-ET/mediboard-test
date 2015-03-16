@@ -18,4 +18,6 @@ CPreferences::$modules["dPccam"] = array (
   "multiple_select_ccam",
   "user_executant",
   'actes_comp_supp_favoris',
+  'precode_modificateur_7',
+  'precode_modificateur_J'
 );

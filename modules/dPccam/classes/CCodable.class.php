@@ -933,10 +933,10 @@ class CCodable extends CMbObject {
           ($date > "$date_ref 20:00:00" && $date < $date_tomorrow);
         break;
       case "7":
-        return CAppUI::conf("dPccam CCodable precode_modificateur_7");
+        return CAppUI::pref('precode_modificateur_7');
         break;
       case "J":
-        return CAppUI::conf("dPccam CCodable precode_modificateur_J") && $this->_class == 'COperation';
+        return CAppUI::pref('precode_modificateur_J') && $this->_class == 'COperation';
     }
     return null;
   }

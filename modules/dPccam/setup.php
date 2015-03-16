@@ -285,7 +285,12 @@ class CSetupdPccam extends CSetup {
                 CHANGE `codable_class` `codable_class` ENUM('CConsultation', 'CSejour', 'COperation', 'CDevisCodage') NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = '0.29';
+    $this->makeRevision('0.29');
+
+    $this->addPrefQuery('precode_modificateur_7', CAppUi::conf('dPccam CCodable precode_modificateur_7'));
+    $this->addPrefQuery('precode_modificateur_J', CAppUi::conf('dPccam CCodable precode_modificateur_J'));
+
+    $this->mod_version = '0.30';
 
     // Data source query
 
