@@ -83,6 +83,8 @@ if (!$consult->_id) {
   CApp::rip();
 }
 
+$consult->canDo()->needsEdit(array("selConsult" => null));
+
 switch ($current_m) {
   case "dPurgences":
     $group = CGroups::loadCurrent();
