@@ -2675,11 +2675,11 @@ class CPatient extends CPerson {
       // Documents et fichiers
       $object->loadRefsDocItems($with_cancelled);
       foreach ($object->_ref_documents as $_doc) {
-        $patient->_all_docs[$_doc->_guid] = $_doc;
+        $patient->_all_docs[$_doc->creation_date . $_doc->_guid] = $_doc;
       }
 
       foreach ($object->_ref_files as $_file) {
-        $patient->_all_docs[$_file->_guid] = $_file;
+        $patient->_all_docs[$_file->file_date . $_file->_guid] = $_file;
       }
     }
 
@@ -2712,8 +2712,10 @@ class CPatient extends CPerson {
       $_ex->_ex_class_id = $_link->ex_class_id;
       $_ex->updateCreationFields();
       $_ex->loadRefExClass();
-      $this->_all_docs[$_link->_guid] = $_link;
+      $this->_all_docs[$_link->datetime_create . $_link->_guid] = $_link;
     }
+
+    ksort($this->_all_docs);
   }
 }
 
