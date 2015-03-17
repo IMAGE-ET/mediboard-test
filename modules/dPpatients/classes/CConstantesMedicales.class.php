@@ -315,6 +315,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cm",
       "min" => 20, "max" => 150
     ),
+    'perimetre_taille' => array(
+      'type' => 'physio',
+      'unit' => 'cm',
+      'min' => 20, 'max' => 300
+    ),
     "hauteur_uterine" => array(
       "type" => "physio",
       "unit" => "cm",
@@ -831,6 +836,16 @@ class CConstantesMedicales extends CMbObject {
       'unit' => '',
       'min' => 0, 'max' => 2
     ),
+    'motricite_inf_d' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
+    'motricite_inf_g' => array(
+      'type' => 'physio',
+      'unit' => '',
+      'min' => 0, 'max' => 2
+    ),
     '_urine_effective' => array(
       "type" => "drain",
       "unit" => "ml",
@@ -868,6 +883,11 @@ class CConstantesMedicales extends CMbObject {
       'unit' => '%',
       'min' => 0, 'max' => 4
     ),
+    'perimetre_taille' => array(
+      'type' => 'physio',
+      'unit' => 'cm',
+      'min'  => 30, 'max' => 60
+    )
   );
 
   /** @var bool Used for making the params conversion (min, max and standard) only once */
@@ -1028,6 +1048,7 @@ class CConstantesMedicales extends CMbObject {
     $props['perimetre_cuisse']       = 'float min|0';
     $props['perimetre_cou']          = 'float min|0';
     $props['perimetre_thoracique']   = 'float min|0';
+    $props['perimetre_taille']       = 'num min|0';
     $props['hauteur_uterine']        = 'float min|0';
     $props['peak_flow']              = 'float min|0';
     $props['_imc']                   = 'float pos';
@@ -1128,6 +1149,8 @@ class CConstantesMedicales extends CMbObject {
     $props['tonus_g']                = 'float min|0 max|2';
     $props['motricite_d']            = 'float min|0 max|2';
     $props['motricite_g']            = 'float min|0 max|2';
+    $props['motricite_inf_d']        = 'float min|0 max|2';
+    $props['motricite_inf_g']        = 'float min|0 max|2';
     $props['_urine_effective']       = 'float min|0';
     $props['echelle_confort']        = 'num min|0 max|10';
     $props['pres_artere_invasive']   = 'num min|20 max|200';

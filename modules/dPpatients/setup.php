@@ -2786,7 +2786,15 @@ class CSetupdPpatients extends CSetup {
 
     $this->addPrefQuery('constantes_show_comments_tooltip', '0');
 
-    $this->mod_version = '2.32';
+    $this->makeRevision('2.32');
+
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `motricite_inf_d` FLOAT,
+                ADD `motricite_inf_g` FLOAT,
+                ADD `perimetre_taille` INT(3) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.33';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
