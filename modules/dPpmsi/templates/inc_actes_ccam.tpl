@@ -132,7 +132,7 @@
   </tr>
   {{if !$read_only}}
     <tr>
-      <th class="title" colspan="14" style="border-top: none;">
+      <th class="title" colspan="15" style="border-top: none;">
         {{foreach from=$subject->_ext_codes_ccam item=_code}}
           <span id="action-{{$_code->code}}" class="circled" style="background-color: #eeffee; color: black; font-weight: normal; font-size: 0.8em;">
          {{$_code->code}}
@@ -175,6 +175,9 @@
     <th class="narrow">{{mb_title class=CActeCCAM field=_tarif_base}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=executant_id}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=facturable}}</th>
+    {{if $subject->_class == 'COperation'}}
+      <th class="narrow">{{mb_title class=CActeCCAM field=sent}}</th>
+    {{/if}}
     <th class="narrow">{{mb_title class=CActeCCAM field=code_association}}</th>
     <th>{{mb_title class=CActeCCAM field=modificateurs}}</th>
     <th class="narrow">{{mb_title class=CActeCCAM field=extension_documentaire}}</th>
@@ -187,7 +190,7 @@
   </tr>
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
     <tr>
-      <th colspan="14" style="text-align: left;">
+      <th colspan="15" style="text-align: left;">
         <span onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')"
               style="cursor: pointer;{{if $_code->type == 2}} color: #444;{{/if}}">
           {{$_code->code}} : {{$_code->libelleLong}}
@@ -238,6 +241,13 @@
                 </form>
               {{/if}}
             </td>
+            {{if $subject->_class == 'COperation'}}
+              <td>
+                {{if $acte->_id}}
+                  {{mb_value object=$acte field=sent}}
+                {{/if}}
+              </td>
+            {{/if}}
             <td
               {{if $acte->_id && ($acte->code_association != $acte->_guess_association)}}style="background-color: #fc9"{{/if}}>
               {{if $read_only}}
