@@ -3,10 +3,11 @@
 <script>
 updateActes = function() {
   var url = new Url("board", "ajax_list_interv_non_cotees");
-  url.addParam("praticien_id", "{{$chirSel}}");
-  url.addParam("all_prats"   , "{{$all_prats}}");
-  url.addParam("debut"       , "{{$debut}}");
-  url.addParam("fin"         , "{{$fin}}");
+  url.addParam("praticien_id"        , "{{$chirSel}}");
+  url.addParam("all_prats"           , "{{$all_prats}}");
+  url.addParam("debut"               , "{{$debut}}");
+  url.addParam("fin"                 , "{{$fin}}");
+  url.addParam('display_not_exported', '{{$display_not_exported}}');
   url.requestUpdate("list_interv_non_cotees");
 };
 
@@ -56,6 +57,10 @@ Main.add(function() {
       <td>
         jusqu'au
         <input type="hidden" name="fin" value="{{$fin}}" class="date notNull" onchange="this.form.submit()"/>
+      </td>
+      <td>
+        Afficher les actes non exportés
+        <input type="checkbox" name="display_not_exported"{{if $display_not_exported}} checked="checked"{{/if}} onchange="this.form.submit();"/>
       </td>
     </tr>
   </table>

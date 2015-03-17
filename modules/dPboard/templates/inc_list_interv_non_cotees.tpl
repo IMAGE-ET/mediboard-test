@@ -28,9 +28,12 @@
     <th class="narrow">Actes <br /> Non cotés</th>
     <th class="narrow">Codes <br /> prévus   </th>
     <th>Actes cotés</th>
+    {{if $display_not_exported}}
+      <th>Actes non exportés</th>
+    {{/if}}
   </tr>
   <tr>
-    <th class="section" colspan="6">Interventions ({{$interventions|@count}} / {{$totals.interventions}})</th>
+    <th class="section" colspan="7">Interventions ({{$interventions|@count}} / {{$totals.interventions}})</th>
   </tr>
   
   {{foreach from=$interventions item=_interv}}
@@ -103,15 +106,28 @@
           </div>
         {{/foreach}}
       </td>
+      {{if $display_not_exported}}
+        <td>
+          {{foreach from=$_interv->_ref_actes_ccam item=_acte}}
+            {{if !$_acte->sent}}
+              <div>
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+                  {{$_acte->code_acte}}-{{$_acte->code_activite}}-{{$_acte->code_phase}}
+                </span>
+              </div>
+            {{/if}}
+          {{/foreach}}
+        </td>
+      {{/if}}
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="5" class="empty">{{tr}}COperation.none_non_cotee{{/tr}}</td>
+      <td colspan="7" class="empty">{{tr}}COperation.none_non_cotee{{/tr}}</td>
     </tr>
   {{/foreach}}
 
   <tr>
-    <th class="section" colspan="6">Consultations ({{$consultations|@count}} / {{$totals.consultations}})</th>
+    <th class="section" colspan="7">Consultations ({{$consultations|@count}} / {{$totals.consultations}})</th>
   </tr>
   {{foreach from=$consultations item=consult}}
     {{assign var=patient value=$consult->_ref_patient}}
@@ -175,10 +191,13 @@
           </div>
         {{/foreach}}
       </td>
+      {{if $display_not_exported}}
+        <td></td>
+      {{/if}}
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="6" class="empty">{{tr}}CConsultation.none_non_cotee{{/tr}}</td>
+      <td colspan="7" class="empty">{{tr}}CConsultation.none_non_cotee{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

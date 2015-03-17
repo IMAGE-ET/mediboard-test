@@ -231,13 +231,14 @@ $consultations = CModelObject::naturalSort($consultations, array("_date"));
 if (!$export) {
   $smarty = new CSmartyDP();
 
-  $smarty->assign("totals"       , $totals);
-  $smarty->assign("interventions", $interventions);
-  $smarty->assign("consultations", $consultations);
-  $smarty->assign("debut"        , $debut);
-  $smarty->assign("fin"          , $fin);
-  $smarty->assign("all_prats"    , $all_prats);
-  $smarty->assign("board"        , CValue::get("board", 0));
+  $smarty->assign("totals"              , $totals);
+  $smarty->assign("interventions"       , $interventions);
+  $smarty->assign("consultations"       , $consultations);
+  $smarty->assign("debut"               , $debut);
+  $smarty->assign("fin"                 , $fin);
+  $smarty->assign("all_prats"           , $all_prats);
+  $smarty->assign("board"               , CValue::get("board", 0));
+  $smarty->assign('display_not_exported', CValue::get('display_not_exported', 0));
 
   $smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
 }
