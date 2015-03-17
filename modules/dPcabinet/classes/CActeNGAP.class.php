@@ -35,12 +35,15 @@ class CActeNGAP extends CActe {
   public $numero_forfait_technique;
   public $numero_agrement;
   public $rapport_exoneration;
+  public $prescripteur_id;
 
   // Distant fields
   public $_libelle;
 
   // Tarif final
   public $_tarif;
+
+  public $_ref_prescripteur;
 
   /**
    * @see parent::getSpec()
@@ -76,6 +79,7 @@ class CActeNGAP extends CActe {
     $props["numero_forfait_technique"] = "num min|1 max|99999";
     $props["numero_agrement"]          = "num min|1 max|99999999999999";
     $props["rapport_exoneration"]      = "enum list|4|7|C|R";
+    $props['prescripteur_id']          = 'ref class|CMediusers';
     $props['_tarif']                   = 'currency';
 
     return $props;
@@ -130,6 +134,12 @@ class CActeNGAP extends CActe {
     $acte->coefficient = 1;
     $acte->loadListExecutants();
     $acte->loadExecution();
+
+    if ($acte->object_class == 'CConsultation' && $acte->_ref_object->sejour_id) {
+      $sejour = $acte->_ref_object->loadRefSejour();
+      $acte->prescripteur_id = $sejour->praticien_id;
+    }
+
     return $acte;
   }
 
@@ -362,5 +372,17 @@ class CActeNGAP extends CActe {
     $ligne->quantite      = $this->quantite;
     $ligne->coeff         = $this->coefficient;
     return $ligne->store();
+  }
+
+  /**
+   * Load the prescriptor
+   *
+   * @return CMediusers
+   */
+  public function loadRefPrescripteur() {
+    /** @var CMediusers $prescripteur */
+    $prescripteur = $this->loadFwdRef('prescripteur_id', true);
+    $prescripteur->loadRefFunction();
+    return $this->_ref_prescripteur = $prescripteur;
   }
 }

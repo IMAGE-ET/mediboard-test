@@ -634,6 +634,9 @@ class CCodable extends CMbObject {
       $this->_codes_ngap[] = $_acte_ngap->makeFullCode();
       $_acte_ngap->loadRefExecutant();
       $_acte_ngap->getLibelle();
+      if ($this->_class == 'CConsultation' && $this->sejour_id) {
+        $_acte_ngap->loadRefPrescripteur();
+      }
     }
     $this->_tokens_ngap = implode("|", $this->_codes_ngap);
   }

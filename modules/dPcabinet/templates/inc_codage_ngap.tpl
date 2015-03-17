@@ -52,6 +52,16 @@ ActesNGAP = {
     submitFormAjax(oForm, 'systemMsg');
   },
 
+  changePrescripteur: function(acte_ngap_id, prescripteur_id) {
+    ActesNGAP.checkExecutant(prescripteur_id);
+
+    var oForm = document.changePrescripteur;
+    $V(oForm.acte_ngap_id, acte_ngap_id);
+    $V(oForm.prescripteur_id, prescripteur_id);
+
+    submitFormAjax(oForm, 'systemMsg');
+  },
+
   submit: function() {
     ActesNGAP.checkExecutant($V(document.editNGAP.executant_id));
     var oForm = document.editNGAP;
@@ -216,10 +226,21 @@ ActesNGAP = {
           <td>{{mb_field object=$acte_ngap field=execution form="editNGAP" register=true}}</td>
 
           <td>
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              {{mb_label object=$acte_ngap field=executant_id}} :
+            {{/if}}
             <select onchange="ActesNGAP.checkExecutant($V(document.editNGAP.executant_id))" name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{mb_include module=mediusers template=inc_options_mediuser list=$acte_ngap->_list_executants selected=$acte_ngap->executant_id}}
             </select>
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              <br/>
+              {{mb_label object=$acte_ngap field=prescripteur_id}} :
+              <select onchange="ActesNGAP.checkExecutant($V(document.editNGAP.prescripteur_id))" name="prescripteur_id" style="width: 120px;" class="{{$acte_ngap->_props.prescripteur_id}}">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                {{mb_include module=mediusers template=inc_options_mediuser list=$acte_ngap->_list_executants selected=$acte_ngap->prescripteur_id}}
+              </select>
+            {{/if}}
           </td>
           <td>
             <button id="inc_codage_ngap_button_create" type="button" class="new" onclick="ActesNGAP.submit()">
@@ -280,22 +301,54 @@ ActesNGAP = {
       <td>{{mb_value object=$_acte_ngap field=execution}}</td>
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
+      {{assign var=prescripteur value=$_acte_ngap->_ref_prescripteur}}
       <td>
         {{if !$object->_coded}}
           {{if $can->edit}}
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              <span style="font-weight: normal;">{{mb_label object=$_acte_ngap field=executant_id}} :</span>
+            {{/if}}
             <select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{mb_include module=mediusers template=inc_options_mediuser selected=$_acte_ngap->executant_id list=$acte_ngap->_list_executants}}
             </select>
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              <br/>
+              <span style="font-weight: normal;">{{mb_label object=$_acte_ngap field=prescripteur_id}} :</span>
+              <select onchange="ActesNGAP.changePrescripteur('{{$_acte_ngap->_id}}', $V(this))" name="prescripteur_id" style="width: 150px;" class="{{$_acte_ngap->_props.prescripteur_id}}">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                {{mb_include module=mediusers template=inc_options_mediuser selected=$_acte_ngap->prescripteur_id list=$acte_ngap->_list_executants}}
+              </select>
+            {{/if}}
           {{else}}
-            <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              <span style="font-weight: normal;">{{tr}}CActeNGAP-executant_id-court{{/tr}} : </span>
+            {{/if}}
+            <span class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
              {{$executant}}
-            </div>
+            </span>
+            {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+              <br/>
+              <span style="font-weight: normal;">{{tr}}CActeNGAP-prescripteur_id-court{{/tr}} : </span>
+              <span class="mediuser" style="border-color: #{{$prescripteur->_ref_function->color}};">
+               {{$prescripteur}}
+              </span>
+            {{/if}}
           {{/if}}
         {{else}}
-        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
-         {{$executant}}
-        </div>
+          {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+            <span style="font-weight: normal;">{{tr}}CActeNGAP-executant_id-court{{/tr}} : </span>
+          {{/if}}
+          <span class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+           {{$executant}}
+          </span>
+          {{if $object->_class == 'CConsultation' && $object->sejour_id}}
+            <br>
+            <span style="font-weight: normal;">{{tr}}CActeNGAP-prescripteur_id-court{{/tr}} : </span>
+            <span class="mediuser" style="border-color: #{{$prescripteur->_ref_function->color}};">
+             {{$prescripteur}}
+            </span>
+          {{/if}}
         {{/if}}
       </td>
 
@@ -321,6 +374,14 @@ ActesNGAP = {
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
   
   <input type="hidden" name="executant_id" value="" />
+</form>
+
+<form name="changePrescripteur" method="post" action="">
+  <input type="hidden" name="acte_ngap_id" value="" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
+
+  <input type="hidden" name="prescripteur_id" value="" />
 </form>
 
 <script>
