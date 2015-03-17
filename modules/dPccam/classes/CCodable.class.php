@@ -108,6 +108,15 @@ class CCodable extends CMbObject {
   public $_delete_actes_type;
 
   /**
+   * @var array A list of acts whose activities 1 need to be hidden
+   */
+  public static $hidden_activity_1 = array(
+    'YYYY041',
+    'GELE001',
+    'AHQJ021'
+  );
+
+  /**
    * Détruit les actes CCAM et NGAP
    *
    * @return string Store-like message
@@ -761,6 +770,10 @@ class CCodable extends CMbObject {
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
         $code = CDatedCodeCCAM::get($code, $dateActe);
+        /* On supprime l'activité 1 du code si celui fait partie de la liste */
+        if (in_array($code->code, self::$hidden_activity_1)) {
+          unset($code->activites[1]);
+        }
         $this->_ext_codes_ccam[] = $code;
         if ($code->type != 2) {
           $this->_ext_codes_ccam_princ[] = $code;
