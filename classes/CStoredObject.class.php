@@ -2653,7 +2653,7 @@ class CStoredObject extends CModelObject {
             $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword'";
           }
           if ($spec->seekable === true OR $index != 0) {
-            if ($spec instanceof CRefSpec) {
+            if ($spec instanceof CRefSpec && $field != $this->_spec->key) {
               $class = $spec->class;
               
               if (isset($spec->meta)) {

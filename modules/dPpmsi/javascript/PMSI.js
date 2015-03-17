@@ -22,7 +22,7 @@ PMSI = {
       url.addParam("confirmCloture", confirmCloture);
     }
 
-    url.requestUpdate("export_" + object_class + "_" + object_id); 
+    url.requestUpdate("export_" + object_class + "-" + object_id);
   },
   
   exportActes: function(object_id, object_class, oOptions, module){
@@ -297,5 +297,10 @@ PMSI = {
     new Url("atih", "ajax_refresh_um_line")
       .addParam("um_id", id)
       .requestUpdate(path);
+  },
+
+  importBaseCim : function () {
+    var url = new Url('pmsi', 'ajax_import_cim_pmsi');
+    url.requestUpdate("result-import");
   }
 };

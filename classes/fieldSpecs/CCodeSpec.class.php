@@ -15,6 +15,7 @@
 class CCodeSpec extends CMbFieldSpec {
   public $ccam;
   public $cim10;
+  public $cim10Pmsi;
   public $adeli;
   public $insee;
   public $rib;
@@ -40,6 +41,9 @@ class CCodeSpec extends CMbFieldSpec {
     elseif ($this->cim10) {
       $type_sql = "VARCHAR(5)";
     }
+    elseif ($this->cim10Pmsi) {
+      $type_sql = "VARCHAR(10)";
+    }
     elseif ($this->adeli) {
       $type_sql = "VARCHAR(9)";
     }
@@ -63,6 +67,7 @@ class CCodeSpec extends CMbFieldSpec {
     return array(
       'ccam'         => 'bool',
       'cim10'        => 'bool',
+      'cim10Pmsi'    => 'bool',
       'adeli'        => 'bool',
       'insee'        => 'bool',
       'rib'          => 'bool',
@@ -118,6 +123,12 @@ class CCodeSpec extends CMbFieldSpec {
         // }
 
         return "Code CIM incorrect, doit contenir une lettre, puis de 2 à 4 chiffres ou la lettre X";
+      }
+    }
+    // cim10 PMSI
+    elseif ($this->cim10Pmsi) {
+      if (!preg_match("/^[a-z]([0-9]{1,5})((\+|x)[0-9])?$/i", $propValue)) {
+        return "Code CIM incorrect, doit contenir une lettre, puis de 2 à 5 chiffres ou la lettre X";
       }
     }
 

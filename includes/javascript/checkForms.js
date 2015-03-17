@@ -308,6 +308,13 @@ Object.extend(ElementChecker, {
       if (!/^[a-z][0-9x]{2,4}$/i.test(this.sValue))
         this.addError("cim10", "Code CIM incorrect, doit contenir une lettre, puis de 2 à 4 chiffres ou la lettre X");
     },
+
+    // cim10 pour PMSI
+    cim10Pmsi: function () {
+      this.assertNoArg("cim10Pmsi");
+      if (!/^[a-z]([0-9]{1,5})((\+|x)[0-9])?$/i.test(this.sValue))
+        this.addError("cim10Pmsi", "Code CIM PMSI incorrect, doit contenir une lettre, puis de 2 à 5 chiffres ou la lettre X");
+    },
     
     // adeli
     adeli: function() {
@@ -526,7 +533,7 @@ Object.extend(ElementChecker, {
     
     // code
     code: function() {
-      if (!(this.oProperties.ccam || this.oProperties.cim10 || this.oProperties.adeli || this.oProperties.insee || 
+      if (!(this.oProperties.ccam || this.oProperties.cim10 || this.oProperties.cim10Pmsi || this.oProperties.adeli || this.oProperties.insee ||
             this.oProperties.product_order || this.oProperties.siret || this.oProperties.rib))
       this.addError("code", "Spécification de code invalide");
     },

@@ -23,6 +23,7 @@
   {{if "atih"|module_active}}
     <li onmousedown="PMSI.loadConfigUms('{{$g}}')"><a href="#Config-UM">{{tr}}config_atih_um{{/tr}}</a></li>
   {{/if}}
+  <li><a href="#importCIM">{{tr}}Import.CIM{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -40,3 +41,7 @@
 {{if "atih"|module_active}}
   <div id="Config-UM" style="display:none"></div>
 {{/if}}
+
+<div id="importCIM" style="display: none">
+  {{mb_include template=nomenclature_cim/inc_configure_import_cim}}
+</div>

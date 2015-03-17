@@ -14,4 +14,5 @@ $dPconfig["dPpmsi"] = array(
   "server"              => "0",
   "transmission_actes"  => "pmsi",
   "passage_facture"     => "envoi",
+  "use_cim_pmsi"     => "0",
 );

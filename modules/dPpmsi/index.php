@@ -19,3 +19,8 @@ $module->registerTab("vw_print_planning", TAB_READ);
 if (CAppUI::conf("ref_pays") == "2") {
   $module->registerTab("vw_idx_sortie"    , TAB_READ);
 }
+if (CModule::getActive("atih")) {
+  $module->registerTab("vw_traitement_dossiers"  , TAB_EDIT);
+  $module->registerTab("vw_statistics_pmsi"    , TAB_ADMIN);
+}
+$module->registerTab('vw_cim10_explorer', TAB_READ);

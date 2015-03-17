@@ -19,7 +19,10 @@
 		{{mb_include module=system template=inc_config_enum var=transmission_actes values=pmsi|signature}}
     
     {{mb_include module=system template=inc_config_enum var=passage_facture values=envoi|reception}}
-		
+
+    {{if "atih"|module_active}}
+      {{mb_include module=system template=inc_config_bool var=use_cim_pmsi}}
+    {{/if}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
