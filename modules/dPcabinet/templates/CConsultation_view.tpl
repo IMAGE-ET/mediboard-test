@@ -61,15 +61,15 @@
       </th>
     </tr>
   {{/if}}
-  
+
+
+  {{if $object->_can->edit}}
   <tr>
     <td class="button" colspan="2">
       {{mb_script module="dPcabinet" script="edit_consultation" ajax="true"}}
       <button type="button" class="change" onclick="Consultation.editRDVModal('{{$consultation->_id}}')">
         {{tr}}Rendez-vous{{/tr}}
       </button>
-
-      {{if $object->_can->edit}}
         <button type="button" class="edit" onclick="Consultation.editModal('{{$consultation->_id}}')">
           {{tr}}CConsultation{{/tr}}
         </button>
@@ -87,7 +87,6 @@
             </button>
           </form>
         {{/if}}
-      {{/if}}
 
       {{if @$modules.brancardage->_can->read && $consultation->sejour_id}}
         {{mb_script module=brancardage script=creation_brancardage ajax="true"}}
@@ -105,7 +104,10 @@
       {{/if}}
     </td>
   </tr>
+  {{/if}}
 </table>
+
+{{if $object->_can->edit}}
 
 {{mb_include module=cabinet template=inc_list_actes_ccam subject=$consultation vue=view}}
 {{mb_include module=cabinet template=inc_list_actes_ngap subject=$consultation }}
@@ -124,4 +126,6 @@
   <a href="#{{$examaudio->_guid}}" onclick="newExam('exam_audio', '{{$consultation->_id}}')">
     <strong>Audiogramme</strong>
   </a>
+{{/if}}
+
 {{/if}}

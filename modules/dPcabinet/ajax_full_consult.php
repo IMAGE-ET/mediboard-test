@@ -27,7 +27,8 @@ $listAnesths = $user->loadAnesthesistes();
 
 $list_mode_sortie = array();
 
-$consult = new CConsultation();if ($current_m == "dPurgences") {
+$consult = new CConsultation();
+if ($current_m == "dPurgences") {
   if (!$selConsult) {
     CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
     CAppUI::redirect("m=urgences&tab=0");
@@ -70,6 +71,7 @@ $consult->_ref_chir =& $userSel;
 
 // Chargement de la consultation
 if ($consult->_id) {
+  $consult->canDo()->needsEdit(array("consult_id" => null));
   $consult->loadRefs();  
   
   // Chargement de la consultation d'anesthésie
