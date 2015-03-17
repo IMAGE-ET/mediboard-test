@@ -39,6 +39,7 @@ Main.add(function () {
             <th>{{mb_label object=$check_list_filter field=object_id}}</th>
             <td>
               <select name="object_guid" onchange="this.form.start.value=0;changeObject();">
+                <option value="">{{tr}}All{{/tr}}</option>
                 {{foreach from=$list_rooms item=list key=class}}
                   <optgroup label="{{if $class == "CBlocOperatoire"}}Salle de réveil{{else}}{{tr}}{{$class}}{{/tr}}{{/if}}">
                     {{foreach from=$list item=room}}
