@@ -130,6 +130,9 @@ Document = {
   refreshList: function(category_id, object_class, object_id) {
     var selector = printf("div.documents-%s-%s", object_class, object_id);
     $$(selector).each(Document.refresh);
+    if (window.loadAllDocs) {
+      loadAllDocs();
+    }
   },
     
   /**

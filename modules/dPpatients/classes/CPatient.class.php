@@ -343,6 +343,8 @@ class CPatient extends CPerson {
   /** @var  CINSPatient */
   public $_ref_last_ins;
 
+  public $_all_docs;
+
   public $_count_ins;
 
   // Distant fields
@@ -2664,6 +2666,54 @@ class CPatient extends CPerson {
     $this->_p_last_name           = $this->nom;
     $this->_p_birth_date          = $this->naissance;
     $this->_p_maiden_name         = $this->nom_jeune_fille;
+  }
+
+  function loadAllDocs($tri = "date", $with_cancelled = false) {
+    $this->_all_docs = array();
+
+    function mapDocs($object, &$patient, $with_cancelled) {
+      // Documents et fichiers
+      $object->loadRefsDocItems($with_cancelled);
+      foreach ($object->_ref_documents as $_doc) {
+        $patient->_all_docs[$_doc->_guid] = $_doc;
+      }
+
+      foreach ($object->_ref_files as $_file) {
+        $patient->_all_docs[$_file->_guid] = $_file;
+      }
+    }
+
+    $this->loadRefsDocItems($with_cancelled);
+    mapDocs($this, $this, $with_cancelled);
+
+    foreach ($this->loadRefsSejours() as $_sejour) {
+      mapDocs($_sejour, $this, $with_cancelled);
+      foreach ($_sejour->loadRefsOperations() as $_op) {
+        mapDocs($_op, $this, $with_cancelled);
+      }
+    }
+
+    foreach ($this->loadRefsConsultations() as $_consult) {
+      mapDocs($_consult, $this, $with_cancelled);
+
+      foreach ($_consult->loadRefsDossiersAnesth() as $_dossier_anesth) {
+        mapDocs($_dossier_anesth, $this, $with_cancelled);
+      }
+    }
+
+    // Formulaires
+    $ex_link = new CExLink();
+    $ex_link->setObject($this);
+    $ex_links = $ex_link->loadMatchingList();
+    CExLink::massLoadExObjects($ex_links);
+
+    foreach ($ex_links as $_link) {
+      $_ex = $_link->loadRefExObject();
+      $_ex->_ex_class_id = $_link->ex_class_id;
+      $_ex->updateCreationFields();
+      $_ex->loadRefExClass();
+      $this->_all_docs[$_link->_guid] = $_link;
+    }
   }
 }
 
