@@ -344,7 +344,7 @@
         <td colspan="3">
           {{if $can->admin}}
           <div class="small-warning">
-            Attention, vous étes en train de modifier une consultation ayant :
+            Attention, vous êtes en train de modifier une consultation ayant :
             {{else}}
             <div class="small-info">
               <input type="hidden" name="_locked" value="1" />
@@ -372,7 +372,7 @@
       <tr>
         <td colspan="3">
           <div class="small-warning">
-            Attention, vous étes en train de modifier
+            Attention, vous êtes en train de modifier
             <strong>une consultation du jour</strong>.
           </div>
         </td>
