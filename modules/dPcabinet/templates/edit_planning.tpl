@@ -102,7 +102,7 @@
 
   checkFormRDV = function(form){
     if(!form._pause.checked && form.patient_id.value == ""){
-      alert("Veuillez sï¿½lectionner un patient");
+      alert("Veuillez sélectionner un patient");
       PatSelector.init();
       return false;
     }
@@ -171,10 +171,10 @@
     var oForm = getForm(window.PlageConsultSelector.sForm);
     if ($V(oForm["consult_id_"+id]) && !$V(oForm["cancel_"+id])) {
       $V(oForm["cancel_"+id], "");
-      SystemMessage.notify("Cette consultation sera annulï¿½e");
+      SystemMessage.notify("Cette consultation sera annulée");
     }
     else {
-      SystemMessage.notify("Cette consultation ne sera pas crï¿½ï¿½e");
+      SystemMessage.notify("Cette consultation ne sera pas créée");
       $V(oForm["_consult"+id], "");
       $V(oForm["consult_id_"+id], "");
       $V(oForm["plage_id_"+id], "");
@@ -314,7 +314,7 @@
 
   {{if !$consult->_id && $consult->element_prescription_id && !$nb_plages}}
     <div class="small-warning">
-      Aucune plage de consultation prï¿½sente pour l'exï¿½cutant sï¿½lectionnï¿½
+      Aucune plage de consultation présente pour l'exécutant sélectionné
     </div>
   {{/if}}
 
@@ -344,7 +344,7 @@
         <td colspan="3">
           {{if $can->admin}}
           <div class="small-warning">
-            Attention, vous ï¿½tes en train de modifier une consultation ayant :
+            Attention, vous étes en train de modifier une consultation ayant :
             {{else}}
             <div class="small-info">
               <input type="hidden" name="_locked" value="1" />
@@ -353,15 +353,15 @@
 
               <ul>
                 {{if in_array("datetime", $consult->_locks)}}
-                  <li>le rendez-vous <strong>passï¿½ de {{mb_value object=$consult field=_datetime format=relative}}</strong></li>
+                  <li>le rendez-vous <strong>passé de {{mb_value object=$consult field=_datetime format=relative}}</strong></li>
                 {{/if}}
 
                 {{if in_array("termine", $consult->_locks)}}
-                  <li>la consultation <strong>notï¿½e terminï¿½e</strong></li>
+                  <li>la consultation <strong>notée terminée</strong></li>
                 {{/if}}
 
                 {{if in_array("valide", $consult->_locks)}}
-                  <li>la cotation <strong>validï¿½e</strong></li>
+                  <li>la cotation <strong>validée</strong></li>
                 {{/if}}
 
               </ul>
@@ -372,7 +372,7 @@
       <tr>
         <td colspan="3">
           <div class="small-warning">
-            Attention, vous ï¿½tes en train de modifier
+            Attention, vous étes en train de modifier
             <strong>une consultation du jour</strong>.
           </div>
         </td>
@@ -442,7 +442,7 @@
                   </button>
                 {{else}}
                   <div class="info text">
-                    Consultation de sejour, dissocier du sï¿½jour pour changer le patient ou changer le patient du sï¿½jour
+                    Consultation de sejour, dissocier du séjour pour changer le patient ou changer le patient du séjour
                   </div>
                 {{/if}}
                   <input type="text" name="_seek_patient" style="width: 13em; {{if !$can_edit_pat}}display:none;{{/if}}" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"  />
@@ -501,7 +501,7 @@
                           {{if $today_ref_multiple}}
                             {{$following_consultations|@count}} future{{if $following_consultations|@count > 1}}s{{/if}} consultation{{if $following_consultations|@count > 1}}s{{/if}}
                           {{else}}
-                            {{$following_consultations|@count}} consultation{{if $following_consultations|@count > 1}}s{{/if}} ultï¿½rieure{{if $following_consultations|@count > 1}}s{{/if}}
+                            {{$following_consultations|@count}} consultation{{if $following_consultations|@count > 1}}s{{/if}} ultérieure{{if $following_consultations|@count > 1}}s{{/if}}
                           {{/if}}
                         </button>
                       {{else}}
@@ -537,7 +537,7 @@
                     <th>{{mb_label object=$consult field="premiere"}}</th>
                     <td>
                       {{mb_field object=$consult field="premiere" typeEnum=checkbox}} {{if $consult->_consult_sejour_out_of_nb}}
-                        <strong>Sï¿½ance {{$consult->_consult_sejour_nb}} / {{$consult->_consult_sejour_out_of_nb}}</strong>
+                        <strong>Séance {{$consult->_consult_sejour_nb}} / {{$consult->_consult_sejour_out_of_nb}}</strong>
                       {{/if}}
                     </td>
                   </tr>

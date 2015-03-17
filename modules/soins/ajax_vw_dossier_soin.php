@@ -41,7 +41,7 @@ CPrescription::$mode_plan_soins = true;
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
 
-// Recuperation du sejour_id si seulement l'object est passï¿½
+// Recuperation du sejour_id si seulement l'object est passé
 if ($object_id && $object_class) {
   $object = new $object_class;
   $object->load($object_id);
@@ -59,7 +59,7 @@ $sejour->loadRefCurrAffectation();
 $sejour->_ref_curr_affectation->loadView();
 
 if ($group->_id != $sejour->group_id) {
-  CAppUI::stepAjax("Ce sï¿½jour n'est pas dans l'ï¿½tablissement courant", UI_MSG_WARNING);
+  CAppUI::stepAjax("Ce séjour n'est pas dans l'établissement courant", UI_MSG_WARNING);
   return;
 }
 
@@ -91,19 +91,19 @@ $hidden_lines_count = 0;
 $hide_inactive_count = 0;
 if (CModule::getActive("dPprescription")) {
 
-  // Chargement des cis ï¿½ risque
+  // Chargement des cis é risque
   $where = array();
   $where["risque"]    = " = '1'";
   $risques_cis = CProduitLivretTherapeutique::getCISList($where);
 
-  // Chargement de la prescription ï¿½ partir du sejour
+  // Chargement de la prescription é partir du sejour
   $prescription = new CPrescription();
   $prescription->object_id = $sejour_id;
   $prescription->object_class = "CSejour";
   $prescription->type = "sejour";
   $prescription->loadMatchingObject();
 
-  // Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargï¿½es
+  // Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
   $prescription->calculAllPlanifSysteme();
 
   // Chargement des configs de service
@@ -128,7 +128,7 @@ if (CModule::getActive("dPprescription")) {
   }
 
   if (!$without_check_date && !($object_id && $object_class) && !$chapitre) {
-    // Si la date actuelle est infï¿½rieure a l'heure affichï¿½e sur le plan de soins, on affiche le plan de soins de la veille
+    // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille
     $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
     if (CMbDT::dateTime() < $datetime_limit) {
       $date = CMbDT::date("- 1 DAY");
@@ -317,7 +317,7 @@ if (CModule::getActive("dPprescription")) {
             }
           }
         }
-        // Chargement des lignes d'ï¿½lï¿½ments
+        // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
           $prescription->loadRefsLinesElementByCat("1", "1", null, null, null, null, $hide_old_lines, null, null, $hide_line_inactive);
           foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
@@ -385,7 +385,7 @@ if (CModule::getActive("dPprescription")) {
         }
       }
       elseif ($chapitre == "inscription") {
-        // Chargement des inscriptions effectuï¿½es
+        // Chargement des inscriptions effectuées
         $prescription->loadRefsLinesInscriptions();
         foreach ($prescription->_ref_lines_inscriptions as $_inscriptions_by_type) {
           foreach ($_inscriptions_by_type as &$_inscription) {
@@ -397,7 +397,7 @@ if (CModule::getActive("dPprescription")) {
         }
       }
       elseif (!$chapitre) {
-        // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifiï¿½)
+        // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
         $prescription->loadRefsPrescriptionLineMixes("", "1");
         $prescription->loadRefsLinesMedByCat("1", "1");
 
@@ -568,7 +568,7 @@ if (!$chapitre && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("s
   unset($prescription->_ref_lines_elt_for_plan["med_elt"]);
 }
 
-// Crï¿½ation du template
+// Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("risques_cis"         , $risques_cis);
 $smarty->assign("plan_soins_unite_prescription", CAppUI::conf("dPprescription CPrescription unite_prescription_plan_soins", $group));
@@ -648,7 +648,7 @@ else {
   else {
     // Affichage du plan de soin complet
     if (CModule::getActive("dPprescription")) {
-      // Multiple prescriptions existante pour le sï¿½jour (Fusion des prescriptions)
+      // Multiple prescriptions existante pour le séjour (Fusion des prescriptions)
       $prescription_multiple = new CPrescription;
       $where = array(
         "type" => " = 'sejour'",
