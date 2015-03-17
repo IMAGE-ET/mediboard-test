@@ -101,4 +101,15 @@ class CSVS extends CIHE {
 
     return new $classname;
   }
+
+  /**
+   * Create the acknowledgment
+   *
+   * @param String $ack_data acknowledgment message
+   *
+   * @return CHL7v3AcknowledgmentPRPA|CHL7v3AcknowledgmentXDSb
+   */
+  function getAcknowledgment($ack_data) {
+
+  }
 }

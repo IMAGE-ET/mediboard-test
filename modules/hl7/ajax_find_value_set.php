@@ -48,5 +48,5 @@ foreach ($receivers as $_receiver) {
     continue;
   }
 
-  mbTrace($_receiver->sendEvent($event, $object, $headers, true));
+  $ack = $_receiver->sendEvent($event, $object, $headers, true);
 }

@@ -72,7 +72,7 @@ class CHL7v3MessageXML extends CMbXMLDocument {
    *
    * @return DOMElement
    */
-  function addElement($elParent, $elName, $elValue = null, $elNS = "urn:hl7-org:v3") {
+  function addElement($elParent, $elName, $elValue = null, $elNS = null) {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
 

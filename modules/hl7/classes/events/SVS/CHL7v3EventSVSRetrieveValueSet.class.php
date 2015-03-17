@@ -35,14 +35,13 @@ class CHL7v3EventSVSRetrieveValueSet extends CHL7v3EventSVS implements CHL7Event
     $data   = $object->_data;
 
     $dom = new CHL7v3MessageXML("utf-8", $this->version);
-    //$dom->addNameSpaces();
 
-    $RetrieveValueSetRequest = $dom->addElement($dom, "RetrieveValueSetRequest");
+    $RetrieveValueSetRequest = $dom->addElement($dom, "ns1:RetrieveValueSetRequest", null, "urn:ihe:iti:svs:2008");
 
-    $ValueSet = $dom->addElement($RetrieveValueSetRequest, "ValueSet");
-    $dom->addValueSet($ValueSet, "id"     , "OID"     , $data);
-    $dom->addValueSet($ValueSet, "version", "version" , $data);
-    $dom->addValueSet($ValueSet, "lang"   , "language", $data);
+    $ValueSet = $dom->addElement($RetrieveValueSetRequest, "ns1:ValueSet", null, "urn:ihe:iti:svs:2008");
+    $dom->addValueSet($ValueSet, "id"      , "OID"     , $data);
+    $dom->addValueSet($ValueSet, "version" , "version" , $data);
+    $dom->addValueSet($ValueSet, "xml:lang", "language", $data);
 
     $this->message = $dom->saveXML();
 

@@ -119,7 +119,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
 
     $msg = $event->message;
     if ($soapVar) {
-      $msg = preg_replace("#^<\?xml[^>]*>#", "", $msg);
+      $msg = trim(preg_replace("#^<\?xml[^>]*>#", "", $msg));
       $msg = new SoapVar($msg, XSD_ANYXML);
     }
 

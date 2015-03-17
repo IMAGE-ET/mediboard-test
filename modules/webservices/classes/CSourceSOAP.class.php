@@ -188,7 +188,7 @@ class CSourceSOAP extends CExchangeSource {
     }
 
     if ($this->soap_version) {
-      $options["soap_version"] = $this->soap_version;
+      $options["soap_version"] = constant($this->soap_version);
     }
 
     if ($this->xop_mode) {
