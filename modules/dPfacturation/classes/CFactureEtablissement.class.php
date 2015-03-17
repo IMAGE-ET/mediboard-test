@@ -85,6 +85,10 @@ class CFactureEtablissement extends CFacture {
    * @return void|string
   **/
   function delete() {
+    $this->_ref_reglements = array();
+    $this->_ref_relances = array();
+    $this->_count["relance_fact_etab"] = 0;
+    $this->_count["reglements_fact_etab"] = 0;
     $this->loadRefsReglements();
     $this->loadRefsRelances();
     // Standard delete

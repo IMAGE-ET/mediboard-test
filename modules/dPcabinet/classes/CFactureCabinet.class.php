@@ -92,6 +92,10 @@ class CFactureCabinet extends CFacture {
    * @see parent::delete()
    */
   function delete() {
+    $this->_ref_reglements = array();
+    $this->_ref_relances = array();
+    $this->_count["relance_fact_cabinet"] = 0;
+    $this->_count["reglements"] = 0;
     $this->loadRefsReglements();
     $this->loadRefsRelances();
 
