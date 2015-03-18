@@ -119,6 +119,10 @@ TestHL7 = {
   },
 
   findValueSet : function(form) {
+    if (!checkForm(form)) {
+      return false;
+    }
+
     new Url("hl7", "ajax_find_value_set")
       .addFormData(form)
       .requestUpdate("search_value_set");

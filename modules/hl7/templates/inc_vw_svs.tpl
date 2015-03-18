@@ -24,8 +24,8 @@
 
           <table class="form">
             <tr>
-              <th>OID</th>
-              <td> <input tabindex="10" type="text" name="OID" value="" size="25" /> </td>
+              <th> <label class="notNull">OID</label></th>
+              <td> <input tabindex="10" type="text" name="OID" value="" size="25" class="notNull"/> </td>
             </tr>
 
             <tr>

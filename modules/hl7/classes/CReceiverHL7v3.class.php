@@ -175,7 +175,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
    * @param String $event_type evenment type
    * @param String $ack_data   acknowledgment message
    *
-   * @return CHL7v3AcknowledgmentPRPA|CHL7v3AcknowledgmentXDSb
+   * @return CHL7v3AcknowledgmentPRPA|CHL7v3AcknowledgmentXDSb|CHL7v3AcknowledgmentSVS
    */
   static function createAcknowledgment($event_type, $ack_data) {
     $class_name = "C$event_type";
@@ -196,7 +196,11 @@ class CReceiverHL7v3 extends CInteropReceiver {
 
     $iti41->_event_name = "ProvideAndRegisterDocumentSetRequest";
 
-    $headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b");
+    $headers = CHL7v3Adressing::createWSAddressing(
+      "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b",
+      "http://ihexds.nist.gov/tf6/services/xdsrepositoryb"
+    );
+
     try {
       $this->sendEvent($iti41, $document_item, $headers, true);
 

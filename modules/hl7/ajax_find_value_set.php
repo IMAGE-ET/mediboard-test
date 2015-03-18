@@ -17,6 +17,10 @@ $OID      = CValue::get("OID");
 $version  = CValue::get("version");
 $language = CValue::get("language");
 
+if (!$OID) {
+  return;
+}
+
 $receiver_hl7v3           = new CReceiverHL7v3();
 $receiver_hl7v3->actif    = 1;
 $receiver_hl7v3->group_id = CGroups::loadCurrent()->_id;
@@ -41,12 +45,29 @@ $data = array(
 $object = new CMbObject();
 $object->_data = $data;
 
-$headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2008:$value_set_type");
+$headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2008:$value_set_type", "http://valuesetrepository/");
 
+$ack       = null;
+$error     = null;
+$value_set = null;
 foreach ($receivers as $_receiver) {
   if (!$_receiver->isMessageSupported($event_name)) {
     continue;
   }
 
-  $ack = $_receiver->sendEvent($event, $object, $headers, true);
+  try {
+    /** @var CHL7v3AcknowledgmentSVS $ack */
+    $ack = $_receiver->sendEvent($event, $object, $headers, true);
+
+    $value_set = $ack->getQueryAck();
+  }
+  catch (SoapFault $s) {
+    $error = $s->getMessage();
+  }
 }
+
+mbTrace($value_set);
+
+$smarty = new CSmartyDP();
+$smarty->assign("error", $error);
+$smarty->display("inc_result_find_value_set.tpl");

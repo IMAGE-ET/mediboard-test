@@ -33,14 +33,15 @@ class CHL7v3Adressing {
    * Création d'une entête WS-Adressing
    *
    * @param string $action_name Action name
+   * @param string $to          To
    *
    * @return CSVSMessageXML[]
    */
-  static function createWSAddressing($action_name) {
-    $headers[] = self::createHeaders("Action", $action_name, true);
+  static function createWSAddressing($action_name, $to) {
+    $headers[] = self::createHeaders("Action"   , $action_name, true);
     $headers[] = self::createHeaders("MessageID", "urn:uuid:".CMbSecurity::generateUUID());
-    $headers[] = self::createHeaders("ReplyTo", array("Address" => array("_", "http://www.w3.org/2005/08/addressing/anonymous")));
-    $headers[] = self::createHeaders("To", "http://valuesetrepository/", true);
+    $headers[] = self::createHeaders("ReplyTo"  , array("Address" => array("_", "http://www.w3.org/2005/08/addressing/anonymous")));
+    $headers[] = self::createHeaders("To"       , $to, true);
 
     return $headers;
   }

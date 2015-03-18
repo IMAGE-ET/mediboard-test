@@ -35,7 +35,7 @@ class CSVS extends CIHE {
    */
   static $evenements = array(
     // ITI-48
-    "RetrieveValueSet" => "CHL7v3EventSVSRetrieveValueSet",
+    "RetrieveValueSet"          => "CHL7v3EventSVSRetrieveValueSet",
 
     // ITI-60
     "RetrieveMultipleValueSets" => "CHL7v3EventSVSRetrieveMultipleValueSets"
@@ -103,13 +103,20 @@ class CSVS extends CIHE {
   }
 
   /**
-   * Create the acknowledgment
+   * Get aAcknowledgment object
    *
-   * @param String $ack_data acknowledgment message
+   * @param string $ack_data Data
    *
-   * @return CHL7v3AcknowledgmentPRPA|CHL7v3AcknowledgmentXDSb
+   * @return CHL7v3AcknowledgmentPRPA|null
    */
-  function getAcknowledgment($ack_data) {
+  static function getAcknowledgment($ack_data) {
+    $dom = new CHL7v3MessageXML();
+    $dom->loadXMLSafe($ack_data);
+    $dom->formatOutput = true;
 
+    $acknowledgment_svs      = new CHL7v3AcknowledgmentSVS();
+    $acknowledgment_svs->dom = $dom;
+
+    return $acknowledgment_svs;
   }
 }
