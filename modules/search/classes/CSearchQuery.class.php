@@ -458,7 +458,8 @@ class CSearchQuery extends CSearch{
     $result['stats']['shards']["failed"]     = $stats["_shards"]['failed'];
 
     // récupération de statistiques
-    $name = CAppUI::conf("db std dbname");
+    $name = CAppUI::conf("search index_name");
+
     $result['stats']["search"]['total']        = $stats["indices"][$name]["primaries"]["search"]["query_total"];
     $result['stats']["search"]['average_time'] = $stats["indices"][$name]["primaries"]["search"]["query_time_in_millis"];
 

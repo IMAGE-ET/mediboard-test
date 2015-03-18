@@ -17,6 +17,7 @@
           case "CConfigEtab"    : Configuration.edit('search', 'CGroups', container.id); break;
           case "CConfigServeur" : Search.configServeur(); break;
           case "CConfigES"      : Search.configES(); break;
+          case "CConfigReIndexing" : Search.configReIndexing(); break;
           default : Configuration.edit('search', 'CGroups', container.id); break;
         }
       }
@@ -31,6 +32,7 @@
         <li><a href="#CConfigEtab">Config par établissement</a></li>
         <li><a href="#CConfigServeur">Config serveur</a></li>
         <li><a href="#CConfigES">Config ES</a></li>
+        <li><a href="#CConfigReIndexing">Réindexation</a></li>
       </ul>
     </td>
   </tr>
@@ -39,6 +41,7 @@
       <div id="CConfigEtab" style="display: none"></div>
       <div id="CConfigServeur" style="display: none"></div>
       <div id="CConfigES" style="display: none"></div>
+      <div id="CConfigReIndexing" style="display: none"></div>
     </td>
   </tr>
 </table>

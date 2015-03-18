@@ -87,7 +87,8 @@ class CSearch {
    */
   function createIndex ($name, $params, $bool=false) {
     if (!$name) {
-      $name = CAppUI::conf("db std dbname");
+      $conf_name = CAppUI::conf("search index_name");
+      $name = ($conf_name) ? $conf_name : CAppUI::conf("db std name");
     }
     if (!$params) {
       $params = self::$settings_default;
@@ -153,8 +154,8 @@ class CSearch {
    */
   function loadIndex ($name = null) {
     if (!$name) {
-      $name = CAppUI::conf("db std dbname");
-
+      $conf_name = CAppUI::conf("search index_name");
+      $name = ($conf_name) ? $conf_name : CAppUI::conf("db std name");
     }
     return $this->getIndex($name);
   }

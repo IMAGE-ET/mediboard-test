@@ -56,6 +56,11 @@ Search = window.Search || {
     return false;
   },
 
+  configReIndexing : function () {
+    var url    = new Url('search', 'ajax_configure_reindexing');
+    url.requestUpdate("CConfigReIndexing");
+  },
+
   /**
    * Method to toggle élément
    *
