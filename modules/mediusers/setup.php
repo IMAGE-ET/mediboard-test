@@ -661,7 +661,13 @@ class CSetupmediusers extends CSetup {
                 ADD `electronic_bill` ENUM ('0','1') DEFAULT '0',
                 ADD `specialite_tarmed` MEDIUMINT (4) UNSIGNED ZEROFILL;";
     $this->addQuery($query);
+    $this->makeRevision('0.59');
 
-    $this->mod_version = '0.59';
+    $query = "ALTER TABLE `users_mediboard`
+                ADD `ean_base` VARCHAR (255),
+                ADD `role_tarmed` VARCHAR (255),
+                ADD `place_tarmed` VARCHAR (255);";
+    $this->addQuery($query);
+    $this->mod_version = '0.60';
   }
 }

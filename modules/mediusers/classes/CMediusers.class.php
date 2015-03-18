@@ -52,11 +52,14 @@ class CMediusers extends CPerson {
   public $zisd;
   public $ik;
   public $ean;
+  public $ean_base;
   public $rcc;
   public $adherent;
   public $debut_bvr;
   public $electronic_bill;
   public $specialite_tarmed;
+  public $role_tarmed;
+  public $place_tarmed;
 
   // CUser reported fields fields
   public $_user_type;
@@ -243,11 +246,14 @@ class CMediusers extends CPerson {
     $props["zisd"]                   = "str";
     $props["ik"]                     = "str";
     $props["ean"]                    = "str";
+    $props["ean_base"]               = "str";
     $props["rcc"]                    = "str";
     $props["adherent"]               = "str";
     $props["debut_bvr"]              = "str maxLength|10";
     $props["electronic_bill"]        = "bool default|0";
     $props["specialite_tarmed"]      = "numchar length|4";
+    $props["role_tarmed"]            = "str";
+    $props["place_tarmed"]           = "str";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
     $props["last_ldap_checkout"]     = "date";

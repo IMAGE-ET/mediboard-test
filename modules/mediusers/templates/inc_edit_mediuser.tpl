@@ -142,6 +142,10 @@
     <li><a href="#identification">Identification</a></li>
     <li><a href="#infos_praticien">Professionnel de santé</a></li>
     <li><a href="#iconographie">Iconographie</a></li>
+    {{if $conf.ref_pays == 2}}
+      <li><a href="#facturation">Facturation</a></li>
+      <li><a href="#sources">Archivage</a></li>
+    {{/if}}
   </ul>
 
   <hr class="control_tabs" />
@@ -157,6 +161,14 @@
   <table id="iconographie" class="form" style="display: none;">
     {{mb_include template=inc_iconographie}}
   </table>
+
+  {{if $conf.ref_pays == 2}}
+    <table id="facturation" class="form" style="display: none;">
+      {{mb_include template=inc_facturation name_form="mediuser"}}
+    </table>
+    <div id="sources" class="form" style="display: none;">
+    </div>
+  {{/if}}
 
   <table class="form">
     <tr>
