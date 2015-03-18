@@ -66,8 +66,7 @@ foreach ($receivers as $_receiver) {
   }
 }
 
-mbTrace($value_set);
-
 $smarty = new CSmartyDP();
-$smarty->assign("error", $error);
+$smarty->assign("error"    , $error);
+$smarty->assign("value_set", $value_set);
 $smarty->display("inc_result_find_value_set.tpl");
