@@ -8,6 +8,7 @@
   * @version  SVN: $Id:$ 
   * @link     http://www.mediboard.org
 *}}
+{{mb_default var=callback_source value="ExchangeSource.refreshUserSources"}}
 
 <table class="main tbl">
   <tr>
@@ -21,9 +22,9 @@
     {{if $_source->_id}}
       <tr {{if !$_source->active}}class="hatching"{{/if}}>
         <td class="compact">
-          <button class="edit notext compact"
+          <button type="button" class="edit notext compact"
                   onclick="ExchangeSource.editSource('{{$_source->_guid}}', true, '{{$_source->name}}',
-                    '{{$_source->_wanted_type}}', null, ExchangeSource.refreshUserSources)">
+                    '{{$_source->_wanted_type}}', null, {{$callback_source}})">
             {{tr}}Edit{{/tr}}
           </button>
           {{mb_value object=$_source field=libelle}}
