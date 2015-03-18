@@ -308,6 +308,6 @@ class CSearchLog extends CSearch {
    * @return array
    */
   function loadNameIndex () {
-    return CAppUI::conf("db std dbname") . "_log";
+    return CAppUI::conf("search index_name") . "_log";
   }
 }
