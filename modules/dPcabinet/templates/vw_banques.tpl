@@ -1,3 +1,10 @@
+{{mb_script module="patients" script="autocomplete"}}
+<script>
+  Main.add(function () {
+    InseeFields.initCPVille("editFrm", "cp", "ville");
+  });
+</script>
+
 <table class="main layout">
   <tr>
     <td style="width: 50%;">
@@ -36,6 +43,26 @@
           <tr>
             <th>{{mb_label object=$banque field="description"}}</th>
             <td>{{mb_field object=$banque field="description"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$banque field="departement"}}</th>
+            <td>{{mb_field object=$banque field="departement"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$banque field="boite_postale"}}</th>
+            <td>{{mb_field object=$banque field="boite_postale"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$banque field="adresse"}}</th>
+            <td>{{mb_field object=$banque field="adresse"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$banque field="cp"}}</th>
+            <td>{{mb_field object=$banque field="cp"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$banque field="ville"}}</th>
+            <td>{{mb_field object=$banque field="ville"}}</td>
           </tr>
           <tr>
             <td class="button" colspan="2">

@@ -2233,13 +2233,20 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `acte_ngap`
                 CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation', 'CDevisCodage') NOT NULL default 'CConsultation';";
     $this->addQuery($query);
-
     $this->makeRevision('2.48');
 
     $query = "ALTER TABLE `acte_ngap`
                 ADD `prescripteur_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
+    $this->makeRevision('2.49');
 
-    $this->mod_version = '2.49';
+    $query = "ALTER TABLE `banque`
+                ADD `departement` VARCHAR (255),
+                ADD `boite_postale` VARCHAR (255),
+                ADD `adresse` TEXT,
+                ADD `cp` VARCHAR (5),
+                ADD `ville` VARCHAR (255);";
+    $this->addQuery($query);
+    $this->mod_version = '2.50';
   }
 }

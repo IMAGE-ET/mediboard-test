@@ -18,6 +18,11 @@ class CBanque extends CMbObject {
   // DB fields
   public $nom;
   public $description;
+  public $departement;
+  public $boite_postale;
+  public $adresse;
+  public $cp;
+  public $ville;
 
   /**
    * @see parent::getSpec()
@@ -34,8 +39,13 @@ class CBanque extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["nom"]         = "str notNull seekable";
-    $props["description"] = "str seekable";
+    $props["nom"]           = "str notNull seekable";
+    $props["description"]   = "str seekable";
+    $props["departement"]   = "str";
+    $props["boite_postale"] = "str";
+    $props["adresse"]       = "text confidential";
+    $props["ville"]         = "str confidential seekable|begin";
+    $props["cp"]            = "str minLength|4 maxLength|5 confidential";
     return $props;
   }
 
