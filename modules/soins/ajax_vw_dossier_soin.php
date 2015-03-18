@@ -92,6 +92,7 @@ $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
 $risques_cis = array();
 
+$atc_classes = array();
 $hidden_lines_count = 0;
 $hide_inactive_count = 0;
 if (CModule::getActive("dPprescription")) {
@@ -272,6 +273,12 @@ if (CModule::getActive("dPprescription")) {
       }
       $prescription->countLinesTP();
 
+      if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group) && CAppUI::pref("regroupement_med_plan_soins")) {
+        $atc_classes["other_perf"] = "Autres perfusions";
+      }
+      $display_level = $prescription->_display_level ? $prescription->_display_level : '2';
+      $_ref_name = "_ref_ATC_".$display_level."_code";
+
       // Chargement des lignes de medicament
       if (in_array($chapitre, array("all_med", "all_chaps"))) {
         $prescription->loadRefsLinesMedByCat("1", "1", '', $hide_old_lines, null, null, $hide_line_inactive);
@@ -292,6 +299,14 @@ if (CModule::getActive("dPprescription")) {
           }
           $_line_med->updateAlerteAntibio();
           $_line_med->loadActiveDates();
+
+          if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group)&& CAppUI::pref("regroupement_med_plan_soins")) {
+            $atc = $_line_med->_ref_produit->$_ref_name;
+            if (!isset($atc_classes[$atc])) {
+              $medicament_produit = new CMedicamentProduit();
+              $atc_classes[$atc] = $medicament_produit->getLibelleATC($atc);
+            }
+          }
         }
 
         // Chargement des prescription_line_mixes
@@ -319,6 +334,29 @@ if (CModule::getActive("dPprescription")) {
           if ($_prescription_line_mix->sans_planif) {
             foreach ($_prescription_line_mix->_ref_lines as $_line_mix_item) {
               $_line_mix_item->loadRefLastAdministration();
+            }
+          }
+          if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group) && CAppUI::pref("regroupement_med_plan_soins")) {
+            $atcs = array();
+            foreach ($_prescription_line_mix->loadRefsLines() as $_line_mix_item) {
+              if (!$_line_mix_item->solvant && $_line_mix_item->atc) {
+                $display_level = $prescription->_display_level ? $prescription->_display_level : '2';
+                $_ref_name = "_ref_ATC_".$display_level."_code";
+                $atc = $_line_mix_item->_ref_produit->$_ref_name;
+                $atcs[] = $atc;
+              }
+            }
+            if (count($atcs) == 1) {
+              foreach ($atcs as $_atc) {
+                if (!isset($atc_classes[$_atc])) {
+                  $medicament_produit = new CMedicamentProduit();
+                  $atc_classes[$_atc] = $medicament_produit->getLibelleATC($_atc);
+                }
+                $prescription->_ref_all_med_for_plan[$_atc][$_prescription_line_mix->_id]["aucune_prise"] = $_prescription_line_mix;
+              }
+            }
+            else {
+              $prescription->_ref_all_med_for_plan["other_perf"][$_prescription_line_mix->_id][] = $_prescription_line_mix;
             }
           }
         }
@@ -573,6 +611,28 @@ if (!$chapitre && CAppUI::pref("regroupement_med_plan_soins") && CAppUI::conf("s
   unset($prescription->_ref_lines_elt_for_plan["med_elt"]);
 }
 
+/**
+ * Tri par classe ATC
+ *
+ * @param string $atc1 ATC 1
+ * @param string $atc2 ATC 2
+ *
+ * @return int
+ */
+function compareATC($atc1, $atc2) {
+  global $atc_classes;
+  return strcmp($atc_classes[$atc1], $atc_classes[$atc2]);
+}
+
+if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group) && CAppUI::pref("regroupement_med_plan_soins") && $prescription->object_id && count($prescription->_ref_all_med_for_plan)) {
+  uksort($prescription->_ref_all_med_for_plan, "compareATC");
+  if (isset($prescription->_ref_all_med_for_plan["other_perf"])) {
+    $other = $prescription->_ref_all_med_for_plan["other_perf"];
+    unset($prescription->_ref_all_med_for_plan["other_perf"]);
+    $prescription->_ref_all_med_for_plan["other_perf"] = $other;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("risques_cis"         , $risques_cis);
@@ -584,6 +644,7 @@ $smarty->assign("poids"               , $poids);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("count_perop_adm"     , $count_perop_adm);
 $smarty->assign("group_guid"          , $group->_guid);
+$smarty->assign("atc_classes"         , $atc_classes);
 
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("prescription"        , $prescription);
