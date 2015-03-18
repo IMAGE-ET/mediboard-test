@@ -25,6 +25,7 @@ window.list_plugins = [
   {{if $can->admin}}
   "mbthumbs",
   {{/if}}
+  "mssante",
   "usermessage"
 ];
 
@@ -97,7 +98,15 @@ CKEDITOR.editorConfig = function(config) {
     ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
     ['TextColor', 'BGColor']
     ];
-  {{else}}
+   {{elseif $templateManager->messageMode}}
+      config.toolbar = [
+        ['Font', 'FontSize'],
+        ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript'],
+        ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+        ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
+        ['TextColor', 'BGColor']
+      ];
+   {{else}}
     {{if $app->user_prefs.saveOnPrint || ($pdf_thumbnails && $app->user_prefs.pdf_and_thumbs)}}
       var textForPrint = 'mbprint';
     {{else}}
@@ -107,7 +116,7 @@ CKEDITOR.editorConfig = function(config) {
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
     {{if !$templateManager->isModele}}
-      config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}';
+      config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}{{if $use_mssante}},mssante{{/if}}';
     {{/if}}
 
     config.toolbar = [
@@ -120,7 +129,7 @@ CKEDITOR.editorConfig = function(config) {
     ['TransformTextSwitcher', 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize'],
     ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
     ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-    [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{if $use_apicrypt}}'apicrypt', {{/if}}{{/if}}{{if $can->admin}}'mbthumbs', {{/if}}{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbhidethumbs'{{/if}}]];
+    [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{if $use_apicrypt}}'apicrypt', {{/if}}{{if $use_mssante}}'mssante', {{/if}}{{/if}}{{if $can->admin}}'mbthumbs', {{/if}}{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbhidethumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];

@@ -23,11 +23,20 @@ elseif ($user->mail_apicrypt && CModule::getActive("apicrypt")) {
   $use_apicrypt = true;
 }
 
+$use_mssante = false;
+if (!$user->isPraticien() && CModule::getActive('mssante')) {
+  $use_mssante = true;
+}
+elseif (CModule::getActive('mssante') && CMSSanteUserAccount::isUserHasAccount($user)) {
+  $use_mssante = true;
+}
+
 // Création du template
 $smarty = new CSmartyDP("modules/dPcompteRendu");
 
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("nodebug", true);
 $smarty->assign("use_apicrypt"  , $use_apicrypt);
+$smarty->assign('use_mssante'   , $use_mssante);
 
 $smarty->display("mb_fckeditor.tpl");

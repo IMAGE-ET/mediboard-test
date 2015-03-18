@@ -59,7 +59,12 @@
         }
 
         var dims = document.viewport.getDimensions();
-        CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
+        if (greedyPane.hasClassName('message_input')) {
+          CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 50));
+        }
+        else {
+          CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
+        }
         if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
           $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
         }
@@ -178,6 +183,10 @@
 
     var mbcap     = editor.getCommand('mbcap');
     var mbreplace = editor.getCommand('mbreplace');
+
+    if (!mbcap) {
+      return;
+    }
 
     if (mbcap.state === CKEDITOR.TRISTATE_OFF && mbreplace.state === CKEDITOR.TRISTATE_OFF) {
       return;

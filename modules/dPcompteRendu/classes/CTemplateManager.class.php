@@ -32,6 +32,7 @@ class CTemplateManager {
   public $isModele      = true;
   public $printMode     = false;
   public $simplifyMode  = false;
+  public $messageMode   = false;
   public $parameters    = array();
   public $font;
   public $size;

@@ -42,6 +42,14 @@
     {{/if}}
   }
 
+  function openWindowMSSante() {
+    var form = getForm("editFrm");
+    var url = new Url('mssante', 'ajax_send_document');
+    url.addParam('object_class', 'CCompteRendu');
+    url.addParam('object_id', $V(form.compte_rendu_id));
+    url.requestModal(700, 320);
+  }
+
   function refreshListDocs() {
     {{if $compte_rendu->_id && !$compte_rendu->valide}}
       var form = getForm("editFrm");

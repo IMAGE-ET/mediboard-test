@@ -88,6 +88,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $backProps["bioserver_document"]  = "CBioserveurDocument file_id";
     $backProps["dmp_documents_sent"]  = "CDMPFile file_id";
     $backProps["file_read_status"]    = "CFileUserView file_id";
+    $backProps['mssante_attachment']  = 'CMSSanteMailAttachment file_id';
 
     return $backProps;
   }
