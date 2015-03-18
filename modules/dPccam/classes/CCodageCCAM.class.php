@@ -328,7 +328,7 @@ class CCodageCCAM extends CMbObject {
   public function check() {
     $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked', 'activite_anesth');
 
-    if ($this->_old->locked && $this->locked) {
+    if ($this->_old->locked && $this->locked && !CModule::getCanDo('dPpmsi')->edit) {
       return "Codage verrouillé";
     }
     if (!$this->_id || $this->fieldModified('association_mode', 'auto')) {

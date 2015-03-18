@@ -238,7 +238,7 @@
                         {{tr}}Lock{{/tr}}
                       </button>
                     {{/if}}
-                    {{if !$count_actes_by_prat}}
+                    {{if !$count_actes_by_prat && !$_codage->locked}}
                       <button type="button" class="notext trash"
                               onclick="deleteCodages({{$_codage->praticien_id}})">
                         {{tr}}Delete{{/tr}}

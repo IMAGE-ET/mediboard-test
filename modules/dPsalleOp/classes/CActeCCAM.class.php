@@ -192,7 +192,7 @@ class CActeCCAM extends CActe {
   function checkCoded() {
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
       $this->loadRefCodageCCAM();
-      if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked) {
+      if ($this->_ref_codage_ccam->_id && $this->_ref_codage_ccam->locked && !CModule::getCanDo('dPpmsi')->edit) {
         return "Codage CCAM verrouillé, impossible de modifier l'acte";
       }
     }
