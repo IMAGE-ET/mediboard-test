@@ -53,6 +53,12 @@ class CLit extends CInternalStructure {
   /** @var CItemLiaison[] */
   public $_ref_liaisons_items;
 
+  /** @var  CBedCleanup */
+  public $_ref_current_cleanup;
+
+  /** @var  CBedCleanup */
+  public $_ref_last_cleanup;
+
   /**
    * @see parent::getSpec()
    */
@@ -69,12 +75,13 @@ class CLit extends CInternalStructure {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["affectations"]     = "CAffectation lit_id";
-    $backProps["affectations_rpu"] = "CRPU box_id";
-    $backProps["ufs"]              = "CAffectationUniteFonctionnelle object_id";
-    $backProps["liaisons_items"]   = "CLitLiaisonItem lit_id";
+    $backProps["affectations"]        = "CAffectation lit_id";
+    $backProps["affectations_rpu"]    = "CRPU box_id";
+    $backProps["ufs"]                 = "CAffectationUniteFonctionnelle object_id";
+    $backProps["liaisons_items"]      = "CLitLiaisonItem lit_id";
     $backProps["origine_brancardage"] = "CBrancardage origine_id";
     $backProps["origine_item"]        = "CBrancardageItem destination_id";
+    $backProps["cleanups"]            = "CBedCleanup lit_id";
     return $backProps;
   }
 
@@ -131,6 +138,36 @@ class CLit extends CInternalStructure {
     $this->checkDispo($date);
   }
 
+  function loadCurrentCleanup() {
+    $cleanup = new CBedCleanup();
+    $order = "cleanup_bed_id DESC";
+    $where = array("lit_id" => " = '$this->_id' ");
+    $where[] = " datetime_end IS NULL OR datetime_start IS NULL";
+    $cleanup->loadObject($where, $order);
+    return $this->_ref_current_cleanup = $cleanup;
+  }
+
+  function loadLastCleanup() {
+    $cleanup = new CBedCleanup();
+    $order = "cleanup_bed_id DESC";
+    $where = array("lit_id" => " = '$this->_id' ");
+    $where[] = " datetime_end IS NOT NULL";
+    $cleanup->loadObject($where, $order);
+    return $this->_ref_last_cleanup = $cleanup;
+  }
+
+  function loadView() {
+    parent::loadView();
+
+    $this->loadRefService();
+    $this->loadAffectations(CMbDT::date());
+
+    if (CModule::getActive('hotellerie')) {
+      $this->loadLastCleanup();
+      $this->loadCurrentCleanup();
+    }
+  }
+
   /**
    * @see parent::updateFormFields()
    */
@@ -171,7 +208,7 @@ class CLit extends CInternalStructure {
   function loadRefService() {
     if (!$this->_ref_chambre) {
       $this->loadRefChambre();
-    } 
+    }
     
     return $this->_ref_service = $this->_ref_chambre->loadRefService();
   }

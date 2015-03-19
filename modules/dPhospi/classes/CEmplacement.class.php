@@ -46,7 +46,7 @@ class CEmplacement extends CMbObject {
     $props["chambre_id"]  = "ref notNull class|CChambre";
     $props["plan_x"]      = "num notNull";
     $props["plan_y"]      = "num notNull";
-    $props["color"]       = "str default|DDDDDD notNull maxLength|6";    
+    $props["color"]       = "color default|DDDDDD notNull";
     $props["hauteur"]     = "num notNull default|1 min|1 max|20";
     $props["largeur"]     = "num notNull default|1 min|1 max|20";
     return $props;

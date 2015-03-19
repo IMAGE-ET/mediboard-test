@@ -1,5 +1,4 @@
 <!-- Formulaire d'un emplacement -->
-{{mb_script module="mediusers" script="color_selector" ajax=true}}
 
 <form name="Edit-CEmplacement" action="" method="post" onsubmit="return PlanEtage.onSubmit(this)">
   {{mb_class object=$emplacement}}
@@ -22,23 +21,10 @@
     </tr>  
 
     <tr>
-      <script>
-        ColorSelector.init = function(){
-          this.sForm  = "Edit-CEmplacement";
-          this.sColor = "color";
-          this.sColorView = "color-view";
-          this.pop();
-        };
-      </script>
       <th>{{mb_label object=$emplacement field="color"}}</th>
       <td>
-        <span class="color-view" id="color-view" style="background: #{{if $emplacement->color}}{{$emplacement->color}}{{else}}DDDDDD{{/if}};">
-          {{tr}}Choose{{/tr}}
-        </span>
-        <button type="button" class="search notext" onclick="ColorSelector.init()">
-          {{tr}}Choose{{/tr}}
-        </button>
-        {{mb_field object=$emplacement field="color" hidden=1}}
+
+        {{mb_field object=$emplacement field="color" form="Edit-CEmplacement"}}
       </td>
     </tr>    
   
