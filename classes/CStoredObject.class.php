@@ -2586,14 +2586,15 @@ class CStoredObject extends CModelObject {
   function seek($keywords, $where = array(), $limit = 100, $countTotal = false, $ljoin = null, $order = null) {
     if (!is_array($keywords)) {
       $regex = '/"([^"]+)"/';
-      
+
+      $keywords = trim($keywords);
       $keywords = str_replace('\\"', '"', $keywords);
       
       if (preg_match_all($regex, $keywords, $matches)) { // Find quoted strings
         $keywords = preg_replace($regex, "", $keywords); // ... and remove them
       }
       
-      $keywords = explode(" ", $keywords);
+      $keywords = preg_split('/\s+/', $keywords);
       
       // If there are quoted strings
       if (isset($matches[1])) {
@@ -2653,20 +2654,23 @@ class CStoredObject extends CModelObject {
             $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword'";
           }
           if ($spec->seekable === true OR $index != 0) {
-            if ($spec instanceof CRefSpec && $field != $this->_spec->key) {
-              $class = $spec->class;
-              
-              if (isset($spec->meta)) {
-                $class = $this->{$spec->meta};
-              }
+            if ($spec instanceof CRefSpec) {
+              // Only if the ref is not the object itself
+              if ($spec->class !== $this->_class) {
+                $class = $spec->class;
 
-              /** @var self $object */
-              $object = new $class;
-              $objects = $object->seek($keywords);
-              
-              if (count($objects)) {
-                $ids = implode(',', array_keys($objects));
-                $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
+                if (isset($spec->meta)) {
+                  $class = $this->{$spec->meta};
+                }
+
+                /** @var self $object */
+                $object = new $class;
+                $objects = $object->seek($keywords);
+
+                if (count($objects)) {
+                  $ids = implode(',', array_keys($objects));
+                  $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
+                }
               }
             }
             else {
