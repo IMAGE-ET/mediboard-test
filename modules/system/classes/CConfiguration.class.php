@@ -246,7 +246,7 @@ class CConfiguration extends CMbMetaObject {
         SHM::put(
           "config-model",
           array(
-            "date"    => CMbDT::dateTime(),
+            "date"    => strftime(CMbDT::ISO_DATETIME), // Don't use CMbDT::dateTime because it may be offsetted
             "hash"    => self::_getHash(self::$model_raw),
             "content" => self::$model,
           )
@@ -339,7 +339,7 @@ class CConfiguration extends CMbMetaObject {
     $mutex = new CMbFileMutex("config-build");
     $mutex->acquire(10);
 
-    $datetime = CMbDT::dateTime();
+    $datetime = strftime(CMbDT::ISO_DATETIME);
 
     foreach (self::$values as $_host => $_configs) {
       SHM::put(
