@@ -84,10 +84,17 @@ $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
-if ($selSortis != "0") {
-  $where[] = "(sortie_reelle IS NULL)";
-}
+switch ($selSortis) {
+  case 'np':
+    $where['sortie_preparee'] = "= '0'";
+    break;
 
+  case 'n':
+    $where[] = "(sortie_reelle IS NULL)";
+    break;
+
+  default:
+}
 
 if ($order_col != "patient_id" && $order_col != "sortie_prevue" && $order_col != "praticien_id") {
   $order_col = "patient_id";

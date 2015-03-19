@@ -106,8 +106,11 @@
     var elt_tr = elt.up("tr");
     elt_tr.addClassName("selected");
     var pos = 1;
-    if ($V(form.selSortis) == 'n') {
+    if ($V(form.selSortis) == 'np') {
       pos = 2;
+    }
+    else if ($V(form.selSortis) == 'n') {
+      pos = 3;
     }
     var td = elt_tr.down("td", pos);
     td.writeAttribute("style", "font-weight: bold");
@@ -148,7 +151,7 @@
      if (!checkForm(form)) {
        return false;
      }
-     if (confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')) {
+     if (confirm('La date de sortie enregistrée est différente de la date prévue, souhaitez-vous confimer la sortie du patient ?')) {
        submitSortie(form, type);
      }
      else {
@@ -158,13 +161,13 @@
 
   function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, form) {
     if (entree_reelle == "") {
-      if (!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')) {
+      if (!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez-vous confirmer la sortie du patient ?')) {
         sejours_enfants_ids = undefined;
         return false;
       }
     }
     if (date_actuelle > sortie_prevue || date_demain < sortie_prevue) {
-      if (!confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')) {
+      if (!confirm('La date de sortie enregistrée est différente de la date prévue, souhaitez-vous confimer la sortie du patient ?')) {
         sejours_enfants_ids = undefined;
         return false;
       }

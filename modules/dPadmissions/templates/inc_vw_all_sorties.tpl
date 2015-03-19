@@ -10,7 +10,7 @@
 
 <table class="tbl" style="text-align: center;">
   <tr>
-    <th class="title" colspan="3">
+    <th class="title" colspan="4">
       <a style="display: inline;" href="#1" onclick="$V(getForm('selType').date, '{{$lastmonth}}'); reloadFullSorties()">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
       <a style="display: inline;" href="#1" onclick="$V(getForm('selType').date, '{{$nextmonth}}'); reloadFullSorties()">&gt;&gt;&gt;</a>
@@ -21,9 +21,17 @@
     <th class="text">
       Date
     </th>
+
     <th class="text">
       <a class="{{if $selSortis=='0'}}selected{{else}}selectable{{/if}}" title="Toutes les sorties" href="#1" onclick="filterAdm(0)">
         Sorties
+      </a>
+    </th>
+
+    <th class="text">
+      <a class="{{if $selSortis == 'np'}}selected{{else}}selectable{{/if}}"
+         title="{{tr}}admissions-Unprepared discharges{{/tr}}" href="#" onclick="filterAdm('np')">
+        {{tr}}admissions-Unprepared discharges-court{{/tr}}
       </a>
     </th>
 
@@ -43,6 +51,7 @@
   {{foreach from=$days key=day item=counts}}
   <tr {{if $day == $date}} class="selected" {{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
+
     <td style="text-align: right;
       {{if array_key_exists($day, $bank_holidays)}}
         background-color: #fc0;
@@ -56,22 +65,28 @@
         </strong>
       </a>
     </td>
+
     <td {{if $selSortis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
+      {{if $counts.sorties}}{{$counts.sorties}}{{else}}-{{/if}}
     </td>
+
+    <td {{if $selSortis =='np' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.sorties_non_preparees}}{{$counts.sorties_non_preparees}}{{else}}-{{/if}}
+    </td>
+
     {{if $conf.ref_pays == "2" && $current_m == "dPpmsi"}}
-    <td {{if $selSortis=='nf' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num5}}{{$counts.num5}}{{else}}-{{/if}}
-    </td>
+      <td {{if $selSortis=='nf' && $day == $date}}style="font-weight: bold;"{{/if}}>
+        {{if $counts.sorties_non_facturees}}{{$counts.sorties_non_facturees}}{{else}}-{{/if}}
+      </td>
     {{else}}
-    <td {{if $selSortis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
-    </td>
+      <td {{if $selSortis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
+        {{if $counts.sorties_non_effectuees}}{{$counts.sorties_non_effectuees}}{{else}}-{{/if}}
+      </td>
     {{/if}}
   </tr>
   {{foreachelse}}
-	<tr>
-		<td colspan="10" class="empty">Pas d'admission ce mois</td>
-	</tr>
+    <tr>
+      <td colspan="10" class="empty">Pas d'admission ce mois-ci</td>
+    </tr>
   {{/foreach}}
 </table>
