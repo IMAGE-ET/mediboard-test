@@ -155,7 +155,7 @@ class CSearch {
   function loadIndex ($name = null) {
     if (!$name) {
       $conf_name = CAppUI::conf("search index_name");
-      $name = ($conf_name) ? $conf_name : CAppUI::conf("db std name");
+      $name = ($conf_name) ? $conf_name : CAppUI::conf("db std dbname");
     }
     return $this->getIndex($name);
   }
