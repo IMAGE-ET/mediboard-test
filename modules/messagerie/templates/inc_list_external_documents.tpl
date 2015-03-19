@@ -16,7 +16,7 @@
   };
 
   changeMode = function(mode) {
-    listDocuments('{{$account_id}}', mode);
+    listDocuments('{{$account_id}}', mode, 0);
   };
 
   Main.add(function() {
