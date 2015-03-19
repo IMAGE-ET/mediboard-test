@@ -260,6 +260,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
         }
+        else {
+          /* @todo Gérer ce cas */
+          $venueRI = $venueNPA;
+        }
       }
       
       // VN fourni
