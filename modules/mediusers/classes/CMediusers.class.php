@@ -455,6 +455,7 @@ class CMediusers extends CPerson {
     $backProps["files_user_view"]                  = "CFileUserView user_id";
     $backProps['mssante_account']                  = 'CMSSanteUserAccount user_id';
     $backProps['drawing_category_user']            = 'CDrawingCategory user_id';
+    $backProps['cleanup_operator']                 = 'CBedCleanup cleanup_operator_id';
     return $backProps;
   }
 
