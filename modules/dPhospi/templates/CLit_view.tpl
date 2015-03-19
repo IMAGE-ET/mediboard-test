@@ -38,7 +38,7 @@
 
   {{if $object->_ref_affectations|@count}}
     <tr>
-      <th>Affectations du jour dans ce lit</th>
+      <th>{{tr}}CAffectation{{/tr}} du jour dans ce lit</th>
       <td>
         {{foreach from=$object->_ref_affectations item=_affectation}}
           <p><span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">{{$_affectation}}</span></p>
@@ -49,7 +49,7 @@
 
   {{if @$modules.hotellerie->mod_active}}
     <tr>
-      <th>Dernier nettoyage</th>
+      <th>{{tr}}CBedCleanup last finished{{/tr}}</th>
       <td {{if !$object->_ref_last_cleanup->_id}}class="empty"{{/if}}>
         {{if !$object->_ref_last_cleanup->_id}}
           {{tr}}CBedCleanup.none{{/tr}}
@@ -62,8 +62,8 @@
     </tr>
 
     <tr>
-      <th>Nettoyage en cours</th>
-      <td {{if !$object->_ref_current_cleanup->_id}}class="empty"{{/if}}>
+      <th>{{tr}}CBedCleanup current{{/tr}}</th>
+      <td {{if !$object->_ref_current_cleanup->_id}}class="button"{{/if}}>
         {{if !$object->_ref_current_cleanup->_id && @$modules.hotellerie->_can->read}}
           <form method="post" name="add_cleanup" onsubmit="return onSubmitFormAjax(this, (function() {this.up('.tooltip').remove(); }).bind(this));">
             <input type="hidden" name="@class" value="CBedCleanup" >
