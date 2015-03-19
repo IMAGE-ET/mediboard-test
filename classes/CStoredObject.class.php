@@ -2654,23 +2654,20 @@ class CStoredObject extends CModelObject {
             $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword'";
           }
           if ($spec->seekable === true OR $index != 0) {
-            if ($spec instanceof CRefSpec) {
-              // Only if the ref is not the object itself
-              if ($spec->class !== $this->_class) {
-                $class = $spec->class;
+            if ($spec instanceof CRefSpec && $spec->class !== $this->_class) {
+              $class = $spec->class;
 
-                if (isset($spec->meta)) {
-                  $class = $this->{$spec->meta};
-                }
+              if (isset($spec->meta)) {
+                $class = $this->{$spec->meta};
+              }
 
-                /** @var self $object */
-                $object = new $class;
-                $objects = $object->seek($keywords);
+              /** @var self $object */
+              $object = new $class;
+              $objects = $object->seek($keywords);
 
-                if (count($objects)) {
-                  $ids = implode(',', array_keys($objects));
-                  $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
-                }
+              if (count($objects)) {
+                $ids = implode(',', array_keys($objects));
+                $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
               }
             }
             else {
