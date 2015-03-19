@@ -57,14 +57,8 @@ else {
 // filtre sur les services
 if (count($service_id)) {
   $leftjoinService = "LEFT JOIN affectation
-                        ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie
-                      LEFT JOIN lit
-                        ON affectation.lit_id = lit.lit_id
-                      LEFT JOIN chambre
-                        ON lit.chambre_id = chambre.chambre_id
-                      LEFT JOIN service
-                        ON chambre.service_id = service.service_id";
-  $filterService = "AND service.service_id " . CSQLDataSource::prepareIn($service_id);
+                        ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $filterService = "AND affectation.service_id " . CSQLDataSource::prepareIn($service_id);
 }
 else {
   $leftjoinService = $filterService = "";

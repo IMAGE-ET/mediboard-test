@@ -25,7 +25,9 @@ $selAdmis      = CValue::getOrSession("selAdmis", "0");
 $selSaisis     = CValue::getOrSession("selSaisis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
+$secteur_id    = CValue::getOrSession("secteur_id");
 $prat_id       = CValue::getOrSession("prat_id");
+$type_pec      = CValue::get("type_pec", array("M", "C", "O"));
 $bank_holidays = CMbDate::getHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
@@ -37,129 +39,99 @@ $demain = CMbDT::date("+ 1 day", $date);
 $days = array();
 for ($day = $month_min; $day < $nextmonth; $day = CMbDT::date("+1 DAY", $day)) {
   $days[$day] = array(
-    "num1" => "0",
-    "num2" => "0",
-    "num3" => "0",
+    "admissions" => "0",
+    "admissions_non_effectuee" => "0",
+    "admissions_non_preparee" => "0",
   );
 }
 
-// filtre sur les types d'admission
-if ($type == "ambucomp") {
-  $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
-}
-elseif ($type) {
-  $filterType = "AND `sejour`.`type` = '$type'";
-}
-else {
-  $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
-}
+$group = CGroups::loadCurrent();
+$where = array();
+$leftjoin = array();
 
 // filtre sur les services
 if (count($service_id)) {
-  $leftjoinService = "LEFT JOIN affectation
-                        ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie
-                      LEFT JOIN lit
-                        ON affectation.lit_id = lit.lit_id
-                      LEFT JOIN chambre
-                        ON lit.chambre_id = chambre.chambre_id
-                      LEFT JOIN service
-                        ON chambre.service_id = service.service_id";
-  $in_services = CSQLDataSource::prepareIn($service_id);
-  $filterService = "AND (service.service_id $in_services OR affectation.service_id $in_services)";
+  $leftjoin["affectation"] = " affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $where["affectation.service_id"] = $ds->prepareIn($service_id);
+}
+//filtre sur les secteurs
+elseif ($secteur_id) {
+  $leftjoin["affectation"] = " affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $leftjoin["lit"] = " affectation.lit_id = lit.lit_id";
+  $leftjoin["chambre"] = " lit.chambre_id = chambre.chambre_id";
+  $leftjoin["service"] = " chambre.service_id = service.service_id";
+  $leftjoin["secteur"] = " service.secteur_id = secteur.secteur_id";
+
+  $secteur             = new CSecteur();
+  $secteur->load($secteur_id);
+  $secteur->loadRefsServices();
+  $service_id = CMbArray::pluck($secteur->_ref_services, "_id");
+  $where["sejour.service_id"] = $ds->prepareIn($service_id)." OR affectation.service_id ". $ds->prepareIn($service_id);
+}
+
+// filtre sur les types pec des sejours
+$where["sejour.type_pec"] = CSQLDataSource::prepareIn($type_pec);
+
+// filtre sur les types d'admission
+if ($type == "ambucomp") {
+  $where["sejour.type"] = " = 'ambu' OR `sejour`.`type` = 'comp')";
+}
+elseif ($type) {
+  $where["sejour.type"] = " = '$type'";
 }
 else {
-  $leftjoinService = $filterService = "";
+  $where["sejour.type"] = "!= 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // filtre sur le praticien
 if ($prat_id) {
-  $filterPrat = "AND sejour.praticien_id = '$prat_id'";
-}
-else {
-  $filterPrat = "";
+  $where["sejour.praticien_id"] = "= '$prat_id'";
 }
 
-$group = CGroups::loadCurrent();
+$where["sejour.entree"] = " BETWEEN '$month_min' AND '$nextmonth'";
+$where["sejour.group_id"] = " = '$group->_id'";
+$where["sejour.annule"] = " = '0'";
 
 // Liste des admissions par jour
-$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-  FROM `sejour`
-  $leftjoinService
-  WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$nextmonth'
-    AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`annule` = '0'
-    $filterType
-    $filterService
-    $filterPrat
-  GROUP BY `date`
-  ORDER BY `date`";
-foreach ($ds->loadHashList($query) as $day => $num1) {
-  $days[$day]["num1"] = $num1;
-}
-
-// Liste des admissions non effectuées par jour
-$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-  FROM `sejour`
-  $leftjoinService
-  WHERE `sejour`.`entree_prevue` BETWEEN '$month_min' AND '$nextmonth'
-    AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`entree_reelle` IS NULL
-    AND `sejour`.`annule` = '0'
-    $filterType
-    $filterService
-    $filterPrat
-  GROUP BY `date`
-  ORDER BY `date`";
-foreach ($ds->loadHashList($query) as $day => $num2) {
-  $days[$day]["num2"] = $num2;
+$request = new CRequest();
+$request->addSelect(array("DATE_FORMAT(sejour.entree, '%Y-%m-%d') AS 'date'", "COUNT(sejour.sejour_id) AS 'num'"));
+$request->addTable("sejour");
+$request->addWhere($where);
+$request->addLJoin($leftjoin);
+$request->addGroup("date");
+$request->addOrder("date");
+foreach ($ds->loadHashList($request->makeSelect()) as $day => $num1) {
+  $days[$day]["admissions"] = $num1;
 }
 
 // Liste des admissions non préparées
-$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-  $leftjoinService
-  WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$nextmonth'
-    AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`entree_preparee` = '0'
-    AND `sejour`.`annule` = '0'
-    $filterType
-    $filterService
-    $filterPrat
-  GROUP BY `date`
-  ORDER BY `date`";
-foreach ($ds->loadHashList($query) as $day => $num3) {
-  $days[$day]["num3"] = $num3;
+$where["sejour.entree_preparee"] = " = '0'";
+$request->addWhere($where);
+foreach ($ds->loadHashList($request->makeSelect()) as $day => $num3) {
+  $days[$day]["admissions_non_preparee"] = $num3;
 }
 
-// Liste des séjours non facturés
-if (CAppUI::conf("ref_pays") == "2") {
-  $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-            FROM `sejour`
-            $leftjoinService
-            WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
-              AND `sejour`.`group_id` = '$group->_id'
-              AND `sejour`.`annule` = '0'
-              AND `sejour`.`facture` = '0'
-              $filterType
-              $filterService
-              $filterPrat
-            GROUP BY `date`
-            ORDER BY `date`";
-  foreach ($ds->loadHashList($query) as $day => $num5) {
-    $days[$day]["num5"] = $num5;
-  }
+// Liste des admissions non effectuées par jour
+unset($where['sejour.entree']);
+unset($where['sejour.entree_preparee']);
+$request->where = array();
+$where["sejour.entree_prevue"] = " BETWEEN '$month_min' AND '$nextmonth'";
+$where["sejour.entree_reelle"] = " IS NULL";
+$request->addWhere($where);
+foreach ($ds->loadHashList($request->makeSelect()) as $day => $num2) {
+  $days[$day]["admissions_non_effectuee"] = $num2;
 }
 
 $totaux = array(
-  "num1" => "0",
-  "num2" => "0",
-  "num3" => "0",
+  "admissions" => "0",
+  "admissions_non_effectuee" => "0",
+  "admissions_non_preparee" => "0",
 );
 
 foreach ($days as $day) {
-  $totaux["num1"] += $day["num1"];
-  $totaux["num2"] += $day["num2"];
-  $totaux["num3"] += $day["num3"];
+  $totaux["admissions"] += $day["admissions"];
+  $totaux["admissions_non_effectuee"] += $day["admissions_non_effectuee"];
+  $totaux["admissions_non_preparee"] += $day["admissions_non_preparee"];
 }
 
 // Création du template

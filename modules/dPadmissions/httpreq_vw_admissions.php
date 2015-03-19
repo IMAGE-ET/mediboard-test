@@ -16,6 +16,7 @@ CCanDo::checkRead();
 // Type d'admission
 $type           = CValue::getOrSession("type");
 $service_id     = CValue::getOrSession("service_id");
+$secteur_id     = CValue::getOrSession("secteur_id");
 $prat_id        = CValue::getOrSession("prat_id");
 $selAdmis       = CValue::getOrSession("selAdmis", "0");
 $selSaisis      = CValue::getOrSession("selSaisis", "0");
@@ -24,8 +25,8 @@ $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", CMbDT::date());
 $filterFunction = CValue::getOrSession("filterFunction");
 $period         = CValue::getOrSession("period");
-
-$service_id = explode(",", $service_id);
+$type_pec       = CValue::get("type_pec" , array("M", "C", "O"));
+$service_id     = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
@@ -63,16 +64,25 @@ if (count($service_id)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
 }
+//filtre sur les secteurs
+elseif ($secteur_id) {
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $secteur             = new CSecteur();
+  $secteur->load($secteur_id);
+  $secteur->loadRefsServices();
+  $service_id = CMbArray::pluck($secteur->_ref_services, "_id");
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
+}
 
 // Filtre sur le type du séjour
 if ($type == "ambucomp") {
-  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+  $where["sejour.type"] = " = 'ambu' OR `sejour`.`type` = 'comp'";
 }
 elseif ($type) {
   $where["sejour.type"] = " = '$type'";
 }
 else {
-  $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
+  $where["sejour.type"] = " != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // Filtre sur le praticien
@@ -85,7 +95,7 @@ $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
 if ($selAdmis != "0") {
-  $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";
+  $where["sejour.entree_reelle"] = " IS NULL OR sejour.entree_reelle = '0000-00-00 00:00:00')";
 }
 
 if ($selSaisis != "0") {
@@ -107,6 +117,7 @@ if ($order_col == "entree_prevue") {
 if ($order_col == "praticien_id") {
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
+$where["sejour.type_pec"] = CSQLDataSource::prepareIn($type_pec);
 
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);

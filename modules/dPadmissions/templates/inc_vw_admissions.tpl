@@ -99,7 +99,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10" class="empty">{{tr}}None{{/tr}}</td>
+    <td colspan="11" class="empty">{{tr}}CAdmission.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

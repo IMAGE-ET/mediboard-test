@@ -18,26 +18,26 @@
   </tr>
     
   <tr>
-    <th rowspan="2">Date</th>
+    <th rowspan="2">{{tr}}dPAdmission.admission date{{/tr}}</th>
   </tr>
 
   <tr>
     <th class="text">
       <a class="{{if $selAdmis=='0' && $selSaisis=='0'}}selected{{else}}selectable{{/if}}" title="Toutes les admissions"
         href="#1" onclick="filterAdm(0, 0)">
-        Adm.
+        {{tr}}dPAdmission.admission.short{{/tr}}
       </a>
     </th>
     <th class="text">
-      <a class="{{if $selAdmis=='0' && $selSaisis=='n'}}selected{{else}}selectable{{/if}}" title="Admissions non préparées"
-         href="#1" onclick="filterAdm(0, 'n')">
-        Non prép.
+      <a class="{{if $selAdmis=='0' && $selSaisis=='um'}}selected{{else}}selectable{{/if}}" title="Admissions non préparées"
+         href="#1" onclick="filterAdm(0, '5')">
+        {{tr}}dPAdmission.admission non preparee.short{{/tr}}
       </a>
     </th>
     <th class="text">
       <a class="{{if $selAdmis=='n' && $selSaisis=='0'}}selected{{else}}selectable{{/if}}" title="Admissions non effectuées"
          href="#1" onclick="filterAdm('n', 0)">
-        Non eff.
+        {{tr}}dPAdmission.admission non effectuee.short{{/tr}}
       </a>
     </th>
   </tr>
@@ -59,25 +59,25 @@
       </a>
     </td>
     <td {{if $selAdmis=='0' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if isset($counts.num1|smarty:nodefaults) && $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
+      {{if isset($counts.admissions|smarty:nodefaults) && $counts.admissions}}{{$counts.admissions}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='0' && $selSaisis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if isset($counts.num3|smarty:nodefaults) && $counts.num3}}{{$counts.num3}}{{else}}-{{/if}}
+      {{if isset($counts.admissions_non_preparee|smarty:nodefaults) && $counts.admissions_non_preparee}}{{$counts.admissions_non_preparee}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='n' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if isset($counts.num2|smarty:nodefaults) && $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
+      {{if isset($counts.admissions_non_effectuee|smarty:nodefaults) && $counts.admissions_non_effectuee}}{{$counts.admissions_non_effectuee}}{{else}}-{{/if}}
     </td>
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10" class="empty">Pas d'admission ce mois</td>
+    <td colspan="10" class="empty">{{tr}}CAdmission.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 
   <tr>
     <td><strong>Total</strong></td>
-    <td><strong>{{$totaux.num1|smarty:nodefaults}}</strong></td>
-    <td><strong>{{$totaux.num3|smarty:nodefaults}}</strong></td>
-    <td><strong>{{$totaux.num2|smarty:nodefaults}}</strong></td>
+    <td><strong>{{$totaux.admissions|smarty:nodefaults}}</strong></td>
+    <td><strong>{{$totaux.admissions_non_preparee|smarty:nodefaults}}</strong></td>
+    <td><strong>{{$totaux.admissions_non_effectuee|smarty:nodefaults}}</strong></td>
   </tr>
 </table>

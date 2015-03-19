@@ -22,6 +22,7 @@ $order_col  = CValue::getOrSession("order_col", "patient_id");
 $date       = CValue::getOrSession("date", CMbDT::date());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
+$secteur_id = CValue::getOrSession("secteur_id");
 $prat_id    = CValue::getOrSession("prat_id");
 $period     = CValue::getOrSession("period");
 $filterFunction = CValue::getOrSession("filterFunction");
@@ -35,8 +36,19 @@ $demain = CMbDT::date("+ 1 day", $date);
 $where = array();
 $where["externe"]   = "= '0'";
 $where["cancelled"] = "= '0'";
+if ($secteur_id) {
+  $where["secteur_id"] = "= '$secteur_id'";
+}
 $service = new CService();
+if ($service_id) {
+  $service->load($service_id);
+  $secteur_id = $service->secteur_id;
+}
 $services = $service->loadGroupList($where);
+
+// Récupération de la liste des secteurs
+$secteur = new CSecteur();
+$secteurs = $secteur->loadList(null, "nom");
 
 // Récupération de la liste des praticiens
 $prat = CMediusers::get();
@@ -59,6 +71,9 @@ $smarty->assign("selSaisis"    , $selSaisis);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("services"     , $services);
+$smarty->assign("secteur_id"   , $secteur_id);
+$smarty->assign("service_id"   , $service_id);
+$smarty->assign("secteurs"     , $secteurs);
 $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
