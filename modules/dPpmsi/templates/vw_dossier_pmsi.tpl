@@ -58,19 +58,15 @@
   <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
   <table class="form">
     <tr>
-      <th class="title" colspan="4">
-        Recherche de dossier
-      </th>
+      <th class="title" colspan="4">{{tr}}PMSI.search dossier pmsi{{/tr}}</th>
     </tr>
     <tr>
-      <th class="category halfPane" colspan="2">Champs de recherche</th>
-      <th class="category halfPane">Sejours disponibles</th>
+      <th class="category halfPane" colspan="2">{{tr}}PMSI.search fields{{/tr}}</th>
+      <th class="category halfPane">{{tr}}PMSI.CSejour disponibles{{/tr}}</th>
     </tr>
     <tr>
       <th>
-        <label for="patient_id" title="Choisissez un patient">
-          Patient
-        </label>
+        <label for="patient_id" title="Choisissez un patient">{{tr}}CPatient{{/tr}}</label>
       </th>
       <td>
         <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
@@ -98,9 +94,7 @@
     </tr>
     <tr>
       <th>
-        <label for="NDA" title="Choisissez directement un numero de dossier">
-          NDA
-        </label>
+        <label for="NDA" title="Choisissez directement un numero de dossier">{{tr}}NDA{{/tr}}</label>
       </th>
       <td>
         <input type="text" name="NDA" value="" />
@@ -141,10 +135,10 @@
       <a href="#tab-dossier-sejour">{{tr}}PMSI.DossierSejour{{/tr}}</a>
     </li>
     <li onmousedown="PMSI.loadActes('{{$sejour->_id}}'); this.onmousedown=''">
-      <a href="#tab-actes">{{tr}}CCodable-actes{{/tr}} et {{tr}}PMSI.Diagnostics{{/tr}}</a>
+      <a href="#tab-actes">{{tr}}CCodable-actes{{/tr}} ({{$nbActes}}) et {{tr}}PMSI.Diagnostics{{/tr}}({{$nbDiag}})</a>
     </li>
     <li onmousedown="PMSI.loadDocuments('{{$sejour->_id}}'); this.onmousedown=''">
-      <a href="#tab-documents">Documents</a>
+      <a href="#tab-documents">{{tr}}PMSI.Documents{{/tr}} ({{$sejour->_nb_files_docs}})</a>
     </li>
     {{if "dmi"|module_active}}
       <li onmousedown="PMSI.loadDMI('{{$sejour->_id}}'); this.onmousedown=''">
@@ -157,15 +151,11 @@
       </li>
     {{/if}}
     <li style="float: right">
-      <button type="button" class="print" onclick="PMSI.printDossierComplet('{{$sejour->_id}}');">
-        Dossier complet
-      </button>
+      <button type="button" class="print" onclick="PMSI.printDossierComplet('{{$sejour->_id}}');">{{tr}}PMSI.Complete Dossier{{/tr}}</button>
     </li>
     {{if $sejour->_ref_prescription_sejour && $sejour->_ref_prescription_sejour->_id}}
       <li style="float: right">
-        <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">
-          Prescription
-        </button>
+        <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">{{tr}}PMSI.Prescription{{/tr}}</button>
       </li>
     {{/if}}
     {{if "atih"|module_active}}

@@ -14,17 +14,16 @@ CCanDo::checkEdit();
 // Chargement du séjour et des ses actes
 $sejour  = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
-$patient = $sejour->loadRefPatient();
+$sejour->loadRefPatient();
 $sejour->loadRefPraticien();
 $sejour->loadRefsActes();
 $sejour->canDo();
 $sejour->countExchanges();
 $sejour->loadRefDossierMedical()->loadComplete();
-$patient->loadRefDossierMedical()->loadComplete();
+$sejour->_ref_patient->loadRefDossierMedical()->loadComplete();
 
 // Chargement des interventions et de leurs actes
-$sejour->loadRefsOperations();
-foreach ($sejour->_ref_operations as $_op) {
+foreach ($sejour->loadRefsOperations() as $_op) {
   $_op->loadRefPatient();
   $_op->loadRefAnesth()->loadRefFunction();
   $_op->loadRefPraticien()->loadRefFunction();
@@ -37,8 +36,7 @@ foreach ($sejour->_ref_operations as $_op) {
 }
 
 // Chargement des consultations et de leurs actes
-$sejour->loadRefsConsultations();
-foreach ($sejour->_ref_consultations as $_consult) {
+foreach ($sejour->loadRefsConsultations() as $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPraticien()->loadRefFunction();
   $_consult->loadRefsActes();

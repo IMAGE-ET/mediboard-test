@@ -58,10 +58,32 @@ if ($patient->_id) {
   }
 }
 
+// Compteur par volets des items
+$sejour->loadRefsDocItems();
+$nbActes = 0;
+$nbDiag = $sejour->DP ? 1 : 0;
+$sejour->countActes();
+$nbActes += $sejour->_count_actes;
+
+foreach ($sejour->loadRefsOperations() as $_op) {
+  $_op->countActes();
+  $nbActes += $_op->_count_actes;
+}
+
+foreach ($sejour->loadRefsConsultations() as $_consult) {
+  $_consult->countActes();
+  $nbActes += $_consult->_count_actes;
+}
+
+$nbDiag += $sejour->DR ? 1 : 0;
+$nbDiag += count($sejour->loadDiagnosticsAssocies());
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("patient", $patient);
-$smarty->assign("sejour" , $sejour);
+$smarty->assign("patient" , $patient);
+$smarty->assign("sejour"  , $sejour);
+$smarty->assign("nbActes" , $nbActes);
+$smarty->assign("nbDiag"  , $nbDiag);
 
 $smarty->display("vw_dossier_pmsi.tpl");
