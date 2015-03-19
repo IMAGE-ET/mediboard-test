@@ -41,6 +41,49 @@
     #{{$conf.dPhospi.colors.recuse}} 70%,
     rgba(1,1,1,0) 70%);
   }
+
+  div.hatching {
+    background-image: linear-gradient(135deg,
+    rgba(1,1,1,0) 0,
+    rgba(1,1,1,0) 10%,
+    black 10%,
+    black 12%,
+    rgba(1,1,1,0) 12%,
+    rgba(1,1,1,0) 20%,
+    black 20%,
+    black 22%,
+    rgba(1,1,1,0) 22%,
+    rgba(1,1,1,0) 30%,
+    black 30%,
+    black 32%,
+    rgba(1,1,1,0) 32%,
+    rgba(1,1,1,0) 40%,
+    black 40%,
+    black 42%,
+    rgba(1,1,1,0) 42%,
+    rgba(1,1,1,0) 50%,
+    black 50%,
+    black 52%,
+    rgba(1,1,1,0) 52%,
+    rgba(1,1,1,0) 60%,
+    black 60%,
+    black 62%,
+    rgba(1,1,1,0) 62%,
+    rgba(1,1,1,0) 70%,
+    black 70%,
+    black 72%,
+    rgba(1,1,1,0) 72%,
+    rgba(1,1,1,0) 80%,
+    black 80%,
+    black 82%,
+    rgba(1,1,1,0) 82%,
+    rgba(1,1,1,0) 90%,
+    black 90%,
+    black 92%,
+    rgba(1,1,1,0) 92%,
+    rgba(1,1,1,0) 100%
+    );
+  }
 </style>
 
 <script>
