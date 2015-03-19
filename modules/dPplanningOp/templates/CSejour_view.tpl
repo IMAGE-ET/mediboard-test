@@ -9,7 +9,7 @@
 {{mb_script module=hospi script=modele_etiquette ajax=1}}
 
 {{if @$modules.dPpmsi->_can->edit}}
-  {{mb_script module=pmsi script=pmsi ajax=true}}
+  {{mb_script module=pmsi script=PMSI ajax=true}}
   {{mb_script module=planningOp script=cim10_selector ajax=true}}
   {{mb_script module=patients script=pat_selector ajax=true}}
 {{/if}}
