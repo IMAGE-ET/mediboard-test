@@ -1962,6 +1962,11 @@ class CSetupdPplanningOp extends CSetup {
                 CHANGE `destination` `destination` ENUM('0', '1','2','3','4','6','7');";
     $this->addQuery($query);
 
-    $this->mod_version = '2.10';
+    $this->makeRevision('2.10');
+    $query = "ALTER TABLE `sejour`
+                ADD `date_entree_reelle_provenance` DATETIME;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.11';
   }
 }

@@ -132,8 +132,11 @@
 
       <tr style="display: none" id="etablissement_entree_id_{{$sejour->_id}}" class="togglisable_tr">
         <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
-        <td colspan="3">{{mb_field object=$sejour field="etablissement_entree_id" form="$form_name"
+        <td>{{mb_field object=$sejour field="etablissement_entree_id" form="$form_name"
           autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}</td>
+
+        <th>{{mb_label object=$sejour field=date_entree_reelle_provenance}}</th>
+        <td>{{mb_field object=$sejour field=date_entree_reelle_provenance form=$form_name register=true}}</td>
       </tr>
 
       <tr class="togglisable_tr" id="service_entree_id_{{$sejour->_id}}">
