@@ -25,8 +25,9 @@ class CAccessMedicalData extends CMbObject {
     if (is_string($sejour)) {
       $sejour = CMbObject::loadFromGuid($sejour);
     }
-    CBrisDeGlace::checkForSejour($sejour, $modal);
+    $canAccess = CBrisDeGlace::checkForSejour($sejour, $modal);
     CLogAccessMedicalData::logForSejour($sejour);
+    return $canAccess;
   }
 
   static function checkForObject($object_class, $object_id) {

@@ -82,13 +82,25 @@ $op = new COperation();
 $op->load($operation_id);
 if ($op->_id) {
 
-  // On vérifie que l'utilisateur a les droits sur l'intervention
-  if (!$op->canDo()->read) {
-    global $m, $tab;
-    CAppUI::setMsg("Vous n'avez pas accés à cette intervention", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
-  }
+  $op->loadRefSejour();
 
+  if (CBrisDeGlace::isBrisDeGlaceRequired()) {
+    $canAccess = CAccessMedicalData::checkForSejour($op->_ref_sejour);
+    if (!$canAccess) {
+      if (!$op->canDo()->read) {
+        global $m, $tab;
+        CAppUI::setMsg("Vous n'avez pas accés à cette intervention", UI_MSG_WARNING);
+        CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+      }
+    }
+  }
+  else {
+    if (!$op->canDo()->read) {
+      global $m, $tab;
+      CAppUI::setMsg("Vous n'avez pas accés à cette intervention", UI_MSG_WARNING);
+      CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+    }
+  }
   $op->loadRefs();
   $op->loadRefsNotes();
   $op->_ref_chir->loadRefFunction();

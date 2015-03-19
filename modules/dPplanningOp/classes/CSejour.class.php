@@ -2855,7 +2855,14 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadView() {
     parent::loadView();
-    CBrisDeGlace::checkForSejour($this, false);
+
+    if (CBrisDeGlace::isBrisDeGlaceRequired()) {
+      $canAccess = CAccessMedicalData::checkForSejour($this);
+      if ($canAccess) {
+        $this->_can->read = 1;
+      }
+    }
+
     $this->loadRefPatient()->loadRefPhotoIdentite();
     $this->loadRefEtablissement();
     $affectations = $this->loadRefsAffectations();

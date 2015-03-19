@@ -98,14 +98,26 @@ $op = new COperation();
 $op->load($operation_id);
 
 if ($op->_id) {
+  $op->loadRefSejour();
   if (CAppUI::conf("dPplanningOp COperation use_session_praticien")) {
     CValue::setSession("chir_id", $op->chir_id);
   }
-  // On vérifie que l'utilisateur a les droits sur l'intervention
-  if (!$op->canDo()->read) {
-    global $m, $tab;
-    CAppUI::setMsg("Vous n'avez pas accés à cette intervention hors plage", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+  if (CBrisDeGlace::isBrisDeGlaceRequired()) {
+    $canAccess = CAccessMedicalData::checkForSejour($op->_ref_sejour);
+    if (!$canAccess) {
+      if (!$op->canDo()->read) {
+        global $m, $tab;
+        CAppUI::setMsg("Vous n'avez pas accés à cette intervention hors plage", UI_MSG_WARNING);
+        CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+      }
+    }
+  }
+  else {
+     if (!$op->canDo()->read) {
+       global $m, $tab;
+       CAppUI::setMsg("Vous n'avez pas accés à cette intervention hors plage", UI_MSG_WARNING);
+       CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+     }
   }
 
   // Chargement des régérences
@@ -119,7 +131,6 @@ if ($op->_id) {
   }
   
   $sejour = $op->_ref_sejour;
-  CAccessMedicalData::checkForSejour($sejour);
   $sejour->loadRefsFwd();
   $sejour->loadRefCurrAffectation()->loadRefService();
   $sejour->_ref_praticien->canDo();

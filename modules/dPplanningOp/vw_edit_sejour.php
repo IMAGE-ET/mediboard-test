@@ -49,14 +49,22 @@ $sejour->consult_related_id = $consult_related_id;
 if ($sejour_id) {
   $sejour->load($sejour_id);
 
-  CAccessMedicalData::checkForSejour($sejour);
-
-
-  // On vérifie que l'utilisateur a les droits sur le sejour
-  if (!$sejour->canDo()->read) {
-    global $m, $tab;
-    CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
+  if (CBrisDeGlace::isBrisDeGlaceRequired()) {
+    $canAccess = CAccessMedicalData::checkForSejour($sejour);
+    if (!$canAccess) {
+      if (!$sejour->canDo()->read) {
+        global $m, $tab;
+        CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
+        CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
+      }
+    }
+  }
+  else {
+    if (!$sejour->canDo()->read) {
+      global $m, $tab;
+      CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
+      CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
+    }
   }
 
   $sejour->loadRefPatient();

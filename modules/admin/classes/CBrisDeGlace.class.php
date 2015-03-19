@@ -71,6 +71,11 @@ class CBrisDeGlace extends CMbMetaObject {
     return true;
   }
 
+
+  static function isBrisDeGlaceRequired() {
+    return CAppUI::conf("admin CBrisDeGlace enable_bris_de_glace", CGroups::loadCurrent()) && CAppUI::$user->use_bris_de_glace;
+  }
+
   /**
    * check if we can access to the view following the configuration and already granted.
    *

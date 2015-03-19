@@ -1028,6 +1028,17 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadView() {
     parent::loadView();
+
+    $this->loadRefSejour();
+    if (CBrisDeGlace::isBrisDeGlaceRequired()) {
+      $canAccess = CAccessMedicalData::checkForSejour($this->_ref_sejour);
+      if ($canAccess) {
+        $this->_can->read = 1;
+      }
+    }
+
+
+
     $this->loadRefPraticien()->loadRefFunction();
     $this->loadRefAnesth()->loadRefFunction();
     $this->loadRefPatient();
@@ -1548,7 +1559,9 @@ class COperation extends CCodable implements IPatientRelated {
     }
 
     return (
-      ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType))
+      ($this->_ref_chir->getPerm($permType) ||
+        ($this->_ref_anesth->_id && $this->_ref_anesth->getPerm($permType))
+      )
       && $this->_ref_module->getPerm($permType)
     );
   }
