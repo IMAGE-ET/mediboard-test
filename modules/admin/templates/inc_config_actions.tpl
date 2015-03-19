@@ -54,7 +54,7 @@
               url.requestUpdate(modal.container.down('.content'));
             }
             else {
-              url.requestModal(900, 700);
+              url.requestModal(900);
             }
 
             return false;

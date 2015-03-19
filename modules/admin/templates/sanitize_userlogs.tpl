@@ -22,72 +22,76 @@
   <li><a href="#sanitize-inserts">{{tr}}sanitize_userlogs-inserts{{/tr}}</a></li>
 </ul>
 
-<table class="tbl" id="sanitize-removers">
-  <tr>
-    <th>{{mb_title class=CUserLog field=object_class}}</th>
-    <th>{{mb_title class=CUserLog field=type}}</th>
-    <th>{{mb_title class=CUserLog field=fields}}</th>
-  </tr>
+<div style="height: 300px; overflow-y: auto;">
 
-  {{foreach from=$removers item=_remover}}
+  <table class="tbl" id="sanitize-removers">
     <tr>
-      <td>{{$_remover.0|default:'-'}}</td>
-      <td>{{$_remover.1|default:'-'}}</td>
-      <td>{{$_remover.2|default:'-'}}</td>
+      <th>{{mb_title class=CUserLog field=object_class}}</th>
+      <th>{{mb_title class=CUserLog field=type}}</th>
+      <th>{{mb_title class=CUserLog field=fields}}</th>
     </tr>
-  {{/foreach}}
-</table>
 
-<table class="tbl" id="sanitize-copies" style="display: none;">
-  <tr>
-    <th>{{mb_title class=CUserLog field=object_class}}</th>
-    <th>{{mb_title class=CUserLog field=fields}}</th>
-    <th>Champ cible</th>
-  </tr>
+    {{foreach from=$removers item=_remover}}
+      <tr>
+        <td>{{$_remover.0|default:'-'}}</td>
+        <td>{{$_remover.1|default:'-'}}</td>
+        <td>{{$_remover.2|default:'-'}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
 
-  {{foreach from=$copies item=_copy}}
-    {{assign var=class value=$_copy.0}}
-    {{assign var=from  value=$_copy.1}}
-    {{assign var=to    value=$_copy.2}}
+  <table class="tbl" id="sanitize-copies" style="display: none;">
     <tr>
-      <td>{{$class|default:'-'}}</td>
-      <td>{{tr}}CUserLog-{{$from}}{{/tr}}</td>
-      <td>{{tr}}{{$class}}-{{$to}}{{/tr}}</td>
+      <th>{{mb_title class=CUserLog field=object_class}}</th>
+      <th>{{mb_title class=CUserLog field=fields}}</th>
+      <th>Champ cible</th>
     </tr>
-  {{/foreach}}
-</table>
 
-<table class="tbl" id="sanitize-inserts" style="display: none;">
-  <tr>
-    <th>{{mb_title class=CUserLog field=object_class}}</th>
-    <th>{{mb_title class=CUserLog field=type}}</th>
-    <th>{{mb_title class=CUserLog field=fields}}</th>
-  </tr>
+    {{foreach from=$copies item=_copy}}
+      {{assign var=class value=$_copy.0}}
+      {{assign var=from  value=$_copy.1}}
+      {{assign var=to    value=$_copy.2}}
+      <tr>
+        <td>{{$class|default:'-'}}</td>
+        <td>{{tr}}CUserLog-{{$from}}{{/tr}}</td>
+        <td>{{tr}}{{$class}}-{{$to}}{{/tr}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
 
-  {{foreach from=$inserts item=_insert}}
+  <table class="tbl" id="sanitize-inserts" style="display: none;">
     <tr>
-      <td>{{$_insert.0|default:'-'}}</td>
-      <td>{{$_insert.1|default:'-'}}</td>
-      <td>{{$_insert.2|default:'-'}}</td>
+      <th>{{mb_title class=CUserLog field=object_class}}</th>
+      <th>{{mb_title class=CUserLog field=type}}</th>
+      <th>{{mb_title class=CUserLog field=fields}}</th>
     </tr>
-  {{/foreach}}
-</table>
+
+    {{foreach from=$inserts item=_insert}}
+      <tr>
+        <td>{{$_insert.0|default:'-'}}</td>
+        <td>{{$_insert.1|default:'-'}}</td>
+        <td>{{$_insert.2|default:'-'}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
+
+</div>
 
 {{if $log->_id < $offset}}
   <div class="small-info">
-    {{tr var1=$log->_id}}sanitize_userlogs-message-finished{{/tr}}
+    {{tr var1=$log->_id|integer}}sanitize_userlogs-message-finished{{/tr}}
   </div>
 {{else}}
   <div class="small-{{$execute|ternary:'warning':'info'}}">
-    {{tr var1=$counts.delete var2=$min var3=$max}}sanitize_userlogs-message-foundrows-delete-{{$execute|ternary:'execute':'count'}}{{/tr}}
+    {{tr var1=$counts.delete|integer var2=$min|integer var3=$max|integer}}sanitize_userlogs-message-foundrows-delete-{{$execute|ternary:'execute':'count'}}{{/tr}}
   </div>
 
   <div class="small-{{$execute|ternary:'warning':'info'}}">
-    {{tr var1=$counts.copy var2=$min var3=$max}}sanitize_userlogs-message-foundrows-copy-{{$execute|ternary:'execute':'count'}}{{/tr}}
+    {{tr var1=$counts.copy|integer var2=$min|integer var3=$max|integer}}sanitize_userlogs-message-foundrows-copy-{{$execute|ternary:'execute':'count'}}{{/tr}}
   </div>
 
   <div class="small-{{$execute|ternary:'warning':'info'}}">
-    {{tr var1=$counts.insert var2=$min var3=$max}}sanitize_userlogs-message-foundrows-insert-{{$execute|ternary:'execute':'count'}}{{/tr}}
+    {{tr var1=$counts.insert|integer var2=$min|integer var3=$max|integer}}sanitize_userlogs-message-foundrows-insert-{{$execute|ternary:'execute':'count'}}{{/tr}}
   </div>
 {{/if}}
 
@@ -96,6 +100,10 @@
 
 <table class="form">
   <tr>
+    <td>
+      {{tr}}CUserLog-last_id{{/tr}} :
+      <strong>{{$log->_id|integer}}</strong>
+    </td>
     <td>
       <label for="offset">{{tr}}Offset{{/tr}}</label>
       <input type="text" name="offset" value="{{$offset}}" />
