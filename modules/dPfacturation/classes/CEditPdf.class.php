@@ -48,7 +48,8 @@ class CEditPdf{
   public $praticien;
   public $pre_tab      = array();
   public $type_rbt;
-  
+  public $adherent2;
+
   //Elements pour le justificatif
   public $colonnes = array(20, 28, 25, 75, 30);
   
@@ -844,8 +845,9 @@ class CEditPdf{
       $this->pdf->setFont($this->font, '', 8);
       $nom_auteur_conf = CAppUI::conf("dPfacturation CEditPdf home_nom", $group);
       $this->auteur["nom"] = $nom_auteur_conf ? $nom_auteur_conf : $this->auteur["nom"];
-      $etab_adresse1 = CAppUI::conf("dPfacturation CEditPdf etab_adresse1", $group);
-      $etab_adresse2 = CAppUI::conf("dPfacturation CEditPdf etab_adresse2", $group);
+      $banque = $this->praticien->loadRefBanque();
+      $etab_adresse1 = $banque->_id ? $banque->nom : CAppUI::conf("dPfacturation CEditPdf etab_adresse1", $group);
+      $etab_adresse2 = $banque->_id ? $banque->cp." ".$banque->ville : CAppUI::conf("dPfacturation CEditPdf etab_adresse2", $group);
 
       if ($etab_adresse1) {
         $this->pdf->Text($l_colonne + $decalage, $h_ligne*$h_add+$haut_doc , $etab_adresse1);
