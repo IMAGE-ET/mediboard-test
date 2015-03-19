@@ -230,12 +230,17 @@ class CMbSOAPClient extends SoapClient {
 
     $document = new CMbXMLDocument();
     $document->loadXMLSafe($response, null, true);
+
     $xpath = new CMbXPath($document);
-    $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/soap/envelope/");
-    $body = $xpath->queryUniqueNode("/soap:Envelope/soap:Body");
+    $documentElement = $document->documentElement;
+    $xpath->registerNamespace($documentElement->prefix, $documentElement->namespaceURI);
+    $body = $xpath->queryUniqueNode("/$documentElement->prefix:Envelope/$documentElement->prefix:Body");
+
     $new_document = new CMbXMLDocument("UTF-8");
     $new_document->appendChild($new_document->importNode($body->firstChild, true));
+
     $this->response_body = $new_document->saveXML();
+
     return $response;
   }
 
