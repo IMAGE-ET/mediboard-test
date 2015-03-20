@@ -332,7 +332,7 @@
     if ($V(field) == 1) {
       var url = new Url("salleOp", "ajax_info_anapath");
       url.addParam("operation_id", $V(field.form.operation_id));
-      url.requestModal();
+      url.requestModal(500, 300);
     }
     onSubmitFormAjax(field.form);
   };
@@ -341,7 +341,7 @@
     if ($V(field) == 1) {
       var url = new Url("salleOp", "ajax_info_bacterio");
       url.addParam("operation_id", $V(field.form.operation_id));
-      url.requestModal();
+      url.requestModal(500, 300);
     }
     onSubmitFormAjax(field.form);
   };

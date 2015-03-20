@@ -3,7 +3,7 @@
   <input type="hidden" name="dosql" value="do_planning_aed" />
   <input type="hidden" name="operation_id" value="{{$op->_id}}" />
   <input type="hidden" name="del" value="0" />
-  <table class="form" style="width: 400px;">
+  <table class="form">
     <tr>
       <th>{{mb_label object=$op field=flacons_bacterio}}</th>
       <td>{{mb_field object=$op field=flacons_bacterio form=editBacterio prop="num min|0" size=2 increment=true}}</td>
@@ -14,7 +14,7 @@
     </tr>
     <tr>
       <th>{{mb_label object=$op field=description_bacterio}}</th>
-      <td>{{mb_field object=$op field=description_bacterio}}</td>
+      <td>{{mb_field object=$op field=description_bacterio form="editBacterio" aidesaisie="validateOnBlur: 0, width: '100%'"}}</td>
     </tr>
     <tr>
       <td class="button" colspan="2">
