@@ -39,16 +39,14 @@ $module_action_id = $ma->getID();
 $log                   = new CAccessLog();
 $log->module_action_id = $module_action_id;
 
-$minutes     = CMbDT::format(null, "%M");
-$arr_minutes = (floor($minutes / 10) * 10) % 60;
-($arr_minutes === 0) ? $arr_minutes = "00" : null;
-
-// 10 min. long aggregation
-$log->period = CMbDT::format(null, "%Y-%m-%d %H:" . $arr_minutes . ":00");
-
-$chrono = CApp::$chrono;
+// 10-minutes period aggregation
+// Don't CMbDT::datetime() to get rid of CAppUI::conf("system_date") if ever used
+$period = strftime("%Y-%m-%d %H:%M:00");
+$period[15] = "0";
+$log->period = $period;
 
 // Stop chrono if not already done
+$chrono = CApp::$chrono;
 if ($chrono->step > 0) {
   $chrono->stop();
 }
