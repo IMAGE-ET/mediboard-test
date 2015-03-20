@@ -29,15 +29,9 @@ if (!$action) {
 // Check prerequisites
 $ds = CSQLDataSource::get("std");
 
-$ma         = new CModuleAction();
-$ma->module = $m;
-$ma->action = $action;
-
-$module_action_id = $ma->getID();
-
 // Key initialisation
 $log                   = new CAccessLog();
-$log->module_action_id = $module_action_id;
+$log->module_action_id = CModuleAction::getID($m, $action);
 
 // 10-minutes period aggregation
 // Don't CMbDT::datetime() to get rid of CAppUI::conf("system_date") if ever used

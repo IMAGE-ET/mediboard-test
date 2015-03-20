@@ -85,28 +85,32 @@ class CModuleAction extends CStoredObject {
   /**
    * Get the ID using ON DUPLICATE KEY UPDATE MySQL feature
    *
-   * @return int
+   * @param string $module Specified module
+   * @param string $action Specified action
+   *
    * @throws Exception
+   * @return int
    */
-  function getID() {
-    $module_action_id = SHM::get($this->module . "_" . $this->action);
-
-    if (!$module_action_id) {
-      $query = "INSERT INTO `module_action` (`module`, `action`)
-                VALUES (?1, ?2)
-                ON DUPLICATE KEY UPDATE `module_action_id` = LAST_INSERT_ID(`module_action_id`)";
-
-      $query = $this->_spec->ds->prepare($query, $this->module, $this->action);
-
-      if (!@$this->_spec->ds->exec($query)) {
-        throw new Exception("Exec failed");
-      }
-
-      $module_action_id = $this->_spec->ds->insertId();
-      SHM::put($this->module . "_" . $this->action, $module_action_id);
+  static function getID($module, $action) {
+    $cache = new Cache(__METHOD__, func_get_args(), Cache::INNER_OUTER);
+    if ($module_action_id = $cache->get()) {
+      return $module_action_id;
     }
 
-    return $module_action_id;
+    $query = "INSERT INTO `module_action` (`module`, `action`)
+              VALUES (?1, ?2)
+              ON DUPLICATE KEY UPDATE `module_action_id` = LAST_INSERT_ID(`module_action_id`)";
+
+    $self = new self;
+    $ds = $self->_spec->ds;
+    $query = $ds->prepare($query, $module, $action);
+
+    if (!@$ds->exec($query)) {
+      throw new Exception("Exec failed");
+    }
+
+    $module_action_id = $ds->insertId();
+    return $cache->put($module_action_id);
   }
 
   /**
