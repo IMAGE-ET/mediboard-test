@@ -499,6 +499,55 @@ class CApp {
   }
 
   /**
+   * Try to approximate ouput buffer bandwidth consumption
+   * Won't take into account output_compression
+   *
+   * @return int Number of bytes
+   */
+  static function getOuputBandwidth() {
+    // Already flushed
+    // @fixme output_compression ignored!!
+    $bandwidth = CHTMLResourceLoader::$flushed_output_length;
+    // Still something to be flushed ?
+    // @fixme output_compression ignored!!
+    $bandwidth += ob_get_length();
+
+    return $bandwidth;
+  }
+
+  /** @var int Useful to log extra bandwidth use such as FTP transfers and so on */
+  static $extra_bandwidth = 0;
+
+  /**
+   * Try to approximate non ouput buffer bandwidth consumption
+   * Won't take into account output_compression
+   *
+   * @return int Number of bytes
+   */
+  static function getOtherBandwidth() {
+    $bandwidth = 0;
+
+    // Add REQUEST params, FILES params, request and response headers to the size of the hit
+    // Use of http_build_query() to approximate HTTP serialization
+    $bandwidth += strlen(http_build_query($_REQUEST));
+    $bandwidth += strlen(http_build_query($_FILES));
+    $bandwidth += strlen(http_build_query(apache_request_headers()));
+    $bandwidth += strlen(http_build_query(apache_response_headers()));
+
+    // Add actual FILES sizes to the size of the hit
+    foreach ($_FILES as $_files) {
+      $_files_size = $_files["size"];
+      $bandwidth += is_array($_files_size) ? array_sum($_files_size) : $_files_size;
+    }
+
+    // Add extra bandwidth that may have been declared
+    $bandwidth += self::$extra_bandwidth;
+
+    return $bandwidth;
+  }
+
+
+  /**
    * Prepare performance data to be displayed
    *
    * @return void

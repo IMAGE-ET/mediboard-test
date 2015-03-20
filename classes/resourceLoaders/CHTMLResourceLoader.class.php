@@ -144,7 +144,9 @@ abstract class CHTMLResourceLoader {
       ob_start();
     }
   }
-  
+
+  static $flushed_output_length = 0;
+
   /**
    * Output the content to the standard output
    * 
@@ -177,10 +179,13 @@ abstract class CHTMLResourceLoader {
       }
     }
     else {
+      // Flush zero-ifies ob_get_length
+      self::$flushed_output_length += ob_get_length();
       ob_end_flush();
     }
   }
-  
+
+
   /**
    * Write a string to the cache file
    * 
