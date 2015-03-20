@@ -243,7 +243,6 @@
   };
 
   modalConsult = function(consult_id) {
-    Control.Modal.close();
     var url = new Url("cabinet", "ajax_short_consult");
     url.addParam("sejour_id", "{{$sejour->_id}}");
     url.addParam("consult_id", consult_id);
