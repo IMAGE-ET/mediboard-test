@@ -49,7 +49,7 @@
     </span>
   {{/if}}
   {{if !$readonly && !$in_corridor}}
-    <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onclick="chooseLit('{{$_lit->_id}}');" />
+    <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" />
   {{/if}}
   {{$_lit}}
 </th>
