@@ -238,6 +238,22 @@
     ViewPort.SetAvlSize('content-dossier-soins', 1.0);
   };
 
+  loadSuiviLite = function() {
+    // Transmissions
+    PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
+
+    // Constantes
+    var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.requestUpdate("constantes-medicales-widget");
+
+    // Formulaires
+    {{if "forms"|module_active}}
+      {{unique_id var=unique_id_widget_forms}}
+      ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
+    {{/if}}
+  };
+
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
     File.use_mozaic = 1;
@@ -252,8 +268,11 @@
           case 'constantes-medicales':
             loadConstantes();
             break;
-          case 'dossier_traitement':
+          case 'dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}':
             loadSuiviSoins();
+            {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+              loadSuiviLite();
+            {{/if}}
             break;
           case 'prescription_sejour':
             loadPrescription();
@@ -306,7 +325,7 @@
     {{/if}}
     <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
     <li><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
-    <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+    <li><a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
 
     {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
@@ -349,7 +368,11 @@
 <div id="content-dossier-soins" style="width: 100%;">
   <div id="suivi_clinique" style="display: none;"></div>
   <div id="constantes-medicales" style="display: none;"></div>
-  <div id="dossier_traitement" style="display: none;"></div>
+  <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" style="display: none;">
+    {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+      {{mb_include module=soins template=inc_dossier_soins_widgets}}
+    {{/if}}
+  </div>
   {{if $isPrescriptionInstalled}}
     <div id="prescription_sejour" style="text-align: left; display: none;"></div>
   {{/if}}

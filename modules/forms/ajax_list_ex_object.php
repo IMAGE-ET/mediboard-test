@@ -11,6 +11,8 @@
 
 CCanDo::checkRead();
 
+CSessionHandler::writeClose();
+
 $reference_class     = CValue::get("reference_class");
 $reference_id        = CValue::get("reference_id");
 $cross_context_class = CValue::get("cross_context_class");

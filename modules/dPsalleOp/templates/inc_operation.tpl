@@ -192,6 +192,13 @@
     return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
   };
 
+  loadSuiviSoins = function() {
+    PlanSoins.loadTraitement('{{$selOp->sejour_id}}', '{{$date}}', '', 'administration');
+    {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+    loadSuiviLite();
+    {{/if}}
+  };
+
   Main.add(function() {
     // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
     window.DMI_operation_id = "{{$selOp->_id}}";
@@ -211,8 +218,8 @@
       case "codage_tab":
         reloadActes();
         break;
-      case "dossier_traitement":
-        PlanSoins.loadTraitement('{{$selOp->sejour_id}}', '{{$date}}', '', 'administration');
+      case "dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}":
+        loadSuiviSoins();
         break;
       case "prescription_sejour_tab":
         Prescription.reloadPrescSejour('', '{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null);
@@ -337,7 +344,23 @@
       url.requestModal();
     }
     onSubmitFormAjax(field.form);
-  }
+  };
+
+  loadSuiviLite = function() {
+    // Transmissions
+    PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
+
+    // Constantes
+    var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.requestUpdate("constantes-medicales-widget");
+
+    // Formulaires
+    {{if "forms"|module_active}}
+    {{unique_id var=unique_id_widget_forms}}
+    ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
+    {{/if}}
+  };
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
@@ -366,7 +389,9 @@
     {{/if}}
 
     {{if "dPprescription"|module_active}}
-      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Suivi soins</a></li>
+      <li onmouseup="loadSuiviSoins();">
+        <a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">Suivi soins</a>
+      </li>
       <li onmousedown="Prescription.reloadPrescSejour('', '{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null);">
         <a href="#prescription_sejour_tab">Prescription</a>
       </li>
@@ -512,7 +537,11 @@
     </div>
 
     <!-- Affichage du dossier de soins avec les lignes "bloc" -->
-    <div id="dossier_traitement" style="display:none"></div>
+    <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" style="display:none">
+      {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+        {{mb_include module=soins template=inc_dossier_soins_widgets}}
+      {{/if}}
+    </div>
   {{/if}}
 {{/if}}
 

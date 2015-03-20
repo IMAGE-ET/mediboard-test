@@ -325,12 +325,6 @@
         Calendar.regField(oFormDate.date, dates, {noView: true});
       }
     {{/if}}
-
-    {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
-      var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
-      url.addParam("context_guid", "{{$sejour->_guid}}");
-      url.requestUpdate("constantes-medicales-widget");
-    {{/if}}
   });
 </script>
 
@@ -430,62 +424,6 @@
   <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="original_datetime" value="" />
 </form>
-
-{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
-  <table class="main layout">
-    <tr>
-      <td style="width: 33%;">
-        <script>
-          Main.add(function(){
-            PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
-          });
-        </script>
-
-        <fieldset>
-          <legend>
-            Transmissions et observations importantes
-            <button class="search notext compact" type="button" onclick="PlanSoins.showModalAllTrans('{{$sejour->_id}}')"></button>
-          </legend>
-          <div id="dossier_suivi_lite" style="height: 140px; overflow-y: auto;"></div>
-        </fieldset>
-      </td>
-
-      {{if "forms"|module_active}}
-        <td style="width: 33%;">
-          {{unique_id var=unique_id_widget_forms}}
-
-          <script>
-            Main.add(function(){
-              ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
-            });
-          </script>
-
-          <div id="{{$unique_id_widget_forms}}_modal" style="width: 900px; height: 600px; display: none;"></div>
-
-          <fieldset>
-            <legend>
-              Formulaires
-              <button class="search notext compact" type="button"
-                      onclick="ExObject.loadExObjects('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id_widget_forms}}_modal', 0);
-                               Modal.open('{{$unique_id_widget_forms}}_modal', {showClose: true})"></button>
-            </legend>
-            <div id="{{$unique_id_widget_forms}}" style="height: 140px; overflow-y: auto;"></div>
-          </fieldset>
-        </td>
-      {{/if}}
-
-      <td style="width: 33%;">
-        <fieldset>
-          <legend>
-            Surveillance
-            <button class="search notext compact" type="button" onclick="openSurveillanceTab();"></button>
-          </legend>
-          <div id="constantes-medicales-widget" style="height: 140px;"></div>
-        </fieldset>
-      </td>
-    </tr>
-  </table>
-{{/if}}
 
 <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left; {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}border-bottom: none;{{/if}}">
   {{if "dPprescription"|module_active}}

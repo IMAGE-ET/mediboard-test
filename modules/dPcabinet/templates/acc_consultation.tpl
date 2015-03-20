@@ -16,9 +16,10 @@
 {{assign var="mutation_id"    value=""}}
 {{assign var="object"         value=$consult}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
+{{assign var="sejour"         value=$consult->_ref_sejour}}
 
-{{if $consult->sejour_id && $consult->_ref_sejour && $consult->_ref_sejour->_ref_rpu && $consult->_ref_sejour->_ref_rpu->_id}}
-  {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
+{{if $consult->sejour_id && $sejour && $sejour->_ref_rpu && $sejour->_ref_rpu->_id}}
+  {{assign var="rpu" value=$sejour->_ref_rpu}}
   {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
   {{if $mutation_id == $consult->sejour_id}}
     {{assign var="mutation_id" value=""}}
@@ -115,6 +116,27 @@
     url.requestUpdate("Examens");
   }
 
+  function loadSuiviLite() {
+    // Transmissions
+    PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
+
+    // Constantes
+    var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.requestUpdate("constantes-medicales-widget");
+
+    // Formulaires
+    {{if "forms"|module_active}}
+    {{unique_id var=unique_id_widget_forms}}
+    ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
+    {{/if}}
+  }
+
+  function loadSuiviSoins() {
+    PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');
+    loadSuiviLite();
+  }
+
   Main.add(function() {
     tabsConsult = Control.Tabs.create('tab-consult', false);
     {{if $rpu}}
@@ -136,7 +158,7 @@
     <li>
       <a href="#rpuConsult">
         {{tr}}soins.tab.rpu{{/tr}}
-        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
       </a>
     </li>
   {{/if}}
@@ -154,8 +176,8 @@
   </li>
 
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-    <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
-      <a href="#dossier_traitement" {{if $tabs_count.dossier_traitement == 0}}class="empty"{{/if}}>
+    <li {{if !$mutation_id}}onmousedown="loadSuiviSoins();"{{/if}}>
+      <a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" {{if $tabs_count.dossier_traitement == 0}}class="empty"{{/if}}>
         {{tr}}soins.tab.suivi_soins{{/tr}} <small>({{$tabs_count.dossier_traitement}})</small>
       </a>
     </li>
@@ -233,11 +255,13 @@
       {{/if}}
     </div>
 
-    <div id="dossier_traitement" style="display: none;">
+    <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" style="display: none;">
       {{if $mutation_id}}
         <div class="small-info">
           Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
         </div>
+      {{elseif "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+        {{mb_include module=soins template=inc_dossier_soins_widgets}}
       {{/if}}
     </div>
 

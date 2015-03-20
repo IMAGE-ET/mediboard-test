@@ -302,6 +302,22 @@
     $V(form.elements.mode_entree, selected.get("mode"));
   };
 
+  loadSuiviLite = function() {
+    // Transmissions
+    PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
+
+    // Constantes
+    var url = new Url("patients", "httpreq_vw_constantes_medicales_widget");
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.requestUpdate("constantes-medicales-widget");
+
+    // Formulaires
+    {{if "forms"|module_active}}
+    {{unique_id var=unique_id_widget_forms}}
+    ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
+    {{/if}}
+  };
+
   Main.add(function () {
     {{if $rpu->_id && $can->edit}}
       if (window.DossierMedical){
@@ -317,8 +333,11 @@
               case 'prescription_sejour':
                 Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');
                 break;
-              case 'dossier_traitement':
+              case 'dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}':
                 PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');
+                {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+                  loadSuiviLite();
+                {{/if}}
                 break;
             {{/if}}
             case 'dossier_suivi':
@@ -405,7 +424,7 @@
         </li>
 
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-          <li><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+          <li><a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
           <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
         {{else}}
           <li><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
@@ -485,7 +504,10 @@
             Aucune prescription
           </div>
         </div>
-        <div id="dossier_traitement">
+        <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">
+          {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+            {{mb_include module=soins template=inc_dossier_soins_widgets}}
+          {{/if}}
           <div class="small-info">
             Aucun plan de soins
           </div>

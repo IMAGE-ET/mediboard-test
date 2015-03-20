@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+CSessionHandler::writeClose();
+
 $const = new CConstantesMedicales();
 $perms = $const->canDo();
 if (!$perms->read) {

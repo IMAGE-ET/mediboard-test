@@ -1,13 +1,15 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
+
+CSessionHandler::writeClose();
 
 $sejour_id = CValue::get("sejour_id");
 
@@ -17,6 +19,8 @@ $where = array();
 $where["degre"]     = " = 'high'";
 $where["sejour_id"] = " = '$sejour_id'";
 $where["date"]      = " >= '".CMbDT::dateTime("- 7 DAYS")."'";
+
+/* @var CObservationMedicale[] $observations */
 $observations = $observation->loadList($where);
 
 // Chargement des transmissions d'importance haute ou des macrocibles de moins de 7 jours
@@ -34,20 +38,28 @@ $ljoin = array();
 $ljoin["category_prescription"] = "transmission_medicale.object_id = category_prescription.category_prescription_id
                                   AND transmission_medicale.object_class = 'CCategoryPrescription'";
 
+/* @var CTransmissionMedicale[] $transmissions */
 $transmissions = $transmission->loadList($where, null, null, null, $ljoin);
 
 $suivi = array();
-/* @var CObservationMedicale[] $observations*/
+
+CStoredObject::massLoadFwdRef($observations, "sejour_id");
+$users = CStoredObject::massLoadFwdRef($observations, "user_id");
+CStoredObject::massLoadFwdRef($users, "function_id");
+
 foreach ($observations as $_observation) {
-  $_observation->loadRefsFwd();
-  $_observation->_ref_user->loadRefFunction();
+  $_observation->loadRefSejour();
+  $_observation->loadRefUser()->loadRefFunction();
   $suivi[$_observation->date.$_observation->_id] = $_observation;
 }
 
-/* @var CTransmissionMedicale[] $transmissions*/
+CStoredObject::massLoadFwdRef($transmissions, "sejour_id");
+$users = CStoredObject::massLoadFwdRef($transmissions, "user_id");
+CStoredObject::massLoadFwdRef($users, "function_id");
+
 foreach ($transmissions as $_transmission) {
-  $_transmission->loadRefsFwd();
-  $_transmission->_ref_user->loadRefFunction();
+  $_transmission->loadRefSejour();
+  $_transmission->loadRefUser()->loadRefFunction();
   $suivi[$_transmission->date.$_transmission->_guid] = $_transmission;
 }
 
