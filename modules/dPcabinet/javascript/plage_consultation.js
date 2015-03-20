@@ -29,7 +29,7 @@ PlageConsultation  = window.PlageConsultation || {
     });
   },
   
-  checkForm: function(form) {
+  checkForm: function(form, modal) {
     if (!checkForm(form)) {
       return false;
     }
@@ -53,8 +53,13 @@ PlageConsultation  = window.PlageConsultation || {
       alert("Vous ne pouvez pas vous remplacer vous-même");
       return false;
     }
-          
-    return true;
+
+    if (modal) {
+      return onSubmitFormAjax(form, {onComplete: Control.Modal.close});
+    }
+    else {
+      return true;
+    }
   },
   
   resfreshImageStatus : function(element){

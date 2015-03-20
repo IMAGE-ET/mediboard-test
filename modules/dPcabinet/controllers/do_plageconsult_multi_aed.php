@@ -69,4 +69,11 @@ else {
   }
 }
 
-CAppUI::redirect("m=$m");
+if (!CValue::post('modal')) {
+  CAppUI::redirect("m=$m");
+}
+else {
+  echo CAppUI::getMsg();
+}
+
+CApp::rip();

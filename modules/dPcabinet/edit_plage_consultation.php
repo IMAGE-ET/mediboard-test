@@ -14,6 +14,7 @@ CCanDo::checkRead();
 $_firstconsult_time  = null;
 $_lastconsult_time   = null;
 $today = CMbDT::date();
+$modal = CValue::get("modal", 0);
 
 // L'utilisateur est-il praticien ?
 $chir = null;
@@ -167,6 +168,7 @@ $smarty->assign("holidays"          , $holidays);
 $smarty->assign("listHours"         , $hours);
 $smarty->assign("listMins"          , CPlageconsult::$minutes);
 $smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
+$smarty->assign("modal" , $modal);
 
 $smarty->display("edit_plage_consultation.tpl");
 

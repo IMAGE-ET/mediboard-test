@@ -91,11 +91,11 @@
   });
 </script>
 
-{{mb_script module="mediusers" script="color_selector" ajax=true}}
-
-<form name='editFrm' action='?m=dPcabinet' method='post' onsubmit="this._type_repeat.disabled = ''; return PlageConsultation.checkForm(this);">
+<form name='editFrm' action='?m=dPcabinet' method='post' onsubmit="this._type_repeat.disabled = ''; return PlageConsultation.checkForm(this, {{$modal}});">
+  <input type='hidden' name='m' value='dPcabinet' />
   <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
   <input type='hidden' name='del' value='0' />
+  <input type='hidden' name='modal' value='{{$modal}}'" />
   {{mb_key object=$plageSel}}
 
   <table class="form">
@@ -290,18 +290,30 @@
   <table class="form">
     <tr>
       {{if !$plageSel->_id}}
-      <td class="button" colspan="4"><button id="edit_plage_consult_button_create_new_plage" type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
+        <td class="button" colspan="4">
+          <button id="edit_plage_consult_button_create_new_plage" class="submit">{{tr}}Create{{/tr}}</button>
+        </td>
       {{else}}
       <td class="button" colspan="4">
         <button type="submit" class="modify" id="edit_plage_consult_button_modify_plage">{{tr}}Modify{{/tr}}</button>
         <button class="trash" type='button'  id="edit_plage_consult_button_delete_plage"
-          onclick="confirmDeletion(this.form, {
-            typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}',
-            callback: function() {
-              var form = getForm('editFrm');
-              form._type_repeat.disabled = '';
-              form.submit();
-            }})">
+          onclick="
+              confirmDeletion(this.form, {
+            typeName:'la plage de consultations du',
+            objName:'{{$plageSel->date|date_format:$conf.longdate}}',
+            {{if $modal}}
+              ajax: 1
+            {{else}}
+              callback: function() {
+                var form = getForm('editFrm');
+                form._type_repeat.disabled = '';
+                form.submit();
+              }
+            {{/if}}
+              }
+          {{if $modal}},
+              {onComplete: Control.Modal.close}
+            {{/if}})">
           {{tr}}Delete{{/tr}}
         </button>
         <button type="button" class="button add" onclick="extendPlage('{{$plageSel->_id}}', $V(this.form._type_repeat), $V(this.form._repeat) );">
