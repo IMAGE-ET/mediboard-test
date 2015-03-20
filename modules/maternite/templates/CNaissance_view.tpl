@@ -7,6 +7,7 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  *}}
+{{mb_default var=show_edit value=true}}
 
 {{if !$object->_can->read}}
   <div class="small-info">
@@ -20,12 +21,14 @@
 {{assign var=naissance value=$object}}
 
 {{mb_script module=maternite script=naissance ajax=1}}
-<table class="form">
-  <tr>
-    <td class="button">
-      <button class="edit" onclick="Naissance.edit('{{$naissance->_id}}')">
-        {{tr}}Edit{{/tr}}
-      </button>
-    </td>
-  </tr>
-</table>
+{{if $show_edit}}
+  <table class="form">
+    <tr>
+      <td class="button">
+        <button class="edit" onclick="Naissance.edit('{{$naissance->_id}}')">
+          {{tr}}Edit{{/tr}}
+        </button>
+      </td>
+    </tr>
+  </table>
+{{/if}}

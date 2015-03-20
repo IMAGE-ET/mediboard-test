@@ -50,6 +50,16 @@
         {{if $isImedsInstalled}}
           <li><a href="#result_labo">Labo</a></li>
         {{/if}}
+        {{if $sejour && $sejour->grossesse_id}}
+          <li><a href="#grossesse" onmousedown="">Grossesse</a></li>
+        {{/if}}
+        {{if $naissance && $naissance->_id}}
+          {{if $sejour_maman->grossesse_id}}
+            <li><a href="#grossesse" onmousedown="">Grossesse</a></li>
+          {{/if}}
+
+          <li><a href="#naissance" onmousedown="">Naissance</a></li>
+        {{/if}}
       </ul>
     </td>
     <td>
@@ -60,6 +70,21 @@
       <div id="constantes" style="display:none;"></div>
       {{if $isImedsInstalled}}
         <div id="result_labo" style="display:none;"></div>
+      {{/if}}
+      {{if $sejour->grossesse_id}}
+        <div id="grossesse" style="display:none;">
+          {{mb_include module=maternite template="CGrossesse_view" object=$sejour->_ref_grossesse}}
+        </div>
+      {{/if}}
+      {{if $naissance && $naissance->_id}}
+        {{if $sejour_maman->grossesse_id}}
+          <div id="grossesse" style="display:none;">
+            {{mb_include module=maternite template="CGrossesse_view" object=$sejour_maman->_ref_grossesse}}
+          </div>
+        {{/if}}
+        <div id="naissance" style="display:none;">
+          {{mb_include module=maternite template="CNaissance_view" object=$naissance show_edit=false}}
+        </div>
       {{/if}}
     </td>
   </tr>

@@ -49,8 +49,8 @@ class CCIM10 extends CMbObject {
     $props = parent::getProps();
     $props[$this->getSpec()->key] .= " seekable";
     $props["type"]          = "enum list|0|1|2|3|4";
-    $props["short_name"]    = "str";
-    $props["complete_name"] = "str";
+    $props["short_name"]    = "str seekable";
+    $props["complete_name"] = "str seekable";
 
     return $props;
   }

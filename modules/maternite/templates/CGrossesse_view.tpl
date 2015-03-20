@@ -50,6 +50,9 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_guid}}')">
           {{mb_value object=$patient field=naissance}}
         </span>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+         &mdash; ( {{$sejour->_view}} )
+        </span>
       </td>
     </tr>
   {{foreachelse}}
