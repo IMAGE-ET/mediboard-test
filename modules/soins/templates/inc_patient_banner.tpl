@@ -26,7 +26,7 @@
   </script>
 {{/if}}
 
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title text" style="text-align: left; border: none; width: 5%;">
       {{mb_include module=system template=inc_object_notes object=$patient}}
