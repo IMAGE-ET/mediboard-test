@@ -116,7 +116,8 @@ class WorkingCopy {
     return Util::exec("update", $paths, $options, $this->path, true, $timeout);
   }
 
-  function cleanup($path) {
+  function cleanup($file = '.') {
+    return Util::exec("cleanup", $file);
   }
 
   function log($path = "", $limit = null, $verbose = false, $stopOnCopy = true) {

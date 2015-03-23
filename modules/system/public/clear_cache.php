@@ -14,18 +14,18 @@
  */
 
 // Mediboard root dir
-$root_dir = realpath(__DIR__."/../../../");
+$root_dir = realpath(__DIR__ . "/../../../");
 
 // Check clear cache flag
-$flag_path = "$root_dir/tmp/clearcache.flag";
+$flag_path = "$root_dir/tmp/clear_cache.flag";
 if (!file_exists($flag_path)) {
-  echo "Flag path doesn't exist, exiting\n";
+  echo "Flag path doesn't exist, exiting.\n";
   exit(0);
 }
 
 $ttl = 120;
-if (filemtime($flag_path)+$ttl < time()) {
-  echo "Flag path too old, exiting\n";
+if (filemtime($flag_path) + $ttl < time()) {
+  echo "Flag path too old, exiting.\n";
   exit(0);
 }
 
@@ -50,7 +50,7 @@ if (function_exists("apc_delete_file")) {
 
   apc_delete_file($entries);
 
-  echo count($entries)." opcode cache entries removed\n";
+  echo count($entries) . " Opcode cache entries removed.\n";
 }
 
 // Clear user cache
@@ -71,5 +71,19 @@ if (function_exists("apc_delete")) {
     }
   }
 
-  echo "$count user cache entries removed\n";
+  echo "$count user cache entries removed.\n";
 }
+
+// CSS cache
+$css_files = glob("tmp/*.css");
+foreach ($css_files as $_css_file) {
+  unlink($_css_file);
+}
+echo count($css_files) . " CSS files removed.\n";
+
+// JavaScript cache
+$js_files = glob("tmp/*.js");
+foreach ($js_files as $_js_file) {
+  unlink($_js_file);
+}
+echo count($js_files) . " JS files removed.\n";

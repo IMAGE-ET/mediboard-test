@@ -81,7 +81,7 @@ then
       fi
       if [ "$force_update" = "1" ] || [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
-        touch $MB_PATH/tmp/clearcache.flag
+        touch $MB_PATH/tmp/clear_cache.flag
         eval rsync -avpgzC $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude --include=*.exe\
           --exclude includes/config_overload.php \
           --exclude /tmp \
@@ -93,7 +93,7 @@ then
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnlog.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnstatus.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/monitevent.txt $line/tmp/
-        eval rsync -avzp $dry_run $MB_PATH/tmp/clearcache.flag $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/clear_cache.flag $line/tmp/
       fi
 
       # Call clear apc cache
@@ -118,7 +118,7 @@ then
           ip=$(echo $ip|sed 's/.\{1\}//'|sed 's/.$//')
         fi
 
-        url="http://$ip/$path/modules/system/public/clear_apc_cache.php"
+        url="http://$ip/$path/modules/system/public/clear_cache.php"
         info_script "-- Clearing apc cache // $url --"
         wget $url -q -O -
       fi

@@ -52,8 +52,8 @@ class DeployMaJ extends DeployOperation {
   /**
    * @see parent::showHeader()
    */
-  protected function showHeader(OutputInterface $output) {
-    $output->writeln(
+  protected function showHeader() {
+    $this->output->writeln(
       <<<EOT
 <fg=blue;bg=black>
        __  __     _        _
@@ -70,17 +70,15 @@ EOT
   /**
    * @see parent::testBranch()
    */
-  protected function testBranch($master_branch, $release_code) {
-    return ($master_branch == $release_code);
+  protected function testBranch($release_code) {
+    return ($this->master_branch == $release_code);
   }
 
   /**
    * @see parent::rsync()
    */
-  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false, &$merged_result = false) {
-    $dialog = $this->getHelperSet()->get('dialog');
-
-    $result = parent::rsync($path, $files, $instance, $output, $dry_run, $merged_result);
+  protected function rsync($files, $instance, $dry_run = false, &$merged_result = false) {
+    $result = parent::rsync($files, $instance, $dry_run, $merged_result);
 
     if ($result) {
       foreach ($result as $_line) {
@@ -101,33 +99,35 @@ EOT
    * @see parent::execute()
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $this->showHeader($output);
+    $this->output           = $output;
+    $this->input            = $input;
+    $this->dialog           = $this->getHelperSet()->get('dialog');
+    $this->path             = $input->getOption('path');
+    $this->ignore_externals = $input->getOption("update-ignore-externals");
+    $this->update           = $input->getOption("update");
 
-    $path = $input->getOption('path');
+    $this->showHeader();
 
-    if (!is_dir($path)) {
-      throw new InvalidArgumentException("'$path' is not a valid directory");
+    if (!is_dir($this->path)) {
+      throw new InvalidArgumentException("'$this->path' is not a valid directory.");
     }
 
-    $current_branch = $this->getMasterBranch($path, $output);
-    if (!$current_branch) {
+    $this->getMasterBranch();
+    if (!$this->master_branch) {
       return;
     }
 
-    $ignore_externals = $input->getOption("update-ignore-externals");
-    $update           = $input->getOption("update");
-
-    if ($ignore_externals || $update) {
-      $this->update($path, $output, $ignore_externals);
+    if ($this->ignore_externals || $this->update) {
+      $this->update();
     }
 
     $dialog    = $this->getHelperSet()->get('dialog');
-    $instances = $this->promptInstances($path, $output, $dialog);
+    $instances = $this->promptInstances();
 
-    $this->out($output, "Checking branches...");
-    $instances_with_branch = $this->checkBranches($current_branch, $instances, $output);
+    $this->out($this->output, "Checking branches...");
+    $instances_with_branch = $this->checkBranches($instances);
 
-    $this->out($output, "Result (<error>[branch]</error> will not be performed):\n");
+    $this->out($this->output, "Result (<error>[branch]</error> will not be performed):\n");
 
     $to_perform = array();
     foreach ($instances_with_branch as $_instance) {
@@ -138,37 +138,37 @@ EOT
         $to_perform[] = $_instance["path"];
       }
 
-      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $this->output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
 
     if (!$to_perform) {
-      $this->out($output, "<error>No instance to update</error>");
+      $this->out($this->output, "<error>No instance to update</error>");
 
       return;
     }
 
     // Ask confirmation by typing MASTER release code
-    $this->confirmOperation($current_branch, $dialog, $output);
+    $this->confirmOperation();
 
-    $this->out($output, "<info>Confirmation OK</info>");
-    $this->out($output, "Performing operation...");
+    $this->out($this->output, "<info>Confirmation OK</info>");
+    $this->out($this->output, "Performing operation...");
 
     // External libraries installation
-    $this->installLibraries($output);
+    $this->installLibraries();
 
-    $files = $this->getIncludedAndExcluded($path, $output);
+    $files = $this->getIncludedAndExcluded();
 
     $merged_result = array();
     foreach ($to_perform as $_instance) {
       // RSYNC with dry run
-      $this->rsync($path, $files, $_instance, $output, true, $merged_result);
+      $this->rsync($files, $_instance, true, $merged_result);
     }
 
     // RSYNC file diff table output
-    $this->showFileDiffTable($to_perform, $merged_result, $output);
+    $this->showFileDiffTable($to_perform, $merged_result);
 
     if (!$dialog->askConfirmation(
-      $output,
+      $this->output,
       '<question>Confirm? [Y/n]</question> ',
       true
     )
@@ -178,23 +178,23 @@ EOT
 
     // Progress bar
     $progress = $this->getHelperSet()->get('progress');
-    $progress->start($output, count($to_perform));
+    $progress->start($this->output, count($to_perform));
 
     foreach ($to_perform as $_instance) {
       // RSYNC
-      $result = parent::rsync($path, $files, $_instance, $output);
+      $result = parent::rsync($files, $_instance);
       //$this->checkFilePresence(implode("\n", $result), $output);
 
       // Next progress bar step
       $progress->advance();
-      $output->writeln("");
+      $this->output->writeln("");
     }
 
     $progress->finish();
 
     // Re-check remote release
-    $this->out($output, "Current instances release:");
-    $instances = $this->checkBranches($current_branch, $instances, $output);
+    $this->out($this->output, "Current instances release:");
+    $instances = $this->checkBranches($instances);
 
     foreach ($instances as $_instance) {
       $perform = "error";
@@ -203,7 +203,7 @@ EOT
         $perform = "info";
       }
 
-      $output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
+      $this->output->writeln("- <$perform>" . $_instance["release_code"] . "</$perform> " . $_instance["path"]);
     }
   }
 }

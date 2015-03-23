@@ -14,21 +14,53 @@
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 use SVNClient\WorkingCopy;
-
-use Symfony\Component\Process\Process;
 
 /**
  * deploy:mep command
  */
 abstract class DeployOperation extends MediboardCommand {
-  protected $all_instances = array();
+  protected $start_time;
 
   protected $patterns_to_check = array(
     ".*/setup\.php"
   );
+
+  /** @var OutputInterface */
+  protected $output;
+
+  /** @var InputInterface */
+  protected $input;
+
+  /** @var DialogHelper */
+  protected $dialog;
+
+  protected $ignore_externals;
+  protected $update;
+  protected $path;
+
+  protected $rsyncupdate_conf;
+
+  protected $all_instances = array();
+  protected $instance_ids;
+  protected $instances_to_update;
+  protected $instances_to_perform;
+
+  protected $performed_instances = array();
+  protected $skipped_instances = array();
+
+  /** @var DOMDocument */
+  protected $rsyncupdate_dom;
+
+  /** @var DOMXpath */
+  protected $rsyncupdate_xpath;
+
+  /** @var WorkingCopy */
+  protected $wc;
+
+  protected $master_branch;
+  protected $elapsed_time;
 
   /**
    * Display header information
@@ -37,17 +69,16 @@ abstract class DeployOperation extends MediboardCommand {
    *
    * @return mixed
    */
-  abstract protected function showHeader(OutputInterface $output);
+  abstract protected function showHeader();
 
   /**
    * Test to apply in order to determine if update will be performed
    *
-   * @param string $master_branch Current MASTER release
-   * @param string $release_code  Instance release
+   * @param string $release_code Instance release
    *
    * @return mixed
    */
-  abstract protected function testBranch($master_branch, $release_code);
+  abstract protected function testBranch($release_code);
 
   /**
    * @see parent::execute()
@@ -64,9 +95,9 @@ abstract class DeployOperation extends MediboardCommand {
    *
    * @return string|bool
    */
-  protected function getMasterBranch($path, OutputInterface $output) {
-    $wc  = new WorkingCopy($path);
-    $url = $wc->getURL();
+  protected function getMasterBranch() {
+    $this->wc = new WorkingCopy($this->path);
+    $url      = $this->wc->getURL();
 
     // Find the current branch name
     $current_branch = "trunk";
@@ -76,42 +107,40 @@ abstract class DeployOperation extends MediboardCommand {
       $current_branch = $matches[1];
     }
 
-    $this->out($output, "Current MASTER branch: '<b>$current_branch</b>'");
+    $this->master_branch = $current_branch;
 
-    if ($current_branch == "trunk") {
-      $this->out($output, "<error>Cannot perform operation: MASTER branch is TRUNK.</error>");
+    $this->out($this->output, "Current MASTER branch: '<b>$this->master_branch</b>'");
+
+    if ($this->master_branch == "trunk") {
+      $this->out($this->output, "<error>Cannot perform operation: MASTER branch is TRUNK.</error>");
 
       return false;
     }
 
-    return $current_branch;
+    return $this->master_branch;
   }
 
   /**
    * Select instances
    *
-   * @param string          $path   Current root path
-   * @param OutputInterface $output Output
-   *
    * @return array
    */
-  protected function promptInstances($path, OutputInterface $output) {
-    $dialog = $this->getHelperSet()->get('dialog');
+  protected function promptInstances() {
+    $this->rsyncupdate_conf = "$this->path/cli/conf/deploy.xml";
 
-    $rsyncupdate_conf = "$path/cli/conf/deploy.xml";
-
-    if (!is_readable($rsyncupdate_conf)) {
-      throw new Exception("'$rsyncupdate_conf' is not readable");
+    if (!is_readable($this->rsyncupdate_conf)) {
+      throw new Exception("$this->rsyncupdate_conf is not readable.");
     }
 
     $dom = new DOMDocument();
-    $dom->load($rsyncupdate_conf);
+    $dom->load($this->rsyncupdate_conf);
     $xpath = new DOMXPath($dom);
 
     /** @var DOMNodeList $groups */
     $groups = $xpath->query("//group");
 
     $all_instances = array();
+    /** @var DOMElement $_group */
     foreach ($groups as $_group) {
       $group_name = $_group->getAttribute("name");
 
@@ -122,6 +151,7 @@ abstract class DeployOperation extends MediboardCommand {
       /** @var DOMNodeList $instance_nodes */
       $instance_nodes = $xpath->query("instance", $_group);
 
+      /** @var DOMElement $_instance */
       foreach ($instance_nodes as $_instance) {
         $_path                        = $_instance->getAttribute("path");
         $all_instances[$group_name][] = $_path;
@@ -140,8 +170,8 @@ abstract class DeployOperation extends MediboardCommand {
       }
     }
 
-    $selected = $dialog->select(
-      $output,
+    $selected = $this->dialog->select(
+      $this->output,
       'Select instance (or [group] in order to select all of it)',
       $instances,
       0,
@@ -154,7 +184,7 @@ abstract class DeployOperation extends MediboardCommand {
       return $instances[$c];
     }, $selected);
 
-    $output->writeln('Selected: ' . implode(', ', $selected_values));
+    $this->output->writeln('Selected: ' . implode(', ', $selected_values));
 
     $selected = array();
     foreach ($selected_values as $_selected) {
@@ -191,13 +221,11 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Checks remote instances state
    *
-   * @param string          $master_branch Current MASTER branch
-   * @param array           $instances     Selected instances
-   * @param OutputInterface $output        Output
+   * @param array $instances Selected instances
    *
    * @return array
    */
-  protected function checkBranches($master_branch, $instances, OutputInterface $output) {
+  protected function checkBranches($instances) {
     $to_perform = array();
 
     foreach ($instances as $_instance) {
@@ -214,18 +242,20 @@ abstract class DeployOperation extends MediboardCommand {
           $dom->load($release_file);
         }
         else {
-          throw new Exception("'$release_file' is not readable");
+          throw new Exception("$release_file is not readable.");
         }
       }
       else {
         // Remote file
-        $result = $this->getRemoteRelease($release_file[0], $release_file[1], $output);
+        $result = $this->getRemoteRelease($release_file[0], $release_file[1]);
 
         if ($result) {
-          $dom->loadXML($result);
+          if (!$dom->loadXML($result)) {
+            throw new Exception('Cannot parse XML.');
+          }
         }
         else {
-          throw new Exception("$release_file[0]:$release_file[1] is empty");
+          throw new Exception("$release_file[0]:$release_file[1] is empty.");
         }
       }
 
@@ -235,7 +265,7 @@ abstract class DeployOperation extends MediboardCommand {
       $to_perform[] = array(
         "path"         => $_instance,
         "release_code" => $release_code,
-        "perform"      => $this->testBranch($master_branch, $release_code)
+        "perform"      => $this->testBranch($release_code)
       );
     }
 
@@ -245,15 +275,14 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Checks particular files
    *
-   * @param string          $result RSYNC command result
-   * @param OutputInterface $output Output
+   * @param string $result RSYNC command result
    */
-  protected function checkFilePresence($result, OutputInterface $output) {
+  protected function checkFilePresence($result) {
     if (preg_match_all("#(" . implode("|", $this->patterns_to_check) . ")#m", $result, $matches)) {
-      $this->out($output, "<comment>Particular files:</comment>");
+      $this->out($this->output, "<comment>Particular files:</comment>");
 
       foreach ($matches[1] as $_file) {
-        $output->writeln("- <fg=red;>$_file</fg=red;>");
+        $this->output->writeln("- <fg=red;>$_file</fg=red;>");
       }
     }
   }
@@ -261,22 +290,20 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Performs RSYNC
    *
-   * @param string          $path     Root path
-   * @param array           $files    Files to include and files to exclude from RSYNC
-   * @param string          $instance Instance to RSYNC
-   * @param OutputInterface $output   Output
-   * @param boolean         $dry_run  Dry run mode toggle
+   * @param array   $files    Files to include and files to exclude from RSYNC
+   * @param string  $instance Instance to RSYNC
+   * @param boolean $dry_run  Dry run mode toggle
    *
    * @return array|bool
    */
-  protected function rsync($path, $files, $instance, OutputInterface $output, $dry_run = false, &$merged_result = false) {
+  protected function rsync($files, $instance, $dry_run = false, &$merged_result = false) {
     $msg = "";
     if ($dry_run) {
       $dry_run = "-n ";
       $msg     = "(DRY RUN)";
     }
 
-    $os = $this->getOSVersion($output);
+    $os = $this->getOSVersion();
     $os = explode(" ", $os[0]);
     $os = $os[0];
 
@@ -286,32 +313,32 @@ abstract class DeployOperation extends MediboardCommand {
       $log_cmd = "--log-format";
     }
 
-    $cmd = "rsync -apgzC $log_cmd='%n%L' $dry_run" . escapeshellarg($path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
+    $cmd = "rsync -apgzC $log_cmd='%n%L' $dry_run" . escapeshellarg($this->path . "/") . " --delete " . escapeshellarg($instance) . " " . $files["excluded"] . " " . $files["included"];
 
     // Executes RSYNC
     $result = array();
     exec($cmd, $result, $state);
 
     if ($state !== 0) {
-      $this->out($output, "<error>Error occurred during $instance RSYNC... $msg</error>");
+      $this->out($this->output, "<error>Error occurred during $instance RSYNC... $msg</error>");
 
       return false;
     }
     else {
       if (!$dry_run) {
-        $this->out($output, "<info>RSYNC-ED: $instance</info>");
+        $this->out($this->output, "<info>RSYNC-ED: $instance</info>");
       }
     }
 
     // Log files RSYNC
     foreach ($files["included_logfiles"] as $_file) {
-      $cmd = "rsync -azp --out-format='%n%L' $dry_run" . escapeshellarg($path . "/" . $_file["file"]) . " " . escapeshellarg($instance . $_file["dest"]);
+      $cmd = "rsync -azp --out-format='%n%L' $dry_run" . escapeshellarg($this->path . "/" . $_file["file"]) . " " . escapeshellarg($instance . $_file["dest"]);
 
       $log = array();
       exec($cmd, $log, $log_state);
 
       if ($log_state !== 0) {
-        $this->out($output, "<error>Error occurred during log files RSYNC...</error>");
+        $this->out($this->output, "<error>Error occurred during log files RSYNC...</error>");
 
         return false;
       }
@@ -324,17 +351,13 @@ abstract class DeployOperation extends MediboardCommand {
 
   /**
    * Ask and validate operation by typing MASTER release_code
-   *
-   * @param string          $current_branch Current MASTER branch
-   * @param DialogHelper    $dialog         Dialog helper
-   * @param OutputInterface $output         Output
    */
-  protected function confirmOperation($current_branch, DialogHelper $dialog, OutputInterface $output) {
-    $bundle = $dialog->askAndValidate(
-      $output,
+  protected function confirmOperation() {
+    $bundle = $this->dialog->askAndValidate(
+      $this->output,
       "\nConfirm operation by typing MASTER release code: ",
-      function ($answer) use ($current_branch) {
-        if ($current_branch !== trim($answer)) {
+      function ($answer) {
+        if ($this->master_branch !== trim($answer)) {
           throw new \RunTimeException("Wrong release code: $answer");
         }
 
@@ -346,20 +369,20 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Get excluded and included files
    *
-   * @param string $path Root path
-   *
    * @return array
    * @throws Exception
    */
-  protected function getIncludedAndExcluded($path) {
-    $file = "$path/cli/conf/exclude.xml";
+  protected function getIncludedAndExcluded() {
+    $file = "$this->path/cli/conf/exclude.xml";
 
     if (!is_readable($file)) {
-      throw new Exception("'$file' is not readable");
+      throw new Exception("$file is not readable.");
     }
 
     $dom = new DOMDocument();
-    $dom->load($file);
+    if (!$dom->load($file)) {
+      throw new Exception("Cannot parse $file DOMDocument.");
+    }
 
     $xpath = new DOMXPath($dom);
 
@@ -377,6 +400,7 @@ abstract class DeployOperation extends MediboardCommand {
 
     /** @var DOMNodeList $included */
     $included = $xpath->query("//include");
+    /** @var DOMElement $_included */
     foreach ($included as $_included) {
       if ($_included->hasAttribute("logfile") && $_included->getAttribute("logfile") == "1") {
         // Files included afterwards
@@ -400,16 +424,13 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Get excluded files
    *
-   * @param string          $path   Root path
-   * @param OutputInterface $output Output
-   *
    * @return array
    */
-  protected function getExcluded($path, OutputInterface $output) {
-    $file = "$path/cli/conf/exclude.xml";
+  protected function getExcluded() {
+    $file = "$this->path/cli/conf/exclude.xml";
 
     if (!is_readable($file)) {
-      throw new Exception("'$file' is not readable");
+      throw new Exception("$file is not readable.");
     }
 
     $dom = new DOMDocument();
@@ -432,18 +453,17 @@ abstract class DeployOperation extends MediboardCommand {
    * Get remote release code
    *
    * @param string $host Hostname
-   * @param string $path Path to the release file
    *
    * @return string|bool
    */
-  protected function getRemoteRelease($host, $path, OutputInterface $output) {
-    $cmd = "ssh " . escapeshellarg($host) . " cat " . escapeshellarg($path);
+  protected function getRemoteRelease($host) {
+    $cmd = "ssh " . escapeshellarg($host) . " cat " . escapeshellarg($this->path);
 
     $result = array();
     exec($cmd, $result, $state);
 
     if ($state !== 0) {
-      $this->out($output, "<error>Error occurred during $cmd...</error>");
+      $this->out($this->output, "<error>Error occurred during $cmd...</error>");
 
       return false;
     }
@@ -453,10 +473,8 @@ abstract class DeployOperation extends MediboardCommand {
 
   /**
    * External libraries installer
-   *
-   * @param OutputInterface $output Output
    */
-  protected function installLibraries(OutputInterface $output) {
+  protected function installLibraries() {
     require "install/cli/bootstrap.php";
 
     foreach (CLibrary::$all as $library) {
@@ -466,35 +484,35 @@ abstract class DeployOperation extends MediboardCommand {
 
       $library->clearLibraries($library->name);
 
-      $this->out($output, "Installation: <b>'$library->name'</b>...");
+      $this->out($this->output, "Installation: <b>'$library->name'</b>...");
 
       if ($nbFiles = $library->install()) {
-        $this->out($output, " > <comment>$nbFiles</comment> extracted files");
+        $this->out($this->output, " > <comment>$nbFiles</comment> extracted files");
       }
       else {
-        $this->out($output, "<error> > Error, $library->nbFiles found files</error>");
+        $this->out($this->output, "<error> > Error, $library->nbFiles found files</error>");
       }
 
-      $output->write(strftime("[%Y-%m-%d %H:%M:%S]") . " -  > Moving: ");
+      $this->output->write(strftime("[%Y-%m-%d %H:%M:%S]") . " -  > Moving: ");
 
       if ($library->apply()) {
-        $output->writeln("<info>OK</info>");
+        $this->output->writeln("<info>OK</info>");
       }
       else {
-        $output->writeln("<error>Error!</error>");
+        $this->output->writeln("<error>Error!</error>");
       }
 
       if (count($library->patches)) {
-        $this->out($output, " > Applying patches:");
+        $this->out($this->output, " > Applying patches:");
 
         foreach ($library->patches as $patch) {
-          $output->write(strftime("[%Y-%m-%d %H:%M:%S]") . " -  > Patch <comment>'$patch->sourceName'</comment> in <comment>'$patch->targetDir'</comment>: ");
+          $this->output->write(strftime("[%Y-%m-%d %H:%M:%S]") . " -  > Patch <comment>'$patch->sourceName'</comment> in <comment>'$patch->targetDir'</comment>: ");
 
           if ($patch->apply()) {
-            $output->writeln("<info>Patch applied successfully</info>");
+            $this->output->writeln("<info>Patch applied successfully</info>");
           }
           else {
-            $output->writeln("<error>Error!</error>");
+            $this->output->writeln("<error>Error!</error>");
           }
         }
       }
@@ -504,11 +522,10 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * RSYNC file diff table output
    *
-   * @param array           $instances List of all treated instances, for headers initialisation
-   * @param array           $files     List of all treated files as keys, with all concerned instances as values ([file] => (instance, instance))
-   * @param OutputInterface $output    Output
+   * @param array $instances List of all treated instances, for headers initialisation
+   * @param array $files     List of all treated files as keys, with all concerned instances as values ([file] => (instance, instance))
    */
-  protected function showFileDiffTable($instances, $files, OutputInterface $output) {
+  protected function showFileDiffTable($instances, $files) {
     // Headers initialisation
     $headers = array(str_pad("File", 50));
     foreach ($instances as $_instance) {
@@ -552,21 +569,21 @@ abstract class DeployOperation extends MediboardCommand {
     }
 
     if ($rows) {
-      $this->out($output, "<info>Added or modified files:</info>");
+      $this->out($this->output, "<info>Added or modified files:</info>");
       $table = $this->getHelperSet()->get('table');
       $table
         ->setHeaders($headers)
         ->setRows($rows)
         ->setCellHeaderFormat('<b>%s</b>')
         ->setCellRowFormat('%s');
-      $table->render($output);
+      $table->render($this->output);
     }
     else {
-      $this->out($output, "<comment>No added or modified files</comment>");
+      $this->out($this->output, "<comment>No added or modified files</comment>");
     }
 
     if ($rows_deleted_files) {
-      $this->out($output, "<fg=red;>Deleted files:</fg=red;>");
+      $this->out($this->output, "<fg=red;>Deleted files:</fg=red;>");
 
       $table = $this->getHelperSet()->get('table');
       $table
@@ -574,14 +591,14 @@ abstract class DeployOperation extends MediboardCommand {
         ->setRows($rows_deleted_files)
         ->setCellHeaderFormat('<b>%s</b>')
         ->setCellRowFormat('<fg=red;>%s</fg=red;>');
-      $table->render($output);
+      $table->render($this->output);
     }
     else {
-      $this->out($output, "<comment>No deleted files</comment>");
+      $this->out($this->output, "<comment>No deleted files</comment>");
     }
 
     if ($particular_files) {
-      $this->out($output, "<comment>Particular files:</comment>");
+      $this->out($this->output, "<comment>Particular files:</comment>");
 
       $table = $this->getHelperSet()->get('table');
       $table
@@ -589,21 +606,19 @@ abstract class DeployOperation extends MediboardCommand {
         ->setRows($particular_files)
         ->setCellHeaderFormat('<b>%s</b>')
         ->setCellRowFormat('<fg=red;>%s</fg=red;>');
-      $table->render($output);
+      $table->render($this->output);
     }
   }
 
   /**
    * Get locally modified files from SVN status XML output
    *
-   * @param string          $xml    XML output
-   * @param string          $path   Root
-   * @param OutputInterface $output Output
+   * @param string $xml XML output
    *
    * @return array
    * @throws Exception
    */
-  protected function getModifiedFilesByXML($xml, $path, OutputInterface $output) {
+  protected function getModifiedFilesByXML($xml) {
     $modified_files = array();
 
     $dom = new DOMDocument();
@@ -611,7 +626,7 @@ abstract class DeployOperation extends MediboardCommand {
       throw new Exception("Cannot parse XML.");
     }
 
-    $files_to_exclude = $this->getExcluded($path, $output);
+    $files_to_exclude = $this->getExcluded();
 
     $xpath = new DOMXPath($dom);
 
@@ -619,6 +634,7 @@ abstract class DeployOperation extends MediboardCommand {
     $nodes = $xpath->query("//entry[wc-status[@item != 'normal' and @item != 'external']]");
 
     if ($nodes) {
+      /** @var DOMElement $_node */
       foreach ($nodes as $_node) {
         $_path                  = $_node->getAttribute("path");
         $modified_files[$_path] = $_path;
@@ -667,33 +683,29 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Performs an SVN update
    *
-   * @param string          $path             Root
-   * @param OutputInterface $output           Output
-   * @param bool            $ignore_externals Does the externals have to been ignored?
-   *
    * @throws Exception
    */
-  protected function update($path, OutputInterface $output, $ignore_externals = false) {
-    $wc = new WorkingCopy($path);
+  protected function update() {
+    $wc = new WorkingCopy($this->path);
 
-    $this->out($output, "Checking SVN status...");
-    $out = $wc->status(".", $ignore_externals);
+    $this->out($this->output, "Checking SVN status...");
+    $out = $wc->status(".", $this->ignore_externals);
 
     if ($out) {
-      $this->out($output, "<info>SVN status checked</info>");
+      $this->out($this->output, "<info>SVN status checked</info>");
 
-      $modified_files = $this->getModifiedFilesByXML($out, $path, $output);
+      $modified_files = $this->getModifiedFilesByXML($out);
 
       if ($modified_files) {
-        $this->out($output, "<comment>These files are modified locally:</comment>");
+        $this->out($this->output, "<comment>These files are modified locally:</comment>");
 
         foreach ($modified_files as $_file) {
-          $output->writeln("- <fg=red;>$_file</fg=red;>");
+          $this->output->writeln("- <fg=red;>$_file</fg=red;>");
         }
 
         $dialog = $this->getHelperSet()->get('dialog');
         if (!$dialog->askConfirmation(
-          $output,
+          $this->output,
           '<question>In order to update, you need to revert these files, otherwise update will be skipped.
 Revert? [Y/n]</question> ',
           true
@@ -703,20 +715,20 @@ Revert? [Y/n]</question> ',
         }
 
         // Files have to be reverted
-        $this->out($output, "Reverting files...");
+        $this->out($this->output, "Reverting files...");
         // /!\ Long list may handle an exception
         $wc->revert($modified_files);
-        $this->out($output, "<info>Files reverted</info>");
+        $this->out($this->output, "<info>Files reverted</info>");
       }
     }
 
     // SVN update
-    $this->out($output, "SVN update in progress...");
-    $wc->update(array(), "HEAD", $ignore_externals);
-    $this->out($output, "<info>SVN update completed</info>\n");
+    $this->out($this->output, "SVN update in progress...");
+    $wc->update(array(), "HEAD");
+    $this->out($this->output, "<info>SVN update completed</info>\n");
 
     // SVN status file writing
-    $this->writeSVNStatusFile($wc, $output);
+    $this->writeSVNStatusFile();
   }
 
   /**
@@ -727,25 +739,24 @@ Revert? [Y/n]</question> ',
    *
    * @throws Exception
    */
-  protected function writeSVNStatusFile(WorkingCopy $wc, OutputInterface $output) {
-    $path   = $wc->getPath();
-    $status = "$path/tmp/svnstatus.txt";
-    $event  = "$path/tmp/monitevent.txt";
+  protected function writeSVNStatusFile() {
+    $status = "$this->path/tmp/svnstatus.txt";
+    $event  = "$this->path/tmp/monitevent.txt";
 
-    $this->out($output, "Checking SVN info...");
-    $out = $wc->info();
+    $this->out($this->output, "Checking SVN info...");
+    $out = $this->wc->info();
 
     if ($out) {
       $revision = $this->getRevisionByXML($out);
 
       if (!$revision) {
-        $this->out($output, "<error>Unable to check revision!</error>");
+        $this->out($this->output, "<error>Unable to check revision!</error>");
 
         return;
       }
 
       if (!is_readable($status)) {
-        $this->out($output, "<error>'$status' is not readable</error>");
+        $this->out($this->output, "<error>'$status' is not readable</error>");
       }
       else {
         $status_file = fopen($status, "w");
@@ -753,15 +764,15 @@ Revert? [Y/n]</question> ',
         fwrite($status_file, "Date: " . strftime("%Y-%m-%dT%H:%M:%S") . "\n");
 
         if (fclose($status_file)) {
-          $this->out($output, "<info>'$status' updated</info>");
+          $this->out($this->output, "<info>'$status' updated</info>");
         }
         else {
-          $this->out($output, "<error>Unable to write '$status'</error>");
+          $this->out($this->output, "<error>Unable to write '$status'</error>");
         }
       }
 
       if (!is_readable($event)) {
-        $this->out($output, "<error>'$event' is not readable</error>");
+        $this->out($this->output, "<error>'$event' is not readable</error>");
       }
       else {
         $event_file = fopen($event, "a+");
@@ -770,10 +781,10 @@ Revert? [Y/n]</question> ',
 
 
         if (fclose($event_file)) {
-          $this->out($output, "<info>'$event' updated</info>");
+          $this->out($this->output, "<info>'$event' updated</info>");
         }
         else {
-          $this->out($output, "<error>Unable to write '$event'</error>");
+          $this->out($this->output, "<error>Unable to write '$event'</error>");
         }
       }
     }
@@ -782,20 +793,45 @@ Revert? [Y/n]</question> ',
   /**
    * Get OS version
    *
-   * @param OutputInterface $output
-   *
    * @return array|bool
    */
-  protected function getOSVersion(OutputInterface $output) {
+  protected function getOSVersion() {
     $result = array();
     exec("cat /etc/issue", $result, $state);
 
     if ($state !== 0) {
-      $this->out($output, "<error>Unable to check OS version</error>");
+      $this->out($this->output, "<error>Unable to check OS version</error>");
 
       return false;
     }
 
     return $result;
+  }
+
+  protected function acquire() {
+    $this->out($this->output, "Lock acquisition...");
+    $lock_key = 'auto-update';
+    $this->initLockFile($this->path, $lock_key);
+
+    return $this->acquireLockFile();
+  }
+
+  protected function release() {
+    $this->out($this->output, "Lock releasing...");
+
+    $this->elapsed_time = (microtime(true) - $this->start_time);
+
+    return $this->releaseLockFile();
+  }
+
+  /**
+   * Performs an SVN cleanup
+   */
+  protected function doSVNCleanup() {
+    $this->out($this->output, "Performing SVN cleanup...");
+
+    $this->wc->cleanup($this->path);
+
+    $this->out($this->output, "SVN cleanup performed");
   }
 }
