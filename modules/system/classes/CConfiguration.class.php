@@ -951,30 +951,4 @@ class CConfiguration extends CMbMetaObject {
 
     return $specs[$feature];
   }
-
-  /**
-   * @see parent::store()
-   */
-  function store() {
-    if ($msg = parent::store()) {
-      return $msg;
-    }
-
-    self::clearDataCache();
-
-    return null;
-  }
-
-  /**
-   * @see parent::delete()
-   */
-  function delete() {
-    if ($msg = parent::delete()) {
-      return $msg;
-    }
-
-    self::clearDataCache();
-
-    return null;
-  }
 }

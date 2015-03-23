@@ -24,6 +24,8 @@ $configs = stripslashes_deep($configs);
 
 $messages = CConfiguration::setConfigs($configs, $object);
 
+CConfiguration::clearDataCache();
+
 foreach ($messages as $msg) {
   CAppUI::setMsg($msg, UI_MSG_WARNING);
 }
