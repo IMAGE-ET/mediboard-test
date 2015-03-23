@@ -99,12 +99,16 @@ $fwdrefs_tree = array(
   ),
   "CSejour" => array(
     "praticien_id",
+    "service_id",
     "group_id",
     "grossesse_id",
   ),
   "CGrossesse" => array(
     "group_id",
     "parturiente_id",
+  ),
+  "CMediusers" => array(
+    "user_id",
   ),
 );
 
@@ -188,6 +192,7 @@ foreach ($patients as $_patient) {
       }
     };
 
+    $export->empty_values = false;
     $export->setObjectCallback($callback);
     $export->setForwardRefsTree($fwdrefs_tree);
 

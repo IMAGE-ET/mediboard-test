@@ -37,6 +37,14 @@
 
     var formPatients = getForm("export-patients-form");
     $V(formPatients["praticien_id[]"], list);
+
+    $V($("praticien_ids_view"), list.join(","));
+  };
+
+  checkDirectory = function(input) {
+    var url = new Url("patients", "ajax_check_export_dir");
+    url.addParam("directory", $V(input));
+    url.requestUpdate("directory-check");
   };
 
   Main.add(function(){
@@ -66,14 +74,19 @@
     <td rowspan="2">
       <select id="praticien_ids" multiple size="40" onclick="updatePraticienCount()">
         {{foreach from=$praticiens item=_prat}}
-          <option value="{{$_prat->_id}}" {{if in_array($_prat->_id,$praticien_id)}}selected{{/if}}>{{$_prat}}</option>
+          <option value="{{$_prat->_id}}" {{if in_array($_prat->_id,$praticien_id)}}selected{{/if}}>
+            #{{$_prat->_id|pad:5:0}} -
+            {{$_prat}}
+          </option>
         {{/foreach}}
       </select>
+      <input type="text" id="praticien_ids_view" size="30" onfocus="this.select()" />
+      <button class="up notext" onclick="$V('praticien_ids', $V('praticien_ids_view').split(/,/))"></button>
     </td>
 
     <td>
       <div id="export-sejours" style="display: none;">
-        <form name="export-sejours-form" method="post" onsubmit="return onSubmitFormAjax(this, {useDollarV: true}, 'export-log')">
+        <form name="export-sejours-form" method="post" onsubmit="return onSubmitFormAjax(this, {useDollarV: true}, 'export-log-sejours')">
           <input type="hidden" name="m" value="patients" />
           <input type="hidden" name="dosql" value="do_make_sejour_archives" />
 
@@ -123,11 +136,12 @@
             </tr>
           </table>
 
+          <div id="export-log-sejours"></div>
         </form>
       </div>
 
       <div id="export-patients" style="display: none;">
-        <form name="export-patients-form" method="post" onsubmit="return onSubmitFormAjax(this, {useDollarV: true}, 'export-log')">
+        <form name="export-patients-form" method="post" onsubmit="return onSubmitFormAjax(this, {useDollarV: true}, 'export-log-patients')">
           <input type="hidden" name="m" value="patients" />
           <input type="hidden" name="dosql" value="do_export_patients" />
 
@@ -143,7 +157,8 @@
                 <label for="directory">Répertoire cible</label>
               </th>
               <td colspan="5">
-                <input type="text" name="directory" value="{{$directory}}" size="60" />
+                <input type="text" name="directory" value="{{$directory}}" size="60" onchange="checkDirectory(this)" />
+                <div id="directory-check"></div>
               </td>
             </tr>
 
@@ -178,9 +193,9 @@
           </table>
 
         </form>
-      </div>
 
-      <div id="export-log"></div>
+        <div id="export-log-patients"></div>
+      </div>
     </td>
   </tr>
 </table>

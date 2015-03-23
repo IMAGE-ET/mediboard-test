@@ -79,14 +79,14 @@ foreach ($list_elements as $_list_element) {
   $_elements = $import->getElementsByFwdRef("CExListItem", "list_id", $_id);
   $_elements_values = array();
   foreach ($_elements as $_element) {
-    $_elements_values[] = $import->getValuesFromElement($_element);
+    $_elements_values[] = CMbXMLObjectImport::getValuesFromElement($_element);
   }
   
   /** @var CExList[] $_similar */
   $_similar = $import->getSimilarFromElement($_list_element);
   
   $lists[$_list_element->getAttribute("id")] = array(
-    "values"   => $import->getValuesFromElement($_list_element),
+    "values"   => CMbXMLObjectImport::getValuesFromElement($_list_element),
     "similar"  => $_similar,
     "elements" => $_elements_values,
   );
@@ -105,11 +105,11 @@ $all_lists = $list->loadGroupList(null, "name");
 $concept_elements = $import->getElementsbyClass("CExConcept");
 $concepts = array();
 foreach ($concept_elements as $_concept_element) {
-  $_values = $import->getValuesFromElement($_concept_element);
+  $_values = CMbXMLObjectImport::getValuesFromElement($_concept_element);
   $_spec = explode(" ", $_values["prop"]);
   
   $concepts[$_concept_element->getAttribute("id")] = array(
-    "values"    => $import->getValuesFromElement($_concept_element),
+    "values"    => CMbXMLObjectImport::getValuesFromElement($_concept_element),
     "similar"   => $import->getSimilarFromElement($_concept_element),
     "spec_type" => $_spec[0],
   );

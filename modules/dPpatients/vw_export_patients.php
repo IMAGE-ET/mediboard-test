@@ -21,16 +21,14 @@ $directory    = CValue::postOrSession("directory");
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
 
-$smarty = new CSmartyDP();
-
 if (!$praticien_id) {
   $praticien_id = array();
 }
 
+$smarty = new CSmartyDP();
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("step", $step);
 $smarty->assign("start", $start);
 $smarty->assign("directory", $directory);
-
 $smarty->display("vw_export_patients.tpl");
