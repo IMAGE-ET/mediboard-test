@@ -70,6 +70,13 @@ if ($sejour->patient_id == $patient->_id) {
     // Chargement du séjour de la maman
     $sejour_maman = $naissance_enf->loadRefSejourMaman();
     if ($sejour_maman && $sejour_maman->_id) {
+      $sejour_maman->loadRefGrossesse();
+      $sejour_maman->_ref_grossesse->canDo();
+      $grossesse = $sejour_maman->_ref_grossesse;
+
+      $grossesse->loadLastAllaitement();
+      $grossesse->loadFwdRef("group_id");
+
       $sejour_maman->canDo();
       $sejour_maman->_ref_patient = $grossesse->loadRefParturiente();
       $sejour_maman->loadRefUFHebergement();
@@ -77,12 +84,6 @@ if ($sejour->patient_id == $patient->_id) {
       $sejour_maman->loadRefUFSoins();
       $sejour_maman->loadRefService();
       $sejour_maman->loadRefsNotes();
-      $sejour_maman->loadRefGrossesse();
-
-      $sejour_maman->_ref_grossesse->canDo();
-      $grossesse = $sejour_maman->_ref_grossesse;
-      $grossesse->loadLastAllaitement();
-      $grossesse->loadFwdRef("group_id");
 
       foreach ( $grossesse->loadRefsNaissances() as $_naissance) {
         $_naissance->loadRefSejourEnfant();
