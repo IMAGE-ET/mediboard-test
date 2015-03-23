@@ -175,16 +175,34 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   }
 
   /**
+   * Tells if we are under Windows
+   *
+   * @return bool
+   */
+  protected static function isWindows(){
+    return stripos(PHP_OS, "WIN") === 0;
+  }
+
+  /**
    * @see parent::render()
    */
   function render() {
-    $root_dir = CAppUI::conf("root_dir");
-
-    $arch = CAppUI::conf("dPcompteRendu CCompteRendu arch_wkhtmltopdf");
-    if ($arch != "i386" && $arch != "amd64") {
-      $arch = "i386";
+    if (self::isWindows()) {
+      $bin = "wkhtmltopdf.exe";
     }
-    $command = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-$arch -q ";
+    else {
+      $root_dir = CAppUI::conf("root_dir");
+      $arch = CAppUI::conf("dPcompteRendu CCompteRendu arch_wkhtmltopdf");
+
+      if ($arch != "i386" && $arch != "amd64") {
+        $arch = "i386";
+      }
+
+      $bin = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-$arch";
+    }
+
+    $command = "$bin -q ";
+
     $result = tempnam("./tmp", "result");
     $options = "--print-media-type ";
 
@@ -219,7 +237,11 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $options .= "--page-width ". escapeshellarg($width). " --page-height ". escapeshellarg($height)." ";
     }
 
-    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result) . " 2> /dev/null";
+    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result);
+
+    if (!self::isWindows()) {
+      $options .= " 2> /dev/null";
+    }
 
     exec($command.$options);
 
