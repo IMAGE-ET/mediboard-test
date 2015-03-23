@@ -1,19 +1,17 @@
-<script type="text/javascript">
-
-newExam = function(sAction, consultation_id) {
-  if (sAction) {
-    var url = new Url;
-    url.setModuleAction("dPcabinet", sAction);
-    url.addParam("consultation_id", consultation_id);
-    url.popup(900, 600, "Examen");  
-  }
-};
-printFiche = function(dossier_anesth_id) {
-  var url = new Url("dPcabinet", "print_fiche"); 
-  url.addParam("dossier_anesth_id", dossier_anesth_id);
-  url.addParam("print", true);
-  url.popup(700, 500, "printFiche");
-}
+<script>
+  newExam = function(sAction, consultation_id) {
+    if (sAction) {
+      var url = new Url("cabinet", sAction);
+      url.addParam("consultation_id", consultation_id);
+      url.popup(900, 600, "Examen");
+    }
+  };
+  printFiche = function(dossier_anesth_id) {
+    var url = new Url("cabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.addParam("print", true);
+    url.popup(700, 500, "printFiche");
+  };
 </script>
 
 <table class="form">
@@ -54,9 +52,6 @@ printFiche = function(dossier_anesth_id) {
       <i>{{$object->rques|nl2br}}</i>
     </td>
   </tr>
-  
-  
-  
   <tr>
     <td class="text">
       <strong>Examens :</strong>
@@ -66,6 +61,13 @@ printFiche = function(dossier_anesth_id) {
       <strong>Traitement :</strong>
       <i>{{$object->traitement|nl2br}}</i>
     </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>Au total :</strong>
+      <i>{{$object->conclusion|nl2br}}</i>
+    </td>
+    <td></td>
   </tr>
   {{if $object->_ref_examaudio->examaudio_id}}
   <tr>
