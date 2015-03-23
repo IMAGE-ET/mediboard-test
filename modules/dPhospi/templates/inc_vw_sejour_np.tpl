@@ -18,6 +18,10 @@
     </a>
   </td>
 
+  {{if "soins dossier_soins show_ampoule_patient"|conf:"CGroups-$g"}}
+    <td></td>
+  {{/if}}
+
   <td style="padding: 1px;">
     <div class="imeds_alert" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
       {{if $isImedsInstalled}}
