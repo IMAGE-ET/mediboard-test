@@ -18,6 +18,7 @@ $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient
 $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers");
 $filter->_mode_reglement = CValue::getOrSession("mode", 0);
 $filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
+$all_group_money  = CValue::getOrSession("_all_group_money" , 1);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if ($filter->_type_affichage == "complete") {
@@ -107,7 +108,12 @@ $where["patient_id"] = "IS NOT NULL";
 $order = "ouverture, praticien_id";
 
 $facture = new CFactureCabinet();
-$listFactures = $facture->loadGroupList($where, $order, null, null, $ljoin);
+if ($all_group_money) {
+  $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
+}
+else {
+ $listFactures = $facture->loadGroupList($where, $order, null, null, $ljoin);
+}
 
 $listPlages = array();
 CMbObject::massLoadFwdRef($listFactures, "praticien_id");
@@ -116,7 +122,7 @@ CMbObject::massCountBackRefs($listFactures, "reglements");
 CMbObject::massCountBackRefs($listFactures, "notes");
 
 foreach ($listFactures as $_facture) {
-  /** @var CFacture $_facture */
+  /* @var CFactureCabinet $_facture */
   $_facture->loadRefPatient();
   $_facture->loadRefPraticien();
   $_facture->loadRefsConsultation();

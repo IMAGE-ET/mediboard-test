@@ -184,6 +184,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_etat_reglement_patient;
   public $_etat_reglement_tiers;
   public $_type_affichage;
+  public $_all_group_money;
+  public $_all_group_compta;
   public $_telephone;
   public $_coordonnees;
   public $_plages_vides;
@@ -333,6 +335,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["_date_min"]         = "date";
     $props["_date_max"]         = "date moreEquals|_date_min";
     $props["_type_affichage"]   = "enum list|complete|totaux";
+    $props["_all_group_compta"] = "bool default|1";
+    $props["_all_group_money"]  = "bool default|1";
     $props["_telephone"]        = "bool default|0";
     $props["_coordonnees"]      = "bool default|0";
     $props["_plages_vides"]     = "bool default|1";

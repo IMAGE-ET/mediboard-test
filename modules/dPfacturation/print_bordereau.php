@@ -12,6 +12,7 @@
 CCanDo::checkEdit();
 $date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $date_max = CValue::getOrSession("_date_max", CMbDT::date());
+$all_group_compta = CValue::getOrSession("_all_group_compta" , 1);
 $prat = CValue::get("chir");
 
 // Chargement du praticien
@@ -41,7 +42,9 @@ $ljoin = array();
 $ljoin["facture_cabinet"] = "facture_cabinet.facture_id = reglement.object_id";
 $where["object_class"] = " = 'CFactureCabinet'";
 $where['facture_cabinet.praticien_id'] = "= '$praticien->_id'";
-$where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+if (!$all_group_compta) {
+  $where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+}
 $where['reglement.mode'] = "= 'cheque' ";
 $where['reglement.date'] = "BETWEEN '$date_min' AND '$date_max 23:59:59' ";
 $order = "reglement.date ASC";

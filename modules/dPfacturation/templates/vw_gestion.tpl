@@ -27,6 +27,8 @@
     url.addElement(oFormcompta._type_affichage);
     url.addElement(oFormcompta.typeVue);
     url.addParam("cs", $V(oFormcompta.cs));
+    url.addParam("_all_group_money", $V(oFormcompta._all_group_money));
+    url.addParam("_all_group_compta", $V(oFormcompta._all_group_compta));
     if(compta == 1){
       url.popup(950, 600, "Rapport Comptabilité");
     } else {
@@ -150,6 +152,12 @@
     <td>{{mb_field object=$filter field="_etat_reglement_tiers" emptyLabel="All" canNull="true"}}</td>
     <th>{{mb_label object=$filter field="_type_affichage"}}</th>
     <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$filter field="_all_group_money"}}</th>
+    <td>{{mb_field object=$filter field="_all_group_money" typeEnum=checkbox}}</td>
+    <th>{{mb_label object=$filter field="_all_group_compta"}}</th>
+    <td>{{mb_field object=$filter field="_all_group_compta" typeEnum=checkbox}}</td>
   </tr>
   <tr>
     <td class="button" colspan="2">

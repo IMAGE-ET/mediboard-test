@@ -15,7 +15,8 @@ $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_mode_reglement = CValue::getOrSession("mode", 0);
-$filter->_type_affichage  = CValue::getOrSession("_type_affichage" , 1);
+$filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
+$all_group_compta  = CValue::getOrSession("_all_group_compta" , 1);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if ($filter->_type_affichage == "complete") {
@@ -41,7 +42,9 @@ $listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 // Chargement des règlements via les factures
 $ljoin["facture_cabinet"] = "reglement.object_id = facture_cabinet.facture_id";
-$where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+if (!$all_group_compta) {
+  $where["facture_cabinet.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+}
 $where["facture_cabinet.praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $where["reglement.object_class"] = " = 'CFactureCabinet'";
 
