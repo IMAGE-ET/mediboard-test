@@ -48,7 +48,10 @@ $services = $service->loadGroupList($where);
 
 // Récupération de la liste des secteurs
 $secteur = new CSecteur();
-$secteurs = $secteur->loadList(null, "nom");
+$group = CGroups::loadCurrent();
+$where = array();
+$where["group_id"] = "= $group->_id";
+$secteurs = $secteur->loadList($where, "nom");
 
 // Récupération de la liste des praticiens
 $prat = CMediusers::get();

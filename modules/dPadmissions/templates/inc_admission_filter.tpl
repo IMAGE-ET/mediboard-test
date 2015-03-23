@@ -22,6 +22,7 @@
         <table class="tbl layout">
           <tr>
             <td class="narrow">
+              <br/r>
               <select name="period" onchange="reloadAdmission();">
                 <option value=""      {{if !$period          }}selected{{/if}}>&mdash; {{tr}}dPAdmission.admission all the day{{/tr}}</option>
                 <option value="matin" {{if $period == "matin"}}selected{{/if}}>{{tr}}dPAdmission.admission morning{{/tr}}</option>
