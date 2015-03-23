@@ -334,10 +334,30 @@ class CConfiguration extends CMbMetaObject {
    * @return void
    */
   static function refreshDataCache(){
-    self::buildAllConfig();
-
     $mutex = new CMbFileMutex("config-build");
     $mutex->acquire(10);
+
+    // If cache was built by another thread
+    if (SHM::exists("config-values-__HOSTS__")) {
+      $mutex->release();
+
+      $hosts_shm = SHM::get("config-values-__HOSTS__");
+      $hosts = $hosts_shm["content"];
+
+      $values = array();
+      foreach ($hosts as $_host) {
+        $_host_value = SHM::get("config-values-$_host");
+        $values[$_host] = $_host_value["content"];
+      }
+
+      self::$values = $values;
+      self::$hosts  = $hosts;
+
+      self::$dirty = false;
+      return;
+    }
+
+    self::buildAllConfig();
 
     $datetime = strftime(CMbDT::ISO_DATETIME);
 
