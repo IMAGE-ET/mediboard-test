@@ -353,11 +353,13 @@ abstract class DeployOperation extends MediboardCommand {
    * Ask and validate operation by typing MASTER release_code
    */
   protected function confirmOperation() {
+    $that = $this;
+
     $bundle = $this->dialog->askAndValidate(
       $this->output,
       "\nConfirm operation by typing MASTER release code: ",
-      function ($answer) {
-        if ($this->master_branch !== trim($answer)) {
+      function ($answer) use ($that) {
+        if ($that->master_branch !== trim($answer)) {
           throw new \RunTimeException("Wrong release code: $answer");
         }
 
