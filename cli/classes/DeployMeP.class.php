@@ -87,14 +87,11 @@ EOT
 
     $this->showHeader();
 
-    $path = $input->getOption('path');
-
-    if (!is_dir($path)) {
-      throw new InvalidArgumentException("'$path' is not a valid directory");
+    if (!is_dir($this->path)) {
+      throw new InvalidArgumentException("$this->path is not a valid directory.");
     }
 
-    $this->getMasterBranch();
-    if (!$this->master_branch) {
+    if (!$this->getMasterBranch()) {
       return;
     }
 
