@@ -504,11 +504,17 @@ class DeployMaJAuto extends DeployMaj {
     $updated_instances = array();
 
     foreach ($this->all_instances as $_instance) {
-      $all_instances[] = $_instance['server_id'] . '-' . $_instance['id'];
+      $all_instances[] = array(
+        'server_id'   => $_instance['server_id'],
+        'instance_id' => $_instance['id']
+      );
 
       foreach ($this->instances_to_perform as $_instance_to_perform) {
         if ($_instance_to_perform == $_instance['path']) {
-          $updated_instances[] = $_instance['server_id'] . '-' . $_instance['id'];
+          $updated_instances[] = array(
+            'server_id'   => $_instance['server_id'],
+            'instance_id' => $_instance['id']
+          );
           break;
         }
       }
