@@ -18,23 +18,26 @@
     var form = getForm('Edit-CFacture');
     var type_facture  = form.type_facture.value;
 
+    $('assurances').hide();
+    $('reference_accident').hide();
+    $('assur_accident').hide();
+    $('assur_maladie').hide();
+
     if (type_facture == 'accident') {
       $('assurances').show();
       $('reference_accident').show();
       $('assur_accident').show();
-      $('assur_maladie').hide();
       form.assurance_maladie.value  = '';
     }
-    if (type_facture == 'maladie') {
+    else if (type_facture == 'maladie') {
       $('assurances').show();
-      $('reference_accident').hide();
-      $('assur_accident').hide();
       $('assur_maladie').show();
+      if (form.statut_pro.value == 'invalide') {
+        $('reference_accident').show();
+      }
       form.assurance_accident.value = '';
     }
-    if (type_facture == 'esthetique') {
-      $('assurances').hide();
-      $('reference_accident').hide();
+    else if (type_facture == 'esthetique') {
       form.assurance_maladie.value  = '';
       form.assurance_accident.value = '';
     }

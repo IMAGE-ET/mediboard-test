@@ -61,6 +61,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_montant_dh = 0.0;
   //Champ à supprimer
   public $_montant_total;
+  public $_no_round = false;
 
   public $_total_tarmed;
   public $_total_caisse;
@@ -897,8 +898,9 @@ class CFacture extends CMbObject implements IPatientRelated {
       $this->_autre_tarmed = 0;
       $this->loadTotaux();
 
-      $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, 1);
-      $this->_total_caisse = round($this->_total_caisse, 1);
+      $round = $this->_no_round ? 2 : 1 ;
+      $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, $round);
+      $this->_total_caisse = round($this->_total_caisse, $round);
 
       if ($montant_prem < 0) {
         $montant_prem = 0;
@@ -910,8 +912,8 @@ class CFacture extends CMbObject implements IPatientRelated {
         $this->_montant_factures_caisse[1] = $this->_total_caisse;
       }
 
-      $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, 1);
-      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
+      $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, $round);
+      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, $round);
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
       }

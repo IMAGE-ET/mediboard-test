@@ -159,7 +159,7 @@
   </tr>
 {{/if}}
 
-{{if $facture->type_facture == "accident"}}
+{{if $facture->type_facture == "accident" || ($facture->type_facture == "maladie" && $facture->statut_pro == "invalide")}}
   <tr>
     <td colspan="2">
       <form name="ref_accident" method="post" action="" onsubmit="return onSubmitFormAjax(this);" style="max-width:100px;">
