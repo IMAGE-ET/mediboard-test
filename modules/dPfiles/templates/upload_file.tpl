@@ -90,7 +90,10 @@
               ),
               DOM.td({},
                 dataInput = DOM.input({type: "hidden", name: "formdatauri["+count_datauri+"]"}),
-                img       = DOM.img({src: "", style: "max-height: 120px; max-width: 500px;"})
+                img       = DOM.img({
+                  src: "",
+                  style: "max-height: 120px; max-width: 500px; border: 1px solid #333; background: white;"
+                })
               )
             );
 
