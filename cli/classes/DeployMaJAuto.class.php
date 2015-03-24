@@ -84,8 +84,7 @@ class DeployMaJAuto extends DeployMaj {
       $this->errorMsg("$this->path is not a valid directory", self::STATUS_ERROR, false);
     }
 
-    $current_branch = $this->getMasterBranch();
-    if (!$current_branch) {
+    if (!$this->getMasterBranch()) {
       $this->errorMsg('Exiting.', self::STATUS_ERROR, false);
     }
 
@@ -135,7 +134,7 @@ class DeployMaJAuto extends DeployMaj {
     try {
       $this->doSVNCleanup();
       $this->doSVNRevert();
-      //$this->doSVNUpdate();
+      $this->doSVNUpdate();
     }
     catch (Exception $e) {
       $this->errorMsg($e, self::STATUS_ERROR);
@@ -155,7 +154,7 @@ class DeployMaJAuto extends DeployMaj {
 
     $this->out($this->output, "Checking branches...");
     try {
-      $instances_with_branch = $this->checkBranches($current_branch, $this->instances_to_update, $this->output);
+      $instances_with_branch = $this->checkBranches($this->instances_to_update);
     }
     catch (Exception $e) {
       $this->errorMsg($e, self::STATUS_ERROR);
@@ -190,6 +189,7 @@ class DeployMaJAuto extends DeployMaj {
       touch($clear_cache_file);
       chmod($clear_cache_file, 0755);
 
+      // Adding flag file to RSYNC in order to propage it
       $files[] = array(
         'file' => $clear_cache_file,
         'dest' => 'tmp'
@@ -382,7 +382,7 @@ class DeployMaJAuto extends DeployMaj {
 
         try {
           // /!\ Long list may handle an exception
-          //$wc->revert($modified_files);
+          $this->wc->revert($modified_files);
         }
         catch (Exception $e) {
           $this->errorMsg($e, self::STATUS_ERROR);
