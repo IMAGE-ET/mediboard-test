@@ -1,11 +1,13 @@
 <script>
   showLoading = function(){
     var systemMsg = $('systemMsg');
-    systemMsg.update('\<div class=\'loading\'\>{{tr}}Loading in progress{{/tr}}\</div\>');
+    systemMsg.update(DOM.div({className: "loading"}, "{{tr}}Loading in progress{{/tr}}"));
     systemMsg.show();
-  }
+  };
 
   var count_files = 0;
+  var count_datauri = 0;
+
   // Les images ne sont pas converties en PDF,
   // donc le bouton de fusion reste grisé tant que l'on rajoute une image
   var extensions = ["bmp", "gif", "jpeg", "jpg", "png"];
@@ -26,20 +28,97 @@
       }
     {{/if}}
 
-    count_files ++;
-    // Incrément du rowspan pour le th du label
-    var label = $("labelfile-{{$object->_id}}");
-    label.writeAttribute("rowspan", count_files + 1);
+    count_files++;
 
     // Ajout d'un input pour le fichier suivant
     // <input type="file" name="formfile[0]" size="0" onchange="addFile(this); this.onchange=''"/>
-    var tr = elt.up().up().up();
-    tr.insert(
-      DOM.tr( {},
-        DOM.td({colspan: 4},
-          DOM.input({type: "file", name: "formfile["+count_files + "]", size: 0, onchange: "addFile(this); this.onchange=''"})
-    )));
-  }
+    var tr = DOM.tr({},
+      DOM.td({colSpan: "2"},
+        DOM.input({type: "file", name: "formfile["+count_files+"]", size: 0, onchange: "addFile(this); this.onchange=''"})
+      )
+    );
+    $("files-list").insert(tr);
+  };
+
+  Main.add(function(){
+    if (window.clipboardData || Prototype.Browser.Gecko) {
+      return;
+    }
+
+    $("image-paster").show();
+
+    var form = getForm("uploadFrm");
+    var matchType = /image\/(.*)/i;
+    form.pastearea.observe("paste", function(e){
+      var items = [];
+
+      if (e.clipboardData) {
+        items = e.clipboardData.items || e.clipboardData.files || [];
+      }
+
+      var found = false;
+      for (var i = 0, l = items.length; i < l; i++) {
+        var item = items[i];
+        var matches = item.type.match(matchType);
+        if (matches) {
+          found = true;
+
+          var file = item.getAsFile();
+          var reader = new FileReader();
+
+          reader.onload = function(evt) {
+            var img, dataInput, nameInput;
+            var id = form.name+"_formdatauri_name["+count_datauri+"]";
+
+            var tr = DOM.tr({},
+              DOM.td({className: "narrow"},
+                DOM.label(
+                  {
+                    htmlFor: "formdatauri_name["+count_datauri+"]",
+                    id: "labelFor_"+id
+                  },
+                  "Nom du fichier "
+                ),
+                DOM.br({}),
+                nameInput = DOM.input({
+                  type: "text",
+                  name: "formdatauri_name["+count_datauri+"]",
+                  id: id,
+                  className: "str notNull",
+                  value: "Image "+(count_datauri+1)+"."+matches[1]
+                })
+              ),
+              DOM.td({},
+                dataInput = DOM.input({type: "hidden", name: "formdatauri["+count_datauri+"]"}),
+                img       = DOM.img({src: "", style: "max-height: 120px; max-width: 500px;"})
+              )
+            );
+
+            img.src = evt.target.result;
+            $V(dataInput, evt.target.result);
+
+            $("images-list").insert(tr);
+            count_datauri++;
+
+            nameInput.tryFocus();
+          };
+
+          reader.readAsDataURL(file);
+          break;
+        }
+      }
+
+      var message = $("paste-message");
+
+      if (!found) {
+        Event.stop(e);
+        message.show();
+      }
+      else {
+        message.hide();
+      }
+    });
+  });
 </script>
 
 <iframe name="upload-{{$object->_guid}}" id="upload-{{$object->_guid}}" style="width: 1px; height: 1px;"></iframe>
@@ -64,14 +143,14 @@
 
   <table class="form">
     <tr>
-      <th class="title" colspan="9">
+      <th class="title" colspan="6">
         Ajouter un fichier {{if $named}}'{{$_rename}}'{{/if}} pour
         <br/>'{{$object->_view}}'
       </th>
     </tr>
 
     <tr>
-      <td class="button" colspan="9">
+      <td class="button" colspan="6">
         <div class="small-info">
           <div>{{tr}}config-dPfiles-upload_max_filesize{{/tr}} : <strong>{{$conf.dPfiles.upload_max_filesize}}</strong></div>
           <div>{{tr}}config-dPfiles-extensions_yoplet  {{/tr}} : <strong>{{$conf.dPfiles.extensions_yoplet  }}</strong></div>
@@ -81,11 +160,11 @@
 
     {{if !$named}}
       <tr>
-        <th>
+        <th style="width: 120px;">
           {{mb_label object=$file field="file_category_id" typeEnum=checkbox}}
         </th>
         <td>
-          <select name="_file_category_id">
+          <select name="_file_category_id" style="width: 15em;">
             <option value="" {{if !$file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
             {{foreach from=$listCategory item=curr_cat}}
             <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $file_category_id}}selected="selected"{{/if}} >
@@ -106,7 +185,7 @@
         <td>
           {{mb_field object=$file field="language"}}
         </td>
-        </tr>
+      </tr>
       <tr>
         {{if "cda"|module_active}}
           <th>
@@ -115,36 +194,58 @@
           <td>
             {{mb_field object=$file field="type_doc" emptyLabel="Choose" style="width: 15em;"}}
           </td>
+        {{else}}
+          <td colspan="2"></td>
         {{/if}}
+
         <th>
           {{mb_label object=$file field="private" typeEnum=checkbox}}
         </th>
         <td>
           {{mb_field object=$file field="private" typeEnum=checkbox}}
         </td>
+
         <td colspan="2"></td>
       </tr>
     {{/if}}
-  
+
     <tr>
-      <td colspan="9">
+      <th colspan="6" class="category">{{tr}}CFile{{/tr}}</th>
+    </tr>
+    <tr>
+      <td colspan="6">
         <div style="max-height: 220px; overflow: auto; width: 100%;">
-        <table class="form">
-          <tr>
-            <th id="labelfile-{{$object->_id}}">
-              <label>{{tr}}CFile{{/tr}}</label>
-            </th>
-            <td colspan="6">
-              <input type="file" name="formfile[0]" size="0"
-                {{if !$named}}
-                  onchange="addFile(this); this.onchange=''"
-                {{/if}} />
-            </td>
-          </tr>
-        </table>
+          <table class="main tbl">
+            <tbody id="files-list">
+              <tr>
+                <td colspan="2">
+                  <input type="file" name="formfile[0]" size="30" {{if !$named}} onchange="addFile(this); this.onchange=''" {{/if}} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </td>
     </tr>
+
+    <tbody id="image-paster" style="display: none;">
+      <tr>
+        <th colspan="6" class="category">{{tr}}common-msg-Image paste{{/tr}}</th>
+      </tr>
+      <tr>
+        <td colspan="6">
+          <input type="text" name="pastearea" style="width: 200px;" onkeypress="return false"
+                 placeholder="{{tr}}common-msg-Paste your image here{{/tr}}" />
+          <span id="paste-message" class="warning" style="display: none;">{{tr}}common-msg-Please paste a valid image{{/tr}}</span>
+  
+          <div style="max-height: 220px; overflow: auto; width: 100%;">
+            <table class="main tbl">
+              <tbody id="images-list"></tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </tbody>
 
     <tr>
       <td class="button" colspan="9">

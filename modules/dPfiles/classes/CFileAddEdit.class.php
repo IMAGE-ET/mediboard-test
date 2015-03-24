@@ -29,6 +29,21 @@ class CFileAddEdit extends CDoObjectAddEdit {
     }
   }
 
+  function parseDataUri($data_uri) {
+    if (!preg_match('/^data:(?P<mime>[a-z0-9\/+-.]+)(;charset=(?P<charset>[a-z0-9-])+)?(?P<base64>;base64)?\,(?P<data>.*)?/i', $data_uri, $match)) {
+      return false;
+    }
+
+    $match['data'] = rawurldecode($match['data']);
+    $result = array(
+      'charset' => $match['charset'] ? $match['charset'] : 'US-ASCII',
+      'mime'    => $match['mime'] ? $match['mime'] : 'text/plain',
+      'data'    => $match['base64'] ? base64_decode($match['data']) : $match['data'],
+    );
+
+    return $result;
+  }
+
   /**
    * @see parent::doStore()
    */
@@ -78,16 +93,17 @@ class CFileAddEdit extends CDoObjectAddEdit {
       return parent::doStore();
     }
 
+    $_file_category_id = CValue::post("_file_category_id");
+    $language = CValue::post("language");
+    $type_doc = CValue::post("type_doc");
+    $named    = CValue::post("named");
+    $rename   = CValue::post("_rename");
+
+    CValue::setSession("_rename", $rename);
+
     if (isset($_FILES["formfile"])) {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
-      $_file_category_id = CValue::post("_file_category_id");
-      $language = CValue::post("language");
-      $type_doc = CValue::post("type_doc");
-      $named    = CValue::post("named");
-      $rename   = CValue::post("_rename");
-
-      CValue::setSession("_rename", $rename);
 
       foreach ($upload["error"] as $fileNumber => $etatFile) {
         if (!$named) {
@@ -96,6 +112,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
         if ($upload["name"][$fileNumber]) {
           $aFiles[] = array(
+            "_mode"            => "file",
             "name"             => $upload["name"][$fileNumber],
             "type"             => CMbPath::guessMimeType($upload["name"][$fileNumber]),
             "tmp_name"         => $upload["tmp_name"][$fileNumber],
@@ -108,6 +125,48 @@ class CFileAddEdit extends CDoObjectAddEdit {
             "object_class"     => CValue::post("object_class"),
             "_rename"          => $rename
           );
+        }
+      }
+
+      // Pasted images, via Data uri
+      if (!empty($_POST["formdatauri"])) {
+        $aFiles     = array();
+        $data_uris  = $_POST["formdatauri"];
+        $data_names = $_POST["formdatauri_name"];
+
+        foreach ($data_uris as $fileNumber => $fileContent) {
+          $parsed = $this->parseDataUri($fileContent);
+          $_name = $data_names[$fileNumber];
+
+          if (!$named) {
+            $ext = strrchr($_name, '.');
+            if ($ext === false) {
+              $ext = ".".substr(strrchr($parsed["mime"], '/'), 1);
+              $_name .= $ext;
+            }
+
+            $rename = $rename ? $rename . $ext : "";
+          }
+
+          $temp = tempnam(sys_get_temp_dir(), "up_");
+          file_put_contents($temp, $parsed["data"]);
+
+          if ($data_names[$fileNumber]) {
+            $aFiles[] = array(
+              "_mode"            => "datauri",
+              "name"             => $_name,
+              "type"             => $parsed["mime"],
+              "tmp_name"         => $temp,
+              "error"            => 0,
+              "size"             => strlen($parsed["data"]),
+              "language"         => $language,
+              "type_doc"         => $type_doc,
+              "file_category_id" => $_file_category_id,
+              "object_id"        => CValue::post("object_id"),
+              "object_class"     => CValue::post("object_class"),
+              "_rename"          => $rename
+            );
+          }
         }
       }
 
@@ -231,7 +290,15 @@ class CFileAddEdit extends CDoObjectAddEdit {
           $obj->doc_size = $file["size"];
           $obj->fillFields();
           $obj->private   = CValue::post("private");
-          if (false == $res = $obj->moveTemp($file)) {
+
+          if ($file["_mode"] == "file") {
+            $res = $obj->moveTemp($file);
+          }
+          else {
+            $res = $obj->moveFile($file["tmp_name"]);
+          }
+
+          if (false == $res) {
             CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
             continue;
           }
