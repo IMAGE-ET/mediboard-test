@@ -14,9 +14,9 @@ CCanDo::checkAdmin();
 CMbObject::$useObjectCache = false;
 
 $axe    = CValue::getOrSession('axe');
-$entree = CValue::getOrSession('entree', CMbDT::date());
-$period = CValue::getOrSession('period', "MONTH");
-$count  = CValue::getOrSession('count', 30);
+$entree = CValue::getOrSession('entree');
+$sortie = CValue::getOrSession('sortie');
+$period = CValue::getOrSession('period', "DAY");
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
 /**
@@ -180,16 +180,18 @@ switch ($period) {
     break;
 }
 
+if ($entree > $sortie) {
+  list($entree, $sortie) = array($sortie, $entree);
+}
+
 // Dates
 $dates = array();
 $date = $entree;
-$n = min($count, 120);
-while ($n--) {
+$n = 100;
+while ($date < $sortie && $n-- > 0) {
   $dates[] = $date;
-  $date = CMbDT::date("-1 $period", $date);
+  $date = CMbDT::date("+1 $period", $date);
 }
-
-$dates = array_reverse($dates);
 
 $group = CGroups::loadCurrent();
 

@@ -12,12 +12,17 @@
 CCanDo::checkAdmin();
 
 $axe            = CValue::getOrSession('axe');
-$entree         = CValue::getOrSession('entree', CMbDT::date());
-$count          = CValue::getOrSession('count', 30);
+$entree         = CValue::getOrSession('entree', CMbDT::format("-1 MONTH", "%Y-%m-%d 00:00:00"));
+$sortie         = CValue::getOrSession('sortie', CMbDT::format(null, "%Y-%m-%d 23:59:59"));
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
 $filter = new CSejour;
 $filter->entree = $entree;
+$filter->sortie = $sortie;
+
+if (!$axe) {
+  $axe = "age";
+}
 
 $axes = array(
   "age"                    => "Tranche d'âge",
@@ -51,8 +56,6 @@ $smarty->assign('filter'        , $filter);
 $smarty->assign('axe'           , $axe);
 $smarty->assign('axes'          , $axes);
 $smarty->assign('axes_other'    , $axes_other);
-$smarty->assign('count'         , $count);
 $smarty->assign('hide_cancelled', $hide_cancelled);
-$smarty->assign("ecap_installed", CModule::getActive("ecap"));
 
 $smarty->display('vw_stats.tpl');

@@ -79,6 +79,10 @@ function drawGraphs(data) {
 }
 
 function updateGraphs(form){
+  if (!checkForm(form)) {
+    return false;
+  }
+
   WaitingMessage.cover($("graphs"));
   
   var url = new Url("dPurgences", "ajax_json_stats");
@@ -90,7 +94,6 @@ function updateGraphs(form){
 Main.add(function () {
   var form = getForm('stats-filter');
   updateGraphs(form);
-  $(form.count).addSpinner({min: 0});
   $(form._percent).addSpinner({min: 0, step: 0.1});
 });
 </script>
@@ -109,13 +112,16 @@ Main.add(function () {
       <td>
         <table class="main form">
           <tr>
-            <th>Date</th>
-            <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="date"}}</td>
+            <th><label for="entree">Date min</label></th>
+            <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="dateTime"}}</td>
           </tr>
           <tr>
-            <th>Sur</th>
+            <th><label for="sortie">Date max</label></th>
+            <td>{{mb_field object=$filter field=sortie register=true form="stats-filter" prop="dateTime moreThan|entree"}}</td>
+          </tr>
+          <tr>
+            <th>Grouper par</th>
             <td>
-              <input type="text" name="count" value="{{$count}}" size="2" />
               <select name="period" onchange="this.form.onsubmit()">
                 <option value="DAY">jours</option>
                 <option value="WEEK">semaines</option>
@@ -127,7 +133,7 @@ Main.add(function () {
             <th rowspan="2">Mode</th>
             <td>
               <label>
-                <input type="radio" name="mode" value="bars" onchange="drawGraphs(window.data)" checked="checked" /> Barres
+                <input type="radio" name="mode" value="bars" onchange="drawGraphs(window.data)" checked /> Barres
               </label>
               <label>
                 <input type="radio" name="mode" value="lines" onchange="drawGraphs(window.data)" /> Lignes
@@ -144,14 +150,14 @@ Main.add(function () {
             </td>
           </tr>
         </table>
-        {{if $ecap_installed}}
+        {{if "ecap"|module_active}}
           <button class="change" type="button" onclick="new Url('ecap', 'vw_anap').requestModal()">ANAP</button>
         {{/if}}
       </td>
       <td style="white-space: normal;">
         {{foreach from=$axes key=_axis item=_label}}
           <label style="width: 16em; display: inline-block;">
-            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
+            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
           </label>
         {{/foreach}}
       </td>
@@ -161,11 +167,11 @@ Main.add(function () {
             <hr/>
           {{/if}}
           <label style="width: 16em; display: inline-block;">
-            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()"/> {{$_label}}
+            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked{{/if}} onchange="this.form.onsubmit()"/> {{$_label}}
           </label>
           {{if $_axis == "diag_infirmier"}}
             <label id="s_percent" title="{{tr}}CRPU-percent_diag-desc{{/tr}}">
-                {{tr}}CRPU-percent_diag{{/tr}} <input type="text"  name="_percent" value="0.5" size="2"/> %
+              {{tr}}CRPU-percent_diag{{/tr}} <input type="text"  name="_percent" value="0.5" size="2"/> %
             </label>
           {{/if}}
         {{/foreach}}
@@ -182,7 +188,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="graphs"></td>
-    <td id="graph-legend" style="width: 25%;"></td>
+    <td id="graphs" style="width: 50%;"></td>
+    <td id="graph-legend"></td>
   </tr>
 </table>
