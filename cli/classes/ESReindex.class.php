@@ -74,7 +74,7 @@ class ESReindex extends MediboardCommand {
    * @return mixed
    */
   protected function showHeader() {
-    $this->out('<fg=red;bg=black>Reindexing your ElasticSearch data with zero downtime</fg=red;bg=black>');
+    $this->out($this->output, '<fg=red;bg=black>Reindexing your ElasticSearch data with zero downtime</fg=red;bg=black>');
   }
 
   /**
@@ -97,7 +97,7 @@ class ESReindex extends MediboardCommand {
     $this->start_time = microtime(true);
 
     do {
-      $this->out("Indexing $type_to_index...");
+      $this->out($this->output, "Indexing $type_to_index...");
 
       $ch = curl_init();
 
@@ -108,9 +108,9 @@ class ESReindex extends MediboardCommand {
       curl_setopt($ch, CURLOPT_URL, $url);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-      $this->out("Requesting $url...");
+      $this->out($this->output, "Requesting $url...");
       $output = curl_exec($ch);
-      $this->out("Request completed.");
+      $this->out($this->output, "Request completed.");
       $result = json_decode($output, true);
 
       $this->scroll_id = $result['_scroll_id'];
@@ -118,9 +118,9 @@ class ESReindex extends MediboardCommand {
 
       if (!$hits || empty($hits)) {
         $this->end_time = microtime(true);
-        $this->out("No data to send.");
-        $this->out("$type_to_index reindexing completed.");
-        $this->out("Elapsed time: " . ($this->end_time - $this->start_time));
+        $this->out($this->output, "No data to send.");
+        $this->out($this->output, "$type_to_index reindexing completed.");
+        $this->out($this->output, "Elapsed time: " . ($this->end_time - $this->start_time));
 
         $next_type_to_index = next($this->types_to_index);
         $question = '<question>Reindex another mapping? [y/N] </question>';
@@ -137,7 +137,7 @@ class ESReindex extends MediboardCommand {
           }
         }
         else {
-          $this->out('Exiting...');
+          $this->out($this->output, 'Exiting...');
           exit();
         }
       }
@@ -166,9 +166,9 @@ class ESReindex extends MediboardCommand {
       curl_setopt($ch, CURLOPT_INFILE, $fp);
       curl_setopt($ch, CURLOPT_INFILESIZE, strlen($formatted_hits));
 
-      $this->out("Sending data...");
+      $this->out($this->output, "Sending data...");
       curl_exec($ch);
-      $this->out("Data sent.");
+      $this->out($this->output, "Data sent.");
       fclose($fp);
 
     }
@@ -243,7 +243,7 @@ class ESReindex extends MediboardCommand {
 
     $this->types_to_index = $this->input->getArgument('types_to_index');
     if (!$this->types_to_index) {
-      $this->out('<fg=red;bg=black>No mapping selected, please select a mapping to index.</fg=red;bg=black>');
+      $this->out($this->output, '<fg=red;bg=black>No mapping selected, please select a mapping to index.</fg=red;bg=black>');
 
       $this->types_to_index[] = $this->dialog->askAndValidate(
         $this->output,
@@ -257,17 +257,5 @@ class ESReindex extends MediboardCommand {
         }
       );
     }
-  }
-
-  /**
-   * Output timed text
-   *
-   * @param OutputInterface $output Output interface
-   * @param string          $text   Text to print
-   *
-   * @return void
-   */
-  protected function out($text) {
-    $this->output->writeln(strftime("[%Y-%m-%d %H:%M:%S]") . " - $text");
   }
 }

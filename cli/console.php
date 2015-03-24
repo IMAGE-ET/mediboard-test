@@ -32,4 +32,5 @@ $application->add(new DeployMeP());
 $application->add(new DeployMeQ());
 $application->add(new DeployMaJ());
 $application->add(new ESReindex());
+$application->add(new CacheCleanup());
 $application->run();
