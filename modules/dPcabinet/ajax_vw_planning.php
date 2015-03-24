@@ -94,6 +94,7 @@ $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 $planning->dragndrop = $planning->resizable = $can_edit ? 1 : 0;
 $planning->hour_divider = 60 / CAppUI::conf("dPcabinet CPlageconsult minutes_interval");
+$planning->no_dates = 1;
 
 $plage = new CPlageconsult();
 
@@ -108,6 +109,8 @@ if ($user->_id) {
 
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
+
+  $planning->addDayLabel($jour, '<span style="font-size: 1.4em">'.CMbDT::format($jour, "%a %d %b").'</span>');
 
   // conges dans le header
   if (count($users)) {
