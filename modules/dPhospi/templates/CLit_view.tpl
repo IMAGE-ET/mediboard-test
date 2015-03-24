@@ -55,7 +55,7 @@
           {{tr}}CBedCleanup.none{{/tr}}
         {{else}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_ref_last_cleanup->_guid}}');">
-            {{$object->_ref_last_cleanup}}
+            {{mb_value object=$object->_ref_last_cleanup field=datetime_end}}
           </span>
         {{/if}}
       </td>
