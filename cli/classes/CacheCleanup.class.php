@@ -38,7 +38,7 @@ class CacheCleanup extends MediboardCommand {
   protected function configure() {
     $this
       ->setName('cache:cleanup')
-      ->setAliases(array('cache:clean'))
+      ->setAliases(array('cache:clean', 'cache:clear'))
       ->setDescription('Clearing Mediboard cache')
       ->setHelp('Performs a cache clean up on several instances')
       ->addOption(
@@ -143,7 +143,8 @@ class CacheCleanup extends MediboardCommand {
       }
     }
     else {
-      $cmd = "ssh " . escapeshellarg($host) . " touch " . escapeshellarg($clear_cache_file) . "; chmod 0755 " . escapeshellarg($clear_cache_file);
+      // File creation
+      $cmd = escapeshellcmd("ssh $host touch $clear_cache_file");
 
       $result = array();
       exec($cmd, $result, $state);
@@ -154,8 +155,24 @@ class CacheCleanup extends MediboardCommand {
         return false;
       }
 
-      return implode("\n", $result);
+      $return = implode("\n", $result);
+
+      // Changing permissions
+      $cmd = escapeshellcmd("ssh $host chmod 0755 $clear_cache_file");
+
+      $result = array();
+      exec($cmd, $result, $state);
+
+      if ($state !== 0) {
+        $this->out($this->output, "<error>Error occurred during $cmd...</error>");
+
+        return false;
+      }
+
+      return $return . "\n" . implode("\n", $result);
     }
+
+    return true;
   }
 
   protected function clear($url) {
