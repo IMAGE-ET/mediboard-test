@@ -32,6 +32,8 @@ else {
   $result_set->patient_id = $object->loadRelPatient()->_id;
 }
 
+list($results/*, $times*/) = CObservationResultSet::getResultsFor($object);
+
 $pack = new CSupervisionGraphPack();
 $pack->load($pack_id);
 $links = $pack->loadRefsGraphLinks();
@@ -100,5 +102,6 @@ $smarty->assign("object",     $object);
 $smarty->assign("result_set", $result_set);
 $smarty->assign("pack",       $pack);
 $smarty->assign("result_id",  $result_id);
+$smarty->assign("results", $results);
 
 $smarty->display("inc_edit_observation_result_set.tpl");

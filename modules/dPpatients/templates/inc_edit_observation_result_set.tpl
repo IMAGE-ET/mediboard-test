@@ -112,6 +112,9 @@
 
           <table class="main form">
             <col style="width: 12em;" />
+            <col style="width: 8em;" />
+            <col style="width: 8em;" />
+            <col style="width: 8em;" />
 
             <tr>
               <th>
@@ -144,6 +147,18 @@
                         onclick="$V(this.form.del,1); $V(this.form.label_id,''); $V(this.form.elements.value,''); ">
                   {{tr}}Empty{{/tr}}
                 </button>
+              </td>
+
+              {{assign var=_value_type_id value=$_result->value_type_id}}
+              {{assign var=_value_unit_id value=$_result->unit_id}}
+              {{assign var=_last_result value=$results.$_value_type_id.$_value_unit_id|@end}}
+
+              <td>
+                {{if $_last_result}}
+                  <small style="color: #999;" title="{{$_last_result.datetime|date_format:$conf.datetime}}">{{$_last_result.datetime|date_format:$conf.time}}</small>
+                  &ndash;
+                  {{$_last_result.value}} {{$_result->_ref_value_unit->desc}}
+                {{/if}}
               </td>
             </tr>
           </table>
