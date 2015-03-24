@@ -453,11 +453,12 @@ abstract class DeployOperation extends MediboardCommand {
    * Get remote release code
    *
    * @param string $host Hostname
+   * @param string $path Instance path
    *
    * @return string|bool
    */
-  protected function getRemoteRelease($host) {
-    $cmd = "ssh " . escapeshellarg($host) . " cat " . escapeshellarg($this->path);
+  protected function getRemoteRelease($host, $path) {
+    $cmd = "ssh " . escapeshellarg($host) . " cat " . escapeshellarg($path);
 
     $result = array();
     exec($cmd, $result, $state);
