@@ -130,7 +130,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
       // Pasted images, via Data uri
       if (!empty($_POST["formdatauri"])) {
-        $aFiles     = array();
         $data_uris  = $_POST["formdatauri"];
         $data_names = $_POST["formdatauri_name"];
 
