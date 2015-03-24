@@ -84,34 +84,7 @@ class CacheCleanup extends MediboardCommand {
       $instances = $this->promptInstances();
     }
 
-    $ip_addresses = $this->getIPAddresses($instances);
-    foreach ($instances as $_instance) {
-      $url = $ip_addresses[$_instance] . '/' . basename($_instance);
-
-      if ($ip_addresses[$_instance] == 'localhost') {
-        $host = 'localhost';
-        $path = $_instance;
-      }
-      else {
-        $ssh  = explode(':', $_instance);
-        $host = $ssh[0];
-        $path = $ssh[1];
-      }
-
-      $this->out($this->output, "$_instance ($url) - Clearing cache...");
-      if ($this->createFlagFile($host, $path)) {
-        $result = $this->clear($url);
-
-        if ($result) {
-          $msg = "$_instance ($url) - Cache cleared.";
-        }
-        else {
-          $msg = "$_instance ($url) - Unable to clear cache!";
-        }
-
-        $this->out($this->output, $msg);
-      }
-    }
+    $this->clearAll($instances);
   }
 
   protected function getIPAddresses($instances) {
@@ -187,6 +160,38 @@ class CacheCleanup extends MediboardCommand {
     $info = curl_getinfo($http_client);
 
     return ($info['http_code'] == "200") ? $res : false;
+  }
+
+  protected function clearAll($instances) {
+    $ip_addresses = $this->getIPAddresses($instances);
+
+    foreach ($instances as $_instance) {
+      $url = $ip_addresses[$_instance] . '/' . basename($_instance);
+
+      if ($ip_addresses[$_instance] == 'localhost') {
+        $host = 'localhost';
+        $path = $_instance;
+      }
+      else {
+        $ssh  = explode(':', $_instance);
+        $host = $ssh[0];
+        $path = $ssh[1];
+      }
+
+      $this->out($this->output, "$_instance ($url) - Clearing cache...");
+      if ($this->createFlagFile($host, $path)) {
+        $result = $this->clear($url);
+
+        if ($result) {
+          $msg = "$_instance ($url) - Cache cleared.";
+        }
+        else {
+          $msg = "$_instance ($url) - Unable to clear cache!";
+        }
+
+        $this->out($this->output, $msg);
+      }
+    }
   }
 
   protected function promptInstances() {
