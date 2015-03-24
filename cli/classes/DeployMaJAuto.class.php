@@ -517,9 +517,9 @@ class DeployMaJAuto extends DeployMaj {
     $skipped_instances = array_diff($all_instances, $updated_instances);
 
     return array(
-      'all'     => implode(' ', $all_instances),
-      'updated' => implode(' ', $updated_instances),
-      'skipped' => implode(' ', $skipped_instances)
+      'all'     => $all_instances,
+      'updated' => $updated_instances,
+      'skipped' => $skipped_instances
     );
   }
 }
