@@ -1022,9 +1022,10 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
       // L'incrément de version se fait en fin de store
       if ($parent_modele->object_id) {
         $this->version = $parent_modele->version;
+        $parent_modele->isAutoLock();
 
         // Si le document existant est verrouillé, alors on l'archive
-        if ($parent_modele->valide) {
+        if ($parent_modele->valide || $parent_modele->_is_auto_locked) {
           $parent_modele->annule = 1;
           $parent_modele->store();
         }
