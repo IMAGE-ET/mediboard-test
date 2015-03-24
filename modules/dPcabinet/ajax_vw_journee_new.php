@@ -17,11 +17,12 @@ $function_id  = CValue::getOrSession("function_id");
 $date         = CValue::getOrSession("date");
 
 // filters
-$show_free  = CValue::get("show_free", 1);
-$cancelled  = CValue::get("cancelled");
-$facturated = CValue::get("facturated");
-$finished   = CValue::get("finished");
-$actes      = CValue::get("actes");
+$show_free      = CValue::get("show_free", 1);
+$cancelled      = CValue::get("cancelled");
+$hide_in_conge  = CValue::get("hide_in_conge", 0);
+$facturated     = CValue::get("facturated");
+$finished       = CValue::get("finished");
+$actes          = CValue::get("actes");
 
 
 $function = new CFunctions();
@@ -64,7 +65,7 @@ foreach ($musers as $_user) {
       "$i $conge->date_debut 00:00:00",
       1440,
       $libelle,
-      "#dddddd",
+      "#ffe87e",
       true,
       "hatching",
       null,
@@ -88,171 +89,172 @@ foreach ($musers as $_user) {
   $planning->addDayLabel(
     $i, "<span style=\"$style\">".CMbString::htmlEntities($_user->_view)."</span>", null, "#".$_user->_color, "ObjectTooltip.createEx(this, '".$_user->_guid."');", false, array("user_id" => $user_id));
 
-  $plage = new CPlageconsult();
-  $plage->chir_id = $user_id;
-  $plage->date = $date;
-  /** @var CPlageconsult[] $plages */
-  $plages = $plage->loadMatchingList();
+  // if no conges && we want to hide plage
+  if ($nb_conges && !$hide_in_conge) {
 
-  foreach ($plages as $_plage) {
-    // range
-    $range = new CPlanningRange(
-      $_plage->_guid,
-      $i." ".$_plage->debut,
-      CMbDT::minutesRelative($_plage->debut, $_plage->fin),
-      $_plage->libelle,
-      $_plage->color
-    );
-    $range->type = "plageconsult";
+    $plage = new CPlageconsult();
+    $plage->chir_id = $user_id;
+    $plage->date = $date;
+    /** @var CPlageconsult[] $plages */
+    $plages = $plage->loadMatchingList();
 
-    $planning->addRange($range);
+    foreach ($plages as $_plage) {
+      // range
+      $range = new CPlanningRange(
+        $_plage->_guid,
+        $i . " " . $_plage->debut,
+        CMbDT::minutesRelative($_plage->debut, $_plage->fin),
+        $_plage->libelle,
+        $_plage->color
+      );
+      $range->type = "plageconsult";
 
-    //colors
-    $color = "#cfc";
-    if ($_plage->remplacant_id && $_plage->remplacant_id != $chirSel) {
-      // Je suis remplacé par un autre médecin
-      $color = "#FAA";
-    }
-    if ($_plage->remplacant_id && $_plage->remplacant_id == $chirSel) {
-      // Je remplace un autre médecin
-      $color = "#FDA";
-    }
+      $planning->addRange($range);
+
+      //colors
+      $color = "#cfc";
+      if ($_plage->remplacant_id && $_plage->remplacant_id != $chirSel) {
+        // Je suis remplacé par un autre médecin
+        $color = "#FAA";
+      }
+      if ($_plage->remplacant_id && $_plage->remplacant_id == $chirSel) {
+        // Je remplace un autre médecin
+        $color = "#FDA";
+      }
 
 
-    // consults libres
-    if ($show_free) {
-      $_plage->loadRefsConsultations(false);
-      $utilisation = $_plage->getUtilisation();
-      foreach ($utilisation as $_timing => $_nb) {
-        if (!$_nb) {
-          $heure = CMbDT::format($_timing, "%H:%M");
-          $debute = "$i $_timing";
-          $title = "<strong>$heure</strong>";
-          $event = new CPlanningEvent($debute, $debute, $_plage->_freq, $title, $color, true, "droppable", null, false);
-          $event->type        = "rdvfree";
-          $event->plage["id"] = $_plage->_id;
-          if ($_plage->locked == 1) {
-            $event->disabled = true;
+      // consults libres
+      if ($show_free) {
+        $_plage->loadRefsConsultations(false);
+        $utilisation = $_plage->getUtilisation();
+        foreach ($utilisation as $_timing => $_nb) {
+          if (!$_nb) {
+            $heure = CMbDT::format($_timing, "%H:%M");
+            $debute = "$i $_timing";
+            $title = "<strong>$heure</strong>";
+            $event = new CPlanningEvent($debute, $debute, $_plage->_freq, $title, $color, true, "droppable", null, false);
+            $event->type = "rdvfree";
+            $event->plage["id"] = $_plage->_id;
+            if ($_plage->locked == 1) {
+              $event->disabled = true;
+            }
+            $event->plage["color"] = $_plage->color;
+            //Ajout de l'évènement au planning
+            $planning->addEvent($event);
           }
-          $event->plage["color"] = $_plage->color;
-          //Ajout de l'évènement au planning
-          $planning->addEvent($event);
         }
       }
-    }
 
-    // load consultations manually
-    $consult = new CConsultation();
-    $where = array();
-    $where["plageconsult_id"] = " = '$_plage->_id' ";
-    $where["annule"] = " = '$cancelled'";
-    if ($finished) {
-      $where["chrono"] = " = '$finished'";
-    }
-    if ($facturated) {
-      $where["facture"] = " = '1'";
-    }
-    /** @var CConsultation[] $consults */
-    $consults = $consult->loadList($where, "heure");
-
-    // consultations prises
-    foreach ($consults as $_consult) {
-      $_consult->loadPosition();
-
-      $_actes = $_consult->loadRefsActes();
-      $nb_actes = $_consult->_count_actes;
-      // avec des actes
-      if ($actes && !$nb_actes) {
-        continue;
+      // load consultations manually
+      $consult = new CConsultation();
+      $where = array();
+      $where["plageconsult_id"] = " = '$_plage->_id' ";
+      $where["annule"] = " = '$cancelled'";
+      if ($finished) {
+        $where["chrono"] = " = '$finished'";
       }
-      // sans actes
-      if ($actes === "0" && $nb_actes > 0) {
-        continue;
+      if ($facturated) {
+        $where["facture"] = " = '1'";
       }
+      /** @var CConsultation[] $consults */
+      $consults = $consult->loadList($where, "heure");
 
-      $debute = "$i $_consult->heure";
-      $motif = CMbString::htmlEntities($_consult->motif);
-      $heure = CMbDT::format($_consult->heure, "%H:%M");
+      // consultations prises
+      foreach ($consults as $_consult) {
+        $_consult->loadPosition();
 
-      if ($_consult->patient_id) {
-        $_consult->loadRefPatient();
-        if ($color = "#cfc") {
-          $color = "#fee";
-          if ($_consult->premiere) {
+        $_actes = $_consult->loadRefsActes();
+        $nb_actes = $_consult->_count_actes;
+        // avec des actes
+        if ($actes && !$nb_actes) {
+          continue;
+        }
+        // sans actes
+        if ($actes === "0" && $nb_actes > 0) {
+          continue;
+        }
+
+        $debute = "$i $_consult->heure";
+        $motif = CMbString::htmlEntities($_consult->motif);
+        $heure = CMbDT::format($_consult->heure, "%H:%M");
+
+        if ($_consult->patient_id) {
+          $_consult->loadRefPatient();
+          if ($color = "#cfc") {
+            $color = "#fee";
+            if ($_consult->premiere) {
+              $color = "#faa";
+            } elseif ($_consult->derniere) {
+              $color = "#faf";
+            } elseif ($_consult->sejour_id) {
+              $color = "#CFFFAD";
+            }
+          }
+
+          $title = "";
+          if ($_consult->_consult_sejour_out_of_nb) {
+            $title .= "<span style='float:right;'>$_consult->_consult_sejour_nb/ $_consult->_consult_sejour_out_of_nb</span>";
+          }
+          $title .= "<strong>$heure</strong> " . CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . $motif;
+
+          $event = new CPlanningEvent(
+            $_consult->_guid,
+            $debute,
+            $_consult->duree * $_plage->_freq,
+            $title,
+            $color,
+            true,
+            null,
+            $_consult->_guid,
+            false
+          );
+        } else {
+          if ($color = "#cfc") {
             $color = "#faa";
           }
-          elseif ($_consult->derniere) {
-            $color = "#faf";
+          $event = new CPlanningEvent(
+            $_consult->_guid,
+            $debute, $_consult->duree * $_plage->_freq,
+            $motif ? $motif : "[PAUSE]",
+            $color,
+            true,
+            null,
+            null
+          );
+        }
+        $event->type = "rdvfull";
+        $event->plage["id"] = $_plage->_id;
+        $event->plage["consult_id"] = $_consult->_id;
+        if ($_plage->locked == 1) {
+          $event->disabled = true;
+        }
+
+        $_consult->loadRefCategorie();
+        if ($_consult->categorie_id) {
+          $event->icon = "./modules/dPcabinet/images/categories/" . $_consult->_ref_categorie->nom_icone;
+          $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
+        }
+
+        if ($_consult->patient_id) {
+          $event->draggable /*= $event->resizable */ = 1;
+          $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
+        }
+
+        if ($_consult->canDo()->edit) {
+          if ($_consult->chrono == 16) {
+            $event->addMenuItem("tick", CMbString::htmlEntities("Notifier l'arrivée"));
           }
-          elseif ($_consult->sejour_id) {
-            $color = "#CFFFAD";
+          if ($_consult->chrono == 32) {
+            $event->addMenuItem("tick_cancel", CMbString::htmlEntities("Annuler l'arrivée"));
           }
         }
 
-        $title = "";
-        if ($_consult->_consult_sejour_out_of_nb) {
-          $title.= "<span style='float:right;'>$_consult->_consult_sejour_nb/ $_consult->_consult_sejour_out_of_nb</span>";
-        }
-        $title .= "<strong>$heure</strong> ".CMbString::htmlEntities($_consult->_ref_patient->_view) . "\n" . $motif;
-
-        $event = new CPlanningEvent(
-          $_consult->_guid,
-          $debute,
-          $_consult->duree * $_plage->_freq,
-          $title,
-          $color,
-          true,
-          null,
-          $_consult->_guid,
-          false
-        );
-      }
-      else {
-        if ($color = "#cfc") {
-          $color = "#faa";
-        }
-        $event = new CPlanningEvent(
-          $_consult->_guid,
-          $debute, $_consult->duree * $_plage->_freq,
-          $motif ? $motif : "[PAUSE]",
-          $color,
-          true,
-          null,
-          null
-        );
-      }
-      $event->type        = "rdvfull";
-      $event->plage["id"] = $_plage->_id;
-      $event->plage["consult_id"] = $_consult->_id;
-      if ($_plage->locked == 1) {
-        $event->disabled = true;
+        //Ajout de l'évènement au planning
+        $event->plage["color"] = $_plage->color;
+        $planning->addEvent($event);
       }
 
-      $_consult->loadRefCategorie();
-      if ($_consult->categorie_id) {
-        $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
-        $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
-      }
-
-      if ($_consult->patient_id) {
-        $event->draggable /*= $event->resizable */ = 1;
-        $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
-      }
-
-      if ($_consult->canDo()->edit) {
-        if ($_consult->chrono == 16) {
-          $event->addMenuItem("tick", CMbString::htmlEntities("Notifier l'arrivée"));
-        }
-        if ($_consult->chrono == 32) {
-          $event->addMenuItem("tick_cancel", CMbString::htmlEntities("Annuler l'arrivée"));
-        }
-      }
-
-      //Ajout de l'évènement au planning
-      $event->plage["color"] = $_plage->color;
-      $planning->addEvent($event);
     }
-
   }
 
   $i++;

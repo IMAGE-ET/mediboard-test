@@ -67,6 +67,16 @@
   </tr>
 
   <tr>
+    <th>Affichage en fonction des congés</th>
+    <td>
+      <select name="hide_in_conge">
+        <option value="1">Cacher tout si congés</option>
+        <option value="0">Afficher</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr>
     <td colspan="2" class="button">
       <button class="tick" type="button" onclick="Control.Modal.close();">{{tr}}OK{{/tr}}</button>
 

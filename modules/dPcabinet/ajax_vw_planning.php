@@ -158,24 +158,6 @@ for ($i = 0; $i < $nbDays; $i++) {
       );
       $planning->addRange($op);
     }
-
-
-    //INTERVENTIONS
-    /** @var CPlageOp[] $intervs */
-    $interv = new CPlageOp();
-    $intervs = $interv->loadList($whereInterv);
-    CMbObject::massLoadFwdRef($intervs, "chir_id");
-    foreach ($intervs as $_interv) {
-      $range = new CPlanningRange(
-        $_interv->_guid,
-        $jour." ".$_interv->debut,
-        CMbDT::minutesRelative($_interv->debut, $_interv->fin),
-        CAppUI::tr($_interv->_class),
-        "bbccee",
-        "plageop"
-      );
-      $planning->addRange($range);
-    }
   }
 
   // PLAGES CONGE
@@ -196,7 +178,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $jour . " 00:00:00",
         1440,       // 1440 min = 1 day
         $libelle,
-        "#dddddd",
+        "#ffe87e",
         true,
         "hatching",
         null,
