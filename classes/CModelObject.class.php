@@ -458,15 +458,24 @@ class CModelObject {
    * @return void
    */
   function checkConfidential($specs = null) {
-    if (CAppUI::conf("hide_confidential")) {
-      if ($specs == null) {
-        $specs = $this->_specs;
-      }
-      foreach ($specs as $name => $_spec) {
-        $value =& $this->$name;
-        if ($value !== null && $this->_specs[$name]) {
-          $this->_specs[$name]->checkConfidential($this);
-        }
+    static $confidential = null;
+
+    if ($confidential === null) {
+      $confidential = CAppUI::conf("hide_confidential") == 1;
+    }
+
+    if (!$confidential) {
+      return;
+    }
+
+    if ($specs == null) {
+      $specs = $this->_specs;
+    }
+
+    foreach ($specs as $name => $_spec) {
+      $value =& $this->$name;
+      if ($value !== null && $this->_specs[$name]) {
+        $this->_specs[$name]->checkConfidential($this);
       }
     }
   }
