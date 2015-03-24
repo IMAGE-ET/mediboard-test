@@ -59,7 +59,7 @@ abstract class DeployOperation extends MediboardCommand {
   /** @var WorkingCopy */
   protected $wc;
 
-  protected $master_branch;
+  public $master_branch;
   protected $elapsed_time;
 
   /**
