@@ -95,7 +95,7 @@ $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
 if ($selAdmis != "0") {
-  $where["sejour.entree_reelle"] = " IS NULL OR sejour.entree_reelle = '0000-00-00 00:00:00')";
+  $where["sejour.entree_reelle"] = " IS NULL OR `sejour`.`entree_reelle` = '0000-00-00 00:00:00'";
 }
 
 if ($selSaisis != "0") {
