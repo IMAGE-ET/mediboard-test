@@ -110,6 +110,7 @@ class DeployMaJAuto extends DeployMaj {
         case 0:
           $this->out($this->output, "Instance #{$_instance_id} is not allowed to update. Skipping.");
           unset($perm[$_instance_id]);
+          $this->status = self::STATUS_WARNING;
           break;
 
         case 1:
@@ -119,11 +120,13 @@ class DeployMaJAuto extends DeployMaj {
         case 2:
           $this->out($this->output, "Instance #{$_instance_id} is invalid. Skipping.");
           unset($perm[$_instance_id]);
+          $this->status = self::STATUS_WARNING;
           break;
 
         default:
           $this->out($this->output, "Instance #{$_instance_id} - An error occured. Skipping.");
           unset($perm[$_instance_id]);
+          $this->status = self::STATUS_WARNING;
       }
     }
 
@@ -504,17 +507,11 @@ class DeployMaJAuto extends DeployMaj {
     $updated_instances = array();
 
     foreach ($this->all_instances as $_instance) {
-      $all_instances[] = array(
-        'server_id'   => $_instance['server_id'],
-        'instance_id' => $_instance['id']
-      );
+      $all_instances[] = $_instance['server_id'] . '-' . $_instance['id'];
 
       foreach ($this->instances_to_perform as $_instance_to_perform) {
         if ($_instance_to_perform == $_instance['path']) {
-          $updated_instances[] = array(
-            'server_id'   => $_instance['server_id'],
-            'instance_id' => $_instance['id']
-          );
+          $updated_instances[] = $_instance['server_id'] . '-' . $_instance['id'];
           break;
         }
       }
@@ -522,10 +519,39 @@ class DeployMaJAuto extends DeployMaj {
 
     $skipped_instances = array_diff($all_instances, $updated_instances);
 
-    return array(
-      'all'     => $all_instances,
-      'updated' => $updated_instances,
-      'skipped' => $skipped_instances
+    $instances = array(
+      'all'     => array(),
+      'updated' => array(),
+      'skipped' => array()
     );
+
+    foreach ($all_instances as $_instance) {
+      $value = explode('-', $_instance);
+
+      $instances['all'][] = array(
+        'server_id'   => $value[0],
+        'instance_id' => $value[1]
+      );
+    }
+
+    foreach ($updated_instances as $_instance) {
+      $value = explode('-', $_instance);
+
+      $instances['updated'][] = array(
+        'server_id'   => $value[0],
+        'instance_id' => $value[1]
+      );
+    }
+
+    foreach ($skipped_instances as $_instance) {
+      $value = explode('-', $_instance);
+
+      $instances['skipped'][] = array(
+        'server_id'   => $value[0],
+        'instance_id' => $value[1]
+      );
+    }
+
+    return $instances;
   }
 }
