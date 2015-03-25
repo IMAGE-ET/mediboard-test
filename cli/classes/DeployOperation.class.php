@@ -39,6 +39,7 @@ abstract class DeployOperation extends MediboardCommand {
   protected $ignore_externals;
   protected $update;
   protected $path;
+  protected $allow_trunk;
 
   protected $rsyncupdate_conf;
 
@@ -90,9 +91,6 @@ abstract class DeployOperation extends MediboardCommand {
   /**
    * Get MASTER branch
    *
-   * @param string          $path   Current root path
-   * @param OutputInterface $output Output
-   *
    * @return string|bool
    */
   protected function getMasterBranch() {
@@ -111,7 +109,7 @@ abstract class DeployOperation extends MediboardCommand {
 
     $this->out($this->output, "Current MASTER branch: '<b>$this->master_branch</b>'");
 
-    if ($this->master_branch == "trunk") {
+    if (!$this->allow_trunk && $this->master_branch == "trunk") {
       $this->out($this->output, "<error>Cannot perform operation: MASTER branch is TRUNK.</error>");
 
       return false;

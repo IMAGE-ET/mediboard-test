@@ -46,6 +46,13 @@ class DeployMaJ extends DeployOperation {
         InputOption::VALUE_OPTIONAL,
         'Working copy root',
         realpath(__DIR__ . "/../../")
+      )
+      ->addOption(
+        'allow_trunk',
+        't',
+        InputOption::VALUE_NONE,
+        'Allow TRUNK working copy for MASTER',
+        false
       );
   }
 
@@ -103,6 +110,7 @@ EOT
     $this->input            = $input;
     $this->dialog           = $this->getHelperSet()->get('dialog');
     $this->path             = $input->getOption('path');
+    $this->allow_trunk      = $input->getOption('allow_trunk');
     $this->ignore_externals = $input->getOption("update-ignore-externals");
     $this->update           = $input->getOption("update");
 

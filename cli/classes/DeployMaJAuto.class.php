@@ -52,6 +52,13 @@ class DeployMaJAuto extends DeployMaj {
         InputOption::VALUE_OPTIONAL,
         'Working copy root',
         realpath(__DIR__ . "/../../")
+      )
+      ->addOption(
+        'allow_trunk',
+        't',
+        InputOption::VALUE_NONE,
+        'Allow TRUNK working copy for MASTER',
+        false
       );
   }
 
@@ -67,9 +74,10 @@ class DeployMaJAuto extends DeployMaj {
    * @see parent::execute()
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $this->output = $output;
-    $this->input  = $input;
-    $this->path   = $input->getOption('path');
+    $this->output      = $output;
+    $this->input       = $input;
+    $this->path        = $input->getOption('path');
+    $this->allow_trunk = $input->getOption('allow_trunk');
 
     $this->status = self::STATUS_OK;
 
