@@ -227,39 +227,45 @@ abstract class DeployOperation extends MediboardCommand {
     $to_perform = array();
 
     foreach ($instances as $_instance) {
-      $release_file = "$_instance/release.xml";
-      $release_file = explode(":", $release_file);
-
-      $dom = new DOMDocument();
-
-      // Local file
-      if (count($release_file) == 1) {
-        $release_file = $release_file[0];
-
-        if (is_readable($release_file)) {
-          $dom->load($release_file);
-        }
-        else {
-          throw new Exception("$release_file is not readable.");
-        }
+      if ($this->allow_trunk) {
+        $release_code = 'trunk';
       }
       else {
-        // Remote file
-        $result = $this->getRemoteRelease($release_file[0], $release_file[1]);
+        $release_file = "$_instance/release.xml";
+        $release_file = explode(":", $release_file);
 
-        if ($result) {
-          if (!$dom->loadXML($result)) {
-            throw new Exception('Cannot parse XML.');
+        $dom = new DOMDocument();
+
+        // Local file
+        if (count($release_file) == 1) {
+          $release_file = $release_file[0];
+
+          if (is_readable($release_file)) {
+            $dom->load($release_file);
+          }
+          else {
+            throw new Exception("$release_file is not readable.");
           }
         }
         else {
-          throw new Exception("$release_file[0]:$release_file[1] is empty.");
+          // Remote file
+          $result = $this->getRemoteRelease($release_file[0], $release_file[1]);
+
+          if ($result) {
+            if (!$dom->loadXML($result)) {
+              throw new Exception('Cannot parse XML.');
+            }
+          }
+          else {
+            throw new Exception("$release_file[0]:$release_file[1] is empty.");
+          }
         }
+
+        $root = $dom->documentElement;
+
+        $release_code = $root->getAttribute("code");
       }
 
-      $root = $dom->documentElement;
-
-      $release_code = $root->getAttribute("code");
       $to_perform[] = array(
         "path"         => $_instance,
         "release_code" => $release_code,
