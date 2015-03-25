@@ -299,7 +299,7 @@
       <td class="text" colspan="3">
         <form name="SeptieSejour{{$sejour->_id}}" action="?m=dPhospi" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
-          <input type="hidden" name="otherm" value="dPhospi" />
+          <input type="hidden" name="postRedirect" value="m=dPhospi" />
           <input type="hidden" name="dosql" value="do_sejour_aed" />
           <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
           <strong>Pathologie</strong>:
