@@ -21,6 +21,8 @@ $show_cancelled = CValue::get("show_cancelled");
 $facturated     = CValue::get("facturated");
 $status         = CValue::get("status");
 $actes          = CValue::get("actes");
+$hide_in_conge  = CValue::get("hide_in_conge", 0);
+
 
 $min_hour = 23;
 
@@ -334,8 +336,9 @@ for ($i = 0; $i < $nbDays; $i++) {
           $motif ? $motif : "[PAUSE]",
           $color,
           true,
-          null,
-          null
+          "droppable $debute",
+          $_consult->_guid,
+          false
         );
       }
       $event->type        = "rdvfull";
@@ -351,7 +354,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
       }
 
-      if ($_consult->patient_id) {
+      if ($_consult->_id) {
         $event->draggable /*= $event->resizable */ = $can_edit;
         $freq = $_plage->freq ? CMbDT::transform($_plage->freq, null, "%M") : 1 ;
         $event->hour_divider = 60 / $freq;
