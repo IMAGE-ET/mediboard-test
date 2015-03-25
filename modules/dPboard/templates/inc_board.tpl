@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $praticiens|@count > 1}}
+{{if $praticiens|@count > 1 || !$user->_is_praticien}}
   <form name="ChoixPraticien" method="get" action="?">
     <input type="hidden" name="m" value="{{$m}}"/>
     <input type="hidden" name="tab" value="{{$tab}}" />

@@ -20,7 +20,7 @@ $user->isSecretaire();
 $user->isPraticien();
 
 $date = CValue::getOrSession('date', CMbDT::date());
-$prat_id = CValue::getOrSession('prat_id');
+$prat_id = CValue::getOrSession('praticien_id');
 $function_id = CValue::get("function_id");
 
 $prat = new CMediusers();
