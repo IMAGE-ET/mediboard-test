@@ -72,7 +72,14 @@
 
                     <div class="compact">{{tr}}{{$__result._type}}{{/tr}}</div>
                   </td>
-                  <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$__result._type}}-{{$__result._id}}')">
+
+                  {{if $__result._type == "CExObject"}}
+                    {{assign var=guid value="`$__result._type`_`$__result._source.ex_class_id`-`$__result._source.id`"}}
+                  {{else}}
+                    {{assign var=guid value="`$__result._type`-`$__result._id`"}}
+                  {{/if}}
+
+                  <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$guid}}')">
                     {{if $__result._source.title != ""}}
                       <span>{{$__result._source.title|utf8_decode}}</span>
                     {{else}}
