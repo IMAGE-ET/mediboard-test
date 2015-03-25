@@ -4,7 +4,7 @@
   // default value
   var target_plage_consult = '{{$plageSel->_id}}';
 
-  Consultation.onCloseEdit = function() {
+  Consultation.onCloseEdit = Consultation.onCloseEditModal = function() {
     if (target_plage_consult) {
       refreshPlageConsult(target_plage_consult);
     }
