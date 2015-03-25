@@ -16,7 +16,7 @@
     var form = getForm('selectFrm');
     var url = new Url("board", "ajax_vw_month");
     if ($V(form.chir_id)) {
-      url.addParam("prat_id", $V(form.chir_id));
+      url.addParam("praticien_id", $V(form.chir_id));
     }
     if ($V(form.function_id)) {
       url.addParam("function_id", $V(form.function_id));
