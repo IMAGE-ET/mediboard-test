@@ -61,10 +61,6 @@ $tab_sejour = array();
 // Chargement de l'utilisateur courant
 $userCourant = CMediusers::get();
 
-if (CModule::getActive("dPprescription")) {
-  $prescription_sejour = new CPrescription();
-}
-
 $_is_praticien = $userCourant->isPraticien();
 $_is_anesth    = $userCourant->isAnesth();
 
@@ -240,12 +236,6 @@ ksort($sejoursParService);
 // Récuperation du sejour sélectionné
 $sejour = new CSejour;
 $sejour->load($sejour_id);
-$sejour->loadRefs();
-$sejour->loadRefsPrescriptions();
-$sejour->loadRefsDocs();
-
-$sejour->loadRefAdresseParPraticien();
-$sejour->loadRefEtablissementProvenance();
 
 if ($service_id) {
   // Chargement des séjours à afficher
@@ -423,9 +413,7 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPplanningOp')->edit || 
   $userCourant->isFromType(array("Infirmière"));
 
-if ($type_admission) {
-  $sejour->type = $type_admission;
-}
+$sejour->type = $type_admission;
 
 /**
  * Mettre en cache les lits
@@ -484,21 +472,15 @@ $smarty->assign("object"                  , $sejour);
 $smarty->assign("mode"                    , $mode);
 $smarty->assign("totalLits"               , $totalLits);
 $smarty->assign("date"                    , $date);
-$smarty->assign("isPrescriptionInstalled" , CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("demain"                  , CMbDT::date("+ 1 day", $date));
 $smarty->assign("services"                , $services);
 $smarty->assign("sejoursParService"       , $sejoursParService);
-if (CModule::getActive("dPprescription")) {
-  $smarty->assign("prescription_sejour"     , $prescription_sejour);
-}
 $smarty->assign("service_id"              , $service_id);
 $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
 $smarty->assign("visites"                 , $visites);
-$smarty->assign("current_date"            , CMbDT::date());
 $smarty->assign("my_patient"              , $my_patient);
 $smarty->assign("count_my_patient"        , $count_my_patient);
 
-$smarty->assign("group_id"                , CGroups::loadCurrent()->_id);
 $smarty->display("vw_idx_sejour.tpl");

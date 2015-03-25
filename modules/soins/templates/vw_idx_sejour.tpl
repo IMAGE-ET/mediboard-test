@@ -133,7 +133,7 @@
 
     var default_service_id_elt = formPref.elements['pref[default_services_id]'];
     var default_service_id = $V(default_service_id_elt).evalJSON();
-    default_service_id.g{{$group_id}} = service_id;
+    default_service_id.g{{$g}} = service_id;
     $V(default_service_id_elt, Object.toJSON(default_service_id));
     return onSubmitFormAjax(formPref, function() {
       Control.Modal.close();
@@ -206,7 +206,7 @@
                       {{/foreach}}
                       <option value="NP" {{if $service_id == "NP"}}selected{{/if}}>Non placés</option>
                     </select>
-                    {{if $isPrescriptionInstalled}}
+                    {{if "dPprescription"|module_active}}
                       <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
                     {{/if}}
 
@@ -278,7 +278,7 @@
           </td>
         </tr>
         
-        {{if $_is_praticien && ($current_date == $date)}}
+        {{if $_is_praticien && ($dnow == $date)}}
           <tr>
             <td class="button">
               <script>
