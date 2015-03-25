@@ -15,6 +15,7 @@
   <form name="editAdmFrm{{$_sejour->_id}}" action="?m={{$current_m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="postRedirect" value="m={{$m}}" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
   <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
   <input type="hidden" name="recuse" value="{{$_sejour->recuse}}" />
