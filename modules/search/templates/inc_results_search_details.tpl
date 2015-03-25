@@ -39,10 +39,12 @@
         <div class="compact">{{tr}}{{$_result._type}}{{/tr}}</div>
       </td>
       {{if $_result._type == "CExObject"}}
-      <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}_{{$_result._source.ex_class_id}}-{{$_result._id}}')">
-        {{else}}
-      <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$_result._type}}-{{$_result._id}}')">
-        {{/if}}
+        {{assign var=guid value="`$_result._type`_`$_result._source.ex_class_id`-`$_result._source.id`"}}
+      {{else}}
+        {{assign var=guid value="`$_result._type`-`$_result._id`"}}
+      {{/if}}
+
+      <td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$guid}}')">
         {{if $_result._source.title != ""}}
           <span>{{$_result._source.title|utf8_decode}}</span>
         {{else}}
@@ -84,7 +86,7 @@
       </td>
       {{if $contexte == "pmsi" && "atih"|module_active}}
         <td class="button narrow not-printable">
-          <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._id}}', null)"></button>
+          <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._source.id}}', null)"></button>
         </td>
       {{/if}}
     </tr>
