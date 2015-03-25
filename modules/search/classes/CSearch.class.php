@@ -342,7 +342,13 @@ class CSearch {
       foreach ($_type as $action => $_data) {
         $documents = array();
         foreach ($_data as $_datum) {
-          $documents[] = new Document($_datum['id'], $_datum);
+          if (strpos($type_name, 'CExObject') === 0) {
+            $_id = $_datum["ex_class_id"]."_".$_datum["id"];
+          }
+          else {
+            $_id = $_datum["id"];
+          }
+          $documents[] = new Document($_id, $_datum);
         }
         switch ($action) {
           case 'create':
