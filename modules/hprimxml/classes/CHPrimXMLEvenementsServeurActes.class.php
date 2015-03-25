@@ -58,7 +58,8 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $patient = $this->addElement($evenementServeurActe, "patient");
     switch ($codable->_class) {
       // CSejour / CConsultation
-      case 'CSejour': case 'CConsultation':
+      case 'CSejour':
+      case 'CConsultation':
         $mbPatient = $codable->_ref_patient;
         break;
       
@@ -66,6 +67,8 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       case 'COperation':
         $mbPatient = $codable->_ref_sejour->_ref_patient;
         break;
+
+      default:
     }  
     $this->addPatient($patient, $mbPatient, false, true);
     
@@ -73,7 +76,8 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $venue = $this->addElement($evenementServeurActe, "venue");
     switch ($codable->_class) {
       // COperation / CConsultation
-      case 'COperation': case 'CConsultation':
+      case 'COperation':
+      case 'CConsultation':
         $mbSejour = $codable->_ref_sejour;
         break;
       
@@ -81,6 +85,8 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       case 'CSejour':
         $mbSejour = $codable;
         break;
+
+      default:
     }
     $this->addVenue($venue, $mbSejour, null, true);
     
@@ -94,10 +100,13 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         
       // CConsultation / CSejour
       // On ajoute seulement l'identifiant de la consultation ou séjour
-      case 'CConsultation': case 'CSejour':
+      case 'CConsultation':
+      case 'CSejour':
         $identifiant = $this->addElement($intervention, "identifiant");
         $this->addElement($identifiant, "emetteur", $codable->_id);
         break;
+
+      default:
     }
       
     // Ajout des actes CCAM

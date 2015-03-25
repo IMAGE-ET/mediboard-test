@@ -57,7 +57,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
       // soit quand on a la clôture sur le sejour
       case 'CSejour': 
         $sejour = $mbObject;
-        
+
         $send_only_with_type = CAppUI::conf("sa send_only_with_type");
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
           return;  
@@ -118,9 +118,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
             }
             break;
 
-          case 'sortie_reelle':
-            break;
-            
           default:
             if ($operation->fieldModified('facture', 1)) {
               $this->sendFormatAction("onAfterStore", $operation);
@@ -140,9 +137,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
         }
 
         switch (CAppUI::conf("sa trigger_consultation")) {
-          case 'sortie_reelle':
-            break;
-
           case 'facture':
             if ($consultation->fieldModified('facture', 1)) {
               $this->sendFormatAction("onAfterStore", $consultation);

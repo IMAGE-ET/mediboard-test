@@ -63,7 +63,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         
         $patient = $sejour->loadRefPatient();
         $patient->loadIPP($receiver->group_id);
-        
+
         if (CAppUI::conf("sa send_only_with_ipp_nda")) {
           if (!$patient->_IPP || !$sejour->_NDA) {
             throw new CMbException("CSaObjectHandler-send_only_with_ipp_nda", UI_MSG_ERROR);
@@ -86,7 +86,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         /** @var COperation $operation */
         $operation = $mbObject;
         
-        $sejour  = $operation->_ref_sejour;
+        $sejour  = $operation->loadRefSejour();
         $sejour->loadNDA($receiver->group_id);
         
         $patient = $sejour->loadRefPatient();
@@ -132,13 +132,20 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     $codable = $mbObject;
 
     // Chargement des actes du codable
-    $codable->loadRefsActes();  
-    
+    $codable->loadRefsActes();
+
     // Envoi des actes CCAM / NGAP
     if (empty($codable->_ref_actes_ccam) && empty($codable->_ref_actes_ngap)) {
       return;
     }
-    
+
+    // Flag les actes CCAM en envoyés
+    foreach ($codable->_ref_actes_ccam as $_acte_ccam) {
+      $_acte_ccam->sent        = 1;
+      $_acte_ccam->_no_synchro = true;
+      $_acte_ccam->store();
+    }
+
     $this->sendEvenementPMSI("CHPrimXMLEvenementsServeurActes", $codable);   
   }
 }
