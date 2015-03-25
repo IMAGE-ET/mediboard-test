@@ -4697,7 +4697,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       $where["object_id"] = "= '$_presta_id'";
 
-      $liaisons = $item_liaison->loadList($where, null, null, null, $ljoin);
+      $liaisons = $item_liaison->loadList($where, null, null, "item_liaison_id", $ljoin);
 
       // S'il n'y a pas de liaison (ou que la première liaison est après la date de début)
       // et qu'une période est donnée, on cherche la dernière liaison disponible
