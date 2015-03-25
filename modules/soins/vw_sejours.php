@@ -46,12 +46,13 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
     $default_service_id = reset(explode("|", $default_services->{"g$group_id"}));
   }
 
-  // Récupération d'un éventuel praticien_id en session
+  // Récupération d'un éventuel praticien_id ou function_id en session
   if (!$service_id) {
     $praticien_id = CValue::getOrSession("praticien_id");
+    $function_id  = CValue::getOrSession("function_id");
   }
 
-  if (!$service_id && $default_service_id && !$praticien_id) {
+  if (!$service_id && $default_service_id && !$praticien_id && !$function_id) {
     $service_id = $default_service_id;
   }
 
@@ -61,7 +62,7 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
 // Chargement de l'utilisateur courant
 $userCourant = CMediusers::get();
 // Preselection du praticien_id
-if (!$praticien_id && $userCourant->isPraticien() && !$service_id && !$praticien_id) {
+if (!$praticien_id && $userCourant->isPraticien() && !$service_id && !$praticien_id && !$function_id) {
   $praticien_id = $userCourant->user_id;
 }
 
@@ -270,7 +271,8 @@ if (!isset($sejours)) {
       if ($service_id || $praticien_id || $function_id) {
         $affectations = $affectation->loadList($where, $order, null, "affectation.sejour_id", $ljoin);
 
-        CMbObject::massLoadFwdRef($affectations, "sejour_id");
+        /** @var CSejour[] $sejours */
+        $sejours = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 
         /* @var CAffectation[] $affectations*/
         foreach($affectations as $_affectation){
@@ -279,26 +281,29 @@ if (!isset($sejours)) {
           $sejour = $_affectation->loadRefSejour(1);
           $sejour->_ref_curr_affectation = $_affectation;
         }
-
-        $sejours = CMbArray::pluck($affectations, "_ref_sejour");
       }
     }
   }
 }
 
-/* @var CSejour[] $sejours*/
-CMbObject::massLoadFwdRef($sejours, "patient_id");
-CMbObject::massLoadFwdRef($sejours, "praticien_id");
-CMbObject::massCountBackRefs($sejours, "tasks", array("realise" => " = '0'"), array(), "taches_non_realisees");
+/* @var CPatient[] $patients*/
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CPatient::massLoadIPP($patients);
+CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+
+CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CStoredObject::massCountBackRefs($sejours, "tasks", array("realise" => "= '0'"), array(), "taches_non_realisees");
+CStoredObject::massLoadBackRefs($sejours, "dossier_medical");
+CSejour::massLoadSurrAffectation($sejours);
+CSejour::massLoadBackRefs($sejours, "user_sejour");
+CSejour::massLoadNDA($sejours);
 
 $count_my_patient = 0;
 foreach ($sejours as $sejour) {
   $count_my_patient += count($sejour->loadRefsUserSejour($userCourant));
-  $sejour->loadRefPatient(1)->loadIPP();
-  $sejour->loadRefPraticien(1);
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
   $sejour->checkDaysRelative($date);
-  $sejour->loadSurrAffectations();
-  $sejour->loadNDA();
 
   $sejour->loadRefPrescriptionSejour();
   $prescription = $sejour->_ref_prescription_sejour;
@@ -316,44 +321,54 @@ foreach ($sejours as $sejour) {
     $sejour->_ref_tasks = $task->loadMatchingList();
     foreach ($sejour->_ref_tasks as $_task) {
       $_task->loadRefPrescriptionLineElement();
-    }  
-  }
-  
-  // Chargement des lignes non associées à des taches
-  $where = array();
-  $ljoin = array();
-  $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
-  $ljoin["sejour_task"] = "sejour_task.prescription_line_element_id = prescription_line_element.prescription_line_element_id";
-  $where["prescription_id"] = " = '$prescription->_id'";
-  $where["element_prescription.rdv"] = " = '1'";
-  $where["prescription_line_element.date_arret"] = " IS NULL";
-  $where["active"] = " = '1'";
-  $where[] = "sejour_task.sejour_task_id IS NULL";
-  $where["child_id"] = " IS NULL";
-
-  $line_element = new CPrescriptionLineElement();
-  $sejour->_count_tasks_not_created = $line_element->countList($where, null, $ljoin);  
-  
-  if ($print) {
-    $sejour->_ref_tasks_not_created = $line_element->loadList($where, null, null, null, $ljoin);  
-  }
-  
-  if ($only_non_checked) {
-    $prescription->countNoValideLines($user_id);
-    if ($prescription->_counts_no_valide == 0) {
-      unset($sejours[$sejour->_id]);
-      continue;
     }
   }
-  
-  if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-    $prescription->_count_alertes = $prescription->countAlertsNotHandled("medium");
-    $prescription->_count_urgences = $prescription->countAlertsNotHandled("high");
+
+  if ($only_non_checked && !$prescription->_id) {
+    unset($sejours[$sejour->_id]);
+    continue;
   }
-  else {
-    $prescription->countFastRecentModif();
+
+  $sejour->_count_tasks_not_created = 0;
+  $sejour->_ref_tasks_not_created = array();
+
+  if ($prescription->_id) {
+    // Chargement des lignes non associées à des taches
+    $where                                         = array();
+    $ljoin                                         = array();
+    $ljoin["element_prescription"]                 = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+    $ljoin["sejour_task"]                          = "sejour_task.prescription_line_element_id = prescription_line_element.prescription_line_element_id";
+    $where["prescription_id"]                      = " = '$prescription->_id'";
+    $where["element_prescription.rdv"]             = " = '1'";
+    $where["prescription_line_element.date_arret"] = " IS NULL";
+    $where["active"]                               = " = '1'";
+    $where[]                                       = "sejour_task.sejour_task_id IS NULL";
+    $where["child_id"]                             = " IS NULL";
+
+    $line_element                     = new CPrescriptionLineElement();
+    $sejour->_count_tasks_not_created = $line_element->countList($where, null, $ljoin);
+
+    if ($print) {
+      $sejour->_ref_tasks_not_created = $line_element->loadList($where, null, null, null, $ljoin);
+    }
+
+    if ($only_non_checked) {
+      $prescription->countNoValideLines($user_id);
+      if ($prescription->_counts_no_valide == 0) {
+        unset($sejours[$sejour->_id]);
+        continue;
+      }
+    }
+
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $prescription->_count_alertes  = $prescription->countAlertsNotHandled("medium");
+      $prescription->_count_urgences = $prescription->countAlertsNotHandled("high");
+    }
+    else {
+      $prescription->countFastRecentModif();
+    }
   }
-    
+
   // Chargement des transmissions sur des cibles importantes
   $sejour->loadRefsTransmissions(true, null, false, 1);
   $sejour->loadRefDossierMedical();
