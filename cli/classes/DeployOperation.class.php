@@ -45,8 +45,8 @@ abstract class DeployOperation extends MediboardCommand {
 
   protected $all_instances = array();
   protected $instance_ids;
-  protected $instances_to_update;
-  protected $instances_to_perform;
+  protected $instances_to_update = array();
+  protected $instances_to_perform = array();
 
   protected $performed_instances = array();
   protected $skipped_instances = array();
