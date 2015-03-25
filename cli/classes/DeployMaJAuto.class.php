@@ -57,8 +57,7 @@ class DeployMaJAuto extends DeployMaj {
         'allow_trunk',
         't',
         InputOption::VALUE_NONE,
-        'Allow TRUNK working copy for MASTER',
-        false
+        'Allow TRUNK working copy for MASTER'
       );
   }
 
