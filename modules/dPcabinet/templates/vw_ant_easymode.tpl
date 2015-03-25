@@ -19,17 +19,27 @@
 
     // Refaire le count pour le volet Antécédents
     $("antecedents").down("tr", 1).down("td", 1).select("table").each(function(table) {
-      var aides = table.select("td."+className);
       var tab = document.body.down("a[href=#"+table.id+"]");
 
+      if (Object.isUndefined(tab)) {
+        return;
+      }
+
+      var aides = table.select("td."+className);
       var small = tab.down("small");
-      var count = 0;
+      var count = parseInt(small.innerHTML.replace(/(\(|\))*/, ""));
+
       if (status) {
-        count = parseInt(small.innerHTML.replace(/(\(|\))*/,"")) + aides.length;
+        count += aides.length;
       }
       else {
-        count = parseInt(small.innerHTML.replace(/(\(|\))*/,"")) - aides.length;
+        count -= aides.length;
       }
+
+      if (count < 0) {
+        count = 0;
+      }
+
       small.update("("+count+")");
 
       if (count == 0) {
@@ -39,13 +49,18 @@
         tab.removeClassName("empty");
       }
 
-      // Ansin que pour les sous-volets
+      // Ainsi que pour les sous-volets
       table.select("a").each(function(elt) {
         var id = elt.href.split("#")[1];
         var tbody = $(id);
 
         var nb_tds = (tbody.select("td.text").findAll(function(el) { return el.visible(); })).length;
         var tab = document.body.down("a[href=#"+id+"]");
+
+        if (Object.isUndefined(tab)) {
+          return;
+        }
+
         var small = tab.down("small");
 
         small.update("("+nb_tds+")");
