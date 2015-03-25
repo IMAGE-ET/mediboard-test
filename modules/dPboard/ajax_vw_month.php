@@ -18,7 +18,7 @@ $date = CValue::getOrSession("date", CMbDT::date());
 $group_id = CGroups::loadCurrent()->_id;
 
 $user = CMediusers::get();
-$prat_id      = CValue::getOrSession("prat_id");
+$prat_id      = CValue::getOrSession("praticien_id");
 $function_id  = CValue::get("function_id");
 
 if (!$prat_id && !$function_id) {
