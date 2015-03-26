@@ -246,6 +246,8 @@ if (is_array($services_ids) && count($services_ids)) {
 $where["affectation.entree"] = "<= '$date_max'";
 $where["affectation.sortie"] = ">= '$date_min'";
 
+$where["sejour.annule"] = "= '0'";
+
 if ($duree_uscpo) {
   $ljoin["operations"] = "operations.sejour_id = affectation.sejour_id";
   $where["duree_uscpo"] = "> 0";

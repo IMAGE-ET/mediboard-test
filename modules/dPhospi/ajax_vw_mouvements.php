@@ -164,6 +164,7 @@ $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"] = "chambre.service_id = service.service_id";
 $order = "ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank";
 $lit = new CLit();
+/** @var CLit[] $lits */
 $lits     = $lit->loadList($where, $order, null, null, $ljoin);
 $chambres = CMbObject::massLoadFwdRef($lits, "chambre_id");
 $services = CMbObject::massLoadFwdRef($chambres, "service_id");
@@ -199,18 +200,22 @@ array_multisort(CMbArray::pluck($services, "nom"), SORT_ASC, $services);
 // Chargement des affectations
 $where = array();
 $where["lit_id"] = CSQLDataSource::prepareIn(array_keys($lits));
-$where["entree"] = "< '$date_max'";
-$where["sortie"] = "> '$date_min'";
+$where["affectation.entree"] = "< '$date_max'";
+$where["affectation.sortie"] = "> '$date_min'";
+$where["sejour.annule"] = "= '0'";
+
+$ljoin = array();
+$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
 
 $affectation = new CAffectation();
-$nb_affectations = $affectation->countList($where);
+$nb_affectations = $affectation->countList($where, null, $ljoin);
 if ($nb_affectations > CAppUI::conf("dPhospi max_affectations_view")) {
   $smarty = new CSmartyDP();
   $smarty->display("inc_vw_max_affectations.tpl");
   CApp::rip();
 }
 
-$affectations = $affectation->loadList($where, "parent_affectation_id ASC");
+$affectations = $affectation->loadList($where, "parent_affectation_id ASC", null, null, $ljoin);
 
 // Ajout des prolongations anormales
 // (séjours avec entrée réelle et sortie non confirmée et sortie < maintenant
@@ -225,9 +230,11 @@ if ($nb_days_prolongation) {
     "sortie_reelle"   => "IS NULL",
     "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
     "sejour.confirme" => "IS NULL",
-    "group_id"        => "= '$group->_id'"
+    "group_id"        => "= '$group->_id'",
+    "annule"          => "= '0'"
   );
 
+  /** @var CSejour[] $sejours_prolonges */
   $sejours_prolonges = $sejour->loadList($where);
 
   $affectations_prolong = array();
@@ -241,6 +248,7 @@ if ($nb_days_prolongation) {
   }
 }
 
+/** @var CSejour[] $sejours */
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
