@@ -246,6 +246,8 @@ if (is_array($services_ids) && count($services_ids)) {
 $where["affectation.entree"] = "<= '$date_max'";
 $where["affectation.sortie"] = ">= '$date_min'";
 
+$where["sejour.annule"] = "= '0'";
+
 if ($duree_uscpo) {
   $ljoin["operations"] = "operations.sejour_id = affectation.sejour_id";
   $where["duree_uscpo"] = "> 0";
@@ -267,7 +269,7 @@ $affectation = new CAffectation();
 
 $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
 $_sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
-$services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
+$services = $services + CStoredObject::massLoadFwdRef($affectations, "service_id");
 $patients = CStoredObject::massLoadFwdRef($_sejours, "patient_id");
 CStoredObject::massLoadBackRefs($patients, "dossier_medical");
 
@@ -283,9 +285,10 @@ $user = new CUser();
 $where = array("user_id" => CSQLDataSource::prepareIn(CMbArray::pluck($_sejours, "praticien_id")));
 $users = $user->loadList($where);
 
-$praticiens = CMbObject::massLoadFwdRef($_sejours, "praticien_id");
-CMbObject::massLoadFwdRef($praticiens, "function_id");
-CMbObject::massCountBackRefs($affectations, "affectations_enfant");
+$praticiens = CStoredObject::massLoadFwdRef($_sejours, "praticien_id");
+CStoredObject::massLoadFwdRef($praticiens, "function_id");
+CStoredObject::massCountBackRefs($affectations, "affectations_enfant");
+CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
 
 loadVueTempo(
   $sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
