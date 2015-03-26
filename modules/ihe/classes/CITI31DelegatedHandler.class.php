@@ -702,6 +702,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return "A11";
       }
 
+      // Réattribution dossier administratif
+      if ($sejour->fieldModified("patient_id")) {
+        return "A44";
+      }
+
       if (!$configs["modification_before_admit"] && !$sejour->entree_reelle) {
         return;
       }
