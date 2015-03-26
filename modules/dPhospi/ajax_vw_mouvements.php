@@ -252,7 +252,10 @@ if ($nb_days_prolongation) {
 $sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
 CStoredObject::massLoadBackRefs($patients, "dossier_medical");
-CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
+$operations = CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
+CStoredObject::massLoadFwdRef($operations, "plageop_id");
+CStoredObject::massCountBackRefs($affectations, "affectations_enfant");
+CPatient::massCountPhotoIdentite($patients);
 
 foreach ($affectations as $_affectation_imc) {
   /* @var CAffectation $_affectation_imc*/

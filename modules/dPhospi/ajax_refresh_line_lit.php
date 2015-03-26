@@ -138,6 +138,7 @@ $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 CMbObject::massLoadBackRefs($patients, "dossier_medical");
+CPatient::massCountPhotoIdentite($patients);
 
 foreach ($affectations as $_affectation_imc) {
   /* @var CAffectation $_affectation_imc*/

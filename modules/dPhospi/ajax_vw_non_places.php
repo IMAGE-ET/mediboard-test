@@ -272,6 +272,7 @@ $_sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CStoredObject::massLoadFwdRef($affectations, "service_id");
 $patients = CStoredObject::massLoadFwdRef($_sejours, "patient_id");
 CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+CPatient::massCountPhotoIdentite($patients);
 
 foreach ($affectations as $_affectation_imc) {
   /* @var CAffectation $_affectation_imc*/
@@ -288,7 +289,8 @@ $users = $user->loadList($where);
 $praticiens = CStoredObject::massLoadFwdRef($_sejours, "praticien_id");
 CStoredObject::massLoadFwdRef($praticiens, "function_id");
 CStoredObject::massCountBackRefs($affectations, "affectations_enfant");
-CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
+$_operations = CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
+CStoredObject::massLoadFwdRef($_operations, "plageop_id");
 
 loadVueTempo(
   $sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
