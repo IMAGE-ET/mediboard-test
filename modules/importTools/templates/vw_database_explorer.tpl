@@ -1,30 +1,7 @@
-<script>
-  DatabaseExplorer = {
-    displayTableData: function(dsn, table, start, count) {
-      var url = new Url("importTools", "ajax_vw_table_data");
-      url.addParam("dsn", dsn);
-      url.addParam("table", table);
-      url.addParam("start", start);
-      url.addNotNullParam("count", count);
-      url.requestUpdate("table-data");
-
-      $('col-'+dsn+'-'+table).addUniqueClassName('selected');
-
-      return false;
-    },
-
-    toggleHidden: function(dsn, b) {
-      $("table-"+dsn).toggleClassName("show_hidden", b);
-    },
-
-    toggleEmpty: function(dsn, b) {
-      $("table-"+dsn).toggleClassName("show_empty", b);
-    }
-  }
-</script>
+{{mb_script module=importTools script=DatabaseExplorer}}
 
 <style>
-  .show_hidden .hidden {
+  .show_hidden .hidden:not(.empty) {
     display: table-row !important;
   }
   .show_empty .empty {
@@ -57,7 +34,7 @@
                 </td>
                 <td>
                   {{if $_table.title}}
-                    <em>{{$_table.title}}</em>
+                    <em>{{$_table.title|spancate:25}}</em>
                   {{/if}}
                 </td>
                 <td class="compact">

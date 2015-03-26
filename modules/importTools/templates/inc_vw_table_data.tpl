@@ -1,3 +1,33 @@
+{{if $tooltip}}
+  <h2>
+    {{$table}}
+    &ndash;
+    {{if $where_column}}
+      WHERE {{$where_column}} = '{{$where_value}}'
+    {{/if}}
+  </h2>
+
+
+  <table class="tbl" style="width: auto;">
+    {{foreach from=$columns key=_col item=_col_info}}
+      <tr>
+        <th style="text-align: left;">{{$_col}}</th>
+        <td>
+          {{if $_col_info.Key == "PRI"}}
+            <i class="fa fa-key" style="color: #ae0040;"></i>
+          {{elseif $_col_info.Key == "MUL"}}
+            <i class="fa fa-link"></i>
+          {{/if}}
+        </td>
+        <td style="color: #999;"><code>{{$_col_info.datatype}}</code></td>
+        <td>
+          {{mb_include module=importTools template=inc_display_value value=$rows.0.$_col col_info=$_col_info}}
+        </td>
+      </tr>
+    {{/foreach}}
+  </table>
+{{else}}
+
 <h3>
   {{$table}}
   <select onchange="DatabaseExplorer.displayTableData('{{$dsn}}', '{{$table}}', 0, $V(this))">
@@ -14,58 +44,42 @@
 </script>
 
 <div style="max-width: 600px">
-  {{mb_include module=system template=inc_pagination total=$total step=$count current=$start change_page=changePage}}
+  {{mb_include module=system template=inc_pagination total=$total step=$count current=$start change_page=changePage jumper=10}}
 </div>
 
 <table class="tbl" style="width: auto;">
   <tr>
     {{foreach from=$columns key=_col item=_col_info}}
-      <th title="{{$_col_info.datatype}}" style="padding: 2px 4px;">{{$_col}}</th>
+      <th title="{{$_col_info.datatype}}" style="padding: 2px 4px;">
+        {{assign var=_new_order_way value="ASC"}}
+        {{if $order_way == "ASC"}}
+          {{assign var=_new_order_way value="DESC"}}
+        {{/if}}
+
+        <a class="{{$_col}} {{if $order_column == $_col}}sorted {{$order_way}}{{else}}sortable{{/if}}"
+           onclick="DatabaseExplorer.displayTableData('{{$dsn}}', '{{$table}}', 0, null, '{{$_col}}', '{{$_new_order_way}}')">
+          {{$_col}}
+        </a>
+
+        {{if $_col_info.Key == "PRI"}}
+          <i class="fa fa-key" style="color: #ae0040;"></i>
+        {{elseif $_col_info.Key == "MUL"}}
+          <i class="fa fa-link"></i>
+        {{/if}}
+
+        <button class="lookup notext" onclick="DatabaseExplorer.displayTableDistinctData('{{$dsn}}', '{{$table}}', '{{$_col}}')"></button>
+      </th>
     {{/foreach}}
   </tr>
 
   {{foreach from=$rows item=_row}}
     <tr>
       {{foreach from=$columns key=_col item=_col_info}}
-        <td>
-          {{if strpos($_col_info.Type,'blob') === false}}
-            {{if $_row.$_col !== null}}
-              {{if $_col_info.is_text}}
-                <code style="background: rgba(180,180,255,0.3)">{{$_row.$_col}}</code>
-              {{else}}
-                {{$_row.$_col}}
-              {{/if}}
-            {{else}}
-              <span class="empty" style="color: #ccc;">NULL</span>
-            {{/if}}
-          {{else}}
-            {{if $_row.$_col|strlen === 0}}
-              <span class="empty">[Empty blob]</span>
-            {{else}}
-              {{assign var=_encoded value=$_row.$_col|smarty:nodefaults|base64_encode}}
-
-              <a href="data:image/png;base64,{{$_encoded}}" target="_blank" style="display: inline-block;"
-                 onmouseover="ObjectTooltip.createDOM(this, DOM.img({src: 'data:image/png;base64,{{$_encoded}}', style: 'max-wdth: 400px'}))">
-                PNG
-              </a>
-              <a href="data:image/jpeg;base64,{{$_encoded}}" target="_blank" style="display: inline-block;"
-                 onmouseover="ObjectTooltip.createDOM(this, DOM.img({src: 'data:image/jpeg;base64,{{$_encoded}}', style: 'max-wdth: 400px'}))">
-                JPEG
-              </a>
-              <a href="data:application/pdf;base64,{{$_encoded}}" target="_blank" style="display: inline-block;">
-                PDF
-              </a>
-              <a href="data:application/rtf;base64,{{$_encoded}}" target="_blank" style="display: inline-block;">
-                RTF
-              </a>
-
-              <a href="data:text/plain;base64,{{$_encoded}}" target="_blank" style="display: inline-block;">
-                [Blob {{$_row.$_col|strlen}}o]
-              </a>
-            {{/if}}
-          {{/if}}
+        <td {{if $_col_info.Key == "MUL"}} style="background: rgba(127,127,180,0.2);" {{/if}}>
+          {{mb_include module=importTools template=inc_display_value value=$_row.$_col col_info=$_col_info}}
         </td>
       {{/foreach}}
     </tr>
   {{/foreach}}
 </table>
+{{/if}}
