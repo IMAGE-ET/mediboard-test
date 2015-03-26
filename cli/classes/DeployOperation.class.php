@@ -482,7 +482,7 @@ abstract class DeployOperation extends MediboardCommand {
    * External libraries installer
    */
   protected function installLibraries() {
-    require "install/cli/bootstrap.php";
+    require "{$this->path}/install/cli/bootstrap.php";
 
     foreach (CLibrary::$all as $library) {
       if ($library->isInstalled() && $library->getUpdateState()) {
