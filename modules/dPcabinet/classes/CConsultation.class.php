@@ -2621,6 +2621,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           }
           break;
         case "fdrConsult":
+          $consult->_docitems_from_dossier_anesth = false;
           $consult->countDocs();
           $consult->countFiles();
           $tabs_count[$_tab] = $consult->_nb_docs + $consult->_nb_files;
