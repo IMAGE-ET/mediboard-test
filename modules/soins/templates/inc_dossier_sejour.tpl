@@ -325,8 +325,9 @@
     {{/if}}
     <li><a href="#suivi_clinique">{{tr}}soins.tab.synthese{{/tr}}</a></li>
     <li><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
-    <li><a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
-
+    {{if $conf.dPmedicament.base != "vidal"}}
+      <li><a href="#dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
+    {{/if}}
     {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour">{{tr}}soins.tab.prescription{{/tr}}</a></li>
     {{/if}}
@@ -368,11 +369,13 @@
 <div id="content-dossier-soins" style="width: 100%;">
   <div id="suivi_clinique" style="display: none;"></div>
   <div id="constantes-medicales" style="display: none;"></div>
-  <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" style="display: none;">
-    {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
-      {{mb_include module=soins template=inc_dossier_soins_widgets}}
-    {{/if}}
-  </div>
+  {{if $conf.dPmedicament.base != "vidal"}}
+    <div id="dossier_traitement{{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}_compact{{/if}}" style="display: none;">
+      {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}
+        {{mb_include module=soins template=inc_dossier_soins_widgets}}
+      {{/if}}
+    </div>
+  {{/if}}
   {{if $isPrescriptionInstalled}}
     <div id="prescription_sejour" style="text-align: left; display: none;"></div>
   {{/if}}
