@@ -10,7 +10,7 @@
  * @link       http://www.mediboard.org
  */
 
-require "bootstrap.php";
+require __DIR__ . "/bootstrap.php";
 
 foreach (CLibrary::$all as $library) {
   if ($library->isInstalled() && $library->getUpdateState()) {
