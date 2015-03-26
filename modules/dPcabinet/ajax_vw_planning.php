@@ -106,11 +106,12 @@ $users = array();
 $conges_day = array();
 if ($user->_id) {
   $muser = new CMediusers();
-  $users = $muser->loadProfessionnelDeSanteByPref(PERM_READ, $user->function_id);
+  $users = $muser->loadUsers(PERM_READ, $user->function_id);
 }
 
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
+  $is_holiday = array_key_exists($jour, $bank_holidays);
 
   $planning->addDayLabel($jour, '<span style="font-size: 1.4em">'.CMbDT::format($jour, "%a %d %b").'</span>');
 
@@ -127,38 +128,40 @@ for ($i = 0; $i < $nbDays; $i++) {
   $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
 
   if (CAppUI::pref("showIntervPlanning")) {
-    //INTERVENTIONS
-    /** @var CPlageOp[] $intervs */
-    $interv = new CPlageOp();
-    $intervs = $interv->loadList($whereInterv);
-    CMbObject::massLoadFwdRef($intervs, "chir_id");
-    foreach ($intervs as $_interv) {
-      $range = new CPlanningRange(
-        $_interv->_guid, $jour." ".$_interv->debut,
-        CMbDT::minutesRelative($_interv->debut, $_interv->fin),
-        CAppUI::tr($_interv->_class),
-        "bbccee",
-        "plageop"
-      );
-      $planning->addRange($range);
-    }
+    if (!$is_holiday || CAppUI::pref("show_plage_holiday")) {
+      //INTERVENTIONS
+      /** @var CPlageOp[] $intervs */
+      $interv = new CPlageOp();
+      $intervs = $interv->loadList($whereInterv);
+      CMbObject::massLoadFwdRef($intervs, "chir_id");
+      foreach ($intervs as $_interv) {
+        $range = new CPlanningRange(
+          $_interv->_guid, $jour . " " . $_interv->debut,
+          CMbDT::minutesRelative($_interv->debut, $_interv->fin),
+          CAppUI::tr($_interv->_class),
+          "bbccee",
+          "plageop"
+        );
+        $planning->addRange($range);
+      }
 
-    //HORS PLAGE
-    $horsPlage = new COperation();
-    /** @var COperation[] $horsPlages */
-    $horsPlages = $horsPlage->loadList($whereHP);
-    CMbObject::massLoadFwdRef($horsPlages, "chir_id");
-    foreach ($horsPlages as $_horsplage) {
-      $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
-      $op = new CPlanningRange(
-        $_horsplage->_guid,
-        $jour." ".$_horsplage->time_operation,
-        $lenght,
-        CMbString::htmlEntities($_horsplage->_view),
-        "3c75ea",
-        "horsplage"
-      );
-      $planning->addRange($op);
+      //HORS PLAGE
+      $horsPlage = new COperation();
+      /** @var COperation[] $horsPlages */
+      $horsPlages = $horsPlage->loadList($whereHP);
+      CMbObject::massLoadFwdRef($horsPlages, "chir_id");
+      foreach ($horsPlages as $_horsplage) {
+        $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
+        $op = new CPlanningRange(
+          $_horsplage->_guid,
+          $jour . " " . $_horsplage->time_operation,
+          $lenght,
+          CMbString::htmlEntities($_horsplage->_view),
+          "3c75ea",
+          "horsplage"
+        );
+        $planning->addRange($op);
+      }
     }
   }
 
@@ -192,6 +195,9 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 
   //PLAGES CONSULT
+  if ($is_holiday && !CAppUI::pref("show_plage_holiday")) {
+    continue;
+  }
   /** @var CPlageConsult[] $plages */
   $plages = $plage->loadList($where, "date, debut");
   CMbObject::massLoadFwdRef($plages, "chir_id");
@@ -207,7 +213,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     // Affichage de la plage sur le planning
     $range = new CPlanningRange(
       $_plage->_guid,
-      $jour." ".$_plage->debut,
+      $jour . " " . $_plage->debut,
       CMbDT::minutesRelative($_plage->debut, $_plage->fin),
       $_plage->libelle,
       $_plage->color
@@ -234,7 +240,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         if (!$_nb) {
           $debute = "$jour $_timing";
           $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
-          $event->type        = "rdvfree";
+          $event->type = "rdvfree";
           $event->plage["id"] = $_plage->_id;
           if ($_plage->locked == 1) {
             $event->disabled = true;
@@ -290,18 +296,16 @@ for ($i = 0; $i < $nbDays; $i++) {
           $color = "#fee";
           if ($_consult->premiere) {
             $color = "#faa";
-          }
-          elseif ($_consult->derniere) {
+          } elseif ($_consult->derniere) {
             $color = "#faf";
-          }
-          elseif ($_consult->sejour_id) {
+          } elseif ($_consult->sejour_id) {
             $color = "#CFFFAD";
           }
         }
 
         $style = "";
         if ($_consult->annule) {
-          $style.= "text-decoration:line-through;";
+          $style .= "text-decoration:line-through;";
         }
 
         $title = "";
@@ -325,8 +329,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           $_consult->_guid,
           false
         );
-      }
-      else {
+      } else {
         if ($color = "#cfc") {
           $color = "#faa";
         }
@@ -341,7 +344,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           false
         );
       }
-      $event->type        = "rdvfull";
+      $event->type = "rdvfull";
       $event->plage["id"] = $_plage->_id;
       $event->plage["consult_id"] = $_consult->_id;
       if ($_plage->locked == 1) {
@@ -350,18 +353,18 @@ for ($i = 0; $i < $nbDays; $i++) {
 
       $_consult->loadRefCategorie();
       if ($_consult->categorie_id) {
-        $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
+        $event->icon = "./modules/dPcabinet/images/categories/" . $_consult->_ref_categorie->nom_icone;
         $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
       }
 
       if ($_consult->_id) {
         $event->draggable /*= $event->resizable */ = $can_edit;
-        $freq = $_plage->freq ? CMbDT::transform($_plage->freq, null, "%M") : 1 ;
+        $freq = $_plage->freq ? CMbDT::transform($_plage->freq, null, "%M") : 1;
         $event->hour_divider = 60 / $freq;
 
         if ($can_edit) {
           $event->addMenuItem("copy", "Copier cette consultation");
-          $event->addMenuItem("cut" , "Couper cette consultation");
+          $event->addMenuItem("cut", "Couper cette consultation");
           if ($_consult->patient_id) {
             $event->addMenuItem("add", "Ajouter une consultation");
             if ($_consult->chrono == CConsultation::PLANIFIE) {
@@ -374,7 +377,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         }
       }
 
-      //Ajout de l'évènement au planning 
+      //Ajout de l'évènement au planning
       $event->plage["color"] = $_plage->color;
       $event->below = 0;
       $planning->addEvent($event);
