@@ -202,7 +202,7 @@ $where = array();
 $where["lit_id"] = CSQLDataSource::prepareIn(array_keys($lits));
 $where["affectation.entree"] = "< '$date_max'";
 $where["affectation.sortie"] = "> '$date_min'";
-$where["sejour.annule"] = "= '0'";
+$where[] = "sejour.annule = '0' OR sejour.annule IS NULL";
 
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
