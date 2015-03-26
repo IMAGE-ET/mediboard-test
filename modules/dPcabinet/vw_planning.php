@@ -134,8 +134,15 @@ $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id
 
 for ($i = 0; $i < 7; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
+
+  $is_holiday = array_key_exists($jour, $bank_holidays);
+
   $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
   $where["date"] = "= '$jour'";
+
+  if ($is_holiday && !CAppUI::pref("show_plage_holiday")) {
+    continue;
+  }
 
   if (CAppUI::pref("showIntervPlanning")) {
     //INTERVENTIONS
@@ -146,7 +153,7 @@ for ($i = 0; $i < 7; $i++) {
     foreach ($intervs as $_interv) {
       $range = new CPlanningRange(
         $_interv->_guid,
-        $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin),
+        $jour . " " . $_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin),
         CAppUI::tr($_interv->_class),
         "bbccee",
         "plageop"
@@ -163,7 +170,7 @@ for ($i = 0; $i < 7; $i++) {
       $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
       $op = new CPlanningRange(
         $_horsplage->_guid,
-        $jour." ".$_horsplage->time_operation,
+        $jour . " " . $_horsplage->time_operation,
         $lenght,
         $_horsplage,
         "3c75ea",
