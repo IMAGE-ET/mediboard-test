@@ -12,6 +12,7 @@
  
 CCanDo::checkAdmin();
 
+$count          = CValue::get("count", 20);
 $continue       = CValue::get("continue"); 
 $error_code     = CValue::get("error_code"); 
 $exchange_class = CValue::get("exchange_class"); 
