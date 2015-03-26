@@ -2247,6 +2247,14 @@ class CSetupdPcabinet extends CSetup {
                 ADD `cp` VARCHAR (5),
                 ADD `ville` VARCHAR (255);";
     $this->addQuery($query);
-    $this->mod_version = '2.50';
+    $this->makeRevision('2.50');
+
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD `date_cas` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD INDEX (`date_cas`);";
+    $this->addQuery($query);
+    $this->mod_version = '2.51';
   }
 }

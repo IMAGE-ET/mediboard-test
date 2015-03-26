@@ -44,6 +44,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $envoi_xml;
   public $annule;
   public $definitive;
+  public $date_cas;
 
   // Form fields
   public $_consult_id;
@@ -174,6 +175,7 @@ class CFacture extends CMbObject implements IPatientRelated {
     $props["envoi_xml"]                 = "bool default|1";
     $props["annule"]                    = "bool default|0";
     $props["definitive"]                = "bool default|0";
+    $props["date_cas"]                  = "dateTime";
 
     $props["_du_restant_patient"]       = "currency";
     $props["_du_restant_tiers"]         = "currency";
@@ -838,7 +840,7 @@ class CFacture extends CMbObject implements IPatientRelated {
     if (count($this->_ref_items)) {
       return $this->_ref_items;
     }
-    $this->_ref_items = $this->loadBackRefs("items", 'code ASC');
+    $this->_ref_items = $this->loadBackRefs("items", 'date ASC, code ASC');
     if (count($this->_ref_items)) {
       $this->_ref_actes_tarmed = array();
       $this->_ref_actes_caisse = array();

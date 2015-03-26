@@ -162,10 +162,19 @@
 {{if $facture->type_facture == "accident" || ($facture->type_facture == "maladie" && $facture->statut_pro == "invalide")}}
   <tr>
     <td colspan="2">
-      <form name="ref_accident" method="post" action="" onsubmit="return onSubmitFormAjax(this);" style="max-width:100px;">
+      <form name="ref_accident-{{$facture->_guid}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);" style="max-width:100px;">
         {{mb_class object=$facture}}
         {{mb_key   object=$facture}}
-        <b>{{mb_label object=$facture field="ref_accident"}}:</b>
+        {{assign var=facture_guid value=$facture->_guid}}
+
+        <b>{{mb_label object=$facture field=date_cas}}:</b>
+        {{if $facture->cloture}}
+          {{mb_value object=$facture field="date_cas"}}
+        {{else}}
+          {{mb_field object=$facture field="date_cas" onchange="return onSubmitFormAjax(this.form);" form="ref_accident-$facture_guid" register=true}}
+        {{/if}}
+        <br/>
+        <b>{{mb_label object=$facture field=ref_accident}}:</b>
         {{if $facture->cloture}}
           {{mb_value object=$facture field="ref_accident"}} 
         {{else}}

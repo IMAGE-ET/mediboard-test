@@ -427,11 +427,17 @@ class CSetupdPfacturation extends CSetup {
     $this->addQuery($query);
     $this->makeRevision("0.43");
 
-    //Facture d'établissement de séjour
     $query = "ALTER TABLE `factureitem`
                 ADD `cote` ENUM ('left','right');";
     $this->addQuery($query);
+    $this->makeRevision("0.44");
 
-    $this->mod_version = "0.44";
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `date_cas` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD INDEX (`date_cas`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.45";
   }
 }

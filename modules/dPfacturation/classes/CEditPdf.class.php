@@ -278,17 +278,17 @@ class CEditPdf{
     $this->pdf->setFont($this->font, '', 8);
     $tailles_colonnes = array(
       "Date" => 7,      "Tarif"=> 4,
-      "Code" => 10,      "Code réf" => 7,
+      "Code" => 10,      "Code réf" => 6,
       "Sé Cô" => 5,     "Quantité" => 9,
       "Pt PM/Prix" => 8,"fPM" => 5,
-      "VPtPM" => 6,     "Pt PT" => 7,
-      "fPT" => 5,       "VPtPT" => 5,
+      "VPtPM" => 6,     "Pt PT" => 5,
+      "fPT" => 4,       "VPtPT" => 4,
       "E" => 2,         "R" => 2,
       "P" => 2,         "M" => 2,
       "Montant" => 10 );
     
     $x = 0;
-    $this->pdf->setX(10);
+    $this->pdf->setX(15);
     foreach ($tailles_colonnes as $key => $value) {
       $this->editCell($this->pdf->getX()+$x, 140, $value, $key, "C");
       $x = $value;
@@ -347,7 +347,7 @@ class CEditPdf{
             $ligne++;
           }
           $x = 0;
-          $this->pdf->setX(10);
+          $this->pdf->setX(15);
           $this->pdf->setFont($this->font, '', 8);
           foreach ($tailles_colonnes as $key => $largeur) {
             $valeur = "";
@@ -983,7 +983,7 @@ class CEditPdf{
     $colonnes = array(20, 28, 25, 25, 35, 50);
     if ($this->facture->_class == "CFactureCabinet") {
       $traitement = CMbDT::format($this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
-      $traitement .= CMbDT::format($this->facture->cloture, "%d.%m.%Y");
+      $traitement .= CMbDT::format($this->facture->_ref_last_consult->_date, "%d.%m.%Y");
     }
     else {
       $traitement = CMbDT::format($this->facture->_ref_first_sejour->entree, "%d.%m.%Y")." - ";
@@ -992,11 +992,13 @@ class CEditPdf{
 
     $name_rappel = $date_rappel = null;
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
-      $name_rappel = "Date rappel / facture";
+      //$name_rappel = "Date rappel";
       //$date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
       //$date_rappel = CMbDT::format($date_rappel, "%d.%m.%Y");
-      $date_rappel = CMbDT::format($this->facture->cloture, "%d.%m.%Y");
     }
+    $date_cas = ($this->facture->date_cas && $this->facture->type_facture == "accident") ? CMbDT::format($this->facture->date_cas, "%d.%m.%Y") : "";
+    $ref_accident = (($this->facture->ref_accident || $this->facture->statut_pro == "invalide")) ? $this->facture->ref_accident : "";
+
     $ean2 = $this->group->ean;
     if ($this->facture->_class == "CFactureEtablissement" && $this->facture->_ref_last_sejour->_ref_last_operation) {
       $ean2 = $this->facture->_ref_last_sejour->_ref_last_operation->_ref_anesth->ean;
@@ -1015,8 +1017,8 @@ class CEditPdf{
       array(""          , "Localité"        , $this->patient->ville   , null, $assur["nom"]),
       array(""          , "Date de naissance",$naissance        , null, $assur["adresse"]),
       array(""          , "Sexe"            , strtoupper($this->patient->sexe) , null, $assur["cp"]),
-      array(""          , "Date cas"        , CMbDT::format($this->facture->cloture, "%d.%m.%Y")),
-      array(""          , "N° cas"          , $this->facture->ref_accident),
+      array(""          , "Date cas"        , $date_cas),
+      array(""          , "N° cas"          , $ref_accident),
       array(""          , "N° AVS"          , $this->patient->avs),
       array(""          , "N° assuré"       , $_ref_assurance),
       array(""          , "Nom entreprise"  , $nom_entreprise),
@@ -1026,8 +1028,8 @@ class CEditPdf{
       array(""          , "Loi"             , $loi),
       array(""          , "N° contrat"      , ""),
       array(""          , "Motif traitement", $motif  , null, "N° facture", $num_fact),
-      array(""          , "Traitement"      , $traitement, null, $name_rappel, $date_rappel),
-      array(""          , "Rôle/ Localité"  , "-"),
+      array(""          , "Traitement"      , $traitement, null, "Date facture", CMbDT::format($this->facture->cloture, "%d.%m.%Y")),
+      array(""          , "Rôle/ Localité"  , "-", null, $name_rappel, $date_rappel),
       array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc, null, $this->praticien->_view),
       array("Diagnostic", $msg_info),
       array("Liste EAN" , "", "1/".$this->praticien->ean." 2/".$ean2),
