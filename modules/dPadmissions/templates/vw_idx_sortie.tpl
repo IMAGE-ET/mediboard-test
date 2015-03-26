@@ -70,6 +70,7 @@
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
     url.addParam("prat_id"   , $V(form.prat_id));
+    url.addParam("only_confirmed", $V(form.only_confirmed));
     url.requestUpdate('allSorties');
     reloadSorties();
   }
@@ -84,6 +85,7 @@
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
     url.addParam("prat_id"   , $V(form.prat_id));
+    url.addParam("only_confirmed", $V(form.only_confirmed));
     url.addParam("period"    , $V(form.period));
     url.addParam("filterFunction" , $V(form.filterFunction));
     url.requestUpdate("listSorties");
@@ -239,17 +241,21 @@
           <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
           <option value="soir"  {{if $period == "soir" }}selected{{/if}}>Soir</option>
         </select>
-        {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();"}}
-        <select name="service_id" onchange="reloadFullSorties();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
+        {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();" style="max-width: 15em;"}}
+        <select name="service_id" onchange="reloadFullSorties();" style="max-width: 15em;" {{if $sejour->service_id|@count > 1}}size="5" multiple{{/if}}>
           <option value="">&mdash; Tous les services</option>
           {{foreach from=$services item=_service}}
             <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}>{{$_service}}</option>
           {{/foreach}}
         </select>
         <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
-        <select name="prat_id" onchange="reloadFullSorties();">
+        <select name="prat_id" onchange="reloadFullSorties();" style="max-width: 15em;">
           <option value="">&mdash; Tous les praticiens</option>
           {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$sejour->praticien_id}}
+        </select>
+        <select name="only_confirmed" onchange="reloadFullSorties();" style="max-width: 12em;">
+          <option value="">&mdash; Toutes les sorties</option>
+          <option value="1" {{if $only_confirmed}}selected{{/if}}>Confirmées seulement</option>
         </select>
       </form>
       <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>

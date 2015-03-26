@@ -16,6 +16,7 @@ CCanDo::checkRead();
 $type           = CValue::getOrSession("type");
 $service_id     = CValue::getOrSession("service_id");
 $prat_id        = CValue::getOrSession("prat_id");
+$only_confirmed = CValue::getOrSession("only_confirmed");
 $selSortis      = CValue::getOrSession("selSortis", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
@@ -80,6 +81,12 @@ else {
 if ($prat_id) {
   $where["sejour.praticien_id"] = " = '$prat_id'";
 }
+
+// Seulement les confirmées par le praticien
+if ($only_confirmed) {
+  $where["sejour.confirme"] = " = '1'";
+}
+
 $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";

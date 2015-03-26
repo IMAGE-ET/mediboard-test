@@ -24,12 +24,13 @@ $nextmonth = CMbDT::date("first day of +1 month", $date);
 
 $current_m = CValue::get("current_m");
 
-$selSortis     = CValue::getOrSession("selSortis", "0");
-$type          = CValue::getOrSession("type");
-$service_id    = CValue::getOrSession("service_id");
-$prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CMbDate::getHolidays($date);
-$service_id    = explode(",", $service_id);
+$selSortis      = CValue::getOrSession("selSortis", "0");
+$type           = CValue::getOrSession("type");
+$service_id     = CValue::getOrSession("service_id");
+$prat_id        = CValue::getOrSession("prat_id");
+$only_confirmed = CValue::getOrSession("only_confirmed");
+$bank_holidays  = CMbDate::getHolidays($date);
+$service_id     = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
 $hier   = CMbDT::date("- 1 day", $date);
@@ -73,6 +74,13 @@ else {
   $filterPrat = "";
 }
 
+if ($only_confirmed) {
+  $filterConfirmed = "AND sejour.confirme = '1'";
+}
+else {
+  $filterConfirmed = "";
+}
+
 $group = CGroups::loadCurrent();
 
 // Listes des sorties par jour
@@ -85,6 +93,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`se
             $filterType
             $filterService
             $filterPrat
+            $filterConfirmed
           GROUP BY `date`
           ORDER BY `date`";
 
@@ -103,6 +112,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`se
             $filterType
             $filterService
             $filterPrat
+            $filterConfirmed
           GROUP BY `date`
           ORDER BY `date`";
 
@@ -123,6 +133,7 @@ if (CAppUI::conf("ref_pays") == "2") {
               $filterType
               $filterService
               $filterPrat
+            $filterConfirmed
             GROUP BY `date`
             ORDER BY `date`";
 
@@ -142,6 +153,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`se
             $filterType
             $filterService
             $filterPrat
+            $filterConfirmed
           GROUP BY `date`
           ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $_nb_non_preparees) {
