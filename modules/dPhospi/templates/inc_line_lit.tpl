@@ -213,7 +213,7 @@
                         <strong>{{$sejour->_ref_charge_price_indicator->code}}</strong>
                       {{/if}}
 
-                      {{if $show_age_patient}}({{$patient->_age}}){{/if}}
+                      {{if $conf.dPhospi.show_age_patient}}({{$patient->_age}}){{/if}}
 
                       {{assign var=service_id_imc value=$object->service_id}}
                       {{if ($service_id_imc && "dPhospi vue_temporelle show_imc_patient"|conf:"CService-$service_id_imc")

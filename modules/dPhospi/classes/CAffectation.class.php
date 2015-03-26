@@ -93,6 +93,8 @@ class CAffectation extends CMbObject {
   /** @var CMediusers */
   public $_ref_praticien;
 
+  static $width_vue_tempo = 84.2;
+
   /**
    * @see parent::getSpec()
    */

@@ -164,7 +164,6 @@
     <tr>
       <th class="section {{if $_service->externe}}service_externe{{/if}}" colspan="{{$colspan}}">{{$_service}}</th>
     </tr>
-    {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable line">

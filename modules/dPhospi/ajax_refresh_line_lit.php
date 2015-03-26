@@ -80,7 +80,7 @@ $chambre->_ref_lits[$lit->_id] = $lit;
 $lits = array($lit_id => $lit);
 
 $liaisons_items = $lit->loadBackRefs("liaisons_items");
-$items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
+$items_prestations = CStoredObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
 $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
 
 if (in_array($prestation_id, $prestations_ids)) {
@@ -120,6 +120,7 @@ $where = array(
   "group_id"        => "= '$group_id'"
 );
 
+/** @var CSejour[] $sejours_prolonges */
 $sejours_prolonges = $sejour->loadList($where);
 
 $affectations_prolong = array();
@@ -133,11 +134,11 @@ foreach ($sejours_prolonges as $_sejour) {
   $affectations[$aff->_id] = $aff;
 }
 
-$sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
-$patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
-$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
-CMbObject::massLoadFwdRef($praticiens, "function_id");
-CMbObject::massLoadBackRefs($patients, "dossier_medical");
+$sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CStoredObject::massLoadFwdRef($praticiens, "function_id");
+CStoredObject::massLoadBackRefs($patients, "dossier_medical");
 CPatient::massCountPhotoIdentite($patients);
 
 foreach ($affectations as $_affectation_imc) {
@@ -177,16 +178,16 @@ foreach ($lits_ids as $_lit_id) {
   if ($lit_id == $_lit_id) {
     continue;
   }
-  $_lit = new CLit;
+  $_lit = new CLit();
   $_lit->load($_lit_id);
   
   $where["lit_id"] = "= '$_lit->_id'";
   
   $_affectations = $affectation->loadList($where);
   
-  $_sejours = CMbObject::massLoadFwdRef($_affectations, "sejour_id");
-  CMbObject::massLoadFwdRef($_sejours, "patient_id");
-  CMbObject::massLoadFwdRef($_sejours, "praticien_id");
+  $_sejours = CStoredObject::massLoadFwdRef($_affectations, "sejour_id");
+  CStoredObject::massLoadFwdRef($_sejours, "patient_id");
+  CStoredObject::massLoadFwdRef($_sejours, "praticien_id");
 
   /** @var $_affectations CAffectation[] */
   foreach ($_affectations as $_affectation) {
@@ -222,8 +223,7 @@ $smarty->assign("datetimes" , $datetimes);
 $smarty->assign("current"   , $current);
 $smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 $smarty->assign("prestation_id", $prestation_id);
-$smarty->assign("show_age_patient", CAppUI::conf("dPhospi show_age_patient"));
 $smarty->assign("suivi_affectation", $suivi_affectation);
-$smarty->assign("td_width"  , 84.2 / $nb_ticks);
+$smarty->assign("td_width"  , CAffectation::$width_vue_tempo / $nb_ticks);
 
 $smarty->display("inc_line_lit.tpl");

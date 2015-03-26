@@ -202,7 +202,7 @@ $where = array();
 $where["lit_id"] = CSQLDataSource::prepareIn(array_keys($lits));
 $where["affectation.entree"] = "< '$date_max'";
 $where["affectation.sortie"] = "> '$date_min'";
-$where["sejour.annule"] = "= '0'";
+$where[] = "sejour.annule = '0' OR sejour.annule IS NULL";
 
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
@@ -251,7 +251,6 @@ if ($nb_days_prolongation) {
 /** @var CSejour[] $sejours */
 $sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
-CStoredObject::massLoadBackRefs($patients, "dossier_medical");
 $operations = CStoredObject::massLoadBackRefs($sejours, "operations", "date ASC");
 CStoredObject::massLoadFwdRef($operations, "plageop_id");
 CStoredObject::massCountBackRefs($affectations, "affectations_enfant");
@@ -275,8 +274,11 @@ $operations = array();
 $suivi_affectation = false;
 loadVueTempo($affectations, $suivi_affectation, $lits, $operations, $date_min, $date_max, $period, $prestation_id);
 
-$dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
-CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+if (CAppUI::conf("dPadmissions show_deficience")) {
+  CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+  $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+}
 
 foreach ($lits as $_lit) {
   $intervals = array();
@@ -319,6 +321,6 @@ $smarty->assign("readonly"    , $readonly);
 $smarty->assign("current"     , $current);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("suivi_affectation", $suivi_affectation);
-$smarty->assign("td_width"    , 84.2 / $nb_ticks);
+$smarty->assign("td_width"    , CAffectation::$width_vue_tempo / $nb_ticks);
 
 $smarty->display("inc_vw_mouvements.tpl");

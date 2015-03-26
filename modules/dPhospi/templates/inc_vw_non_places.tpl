@@ -102,7 +102,6 @@
   {{if $sejours_non_affectes|@count}}
     <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
       <col style="width: 15%;" />
-      {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
       {{foreach from=$sejours_non_affectes item=_sejours_by_service key=_service_id}}
         {{if $_service_id != "np"}}
           {{assign var=service value=$services.$_service_id}}

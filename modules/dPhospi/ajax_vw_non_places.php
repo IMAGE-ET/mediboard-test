@@ -271,7 +271,6 @@ $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
 $_sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CStoredObject::massLoadFwdRef($affectations, "service_id");
 $patients = CStoredObject::massLoadFwdRef($_sejours, "patient_id");
-CStoredObject::massLoadBackRefs($patients, "dossier_medical");
 CPatient::massCountPhotoIdentite($patients);
 
 foreach ($affectations as $_affectation_imc) {
@@ -296,15 +295,18 @@ loadVueTempo(
   $sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
   $filter_function, $sejours_non_affectes
 );
-$dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
-CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+if (CAppUI::conf("dPadmissions show_deficience")) {
+  CStoredObject::massLoadBackRefs($patients, "dossier_medical");
+  $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+}
 
 loadVueTempo(
   $affectations, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter,
   $filter_function, $sejours_non_affectes
 );
 
-if (count($affectations)) {
+if (count($affectations) && CAppUI::conf("dPadmissions show_deficience")) {
   $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
   CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 }
@@ -334,7 +336,7 @@ $smarty->assign("current"             , $current);
 $smarty->assign("items_prestation"    , $items_prestation);
 $smarty->assign("item_prestation_id"  , $item_prestation_id);
 $smarty->assign("prestation_id"       , $prestation_id);
-$smarty->assign("td_width"            , 84.2 / $nb_ticks);
+$smarty->assign("td_width"            , CAffectation::$width_vue_tempo / $nb_ticks);
 $smarty->assign("mode_vue_tempo"      , "classique");
 $smarty->assign("affectations"        , $affectations);
 $smarty->assign("sejours"             , $sejours);
