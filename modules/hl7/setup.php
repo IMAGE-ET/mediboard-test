@@ -1477,7 +1477,13 @@ class CSetuphl7 extends CSetup {
                 ADD `send_not_master_NDA` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.16";
+    $this->makeRevision("1.16");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                CHANGE `build_PID_18` `build_PID_18` ENUM ('normal','simple', 'none') DEFAULT 'normal';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.17";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

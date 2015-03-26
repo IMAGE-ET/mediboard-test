@@ -255,42 +255,49 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-17: Religion (CE) (optional)
     $data[] = null;
-    
-    // PID-18: Patient Account Number (CX) (optional)
+
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      $sejour = $this->sejour;
-      $sejour->loadNDA($group->_id);
+      // PID-18: Patient Account Number (CX) (optional)
+      switch ($receiver->_configs["build_PID_18"]) {
+        case 'normal':
+        case 'simple':
+          $sejour = $this->sejour;
+          $sejour->loadNDA($group->_id);
 
-      $NDA = $sejour->_NDA;
-      if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
-        $NDA = "===NDA_MISSING===";
-      }
+          $NDA = $sejour->_NDA;
+          if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
+            $NDA = "===NDA_MISSING===";
+          }
 
-      if ($receiver->_configs["build_PID_18"] == "simple") {
-        $data[] = $NDA;
-      }
-      else {
-        // Même traitement que pour l'IPP
-        switch ($receiver->_configs["build_PID_3_4"]) {
-          case 'actor':
-            $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
-            break;
+          if ($receiver->_configs["build_PID_18"] == "simple") {
+            $data[] = $NDA;
+          }
+          else {
+            // Même traitement que pour l'IPP
+            switch ($receiver->_configs["build_PID_3_4"]) {
+              case 'actor':
+                $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
+                break;
 
-          default:
-            $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-            break;
-        }
+              default:
+                $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+                break;
+            }
 
-        $data[] = $NDA ? array(
-          array(
-            $NDA,
-            null,
-            null,
-            // PID-3-4 Autorité d'affectation
-            $assigning_authority,
-            "AN"
-          )
-        ) : null;
+            $data[] = $NDA ? array(
+              array(
+                $NDA,
+                null,
+                null,
+                // PID-3-4 Autorité d'affectation
+                $assigning_authority,
+                "AN"
+              )
+            ) : null;
+          }
+
+        default:
+          $data[] = null;
       }
     }
     else {
