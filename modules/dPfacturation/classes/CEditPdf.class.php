@@ -813,7 +813,7 @@ class CEditPdf{
     $group = CGroups::loadCurrent();
     //le 01 sera fixe car il correspond à un "Codes des genres de justificatifs (BC)" ici :01 = BVR en CHF
     $genre = "01";
-    $montant = sprintf('%010d', $montant_facture*100);
+    $montant = sprintf("%010s", $montant_facture*100);
     $cle = $this->facture->getNoControle($genre.$montant);
     $num_adherent = $this->facture->loadNumAdherent($this->praticien->adherent);
     $this->adherent2  = $num_adherent["bvr"];
