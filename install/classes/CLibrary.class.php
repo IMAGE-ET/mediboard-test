@@ -31,6 +31,10 @@ class CLibrary {
   /** @var CLibraryPatch[] */
   public $patches = array();
 
+  function getRootPath() {
+    return __DIR__ . "/../../";
+  }
+
   /**
    * Remove installed libraries
    *
@@ -39,7 +43,7 @@ class CLibrary {
    * @return void
    */
   function clearLibraries($libSel = null) {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     $libsDir = $mbpath."lib";
 
     /// Clear out all libraries
@@ -66,7 +70,7 @@ class CLibrary {
    * @return bool|null True if installed and up to date, null otherwise
    */
   function getUpdateState() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     $dir = $mbpath."lib/$this->targetDir";
 
     if ($this->versionFile && $this->versionString) {
@@ -82,7 +86,7 @@ class CLibrary {
    * @return bool
    */
   function isInstalled() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     return is_dir($mbpath."lib/$this->targetDir");
   }
 
@@ -92,7 +96,7 @@ class CLibrary {
    * @return int
    */
   function countLibraries() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     return count(glob($mbpath."lib/*"));
   }
 
@@ -102,7 +106,7 @@ class CLibrary {
    * @return int The number of extracted files
    */
   function install() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     $pkgsDir = $mbpath."libpkg";
     $libsDir = $mbpath."lib";
     $filePath = "$pkgsDir/$this->fileName";
@@ -121,7 +125,7 @@ class CLibrary {
    * @return bool
    */
   function apply() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
     $libsDir = $mbpath."lib";
     $sourceDir = "$libsDir/$this->sourceDir";
     $targetDir = "$libsDir/$this->targetDir";

@@ -19,13 +19,18 @@ class CLibraryPatch {
   public $sourceName = "";
   public $targetDir  = "";
 
+  function getRootPath() {
+    return __DIR__ . "/../../";
+  }
+
   /**
    * Apply the patch to the library
    *
    * @return bool
    */
   function apply() {
-    global $mbpath;
+    $mbpath = $this->getRootPath();
+
     $pkgsDir = $mbpath."libpkg";
     $libsDir = $mbpath."lib";
     $patchDir = "$pkgsDir/patches";
