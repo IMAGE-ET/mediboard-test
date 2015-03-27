@@ -646,7 +646,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
     $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
 
-    $template->addProperty("Anesthésie - Type d'anesthésie"         , $this->getFormattedValue("type_anesth"));
+    $template->addProperty("Anesthésie - Type d'anesthésie"         , $this->_ref_operation->type_anesth ? $this->_ref_operation->getFormattedValue("type_anesth") : $this->getFormattedValue("type_anesth"));
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'), null, false);
     $template->addProperty("Anesthésie - Intubation"                , CAppUI::tr("CConsultAnesth-_intub_" . ($this->_intub_difficile ? "difficile" : "pas_difficile")));
 
