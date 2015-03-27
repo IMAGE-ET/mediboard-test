@@ -454,10 +454,7 @@ afterModifPatient = function(patient_id, patient) {
       if (window.save_facturable) {
         $V(getForm("editSejour").facturable, window.save_facturable);
       }
-    {{else}}
-      updateHeureSortie();
     {{/if}}
-
 
     Sejour.sejours_collision = {{$sejours_collision|@json}};
     var oForm = getForm("editOp");
