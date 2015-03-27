@@ -2076,6 +2076,10 @@ class CSetupsystem extends CSetup {
                 ADD `iv_passphrase`          VARCHAR(16) AFTER `ssl_passphrase`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.85";
+    $this->makeRevision("1.1.85");
+
+    $this->addMethod("removeDuplicatePreferences");
+
+    $this->mod_version = "1.1.86";
   }
 }
