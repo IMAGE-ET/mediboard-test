@@ -166,6 +166,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 
   // PLAGES CONGE
+  $is_conge = false;
   if (CModule::getActive("dPpersonnel")) {
     $conge = new CPlageConge();
     $where_conge = array();
@@ -174,6 +175,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     $where_conge["user_id"] = "= '$chirSel'";
     /** @var CPlageconge[] $conges */
     $conges = $conge->loadList($where_conge);
+    $is_conge = count($conges) > 0;
     foreach ($conges as $_conge) {
       $libelle = '<h3 style="text-align: center">
     CONGES</h3>
@@ -195,9 +197,17 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 
   //PLAGES CONSULT
+
+  // férié & pref
   if ($is_holiday && !CAppUI::pref("show_plage_holiday")) {
     continue;
   }
+
+  // conges
+  if ($is_conge && $hide_in_conge) {
+    continue;
+  }
+
   /** @var CPlageConsult[] $plages */
   $plages = $plage->loadList($where, "date, debut");
   CMbObject::massLoadFwdRef($plages, "chir_id");

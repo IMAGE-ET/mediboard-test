@@ -125,6 +125,7 @@
     // filters
     url.addParam("show_free", $V(form.show_free));
     url.addParam("show_cancelled", $V(form.cancelled));
+    url.addParam("hide_in_conge", $V(form.hide_in_conge));
     url.addParam("facturated", $V(form.facturated));
     url.addParam("status", $V(form.finished));
     url.addParam("actes", $V(form.actes));
