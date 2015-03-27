@@ -70,8 +70,8 @@
     <th>Affichage en fonction des congés</th>
     <td>
       <select name="hide_in_conge">
+        <option value="0">Tout afficher</option>
         <option value="1">Cacher tout si congés</option>
-        <option value="0">Afficher</option>
       </select>
     </td>
   </tr>
