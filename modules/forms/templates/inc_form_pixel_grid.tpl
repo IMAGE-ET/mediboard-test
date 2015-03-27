@@ -70,9 +70,9 @@
 {{else}}
 
   {{foreach from=$groups item=_group}}
-    <h3>{{$_group->name}}</h3>
+    <h3 style="border-bottom: 1px solid #999;">{{$_group->name}}</h3>
 
-    <div id="tab-{{$_group->_guid}}" style="position: relative;" class="pixel-positionning">
+    <div id="tab-{{$_group->_guid}}" style="position: relative;" class="pixel-positionning pixel-grid-print">
       {{* ----- PICTURES ----- *}}
       {{foreach from=$_group->_ref_root_pictures item=_picture}}
         {{if !$_picture->disabled && $_picture->_ref_file && $_picture->_ref_file->_id}}
