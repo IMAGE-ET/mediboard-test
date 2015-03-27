@@ -180,12 +180,16 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   box-shadow: 0 0 0 2px green;
 }
 
-.pixel-grid {
-  border: 1px dashed #999;
-  background: #f9f9f9;
+.pixel-grid,
+.pixel-grid-print {
   position: relative;
   width: 1024px;
   height: 760px;
+}
+
+.pixel-grid {
+  border: 1px dashed #999;
+  background: #f9f9f9;
 }
 
 .pixel-positionning .resizable {
