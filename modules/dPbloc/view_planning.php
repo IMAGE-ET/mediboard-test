@@ -198,9 +198,9 @@ $orderOperations = "date, salle_id, time_operation, chir_id";
 $operation = new COperation();
 /** @var COperation[] $operations */
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
-CMbObject::massLoadFwdRef($operations, "plageop_id");
-CMbObject::massLoadFwdRef($operations, "sejour_id");
-CMbObject::massLoadFwdRef($operations, "chir_id");
+CStoredObject::massLoadFwdRef($operations, "plageop_id");
+CStoredObject::massLoadFwdRef($operations, "sejour_id");
+CStoredObject::massLoadFwdRef($operations, "chir_id");
 
 $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
@@ -215,6 +215,11 @@ if (CAppUI::conf("dPhospi systeme_prestations") == "standard" || $prestation_id 
 $prestation = new CPrestationJournaliere();
 $prestation->load($prestation_id);
 
+$format_print = CAppUI::conf("dPbloc printing format_print", $group);
+
+$ordre_passage_temp = array();
+$ordre_passage = array();
+
 // Operations de chaque plage
 foreach ($plagesop as $plage) {
   $plage->loadRefsFwd(1);
@@ -225,9 +230,9 @@ foreach ($plagesop as $plage) {
   /** @var COperation[] $listOp */
   $listOp = $op->loadList($where, $order, null, null, $ljoin);
 
-  $chirs   = CMbObject::massLoadFwdRef($listOp, "chir_id");
-  $sejours = CMbObject::massLoadFwdRef($listOp, "sejour_id");
-  CMbObject::massLoadFwdRef($sejours, "patient_id");
+  $chirs   = CStoredObject::massLoadFwdRef($listOp, "chir_id");
+  $sejours = CStoredObject::massLoadFwdRef($listOp, "sejour_id");
+  CStoredObject::massLoadFwdRef($sejours, "patient_id");
 
   foreach ($listOp as $key=>$operation) {
     $operation->loadRefPlageOp();
@@ -256,6 +261,11 @@ foreach ($plagesop as $plage) {
 
     if ($prestation_id) {
       $sejour->loadLiaisonsForPrestation($prestation_id);
+    }
+
+    if ($format_print == "advanced") {
+      $operation->_liaisons_prestation = implode("|", $sejour->loadAllLiaisonsForDay(CMbDT::date($operation->_datetime_best)));
+      $ordre_passage_temp[$operation->chir_id][CMbDT::date($operation->_datetime)][$operation->_id] = $operation;
     }
 
     // Chargement de l'affectation
@@ -332,6 +342,11 @@ foreach ($operations as $key => $operation) {
     $sejour->loadLiaisonsForPrestation($prestation_id);
   }
 
+  if ($format_print == "advanced") {
+    $operation->_liaisons_prestation = implode("|", $sejour->loadAllLiaisonsForDay(CMbDT::date($operation->_datetime_best)));
+    $ordre_passage_temp[$operation->chir_id][CMbDT::date($operation->_datetime)][$operation->_id] = $operation;
+  }
+
   // Chargement de l'affectation
   $affectation = $operation->getAffectation();
   
@@ -355,6 +370,19 @@ $numOp += count($operations);
 
 ksort($listDates);
 
+if ($format_print == "advanced") {
+  foreach ($ordre_passage_temp as $chir_id => $_ops_by_prat) {
+    foreach ($_ops_by_prat as $_ops_by_date) {
+      array_multisort(CMbArray::pluck($_ops_by_date, "_datetime"), SORT_ASC, $_ops_by_date);
+      $i = 1;
+      foreach ($_ops_by_date as $_op) {
+        $ordre_passage[$_op->_id] = $i;
+        $i++;
+      }
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -376,5 +404,13 @@ $smarty->assign("_hors_plage"         , $_hors_plage);
 $smarty->assign("_show_comment_sejour", $_show_comment_sejour);
 $smarty->assign('_compact'            , $_compact);
 $smarty->assign("_show_identity"      , $_show_identity);
+$smarty->assign("ordre_passage"       , $ordre_passage);
 
-$smarty->display("view_planning.tpl");
+switch ($format_print) {
+  default:
+  case "standard":
+    $smarty->display("view_planning.tpl");
+    break;
+  case "advanced":
+    $smarty->display("view_planning_advanced.tpl");
+}

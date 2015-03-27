@@ -22,6 +22,9 @@ CConfiguration::register(
           "salles_count"   => "num default|4",
           "refresh_period" => "num default|30",
         ),
+        "printing" => array(
+          "format_print" => "enum localize list|standard|advanced default|standard"
+        )
       )
     )
   )
