@@ -83,7 +83,7 @@
           <td><strong>{{$_prefix}}</strong></td>
         {{foreach from=$_layers key=_layer item=_count name=layers}}
             {{if $_count}}
-              <td><span class="performance-count">{{$_count}}</span></td>
+              <td>{{$_count}}</td>
               <td><tt>{{$_layer}}</tt></td>
             {{else}}
               <td colspan="2"></td>

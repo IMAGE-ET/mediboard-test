@@ -50,11 +50,17 @@ class Cache {
    **/
   const INNER_OUTER = 3;
 
-  /** @var array Count cache usage per key and layer */
+  /** @var array[] Count cache usages per key and layer */
   static $hits = array();
 
+  /** @var array[] Count cache totals per key and layer */
   static $totals = array();
+
+  /** @var int Cache overal total usage */
   static $total = 0;
+
+  /** @var array string[] All layers labels */
+  static $all_layers = array("NONE", "INNER", "OUTER", "DISTR");
 
   /** @var array The actual PHP static cache data */
   private static $data = array();
@@ -114,21 +120,11 @@ class Cache {
    */
   private function _hit($layer) {
     if (!isset(self::$hits[$this->prefix][$this->key][$layer])) {
-      self::$hits[$this->prefix][$this->key]= array(
-        "NONE"  => 0,
-        "INNER" => 0,
-        "OUTER" => 0,
-        "DISTR" => 0,
-      );
+      self::$hits[$this->prefix][$this->key]= array_fill_keys(Cache::$all_layers, 0);
     }
 
     if (!isset(self::$totals[$this->prefix][$layer])) {
-      self::$totals[$this->prefix] = array(
-        "NONE"  => 0,
-        "INNER" => 0,
-        "OUTER" => 0,
-        "DISTR" => 0,
-      );
+      self::$totals[$this->prefix] = array_fill_keys(Cache::$all_layers, 0);
     }
 
     self::$hits[$this->prefix][$this->key][$layer]++;
