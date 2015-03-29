@@ -219,6 +219,10 @@ class CSetupadmin extends CSetup {
       ADD `force_change_password` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.0.41";
+    $this->makeRevision("1.0.41");
+    $query = "ALTER TABLE  `users` ADD INDEX (`user_type`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.42";
   }
 }
