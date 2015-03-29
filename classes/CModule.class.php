@@ -79,9 +79,14 @@ class CModule extends CMbObject {
   
   // Other collections
   public $_tabs      = array(); // List of tabs with permission
-  public $_can;    // Rights
-  public $_canView;
+
   public $_default_tab;   // if pref used, direct go to this tab
+
+  /**
+   * @var bool
+   * @deprecated
+   */
+  public $_canView;
 
   /**
    * constructor
