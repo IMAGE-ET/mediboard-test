@@ -93,6 +93,7 @@ $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements) , $type_hospi);
+$where["sejour.annule"]      = "= '0'";
 
 if ($vue) {
   $where["sejour.confirme"] = " IS NULL";
@@ -102,13 +103,13 @@ if ($praticien_id) {
 }
 
 // Patients non placés
-$sejour                                = new CSejour();
-$ljoinNP                               = array();
-$ljoinNP["affectation"]                = "sejour.sejour_id = affectation.sejour_id";
-$whereNP                               = array();
-$whereNP["sejour.group_id"]            = "= '$group->_id'";
-$whereNP["sejour.annule"]              = "= '0'";
-$whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
+$sejour                     = new CSejour();
+$ljoinNP                    = array();
+$ljoinNP["affectation"]     = "sejour.sejour_id = affectation.sejour_id";
+$whereNP                    = array();
+$whereNP["sejour.group_id"] = "= '$group->_id'";
+$whereNP["sejour.annule"]   = "= '0'";
+$whereNP["sejour.type"]     = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
 if (count($services_ids)) {
   $whereNP[] = "((sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " OR sejour.service_id IS NULL) AND affectation.affectation_id IS NULL) OR "
     ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
@@ -195,7 +196,8 @@ foreach ($mouvements as $type => &$_mouvement) {
   }
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
+
 $smarty->assign("presents"    , $presents);
 $smarty->assign("presentsNP"  , $presentsNP);
 $smarty->assign("mouvements"  , $mouvements);
