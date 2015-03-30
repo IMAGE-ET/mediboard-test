@@ -20,6 +20,14 @@ class CHL7v3EventSVSConcept {
   public $codeSystem;
   public $code;
 
+  /**
+   * Bind value set
+   *
+   * @param CHL7v3MessageXML $dom Document
+   * @param DOMElement       $elt Element
+   *
+   * @return void
+   */
   function bind(CHL7v3MessageXML $dom, DOMElement $elt) {
     $this->displayName = $dom->getValueAttributNode($elt, "displayName");
     $this->codeSystem  = $dom->getValueAttributNode($elt, "codeSystem");

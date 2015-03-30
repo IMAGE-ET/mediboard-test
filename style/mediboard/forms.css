@@ -881,6 +881,10 @@ button.favoris:before, a.button.favoris:before {
   content: url(images/buttons/favoris.png);
 }
 
+button.import:before, a.button.import:before {
+  content: url(images/buttons/import.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

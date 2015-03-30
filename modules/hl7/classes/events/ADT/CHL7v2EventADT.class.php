@@ -257,7 +257,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZBE->sejour  = $sejour;
     $movement     = $sejour->_ref_hl7_movement;
     $affectation  = new CAffectation();
-    if ($movement->affectation_id) {
+    if ($movement && $movement->affectation_id) {
       $affectation->load($movement->affectation_id);
     }
     $ZBE->curr_affectation  = $affectation;

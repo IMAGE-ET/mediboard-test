@@ -36,6 +36,7 @@ class CActe extends CMbMetaObject {
   // Behaviour fields
   public $_check_coded = true;
   public $_permissive;
+  public $_no_synchro = false;
   
   // Distant object
   /** @var CSejour */

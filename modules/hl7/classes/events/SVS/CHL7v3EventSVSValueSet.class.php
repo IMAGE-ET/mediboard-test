@@ -23,6 +23,15 @@ class CHL7v3EventSVSValueSet {
   /** @var array */
   public $concept_list = array();
 
+  /**
+   * Bind value set
+   *
+   * @param CHL7v3MessageXML $dom    Document
+   * @param DOMElement       $elt    Element
+   * @param string           $prefix Prefix
+   *
+   * @return void
+   */
   function bind(CHL7v3MessageXML $dom, DOMElement $elt, $prefix) {
     $this->id          = $dom->getValueAttributNode($elt, "id");
     $this->version     = $dom->getValueAttributNode($elt, "version");

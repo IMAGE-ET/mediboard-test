@@ -256,8 +256,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // PID-17: Religion (CE) (optional)
     $data[] = null;
 
+    // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      // PID-18: Patient Account Number (CX) (optional)
       switch ($receiver->_configs["build_PID_18"]) {
         case 'normal':
         case 'simple':
@@ -295,6 +295,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
               )
             ) : null;
           }
+          break;
 
         default:
           $data[] = null;

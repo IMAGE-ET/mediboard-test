@@ -21,6 +21,15 @@ class CHL7v3EventSVSConceptList {
     /** @var array */
   public $concept = array();
 
+  /**
+   * Bind value set
+   *
+   * @param CHL7v3MessageXML $dom    Document
+   * @param DOMElement       $elt    Element
+   * @param string           $prefix Prefix
+   *
+   * @return void
+   */
   function bind(CHL7v3MessageXML $dom, DOMElement $elt, $prefix) {
     $this->lang = $dom->getValueAttributNode($elt, "xml:lang");
 

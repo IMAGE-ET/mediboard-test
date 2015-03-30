@@ -10,7 +10,7 @@
   </tr>
   <tr>
     <th> {{tr}}CHL7v3EventSVSValueSet-version{{/tr}} </th>
-    <td> {{$value_set->version}} </td>
+    <td> {{$value_set->version|date_format:$conf.date}} </td>
   </tr>
   <tr>
     <th> {{tr}}CHL7v3EventSVSValueSet-displayName{{/tr}} </th>

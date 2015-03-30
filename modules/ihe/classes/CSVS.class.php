@@ -119,4 +119,41 @@ class CSVS extends CIHE {
 
     return $acknowledgment_svs;
   }
+
+  static function sendRetrieveValueSet($OID, $version = null, $language = null) {
+    $receiver_hl7v3           = new CReceiverHL7v3();
+    $receiver_hl7v3->actif    = 1;
+    $receiver_hl7v3->group_id = CGroups::loadCurrent()->_id;
+
+    /** @var CReceiverHL7v3[] $receivers */
+    $receivers = $receiver_hl7v3->loadMatchingList();
+
+    $event_name  = "CHL7v3EventSVSRetrieveValueSet";
+
+    /** @var CHL7v3Event $event */
+    $event              = new $event_name;
+    $event->_event_name = "ValueSetRepository_RetrieveValueSet";
+
+    $data = array(
+      "OID"      => trim($OID),
+      "version"  => trim($version),
+      "language" => trim($language)
+    );
+
+    $object = new CMbObject();
+    $object->_data = $data;
+
+    $headers = CHL7v3Adressing::createWSAddressing("urn:ihe:iti:2008:RetrieveValueSet", "http://valuesetrepository/");
+
+    $value_set = null;
+    foreach ($receivers as $_receiver) {
+      if (!$_receiver->isMessageSupported($event_name)) {
+        continue;
+      }
+
+      $value_set = $_receiver->sendEvent($event, $object, $headers, true)->getQueryAck();
+    }
+
+    return $value_set;
+  }
 }

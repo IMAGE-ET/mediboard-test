@@ -58,7 +58,7 @@ class CExchangeTabular extends CExchangeDataFormat {
     parent::updatePlainFields();
 
     if ($this->_message !== null) {
-      /** @var CContentXML $content */
+      /** @var CContentTabular $content */
       $content = $this->loadFwdRef("message_content_id", true);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
