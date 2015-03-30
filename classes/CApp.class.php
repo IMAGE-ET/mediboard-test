@@ -146,7 +146,7 @@ class CApp {
    */
   static function memoryRatio($ratio) {
     $limit = CMbString::fromDecaSI(ini_get("memory_limit"), "") * $ratio;
-    $limit = CMbString::toDecaSI($limit, "");
+    $limit = CMbString::toDecaSI($limit);
     return ini_set("memory_limit", $limit);
   }
 

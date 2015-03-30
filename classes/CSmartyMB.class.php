@@ -100,6 +100,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("float"             , array($this, "float"));
     $this->register_modifier("integer"           , array($this, "integer"));
     $this->register_modifier("decabinary"        , array($this, "decabinary"));
+    $this->register_modifier("decasi"            , array($this, "decasi"));
     $this->register_modifier("module_installed"  , array($this, "module_installed"));
     $this->register_modifier("module_active"     , array($this, "module_active"));
     $this->register_modifier("JSAttribute"       , array($this, "JSAttribute"));
@@ -692,6 +693,19 @@ class CSmartyMB extends Smarty {
    */
   function decabinary($value) {
     $decabinary = CMbString::toDecaBinary($value);
+    return "<span title=\"$value\">$decabinary</span>";
+  }
+
+  /**
+   * Converts a value to decabinary SI format
+   * Example: {$value|decabinary}
+   *
+   * @param float $value The value to format
+   *
+   * @return string
+   */
+  function decaSI($value) {
+    $decabinary = CMbString::toDecaSI($value);
     return "<span title=\"$value\">$decabinary</span>";
   }
 
