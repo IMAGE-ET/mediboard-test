@@ -20,9 +20,7 @@ class CImportTools  {
     $xpath = null;
 
     $description = self::getDescription($ds->dsn);
-    if ($description) {
-      $xpath = new DOMXPath($description);
-    }
+    $xpath = $description->_xpath;
 
     foreach ($columns as $_name => &$_column) {
       $_column["datatype"] = $_column["Type"]." ".($_column["Null"] == "YES" ? "NULL" : "NOT NULL");
@@ -44,12 +42,9 @@ class CImportTools  {
 
   static function getTableInfo(CSQLDataSource $ds, $table) {
     $xpath = null;
-    mbTrace("table");
 
     $description = self::getDescription($ds->dsn);
-    if ($description) {
-      $xpath = new DOMXPath($description);
-    }
+    $xpath = $description->_xpath;
 
     /** @var DOMElement $element */
     $element = $xpath->query("//tables/table[@name='$table']")->item(0);
@@ -64,7 +59,49 @@ class CImportTools  {
     return $info;
   }
 
+  static function getDatabaseStructure($dsn, $count = false) {
+    $databases = CImportTools::getAllDatabaseInfo();
+
+    if (!isset($databases[$dsn])) {
+      throw new Exception("DSN not found : $dsn");
+    }
+
+    $db_info = $databases[$dsn];
+
+    $ds = CSQLDataSource::get($dsn);
+
+    // Description file
+    $description = new DOMDocument();
+    $description->load($db_info["description_file"]);
+    $description->_xpath = new DOMXPath($description);
+
+    $db_info["description"] = $description;
+
+    // Tables
+    $table_names = $ds->loadTables();
+    $tables = array();
+    foreach ($table_names as $_table_name) {
+      $_table_info = CImportTools::getTableInfo($ds, $_table_name);
+
+      if ($count) {
+        $_table_info["count"] = $ds->loadResult("SELECT COUNT(*) FROM $_table_name");
+      }
+
+      $tables[$_table_name] = $_table_info;
+    }
+
+    $db_info["tables"] = $tables;
+
+    return $db_info;
+  }
+
   static function getDescription($dsn) {
+    static $cache = array();
+
+    if (isset($cache[$dsn])) {
+      return $cache[$dsn];
+    }
+
     $databases = self::getAllDatabaseInfo();
     $info = null;
 
@@ -79,9 +116,10 @@ class CImportTools  {
     if ($info) {
       $description = new DOMDocument();
       $description->load($info["description_file"]);
+      $description->_xpath = new DOMXPath($description);
     }
 
-    return $description;
+    return $cache[$dsn] = $description;
   }
 
   static function getAllDatabaseInfo() {

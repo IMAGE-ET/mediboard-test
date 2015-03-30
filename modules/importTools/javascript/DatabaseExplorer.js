@@ -42,6 +42,31 @@ DatabaseExplorer = {
     return false;
   },
 
+  selectPrimaryKey: function(dsn, table, column) {
+    var url = new Url("importTools", "ajax_select_primary_key");
+    url.addParam("dsn", dsn);
+    url.addParam("table", table);
+    url.addParam("column", column);
+    url.requestModal(400, 700);
+
+    return false;
+  },
+
+  saveForeignKey: function(dsn, table, column, value) {
+    var url = new Url();
+    url.setModuleDosql("importTools", "do_save_foreign_key");
+    url.addParam("dsn", dsn);
+    url.addParam("table", table);
+    url.addParam("column", column);
+    url.addParam("value", value);
+    url.requestUpdate($(SystemMessage.id).show(), {
+      method: "post",
+      onComplete: Control.Modal.close.curry()
+    });
+
+    return false;
+  },
+
   toggleHidden: function(dsn, b) {
     $("table-"+dsn).toggleClassName("show_hidden", b);
   },

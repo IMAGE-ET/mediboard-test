@@ -16,7 +16,7 @@
           {{if $_col_info.Key == "PRI"}}
             <i class="fa fa-key" style="color: #ae0040;"></i>
           {{elseif $_col_info.Key == "MUL"}}
-            <i class="fa fa-link"></i>
+            <i class="fa fa-link" onclick="DatabaseExplorer.selectPrimaryKey('{{$dsn}}', '{{$table}}', '{{$_col}}')" style="cursor: pointer;"></i>
           {{/if}}
         </td>
         <td style="color: #999;"><code>{{$_col_info.datatype}}</code></td>
@@ -64,7 +64,7 @@
         {{if $_col_info.Key == "PRI"}}
           <i class="fa fa-key" style="color: #ae0040;"></i>
         {{elseif $_col_info.Key == "MUL"}}
-          <i class="fa fa-link"></i>
+          <i class="fa fa-link" onclick="DatabaseExplorer.selectPrimaryKey('{{$dsn}}', '{{$table}}', '{{$_col}}')" style="cursor: pointer;"></i>
         {{/if}}
 
         <button class="lookup notext" onclick="DatabaseExplorer.displayTableDistinctData('{{$dsn}}', '{{$table}}', '{{$_col}}')"></button>
@@ -75,7 +75,7 @@
   {{foreach from=$rows item=_row}}
     <tr>
       {{foreach from=$columns key=_col item=_col_info}}
-        <td {{if $_col_info.Key == "MUL"}} style="background: rgba(127,127,180,0.2);" {{/if}}>
+        <td {{if $_col_info.Key == "MUL"}} style="background: rgba(127,180,127,0.2);" {{/if}}>
           {{mb_include module=importTools template=inc_display_value value=$_row.$_col col_info=$_col_info}}
         </td>
       {{/foreach}}
