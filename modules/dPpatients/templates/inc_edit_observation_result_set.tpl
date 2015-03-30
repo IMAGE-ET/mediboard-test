@@ -113,8 +113,7 @@
           <table class="main form">
             <col style="width: 12em;" />
             <col style="width: 8em;" />
-            <col style="width: 8em;" />
-            <col style="width: 8em;" />
+            <col style="width: 3em;" />
 
             <tr>
               <th>
@@ -151,13 +150,38 @@
 
               {{assign var=_value_type_id value=$_result->value_type_id}}
               {{assign var=_value_unit_id value=$_result->unit_id}}
-              {{assign var=_last_result value=$results.$_value_type_id.$_value_unit_id|@end}}
+
+              {{if !$_value_unit_id}}
+                {{assign var=_value_unit_id value="none"}}
+              {{/if}}
 
               <td>
-                {{if $_last_result}}
-                  <small style="color: #999;" title="{{$_last_result.datetime|date_format:$conf.datetime}}">{{$_last_result.datetime|date_format:$conf.time}}</small>
-                  &ndash;
-                  {{$_last_result.value}} {{$_result->_ref_value_unit->desc}}
+                {{if isset($results.$_value_type_id.$_value_unit_id|smarty:nodefaults)}}
+                  {{assign var=_last_result value=$results.$_value_type_id.$_value_unit_id|@end}}
+                  {{if $_last_result}}
+                    <small style="color: #999;" title="{{$_last_result.datetime|date_format:$conf.datetime}}">
+                      {{$_last_result.datetime|date_format:$conf.time}}
+                    </small>
+                    &ndash;
+
+                    {{if $_axis->_labels|@count}}
+                      {{assign var=_label_id value=$_last_result.label_id}}
+
+                      {{if isset($_axis->_ref_labels.$_label_id|smarty:nodefaults)}}
+                        {{assign var=_label value=$_axis->_ref_labels.$_label_id}}
+                        {{$_label->title}} ({{$_last_result.value}})
+                      {{else}}
+                        {{$_last_result.value}}
+                      {{/if}}
+
+                    {{else}}
+                      {{$_last_result.value}}
+                    {{/if}}
+
+                    {{if $_result->_ref_value_unit}}
+                      {{$_result->_ref_value_unit->desc}}
+                    {{/if}}
+                  {{/if}}
                 {{/if}}
               </td>
             </tr>
