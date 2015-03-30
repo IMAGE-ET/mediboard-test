@@ -416,7 +416,7 @@ foreach ($initiales as $prescription_id => $_initiales) {
 }
 
 $current_moment =
-  isset($postes_by_date[$now_date]) ?
+  isset($postes_by_date[$now_date]) && isset($postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]) ?
     $postes_by_date[$now_date][CMbDT::transform(null, CMbDT::time(), "%H")]["moment"] : "";
 
 // Chargement des cis à risque
