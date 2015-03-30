@@ -175,6 +175,7 @@
   function changeEtablissementId(oForm) {
     $V(oForm._modifier_entree, '0');
     submitAdmission(oForm);
+    $V(oForm._modifier_entree, '1');
   }
 
   updateModeEntree = function(select) {
