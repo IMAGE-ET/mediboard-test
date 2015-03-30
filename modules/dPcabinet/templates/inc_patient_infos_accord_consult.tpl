@@ -9,6 +9,7 @@
         function editPatient(patient_id) {
           var url = new Url('patients', 'vw_edit_patients', 'tab');
           url.addParam("patient_id", patient_id);
+          url.addParam("modal", 1);
           url.modal({
             width: "95%",
             height: "95%"
