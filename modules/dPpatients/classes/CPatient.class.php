@@ -2671,33 +2671,69 @@ class CPatient extends CPerson {
   function loadAllDocs($tri = "date", $with_cancelled = false) {
     $this->_all_docs = array();
 
-    function mapDocs($object, &$patient, $with_cancelled) {
+    function makePrefix($tri, $object, $item) {
+      switch ($tri) {
+        default:
+        case "date":
+          switch ($object->_class) {
+            case "CCompteRendu":
+              return $object->_ref_content->last_modified;
+              break;
+            case "CFile":
+              return $object->file_date;
+              break;
+            case "CExObject":
+              return $object->datetime_edit;
+          }
+          break;
+        case "context":
+          return $object->_view;
+          break;
+        case "cat":
+          if ($item->_class == "CExObject") {
+            return "Autres";
+          }
+          return $item->_ref_category->_id ? $item->_ref_category->nom : "Autres";
+      }
+    }
+
+    function mapDocs($object, &$patient, $with_cancelled, $tri) {
       // Documents et fichiers
       $object->loadRefsDocItems($with_cancelled);
+      CStoredObject::massLoadFwdRef($object->_ref_documents, "file_category_id");
+
       foreach ($object->_ref_documents as $_doc) {
-        $patient->_all_docs[$_doc->creation_date . $_doc->_guid] = $_doc;
+        CDocumentItem::makeIconName($_doc);
+        $_doc->loadContent(false);
+        $_doc->loadRefCategory();
+        $_doc->_ref_object = $object;
+        $patient->_all_docs[makePrefix($tri, $object, $_doc)][] = $_doc;
       }
 
+      CStoredObject::massLoadFwdRef($object->_ref_files, "file_category_id");
       foreach ($object->_ref_files as $_file) {
-        $patient->_all_docs[$_file->file_date . $_file->_guid] = $_file;
+        CDocumentItem::makeIconName($_file);
+        $_file->loadRefCategory();
+        $_file->_ref_object = $object;
+        $patient->_all_docs[makePrefix($tri, $object, $_file)][] = $_file;
       }
     }
 
     $this->loadRefsDocItems($with_cancelled);
-    mapDocs($this, $this, $with_cancelled);
+    mapDocs($this, $this, $with_cancelled, $tri);
 
     foreach ($this->loadRefsSejours() as $_sejour) {
-      mapDocs($_sejour, $this, $with_cancelled);
+      mapDocs($_sejour, $this, $with_cancelled, $tri);
       foreach ($_sejour->loadRefsOperations() as $_op) {
-        mapDocs($_op, $this, $with_cancelled);
+        mapDocs($_op, $this, $with_cancelled, $tri);
       }
     }
 
     foreach ($this->loadRefsConsultations() as $_consult) {
-      mapDocs($_consult, $this, $with_cancelled);
+      mapDocs($_consult, $this, $with_cancelled, $tri);
 
       foreach ($_consult->loadRefsDossiersAnesth() as $_dossier_anesth) {
-        mapDocs($_dossier_anesth, $this, $with_cancelled);
+        mapDocs($_dossier_anesth, $this, $with_cancelled, $tri);
       }
     }
 
@@ -2705,14 +2741,18 @@ class CPatient extends CPerson {
     $ex_link = new CExLink();
     $ex_link->setObject($this);
     $ex_links = $ex_link->loadMatchingList();
-    CExLink::massLoadExObjects($ex_links);
+    $ex_objects = CExLink::massLoadExObjects($ex_links);
+    CStoredObject::massLoadFwdRef($ex_objects, "object_id");
 
     foreach ($ex_links as $_link) {
       $_ex = $_link->loadRefExObject();
-      $_ex->_ex_class_id = $_link->ex_class_id;
+
       $_ex->updateCreationFields();
+      $object = $_ex->loadTargetObject();
+      $_ex->_ex_class_id = $_link->ex_class_id;
       $_ex->loadRefExClass();
-      $this->_all_docs[$_link->datetime_create . $_link->_guid] = $_link;
+      CDocumentItem::makeIconName($_ex->_ref_ex_class);
+      $this->_all_docs[makePrefix($tri, $object, $_ex)][] = $_link;
     }
 
     ksort($this->_all_docs);

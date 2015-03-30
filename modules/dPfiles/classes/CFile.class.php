@@ -40,6 +40,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
   public $_old_file_path;
   public $_data_uri;
   public $_binary_content;
+  public $_file_type;
 
   public $_ref_read_status;
 
@@ -222,6 +223,8 @@ class CFile extends CDocumentItem implements IIndexableObject {
     }
     
     $this->_shortview = $this->_view = str_replace("_", " ", $this->file_name);
+
+    $this->guessFileType();
   }
 
   /**
@@ -1044,6 +1047,24 @@ class CFile extends CDocumentItem implements IIndexableObject {
     }
 
     return $res === 0;
+  }
+
+  function guessFileType() {
+    if (strpos($this->file_type, "pdf") !== false) {
+      $this->_file_type = "pdf";
+    }
+    elseif (strpos($this->file_type, "image") !== false) {
+      $this->_file_type = "image";
+    }
+    elseif (strpos($this->file_type, "text") !== false || strpos($this->file_type, "rtf") !== false) {
+      $this->_file_type = "text";
+    }
+    elseif (strpos($this->file_type, "excel") !== false || strpos($this->file_type, "spreadsheet") !== false) {
+      $this->_file_type = "excel";
+    }
+    elseif (strpos($this->file_type, "word") !== false || strpos($this->file_type, "odt") !== false) {
+      $this->_file_type = "word";
+    }
   }
 }
 

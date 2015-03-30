@@ -25,23 +25,27 @@
   <input type="hidden" name="patient_id" value="{{$patient_id}}" />
   <table class="tbl">
     <tr>
-      <th>
+      <th class="title">
+        <input type="text" style="float: left;" class="search" onkeyup="filterResults(this.value)" />
+        <button type="button" style="float: right;" class="add">Ajouter un document</button>
         <select name="tri" onchange="loadAllDocs()">
           <option value="date"  {{if $tri == "date"}}selected{{/if}}>Date</option>
-          <option value="event" {{if $tri == "event"}}selected{{/if}}>Evénement</option>
+          <option value="context" {{if $tri == "context"}}selected{{/if}}>Evénement</option>
+          <option value="cat" {{if $tri == "cat"}}selected{{/if}}>Catégorie</option>
         </select>
-        &mdash;
-        <label>
-          <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="loadAllDocs()" /> Icône
+        &nbsp; &nbsp;
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;">
+          <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="loadAllDocs()"
+                 style="display: none;" /> &#xf00a;
         </label>
-        <label>
-          <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="loadAllDocs()" /> Liste
+        &nbsp; &nbsp;
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;">
+          <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="loadAllDocs()"
+                 style="display: none;" /> &#xf0ca;
         </label>
-        &mdash;
-        <button type="button" class="add">Ajouter un élément</button>
       </th>
     </tr>
   </table>
 </form>
 
-<div id="area_docs" style="width: 100%"></div>
+<div id="area_docs" style="width: 100%;"></div>

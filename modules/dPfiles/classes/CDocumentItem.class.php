@@ -28,6 +28,7 @@ class CDocumentItem extends CMbMetaObject {
   public $_extensioned;
   public $_no_extension;
   public $_file_size;
+  public $_icon_name;
 
   public $_send_problem;
 
@@ -436,5 +437,27 @@ class CDocumentItem extends CMbMetaObject {
     . $record_date . "\n"
     . ".          $sender[0]\n"
     . ".          $receiver[0]\n\n";
+  }
+
+  static function makeIconName($object) {
+    switch ($object->_class) {
+      default:
+      case "CCompteRendu":
+        $file_name = $object->nom;
+        break;
+      case "CFile":
+        $file_name = $object->file_name;
+        break;
+      case "CExClass" :
+        $file_name = $object->name;
+    }
+
+    $max_length = 25;
+
+    if (strlen($file_name) <= $max_length) {
+      return $object->_icon_name = $file_name;
+    }
+
+    return $object->_icon_name = substr_replace($file_name, " ... ", $max_length / 2, round(-$max_length / 2));
   }
 }

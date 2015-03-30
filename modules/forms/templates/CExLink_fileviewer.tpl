@@ -17,35 +17,37 @@
 {{if $display == "icon"}}
   {{mb_script module=patients script=fileviewer ajax=true}}
 
-  <table class="layout" style="width: 300px; display: inline-block;" onmouseover="expandDocDisplay(this, true)" onmouseout="expandDocDisplay(this)">
+  <table class="layout" style="display: inline-table; width: 150px; height: 150px;">
     <tr>
-      <td style="width: 80px;">
-        <img class="thumbnail" src="images/pictures/medifile.png" />
-      </td>
-      <td style="visibility: hidden" class="toolbar">
-        {{$ex_object->datetime_create|date_format:$conf.datetime}} <br />
-
-        {{mb_include module=forms template=inc_fileviewer_toolbar}}
+      <td style="text-align: center; height: 92px;">
+        <div style="width: 64px; height: 92px; margin: auto; border: 0 !important;" class="icon_fileview">
+          <img src="images/pictures/medifile.png" />
+        </div>
       </td>
     </tr>
     <tr>
-      <td colspan="2">{{$ex_class->name}}</td>
+      <td class="text item_name" style="text-align: center; vertical-align: top;">{{$ex_class->_icon_name}}</td>
     </tr>
   </table>
   {{mb_return}}
 {{/if}}
 
-<table class="tbl" onmouseover="expandDocDisplay(this, true)" onmouseout="expandDocDisplay(this)">
-  <tr>
-    <td style="width: 75%">
-      {{$ex_class->name}}
-    </td>
-    <td>
-      {{$ex_object->datetime_create|date_format:$conf.datetime}}
+<tr>
+  <td class="narrow">
+    <span style="font-family: FontAwesome; font-size: 11pt;">&#xf0f7;</span>
+  </td>
+  <td class="item_name">
+    {{$ex_class->name}}
+  </td>
+  <td style="width: 25%">
+  </td>
+  <td>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_object->_guid}}')" class="list_file_name">
+      {{$ex_object->_ref_object}}
+    </span>
+  </td>
+  <td class="narrow">
+    {{mb_value object=$ex_object field=datetime_edit}}
+  </td>
+</tr>
 
-      <span class="toolbar" style="float: right; visibility: hidden;">
-        {{mb_include module=forms template=inc_fileviewer_toolbar}}
-      </span>
-    </td>
-  </tr>
-</table>

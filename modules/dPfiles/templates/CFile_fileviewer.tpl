@@ -44,37 +44,63 @@
     };
   </script>
 
-  <table class="layout" style="width: 300px; display: inline-block;" onmouseover="expandDocDisplay(this, true)" onmouseout="expandDocDisplay(this)">
+  <table class="layout" style="display: inline-table; width: 150px; height: 150px;">
     <tr>
-      <td style="width: 80px;">
-        <img class="thumbnail" src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
-             style="background: white; max-width: 64px; max-height: 92px;"
-             onclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')" />
-      </td>
-      <td style="visibility: hidden" class="toolbar">
-        {{$file->file_date|date_format:$conf.datetime}} <br />
-
-        {{mb_include module=files template=inc_fileviewer_toolbar}}
+      <td style="text-align: center; height: 92px;">
+        <div style="width: 64px; height: 92px; margin: auto; cursor: pointer;" class="icon_fileview"
+             onclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
+          <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
+               style="background: white; max-width: 64px; max-height: 92px;" />
+        </div>
       </td>
     </tr>
     <tr>
-      <td colspan="2">{{$file}}</td>
+      <td class="text item_name" style="text-align: center; vertical-align: top;">
+        {{if $file->file_category_id}}<span class="compact circled">{{$file->_ref_category}}</span>{{/if}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')">
+          {{$file->_icon_name}}
+        </span>
+      </td>
     </tr>
   </table>
 
   {{mb_return}}
 {{/if}}
 
-<table class="tbl" onmouseover="expandDocDisplay(this, true)" onmouseout="expandDocDisplay(this)">
-  <tr>
-    <td style="width: 75%">
+<tr>
+  <td class="narrow">
+    <span style="font-family: FontAwesome; font-size: 11pt;">
+      {{if $file->_file_type == "pdf"}}
+        &#xf1c1;
+      {{elseif $file->_file_type == "image"}}
+        &#xf1c5;
+      {{elseif $file->_file_type == "text"}}
+        &#xf0f6;
+      {{elseif $file->_file_type == "excel"}}
+        &#xf1c3;
+      {{elseif $file->_file_type == "word"}}
+        &#xf1c2;
+      {{else}}
+        &#xf016;
+      {{/if}}
+    </span>
+  </td>
+  <td class="item_name">
+    <span onclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')"
+          onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')"
+          style="cursor: pointer;">
       {{$file}}
-    </td>
-    <td>
-      {{$file->file_date|date_format:$conf.datetime}}
-      <span class="toolbar" style="float: right; visibility: hidden;">
-        {{mb_include module=files template=inc_fileviewer_toolbar}}
-      </span>
-    </td>
-  </tr>
-</table>
+    </span>
+  </td>
+  <td style="width: 25%">
+    {{if $file->file_category_id}}<span class="compact circled">{{$file->_ref_category}}</span>{{/if}}
+  </td>
+  <td>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$file->_ref_object->_guid}}')">
+      {{$file->_ref_object}}
+    </span>
+  </td>
+  <td class="narrow">
+    {{mb_value object=$file field=file_date}}
+  </td>
+</tr>

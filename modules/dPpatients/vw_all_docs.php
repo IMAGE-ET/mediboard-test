@@ -14,7 +14,7 @@
 CCanDo::checkRead();
 
 $patient_id = CView::get("patient_id", "num pos");
-$tri        = CView::get("tri"       , "enum list|date|event default|date");
+$tri        = CView::get("tri"       , "enum list|date|context|cat default|date");
 $display    = CView::get("display"   , "enum list|icon|list default|icon");
 
 CView::checkin();

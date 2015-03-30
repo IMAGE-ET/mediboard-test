@@ -85,3 +85,11 @@ td.legend-onhover {
 .date-naissance-input:hover span {
   display: inline;
 }
+
+div.icon_fileview {
+  border: 1px solid black;
+}
+
+div.icon_fileview:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+}

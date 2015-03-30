@@ -36,7 +36,8 @@ class CExClass extends CMbObject {
   public $_dont_create_default_group;
   public $_duplicate;
   public $_formula_field;
-  
+  public $_icon_name;
+
   private $_latest_ex_object_cache = array();
 
   private $_duplication_mapping = array();
@@ -946,5 +947,10 @@ class CExClass extends CMbObject {
       /** @var CMbObject $_back */
       $this->duplicateObject($_back, $fwd_field, $fwd_value, $new, $exclude_fields);
     }
+  }
+
+  function makeIconName() {
+    $file = new CFile();
+    return $this->_icon_name = $file->makeIconName($this->name);
   }
 }
