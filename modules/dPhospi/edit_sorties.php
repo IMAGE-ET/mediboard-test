@@ -93,6 +93,7 @@ $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements) , $type_hospi);
+$where["sejour.annule"]      = "= '0'";
 
 if ($vue) {
   $where["sejour.confirme"] = " IS NULL";
