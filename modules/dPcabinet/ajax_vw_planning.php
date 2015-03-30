@@ -174,7 +174,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   }
 
   // PLAGES CONGE
-  if (CModule::getInstalled("dPpersonnel")) {
+  if (CModule::getActive("dPpersonnel")) {
     $conge = new CPlageConge();
     $where_conge = array();
     $where_conge["date_debut"] = " <= '$jour' ";
