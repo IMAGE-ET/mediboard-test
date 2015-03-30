@@ -273,7 +273,7 @@ class CSetupdPccam extends CSetup {
       `dh` FLOAT(6),
       `ht` FLOAT(6),
       `tax_rate` FLOAT
-    );";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `devis_codage`
