@@ -107,6 +107,9 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if ($object instanceof CCompteRendu && !$object->object_id) {
       return false;
     }
+    if ($object instanceof CFile && in_array($object->object_class, array('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation'))) {
+      return false;
+    }
 
     if (!$type) {
       if (!$object->_ref_current_log) {

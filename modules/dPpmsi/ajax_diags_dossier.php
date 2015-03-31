@@ -50,6 +50,7 @@ if (CModule::getActive("atih") && CAppUI::conf("dPpmsi use_cim_pmsi")) {
       $cim_das_patient[preg_replace("/\./", "", $_da)] = true;
     }
   }
+  $sejour->_DP_state = false;
   if ($cim_dp->type == 0) {
     $sejour->_DP_state = true;
   }

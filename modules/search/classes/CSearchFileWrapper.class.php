@@ -36,20 +36,15 @@ class CSearchFileWrapper {
    *
    * @return string
    */
-  function run ($option) {
-    $path = realpath(__DIR__.'/../../../lib/tika-app-1.6.jar');
-    $shellCommand = "java -jar $path $option $this->_fichier ";
+  function run () {
 
-    $processorInstance = proc_open($shellCommand, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
-    $processorResult = stream_get_contents($pipes[1]);
-    $processorErrors = stream_get_contents($pipes[2]);
-    $error = explode("\n", $processorErrors);
-    trigger_error("le CFile n°$this->_file_id suivant n'a pas été correctement indexé raison : $error[0]", E_USER_WARNING);
+    $conf_host = trim(CAppUI::conf("search tika_host"));
+    $conf_port = trim(CAppUI::conf("search tika_port"));
+    $client = new CHTTPClient("http://$conf_host:$conf_port/tika");
+    $client->header = array("\"Accept: text/plain\"");
+    $content = $client->putFile($this->_fichier);
 
-    proc_close($processorInstance);
-
-    return trim($processorResult);
-
+    return $content;
   }
 
   /**
@@ -129,6 +124,20 @@ class CSearchFileWrapper {
   function getLanguage () {
     $option = "--language --encoding=utf-8";
     return $this->run($option);
+  }
+
+  /**
+   * Méthode permettant de tester si le service d'extraction Tika est actif
+   *
+   * @return string
+   */
+  function loadTikaInfos () {
+
+    $conf_host = trim(CAppUI::conf("search tika_host"));
+    $conf_port = trim(CAppUI::conf("search tika_port"));
+    $client = new CHTTPClient("http://$conf_host:$conf_port/tika");
+
+    return $client->get();
   }
 
 }

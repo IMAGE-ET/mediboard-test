@@ -38,6 +38,17 @@ try{
 
 }
 
+try {
+  // récupération des données pour les journaux utilisateur
+  $wrapper   = new CSearchFileWrapper(null, null);
+  $infos_tika = $wrapper->loadTikaInfos();
+
+} catch (Exception $e) {
+  mbLog($e);
+  $infos_tika = "";
+  CAppUI::displayAjaxMsg("Le serveur d'extraction de fichiers n'est pas connecté", UI_MSG_WARNING);
+}
+
 $ds = CSQLDataSource::get("std");
 $query = "SELECT MIN(`date`) as oldest_datetime from `search_indexing`";
 $result = $ds->exec($query);
@@ -48,6 +59,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("infos_index", $infos_index);
 $smarty->assign("infos_log", $infos_log);
+$smarty->assign("infos_tika", $infos_tika);
 $smarty->assign("oldest_datetime", $oldest_datetime);
 
 $smarty->display("vw_cartographie_mapping.tpl");

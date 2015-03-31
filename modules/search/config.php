@@ -20,5 +20,8 @@ $dPconfig["search"] = array(
   "index_name"             => $dPconfig["db"]["std"]["dbname"],
   "nb_replicas"            => "1",
   "interval_indexing"      => "100",
+  "tika_host"              => "",
+  "tika_port"              => "",
+  "ids_search"             => "",
 );
 $dPconfig["object_handlers"]["CSearchObjectHandler"] = "0";

@@ -912,13 +912,13 @@ class CFile extends CDocumentItem implements IIndexableObject {
   /**
    * Get the patient_id of CMbobject
    *
-   * @return string
+   * @return CPatient
    */
   function getIndexablePatient() {
     $object = $this->loadTargetObject();
 
     if ($object instanceof CPatient) {
-      return $object->_id;
+      return $object;
     }
 
     if (!method_exists($this, "loadRelPatient")) {
@@ -949,6 +949,9 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if ($object instanceof CConsultAnesth) {
       $prat = $object->loadRefConsultation()->loadRefPraticien();
     }
+    else if ($object instanceof CSejour) {
+      $prat = $object->loadRefSejour()->loadRefPraticien();
+    }
     else {
       $prat = $object->loadRefPraticien();
     }
@@ -968,16 +971,17 @@ class CFile extends CDocumentItem implements IIndexableObject {
     $array["author_id"] = $this->author_id;
     $array["prat_id"]   = $prat->_id;
     $array["title"]     = utf8_encode($this->file_name);
-    $array["body"]             = $this->getIndexableBody($this->_absolute_dir);
+    $array["body"]             = $this->getIndexableBody($this->_absolute_dir . "/" . $this->file_real_filename);
     $date                      = $this->file_date;
     $array["date"]             = str_replace("-", "/", $date);
     $array["function_id"]      = $prat->function_id;
-    $array["group_id"]         = "";
+    $array["group_id"]         = $prat->loadRefFunction()->group_id;
     $array["patient_id"]       = $this->getIndexablePatient()->_id;
     $array["object_ref_id"]    = $this->loadTargetObject()->_id;
     $array["object_ref_class"] = $this->loadTargetObject()->_class;
     $array["path"]             = $this->_file_path;
     $array["content_type"]     = $this->file_type;
+
     return $array;
   }
 
@@ -989,6 +993,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
    * @return string
    */
   function getIndexableBody($content) {
+    $body = " ";
     if (substr($this->file_type, 0, 6) == 'image/') {
       $body = $this->file_name;
     }
@@ -1007,8 +1012,9 @@ class CFile extends CDocumentItem implements IIndexableObject {
           $body = strip_tags($body);
           break;
 
-        default : $body = new CSearchFileWrapper($content, $this->_id);
-        $body = $body->getPlainText();
+        default :
+          $wrapper = new CSearchFileWrapper($content, $this->_id);
+          $body = $wrapper->run();
 
       }
     }

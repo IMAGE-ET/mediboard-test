@@ -39,6 +39,7 @@ try {
   }
 }
 catch (Exception $e) {
+  mbLog($e);
   CAppUI::displayAjaxMsg("L'index " . CAppUI::conf("db std dbname") . " existe déjà", UI_MSG_ERROR);
   $error = "mapping";
 }

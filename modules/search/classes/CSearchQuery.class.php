@@ -310,6 +310,11 @@ class CSearchQuery extends CSearch{
       $user_req = implode(' ', $users_id);
     }
 
+    $ids_conf = str_replace(";", " || ", CAppUI::conf("search ids_search"));
+    if ($ids_conf) {
+      $user_req .= " || $ids_conf";
+    }
+
     return $user_req;
   }
 

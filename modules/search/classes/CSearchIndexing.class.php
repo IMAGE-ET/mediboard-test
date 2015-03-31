@@ -107,8 +107,7 @@ class CSearchIndexing extends CStoredObject {
         $queries = array("INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
           SELECT 'CFile', `files_mediboard`.`file_id`, 'create', '$date'
           FROM `files_mediboard`
-          WHERE `files_mediboard`.`object_class` != 'CCompteRendu'
-          AND `files_mediboard`.`object_class` != 'CPatient'
+          WHERE `files_mediboard`.`object_class` IN  ('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation')
           AND `files_mediboard`.`file_type` NOT LIKE 'video/%'
           AND `files_mediboard`.`file_type` NOT LIKE 'audio/%'");
         break;
@@ -145,6 +144,13 @@ class CSearchIndexing extends CStoredObject {
           SELECT 'CExObject_$_ex_class_id', `ex_object_id`, 'create', '$date'
           FROM `ex_object_$_ex_class_id`";
         }
+        break;
+      case 'COperation':
+        $queries = array("INSERT INTO `search_indexing` (`object_class`, `object_id`, `type`, `date`)
+          SELECT 'COperation', `operations`.`operation_id`, 'create', '$date'
+          FROM `operations`, `users_mediboard`, `functions_mediboard`
+          WHERE `users_mediboard`.`user_id` =  `operations`.`chir_id`
+          AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`");
         break;
 
       default: $queries = array();

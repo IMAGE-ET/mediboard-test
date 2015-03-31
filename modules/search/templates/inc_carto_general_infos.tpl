@@ -41,6 +41,20 @@
   </tr>
 
   <tr>
+    <th class="section" colspan="2"> SERVEUR D'EXTRACTION DE FICHIERS</th>
+  </tr>
+  <tr>
+    <td class="text">Test connexion</td>
+    <td class="text">
+      {{if $infos_tika}}
+        <img title="CONNECTÉ" src="images/icons/note_green.png">
+      {{else}}
+        <img title="NON CONNECTÉ" src="images/icons/note_red.png">
+      {{/if}}
+    </td>
+  </tr>
+
+  <tr>
     <th class="section" colspan="2"> STATISTIQUES</th>
   </tr>
   <tr>

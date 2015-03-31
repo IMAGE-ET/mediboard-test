@@ -82,6 +82,30 @@ class CHTTPClient {
   }
 
   /**
+   * Execute a request PUT for a file
+   *
+   * @param String $file The path of the file
+   * @param String $mode The mode parameter specifies the type of access you require to the stream.
+   *
+   * @return string the response's content
+   */
+  function putFile($file, $mode ="r", $close = true) {
+    $content = "";
+    $fp = fopen($file, $mode);
+
+    $this->setOption(CURLOPT_INFILE, $fp);
+    $this->setOption(CURLOPT_INFILESIZE, filesize($file));
+    $this->setOption(CURLOPT_BINARYTRANSFER, 1);
+    $this->setOption(CURLOPT_PUT, 1);
+
+    $content = $this->put(null, $close);
+
+    fclose($fp);
+
+    return $content;
+  }
+
+  /**
    * Execute a request DELETE
    *
    * @param bool $close Close the connection

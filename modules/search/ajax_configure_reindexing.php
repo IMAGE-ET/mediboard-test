@@ -25,9 +25,7 @@ if (CAppUI::conf("search active_handler active_handler_search_types", $group)) {
 
 $mapping = CSearch::$mapping_default;
 $final_mapping = array();
-foreach ($types as $type) {
-  $final_mapping[$type]["properties"] = $mapping;
-}
+$final_mapping["properties"] = $mapping;
 
 // Création du template
 $smarty = new CSmartyDP();
