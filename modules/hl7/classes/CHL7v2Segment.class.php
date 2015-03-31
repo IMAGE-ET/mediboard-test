@@ -1214,8 +1214,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
       // Si on n'a pas d'affectation on va essayer de chercher la première
       if (!$affectation->_id) {
-        $sejour->loadSurrAffectations();
-        $affectation = $sejour->_ref_prev_affectation;
+        $affectation = $sejour->loadRefFirstAffectation();
       } 
     }
     $affectation->loadRefLit()->loadRefChambre();
