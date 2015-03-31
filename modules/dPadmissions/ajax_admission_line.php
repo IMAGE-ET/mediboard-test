@@ -27,7 +27,7 @@ $sejour->load($sejour_id);
 
 $sejour->loadRefEtablissementProvenance();
 $sejour->loadRefAdresseParPraticien();
-$sejour->loadRefPraticien();
+$sejour->loadRefPraticien()->loadRefFunction();
 $patient = $sejour->loadRefPatient();
 
 $patient->loadIPP();
