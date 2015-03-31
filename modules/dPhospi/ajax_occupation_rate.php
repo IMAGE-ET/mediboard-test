@@ -31,6 +31,7 @@ $query = "SELECT COUNT(*) FROM `lit`
     AND `chambre`.`annule` = '0';";
 $result = $ds->fetchRow($ds->exec($query));
 $total_lits_dispo = $result[0];
+$max = $total_lits;
 
 $ticks = array();
 $series = array(
@@ -102,19 +103,47 @@ for($h = 0; $h < 24; $h++) {
       WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
       AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL";
   $result = $ds->fetchRow($ds->exec($query));
-  $series['patients']['data'][] = array($h, $result[0]);
+  $nb_occupied_beds = $result[0];
+
+  /* Récupération du nombre de patients dans le couloir */
+  $query = "SELECT COUNT(*) FROM `affectation`
+      WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
+      AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND `lit_id` IS NULL AND `sejour_id`
+      NOT IN (
+        SELECT `sejour_id` FROM `affectation`
+        WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
+        AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND `lit_id` IS NOT NULL
+      );";
+  $result = $ds->fetchRow($ds->exec($query));
+  $nb_patient_hallway = $result[0];
+
+  if ($max < $nb_occupied_beds + $nb_patient_hallway) {
+    $max = $nb_occupied_beds + $nb_patient_hallway;
+  }
+
+  $series['patients']['data'][] = array($h, $nb_occupied_beds + $nb_patient_hallway);
 
   /* Récupération du nombre de patients entrants */
-  $query = "SELECT COUNT(DISTINCT `sejour_id`) FROM `affectation`
+  $query = "SELECT COUNT(DISTINCT `sejour_id`) FROM `affectation` as a
       WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
-      AND `entree` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL";
+      AND `entree` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND `sejour_id`
+      NOT IN (
+        SELECT `sejour_id` FROM `affectation` as b
+        WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
+        AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND a.`affectation_id` != b.`affectation_id`
+      );";
   $result = $ds->fetchRow($ds->exec($query));
   $series['entrants']['data'][] = array($h - 0.45, $result[0]);
 
   /* Récupération du nombre de patients sortants */
-  $query = "SELECT COUNT(DISTINCT `sejour_id`) FROM `affectation`
+  $query = "SELECT COUNT(DISTINCT `sejour_id`) FROM `affectation` as a
       WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `sortie` <= '$date $_hour:59:59'
-      AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL";
+      AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND `sejour_id`
+      NOT IN (
+        SELECT `sejour_id` FROM `affectation` as b
+        WHERE `service_id` " . $ds->prepareIn($services_ids) . " AND `entree` <= '$date $_hour:59:59'
+        AND `sortie` >= '$date $_hour:00:00' AND `sejour_id` IS NOT NULL AND a.`affectation_id` != b.`affectation_id`
+      );";
   $result = $ds->fetchRow($ds->exec($query));
   $series['sortants']['data'][] = array($h, $result[0]);
 }
@@ -139,7 +168,7 @@ $options = array(
     'title' => utf8_encode('Nombre de patients'),
     'tickDecimals' => 0,
     'min' => 0,
-    'max' => $total_lits + 5,
+    'max' => $max + 5,
   ),
   'legend' => array(
     'show' => true,
