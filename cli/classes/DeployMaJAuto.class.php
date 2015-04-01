@@ -499,7 +499,7 @@ class DeployMaJAuto extends DeployMaj {
       'date'                     => date('Y/m/d H:i:s', $this->start_time),
       'server_id'                => $this->server_id,
       'instance_ids_all'         => $instances['all'],
-      'instance_ids_not_allowed' => $this->instances_not_allowed,
+      'instance_ids_not_allowed' => implode(' ', $this->instances_not_allowed),
       'instance_ids_ok'          => $instances['updated'],
       'instance_ids_ko'          => $instances['skipped'],
       'role'                     => $this->master_role,
