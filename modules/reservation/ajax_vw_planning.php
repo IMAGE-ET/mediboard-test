@@ -332,8 +332,19 @@ if ($show_operations) {
       //post op
       if ($_operation->presence_postop) {
         $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
+        // Si l'heure de fin postop est inférieure à la fin de l'intervention, alors on est à la journée suivante
+        // On simule une fin à 23h59 afin de rester dans la même journée
+        $save_hour_fin_postop = "";
+        if ($hour_fin_postop < $fin_op) {
+          $save_hour_fin_postop = $hour_fin_postop;
+          $hour_fin_postop = "23:59:59";
+        }
         $offset_bottom   = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
-        $duree           = $duree + $offset_bottom;
+        if ($save_hour_fin_postop) {
+          $offset_bottom += CMbDT::minutesRelative("00:00:00", $save_hour_fin_postop);
+          // On simule une fin à 23h59, alors il faut encore une minute pour aller jusqu'à 00h00
+          $offset_bottom += 1;
+        }
       }
 
       $datetime_creation = $workflow->date_creation ? $workflow->date_creation : $_operation->loadFirstLog()->date;
