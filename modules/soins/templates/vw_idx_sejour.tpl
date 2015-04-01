@@ -78,6 +78,21 @@
     scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
   }
 
+  function compteurAlerte(level, prescription_guid) {
+    var url = new Url("prescription", "ajax_count_alerte", "raw");
+    url.addParam("prescription_guid", prescription_guid);
+    url.requestJSON(function(count) {
+      var span_ampoule = $('span-icon-alert-'+level+'-'+prescription_guid);
+      if (count[level]) {
+        span_ampoule.down('span').innerHTML = count[level];
+      }
+      else {
+        span_ampoule.down('span').remove();
+        span_ampoule.down('img').remove();
+      }
+    });
+  }
+
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
@@ -387,12 +402,18 @@
                   <td>
                     {{if $sejour->_ref_prescriptions && array_key_exists('sejour', $sejour->_ref_prescriptions)}}
                       {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
+                      {{assign var=prescription_guid value=$prescription->_guid}}
                       {{if $prescription->_id}}
                         {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
                           {{mb_script module=system script=alert}}
-                          {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
-                          {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
-                          nb_alerts=$prescription->_count_urgences}}
+                          <span id="span-icon-alert-medium-{{$prescription_guid}}">
+                            {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes
+                            callback="function() { compteurAlerte('medium', '$prescription_guid')}"}}
+                          </span>
+                          <span id="span-icon-alert-high-{{$prescription_guid}}">
+                            {{mb_include module=system template=inc_icon_alerts object=$prescription level="high" nb_alerts=$prescription->_count_urgences
+                            callback="function() { compteurAlerte('high', '$prescription_guid')}"}}
+                          </span>
                         {{elseif $prescription->_count_fast_recent_modif}}
                           <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
                           {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif top="-5px" right="-15px"}}
@@ -496,12 +517,18 @@
                   <td>
                     {{if $sejour->_ref_prescriptions && array_key_exists('sejour', $sejour->_ref_prescriptions)}}
                       {{assign var=prescription value=$sejour->_ref_prescriptions.sejour}}
+                      {{assign var=prescription_guid value=$prescription->_guid}}
                       {{if $prescription->_id}}
                         {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
                           {{mb_script module=system script=alert}}
-                          {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes}}
-                          {{mb_include module=system template=inc_icon_alerts object=$prescription level="high"
-                          nb_alerts=$prescription->_count_urgences}}
+                          <span id="span-icon-alert-medium-{{$prescription_guid}}">
+                            {{mb_include module=system template=inc_icon_alerts object=$prescription nb_alerts=$prescription->_count_alertes
+                            callback="function() { compteurAlerte('medium', '$prescription_guid')}"}}
+                          </span>
+                          <span id="span-icon-alert-high-{{$prescription_guid}}">
+                            {{mb_include module=system template=inc_icon_alerts object=$prescription level="high" nb_alerts=$prescription->_count_urgences
+                            callback="function() { compteurAlerte('high', '$prescription_guid')}"}}
+                          </span>
                         {{elseif $prescription->_count_fast_recent_modif}}
                           <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
                           {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif top="-5px" right="-15px"}}

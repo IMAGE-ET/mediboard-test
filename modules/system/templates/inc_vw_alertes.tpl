@@ -37,7 +37,7 @@
     <td class="narrow">
       <form name="editAlert-{{$_alert->_id}}" action="?" method="post"
             onsubmit="return onSubmitFormAjax(this, function(){
-              $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().remove();
+              $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().hide();
               Alert.callback();})">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_alert_aed" />
