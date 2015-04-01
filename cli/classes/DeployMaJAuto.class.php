@@ -30,11 +30,13 @@ class DeployMaJAuto extends DeployMaj {
   protected $master_role;
   protected $server_id;
 
+  protected $instances_not_allowed = array();
+
   protected $status;
   protected $report = '';
 
-  const STATUS_ERROR   = '0';
-  const STATUS_OK      = '1';
+  const STATUS_ERROR = '0';
+  const STATUS_OK = '1';
   const STATUS_WARNING = '2';
 
   /**
@@ -117,7 +119,7 @@ class DeployMaJAuto extends DeployMaj {
         case 0:
           $this->out($this->output, "Instance #{$_instance_id} is not allowed to update. Skipping.");
           unset($perm[$_instance_id]);
-          $this->status = self::STATUS_WARNING;
+          $this->instances_not_allowed[] = $_instance_id;
           break;
 
         case 1:
@@ -493,17 +495,18 @@ class DeployMaJAuto extends DeployMaj {
     $instances = $this->formatInstanceIDs();
 
     $data = array(
-      'id'               => "{$this->server_id}-{$this->master_name}",
-      'date'             => date('Y/m/d H:i:s', $this->start_time),
-      'server_id'        => $this->server_id,
-      'instance_ids_all' => $instances['all'],
-      'instance_ids_ok'  => $instances['updated'],
-      'instance_ids_ko'  => $instances['skipped'],
-      'role'             => $this->master_role,
-      'status'           => $this->status,
-      'elapsed_time'     => $this->elapsed_time,
-      'branch'           => str_replace('_', '/', $this->master_branch),
-      'body'             => trim($this->report)
+      'id'                       => "{$this->server_id}-{$this->master_name}",
+      'date'                     => date('Y/m/d H:i:s', $this->start_time),
+      'server_id'                => $this->server_id,
+      'instance_ids_all'         => $instances['all'],
+      'instance_ids_not_allowed' => $this->instances_not_allowed,
+      'instance_ids_ok'          => $instances['updated'],
+      'instance_ids_ko'          => $instances['skipped'],
+      'role'                     => $this->master_role,
+      'status'                   => $this->status,
+      'elapsed_time'             => $this->elapsed_time,
+      'branch'                   => str_replace('_', '/', $this->master_branch),
+      'body'                     => trim($this->report)
     );
 
     return $data;
@@ -550,13 +553,15 @@ class DeployMaJAuto extends DeployMaj {
       );
     }
 
-    foreach ($skipped_instances as $_instance) {
+    foreach ($skipped_instances as $_k => $_instance) {
       $value = explode('-', $_instance);
 
-      $instances['skipped'][] = array(
-        'server_id'   => $value[0],
-        'instance_id' => $value[1]
-      );
+      if (!in_array($value[1], $this->instances_not_allowed)) {
+        $instances['skipped'][] = array(
+          'server_id'   => $value[0],
+          'instance_id' => $value[1]
+        );
+      }
     }
 
     return $instances;
