@@ -33,6 +33,8 @@ class CErrorLog extends CStoredObject {
 
   public $signature_hash;
 
+  public $debug;
+
   public $_stacktrace;
   public $_stacktrace_output;
   public $_param_GET;
@@ -80,6 +82,8 @@ class CErrorLog extends CStoredObject {
     $props["session_data_id"] = "ref class|CErrorLogData";
 
     $props["signature_hash"] = "str";
+
+    $props["debug"]          = "bool default|0";
 
     $props["_datetime_min"] = "dateTime";
     $props["_datetime_max"] = "dateTime";

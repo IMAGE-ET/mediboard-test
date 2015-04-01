@@ -39,6 +39,19 @@ if ($log_size > $log_size_limit) {
 }
 $log_content = file_get_contents(CError::LOG_PATH, false, null, $offset);
 
+// Debug file
+$debug_content = null;
+$debug_size    = 0;
+if (file_exists(CMbDebug::DEBUG_PATH)) {
+  $debug_size = filesize(CMbDebug::DEBUG_PATH);
+  $debug_size_limit = CMbDebug::DEBUG_SIZE_LIMIT;
+  $offset = -1;
+  if ($debug_size > $debug_size_limit) {
+    $offset = $debug_size - $debug_size_limit;
+  }
+  $debug_content = file_get_contents(CMbDebug::DEBUG_PATH, false, null, $offset);
+}
+
 // Récupération de la liste des utilisateurs disponibles
 $user = new CUser();
 $user->template = "0";
@@ -49,6 +62,8 @@ $list_users = $user->loadMatchingList($order);
 $smarty = new CSmartyDP();
 $smarty->assign("log",           $log_content);
 $smarty->assign("log_size",      CMbString::toDecaBinary($log_size));
+$smarty->assign("debug",         $debug_content);
+$smarty->assign("debug_size",    CMbString::toDecaBinary($debug_size));
 $smarty->assign("error_log",     $error_log);
 $smarty->assign("error_type",    $error_type);
 $smarty->assign("server_ip",     $server_ip);

@@ -206,7 +206,7 @@ function filterInput(&$params) {
  * 
  * @return void
  */
-function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
+function errorHandler($code, $text, $file, $line, $context, $backtrace = null, $debug = false) {
   global $dPconfig;
 
   // Handles the @ case
@@ -283,7 +283,7 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
       CErrorLog::insert(
         $user_id, $server_ip,
         $time, $request_uid, $type, $text,
-        $file, $line, $data
+        $file, $line, $data, $debug
       );
     }
     catch (Exception $e) {

@@ -2080,6 +2080,11 @@ class CSetupsystem extends CSetup {
 
     $this->addMethod("removeDuplicatePreferences");
 
-    $this->mod_version = "1.1.86";
+    $this->makeRevision("1.1.86");
+    $query = "ALTER TABLE `error_log`
+                ADD `debug` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.87";
   }
 }

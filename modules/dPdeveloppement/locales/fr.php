@@ -5,6 +5,7 @@ $locales['CPermModule._owner.user'] = 'Utilisateur';
 $locales['CUserLog-_view'] = 'Journal utilisateur';
 $locales['CUserLog-_view-desc'] = 'Journal utilisateur';
 $locales['Cache-remove_key'] = 'Supprimer l\'entrée du cache';
+$locales['Debug'] = 'Débogage';
 $locales['HTTP-code'] = 'Code HTTP';
 $locales['Humans'] = 'Humains';
 $locales['Robots'] = 'Robots';

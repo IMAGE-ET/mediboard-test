@@ -31,12 +31,41 @@ function toggleCheckboxes(checkbox) {
 
   $V(form.start, 0);
 }
+
+function insertDeleteButtons(eltName = 'logs-file'){
+  $(eltName).select('div[title]').each(function(e){
+    e.insert({
+      top: '<button class="trash notext" type="button" onclick="removeByHash(\''+e.title+'\', \''+eltName+'\')">Remove</button>'
+    });
+  });
+}
+
+function removeByHash(hash, eltName = 'logs-file') {
+  new Url('dPdeveloppement', 'ajax_delete_logs')
+    .addParam('hash', hash)
+    .addParam('type', eltName)
+    .requestUpdate(eltName, function(){
+      insertDeleteButtons(eltName);
+      updateFilter();
+    });
+}
+
+function updateFilter(eltName = 'logs-file') {
+  var elements = getForm('filter-'+eltName).filter;
+  $A(elements).each(function(e){
+    $(eltName).select(e.value).invoke('setVisible', e.checked);
+  });
+  new CookieJar().put("filter-"+eltName, $V(elements));
+}
 </script>
 
 {{if $conf.error_logs_in_db}}
   <ul id="error-log-tabs" class="control_tabs">
     <li><a href="#error-db">Journaux</a></li>
     <li><a href="#error-file">Fichier <small>({{$log_size}})</small></a></li>
+    {{if $conf.debug}}
+      <li><a href="#debug">{{tr}}Debug{{/tr}} <small>({{$debug_size}})</small></a></li>
+    {{/if}}
   </ul>
 {{/if}}
 
@@ -164,29 +193,6 @@ function toggleCheckboxes(checkbox) {
     insertDeleteButtons();
     updateFilter();
   });
-
-  function insertDeleteButtons(){
-    $('logs-file').select('div[title]').each(function(e){
-      e.insert({top: '<button class="trash notext" type="button" onclick="removeByHash(\''+e.title+'\')">Remove</button>'});
-    });
-  }
-
-  function removeByHash(hash) {
-    var url = new Url('dPdeveloppement', 'ajax_delete_logs');
-    url.addParam('hash', hash);
-    url.requestUpdate('logs-file', function(){
-      insertDeleteButtons();
-      updateFilter();
-    });
-  }
-
-  function updateFilter() {
-    var elements = getForm('filter-logs-file').filter;
-    $A(elements).each(function(e){
-      $('logs-file').select(e.value).invoke('setVisible', e.checked);
-    });
-    new CookieJar().put("filter-logs-file", $V(elements));
-  }
   </script>
 
   <form name="filter-logs-file" action="" method="get" onsubmit="return false">
@@ -200,3 +206,37 @@ function toggleCheckboxes(checkbox) {
     {{$log|smarty:nodefaults}}
   </div>
 </div>
+
+{{if $conf.debug}}
+  <div id="debug">
+    {{if $can->edit}}
+      <button class="trash" type="button" onclick="removeByHash('clean', 'debug-file')">
+        {{tr}}Reset{{/tr}}
+      </button>
+    {{/if}}
+
+    <button class="change" type="button" onclick="removeByHash(null, 'debug-file')">
+      {{tr}}Refresh{{/tr}}
+    </button>
+
+    <script type="text/javascript">
+      Main.add(function(){
+        var values = new CookieJar().get("filter-debug-file") || [".big-error", ".big-warning:not(.javascript)", ".big-info", ".javascript"];
+        $V(getForm("filter-debug-file").filter, values);
+        insertDeleteButtons('debug-file');
+        updateFilter('debug-file');
+      });
+    </script>
+
+    <form name="filter-debug-file" action="" method="get" onsubmit="return false">
+      <label><input type="checkbox" name="filter" value=".big-error" checked="checked" onchange="updateFilter()" /> Error</label>
+      <label><input type="checkbox" name="filter" value=".big-warning:not(.javascript)" checked="checked" onchange="updateFilter()" /> Warning</label>
+      <label><input type="checkbox" name="filter" value=".big-info" checked="checked" onchange="updateFilter()" /> Info</label>
+      <label><input type="checkbox" name="filter" value=".javascript" checked="checked" onchange="updateFilter()" /> Javascript</label>
+    </form>
+
+    <div id="debug-file">
+      {{$debug|smarty:nodefaults}}
+    </div>
+  </div>
+{{/if}}
