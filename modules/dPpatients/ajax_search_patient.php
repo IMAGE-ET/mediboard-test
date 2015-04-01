@@ -107,11 +107,6 @@ else {
     $patient_prenom_search_limited  = substr($patient_prenom_search, 0, $limit_char_search);
   }
 
-  if (CAppUI::conf('dPpatients CPatient function_distinct') && !CMediusers::get()->isAdmin()) {
-    $function_id = CMediusers::get()->function_id;
-    $where["function_id"] = $whereLimited["function_id"] = $whereSoundex["function_id"] = "= '$function_id'";
-  }
-
   if ($patient_nom_search) {
     $patient_nom_soundex = $soundexObj->build($patient_nom_search);
     $where[]        = "`nom` LIKE '$patient_nom_search%'
@@ -182,6 +177,13 @@ else {
 
   // Chargement des patients
   if ($where) {
+
+    // Séparation des patients par fonction
+    if (CAppUI::conf('dPpatients CPatient function_distinct') && !CMediusers::get()->isAdmin()) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = $whereLimited["function_id"] = $whereSoundex["function_id"] = "= '$function_id'";
+    }
+
     $patients = $pat->loadList($where, $order, $showCount, $group_by, $ljoin);
   }
 
