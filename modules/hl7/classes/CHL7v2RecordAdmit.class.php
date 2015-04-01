@@ -3051,7 +3051,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     $sender  = $this->_ref_sender;
-    $patient = $newVenue->_ref_patient;
+    $patient = $newVenue->loadRefPatient();
 
     // AMO
     $IN1_3_1 = $this->queryTextNode("IN1.3/CX.1", $node);
