@@ -158,6 +158,8 @@ $dPconfig["ft"] = array(
   "application/pdf"    => "/usr/bin/pdftotext",
 );
 
+$dPconfig["other_databases"] = "";
+
 // Module config file inclusion
 $config_files = glob(dirname(__DIR__) . "/modules/*/config.php");
 foreach ($config_files as $file) {

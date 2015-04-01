@@ -32,7 +32,9 @@ function toggleCheckboxes(checkbox) {
   $V(form.start, 0);
 }
 
-function insertDeleteButtons(eltName = 'logs-file'){
+function insertDeleteButtons(eltName){
+  eltName = eltName || "logs-file";
+
   $(eltName).select('div[title]').each(function(e){
     e.insert({
       top: '<button class="trash notext" type="button" onclick="removeByHash(\''+e.title+'\', \''+eltName+'\')">Remove</button>'
@@ -40,7 +42,9 @@ function insertDeleteButtons(eltName = 'logs-file'){
   });
 }
 
-function removeByHash(hash, eltName = 'logs-file') {
+function removeByHash(hash, eltName) {
+  eltName = eltName || "logs-file";
+
   new Url('dPdeveloppement', 'ajax_delete_logs')
     .addParam('hash', hash)
     .addParam('type', eltName)
@@ -50,7 +54,9 @@ function removeByHash(hash, eltName = 'logs-file') {
     });
 }
 
-function updateFilter(eltName = 'logs-file') {
+function updateFilter(eltName) {
+  eltName = eltName || "logs-file";
+
   var elements = getForm('filter-'+eltName).filter;
   $A(elements).each(function(e){
     $(eltName).select(e.value).invoke('setVisible', e.checked);
