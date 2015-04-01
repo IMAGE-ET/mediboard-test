@@ -25,7 +25,7 @@
   {{assign var=maternite_active value="1"}}
   {{if !$sejour->_id && $sejour->grossesse_id}}
     {{assign var=_duree_prevue value=$sejour->_duree_prevue}}
-    {{assign var=_duree_prevue value=$sejour->_duree_prevue_heure}}
+    {{assign var=_duree_prevue_heure value=$sejour->_duree_prevue_heure}}
   {{/if}}
 {{else}}
   {{assign var=maternite_active value="0"}}
@@ -973,7 +973,7 @@ Main.add( function(){
     {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false 
       onchange="updateDureePrevue(); modifSejour(); reloadSejours(true);"}}
     à 
-    <select name="_hour_sortie_prevue" onchange="reloadSejours(true);">
+    <select name="_hour_sortie_prevue" onchange="updateDureePrevueHeure(); reloadSejours(true);">
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == $heure_sortie_ambu)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}

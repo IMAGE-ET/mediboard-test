@@ -76,13 +76,6 @@ checkDureeHospi = function(sType) {
   }
 };
 
-reinitDureeSejour = function() {
-  var form = document.editSejour;
-  field2 = form._duree_prevue;
-  field2.value = '0';
-  form._duree_prevue_heure.value = '0';
-}
-
 removePlageOp = function(bIgnoreGroup){
   var oFormOp = document.editOp;  
   var oFormSejour = document.editSejour;
@@ -206,46 +199,66 @@ updateDureePrevue = function() {
 };
 
 updateHeureSortie = function() {
-  var oForm = document.editSejour;
+  var oForm = getForm("editSejour");
 
-  duree_prevu  = oForm._duree_prevue; 
-  heure_sortie = oForm._hour_sortie_prevue;
-  min_sortie   = oForm._min_sortie_prevue;
+  var duree_prevu  = oForm._duree_prevue;
+  var duree_prevu_heure = oForm._duree_prevue_heure;
+  var heure_sortie = oForm._hour_sortie_prevue;
+  var heure_entree_prevue = oForm._hour_entree_prevue;
+  var heure_sortie_prevue = oForm._hour_sortie_prevue;
+  var min_sortie   = oForm._min_sortie_prevue;
 
-  if (!oForm._duree_prevue_heure.value) {
-    oForm._duree_prevue_heure.value = 0;
+  if (!duree_prevu_heure.value) {
+    duree_prevu_heure.value = 0;
   }
 
-  if (oForm._duree_prevue.value == 0) {
+  if (duree_prevu.value == 0) {
     $('duree_prevue_view').show();
   }
   else {
     $('duree_prevue_view').hide();
-    oForm._duree_prevue_heure.value = 0;
+    duree_prevu_heure.value = 0;
   }
 
-  var hour_entree = oForm._hour_entree_prevue.value;
-  if (oForm._duree_prevue_heure.value != 0 && oForm._duree_prevue.value == 0) {
-    if (oForm._duree_prevue_heure.value >= 0) {
-      var hour_sortie = parseInt(oForm._hour_entree_prevue.value) + parseInt(oForm._duree_prevue_heure.value);
+  if (duree_prevu_heure.value != 0 && duree_prevu.value == 0) {
+    if (duree_prevu_heure.value >= 0) {
+      var hour_sortie = parseInt(heure_entree_prevue.value) + parseInt(duree_prevu_heure.value);
     }
     else {
-      var hour_sortie = parseInt(oForm._hour_entree_prevue.value) - Math.abs(parseInt(oForm._duree_prevue_heure.value));
+      var hour_sortie = parseInt(heure_entree_prevue.value) - Math.abs(parseInt(duree_prevu_heure.value));
     }
     if (hour_sortie >= 24) {
       hour_sortie = 23;
-      oForm._duree_prevue_heure.value = 23 - parseInt(oForm._hour_entree_prevue.value);
+      duree_prevu_heure.value = 23 - parseInt(heure_entree_prevue.value);
+
     }
-    oForm._hour_sortie_prevue.value = hour_sortie;
+    heure_sortie_prevue.value = hour_sortie;
   }
   else {
     heure_sortie.value = duree_prevu.value < 1 ? "{{$heure_sortie_ambu}}" : "{{$heure_sortie_autre}}";
-    if (oForm._duree_prevue.value == 0) {
-      oForm._duree_prevue_heure.value = parseInt(heure_sortie.value) - parseInt(oForm._hour_entree_prevue.value);
+    if (duree_prevu.value == 0) {
+      duree_prevu_heure.value = parseInt(heure_sortie.value) - parseInt(heure_entree_prevue.value);
     }
   }
 
   min_sortie.value = "0";
+};
+
+updateDureePrevueHeure = function () {
+  var oForm = getForm("editSejour");
+
+  var duree_prevu  = oForm._duree_prevue;
+  var duree_prevu_heure = oForm._duree_prevue_heure;
+  var heure_sortie = oForm._hour_sortie_prevue;
+  var hour_entree = oForm._hour_entree_prevue;
+
+  if (duree_prevu.value == 0) {
+    duree_prevu_heure.value = parseInt(heure_sortie.value) - parseInt(hour_entree.value);
+    if (parseInt(heure_sortie.value) < parseInt(hour_entree.value)) {
+      duree_prevu_heure.value = 0;
+      hour_entree.value = heure_sortie.value;
+    }
+  }
 };
 
 checkSejoursToReload = function() {
