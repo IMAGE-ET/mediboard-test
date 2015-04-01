@@ -248,25 +248,6 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   /**
-   * count Antecedents for type array
-   *
-   * @param array $types list of antecedent (array of string)
-   *
-   * @return int
-   */
-  function countRefsAntecedentsByType($types = null) {
-    if (!$types) {
-      $types = CAntecedent::$types;
-    }
-    $antecedent = new CAntecedent();
-    $where = array();
-    $where["type"] = $antecedent->getDS()->prepareIn($types);
-    $where["dossier_medical_id"] = " = '$this->_id' ";
-    $antecedent->dossier_medical_id = $this->_id;
-    return $antecedent->countList($where);
-  }
-
-  /**
    * Chargement des antécédents du dossier
    *
    * @param bool $cancelled Prise en compte des annulés
