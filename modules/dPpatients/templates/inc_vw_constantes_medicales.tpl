@@ -46,6 +46,10 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("selection[]", keys_selection);
   url.addParam("selected_context_guid", context_guid);
   url.addParam("paginate", window.paginate || 0);
+  url.addParam("count", $V($('count_constantes')));
+  if (window.oGraphs) {
+        url.addParam('hidden_graphs', JSON.stringify(window.oGraphs.getHiddenGraphs()));
+  }
   url.requestUpdate(container);
 };
 
@@ -64,7 +68,7 @@ refreshFiches = function(sejour_id) {
       {{if !$can_select_context}}
         {{$context}}
       {{else}}
-        <select name="context" onchange="loadConstantesMedicales($V(this));">
+        <select id="select_context" name="context" onchange="loadConstantesMedicales($V(this));">
           <option value="all" {{if $all_contexts}} selected {{/if}}>Tous les contextes du patient</option>
           {{foreach from=$list_contexts item=curr_context}}
             <option value="{{$curr_context->_guid}}" 
@@ -191,7 +195,7 @@ refreshFiches = function(sejour_id) {
             <li>
               <label>
                 Afficher les 
-                <select name="count_constantes" onchange="refreshConstantesMedicales('{{$context_guid}}', 1, $V(this))" style="margin: 0;">
+                <select id="count_constantes" name="count_constantes" onchange="loadConstantesMedicales($V($('select_context')));" style="margin: 0;">
                   {{assign var=_counts value=","|@explode:"50,100,200,500"}}
                   {{foreach from=$_counts item=_count}}
                     <option value="{{$_count}}" {{if $count == $_count}} selected {{/if}}>{{$_count}}</option>
