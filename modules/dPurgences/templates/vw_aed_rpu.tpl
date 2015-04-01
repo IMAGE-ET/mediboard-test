@@ -87,13 +87,13 @@
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.addParam("cible", cible);
     urlSuivi.addParam("show_header", 1);
-    if (!Object.isUndefined(show_obs)) {
+    if (!Object.isUndefined(show_obs) && show_obs != null) {
       urlSuivi.addParam("_show_obs", show_obs);
     }
-    if (!Object.isUndefined(show_trans)) {
+    if (!Object.isUndefined(show_trans) && show_trans != null) {
       urlSuivi.addParam("_show_trans", show_trans);
     }
-    if (!Object.isUndefined(show_const)) {
+    if (!Object.isUndefined(show_const) && show_const != null) {
       urlSuivi.addParam("_show_const", show_const);
     }
     if (!Object.isUndefined(show_header)) {

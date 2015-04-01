@@ -778,7 +778,7 @@ PlanSoins = {
   },
 
    showModalAllTrans: function(sejour_id) {
-    loadSuivi(sejour_id, null, null, 1, 1, null, 1);
+    loadSuivi(sejour_id, null, null, null, null, null, 1);
     var modal_suivi_lite = Modal.open("dossier_suivi", { showClose: true});
     modal_suivi_lite.container.setStyle({width: "80%", height: "80%"});
     Control.Modal.position();

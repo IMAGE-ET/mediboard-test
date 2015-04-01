@@ -188,13 +188,13 @@
       if (!Object.isUndefined(cible)) {
         url.addParam("cible", cible);
       }
-      if (!Object.isUndefined(show_obs)) {
+      if (!Object.isUndefined(show_obs) && show_obs != null) {
         url.addParam("_show_obs", show_obs);
       }
-      if (!Object.isUndefined(show_trans)) {
+      if (!Object.isUndefined(show_trans) && show_trans != null) {
         url.addParam("_show_trans", show_trans);
       }
-      if (!Object.isUndefined(show_const)) {
+      if (!Object.isUndefined(show_const) && show_const != null) {
         url.addParam("_show_const", show_const);
       }
       if (!Object.isUndefined(show_header)) {
