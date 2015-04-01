@@ -130,6 +130,8 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_ref_debiteurs;
   /** @var CEcheance[] */
   public $_ref_echeances;
+  /** @var CGroups[] */
+  public $_ref_group;
 
   /**
    * @see parent::getBackProps()
@@ -1352,4 +1354,14 @@ class CFacture extends CMbObject implements IPatientRelated {
     return array("compte"=>$numero_adherent,
                  "bvr" => $num_adherent.$cle_adherent);
   }
+
+  /**
+   * Load associated Group
+   *
+   * @return CGroups
+   */
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
+  }
+
 }

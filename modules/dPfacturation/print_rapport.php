@@ -123,6 +123,7 @@ CMbObject::massCountBackRefs($listFactures, "notes");
 
 foreach ($listFactures as $_facture) {
   /* @var CFactureCabinet $_facture */
+  $_facture->loadRefGroup();
   $_facture->loadRefPatient();
   $_facture->loadRefPraticien();
   $_facture->loadRefsConsultation();

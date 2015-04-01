@@ -76,6 +76,9 @@
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$facture->_guid}}')">
               {{$facture}}
             </strong>
+            {{if $facture->group_id != $g}}
+              <span class="compact"></br>({{$facture->_ref_group}})</span>
+            {{/if}}
           </td>
           <td>{{mb_include module=system template=inc_object_notes object=$facture}}</td>          
           <td class="text">

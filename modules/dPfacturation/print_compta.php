@@ -85,6 +85,7 @@ CStoredObject::massCountBackRefs($factures, "notes");
 foreach ($reglements as $_reglement) {
   $facture = $_reglement->loadRefFacture();
 
+  $facture->loadRefGroup();
   $facture->loadRefsNotes();
   $facture->loadRefsConsultation();
   $facture->loadRefsReglements();
