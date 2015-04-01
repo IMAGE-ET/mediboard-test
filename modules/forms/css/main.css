@@ -121,7 +121,7 @@ div.ex-message-title {
   pointer-events: none;
 }
 
-.pixel-positionning .ex-message {
+.ex-message {
   white-space: pre;
 }
 
