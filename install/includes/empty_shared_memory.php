@@ -44,7 +44,7 @@ $classes = array(
 
 foreach ($classes as $_class) {
   $count = SHM::remKeys("$_class*");
-  echo CAppUI::tr("module-system-msg-cache-removal", $count, $_class);
+  echo "Suppression dans le cache de $count items pour le préfixe $_class";
 }
 
 echo "Table des classes filles supprimée<br />";
