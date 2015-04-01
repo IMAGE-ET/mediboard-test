@@ -343,6 +343,12 @@ class CAffectation extends CMbObject {
       $store_prestations = true;
     }
 
+    // Si on place le patient alors que le séjour a déjà une sortie réelle
+    // alors on passe le flag effectue à 1 sur l'affectation
+    if (!$this->_id && $sejour->sortie_reelle) {
+      $this->effectue = 1;
+    }
+
     // Enregistrement standard
     if ($msg = parent::store()) {
       return $msg;
