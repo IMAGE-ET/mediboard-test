@@ -15,6 +15,7 @@
 {{unique_id var=uniq_id}}
 
 <script>
+  window.checking_ressources = window.checking_ressources || [];
   // Dans le cas d'une intervention, il faut vérifier
   // que pour chaque type de ressource exprimé par un besoin, une ressource
   // au moment de l'intervention est disponible.
@@ -58,14 +59,28 @@
     window.besoins_non_stored = types.split(",");
   };
 
-  checkAllOps = function() {
+  checkAllOps = window.checkAllOps || function() {
+    var objects_ids = [];
     $$(".bouton_materiel").each(function(button) {
-      var object_id = button.get("object_id");
-      checkRessources(object_id);
+      objects_ids.push(button.get("object_id"));
     });
-  }
 
-  checkRessources = function(object_id) {
+    objects_ids = objects_ids.uniq();
+
+    if (objects_ids.length) {
+      objects_ids.each(function(object_id) {
+        checkRessources(object_id);
+      });
+    }
+  };
+
+  checkRessources = window.checkRessources || function(object_id) {
+    // Gestion de la concurrence pour la vérification du matériel pour la même intervention
+    // Boutons présents 2 fois dans la DHE (mode normal et simplifié)
+    if (window.checking_ressources && window.checking_ressources[object_id] == true) {
+      return;
+    }
+    window.checking_ressources[object_id] = true;
     var url = new Url("bloc", "ajax_check_ressources");
     url.addParam("type", "{{$type}}");
     url.addParam("object_id", object_id);
@@ -76,13 +91,13 @@
         {{if $object_id}}
           button.down('span').update("("+object.count+")");
         {{/if}}
-
-        {{if $from_dhe}}
-          if (object.color == "a00") {
-            alert($T("CBesoinRessource-_missing_materiel"));
-          }
-        {{/if}}
       });
+      {{if $from_dhe}}
+      if (object.color == "a00") {
+        alert($T("CBesoinRessource-_missing_materiel"));
+      }
+      {{/if}}
+      window.checking_ressources[object_id] = false;
     });
   }
 </script>
