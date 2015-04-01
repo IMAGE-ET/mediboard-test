@@ -6,6 +6,7 @@ var ExObject = {
   pixelPositionning: false,
   groupTabsCallback: {},
   timestampLimit: 50000,
+  pendingFormLoad: {},
   dateOperator: function(divisor, ms) {
     // Absolute timestamp
     if (Math.abs(ms) > ExObject.timestampLimit) {
@@ -545,6 +546,132 @@ var ExObject = {
     url.addParam("protocoles_ids", protocole_ids.join("-"));
     url.addParam("prescription_id", prescription_id);
     url.requestModal();
+  },
+
+  registerFormItem: function(object_id, element_id) {
+    ExObject.pendingFormLoad[element_id] = object_id;
+  },
+
+  displayRegisteredFormItems: function(object_class, event_name, form_name) {
+    var ids = ExObject.pendingFormLoad;
+
+    if ($H(ids).values().length == 0) {
+      return;
+    }
+
+    var url = new Url("forms", "ajax_widget_ex_classes_multiple");
+    url.addObjectParam("ids", ids);
+    url.addParam("object_class", object_class);
+    url.addParam("event_name",   event_name);
+    url.addParam("form_name",    form_name);
+    url.requestJSON(function(data){
+      $H(data.objects).each(function(pair){
+        var d = pair.value;
+
+        ExObject.makeWidget($(pair.key), object_class, event_name, form_name, d, data.ex_classes);
+      });
+    }, {
+      method: "post",
+      getParameters: {m: 'forms', a: 'ajax_widget_ex_classes_multiple'}
+    });
+
+    ExObject.pendingFormLoad = {};
+  },
+
+  makeWidget: function(element, object_class, event_name, form_name, data, ex_classes) {
+    var container = element;
+    var ex_objects = $H(data.ex_objects);
+
+    if (!form_name) {
+      var attributes = {
+        type: "button",
+        className: "forms",
+        onclick: "ObjectTooltip.createDOM(this, $(this).next(), {duration: 0});"
+      };
+
+      if (ex_objects.values().length == 0) {
+        attributes.disabled = true;
+      }
+
+      element.insert(DOM.button(attributes, " Form. ("+data.count_avl+")"));
+    }
+    else {
+      var fieldset = DOM.fieldset({},
+        DOM.legend({},
+          "Formulaire "+$T(object_class+"-event-"+event_name)
+        )
+      );
+
+      element.insert(fieldset);
+
+      container = fieldset;
+    }
+
+    var table = DOM.table({
+      className: "layout",
+      style: "width: 400px; max-width: 700px; "+(!form_name ? "border: 1px solid #000; display: none;" : "")
+    });
+
+    ex_objects.each(function(pair){
+      var ex_class_id = pair.key;
+      var _ex_objects = pair.value;
+      var cell = DOM.td({
+        style: "text-align: left; white-space: normal;"
+      });
+
+      _ex_objects.each(function(_ex_object){
+        var button;
+
+        if (_ex_object.id) {
+          button = DOM.button({
+              type: "button",
+              className: "edit",
+              title: _ex_object.owner,
+              onclick: "showExClassForm('#{ex_class_id}', '#{object_guid}', '#{ex_object}', '#{ex_object_id}', '#{event_name}', '#{element_id}')".interpolate({
+                ex_class_id:  ex_class_id,
+                object_guid:  object_class+"-"+data.id,
+                ex_object:    _ex_object.view,
+                ex_object_id: _ex_object.id,
+                event_name:   event_name,
+                element_id:   element.id
+              })
+            },
+            _ex_object.datetime_create
+          );
+
+          if (_ex_object.formula_value !== null) {
+            button.insert(DOM.strong({}, "= "+_ex_object.formula_value));
+          }
+        }
+        else {
+          button = DOM.button(
+            {
+              type: "button",
+              className: "new",
+              value: ex_class_id,
+              onclick: ("selectExClass(this, '#{object_guid}', '#{event_name}', '#{element_id}', "+(form_name ? ("'"+form_name+"'") : "null")+")").interpolate({
+                object_guid:  object_class+"-"+data.id,
+                event_name:   event_name,
+                element_id:   element.id
+              })
+            },
+            $T("New")
+          );
+        }
+
+        cell.insert(button);
+      });
+
+      table.insert(DOM.tr({},
+        DOM.td(
+          {style: "text-align: right; "+(!form_name ? "font-weight: bold; vertical-align: middle; white-space: normal; min-width: 200px;" : "")},
+          ex_classes[ex_class_id]
+        ),
+        cell
+      ));
+    });
+
+    container.insert(table);
   }
 };
 
