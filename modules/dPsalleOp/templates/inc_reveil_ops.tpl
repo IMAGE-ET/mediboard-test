@@ -171,7 +171,7 @@
           -
         {{/if}}
 
-        {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=entree_reveil cssStyle="display: inline-block;"}}
+        {{mb_include module=forms template=inc_widget_ex_class_register_multiple object=$_operation cssStyle="display: inline-block;"}}
       </td>
       <td class="button">
         {{if $modif_operation}}
@@ -198,3 +198,5 @@
     <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
+
+{{mb_include module=forms template=inc_widget_ex_class_register_multiple_end event_name=entree_reveil object_class="COperation"}}

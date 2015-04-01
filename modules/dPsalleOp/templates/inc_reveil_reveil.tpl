@@ -247,7 +247,7 @@
       </form>
       {{else}}-{{/if}}
       
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=sortie_reveil cssStyle="display: inline-block;"}}
+      {{mb_include module=forms template=inc_widget_ex_class_register_multiple object=$_operation cssStyle="display: inline-block;"}}
     </td>
     {{if $use_sortie_reveil_reel}}
       <td class="button">
@@ -277,3 +277,5 @@
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
+
+{{mb_include module=forms template=inc_widget_ex_class_register_multiple_end event_name=sortie_reveil object_class="COperation"}}
