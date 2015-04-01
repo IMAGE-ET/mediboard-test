@@ -248,10 +248,6 @@ if ($show_operations) {
   /** @var $_operation COperation */
   foreach ($operations_by_salle as $salle_id => $_operations) {
     $i = array_search($salle_id, $salles_ids);
-
-    $types_antecedent = CAntecedent::$types;
-    $types_antecedent = array_diff($types_antecedent, array("alle"));
-
     foreach ($_operations as $_operation) {
       //CSQLDataSource::$trace = true;
 
@@ -288,11 +284,12 @@ if ($show_operations) {
 
       $charge = $sejour->loadRefChargePriceIndicator();
       $patient = $sejour->loadRefPatient();
-      $patient->loadRefDossierMedical(false);
-      $patient->_ref_dossier_medical->countAllergies();
+      $dossier_medical = $patient->loadRefDossierMedical(false);
+      $dossier_medical->countAllergies();
 
-      //antecedents, OK
-      $count_atcd = $patient->_ref_dossier_medical->countRefsAntecedentsByType($types_antecedent);
+      //antecedents
+      $dossier_medical->countAntecedents(false);
+      $count_atcd = $dossier_medical->_count_cancelled_antecedents;
 
       //besoins
       $besoins = $_operation->loadRefsBesoins();
