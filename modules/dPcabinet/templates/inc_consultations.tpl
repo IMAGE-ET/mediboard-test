@@ -13,5 +13,5 @@
 
 
 <table class="tbl">
-  {{mb_include module=cabinet template=inc_consultations_lines plageSel=$_plage chirSel=$_plage->chir_id}}
+  {{mb_include module=cabinet template=inc_consultations_lines chirSel=$plageSel->chir_id}}
 </table>
