@@ -592,7 +592,7 @@ var Calendar = {
       }
     }
     else {
-      elementView.observe('click', showPicker).observe('focus', showPicker);
+      elementView.observe('click', showPicker)/*.observe('focus', showPicker)*/;
     }
 
     // We update the view
