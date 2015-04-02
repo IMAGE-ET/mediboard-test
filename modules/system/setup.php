@@ -2085,6 +2085,16 @@ class CSetupsystem extends CSetup {
                 ADD `debug` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.87";
+    $this->makeRevision("1.1.87");
+    $query = "ALTER TABLE `access_log`
+                ADD `session_wait` FLOAT AFTER `duration`,
+                ADD `session_read` FLOAT AFTER `session_wait`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `access_log_archive`
+                ADD `session_wait` FLOAT AFTER `duration`,
+                ADD `session_read` FLOAT AFTER `session_wait`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.88";
   }
 }

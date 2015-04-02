@@ -20,6 +20,8 @@ class CAccessLog extends CMbObject {
   public $period;
   public $hits;
   public $duration;
+  //public $session_wait;
+  //public $session_read;
   public $processus;
   public $processor;
   public $request;
@@ -35,6 +37,8 @@ class CAccessLog extends CMbObject {
   // Form fields
   public $_average_hits = 0;
   public $_average_duration = 0;
+  //public $_average_session_wait = 0;
+  //public $_average_session_read = 0;
   public $_average_processus = 0;
   public $_average_processor = 0;
   public $_average_request = 0;
@@ -69,6 +73,8 @@ class CAccessLog extends CMbObject {
     $props["period"]           = "dateTime notNull";
     $props["hits"]             = "num pos notNull";
     $props["duration"]         = "float notNull";
+    //$props["session_wait"]     = "float";
+    //$props["session_read"]     = "float";
     $props["request"]          = "float notNull";
     $props["nb_requests"]      = "num";
     $props["processus"]        = "float";
@@ -135,15 +141,18 @@ class CAccessLog extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
-      $this->_average_duration    = $this->duration    / $this->hits;
-      $this->_average_processus   = $this->processus   / $this->hits;
-      $this->_average_processor   = $this->processor   / $this->hits;
-      $this->_average_request     = $this->request     / $this->hits;
-      $this->_average_nb_requests = $this->nb_requests / $this->hits;
-      $this->_average_peak_memory = $this->peak_memory / $this->hits;
-      $this->_average_errors      = $this->errors      / $this->hits;
-      $this->_average_warnings    = $this->warnings    / $this->hits;
-      $this->_average_notices     = $this->notices     / $this->hits;
+      $this->_average_duration     = $this->duration     / $this->hits;
+      //$this->_average_session_wait = $this->session_wait / $this->hits;
+      //$this->_average_session_read = $this->session_read / $this->hits;
+      $this->_average_duration     = $this->duration     / $this->hits;
+      $this->_average_processus    = $this->processus    / $this->hits;
+      $this->_average_processor    = $this->processor    / $this->hits;
+      $this->_average_request      = $this->request      / $this->hits;
+      $this->_average_nb_requests  = $this->nb_requests  / $this->hits;
+      $this->_average_peak_memory  = $this->peak_memory  / $this->hits;
+      $this->_average_errors       = $this->errors       / $this->hits;
+      $this->_average_warnings     = $this->warnings     / $this->hits;
+      $this->_average_notices      = $this->notices      / $this->hits;
     }
     // If time period == 1 hour
     $this->_average_hits = $this->hits / 60; // hits per min
@@ -158,6 +167,8 @@ class CAccessLog extends CMbObject {
    * @param int    $groupmod  Grouping mode
    * @param null   $module    Module name
    * @param string $human_bot Human/bot filter
+   *
+   * @todo A partir de cette méthode, il faut compléter les champs de session
    *
    * @return CAccessLog[]
    */
