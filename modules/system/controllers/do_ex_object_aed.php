@@ -52,7 +52,7 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
         );
         $protocole_ids = array_values(CMbArray::pluck($p_to_c->loadList($where), "protocole_id"));
 
-        if (count($protocole_ids)) {
+        if (count($protocole_ids) && CMediusers::get()->isPraticien()) {
           /** @var CSejour $sejour */
           $sejour = $ex_object->getReferenceObject("CSejour");
           if ($sejour && $sejour->_id) {
@@ -68,8 +68,8 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
                 CAppUI::setMsg($msg, UI_MSG_WARNING);
               }
             }
-
-            CAppUI::callbackAjax("window.opener.ExObject.launchProtocole", $protocole_ids, $prescription->_id);
+            $ops_ids = implode("-", CMbArray::pluck($sejour->loadRefsOperations(array("annulee" => "= '0'")), "operation_id"));
+            CAppUI::callbackAjax("window.opener.ExObject.checkOpsBeforeProtocole", $protocole_ids, $prescription->_id, $sejour->_id, $ops_ids);
           }
         }
       }

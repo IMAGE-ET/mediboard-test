@@ -541,10 +541,28 @@ var ExObject = {
     }
   },
 
-  launchProtocole: function(protocole_ids, prescription_id){
+  checkOpsBeforeProtocole: function(protocole_ids, prescription_id, sejour_id, ops_ids) {
+    var url = new Url("prescription", "ajax_check_relative_date", "raw");
+    url.addParam("protocoles_ids", protocole_ids);
+    url.requestJSON(function(count) {
+      if (count["I"] && /-/.test(ops_ids)) {
+        var urlOp = new Url("prescription", "ajax_choose_intervention");
+        urlOp.addParam("sejour_id", sejour_id);
+        urlOp.addParam("prescription_id", prescription_id);
+        urlOp.addParam("protocole_ids", protocole_ids.join('-'));
+        urlOp.requestModal("50%", "50%");
+      }
+      else {
+        ExObject.launchProtocole(protocole_ids.join('-'), prescription_id, ops_ids);
+      }
+    });
+  },
+
+  launchProtocole: function(protocole_ids, prescription_id, op_id) {
     var url = new Url("prescription", "ajax_apply_protocole");
-    url.addParam("protocoles_ids", protocole_ids.join("-"));
+    url.addParam("protocoles_ids", protocole_ids);
     url.addParam("prescription_id", prescription_id);
+    url.addParam("operation_id", op_id);
     url.requestModal();
   },
 
