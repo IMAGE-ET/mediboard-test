@@ -323,7 +323,10 @@ function updateListCPI(form, callback) {
     if (field.type == "hidden") {
       $V(field, ""); // To check the field
     }
-    $V(field, "{{$sejour->charge_id}}", true);
+
+    {{if $sejour->charge_id}}
+      $V(field, "{{$sejour->charge_id}}", true);
+    {{/if}}
 
     if (callback) {
       callback();
