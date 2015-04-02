@@ -68,7 +68,7 @@ if ($prat_selected) {
 elseif($user->isPraticien()) {
   $prat = $user;
 }
-elseif (!$rat->_id && $user->isSecretaire() && count($praticiens) == 1) {
+elseif (!$prat->_id && $user->isSecretaire() && count($praticiens) == 1) {
   $prat = reset($praticiens);
 }
 

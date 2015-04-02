@@ -16,6 +16,7 @@ $fin       = CValue::get("fin", CMbDT::date());
 $fin       = CMbDT::date("+1 day", $fin);
 $debut     = CValue::get("debut", CMbDT::date("-1 week", $fin));
 $export    = CValue::get("export", 0);
+$interv_with_no_codes = CValue::get('interv_with_no_codes', 1);
 
 $mediuser = CMediusers::get();
 if ($mediuser->isPraticien()) {
@@ -59,7 +60,9 @@ else {
 
 /** @var COperation[] $interventions */
 $operation = new COperation();
-$where[] = "LENGTH(codes_ccam) > 0";
+if (!$interv_with_no_codes) {
+  $where[] = "LENGTH(codes_ccam) > 0";
+}
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
 $totals["interventions"] = count($interventions);
 
@@ -149,7 +152,9 @@ $where = array();
 $where["sejour.entree"] = " BETWEEN '$debut' AND '$fin'";
 $where["sejour.annule"] = "= '0'";
 $where["consultation.annule"] = "= '0'";
-$where[] = "LENGTH(consultation.codes_ccam) > 0";
+if(!$interv_with_no_codes) {
+  $where[] = "LENGTH(consultation.codes_ccam) > 0";
+}
 
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
@@ -238,6 +243,7 @@ if (!$export) {
   $smarty->assign("fin"                 , $fin);
   $smarty->assign("all_prats"           , $all_prats);
   $smarty->assign("board"               , CValue::get("board", 0));
+  $smarty->assign('interv_with_no_codes', $interv_with_no_codes);
   $smarty->assign('display_not_exported', CValue::get('display_not_exported', 0));
 
   $smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");

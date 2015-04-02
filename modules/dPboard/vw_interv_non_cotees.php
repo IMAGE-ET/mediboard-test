@@ -21,7 +21,8 @@ $chirSel              = CValue::getOrSession("praticien_id", $chir ? $chir->user
 $all_prats            = CValue::get("all_prats", 0);
 $fin                  = CValue::getOrSession("fin"  , CMbDT::date());
 $debut                = CValue::getOrSession("debut", CMbDT::date("-1 week", $fin));
-$display_not_exported = Cvalue::getOrSession('display_not_exported', 0);
+$interv_with_no_codes = CValue::get('interv_with_no_codes', 1);
+$display_not_exported = Cvalue::get('display_not_exported', 0);
 
 if (!$all_prats) {
   CAppUI::requireModuleFile("dPboard", "inc_board");
@@ -33,5 +34,6 @@ $smarty->assign("chirSel"             , $chirSel);
 $smarty->assign("debut"               , $debut);
 $smarty->assign("fin"                 , $fin);
 $smarty->assign("all_prats"           , $all_prats);
+$smarty->assign('interv_with_no_codes', $interv_with_no_codes);
 $smarty->assign('display_not_exported', $display_not_exported);
 $smarty->display("../../dPboard/templates/inc_vw_interv_non_cotees.tpl");
