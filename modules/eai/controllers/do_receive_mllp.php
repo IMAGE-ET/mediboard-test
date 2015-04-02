@@ -129,10 +129,28 @@ if (!$source_mllp->_id) {
   CApp::rip();
 }
 
+/** @var CSenderMLLP $sender_mllp */
 $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 
-// Dispatch EAI 
-$ack = CEAIDispatcher::dispatch($message, $sender_mllp);
+// Dispatch EAI
+try {
+  $ack = CEAIDispatcher::dispatch($message, $sender_mllp);
+}
+catch (CHL7v2Exception $e) {
+  $sender_mllp->getConfigs(new CExchangeHL7v2());
+  $configs = $sender_mllp->_configs;
+
+  $now  = CMbDT::format(null, "%Y%m%d%H%M%S");
+  $sending_app = CAppUI::conf("hl7 sending_application");
+  $sending_fac = CAppUI::conf("hl7 sending_facility");
+
+  $recv_app = isset($configs["receiving_application"]) ? $configs["receiving_application"] : $sender_mllp->nom;
+  $recv_fac = isset($configs["receiving_facility"])    ? $configs["receiving_facility"]    : $sender_mllp->nom;
+
+  $ack  = "MSH|^~\&|$sending_app|$sending_fac|$recv_app|$recv_fac|$now||ACK^R01^ACK|$now|P|2.6||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
+  $ack .= "\r\n"."MSA|CR|$now";
+  $ack .= "\r\n"."ERR||0^0|207|E|E200^".$e->getMessage()."|||||||";
+}
 
 ob_clean();
 

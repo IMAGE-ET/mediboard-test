@@ -84,9 +84,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $exchange_hl7v2->_ref_sender->loadConfigValues();
     $sender = $this->_ref_sender = $exchange_hl7v2->_ref_sender;
 
+    // Patient
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
-    $venueAN   = CValue::read($data["admitIdentifiers"] , "AN");
-
     if (!$patientPI) {
       return $exchange_hl7v2->setAckAR($ack, "E007", null, $patient);
     }
@@ -98,26 +97,43 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
     $patient->load($IPP->object_id);
 
-    if (!$venueAN) {
-      return $exchange_hl7v2->setAckAR($ack, "E200", null, $patient);
+    $sejour = null;
+
+    // Sejour
+    $venueAN = CValue::read($data["admitIdentifiers"], "AN");
+    if ($venueAN) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+
+      // Séjour non retrouvé par son NDA
+      if (!$NDA->_id) {
+        return $exchange_hl7v2->setAckAR($ack, "E205", null, $patient);
+      }
+
+      /** @var CSejour $sejour */
+      $sejour = $NDA->loadTargetObject();
+
+      if (!$sejour->_id) {
+        return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+      }
+
+      if ($sejour->patient_id !== $patient->_id) {
+        return $exchange_hl7v2->setAckAR($ack, "E606", null, $patient);
+      }
     }
 
-    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
-
-    // Séjour non retrouvé par son NDA
-    if (!$NDA->_id) {
-      return $exchange_hl7v2->setAckAR($ack, "E205", null, $patient);
+    // Pas d'observations
+    $first_result = reset($data["observations"]);
+    if (!$first_result) {
+      return $exchange_hl7v2->setAckAR($ack, "E225", null, $patient);
     }
 
-    /** @var CSejour $sejour */
-    $sejour = $NDA->loadTargetObject();
+    // Recherche par date
+    $observation_dt = $this->getOBRObservationDateTime($first_result["OBR"]);
+    $sejours = $patient->getCurrSejour($observation_dt); //FIXME ignorer les annulés
+    $sejour = reset($sejours);
 
     if (!$sejour->_id) {
       return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
-    }
-
-    if ($sejour->patient_id !== $patient->_id) {
-      return $exchange_hl7v2->setAckAR($ack, "E606", null, $patient);
     }
 
     // Récupération des observations
@@ -135,6 +151,11 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       }
 
       foreach ($_observation["OBX"] as $key => $_OBX) {
+        $status = $this->getObservationResultStatus($_OBX);
+        if ($status === "X") {
+          continue;
+        }
+
         // OBX.2 : Value type
         $value_type   = $this->getOBXValueType($_OBX);
         $date         = $observation_dt ? $observation_dt : $this->getOBXObservationDateTime($_OBX);
@@ -195,7 +216,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       }
     }
     
-    return $exchange_hl7v2->setAckAA($ack, $this->codes, $comment, $object);
+    return $exchange_hl7v2->setAckCA($ack, $this->codes, $comment, $object);
   }
 
   /**
@@ -339,17 +360,6 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   }
 
   /**
-   * Get result status
-   *
-   * @param DOMNode $node DOM node
-   *
-   * @return string
-   */
-  function getOBXResultStatus(DOMNode $node) {
-    return $this->queryTextNode("OBX.11", $node);
-  }
-
-  /**
    * Get observation date time
    *
    * @param DOMNode            $node   DOM node
@@ -466,7 +476,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
 
     // Traiter le cas où ce sont des paramètres sans résultat utilisable
-    if ($this->getOBXResultStatus($OBX) === "X") {
+    if ($this->getObservationResultStatus($OBX) === "X") {
       return true;
     }
 

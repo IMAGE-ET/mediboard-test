@@ -245,7 +245,7 @@ class SocketServer {
       //stream_context_set_option($context, 'ssl', 'local_pk', "private.key");
 
       if ($passphrase) {
-        stream_context_set_option($context, 'ssl', 'passphrase', $passphrase); 
+        stream_context_set_option($context, 'ssl', 'passphrase', $passphrase);
       }
 
       stream_context_set_option($context, 'ssl', 'cafile', $certificate_authority);
@@ -597,7 +597,7 @@ class SocketServer {
       foreach ($active as $conn) {
         $conn_id = (integer) $conn;
         $request = @fread($conn, $this->__readAmount);
-        
+
         // If connection is closed, mark it for cleanup and continue
         if (false === $request || $request === "") {
           $pool[$conn_id] = false;
@@ -634,7 +634,7 @@ class SocketServer {
           $this->__destruct();
           return;
         }
-        
+
         $test = @fwrite($conn, $response, strlen($response));
         if (false === $test) {
           $this->__writeError($conn_id);

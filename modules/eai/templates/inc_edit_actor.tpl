@@ -11,6 +11,17 @@
 
 <script type="text/javascript">
   InteropActor.actor_guid = '{{$actor->_guid}}';
+
+  confirmPurge = function (button, view) {
+    var oForm = button.form;
+    if (confirm("ATTENTION : Vous êtes sur le point de purger cet acteur")) {
+      oForm._purge.value = "1";
+      confirmDeletion(oForm, {
+        typeName:'l\'acteur',
+        objName:view
+      } );
+    }
+  }
 </script>
 
 {{if (($actor->_class != "CInteropactor") || ($actor->_class != "CInteropSender")) && $can->edit}}
@@ -21,6 +32,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="parent_class" value="{{$actor->_parent_class}}" />
     <input type="hidden" name="_duplicate" value="" />
+    <input type="hidden" name="_purge" value="0" />
     <input type="hidden" name="callback" value="InteropActor.refreshActorsAndActor" />
                   
     <table class="form">
@@ -71,6 +83,12 @@
                       {typeName:'',objName:'{{$actor->_view|smarty:nodefaults|JSAttribute}}', ajax:true})">
               {{tr}}Delete{{/tr}}
             </button>
+
+            {{if $can->admin}}
+              <button type="button" class="cancel" onclick="confirmPurge(this, '{{$actor->_view|smarty:nodefaults|JSAttribute}}');">
+                {{tr}}Purge{{/tr}}
+              </button>
+            {{/if}}
           {{else}}
              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}

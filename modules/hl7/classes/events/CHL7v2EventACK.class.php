@@ -97,6 +97,7 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
    * @return void
    */
   function addMSH() {
+    /** @var CHL7v2SegmentMSH $MSH */
     $MSH = CHL7v2Segment::create("MSH", $this->message);
     $MSH->build($this);
   }

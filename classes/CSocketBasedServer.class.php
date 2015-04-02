@@ -8,9 +8,7 @@
  * @license http://www.gnu.org/licenses/ GNU GPLv3
  */
 
-$dir = dirname(__FILE__);
-
-$socket_server_class = "$dir/SocketServer.class.php";
+$socket_server_class = __DIR__."/SocketServer.class.php";
 
 // Library not installed
 if (!file_exists($socket_server_class)) {
@@ -21,7 +19,7 @@ if (!class_exists("SocketServer", false)) {
   require $socket_server_class;
 }
 
-require "$dir/../includes/version.php"; 
+require __DIR__."/../includes/version.php";
  
 class CSocketBasedServer {
   

@@ -45,7 +45,23 @@ class CMLLPServer extends CSocketBasedServer{
    */
   function displayMessage($message) {
     echo " ----- Message reçu :\n";
-    echo preg_replace("/[\r\n]+/", "\n", $message);
+    $message = preg_replace("/[\r\n]+/", "\n", $message);
+
+    $colors = array(
+      "|" => "red",
+      "^" => "green",
+      "~" => "blue",
+      "&" => "magenta",
+    );
+
+    //$message = preg_replace('/([^\|\^\~\&]+)/', shColorText($message, $_color, "white"), $message);
+
+    foreach ($colors as $_char => $_color) {
+      $message = str_replace($_char, shColorText($_char, $_color), $message);
+    }
+
+    $sep = str_repeat("-", 10);
+    echo "$sep\n$message\n$sep\n";
   }
 
   /**

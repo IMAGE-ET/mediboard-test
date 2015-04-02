@@ -354,6 +354,22 @@ class CExchangeHL7v2 extends CExchangeTabular {
   }
 
   /**
+   * Generate 'Commit Accept' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param null               $comments       Comments
+   * @param CMbObject          $mbObject       Object
+   *
+   * @return string
+   */
+  function setAckCA(CHL7Acknowledgment $ack, $mb_error_codes = null, $comments = null, CMbObject $mbObject = null) {
+    $ack->generateAcknowledgment("CA", $mb_error_codes, "0", "I", $comments, $mbObject);
+
+    return $this->populateExchangeACK($ack, $mbObject);
+  }
+
+  /**
    * Generate 'Application Accept' acknowledgment
    *
    * @param CHL7Acknowledgment $ack            Acknowledgment
@@ -365,7 +381,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
    */
   function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes = null, $comments = null, CMbObject $mbObject = null) {
     $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $mbObject);
-        
+
     return $this->populateExchangeACK($ack, $mbObject);
   }
 

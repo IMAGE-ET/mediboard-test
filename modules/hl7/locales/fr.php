@@ -532,6 +532,7 @@ $locales['CHL7Event-AR-E221'] = 'Erreur lors du test préalable de la fusion des 
 $locales['CHL7Event-AR-E222'] = 'Erreur lors de la fusion des données séjours';
 $locales['CHL7Event-AR-E223'] = 'Le séjour retrouvé sur le système par son RI est différent de celui du message';
 $locales['CHL7Event-AR-E224'] = 'Le séjour retrouvé sur le système par son NA est différent de celui du message';
+$locales['CHL7Event-AR-E225'] = 'Aucune observation dans le message';
 $locales['CHL7Event-AR-E230'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du séjour';
 $locales['CHL7Event-AR-E231'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du séjour à éliminer';
 $locales['CHL7Event-AR-E301'] = 'Aucune consultation sur le séjour à la date d\'observation donnée';

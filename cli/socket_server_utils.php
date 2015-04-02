@@ -11,8 +11,9 @@
 // CLI or die
 PHP_SAPI === "cli" or die;
 
-$root_dir = dirname(__FILE__)."/..";
+$root_dir = __DIR__."/..";
 require "$root_dir/classes/CSocketBasedServer.class.php";
+require "$root_dir/cli/style.php";
 
 $server_type = "";
 $server_class = "";
