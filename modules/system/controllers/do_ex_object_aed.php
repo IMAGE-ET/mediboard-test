@@ -52,7 +52,7 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
         );
         $protocole_ids = array_values(CMbArray::pluck($p_to_c->loadList($where), "protocole_id"));
 
-        if (count($protocole_ids) && CMediusers::get()->isPraticien()) {
+        if (count($protocole_ids)) {
           /** @var CSejour $sejour */
           $sejour = $ex_object->getReferenceObject("CSejour");
           if ($sejour && $sejour->_id) {
