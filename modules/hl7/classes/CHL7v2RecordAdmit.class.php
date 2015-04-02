@@ -2574,6 +2574,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue
         );
     }
+    elseif (!$sortie_prevue && $newVenue->sortie_prevue) {
+      // On ne modifie pas la sortie de Mediboard si on ne l'a pas dans le message
+    }
     elseif ($sortie_prevue && preg_match("/^\d{4}-\d\d-\d\d( 00:00:00)?$/", $sortie_prevue)) {
       $newVenue->sortie_prevue = CMbDT::date($sortie_prevue)." 00:00:00";
     }
