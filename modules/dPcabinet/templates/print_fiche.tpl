@@ -271,7 +271,7 @@
               {{if $const_med->_imc_valeur}}({{$const_med->_imc_valeur}}){{/if}}
             {{/if}}
             {{if $const_med->_poids_ideal}}
-              - Poids idéal : <strong>{{$const_med->_poids_ideal}} kg</strong>
+              - Poids idéal (Formule de Lorentz) : <strong>{{$const_med->_poids_ideal}} kg</strong>
             {{/if}}
           </td>
         </tr>
