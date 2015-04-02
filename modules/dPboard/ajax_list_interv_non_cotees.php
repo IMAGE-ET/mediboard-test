@@ -59,7 +59,6 @@ else {
 
 /** @var COperation[] $interventions */
 $operation = new COperation();
-$where[] = "LENGTH(codes_ccam) > 0";
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
 $totals["interventions"] = count($interventions);
 
@@ -149,7 +148,6 @@ $where = array();
 $where["sejour.entree"] = " BETWEEN '$debut' AND '$fin'";
 $where["sejour.annule"] = "= '0'";
 $where["consultation.annule"] = "= '0'";
-$where[] = "LENGTH(consultation.codes_ccam) > 0";
 
 if ($all_prats) {
   $prats = $user->loadPraticiens(PERM_READ);
