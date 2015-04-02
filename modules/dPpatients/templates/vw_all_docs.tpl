@@ -16,6 +16,17 @@
     .requestUpdate("area_docs");
   };
 
+  toggleLabels = function() {
+    var form = getForm("filterDisplay");
+    var elts = form.elements["display"];
+    var display = $V(form.display);
+
+    $A(elts).each(function(elt) {
+      var color = elt.value == display ? "" : "#AAA";
+      elt.up("label").setStyle({"color": color});
+    });
+  };
+
   Main.add(function() {
     loadAllDocs();
   });
@@ -35,12 +46,12 @@
         </select>
         &nbsp; &nbsp;
         <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;">
-          <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="loadAllDocs()"
+          <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf00a;
         </label>
         &nbsp; &nbsp;
-        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;">
-          <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="loadAllDocs()"
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "list"}}color: #AAA;{{/if}}">
+          <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf0ca;
         </label>
       </th>
