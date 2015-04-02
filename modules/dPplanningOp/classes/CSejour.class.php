@@ -3881,6 +3881,23 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Dernière intervention
     $this->_ref_last_operation->fillLimitedTemplate($template);
 
+    // Consultations
+    $consults = array();
+    foreach ($this->loadRefsConsultations() as $_consult) {
+      $_consult->loadRefsDossiersAnesth();
+      if (count($_consult->_refs_dossiers_anesth)) {
+        foreach ($_consult->_refs_dossiers_anesth as $_dossier_anesth) {
+          if ($_dossier_anesth->conclusion) {
+            $consults[] = $_dossier_anesth->conclusion;
+          }
+        }
+      }
+      else if ($_consult->conclusion) {
+        $consults[] = $_consult->conclusion;
+      }
+    }
+    $template->addListProperty("Sejour - Conclusions des consultations", $consults);
+
     // Régime
     $regimes = array();
 
