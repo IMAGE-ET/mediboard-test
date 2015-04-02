@@ -2124,9 +2124,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $doctor_id = $this->getDoctor($_PV17, $mediuser);
     }
 
+    // On ne change pas le praticien si celui-ci existe sur le séjour et n'est pas présent dans le message reçu
+    if (!$doctor_id && $newVenue->praticien_id) {
+      return;
+    }
+
     // Dans le cas ou la venue ne contient pas de medecin responsable
     // Attribution d'un medecin indeterminé
-    if (!$doctor_id) {
+    if (!$doctor_id && !$newVenue->praticien_id) {
       $doctor_id = $this->createIndeterminateDoctor();
     }
 
