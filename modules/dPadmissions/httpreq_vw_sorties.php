@@ -84,7 +84,7 @@ if ($prat_id) {
 
 // Seulement les confirmées par le praticien
 if ($only_confirmed) {
-  $where["sejour.confirme"] = " = '1'";
+  $where["sejour.confirme"] = "IS NOT NULL";
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";

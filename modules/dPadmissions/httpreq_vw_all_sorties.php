@@ -75,7 +75,7 @@ else {
 }
 
 if ($only_confirmed) {
-  $filterConfirmed = "AND sejour.confirme = '1'";
+  $filterConfirmed = "AND sejour.confirme IS NOT NULL";
 }
 else {
   $filterConfirmed = "";
