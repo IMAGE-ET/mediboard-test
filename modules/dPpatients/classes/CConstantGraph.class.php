@@ -639,7 +639,7 @@ class CConstantGraph {
         }
         if ("$_value->context_class-$_value->context_id" !== $this->context_guid) {
           $_value->loadRefContext();
-          if ($_value->_ref_context->_id) {
+          if ($_value->_ref_context) {
             $_value->_ref_context->loadRefsFwd();
             $entry['context']      = utf8_encode($_value->_ref_context->_view);
             $entry['context_guid'] = "$_value->context_class-$_value->context_id";
