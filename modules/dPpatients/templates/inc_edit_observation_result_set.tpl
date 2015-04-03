@@ -162,7 +162,8 @@
                     <small style="color: #999;" title="{{$_last_result.datetime|date_format:$conf.datetime}}">
                       {{$_last_result.datetime|date_format:$conf.time}}
                     </small>
-                    &ndash;
+
+                    &nbsp;
 
                     {{if $_axis->_labels|@count}}
                       {{assign var=_label_id value=$_last_result.label_id}}
