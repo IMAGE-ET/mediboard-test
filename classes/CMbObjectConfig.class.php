@@ -39,15 +39,15 @@ class CMbObjectConfig extends CMbObject {
       $node->setAttribute("value", $value);
     }
     
-   return $doc;
+    return $doc;
   }
   
   /**
-   * Import object config 
+   * Import object config
+   *
+   * @return void
    */
   function importXMLConfigValues(){
-    
   }
-    
 }
   

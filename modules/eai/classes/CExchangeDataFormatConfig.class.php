@@ -26,7 +26,17 @@ class CExchangeDataFormatConfig extends CMbObjectConfig {
   
   // Form fields
   public $_config_fields;
-  
+
+  /**
+   * References
+   */
+
+  /** @var CInteropSender */
+  public $_ref_sender;
+
+  /**
+   * @see parent::getProps
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -35,31 +45,58 @@ class CExchangeDataFormatConfig extends CMbObjectConfig {
     
     return $props;
   }
-  
+
+  /**
+   * Load interop sender
+   *
+   * @return CInteropSender
+   */
+  function loadRefSender(){
+    return $this->_ref_sender = $this->loadFwdRef("sender_id", true);
+  }
+
+  /**
+   * Get config fields
+   *
+   * @return array
+   */
   function getConfigFields() {
     return $this->_config_fields = self::$config_fields;
   }
-  
-  function store(){
-  	$this->exportXML();
-  	return parent::store();
+
+  /**
+   * @see parent::store
+   */
+  function store() {
+    $this->exportXML();
+
+    return parent::store();
   }
-  
+
+  /**
+   * Export XML
+   *
+   * @return CMbXMLDocument
+   */
   function exportXML(){
-  	$doc = new CMbXMLDocument();
+    $doc = new CMbXMLDocument();
     $root = $doc->addElement($doc, $this->_class);
     
-    foreach($this->getConfigFields() as $field) {
-    	$node = $doc->addElement($root, "entry");
+    foreach ($this->getConfigFields() as $field) {
+      $node = $doc->addElement($root, "entry");
       $node->setAttribute("config", $field);
       $node->setAttribute("value", $this->$field);
     }
     
-   return $doc;
+    return $doc;
   }
-  
+
+  /**
+   * Import XML
+   *
+   * @return void
+   */
   function importXML() {
-    
   }
 }
 

@@ -988,7 +988,7 @@ class CStoredObject extends CModelObject {
     }
 
     if (count($objects) != count($rows)) {
-      CMbDebug::log($query,  "Missing group by in $m / $action (rows : ".count($rows).", objects : ".count($objects).")");
+      mbLog($query,  "Missing group by in $m / $action (rows : ".count($rows).", objects : ".count($objects).")");
     }
 
     return $objects;

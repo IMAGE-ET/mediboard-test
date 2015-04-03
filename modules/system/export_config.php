@@ -18,10 +18,12 @@ $object_guid = CValue::get("object_guid");
 /** @var CExchangeDataFormatConfig $object */
 $object = CMbObject::loadFromGuid($object_guid);
 
+$name = $object->loadRefObject()->_view;
+
 ob_clean();
 
 header("Content-Type: text/xml");
-header("Content-Disposition: attachment; filename=\"config.xml\"");
+header("Content-Disposition: attachment; filename=\"config-$name.xml\"");
 echo $object->exportXMLConfigValues()->saveXML();
   
 CApp::rip();
