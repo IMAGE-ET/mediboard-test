@@ -24,6 +24,9 @@ if ($context_guid) {
 }
 
 $host = CConstantesMedicales::guessHost($context);
+if ($host instanceof CGroups) {
+  $host = CMediusers::get()->loadRefFunction();
+}
 
 if (!$selection || is_null($host)) {
   $selection = CConstantesMedicales::getConstantsByRank('form', false, $host);
