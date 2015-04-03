@@ -12,8 +12,8 @@
 CCanDo::checkAdmin();
 
 $axe            = CValue::getOrSession('axe');
-$entree         = CValue::getOrSession('entree', CMbDT::format("-1 MONTH", "%Y-%m-%d 00:00:00"));
-$sortie         = CValue::getOrSession('sortie', CMbDT::format(null, "%Y-%m-%d 23:59:59"));
+$entree         = CValue::getOrSession('entree', CMbDT::date("-1 MONTH"));
+$sortie         = CValue::getOrSession('sortie', CMbDT::date());
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
 $filter = new CSejour;

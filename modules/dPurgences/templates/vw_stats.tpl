@@ -113,11 +113,11 @@ Main.add(function () {
         <table class="main form">
           <tr>
             <th><label for="entree">Date min</label></th>
-            <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="dateTime"}}</td>
+            <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="date"}}</td>
           </tr>
           <tr>
             <th><label for="sortie">Date max</label></th>
-            <td>{{mb_field object=$filter field=sortie register=true form="stats-filter" prop="dateTime moreThan|entree"}}</td>
+            <td>{{mb_field object=$filter field=sortie register=true form="stats-filter" prop="date"}}</td>
           </tr>
           <tr>
             <th>Grouper par</th>
