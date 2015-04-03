@@ -102,14 +102,10 @@ Main.add(function () {
   {{if $show_cat_tabs}}
     Control.Tabs.create("constantes-by-type{{$unique_id}}");
   {{/if}}
-  {{if $unique_id == ''}}
-    ViewPort.SetAvlHeight('constant_form', 0.98);
-  {{/if}}
-  ViewPort.SetAvlHeight('graphs', 1);
 });
 </script>
 
-<div id="constant_form{{$unique_id}}" style="position:relative; min-height: 290px; width: 100%;">
+<div id="constant_form{{$unique_id}}" style="position: absolute; top: 0; left: 0; bottom: 0; min-height: 290px; width: 100%;">
   <form name="edit-constantes-medicales{{$unique_id}}" action="?" method="post" onsubmit="return {{if $can_edit}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -147,7 +143,7 @@ Main.add(function () {
     </ul>
     {{/if}}
 
-    <div id="constantes_{{$constantes->_id}}{{$unique_id}}" style="height: 72%; overflow-y: auto; width: 100%;">
+    <div id="constantes_{{$constantes->_id}}{{$unique_id}}" style="position: absolute; top: 20px; left: 0px; bottom: 80px; overflow-y: auto; width: 100%;">
       {{if $modif_timeout}}
         <div class="small-warning">
           {{tr var1=$modif_timeout}}CConstantes-Medicales-msg-modif-timeout-%s{{/tr}}
@@ -276,7 +272,7 @@ Main.add(function () {
       </table>
     </div>
 
-    <div style="{{if $unique_id == ''}}position: absolute; bottom:0;{{/if}} text-align:center; height:20%; width: 100%;" id="buttons_form_const-{{$unique_id}}">
+    <div style="position: absolute; bottom:0; text-align:center; height:80px; width: 100%;" id="buttons_form_const-{{$unique_id}}">
       {{if $can_edit && !$modif_timeout}}
         {{if $constantes->_id}}
           {{mb_field object=$constantes field=datetime form="edit-constantes-medicales$unique_id" register=true}}

@@ -230,7 +230,7 @@
       </div>
       <fieldset style="width:48%;float:left;">
         <legend>Constantes</legend>
-        <div id="constantes-tri"></div>
+        <div id="constantes-tri" style="position: relative; height: 400px;"></div>
       </fieldset>
       
       <div style="float:left;width:48%;" id="form-edit-complement">
