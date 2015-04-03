@@ -311,24 +311,26 @@ ConstantsGraph = Class.create({
     oDatas.each(function (serie) {
       if (serie.bars) {
         serie.data.each(function (data) {
-          if (data[0] >= this.minXValue && data[0] < this.maxXValue) {
-            var oPoint = plot.pointOffset({x: data[0], y: data[1]});
-            oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
-          }
-          if (data[0] < this.minXValue && (data[0] + data.barWidth) >= this.minXValue && (data[0] + data.barWidth) < this.maxXValue) {
-            var oPoint = plot.pointOffset({x: data[0] + data.barWidth, y: data[1]});
-            oPh.append('<div style="position: absolute; left:' + (oPoint.left - 15) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
-          }
-          if (data[0] < this.minXValue && (data[0] + data.barWidth) >= this.maxXValue) {
-            var xPos;
-            if (this.displayMode == 'time') {
-              xPos = this.minXValue + this.displayTime * 3600000;
+          if (data[1] > 0) {
+            if (data[0] >= this.minXValue && data[0] < this.maxXValue) {
+              var oPoint = plot.pointOffset({x: data[0], y: data[1]});
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
             }
-            else {
-              xPos = this.minXValue + 7.5;
+            if (data[0] < this.minXValue && (data[0] + data.barWidth) >= this.minXValue && (data[0] + data.barWidth) < this.maxXValue) {
+              var oPoint = plot.pointOffset({x: data[0] + data.barWidth, y: data[1]});
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left - 15) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
             }
-            var oPoint = plot.pointOffset({x: xPos, y: data[1]});
-            oPh.append('<div style="position: absolute; left:' + (oPoint.left) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+            if (data[0] < this.minXValue && (data[0] + data.barWidth) >= this.maxXValue) {
+              var xPos;
+              if (this.displayMode == 'time') {
+                xPos = this.minXValue + this.displayTime * 3600000;
+              }
+              else {
+                xPos = this.minXValue + 7.5;
+              }
+              var oPoint = plot.pointOffset({x: xPos, y: data[1]});
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+            }
           }
         }.bind(this));
       }
@@ -347,7 +349,7 @@ ConstantsGraph = Class.create({
 
     // Make the labels of the xaxis clickable
     $$('#placeholder_' + rank + '_' + id + ' .x1Axis .tickLabel').each(function(item) {
-      item.style.zIndex = 1000;
+      item.style.zIndex = 10;
     });
   },
 
