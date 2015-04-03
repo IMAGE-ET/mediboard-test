@@ -67,7 +67,7 @@
     <!--  Liste des Diagnostics Associés du dossier médical (OMS)-->
     <td style="vertical-align: top">
       <ul class="tags" style="float: none;">
-        {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
+        {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item=curr_cim}}
           <li class="tag">
             <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post"
                   onsubmit="return onSubmitFormAjax(this, PMSI.afterEditDiag.curry('{{$sejour->_id}}'));">

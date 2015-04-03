@@ -40,6 +40,9 @@ if (CModule::getActive("atih") && CAppUI::conf("dPpmsi use_cim_pmsi")) {
     if ($code->type != 3) {
       $cim_das[preg_replace("/\./", "", $_da)] = true;
     }
+    else {
+      $cim_das[preg_replace("/\./", "", $_da)] = false;
+    }
   }
   if ($cim_dp->type == 0) {
     $sejour->_DP_state = true;

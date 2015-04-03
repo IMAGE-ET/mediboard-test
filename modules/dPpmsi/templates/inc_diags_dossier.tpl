@@ -36,9 +36,9 @@
             {{$_code_cim->code}} ({{$_code_cim->libelle}}
           </li>
         {{foreachelse}}
-          <li class="empty">
+          <span class="empty">
             {{tr}}CCodeCIM10.none{{/tr}}
-          </li>
+          </span>
         {{/foreach}}
       </ul>
     </td>
@@ -93,7 +93,6 @@
       <ul>
         {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item=_code_cim}}
           <li>
-
             <!-- Si module atih on affiche l'aide au codage -->
             {{if "atih"|module_active && $conf.dPpmsi.use_cim_pmsi == "1"}}
               {{assign var=code value=$_code_cim->code}}
@@ -108,13 +107,9 @@
             {{else}}
               <span>{{$_code_cim->code}} - ({{$_code_cim->libelle}})</span>
             {{/if}}
-
-
           </li>
         {{foreachelse}}
-          <li class="empty">
-            <span>{{tr}}CCodeCIM10.none{{/tr}}</span>
-          </li>
+          <span class="empty">{{tr}}CCodeCIM10.none{{/tr}}</span>
         {{/foreach}}
       </ul>
     </td>
@@ -166,9 +161,9 @@
               </span>
             </li>
             {{foreachelse}}
-            <li class="empty">
+            <span class="empty">
               {{tr}}CCIM10.none{{/tr}}
-            </li>
+            </span>
           {{/foreach}}
         </ul>
       </td>
