@@ -47,10 +47,13 @@ class CDossierMedical extends CMbMetaObject {
   public $_ref_antecedents_by_type_appareil;
   /** @var  CTraitement[] */
   public $_ref_traitements;
+  /** @var  CPathologie[] */
+  public $_ref_pathologies;
   public $_ref_etats_dents;
   /** @var  CPrescription */
   public $_ref_prescription;
   public $_ref_allergies;
+  public $_ref_atcd_sans_allergie;
   public $_ref_deficiences;
   
   // Derived back references
@@ -100,9 +103,10 @@ class CDossierMedical extends CMbMetaObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["antecedents"] = "CAntecedent dossier_medical_id";
-    $backProps["traitements"] = "CTraitement dossier_medical_id";
-    $backProps["etats_dent"]  = "CEtatDent dossier_medical_id";
+    $backProps["antecedents"]  = "CAntecedent dossier_medical_id";
+    $backProps["traitements"]  = "CTraitement dossier_medical_id";
+    $backProps["pathologies"]  = "CPathologie dossier_medical_id";
+    $backProps["etats_dent"]   = "CEtatDent dossier_medical_id";
     $backProps["prescription"] = "CPrescription object_id";
     return $backProps;
   }
@@ -277,7 +281,11 @@ class CDossierMedical extends CMbMetaObject {
     ksort($this->_ref_antecedents_by_type);
     foreach ($this->_all_antecedents as $_atcd) {
       $this->_ref_antecedents_by_type[$_atcd->type][$_atcd->_id] = $_atcd;
+      if($_atcd->type != "alle") {
+        $this->_ref_atcd_sans_allergie[$_atcd->_id] = $_atcd;
+      }
     }
+    $this->_ref_allergies = $this->_ref_antecedents_by_type["alle"];
 
     // Classement par appareil
     $this->_ref_antecedents_by_appareil = array_fill_keys($atcd->_specs["appareil"]->_list, array());
@@ -293,6 +301,17 @@ class CDossierMedical extends CMbMetaObject {
 
     return $this->_all_antecedents;
   }
+
+  /**
+ * Chargement des pathologies du dossier
+ *
+ * @return CPathologie[]|null
+ */
+  function loadRefsPathologies() {
+    $order = "debut DESC";
+    return $this->_ref_pathologies = $this->loadBackRefs("pathologies", $order);
+  }
+
 
   /**
    * Chargement de l'état des dents
@@ -414,7 +433,7 @@ class CDossierMedical extends CMbMetaObject {
 
 
   /**
-   * Chargmeent des antécédents par type
+   * Chargement des antécédents par type
    *
    * @param string $type Type des antécédents
    *

@@ -2794,7 +2794,23 @@ class CSetupdPpatients extends CSetup {
                 ADD `perimetre_taille` INT(3) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.33';
+    $this->makeRevision('2.33');
+    $query = "CREATE TABLE `pathologie` (
+                `pathologie_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `debut` DATE,
+                `fin` DATE,
+                `pathologie` TEXT,
+                `annule` ENUM ('0','1') DEFAULT '0',
+                `dossier_medical_id` INT (11) UNSIGNED NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `pathologie`
+                ADD INDEX (`debut`),
+                ADD INDEX (`fin`),
+                ADD INDEX (`dossier_medical_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.34';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
