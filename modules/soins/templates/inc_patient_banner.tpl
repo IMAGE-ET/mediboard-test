@@ -21,20 +21,24 @@
     Main.add(function() {
       var url = new Url('oncomip', 'ajax_search_patient');
       url.addParam('patient_id', {{$patient->_id}});
-      url.requestUpdate('oncomip_search_patient');
+      url.requestUpdate('oncomip_search_patient', {
+        onComplete: function() {
+          $('oncomip_search_patient').show();
+        }
+      });
     });
   </script>
 {{/if}}
 
 <table class="tbl">
   <tr>
-    <th class="title text" style="text-align: left; border: none; width: 5%;">
+    <th class="title text" style="text-align: left; border: none; width: 80px;">
       {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         {{mb_include module="patients" template=inc_vw_photo_identite mode="read" size=52}}
       </a>
     </th>
-    <th class="title text" style="border: none; width: 90%">
+    <th class="title text" style="border: none;">
       <form name="actionPat" action="?" method="get">
         <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />
@@ -89,7 +93,7 @@
         </h2>
       </form>
     </th>
-    <th class="title text" style="text-align: right; border: none; width: 5%;">
+    <th class="title text" style="text-align: right; border: none; width: 10%;">
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
 
@@ -112,7 +116,7 @@
       {{mb_include module=dPpatients template=inc_view_ins_patient patient=$patient}}
 
       {{if 'oncomip'|module_active}}
-        <div id="oncomip_search_patient"></div>
+        <span id="oncomip_search_patient" style="display: none;"></span>
       {{/if}}
     </th>
   </tr>
