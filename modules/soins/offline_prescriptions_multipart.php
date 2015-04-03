@@ -48,10 +48,10 @@ foreach ($sejours as $_sejour) {
   $params = array(
     "prescription_id" => $_prescription->_id ? : "",
     "in_progress"     => 1,
+    "multipart"       => 1
   );
 
-  $_content = CApp::fetch("dPprescription", "print_prescription", $params);
-
+  $_content = CApp::fetch("dPprescription", "print_prescription_fr", $params);
   $_naissance = str_replace("/", "-", $_patient->getFormattedValue("naissance"));
   $ordonnances[] = array(
     "title"     => base64_encode($_patient->_view . " - " . $_naissance),
