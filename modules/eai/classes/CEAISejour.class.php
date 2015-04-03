@@ -40,35 +40,6 @@ class CEAISejour extends CEAIMbObject {
   }
   
   /**
-   * Recording the external identifier of the CIP
-   * 
-   * @param CIdSante400 $NDA        Object id400
-   * @param int         $idVenueSMP External identifier
-   * 
-   * @return void
-   */ 
-  static function NDASMPSetting(CIdSante400 $NDA, $idVenueSMP = null) {
-    $NDA->object_class = "CSejour";
-    $NDA->tag          = CAppUI::conf("smp tag_dossier");
-    if ($idVenueSMP) {
-      $NDA->object_id  = $idVenueSMP;
-    }
-  }
-  
-  /**
-   * Increment NDA
-   * 
-   * @param CIdSante400 $NDA Object id400
-   * 
-   * @return void
-   */ 
-  static function NDASMPIncrement(CIdSante400 $NDA) {
-    $NDA->id400++;
-    $NDA->id400 = str_pad($NDA->id400, 6, '0', STR_PAD_LEFT);
-    $NDA->_id   = null;
-  }
-  
-  /**
    * Recording NDA
    * 
    * @param CIdSante400    $NDA    Object id400

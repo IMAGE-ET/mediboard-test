@@ -40,22 +40,6 @@ class CEAIPatient extends CEAIMbObject {
   }
   
   /**
-   * Recording the external identifier of the CIP
-   * 
-   * @param CIdSante400 $IPP          Object id400
-   * @param int         $idPatientSIP External identifier
-   * 
-   * @return void
-   */ 
-  static function IPPSIPSetting(CIdSante400 $IPP, $idPatientSIP = null) {
-    $IPP->object_class = "CPatient";
-    $IPP->tag          = CAppUI::conf("sip tag_ipp");
-    if ($idPatientSIP) {
-      $IPP->object_id  = $idPatientSIP;
-    }
-  }
-  
-  /**
    * Recording IPP
    * 
    * @param CIdSante400    $IPP     Object id400

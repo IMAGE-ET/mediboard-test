@@ -33,10 +33,6 @@ force_dir /var/log/mediboard-eai/
 force_file $log
 force_file $doc
 
-# Injection IPP/NDA dans les échanges H'XML
-moda="m=eai&a=ajax_inject_master_idex_missing&exchange_class=CExchangeHL7v2"
-wget -a ${log} -O ${doc} "http://${host}/${instance}/?${auth}&${moda}"
-
 # Injection IPP/NDA dans les échanges HL7v2
 moda="m=eai&a=ajax_inject_master_idex_missing&exchange_class=CExchangeHL7v2"
 wget -a ${log} -O ${doc} "http://${host}/${instance}/?${auth}&${moda}"

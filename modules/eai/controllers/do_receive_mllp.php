@@ -147,7 +147,8 @@ catch (CHL7v2Exception $e) {
   $recv_app = isset($configs["receiving_application"]) ? $configs["receiving_application"] : $sender_mllp->nom;
   $recv_fac = isset($configs["receiving_facility"])    ? $configs["receiving_facility"]    : $sender_mllp->nom;
 
-  $ack  = "MSH|^~\&|$sending_app|$sending_fac|$recv_app|$recv_fac|$now||ACK^R01^ACK|$now|P|2.6||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
+  $ack  = "MSH|^~\&|$sending_app|$sending_fac|$recv_app|$recv_fac|$now||ACK^R01^ACK|$now|P|2.6||||||".
+    CHL7v2TableEntry::mapTo("211", CApp::$encoding);
   $ack .= "\r\n"."MSA|CR|$now";
   $ack .= "\r\n"."ERR||0^0|207|E|E200^".$e->getMessage()."|||||||";
 }

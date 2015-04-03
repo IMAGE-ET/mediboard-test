@@ -54,19 +54,19 @@ class CEAIMbObject {
     if ($object instanceof CPatient) {
       switch ($object->_ref_current_log->type) {
          // Enregistrement du patient
-        case "create" :
+        case "create":
           $comment = "Le patient a été créé dans Mediboard avec l'IC $object->_id.";
           break;
          // Modification du patient
-        case "store" :
+        case "store":
           $comment = "Le patient avec l'IC '$object->_id' dans Mediboard a été modifié.";
           $comment .= ($modified_fields) ? "Les champs mis à jour sont les suivants : $modified_fields." : null;
           break;
         // Fusion des patients
-        case "merge" : 
+        case "merge":
           $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec le patient dont l'IC est '$otherObject->_id'.";
           break;
-        default :
+        default:
           $comment = "";
       }     
       
@@ -76,20 +76,20 @@ class CEAIMbObject {
     if ($object instanceof CSejour) {
       switch ($object->_ref_current_log->type) {
          // Enregistrement du séjour
-        case "create" :
+        case "create":
           $comment = "Le séjour a été créé dans Mediboard avec l'IC $object->_id.";
           break;
          // Modification du séjour
-        case "store" :
+        case "store":
           $comment = "Le séjour avec l'IC '$object->_id' dans Mediboard a été modifié.";
           $comment .= ($modified_fields) ? "Les champs mis à jour sont les suivants : $modified_fields." : null;
           break;
         // Fusion des séjours
-        case "merge" : 
+        case "merge":
           $comment  = "Le séjour avec l'IC '$object->_id' a été fusionné avec 
                        le séjour dont l'IC est '$otherObject->_id'.";
           break;
-        default :
+        default:
           $comment = "";
       }     
       

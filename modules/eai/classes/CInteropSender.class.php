@@ -161,10 +161,22 @@ class CInteropSender extends CInteropActor {
     
     return $objects;
   }
-  
+
+  /**
+   * Read
+   *
+   * @return void
+   */
   function read() {
   }
-  
+
+  /**
+   * Get configs
+   *
+   * @param CExchangeDataFormat $data_format Exchange
+   *
+   * @return void
+   */
   function getConfigs(CExchangeDataFormat $data_format) {
     $data_format->getConfigs($this->_guid);
     $format_config = $data_format->_configs_format;
