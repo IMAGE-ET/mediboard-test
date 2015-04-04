@@ -81,23 +81,23 @@ class CModelObject {
   public $_configs = array();
 
   /**
-   * @var array
+   * @var CMbObjectSpec[]
    */
   static $spec = array();
   /**
-   * @var array
+   * @var string[]
    */
   static $props = array();
   /**
-   * @var array
+   * @var CMbFieldSpec[]
    */
   static $specs = array();
   /**
-   * @var array
+   * @var string[]
    */
   static $backProps = array();
   /**
-   * @var array
+   * @var CMbBackSpec[]
    */
   static $backSpecs = array();
 
