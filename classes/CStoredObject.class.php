@@ -2093,6 +2093,7 @@ class CStoredObject extends CModelObject {
       $this->_count[$backName] = count($backrefs);
 
       if ($limit) {
+        $this->_count[$backName] = null;
         $this->countBackRefs($backName);
       }
     }
