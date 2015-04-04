@@ -28,14 +28,14 @@
     var url = new Url("stats", "vw_hospi_qualite_donnees");
     DisplayGraph.getFilterForm();
     DisplayGraph.addFiltersParam(url);
-    url.modal();
+    url.requestModal();
   };
 
   DisplayGraph.statsPatientsParTypeHospiParService = function() {
     var form = getForm("stats_params");
     var url = new Url("stats", "ajax_patients_by_type_by_service");
     url.addFormData(form);
-    url.modal();
+    url.requestModal();
   }
 </script>
 
