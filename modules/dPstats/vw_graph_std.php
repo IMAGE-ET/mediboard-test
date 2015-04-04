@@ -66,6 +66,8 @@ $can_zoom  = CValue::get("can_zoom");
 // Nom du graphique à afficher
 $type_graph = CValue::get("type_graph");
 
+CView::enforceSlave();
+
 switch ($type_graph) {
   case "patparservice":
     $graph = graphPatParService(

@@ -13,6 +13,9 @@ CCanDo::read();
 
 $year = CValue::get("year", CMbDT::transform(null, null, "%Y"));
 $type = CValue::get("type", "traitant");
+
+CView::enforceSlave();
+
 $group_id = CGroups::loadCurrent()->_id;
 
 // Compteur d'années

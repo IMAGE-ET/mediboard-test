@@ -17,7 +17,6 @@ $groupmod = CValue::getOrSession("groupmod", 2);
 // Hour range for daily stats
 $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "22");
-$hours    = range(0, 24);
 
 // request_time, cpu_time, errors, memory_peak
 $left_mode = CValue::getOrSession("left_mode", "request_time");
@@ -34,6 +33,10 @@ $right_sampling = CValue::getOrSession("right_sampling", "total");
 // Human/bot filter
 $human_bot = CValue::getOrSession("human_bot", "0");
 
+CView::enforceSlave();
+
+$hours    = range(0, 24);
+
 $module = null;
 if (!is_numeric($groupmod)) {
   $module   = $groupmod;
@@ -42,7 +45,6 @@ if (!is_numeric($groupmod)) {
 
 $to = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "one-day")) {
-  default:
   case "one-day":
     $today = CMbDT::date("-1 DAY", $to);
     // Hours limitation

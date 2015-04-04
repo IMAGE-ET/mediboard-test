@@ -45,7 +45,7 @@ $do             = CValue::get("do");
 $calcul_planifs = CValue::get("calcul_planifs", 1);
 
 if (!$calcul_planifs) {
-  CView::enableSlave();
+  CView::enforceSlave();
 }
 
 $group = CGroups::loadCurrent();

@@ -8,8 +8,7 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
- 
- 
+
 $debut         = CValue::get("date_debut");
 $fin           = CValue::get("date_fin");
 $codeCCAM      = CValue::get("CCAM");
@@ -19,7 +18,7 @@ $bloc_id       = CValue::get("bloc_id");
 $salle_id      = CValue::get("salle_id");
 $hors_plage    = CValue::get("hors_plage");
 
-$ds = CSQLDataSource::get("std");
+CView::enforceSlave();
 
 if (!$debut) {
   $debut = CMbDT::date("-1 YEAR");
@@ -87,6 +86,8 @@ if ($codeCCAM) {
 }
 
 $query .=  "\nGROUP BY users.user_id ORDER BY users.user_last_name, users.user_first_name";
+
+$ds = CSQLDataSource::get("std");
 $result = $ds->loadList($query);
 
 $total_interventions     = 0;

@@ -12,6 +12,8 @@ $codeCCAM = strtoupper(CValue::getOrSession("codeCCAM", ""));
 $prat_id  = CValue::getOrSession("prat_id", 0);
 $type     = CValue::getOrSession("type", "ambu");
 
+CView::enforceSlave();
+
 $total["nbSejours"]   = 0;
 $total["duree_moy"]   = 0;
 $total["duree_somme"] = 0;

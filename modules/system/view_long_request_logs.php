@@ -11,6 +11,7 @@
  */
 
 CCanDo::checkAdmin();
+CView::enforceSlave();
 
 $filter = new CLongRequestLog();
 

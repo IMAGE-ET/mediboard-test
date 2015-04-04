@@ -11,6 +11,7 @@
  */
 
 CCanDo::checkAdmin();
+CView::enforceSlave();
 
 $tables = array(
   "access_log",

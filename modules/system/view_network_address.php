@@ -10,8 +10,8 @@
  */
 
 CCanDo::checkRead();
-
 $start  = CValue::get("start", 0);
+CView::enforceSlave();
 
 $filter = new CUserLog();
 $filter->date = CValue::get("date", CMbDT::dateTime());

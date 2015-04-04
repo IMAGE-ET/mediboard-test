@@ -14,6 +14,7 @@ $start  = CValue::get("start", 0);
 $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
 $csv = CValue::get("csv", 0);
+CView::enableSlave();
 
 if (!CCanDo::read() && !$dialog) {
   global $can;

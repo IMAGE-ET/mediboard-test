@@ -26,6 +26,10 @@ function graphPatParHeureReveil(
     $debut = null, $fin = null, $prat_id = 0, $bloc_id = 0,
     $func_id = 0, $discipline_id = null, $codeCCAM = ''
 ) {
+  // This stats uses temporary table, impossible on slave
+  // @todo Get rid of temporary table
+  CView::disableSlave();
+
   $ds = CSQLDataSource::get("std");
   if (!$debut) {
     $debut = CMbDT::date("-1 YEAR");

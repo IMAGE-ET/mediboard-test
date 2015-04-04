@@ -13,11 +13,14 @@ CCanDo::checkRead();
 
 $date    = CValue::getOrSession("date", CMbDT::date());
 $user_id = CValue::getOrSession("user_id");
+$interval = CValue::getOrSession("interval", "one-day");
+
+CView::enforceSlave();
 
 CAppUI::requireModuleFile("dPstats", "graph_userlog");
 
 $to = CMbDT::date("+1 DAY", $date);
-switch ($interval = CValue::getOrSession("interval", "one-day")) {
+switch ($interval) {
   case "one-day":
     $from = CMbDT::date("-1 DAY", $to);
     break;

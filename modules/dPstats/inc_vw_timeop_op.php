@@ -11,6 +11,8 @@
 $codeCCAM   = strtoupper(CValue::getOrSession("codeCCAM", ""));
 $prat_id    = CValue::getOrSession("prat_id", 0);
 
+CView::enforceSlave();
+
 $total["nbInterventions"] = 0;
 $total["estim_moy"]       = 0;
 $total["estim_somme"]     = 0;

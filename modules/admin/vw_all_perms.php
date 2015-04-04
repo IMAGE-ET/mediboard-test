@@ -12,6 +12,7 @@
  */
 
 CCanDo::checkRead();
+CView::enforceSlave();
 
 // Liste des modules
 $listModules = CModule::getActive();
