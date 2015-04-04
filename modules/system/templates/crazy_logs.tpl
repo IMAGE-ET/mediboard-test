@@ -22,8 +22,8 @@
 
 <table class="main">
   <tr>
-    <th>{{tr}}CAccessLog{{/tr}}</th>
-    <th>{{tr}}CDataSourceLog{{/tr}}</th>
+    <th style="width: 50%;">{{tr}}CAccessLog{{/tr}}</th>
+    <th style="width: 50%;">{{tr}}CDataSourceLog{{/tr}}</th>
   </tr>
 
   <tr>
