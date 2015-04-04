@@ -20,10 +20,12 @@ class CView {
   public static $params;
   /** @var string[] Parameters properties */
   public static $props = array();
-
+  /** @var bool View was slaved */
+  public static $enslaved = false;
+  /** @var bool View is currently slaved */
   public static $slavestate = false;
-
-  public static $protected_names = array("m", "a", "tab", "dialog", "raw", "ajax", "info");
+  /** @var string[] Protected param names */
+  public static $protected_names = array("m", "a", "tab", "dialog", "raw", "ajax", "info", "enslave");
 
   /**
    * Get a REQUEST parameter
@@ -166,6 +168,10 @@ class CView {
    * @return void
    */
   static public function checkin() {
+    if (CValue::request("enslave")) {
+      CView::enforceSlave();
+    }
+
     if (!CValue::request("info")) {
       return;
     }
@@ -183,11 +189,55 @@ class CView {
     CApp::rip();
   }
 
-  static function enableSlave() {
+  /**
+   * Enforce the current view to be rerouted on a slave SQL server if slave datasource is available
+   *
+   * @return void
+   */
+  static function enforceSlave() {
+    // Enslaved views are supposably session stallers so close session preventively
+    CSessionHandler::writeClose();
+
+    // URL param enslave prevention
+    if (CValue::request("enslave") === "0") {
+      return;
+    }
+
+    // Test wether a slave datasource has been configured
+    if (!CAppUI::conf("db slave dbhost")) {
+      return;
+    }
+
+    // Check connection to the slave datasource or abandon std datasource rerouting
+    if (!CSQLDataSource::get("slave", true)) {
+      return;
+    }
+
+    self::$enslaved = true;
     self::$slavestate = true;
     self::rerouteStdDS();
   }
 
+  /**
+   * Enable the current view to forced to slave based on a enslaving ratio
+   *
+   * @return void
+   */
+  static function enableSlave() {
+    // Enslaved views are supposably session stallers so close session preventively
+    CSessionHandler::writeClose();
+
+    if (rand(0, 100) < CAppUI::conf("enslaving_ratio")) {
+      self::enforceSlave();
+      return;
+    }
+  }
+
+  /**
+   * Disable current view reroute to slave SQL
+   *
+   * @return void
+   */
   static function disableSlave() {
     if (!self::$slavestate) {
       return;
@@ -196,6 +246,11 @@ class CView {
     self::rerouteStdDS();
   }
 
+  /**
+   * Actual rerouting from std datasource to readonly slave datasource
+   *
+   * @return void
+   */
   static function rerouteStdDS() {
     foreach (CStoredObject::$spec as $_spec) {
       if ($_spec->dsn === "std") {

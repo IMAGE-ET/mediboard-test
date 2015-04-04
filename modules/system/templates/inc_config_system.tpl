@@ -162,11 +162,21 @@
     {{mb_include module=system template=inc_config_str var=limit_date}}
 
     <tr>
+      <th colspan="2" class="title">
+        Mode esclave
+      </th>
+    </tr>
+
+    {{assign var="m" value=""}}
+    {{mb_include module=system template=inc_config_num var=enslaving_ratio}}
+
+    <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
+
   </table>
 </form>
 
-{{mb_include module=system template=configure_dsn dsn=readonly}}
+{{mb_include module=system template=configure_dsn dsn=slave}}
