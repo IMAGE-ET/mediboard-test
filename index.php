@@ -327,7 +327,7 @@ CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 CApp::notify("BeforeMain");
 
 // Check if the mobile feature is available and if the user agent is a mobile
-$enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$user->_id;
+$enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$instance->user_id;
 if (is_file(__DIR__."/mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && $enable_mobile_ui) {
   CAppUI::$mobile = true;
   include __DIR__."/mobile/main.php";

@@ -469,9 +469,13 @@ class CStoredObject extends CModelObject {
    *
    * @param string $path The configuration path
    *
-   * @return string
+   * @return string|null Null if module is not installed
    */
   function conf($path) {
+    if (!$this->_ref_module) {
+      return null;
+    }
+
     $mod_name = $this->_ref_module->mod_name;
     return CAppUI::conf("$mod_name $this->_class $path");
   }
