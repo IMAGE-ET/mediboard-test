@@ -10,6 +10,7 @@
  */
 
 CCanDo::checkRead();
+CView::checkin();
 
 $smarty = new CSmartyDP();
 $smarty->display("about.tpl");
