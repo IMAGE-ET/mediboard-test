@@ -64,7 +64,7 @@ Main.add(function() {
         <input type="hidden" name="fin" value="{{$fin}}" class="date notNull" onchange="this.form.submit()"/>
       </td>
       <td>
-        Afficher les interventions/consultations sans codes CCAM
+        Afficher les interventions/consultations sans code CCAM
         <input type="checkbox" name="_cb_interv_with_no_codes"{{if $interv_with_no_codes}} checked="checked"{{/if}} onchange="toggleValueCheckbox(this, this.form.interv_with_no_codes);"/>
         <input type="hidden" name="interv_with_no_codes" value="{{$interv_with_no_codes}}" onchange="this.form.submit();"/>
       </td>
