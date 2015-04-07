@@ -48,7 +48,7 @@
           {{tr}}Show{{/tr}}
         </a>
       {{else}}
-        <button class="right notext" onclick="loadTdbPatient('{{$_patient->_id}}');">
+        <button type="button" class="right notext" onclick="loadTdbPatient('{{$_patient->_id}}');">
           {{tr}}Show{{/tr}}
         </button>
       {{/if}}
