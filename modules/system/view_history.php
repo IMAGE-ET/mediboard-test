@@ -9,12 +9,13 @@
  * @version    $Revision$
  */
 
+CCanDo::check();
+
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
 $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
 $csv = CValue::get("csv", 0);
-CView::enableSlave();
 
 if (!CCanDo::read() && !$dialog) {
   global $can;
@@ -41,6 +42,8 @@ else {
 }
 
 $ex_class_id          = CValue::get("ex_class_id");
+
+CView::enableSlave();
 
 // Limit to a default one month for no context queries
 if (!$filter->_date_min && !$filter->object_id && !$filter->user_id && !$ex_class_id) {
