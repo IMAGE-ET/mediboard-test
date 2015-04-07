@@ -43,7 +43,7 @@ else {
 
 $ex_class_id          = CValue::get("ex_class_id");
 
-CView::enableSlave();
+CView::enforceSlave();
 
 // Limit to a default one month for no context queries
 if (!$filter->_date_min && !$filter->object_id && !$filter->user_id && !$ex_class_id) {
