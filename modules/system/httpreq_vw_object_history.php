@@ -9,12 +9,9 @@
  * @version    $Revision$
  */
 
-global $can;
-
+CCanDo::check();
 $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
-
-// Récupération des logs correspondants
-$logs = array();
+CView::enforceSlave();
 
 $log = new CUserLog;
 $log->setObject($object);
@@ -25,7 +22,7 @@ $logs = $log->loadMatchingList("date DESC", 10);
 
 foreach ($logs as $key => $_log) {
   $_log->setObject($object);
-  $_log->loadRefsFwd();
+  $_log->loadRefUser();
   $_log->getOldValues();
 }
 
