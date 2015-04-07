@@ -49,6 +49,12 @@
     url.requestModal();
   };
 
+  editConstant = function(constant_id) {
+    var url = new Url('patients', 'ajax_edit_constantes');
+    url.addParam('constant_id', constant_id);
+    url.requestModal();
+  };
+
   Main.add(function() {
     var form = getForm('edit-constantes');
     var url = new Url('patients', 'ajax_do_autocomplete_constants');
@@ -77,7 +83,7 @@
   });
 </script>
 
-<form name="edit-constantes" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+<form name="edit-constantes" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: loadConstants.curry()});">
   <input type="hidden" name="m" value="dPpatients"/>
   <input type="hidden" name="dosql" value="do_constantes_medicales_aed"/>
   {{if $constantes->_id}}
@@ -96,10 +102,10 @@
 
   <table class="tbl" id="tableConstant" style="width: 1px;">
     <tr>
-      <th {{if $list_constantes|@count > 0}}rowspan="2" {{/if}}class="category narrow">
+      <th rowspan="2" class="category narrow">
         <button class="stats notext" type="button" onclick="displayGraph();"></button>
       </th>
-      <th {{if $list_constantes|@count > 0}}rowspan="2" {{/if}}class="category">
+      <th rowspan="2" class="category">
         {{tr}}Name{{/tr}}
         <br/>
         <span>
@@ -107,31 +113,34 @@
         </span>
         <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;" class="autocomplete" id="_constants_autocomplete"></div>
       </th>
-      <th {{if $list_constantes|@count > 0}}rowspan="2" {{/if}}colspan="2" class="category">
-        <div>
-          <button class="save notext" type="submit" style="float: right;"></button>
+      <th colspan="2" class="category" style="border-bottom: none;">
+        <button class="save notext" type="submit" style="float: right;"></button>
+        <div style="margin-top: 5px;">
           {{tr}}Value{{/tr}}
         </div>
-        <div>
-          {{mb_field object=$constantes field=datetime form="edit-constantes" register=true}}
-        </div>
       </th>
-      <th {{if $list_constantes|@count > 0}}rowspan="2" {{/if}}colspan="2" class="category">
+      <th rowspan="2" colspan="2" class="category">
         {{tr}}CConstantesMedicales-title-latest_values{{/tr}}
       </th>
       {{if $list_constantes|@count > 0}}
-          <th class="category" colspan="{{$list_constantes|@count}}">
-            <button type="button" class="list" title="{{tr}}CConstantesMedicales-msg-see_last_values{{/tr}}" onclick="displayAllConstantes('{{$patient_id}}');">
-              {{tr}}CConstantesMedicales-msg-see_last_values{{/tr}}
-            </button>
+        <th class="category" colspan="{{$list_constantes|@count}}">
+          <button type="button" class="list" title="{{tr}}CConstantesMedicales-msg-see_last_values{{/tr}}" onclick="displayAllConstantes('{{$patient_id}}');">
+            {{tr}}CConstantesMedicales-msg-see_last_values{{/tr}}
+          </button>
+        </th>
+      {{/if}}
+    </tr>
+    <tr>
+      <th colspan="2" class="category" style="border-top: none;">
+        {{mb_field object=$constantes field=datetime form="edit-constantes" register=true}}
+      </th>
+      {{if $list_constantes|@count > 0}}
+        {{foreach from=$list_constantes item=_constantes}}
+          <th class="narrow" class="category">
+            {{$_constantes->datetime|date_format:"%d/%m/%Y"}}
+            <button type="button" class="edit notext" onclick="editConstant('{{$_constantes->_id}}');" title="{{tr}}Edit{{/tr}}"/>
           </th>
-        </tr>
-        <tr>
-          {{foreach from=$list_constantes item=_constantes}}
-            <th class="narrow" class="category">
-              {{$_constantes->datetime|date_format:"%d/%m/%Y"}}
-            </th>
-          {{/foreach}}
+        {{/foreach}}
       {{/if}}
     </tr>
 
@@ -193,7 +202,7 @@
                 </span>
               {{/if}}
             </td>
-            <td class="narrow" style="text-align: center">
+            <td class="narrow" style="text-align: center; font-weight: bold;">
               {{assign var=isnull value=$const->$_constant|is_null}}
               {{if $isnull != '1'}}
                 {{if array_key_exists('formfields', $_params) && !array_key_exists('readonly', $_params)}}
@@ -205,8 +214,14 @@
                   {{mb_value object=$const field=$_constant}}
                 {{/if}}
               {{/if}}
+
+              {{if $_params.unit}}
+                <span>
+                  {{$_params.unit}}
+                </span>
+              {{/if}}
             </td>
-            <td class="narrow" style="text-align: center">
+            <td class="narrow" style="text-align: center; font-weight: bold;">
               {{$dates.$_constant|date_format:"%d/%m/%Y"}}
             </td>
             {{foreach from=$list_constantes item=_constantes}}

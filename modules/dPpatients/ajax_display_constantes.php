@@ -66,4 +66,5 @@ $constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, f
 $smarty = new CSmartyDP();
 $smarty->assign('list_constantes', $list_constantes);
 $smarty->assign('constantes_medicales_grid',  $constantes_medicales_grid);
+$smarty->assign('full_size', 1);
 $smarty->display('print_constantes_vert.tpl');
