@@ -140,7 +140,7 @@ class DeployMaJAuto extends DeployMaj {
     }
 
     if (empty($perm)) {
-      $this->errorMsg('No instance to udpdate.', self::STATUS_WARNING);
+      $this->errorMsg('No instance to update.', self::STATUS_WARNING);
     }
 
     try {
