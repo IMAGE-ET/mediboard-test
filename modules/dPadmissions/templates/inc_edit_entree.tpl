@@ -104,27 +104,36 @@
 
     <input type="hidden" name="_modifier_entree" value="1" />
 
+    {{assign var=_mode_entree_prop value=$sejour->_props.mode_entree}}
+    {{if "dPplanningOp CSejour required_mode_entree"|conf:"CGroups-$g"}}
+      {{assign var=_mode_entree_prop value="$_mode_entree_prop notNull"}}
+    {{/if}}
 
     {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
       <tr>
-        <th>{{mb_label object=$sejour field=mode_entree}}</th>
+        <th>
+          {{mb_label object=$sejour field=mode_entree prop=$_mode_entree_prop}}
+        </th>
         <td>
-            {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0);" hidden=true}}
-            <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$list_mode_entree item=_mode}}
-                <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
-                  {{$_mode}}
-                </option>
-              {{/foreach}}
-            </select>
+          {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0);" hidden=true prop=$_mode_entree_prop}}
+
+          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}}" style="width: 15em;" onchange="updateModeEntree(this)">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$list_mode_entree item=_mode}}
+              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
+                {{$_mode}}
+              </option>
+            {{/foreach}}
+          </select>
         </td>
       </tr>
     {{else}}
       <tr>
-        <th>{{mb_label object=$sejour field=mode_entree}}</th>
+        <th>
+          {{mb_label object=$sejour field=mode_entree prop=$_mode_entree_prop}}
+        </th>
         <td>
-            {{mb_field object=$sejour field=mode_entree onchange="showSecondary();" typeEnum=radio}}
+          {{mb_field object=$sejour field=mode_entree onchange="showSecondary();" typeEnum=radio prop=$_mode_entree_prop}}
         </td>
       </tr>
 

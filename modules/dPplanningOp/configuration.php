@@ -21,6 +21,7 @@ CConfiguration::register(
           'use_charge_price_indicator'    => 'enum list|no|opt|obl localize default|no',
           "required_destination"          => "bool default|0",
           "required_from_when_transfert"  => "bool default|0",
+          "required_mode_entree"          => "bool default|0",
           "required_uf_soins"             => "bool default|0",
           "ssr_not_collides"              => "bool default|0",
         ),
