@@ -213,12 +213,12 @@
                 {{else}}
                   {{mb_value object=$const field=$_constant}}
                 {{/if}}
-              {{/if}}
 
-              {{if $_params.unit}}
-                <span>
-                  {{$_params.unit}}
-                </span>
+                {{if $_params.unit}}
+                  <span>
+                    {{$_params.unit}}
+                  </span>
+                {{/if}}
               {{/if}}
             </td>
             <td class="narrow" style="text-align: center; font-weight: bold;">
