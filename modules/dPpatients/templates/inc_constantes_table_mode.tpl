@@ -23,7 +23,7 @@
         elt.enable();
       });
     }
-  }
+  };
   
   displayGraph = function() {
     var checkboxes = $$('input[name="_displayGraph"]:checked');
@@ -41,13 +41,13 @@
     url.addParam('patient_id', '{{$patient_id}}');
     url.addParam('constants', JSON.stringify(selection));
     url.requestModal();
-  }
+  };
 
   displayAllConstantes = function(patient_id) {
     var url = new Url('patients', 'ajax_display_constantes');
     url.addParam('patient_id', patient_id);
     url.requestModal();
-  }
+  };
 
   Main.add(function() {
     var form = getForm('edit-constantes');
@@ -60,7 +60,7 @@
         var row = $$('tr[data-constant="' + constant + '"]');
         if (row.length != 0) {
           row = row[0];
-          var table = row.up()
+          var table = row.up();
           /* We remove the row, and add to the table to display the node at the bottom of the table */
           row = table.removeChild(row);
           row = table.appendChild(row);
@@ -70,9 +70,9 @@
     });
 
     {{if !$constantes->datetime}}
-      var form = getForm('edit-constantes');
-      form.datetime.value = "now";
-      form.datetime_da.value = "Maintenant";
+      var formCst = getForm('edit-constantes');
+      formCst.datetime.value = "now";
+      formCst.datetime_da.value = "Maintenant";
     {{/if}}
   });
 </script>
@@ -82,7 +82,7 @@
   <input type="hidden" name="dosql" value="do_constantes_medicales_aed"/>
   {{if $constantes->_id}}
     <input type="hidden" name="_new_constantes_medicales" value="0"/>
-    <input type="hidden" name="constantes_medicales_id" vlaue="{{$constantes->_id}}"/>
+    <input type="hidden" name="constantes_medicales_id" value="{{$constantes->_id}}"/>
   {{else}}
     <input type="hidden" name="_new_constantes_medicales" value="1"/>
    {{/if}}
@@ -94,7 +94,7 @@
     {{mb_field object=$constantes field=context_id hidden=1}}
     {{mb_field object=$constantes field=patient_id hidden=1}}
 
-  <table class="tbl" id="tableConstant" style="max-width: 800px;">
+  <table class="tbl" id="tableConstant" style="width: 1px;">
     <tr>
       <th {{if $list_constantes|@count > 0}}rowspan="2" {{/if}}class="category narrow">
         <button class="stats notext" type="button" onclick="displayGraph();"></button>
@@ -103,8 +103,7 @@
         {{tr}}Name{{/tr}}
         <br/>
         <span>
-          <i style="color: #4d535f; margin-right: 1px;" class="fa fa-search"></i>
-          <input style="margin-left: 0px;" type="text" name="_search_constants" class="autocomplete" placeholder="{{tr}}Search{{/tr}}"/>
+          <input type="text" name="_search_constants" class="autocomplete" placeholder="{{tr}}Search{{/tr}}"/>
         </span>
         <div style="text-align: left; color: #000; display: none; width: 200px !important; font-weight: normal; font-size: 11px; text-shadow: none;" class="autocomplete" id="_constants_autocomplete"></div>
       </th>
