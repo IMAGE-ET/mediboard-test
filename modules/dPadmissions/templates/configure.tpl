@@ -29,7 +29,6 @@
     {{mb_include module=system template=inc_config_bool var=show_curr_affectation}}
     {{mb_include module=system template=inc_config_enum var=auto_refresh_frequency values="90|180|300|600"}}
     {{mb_include module=system template=inc_config_bool var=show_deficience}}
-    {{mb_include module=system template=inc_config_enum var=auto_refresh_frequency_admissions values="120|300|600|never"}}
 
     <tr>
       <th style="width: 50%"></th>
@@ -49,6 +48,8 @@
         {{/if}}
       </td>
     </tr>
+
+    {{mb_include module=system template=inc_config_enum var=auto_refresh_frequency_admissions values="120|300|600|never"}}
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
