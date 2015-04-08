@@ -14,41 +14,11 @@
 {{if $display == "icon"}}
   {{mb_script module=patients script=fileviewer ajax=true}}
 
-  <script>
-    trashFile = window.trashFile || function(form, file_view) {
-      return confirmDeletion(form, {typeName: "le fichier", objName: file_view}, function() {
-        if (window.loadAllDocs) {
-          loadAllDocs();
-        }
-      });
-    };
-
-    archiveFile = window.archiveFile || function(form) {
-      if (confirm($T("CFile-comfirm_cancel"))) {
-        $V(form.annule, 1);
-        return onSubmitFormAjax(form, function() {
-          if (window.loadAllDocs) {
-            loadAllDocs();
-          }
-        });
-      }
-    };
-
-    restoreFile = window.archiveFile || function(form) {
-      $V(form.annule, 0);
-      return onSubmitFormAjax(form, function() {
-        if (window.loadAllDocs) {
-          loadAllDocs();
-        }
-      });
-    };
-  </script>
-
-  <table class="layout" style="display: inline-table; width: 150px; height: 150px;">
+  <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')">
     <tr>
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; cursor: pointer;" class="icon_fileview"
-             onclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
+             ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
           <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
                style="background: white; max-width: 64px; max-height: 92px;" />
         </div>
@@ -56,10 +26,7 @@
     </tr>
     <tr>
       <td class="text item_name" style="text-align: center; vertical-align: top;">
-        {{if $file->file_category_id}}<span class="compact circled">{{$file->_ref_category}}</span>{{/if}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')">
-          {{$file->_icon_name}}
-        </span>
+        {{if $file->file_category_id}}<span class="compact circled">{{$file->_ref_category}}</span>{{/if}} {{$file->_icon_name}}
       </td>
     </tr>
   </table>

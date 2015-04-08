@@ -22,8 +22,17 @@
     var display = $V(form.display);
 
     $A(elts).each(function(elt) {
-      var color = elt.value == display ? "" : "#AAA";
-      elt.up("label").setStyle({"color": color});
+      var label = elt.up("label");
+      if (elt.value == display) {
+        label.setStyle({"color": ""});
+        label.removeClassName("opacity-70");
+        label.addClassName("opacity-100");
+      }
+      else {
+        label.setStyle({"color": "#AAA"});
+        label.removeClassName("opacity-100");
+        label.addClassName("opacity-70");
+      }
     });
   };
 
@@ -41,16 +50,18 @@
         <button type="button" style="float: right;" class="add">Ajouter un document</button>
         <select name="tri" onchange="loadAllDocs()">
           <option value="date"  {{if $tri == "date"}}selected{{/if}}>Date</option>
-          <option value="context" {{if $tri == "context"}}selected{{/if}}>Evénement</option>
+          <option value="context" {{if $tri == "context"}}selected{{/if}}>Contexte</option>
           <option value="cat" {{if $tri == "cat"}}selected{{/if}}>Catégorie</option>
         </select>
         &nbsp; &nbsp;
-        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;">
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "icon"}}color: #AAA;{{/if}}"
+               class="{{if $display != "icon"}}opacity-70{{/if}}">
           <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf00a;
         </label>
         &nbsp; &nbsp;
-        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "list"}}color: #AAA;{{/if}}">
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "list"}}color: #AAA;{{/if}}"
+               class="{{if $display != "list"}}opacity-70{{/if}}">
           <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf0ca;
         </label>

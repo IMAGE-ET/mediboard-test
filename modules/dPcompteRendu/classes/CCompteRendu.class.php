@@ -209,7 +209,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["user_id"]          = "ref class|CMediusers purgeable show|1";
+    $props["user_id"]          = "ref class|CMediusers purgeable show|0";
     $props["function_id"]      = "ref class|CFunctions purgeable";
     $props["group_id"]         = "ref class|CGroups purgeable";
     $props["object_id"]        = "ref class|CMbObject meta|object_class purgeable show|1";
@@ -220,16 +220,16 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
                                  "tahoma|times|trebuchet|verdana|zapfdingbats show|0";
     $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|".
                                  "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
-    $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
-    $props["factory"]          = "enum list|CDomPDFConverter|CWkHtmlToPDFConverter|CPrinceXMLConverter|none";
+    $props["type"]             = "enum list|header|preface|body|ending|footer default|body show|0";
+    $props["factory"]          = "enum list|CDomPDFConverter|CWkHtmlToPDFConverter|CPrinceXMLConverter|none show|0";
     $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["_is_locked"]       = "bool default|0";
     $props["locker_id"]        = "ref class|CMediusers purgeable";
-    $props["header_id"]        = "ref class|CCompteRendu";
-    $props["footer_id"]        = "ref class|CCompteRendu";
-    $props["preface_id"]       = "ref class|CCompteRendu";
-    $props["ending_id"]        = "ref class|CCompteRendu";
+    $props["header_id"]        = "ref class|CCompteRendu show|0";
+    $props["footer_id"]        = "ref class|CCompteRendu show|0";
+    $props["preface_id"]       = "ref class|CCompteRendu show|0";
+    $props["ending_id"]        = "ref class|CCompteRendu show|0";
     $props["modele_id"]        = "ref class|CCompteRendu nullify show|0";
     $props["height"]           = "float min|0 show|0";
     $props["margin_top"]       = "float notNull min|0 default|2 show|0";
@@ -245,7 +245,7 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     $props["purge_field"]      = "str show|0";
     $props["purgeable"]        = "bool default|0 show|0";
     $props["fields_missing"]   = "num default|0 show|0";
-    $props["version"]          = "num default|0";
+    $props["version"]          = "num default|0 show|0";
     $props["_owner"]           = "enum list|prat|func|etab";
     $props["_orientation"]     = "enum list|portrait|landscape";
     $props["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));

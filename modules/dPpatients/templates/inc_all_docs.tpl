@@ -79,7 +79,10 @@
       <th class="section">Contexte</th>
       <th class="section narrow">Date</th>
     </tr>
+  {{else}}
+    <div style="width: 100%; height: 15px;"></div>
   {{/if}}
+
   {{foreach from=$_docs_by_context item=_doc}}
     {{if $_doc instanceof CCompteRendu}}
       {{mb_include module=compteRendu template=CCompteRendu_fileviewer doc=$_doc}}

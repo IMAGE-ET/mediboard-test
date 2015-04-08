@@ -9,15 +9,14 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_default var=display value="icon"}}
+
 {{assign var=ex_object value=$link->_ref_ex_object}}
 {{assign var=ex_class value=$ex_object->_ref_ex_class}}
 
-{{mb_default var=display value="icon"}}
-
 {{if $display == "icon"}}
   {{mb_script module=patients script=fileviewer ajax=true}}
-
-  <table class="layout" style="display: inline-table; width: 150px; height: 150px;">
+  <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_class}}_{{$ex_class->_id}}-{{$ex_object->_id}}')">
     <tr>
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; border: 0 !important;" class="icon_fileview">

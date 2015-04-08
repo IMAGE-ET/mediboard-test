@@ -17,21 +17,18 @@
 {{if $display == "icon"}}
   {{mb_script module=patients script=fileviewer ajax=true}}
 
-  <table class="layout" style="display: inline-table; width: 150px; height: 150px;">
+  <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$doc->_guid}}')">
     <tr>
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; cursor: pointer;" class="icon_fileview">
           <img src="{{$src}}" style="background: white; max-width: 64px; max-height: 92px;"
-               onclick="popFile('{{$doc->_class}}', '{{$doc->_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')" />
+               ondblclick="popFile('{{$doc->_class}}', '{{$doc->_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')" />
         </div>
       </td>
     </tr>
     <tr>
       <td class="text item_name" style="text-align: center; vertical-align: top;">
-        {{if $doc->file_category_id}}<span class="compact circled">{{$doc->_ref_category}}</span>{{/if}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$doc->_guid}}')">
-          {{$doc->_icon_name}}
-        </span>
+        {{if $doc->file_category_id}}<span class="compact circled">{{$doc->_ref_category}}</span>{{/if}} {{$doc->_icon_name}}
       </td>
     </tr>
   </table>

@@ -102,7 +102,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
 
     $props["file_date"]          = "dateTime notNull";
     $props["file_real_filename"] = "str notNull show|0";
-    $props["file_type"]          = "str";
+    $props["file_type"]          = "str show|0";
     $props["file_name"]          = "str notNull show|0";
     $props["rotation"]           = "num default|0 show|0";
     $props["language"]           = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";

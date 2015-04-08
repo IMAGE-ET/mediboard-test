@@ -52,9 +52,9 @@ class CDocumentItem extends CMbMetaObject {
     $props = parent::getProps();
     
     $props["file_category_id"] = "ref class|CFilesCategory";
-    $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
+    $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non show|0";
     $props["author_id"]        = "ref class|CMediusers";
-    $props["private"]          = "bool default|0";
+    $props["private"]          = "bool default|0 show|0";
     $props["annule"]           = "bool default|0 show|0";
     $props["doc_size"]         = "num min|0 show|0";
     $type_doc = "";

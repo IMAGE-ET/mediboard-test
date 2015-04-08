@@ -849,7 +849,7 @@ class CMbObject extends CStoredObject {
       return null;
     }
 
-    $path = "$module->mod_name/templates/$this->_class";
+    $path = "$module->mod_name/templates/".get_class($this);
     return "{$path}_{$name}.tpl";
   }
   
