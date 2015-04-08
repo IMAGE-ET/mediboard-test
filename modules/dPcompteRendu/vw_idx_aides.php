@@ -21,13 +21,13 @@ $filter_class   = CValue::getOrSession("filter_class");
 $aide_id        = CValue::getOrSession("aide_id", "0");
 $keywords       = CValue::getOrSession("keywords");
 $start          = CValue::getOrSession("start", array("user" => 0, "func" => 0, "etab" => 0));
-$order_col      = CValue::getOrSession("order_col", "class");
+$order_col_aide = CValue::getOrSession("order_col_aide", "class");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 
 $listOrderCols = array("class", "field", "depend_value_1", "depend_value_2", "name");
 
-if (!in_array($order_col, $listOrderCols)) {
-  $order_col = "class";
+if (!in_array($order_col_aide, $listOrderCols)) {
+  $order_col_aide = "class";
 }
 
 $classes = array_flip(CApp::getInstalledClasses());
@@ -120,7 +120,7 @@ $smarty->assign("keywords"        , $keywords);
 $smarty->assign("filter_class"    , $filter_class);
 $smarty->assign("filter_user_id"  , $filter_user_id);
 $smarty->assign("listTraductions" , $listTraductions);
-$smarty->assign("order_col"       , $order_col);
+$smarty->assign("order_col_aide"  , $order_col_aide);
 $smarty->assign("order_way"       , $order_way);
 $smarty->assign("aide_id"         , $aide_id);
 

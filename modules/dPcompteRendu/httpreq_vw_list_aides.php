@@ -18,11 +18,11 @@ $filter_user_id = CValue::getOrSession("filter_user_id");
 $filter_class   = CValue::getOrSession("filter_class");
 $start          = CValue::getOrSession("start");
 $keywords       = CValue::getOrSession("keywords");
-$order_col      = CValue::getOrSession("order_col");
+$order_col_aide = CValue::getOrSession("order_col_aide");
 $order_way      = CValue::getOrSession("order_way");
 $aide_id        = CValue::getOrSession("aide_id", "0");
 
-$order_by = $order_col ? $order_col . " " . $order_way : null;
+$order_by = $order_col_aide ? $order_col_aide . " " . $order_way : null;
 
 $userSel = CMediusers::get($filter_user_id);
 $userSel->loadRefFunction()->loadRefGroup();
@@ -102,13 +102,13 @@ if (isset($aides["etab"])) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("userSel",      $userSel);
-$smarty->assign("aides",        $aides);
-$smarty->assign("aidesCount",   $aidesCount);
-$smarty->assign("filter_class", $filter_class);
-$smarty->assign("start",        $start);
-$smarty->assign("order_col",    $order_col);
-$smarty->assign("order_way",    $order_way);
-$smarty->assign("aide_id",      $aide_id);
+$smarty->assign("userSel"       , $userSel);
+$smarty->assign("aides"         , $aides);
+$smarty->assign("aidesCount"    , $aidesCount);
+$smarty->assign("filter_class"  , $filter_class);
+$smarty->assign("start"         , $start);
+$smarty->assign("order_col_aide", $order_col_aide);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("aide_id"       , $aide_id);
 
 $smarty->display("inc_tabs_aides.tpl");

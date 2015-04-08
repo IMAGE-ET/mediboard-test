@@ -175,29 +175,45 @@ class CListeChoix extends CMbObject {
   /**
    * Charge les listes d'un utilisateur
    *
-   * @param int $user_id User ID
+   * @param int $user_id     User ID
+   * @param int $function_id Function ID
    *
    * @return self[]
    */
-  static function loadAllFor($user_id) {
+  static function loadAllFor($user_id, $function_id) {
     $user = CMediusers::get($user_id);
+
+    $function = new CFunctions();
+    $function->load($function_id);
+
     // Accès aux listes de choix de la fonction et de l'établissement
     $module = CModule::getActive("dPcompteRendu");
     $is_admin = $module && $module->canAdmin();
     $access_function = $is_admin || CAppUI::conf("compteRendu CListeChoix access_function");
     $access_group    = $is_admin || CAppUI::conf("compteRendu CListeChoix access_group");
     $listes = array();
-    $listes["prat"] = array();
+    if ($user->_id && !$function_id) {
+      $listes["prat"] = array();
+    }
     if ($access_function) {
       $listes["func"] = array();
     }
     if ($access_group) {
       $listes["etab"] = array();
     }
-    foreach ($user->getOwners() as $type => $owner) {
-     if (isset($listes[$type])) {
-        $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
-     }
+    if ($user->_id && !$function_id) {
+      foreach ($user->getOwners() as $type => $owner) {
+        if (isset($listes[$type])) {
+          $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+        }
+      }
+    }
+    else {
+      foreach ($function->getOwners() as $type => $owner) {
+        if (isset($listes[$type])) {
+          $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+        }
+      }
     }
     return $listes;
   }

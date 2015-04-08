@@ -23,11 +23,11 @@
 
 <table class="tbl">
 <tr>
-  <th>{{mb_colonne class=CAideSaisie field=class order_col=$order_col order_way=$order_way function=sortBy}}</th>
-  <th>{{mb_colonne class=CAideSaisie field=field order_col=$order_col order_way=$order_way function=sortBy}}</th>
-  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_1 order_col=$order_col order_way=$order_way function=sortBy}}</th>
-  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_2 order_col=$order_col order_way=$order_way function=sortBy}}</th>
-  <th>{{mb_colonne class=CAideSaisie field=name order_col=$order_col order_way=$order_way function=sortBy}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=class order_col=$order_col_aide order_way=$order_way function=sortBy}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=field order_col=$order_col_aide order_way=$order_way function=sortBy}}</th>
+  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_1 order_col=$order_col_aide order_way=$order_way function=sortBy}}</th>
+  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_2 order_col=$order_col_aide order_way=$order_way function=sortBy}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=name order_col=$order_col_aide order_way=$order_way function=sortBy}}</th>
   <th>{{mb_title class=CAideSaisie field=text}}</th>
   <th class="narrow"></th>
 </tr>

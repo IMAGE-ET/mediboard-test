@@ -284,4 +284,18 @@ class CFunctions extends CMbObject {
     $template->addProperty("Cabinet - téléphone"   , $this->getFormattedValue("tel"));
     $template->addProperty("Cabinet - fax"         , $this->getFormattedValue("fax"));
   }
+
+  /**
+   * Tableau comprenant l'utilisateur et son organigramme
+   *
+   * @return CMbObject[]
+   */
+  function getOwners() {
+    $etab  = $this->loadRefGroup();
+
+    return array(
+      "func"  => $this,
+      "etab"  => $etab,
+    );
+  }
 }

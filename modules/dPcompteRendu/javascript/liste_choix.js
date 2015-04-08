@@ -63,6 +63,7 @@ ListeChoix = {
   var form = getForm('Filter');
     var url = new Url('compteRendu', 'ajax_list_listes_choix');
     url.addElement(form.user_id);
+    url.addElement(form.function_id);
     url.requestUpdate('list-listes_choix');
   },
   
