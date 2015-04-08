@@ -16,19 +16,7 @@ CCanDo::checkRead();
 $prat_id         = CValue::getOrSession("selPrat");
 $compte_rendu_id = CValue::getOrSession("compte_rendu_id");
 
-$group = CGroups::loadCurrent();
 $mediuser = CMediusers::get();
-
-$listEtab = array($group);
-
-$where = array(
-  "group_id" => "= '$group->_id'"
-);
-$listFunc = new CFunctions();
-$listFunc = $listFunc->loadListWithPerms(PERM_EDIT, $where, "text");
-
-// Liste des praticiens accessibles
-$listUser = $mediuser->loadUsers(PERM_EDIT);
 
 // L'utilisateur est-il praticien?
 if (!$prat_id) {
@@ -70,6 +58,10 @@ if ($compte_rendu->object_id) {
 else {
   $compte_rendu->loadRefCategory();
 }
+
+$compte_rendu->loadRefUser();
+$compte_rendu->loadRefFunction();
+$compte_rendu->loadRefGroup();
 
 // Gestion du modèle
 $_GET["isBody"] = in_array($compte_rendu->type, array("body", "preface"));
@@ -181,23 +173,18 @@ if ($compte_rendu->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("mediuser"            , $mediuser);
-$smarty->assign("isPraticien"         , $mediuser->isPraticien());
-$smarty->assign("user_id"             , $mediuser->_id);
-$smarty->assign("prat_id"             , $prat_id);
-$smarty->assign("listPrat"            , $listUser);
-$smarty->assign("listEtab"            , $listEtab);
-$smarty->assign("listFunc"            , $listFunc);
-$smarty->assign("access_function"     , $access_function);
-$smarty->assign("access_group"        , $access_group);
-$smarty->assign("listObjectClass"     , $listObjectClass);
-$smarty->assign("compte_rendu"        , $compte_rendu);
-$smarty->assign("listObjectAffichage" , $listObjectAffichage);
-$smarty->assign("droit"               , $droit);
-$smarty->assign("headers"             , $headers);
-$smarty->assign("prefaces"            , $prefaces);
-$smarty->assign("endings"             , $endings);
-$smarty->assign("footers"             , $footers);
-$smarty->assign("special_names"       , CCompteRendu::$special_names);
+$smarty->assign("mediuser"           , $mediuser);
+$smarty->assign("user_id"            , $mediuser->_id);
+$smarty->assign("prat_id"            , $prat_id);
+$smarty->assign("access_function"    , $access_function);
+$smarty->assign("access_group"       , $access_group);
+$smarty->assign("listObjectClass"    , $listObjectClass);
+$smarty->assign("compte_rendu"       , $compte_rendu);
+$smarty->assign("listObjectAffichage", $listObjectAffichage);
+$smarty->assign("droit"              , $droit);
+$smarty->assign("headers"            , $headers);
+$smarty->assign("prefaces"           , $prefaces);
+$smarty->assign("endings"            , $endings);
+$smarty->assign("footers"            , $footers);
 
 $smarty->display("addedit_modeles.tpl");

@@ -9,7 +9,6 @@
  * @version    $Revision$
  */
 
-$object_class = CValue::get('object_class');
 $field        = CValue::get('field');
 $view_field   = CValue::get('view_field', $field);
 $input_field  = CValue::get('input_field', $view_field);

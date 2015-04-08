@@ -13,18 +13,20 @@
 
 CCanDo::checkRead();
 
-$user_id = CValue::getOrSession("user_id");
+$filtre = new CListeChoix();
+$filtre->user_id     = CView::get("user_id", "num", true);
+$filtre->function_id = CView::get("function_id", "num", true);
 
-// Utilisateurs disponibles
-$user = CMediusers::get();
-$users = $user->loadUsers(PERM_EDIT);
+if (!$filtre->user_id && !$filtre->function_id) {
+  $filtre->user_id = CMediusers::get()->_id;
+}
 
-$user = CMediusers::get($user_id);
+$filtre->loadRefUser();
+$filtre->loadRefFunction();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user_id", $user_id);
-$smarty->assign("users"  , $users);
+$smarty->assign("filtre", $filtre);
 
 $smarty->display("vw_idx_listes.tpl");

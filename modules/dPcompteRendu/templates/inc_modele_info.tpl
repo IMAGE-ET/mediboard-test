@@ -26,14 +26,18 @@
     <tr>
       <th>{{mb_label object=$compte_rendu field="group_id"}}</th>
       <td>
-        <select {{if !$droit}}disabled{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}" style="width: 15em;">
-          <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-          {{foreach from=$listEtab item=curr_etab}}
-            <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}}selected{{/if}}>
-              {{$curr_etab}}
-            </option>
-          {{/foreach}}
-        </select>
+        {{if $droit}}
+          {{mb_field object=$compte_rendu field=group_id hidden=1
+          onchange="
+             \$V(this.form.user_id, '', false);
+             \$V(this.form.user_id_view, '', false);
+             \$V(this.form.function_id, '', false);
+             \$V(this.form.function_id_view, '', false);"}}
+          <input type="text" name="group_id_view" value="{{$compte_rendu->_ref_group}}" />
+        {{elseif $compte_rendu->group_id}}
+          {{mb_field object=$compte_rendu field=group_id hidden=1}}
+          {{$compte_rendu->_ref_group}}
+        {{/if}}
       </td>
     </tr>
   {{/if}}
@@ -42,18 +46,17 @@
     <tr>
       <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$compte_rendu->_props.function_id}}" style="width: 15em;" {{if !$droit}}disabled{{/if}} >
-          <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-          {{foreach from=$listFunc item=curr_func}}
-            <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}}selected{{/if}}>
-              {{if $smarty.session.browser.name == "msie"}}
-                {{$curr_func->_view|truncate:45}}
-              {{else}}
-                {{$curr_func->_view}}
-              {{/if}}
-            </option>
-          {{/foreach}}
-        </select>
+        {{if $droit}}
+          {{mb_field object=$compte_rendu field=function_id hidden=1
+          onchange="
+             \$V(this.form.user_id, '', false);
+             \$V(this.form.user_id_view, '', false);
+             \$V(this.form.group_id, '', false);
+             \$V(this.form.group_id_view, '', false);"}}
+          <input type="text" name="function_id_view" value="{{$compte_rendu->_ref_function}}" />
+        {{elseif $compte_rendu->function_id}}
+          {{$compte_rendu->_ref_function}}
+        {{/if}}
       </td>
     </tr>
   {{/if}}
@@ -61,10 +64,17 @@
   <tr>
     <th>{{mb_label object=$compte_rendu field="user_id"}}</th>
     <td>
-      <select name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;" {{if !$droit}}disabled{{/if}}>
-        <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$compte_rendu->user_id}}
-      </select>
+      {{if $droit}}
+        {{mb_field object=$compte_rendu field=user_id hidden=1
+        onchange="
+             \$V(this.form.function_id, '', false);
+             \$V(this.form.function_id_view, '', false);
+             \$V(this.form.group_id, '', false);
+             \$V(this.form.group_id_view, '', false);"}}
+        <input type="text" name="user_id_view" value="{{$compte_rendu->_ref_user}}" />
+      {{elseif $compte_rendu->user_id}}
+        {{$compte_rendu->_ref_user}}
+      {{/if}}
     </td>
   </tr>
 

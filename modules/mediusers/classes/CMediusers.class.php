@@ -1158,21 +1158,27 @@ class CMediusers extends CPerson {
    *
    * @return CFunctions[] Found functions
    */
-  static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
+  static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null, $name = "") {
     $group = CGroups::loadCurrent();
 
-    $function           = new CFunctions();
-    $function->actif    = 1;
-    $function->group_id = CValue::first($group_id, $group->_id);
+    $function = new CFunctions();
+    $where = array();
+
+    $where["actif"] = "= '1'";
+    $where["group_id"] = "= '" . CValue::first($group_id, $group->_id) . "'";
 
     if ($type) {
-      $function->type = $type;
+      $where["type"] = "= '$type'";
+    }
+
+    if ($name) {
+      $where["text"] = "LIKE '$name%'";
     }
 
     $order = "text";
 
     /** @var CFunctions[] $functions */
-    $functions = $function->loadMatchingList($order);
+    $functions = $function->loadList($where, $order);
     CMbObject::filterByPerm($functions, $permType);
 
     // Group association

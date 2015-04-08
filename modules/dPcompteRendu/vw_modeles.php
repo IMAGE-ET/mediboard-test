@@ -15,43 +15,31 @@ CCanDo::checkRead();
 
 // Filtres
 $filtre = new CCompteRendu();
-$filtre->user_id      = CValue::getOrSession("user_id");
-$filtre->function_id  = CValue::getOrSession("function_id");
-$filtre->object_class = CValue::getOrSession("object_class");
-$filtre->type         = CValue::getOrSession("type");
+$filtre->user_id      = CView::get("user_id", "num", true);
+$filtre->function_id  = CView::get("function_id", "num", true);
+$filtre->object_class = CView::get("object_class", $filtre->_specs["_list_classes"]->prop, true);
+$filtre->type         = CView::get("type", $filtre->_specs["type"]->prop, true);
 
-$order_col = CValue::getOrSession("order_col", "object_class");
-$order_way = CValue::getOrSession("order_way", "ASC");
+$order_col = CView::get("order_col", "enum list|nom|object_class|file_category_id|type|_count_utilisation default|object_class", true);
+$order_way = CView::get("order_way", "enum list|ASC|DESC default|DESC", true);
 
-if (!in_array($order_col, array("nom", "object_class", "file_category_id", "type", "_count_utilisation"))) {
-  $order_col = "object_class";
-}
-
-$curr_user = CMediusers::get();
-
-// Praticiens
-// Liste des praticiens accessibles
-$praticiens = $curr_user->loadUsers(PERM_EDIT);
-
-// Fonctions
-// Liste des fonctions accessibles
-$functions = array_unique(CMbArray::pluck($praticiens, "_ref_function"));
-array_multisort(CMbArray::pluck($functions, "text"), SORT_ASC, $functions);
+CView::checkin();
 
 // On ne met que les classes qui ont une methode fillTemplate
-$filtre->_specs['object_class']->_locales = CCompteRendu::getTemplatedClasses();
+$filtre->_specs['object_class']->_locales = CCompteRendu::$templated_classes;
 
 if (!$filtre->user_id && !$filtre->function_id) {
-  $filtre->user_id = $curr_user->_id;
+  $filtre->user_id = CMediusers::get()->_id;
 }
+
+$filtre->loadRefUser();
+$filtre->loadRefFunction();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filtre"    , $filtre);
-$smarty->assign("praticiens", $praticiens);
-$smarty->assign("functions" , $functions);
-$smarty->assign("order_col" , $order_col);
-$smarty->assign("order_way" , $order_way);
+$smarty->assign("filtre"   , $filtre);
+$smarty->assign("order_col", $order_col);
+$smarty->assign("order_way", $order_way);
 
 $smarty->display("vw_modeles.tpl");

@@ -100,6 +100,56 @@
     loadObjectClass('{{$compte_rendu->object_class}}');
     loadCategory('{{$compte_rendu->file_category_id}}');
 
+    Control.Tabs.create('tabs-edit');
+
+    var form = getForm("editFrm");
+
+    {{if $droit}}
+      var urlUsers = new Url("mediusers", "ajax_users_autocomplete");
+      urlUsers.addParam("edit", "1");
+      urlUsers.addParam("input_field", "user_id_view");
+      urlUsers.autoComplete(form.user_id_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        afterUpdateElement: function(field, selected) {
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.user_id, id);
+        }
+      });
+
+      var urlFunctions = new Url("mediusers", "ajax_functions_autocomplete");
+      urlFunctions.addParam("edit", "1");
+      urlFunctions.addParam("input_field", "function_id_view");
+      urlFunctions.addParam("view_field", "text");
+      urlFunctions.autoComplete(form.function_id_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        afterUpdateElement: function(field, selected) {
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.function_id, id);
+        }
+      });
+
+      var urlGroups = new Url("etablissement", "ajax_groups_autocomplete");
+      urlGroups.addParam("edit", "1");
+      urlGroups.addParam("input_field", "group_id_view");
+      urlGroups.addParam("view_field", "text");
+      urlGroups.autoComplete(form.group_id_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        afterUpdateElement: function(field, selected) {
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.group_id, id);
+        }
+      });
+    {{/if}}
+
     {{if $compte_rendu->_id}}
       Thumb.instance = CKEDITOR.instances.htmlarea;
       {{if $droit && $pdf_thumbnails && $pdf_and_thumbs}}
@@ -110,9 +160,6 @@
       {{/if}}
     {{/if}}
   });
-
-  Main.add(Control.Tabs.create.curry('tabs-edit'));
-
 </script>
 
 <div id="choose_template_name" style="display: none; width: 600px;">
@@ -122,7 +169,7 @@
       <th class="title">Description</th>
       <th class="title narrow"></th>
     </tr>
-    {{foreach from=$special_names item=_names_by_class key=_class}}
+    {{foreach from="CCompteRendu"|static:"special_names" item=_names_by_class key=_class}}
       <tr>
         <th class="category" colspan="3">{{tr}}{{$_class}}{{/tr}}</th>
       </tr>
