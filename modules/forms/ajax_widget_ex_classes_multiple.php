@@ -83,28 +83,30 @@ foreach ($ids as $_id_element => $_id) {
 
     $_count += count($_ex_objects);
 
-    $_ex_objects = array_map(
-      function ($ex_object) use ($_ex_class) {
-        /** @var CExClass $_ex_class */
-        $_formula_field = $_ex_class->_formula_field;
-        $_formula_value = null;
-        if ($_formula_field) {
-          $_formula_value = $ex_object->$_formula_field;
-        }
+    if (count($_ex_objects)) {
+      $_ex_objects = array_map(
+        function ($ex_object) use ($_ex_class) {
+          /** @var CExClass $_ex_class */
+          $_formula_field = $_ex_class->_formula_field;
+          $_formula_value = null;
+          if ($_formula_field) {
+            $_formula_value = $ex_object->$_formula_field;
+          }
 
-        /** @var CExObject $ex_object */
-        return array(
-          "id"              => $ex_object->_id,
-          "view"            => utf8_encode($ex_object->_view),
-          "owner"           => utf8_encode($ex_object->loadRefOwner()->_view),
-          "datetime_create" => $ex_object->getFormattedValue("datetime_create"),
-          "formula_value"   => $_formula_value === null ? null : utf8_encode($_formula_value),
-        );
-      },
-      $_ex_objects
-    );
+          /** @var CExObject $ex_object */
+          return array(
+            "id"              => $ex_object->_id,
+            "view"            => utf8_encode($ex_object->_view),
+            "owner"           => utf8_encode($ex_object->loadRefOwner()->_view),
+            "datetime_create" => $ex_object->getFormattedValue("datetime_create"),
+            "formula_value"   => $_formula_value === null ? null : utf8_encode($_formula_value),
+          );
+        },
+        $_ex_objects
+      );
 
-    $_ex_objects_by_class[$_ex_class->_id] = $_ex_objects;
+      $_ex_objects_by_class[$_ex_class->_id] = array_values($_ex_objects);
+    }
   }
 
   $object_data[$_id_element] = array(

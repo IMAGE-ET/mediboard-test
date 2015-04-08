@@ -586,7 +586,12 @@ var ExObject = {
       $H(data.objects).each(function(pair){
         var d = pair.value;
 
-        ExObject.makeWidget($(pair.key), object_class, event_name, form_name, d, data.ex_classes);
+        try {
+          ExObject.makeWidget($(pair.key), object_class, event_name, form_name, d, data.ex_classes);
+        }
+        catch(e) {
+          // caught ...
+        }
       });
     }, {
       method: "post",
@@ -597,6 +602,10 @@ var ExObject = {
   },
 
   makeWidget: function(element, object_class, event_name, form_name, data, ex_classes) {
+    if (data.ex_objects.length === 0) {
+      return;
+    }
+
     var container = element;
     var ex_objects = $H(data.ex_objects);
 
