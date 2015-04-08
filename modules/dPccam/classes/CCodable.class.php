@@ -1265,7 +1265,7 @@ class CCodable extends CMbObject {
   function getTextcontent () {
     $fields = array();
     foreach ($this->_specs as $_name => $_spec) {
-      if ($_spec instanceof CTextSpec) {
+      if ($_spec instanceof CTextSpec || $_spec instanceof CStrSpec) {
         $fields[] = $_name;
       }
     }
