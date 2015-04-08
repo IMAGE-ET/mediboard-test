@@ -13,7 +13,7 @@
     {{foreach from=$sejour->_ref_operations item=_op}}
       PMSI.loadExportActes('{{$_op->_id}}', 'COperation');
     {{/foreach}}
-
+    PMSI.loadExportActes('{{$sejour->_id}}', 'CSejour', null, "{{$m}}" );
     PMSI.loadDiagsDossier('{{$sejour->_id}}');
     PMSI.loadDiagsPMSI('{{$sejour->_id}}');
   });
@@ -203,6 +203,11 @@
               </fieldset>
             </td>
           </tr>
+          <tr>
+            <td>
+              <div id="export_{{$sejour->_guid}}"></div>
+            </td>
+          </tr>
         </table>
         {{mb_include module=pmsi template=inc_codage_actes subject=$sejour}}
       </div>
@@ -272,7 +277,7 @@
             </tr>
             {{/if}}
             <tr>
-              <td colspan="4" id="export_COperation_{{$_op->_id}}">
+              <td colspan="4" id="export_{{$_op->_guid}}">
               </td>
             </tr>
           </table>

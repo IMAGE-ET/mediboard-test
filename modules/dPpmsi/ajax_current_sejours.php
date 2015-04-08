@@ -48,6 +48,7 @@ foreach ($listSejours as $_sejour) {
   $_sejour->loadExtCodesCCAM();
   $_sejour->loadRefsFactureEtablissement();
   $_sejour->countActes();
+  $_sejour->loadRefTraitementDossier();
 }
 
 // Création du template

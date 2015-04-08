@@ -272,6 +272,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_obs_entree;
   /** @var CMediusers */
   public $_ref_confirme_user;
+  /** @var CTraitementDossier */
+  public $_ref_traitement_dossier;
 
   // Collections
   /** @var COperation[] */
@@ -447,6 +449,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["refus_dispensation"]    = "CRefusDispensation sejour_id";
     $backProps["contextes_constante"]   = "CConstantesMedicales context_id";
     $backProps["user_sejour"]           = "CUserSejour sejour_id";
+    $backProps["traitement_dossier"]    = "CTraitementDossier sejour_id";
 
     return $backProps;
   }
@@ -2131,10 +2134,11 @@ class CSejour extends CFacturable implements IPatientRelated {
    * Charge les diagnostics CIM associés
    *
    * @param bool $split Notation française avec le point séparateur après trois caractères
+   * @param bool $load Chargement du code cim associé si split est false
    *
    * @return string[] Codes CIM
    */
-  function loadDiagnosticsAssocies($split = true) {
+  function loadDiagnosticsAssocies($split = true, $load = false) {
     $this->_diagnostics_associes = array();
     $this->loadRefDossierMedical();
     if ($this->_ref_dossier_medical->_id) {
@@ -2143,7 +2147,13 @@ class CSejour extends CFacturable implements IPatientRelated {
           $this->_diagnostics_associes[] = substr($code, 0, 3) . "." . substr($code, 3);
         }
         else {
-          $this->_diagnostics_associes[] = $code;
+          if ($load) {
+            $this->_diagnostics_associes[] =  CCodeCIM10::get($code);
+          }
+          else {
+            $this->_diagnostics_associes[] = $code;
+          }
+
         }
       }
     }
@@ -5012,6 +5022,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     return true;
   }
+  /** Charge le traitement du dossier pmsi (statut)
+   *
+   * @return CTraitementDossier
+   */
+  function loadRefTraitementDossier () {
+    return $this->_ref_traitement_dossier = $this->loadUniqueBackRef("traitement_dossier");
+  }
+
 }
 
 if (CAppUI::conf("ref_pays") == 2) {

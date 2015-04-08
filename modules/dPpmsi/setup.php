@@ -59,8 +59,28 @@ class CSetupdPpmsi extends CSetup {
     $query = "DROP TABLE IF EXISTS `ghm`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $query = "CREATE TABLE `traitement_dossier` (
+                `traitement_dossier_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `traitement` DATETIME,
+                `validate` DATETIME,
+                `GHS` VARCHAR (255),
+                `rss_id` INT (11) UNSIGNED,
+                `sejour_id` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
 
+    $query = "ALTER TABLE `traitement_dossier`
+                ADD INDEX (`traitement`),
+                ADD INDEX (`validate`),
+                ADD INDEX (`rss_id`),
+                ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
 
+    $this->mod_version = "0.16";
+
+    // Data source query
+    $query = "SHOW TABLES LIKE 'CIM10';";
+    $this->addDatasource("cim10", $query);
   }
 }
