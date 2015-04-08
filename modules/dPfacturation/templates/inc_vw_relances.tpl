@@ -1,5 +1,8 @@
 <fieldset>
   <legend>{{tr}}CRelance{{/tr}}</legend>
+  {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+    <div id="check_bill_relance" style="display:none;"></div>
+  {{/if}}
   <table class="main tbl">
     <tr>
       <th>{{mb_label object=$facture->_ref_last_relance field=numero}}</th>
@@ -32,6 +35,17 @@
               <input type="hidden" name="object_id" value="{{$relance->object_id}}"/>
               <input type="hidden" name="object_class" value="{{$relance->object_class}}"/>
               <button type="submit" class="trash notext"></button>
+            </form>
+          {{/if}}
+          {{if $relance->facture != 1 && $facture->_ref_last_relance->_id == $relance->_id}}
+            <form name="XML_{{$relance->_guid}}" method="post" action="" onsubmit="return false;">
+              {{mb_class object=$relance}}
+              {{mb_key   object=$relance}}
+              <input type="hidden" name="del" value="1"/>
+              <input type="hidden" name="object_id" value="{{$facture->_id}}"/>
+              <input type="hidden" name="object_class" value="{{$facture->_class}}"/>
+              <input type="hidden" name="prat_id" value="{{$facture->praticien_id}}"/>
+              <button type="button" class="send notext" onclick="Relance.checkRelance(this.form);">Générer le XML de relance</button>
             </form>
           {{/if}}
         </td>

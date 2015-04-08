@@ -438,6 +438,23 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement`
                 ADD INDEX (`date_cas`);";
     $this->addQuery($query);
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+
+    $query = "ALTER TABLE `facture_relance`
+                ADD `facture` ENUM ('-1','0','1') NOT NULL DEFAULT '0',
+                ADD `envoi_xml` ENUM ('0','1') DEFAULT '1',
+                ADD `request_date` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_relance`
+                ADD INDEX (`request_date`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `request_date` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD INDEX (`request_date`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.46";
   }
 }

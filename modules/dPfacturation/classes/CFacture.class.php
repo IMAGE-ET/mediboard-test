@@ -45,6 +45,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $annule;
   public $definitive;
   public $date_cas;
+  public $request_date;
 
   // Form fields
   public $_consult_id;
@@ -178,6 +179,7 @@ class CFacture extends CMbObject implements IPatientRelated {
     $props["annule"]                    = "bool default|0";
     $props["definitive"]                = "bool default|0";
     $props["date_cas"]                  = "dateTime";
+    $props["request_date"]              = "dateTime";
 
     $props["_du_restant_patient"]       = "currency";
     $props["_du_restant_tiers"]         = "currency";

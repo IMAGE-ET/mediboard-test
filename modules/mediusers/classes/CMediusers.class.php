@@ -60,6 +60,7 @@ class CMediusers extends CPerson {
   public $specialite_tarmed;
   public $role_tarmed;
   public $place_tarmed;
+  public $reminder_text;
 
   // CUser reported fields fields
   public $_user_type;
@@ -254,6 +255,7 @@ class CMediusers extends CPerson {
     $props["specialite_tarmed"]      = "numchar length|4";
     $props["role_tarmed"]            = "str";
     $props["place_tarmed"]           = "str";
+    $props["reminder_text"]          = "text";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
     $props["last_ldap_checkout"]     = "date";

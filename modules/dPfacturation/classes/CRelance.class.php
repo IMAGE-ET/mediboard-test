@@ -26,6 +26,9 @@ class CRelance extends CMbMetaObject {
   public $numero;
   public $statut;
   public $poursuite;
+  public $facture;
+  public $envoi_xml;
+  public $request_date;
 
   public $_montant;
   // Object References
@@ -55,6 +58,9 @@ class CRelance extends CMbMetaObject {
     $props["du_tiers"]      = "currency decimals|2";
     $props["statut"]        = "enum list|inactive|first|second|third|contentieux|poursuite";
     $props["poursuite"]     = "enum list|defaut|continuation|etranger|faillite|hors_pays|deces|inactive|saisie|introuvable";
+    $props["envoi_xml"]     = "bool default|1";
+    $props["facture"]       = "enum notNull list|-1|0|1 default|0";
+    $props["request_date"]  = "dateTime";
 
     $props["_montant"]      = "currency decimals|2";
     return $props;

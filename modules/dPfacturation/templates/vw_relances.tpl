@@ -11,13 +11,17 @@ function addRelances(facture_class, type_relance){
 }
 </script>
 
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+  <div id="check_bill_relance" style="display:none;"></div>
+{{/if}}
+
 <form name="printRelance" action="?" method="get" onSubmit="return checkRapport()">
   <input type="hidden" name="a" value="" />
   <input type="hidden" name="dialog" value="1" />
   <table class="form">
     {{if $conf.dPfacturation.CFactureCabinet.view_bill}}
       <tr>
-        <th class="category" colspan="4">Relance de Cabinet</th>
+        <th class="category" colspan="5">Relance de Cabinet</th>
       </tr>
       <tr>
         <td class="button" rowspan="2">
@@ -40,6 +44,11 @@ function addRelances(facture_class, type_relance){
           <option value="3">Renouvelées</option>
           </select>
         </td>
+        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <td rowspan="2" class="button">
+            <button type="button" class="send" onclick="Relance.checkBills('CFactureCabinet');">Générer le dossier de relance</button>
+          </td>
+        {{/if}}
       </tr>
       <tr>
         <td class="button">
@@ -75,6 +84,11 @@ function addRelances(facture_class, type_relance){
           <option value="renouvelle">Renouvelées</option>
           </select>
         </td>
+        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <td rowspan="2" class="button">
+            <button type="button" class="send" onclick="Relance.checkBills('CFactureEtablissement');">Générer le dossier de relance</button>
+          </td>
+        {{/if}}
       </tr>
       <tr>
         <td class="button">

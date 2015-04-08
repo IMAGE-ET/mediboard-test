@@ -668,6 +668,11 @@ class CSetupmediusers extends CSetup {
                 ADD `role_tarmed` VARCHAR (255),
                 ADD `place_tarmed` VARCHAR (255);";
     $this->addQuery($query);
-    $this->mod_version = '0.60';
+    $this->makeRevision('0.60');
+
+    $query = "ALTER TABLE `users_mediboard`
+                ADD `reminder_text` TEXT;";
+    $this->addQuery($query);
+    $this->mod_version = '0.61';
   }
 }

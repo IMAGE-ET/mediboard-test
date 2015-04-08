@@ -91,6 +91,11 @@
   </td>
 </tr>
 
+<tr>
+  <th>{{mb_label object=$object field="reminder_text"}}</th>
+  <td>{{mb_field object=$object field="reminder_text"}}</td>
+</tr>
+
 {{mb_script module=system script=exchange_source ajax=true}}
 <script>
   loadArchives = function() {

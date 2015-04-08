@@ -29,6 +29,63 @@ Relance = {
     url.addParam('type_pdf'     , type_pdf);
     url.addParam('suppressHeaders', '1');
     url.popup(1000, 600);
+  },
+  checkBills: function(facture_class) {
+    var form = getForm("printFrm");
+    var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id'    , form.chir.value);
+    url.addParam('date_min'   , $V(form._date_min));
+    url.addParam('date_max'   , $V(form._date_max));
+    url.addParam('facture_class'  , facture_class);
+    url.addParam('relance'    , 1);
+    url.addParam('check'      ,true);
+    url.requestUpdate('check_bill_relance', { onComplete:function() {
+      var suppressHeaders = 0;
+      if ($('check_bill_relance_ok')) {
+        suppressHeaders = 1;
+      }
+      Relance.downloadBills(facture_class, suppressHeaders,form);
+    }}
+    );
+  },
+  downloadBills: function(facture_class, suppressHeaders, form) {
+    var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id'  , form.chir.value);
+    url.addParam('date_min' , $V(form._date_min));
+    url.addParam('date_max' , $V(form._date_max));
+    url.addParam('facture_class'  , facture_class);
+    url.addParam('relance'  , 1);
+    url.addParam('check'    , suppressHeaders ? 0 : 1 );
+    url.addParam('suppressHeaders', suppressHeaders);
+    url.popup(1000, 600);
+  },
+
+  checkRelance: function(form) {
+    var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id'      , $V(form.prat_id));
+    url.addParam('relance_id'   , $V(form.relance_id));
+    url.addParam('facture_class', $V(form.object_class));
+    url.addParam('relance'      , 1);
+    url.addParam('check'        ,true);
+    url.requestUpdate('check_bill_relance', { onComplete:function() {
+      var suppressHeaders = 0;
+      if ($('check_bill_relance_ok')) {
+        suppressHeaders = 1;
+      }
+      Relance.downloadRelanceXML(suppressHeaders,form);
+    }}
+    );
+  },
+  downloadRelanceXML: function(suppressHeaders, form) {
+    var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id'      , $V(form.prat_id));
+    url.addParam('relance_id'   , $V(form.relance_id));
+    url.addParam('facture_class', $V(form.object_class));
+    url.addParam('relance'      , 1);
+    url.addParam('check'        , suppressHeaders ? 0 : 1 );
+    url.addParam('suppressHeaders', suppressHeaders);
+    url.popup(1000, 600);
+    reloadFactureModal($V(form.object_id), $V(form.object_class));
   }
 };
 

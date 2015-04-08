@@ -42,6 +42,14 @@
     <th>{{mb_label object=$relance field=poursuite}}</th>
     <td>{{mb_field object=$relance field=poursuite emptyLabel=Choose}}</td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$relance field=envoi_xml}}</th>
+    <td>{{mb_field object=$relance field=envoi_xml}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$relance field=facture}}</th>
+    <td>{{mb_field object=$relance field=facture}}</td>
+  </tr>
 
   <tr>
     <td class="button" colspan="2">

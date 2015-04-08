@@ -2257,7 +2257,14 @@ class CSetupdPcabinet extends CSetup {
 
     $this->makeRevision("2.51");
     $this->addPrefQuery("show_plage_holiday", "1");
+    $this->makeRevision("2.52");
 
-    $this->mod_version = '2.52';
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD `request_date` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD INDEX (`request_date`);";
+    $this->addQuery($query);
+    $this->mod_version = '2.53';
   }
 }
