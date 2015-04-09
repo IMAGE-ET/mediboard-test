@@ -244,7 +244,7 @@ class CGroups extends CEntity {
   /**
    * @see parent::updateFormFields()
    */
-  function updateFormFields () {
+  function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->_name;
     $this->_shortview = CMbString::truncate($this->_name);
@@ -254,16 +254,20 @@ class CGroups extends CEntity {
   /**
    * @see parent::store()
    */
-  function store(){
+  function store() {
     $is_new = !$this->_id;
 
     if ($msg = parent::store()) {
       return $msg;
     }
 
-    if ($is_new && CModule::getActive("dPprescription")) {
-      CConfigService::emptySHM();
-      CConfigMomentUnitaire::emptySHM();
+    if ($is_new) {
+      CConfiguration::clearDataCache();
+
+      if (CModule::getActive("dPprescription")) {
+        CConfigService::emptySHM();
+        CConfigMomentUnitaire::emptySHM();
+      }
     }
 
     return null;
