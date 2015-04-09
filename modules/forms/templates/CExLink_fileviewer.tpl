@@ -20,7 +20,8 @@
     <tr>
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; border: 0 !important;" class="icon_fileview">
-          <img src="images/pictures/medifile.png" />
+          <img ondblclick="ExObject.display('{{$ex_object->_id}}', '{{$ex_object->_ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')"
+          src="images/pictures/medifile.png" />
         </div>
       </td>
     </tr>
