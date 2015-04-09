@@ -1946,6 +1946,18 @@ class CStoredObject extends CModelObject {
   }
 
   /**
+   * Clear the back reference for given collection name (cache)
+   *
+   * @param string $backName The collection name
+   *
+   * @return void
+   */
+  function clearBackRefCache($backName) {
+    unset($this->_count[$backName]);
+    unset($this->_back[$backName]);
+  }
+
+  /**
    * Load named back reference collection IDs
    *
    * @param string       $backName Name of the collection
