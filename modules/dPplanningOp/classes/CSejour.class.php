@@ -3435,10 +3435,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CAffectation
    */
   function loadRefFirstAffectation() {
-    if (!$this->_ref_first_affectation) {
-      $this->loadRefsAffectations();
-    }
-
+    $this->loadRefsAffectations();
     return $this->_ref_first_affectation;
   }
 
