@@ -12,8 +12,8 @@
 <script>
   loadAllDocs = function() {
     new Url("patients", "ajax_all_docs")
-    .addFormData(getForm("filterDisplay"))
-    .requestUpdate("area_docs");
+      .addFormData(getForm("filterDisplay"))
+      .requestUpdate("area_docs");
   };
 
   toggleLabels = function() {
@@ -36,6 +36,13 @@
     });
   };
 
+  addDocument = function(context_guid) {
+    new Url("patients", "ajax_add_doc")
+      .addFormData(getForm("filterDisplay"))
+      .addParam("context_guid", context_guid)
+      .requestModal("70%", "70%");
+  };
+
   Main.add(function() {
     loadAllDocs();
   });
@@ -47,7 +54,7 @@
     <tr>
       <th class="title">
         <input type="text" style="float: left;" class="search" onkeyup="filterResults(this.value)" />
-        <button type="button" style="float: right;" class="add">Ajouter un document</button>
+        <button type="button" style="float: right;" class="add" onclick="addDocument();">Ajouter un document</button>
         <select name="tri" onchange="loadAllDocs()">
           <option value="date"  {{if $tri == "date"}}selected{{/if}}>Date</option>
           <option value="context" {{if $tri == "context"}}selected{{/if}}>Contexte</option>

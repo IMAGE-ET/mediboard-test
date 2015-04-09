@@ -279,6 +279,9 @@ class CPatient extends CPerson {
   /** @var CSejour[] */
   public $_ref_sejours;
 
+  /** @var COperation[] */
+  public $_ref_operations;
+
   /** @var CConsultation[] */
   public $_ref_consultations;
 
@@ -1074,7 +1077,7 @@ class CPatient extends CPerson {
    *
    * @param array $where SQL where clauses
    *
-   * @return CSejour[]
+   * @return CSejour[]n loadRef
    */
   function loadRefsSejours($where = array()) {
     if (!$this->_id) {

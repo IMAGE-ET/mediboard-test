@@ -11,7 +11,11 @@
     if (window.parent.reloadListFileEditPatient) {
       window.parent.reloadListFileEditPatient("load", object.file_category_id);
     }
-    
+
+    if (window.parent.reloadAfterUpload) {
+      window.parent.reloadAfterUpload();
+    }
+
     var systemMsg=window.parent.$("systemMsg").update('{{$messages|smarty:nodefaults}}');
   
     systemMsg.show();
