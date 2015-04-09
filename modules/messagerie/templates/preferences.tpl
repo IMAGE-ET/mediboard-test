@@ -9,6 +9,12 @@
 *}}
 
 <tr>
+  <th colspan="5" class="category">Messagerie interne</th>
+</tr>
+
+{{mb_include template=inc_pref spec=enum var=inputMode values="html|text"}}
+
+<tr>
   <th colspan="5" class="category">Messagerie externe</th>
 </tr>
 {{mb_include template=inc_pref spec=bool var=ViewMailAsHtml}}

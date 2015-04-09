@@ -10,35 +10,55 @@
 *}}
 
 <script>
-  Control.Tabs.setTabCount('{{$mode}}', {{if $mode == "inbox"}}'{{$unread}}', '{{$total}}'{{else}} '{{$total}}'{{/if}} );
+  Main.add(function() {
+    UserMessage.refreshCounts();
+  });
 </script>
 
-
-{{mb_include module=system template=inc_pagination total=$total current=$page change_page="UserMessage.refreshListPage" step=$app->user_prefs.nbMailList}}
-
+<div id="user_messages_actions" style="margin: 5px;">
+  {{mb_include module=messagerie template=inc_usermessages_actions}}
+</div>
 
 <table class="tbl">
   <tr>
     <th class="narrow"></th>
-    <th class="narrow">{{if $mode == "draft" || $mode == "sentbox"}}À{{else}}De{{/if}}</th>
-    <th>Subject</th>
-    <th class="narrow">{{if $mode == "draft" || $mode == "sentbox"}}Envoyé{{else}}Reçu{{/if}}</th>
-    <th class="narrow">Lecture</th>
-    <th class="narrow"></th>
+    <th class="narrow">{{tr}}Date{{/tr}}</th>
+    <th class="narrow">
+      {{if $mode == "draft" || $mode == "sentbox"}}
+        {{tr}}CUserMessageDest-to_user_id{{/tr}}
+      {{else}}
+        {{tr}}CUserMessageDest-from_user_id{{/tr}}
+      {{/if}}
+    </th>
+    <th>{{tr}}CUserMessage-subject{{/tr}}</th>
+    <th>{{tr}}CUserMessage-_abstract{{/tr}}</th>
+  </tr>
+  <tr>
+    <td colspan="5">
+      {{mb_include module=system template=inc_pagination total=$total current=$page change_page="UserMessage.refreshListPage" step=$app->user_prefs.nbMailList}}
+    </td>
   </tr>
   {{foreach from=$usermessages item=_usermessage}}
-    <tr>
-      <td>
-        {{if $_usermessage->_mode == "in"}}  <!-- reception -->
-          <a href="#" style="display: inline" onclick="UserMessage.editAction('{{$_usermessage->_ref_dest_user->_id}}', 'star', '{{if $_usermessage->_ref_dest_user->starred}}0{{else}}1{{/if}}')" title="{{tr}}CUserMessageDest-title-to_star-{{$_usermessage->_ref_dest_user->starred}}{{/tr}}">
-            <img src="modules/messagerie/images/favorites-{{$_usermessage->_ref_dest_user->starred}}.png" alt="" style="height: 20px;" />
-          </a>
-            <a href="#" style="display: inline" onclick="UserMessage.editAction('{{$_usermessage->_ref_dest_user->_id}}', 'archive', '{{if $_usermessage->_ref_dest_user->archived}}0{{else}}1{{/if}}')" title="{{tr}}CUserMessageDest-title-to_archive-{{$_usermessage->_ref_dest_user->archived}}{{/tr}}">
-              <img src="modules/messagerie/images/{{if $_usermessage->_ref_dest_user->archived}}mail_archive_cancel{{else}}mail_archive{{/if}}.png" alt="" style="height: 20px;" />
-            </a>
+    {{assign var=usermessage_id value=$_usermessage->_id}}
+
+    {{if $mode != 'draft'}}
+      {{assign var=onclick value="UserMessage.view('$usermessage_id');"}}
+    {{else}}
+      {{assign var=onclick value="UserMessage.edit('$usermessage_id', null, '$inputMode', UserMessage.refreshListCallback);"}}
+    {{/if}}
+    <tr class="alternate message{{if !$_usermessage->_ref_dest_user->datetime_read && $mode == 'inbox'}} unread{{/if}}">
+      <td class="narrow">
+        <input type="checkbox" value="{{$_usermessage->_ref_dest_user->_id}}"/>
+      </td>
+      <td onclick="{{$onclick}}">
+        {{if $_usermessage->_ref_dest_user->_id}}
+          {{$_usermessage->_ref_dest_user->_datetime_sent}}
+        {{elseif $mode == 'sentbox'}}
+          {{assign var=dest_user value=$_usermessage->_ref_destinataires|@reset}}
+          {{$dest_user->_datetime_sent}}
         {{/if}}
       </td>
-      <td>
+      <td onclick="{{$onclick}}">
         {{if $_usermessage->_mode == "out"}}  <!-- envoi -->
           {{foreach from=$_usermessage->_ref_destinataires item=_dest}}
             {{if $_dest->_id}}
@@ -51,21 +71,17 @@
           {{/if}}
         {{/if}}
       </td>
-      <td {{if !$_usermessage->_ref_dest_user->datetime_read && $mode == "inbox"}}style="font-weight: bold;" {{/if}}>
-        <a href="#" onclick="UserMessage.edit('{{$_usermessage->_id}}', null, UserMessage.refreshListCallback);">{{$_usermessage->subject}}</a>
-      </td>
-      <td>
-        {{if $_usermessage->_ref_dest_user->_id}}
-          {{mb_value object=$_usermessage->_ref_dest_user field=datetime_sent format=relative}}
+      <td onclick="{{$onclick}}">
+        {{if $_usermessage->_ref_dest_user->_id && $_usermessage->_mode == 'in' && $_usermessage->_ref_dest_user->starred}}
+          <span style="float: right; margin : 2px;">
+            <i class="msgicon fa fa-star"></i>
+          </span>
         {{/if}}
+
+        <a href="#">{{$_usermessage->subject}}</a>
       </td>
-      <td>
-        {{if $_usermessage->_ref_dest_user->_id}}
-          {{mb_value object=$_usermessage->_ref_dest_user field=datetime_read format=relative}}
-        {{/if}}
-      </td>
-      <td>
-        Actions
+      <td onclick="{{$onclick}}">
+        {{mb_value object=$_usermessage field=_abstract}}
       </td>
     </tr>
   {{foreachelse}}
@@ -73,6 +89,9 @@
       <td colspan="6" class="empty">{{tr}}CUserMessage.none{{/tr}}</td>
     </tr>
   {{/foreach}}
+  <tr>
+    <td colspan="5">
+      {{mb_include module=system template=inc_pagination total=$total current=$page change_page="UserMessage.refreshListPage" step=$app->user_prefs.nbMailList}}
+    </td>
+  </tr>
 </table>
-
-{{mb_include module=system template=inc_pagination total=$total current=$page change_page="UserMessage.refreshListPage" step=$app->user_prefs.nbMailList}}

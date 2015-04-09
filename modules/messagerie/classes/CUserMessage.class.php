@@ -20,6 +20,7 @@ class CUserMessage extends CMbObject {
   public $in_reply_to;
 
   // Form Fields
+  public $_abstract;
   public $_can_edit;
   public $_mode;
 
@@ -56,12 +57,23 @@ class CUserMessage extends CMbObject {
    * @return array
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["subject"]      = "str notNull";
-    $specs["content"]      = "html";
-    $specs["creator_id"]   = "ref class|CMediusers notNull";
-    $specs["in_reply_to"]  = "ref class|CUserMessage";
-    return $specs;
+    $props = parent::getProps();
+    $props["subject"]      = "str notNull";
+    $props["content"]      = "html";
+    $props["creator_id"]   = "ref class|CMediusers notNull";
+    $props["in_reply_to"]  = "ref class|CUserMessage";
+
+    /* Form fields */
+    $props['_abstract']         = 'text';
+
+    return $props;
+  }
+
+  /**
+   * @see parent::uodateFormFields()
+   */
+  public function updateFormFields() {
+    $this->_abstract = str_replace(array("\n", "\t", "\r"), ' ', substr(strip_tags($this->content), 0, 50)) . '...';
   }
 
   /**

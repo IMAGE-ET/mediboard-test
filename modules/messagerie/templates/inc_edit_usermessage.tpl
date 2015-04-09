@@ -53,7 +53,7 @@
     if (existing) {
       return;
     }
-    dest_list.insert('<li id="dest_'+id+'" style="border-left:'+style+';">'+name+'<input type="hidden" name="dest[]" value="'+id+'"/><button class="delete notext" type="button" style="display: inline;" onclick="removeDest(\''+id+'\');"></button></li>');
+    dest_list.insert('<li id="dest_'+id+'" style="border-left:'+style+';">'+name+'<input type="hidden" name="dest[]" value="'+id+'"/><button class="delete notext" type="button" style="display: inline; margin-left: 5px;" onclick="removeDest(\''+id+'\');"></button></li>');
   };
 
   removeDest = function(id) {
@@ -61,17 +61,15 @@
   };
 
   sendMessage = function(oform) {
-    if (confirm("envoyer le message ?")) {
-      $V(oform._send, 1);
-      oform.submit();
-      window.parent.Control.Modal.close();
-      UserMessage.refreshListCallback();
-    }
+    $V(oform._send, 1);
+    oform.submit();
+    window.parent.Control.Modal.close();
+    UserMessage.refreshListCallback();
   };
 
 </script>
 
-<form method="post" name="edit_usermessage" onsubmit="return checkForm(this)">
+<form method="post" action="?" name="edit_usermessage" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="messagerie"/>
   <input type="hidden" name="dosql" value="do_usermessage_aed"/>
   <input type="hidden" name="del" value="0" />
@@ -123,7 +121,7 @@
 
             {{if $usermessage->_can_edit}}
               <input type="hidden" name="dest[]" value="{{$_dest->_ref_user_to->_id}}"/>
-              <button class="delete notext" type="button" style="display: inline;" onclick="removeDest('{{$_dest->_ref_user_to->_id}}');"></button>
+              <button class="delete notext" type="button" style="display: inline; margin-left: 5px;" onclick="removeDest('{{$_dest->_ref_user_to->_id}}');"></button>
             {{/if}}
           </li>
         {{/foreach}}
@@ -133,26 +131,30 @@
     <tr>
       <td colspan="2" class="button">
         {{if $usermessage->_can_edit}}
-          <button class="send" type="button" onclick="sendMessage(this.form);">{{tr}}Send{{/tr}}</button>
-          <button class="save" type="button" onclick="this.form.submit();window.parent.Control.Modal.close();">{{tr}}Save{{/tr}}</button>
-          {{if $usermessage->_id}}<button class="trash" onclick="$V(this.form.del, 1); window.parent.Control.Modal.close();">{{tr}}Delete{{/tr}}</button>{{/if}}
+          <button type="button" onclick="sendMessage(this.form);">
+            <i class="msgicon fa fa-send"></i>
+            {{tr}}Send{{/tr}}
+          </button>
+          <button type="button" onclick="this.form.submit();window.parent.Control.Modal.close();">
+            <i class="msgicon fa fa-save"></i>
+            {{tr}}Save{{/tr}}
+          </button>
+          {{if $usermessage->_id}}
+            <button onclick="$V(this.form.del, 1); window.parent.Control.Modal.close();">
+              <i class="msgicon fa fa-save"></i>
+              {{tr}}Delete{{/tr}}
+            </button>
+          {{/if}}
         {{else}}
-           {{*
-            {{if $usermessage->_ref_dest_user->archived}}
-              <button onclick="$V(this.form._archive, 0); window.parent.Control.Modal.close();">
-                <img src="modules/messagerie/images/mail_archive_cancel.png" alt=""/>{{tr}}ToInbox{{/tr}}
-              </button>
-            {{else}}
-              {{if $usermessage->_ref_dest_user->from_user_id != $usermessage->_ref_dest_user->to_user_id && $usermessage->_ref_dest_user->to_user_id != $usermessage->creator_id}}
-                <button onclick="$V(this.form._archive, 1); window.parent.Control.Modal.close();">
-                  <img src="modules/messagerie/images/mail_archive.png" alt=""/>{{tr}}Archive{{/tr}}
-                </button>
-              {{/if}}
-            {{/if}}
-            *}}
-            <button class="send" type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create('{{$usermessage->creator_id}}', '{{$usermessage->_id}}');">{{tr}}CUserMail-button-answer{{/tr}}</button>
+          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create('{{$usermessage->creator_id}}', '{{$usermessage->_id}}');">
+            <i class="msgicon fa fa-reply"></i>
+            {{tr}}CUserMail-button-answer{{/tr}}
+          </button>
         {{/if}}
-        <button class="cancel" type="button" onclick="window.parent.Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+        <button type="button" onclick="window.parent.Control.Modal.close();">
+          <i class="msgicon fa fa-times"></i>
+          {{tr}}Cancel{{/tr}}
+        </button>
       </td>
     </tr>
   </table>

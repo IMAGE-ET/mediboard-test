@@ -16,5 +16,6 @@ CPreferences::$modules["messagerie"] = array (
   "showImgInMail",
   "nbMailList",
   "markMailOnServerAsRead",
-  "mailReadOnServerGoToArchived"
+  "mailReadOnServerGoToArchived",
+  'inputMode'
 );

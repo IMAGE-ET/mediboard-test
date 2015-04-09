@@ -28,11 +28,14 @@ class CUserMessageDest extends CMbObject {
   public $datetime_sent;     // if !sent => draft
   public $archived;
   public $starred;
+  public $deleted;
 
   public $_ref_message;
   public $_ref_user_to;
   public $_ref_user_from;
 
+  public $_datetime_sent;
+  public $_datetime_read;
   public $_is_received;
   public $_is_sent;
   public $_is_draft;
@@ -107,6 +110,8 @@ class CUserMessageDest extends CMbObject {
     $props["datetime_sent"]     = "dateTime";
     $props["archived"]          = "bool default|0";
     $props["starred"]           = "bool default|0";
+    $props['deleted']           = 'bool default|0';
+
     return $props;
   }
 
@@ -115,6 +120,30 @@ class CUserMessageDest extends CMbObject {
     parent::updateFormFields();
     if ($this->_ref_message) {
       $this->_view = $this->_ref_message->subject;
+    }
+
+    if ($this->datetime_sent) {
+      $this->_datetime_sent = CMbDT::date(null, $this->datetime_sent);
+      if ($this->_datetime_sent == CMbDT::date()) {
+        $this->_datetime_sent = CMbDT::format($this->datetime_sent, '%H:%M');
+      }
+      else {
+        if (CMbDT::format($this->datetime_sent, '%Y') == CMbDT::format(CMbDT::date(), '%Y')) {
+          $this->_datetime_sent = CMbDT::format($this->datetime_sent, '%d %B');
+        }
+      }
+    }
+
+    if ($this->datetime_read) {
+      $this->_datetime_read = CMbDT::date(null, $this->datetime_read);
+      if ($this->_datetime_read == CMbDT::date()) {
+        $this->_datetime_read = CMbDT::format($this->datetime_read, '%H:%M');
+      }
+      else {
+        if (CMbDT::format($this->datetime_read, '%Y') == CMbDT::format(CMbDT::date(), '%Y')) {
+          $this->_datetime_read = CMbDT::format($this->datetime_read, '%d %B');
+        }
+      }
     }
   }
 
@@ -173,5 +202,98 @@ class CUserMessageDest extends CMbObject {
     $this->loadRefMessage();
     $this->loadRefFrom()->loadRefFunction();
     $this->loadRefTo()->loadRefFunction();
+  }
+
+  /**
+   * Count the messages sent by the given user
+   *
+   * @param CMediusers $user The user
+   *
+   * @return int The number of sent messages
+   */
+  public static function countSentFor($user) {
+    $query = "SELECT COUNT(DISTINCT `user_message_id`) FROM `usermessage_dest`
+            WHERE `from_user_id` = '$user->_id' AND `datetime_sent` IS NOT NULL;";
+    return CSQLDataSource::get('std')->loadResult($query);
+  }
+
+  /**
+   * Count the messages unread by the given user
+   *
+   * @param CMediusers $user The user
+   *
+   * @return int The number of unread messages
+   */
+  public static function countUnreadFor($user) {
+    $user_message = new self;
+    $where = array(
+      'to_user_id' => "= '$user->_id'",
+      'datetime_sent' => "IS NOT NULL",
+      'archived' => "!= '1'",
+      'datetime_read' => "IS NULL"
+    );
+
+    return $user_message->countList($where);
+  }
+
+  /**
+   * Count the messages unread by the given user
+   *
+   * @param CMediusers $user The user
+   *
+   * @return int The number of unread messages
+   */
+  public static function countInboxFor($user) {
+    $user_message = new self;
+    $where = array(
+      'to_user_id' => "= '$user->_id'",
+      'datetime_sent' => "IS NOT NULL",
+      'archived' => "!= '1'",
+    );
+
+    return $user_message->countList($where);
+  }
+
+  /**
+   * Count the messages archived by the given user
+   *
+   * @param CMediusers $user The user
+   *
+   * @return int The number of archived messages
+   */
+  public static function countArchivedFor($user) {
+    $user_message = new self;
+    $where = array(
+      'to_user_id' => "= '$user->_id'",
+      'datetime_sent' => "IS NOT NULL",
+      'archived' => "= '1'",
+    );
+
+    return $user_message->countList($where);
+  }
+
+  /**
+   * Count the messages drafted by the given user
+   *
+   * @param CMediusers $user The user
+   *
+   * @return int The number of drafted messages
+   */
+  public static function countDraftedFor($user) {
+    $usermessage = new CUserMessage();
+    $where = array('creator_id' => "= '$user->_id'");
+    /** @var CUserMessage[] */
+    $listDrafted = $usermessage->loadList($where);
+    foreach ($listDrafted as $key => $_mail) {
+      $dests = $_mail->loadRefDests();
+      foreach ($dests as $_dest) {
+        if ($_dest->datetime_sent) {
+          unset($listDrafted[$key]);
+          continue 2;
+        }
+      }
+    }
+
+    return count($listDrafted);
   }
 }

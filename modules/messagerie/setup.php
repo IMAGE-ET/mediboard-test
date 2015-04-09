@@ -231,6 +231,14 @@ class CSetupmessagerie extends CSetup {
     $query = "UPDATE `user_mail` SET `account_class` = 'CSourcePOP';";
     $this->addQuery($query);
 
-    $this->mod_version = '0.35';
+    $this->makeRevision('0.35');
+
+    $query = "ALTER TABLE `usermessage_dest`
+                ADD `deleted` ENUM('0', '1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->addPrefQuery('inputMode', 'html');
+
+    $this->mod_version = '0.36';
   }
 }

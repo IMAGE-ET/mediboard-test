@@ -20,3 +20,44 @@
 ul#listUser li {
   display: inline;
 }
+
+ul.list-folders:before {
+  content: '';
+  position: absolute;
+  display: block;
+  border-top: 1px solid #7fa5a2;
+  width : 75%;
+  top: -5px;
+  left: 12.5%;
+}
+
+ul.list-folders:after {
+  content: '';
+  position: absolute;
+  display: block;
+  border-right: 1px solid #7fa5a2;
+  height: 75%;
+  top: 12.5%;
+  right: -5px;
+}
+
+i.msgicon {
+  color: #4d535f;
+}
+
+tr.message.unread {
+  font-weight: bold;
+}
+
+span.count {
+  float: right;
+  background-color: #73918e;
+  border-color: #4a6461;
+  color: #fff
+}
+
+#message_content {
+  overflow: auto;
+  height: 70%;
+  width: 100%;
+}

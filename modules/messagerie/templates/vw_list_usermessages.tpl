@@ -1,14 +1,10 @@
 <script>
   Main.add(function () {
-    Control.Tabs.create("tab-usermessages", true , {
-      afterChange: function(newContainer) {
-        UserMessage.refreshList(newContainer.id, 0);
-      }
-    });
+    UserMessage.refresh('{{$selected_folder}}', 0);
   });
 </script>
 
-<form method="get" name="list_usermessage" onsubmit="return onSubmitFormAjax(this, null, $V(this.mode))">
+<form method="get" target="?" name="list_usermessage" onsubmit="return onSubmitFormAjax(this, null, 'list-messages')">
   <input type="hidden" name="m" value="messagerie" />
   <input type="hidden" name="a" value="ajax_list_usermessage" />
   <input type="hidden" name="user_id" value="{{$user->_id}}" />
@@ -16,60 +12,31 @@
   <input type="hidden" name="page" value="0" />
 </form>
 
-<table class="main">
-  <tr>
-    <td colspan="2">
-      <button class="button edit" onclick="UserMessage.edit('', '', UserMessage.refreshListCallback)">
-        {{tr}}CUserMessage-title-create{{/tr}}
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align: top;" class="narrow">
-      <ul id="tab-usermessages" class="control_tabs_vertical">
-        <li>
-          <a href="#inbox" style="white-space: nowrap;" {{if !$listInboxUnread}}class="empty"{{/if}}>
-        		{{tr}}CUserMessage-inbox{{/tr}}
-        		<small>({{$listInboxUnread}} / {{$listInbox}})</small>
-        	</a>
-        </li>
-        <li>
-          <a href="#archive" style="white-space: nowrap;" {{if !$listArchived}}class="empty"{{/if}}>
-        		{{tr}}CUserMessage-archive{{/tr}}
-        		<small>({{$listArchived}})</small>
-        	</a>
-        </li>
-        <li>
-          <a href="#sentbox" style="white-space: nowrap;" {{if !$listSent}}class="empty"{{/if}}>
-        		{{tr}}CUserMessage-sentbox{{/tr}}
-        		<small>({{$listSent}})</small>
-        	</a>
-        </li>
-        <li>
-          <a href="#draft" style="white-space: nowrap;" {{if !$listDraft}}class="empty"{{/if}}>
-        		{{tr}}CUserMessage-draft{{/tr}}
-        		<small>({{$listDraft}})</small>
-        	</a>
-        </li>
-      </ul>
-    </td>
+<div id="internalMessages" style="position: relative;">
+  <section style="position: absolute; width: 15%; left: 0px;">
+    <ul class="list-folders" style="list-style-type: none; position: relative; margin-top: 10px; margin-right: 10px;">
+      {{foreach from=$folders key=_folder item=_count}}
+        <li style="margin-bottom: 5px;">
+          <div class="folder{{if $_folder == $selected_folder}} selected{{/if}}" data-folder="{{$_folder}}" onclick="UserMessage.refresh('{{$_folder}}', 0);" style="font-size: 1.1em; height: 20px; padding-bottom: 2px; padding-top: 2px; padding-left: 5px; margin: 5px; cursor: pointer;">
+            <span style="float:left; margin-right: 5px;">
+              <i class="msgicon folder-icon fa fa-folder{{if $selected_folder == $_folder}}-open{{/if}}"></i>
+            </span>
 
-    <td>
-      <!-- INBOX -->
-      <div id="inbox" style="display: none;">
-	    </div>
+            <span class="count circled"{{if $_count == 0}} style="display: none;"{{/if}}>
+             {{$_count}}
+            </span>
 
-      <!-- ARCHIVED -->
-      <div id="archive" style="display: none;">
-	    </div>
+            <span>
+              {{tr}}CUserMessage-{{$_folder}}{{/tr}}
+            </span>
+          </div>
+        </li>
+      {{/foreach}}
+    </ul>
+  </section>
+  <section style="position: absolute; height: 80%; width: 85%; left: 15%; top: 20%;">
+    <div id="list-messages">
 
-      <!-- SENT -->
-      <div id="sentbox" style="display: none;">
-	    </div>
-
-      <!-- DRAFT -->
-      <div id="draft" style="display: none;">
-	    </div>
-    </td>
-  </tr>
-</table>
+    </div>
+  </section>
+</div>

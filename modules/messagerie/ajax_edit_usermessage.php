@@ -15,6 +15,7 @@ CCanDo::checkRead();
 
 $user = CMediusers::get();
 $to_id = CValue::get("to_id");
+$answer_to_all = CValue::get('answer_to_all');
 $in_reply_to = CValue::get("in_reply_to");
 $message_id = CValue::getOrSession("usermessage_id");
 $dest_message = CValue::get("usermessage_dest_id");
@@ -48,15 +49,30 @@ foreach ($destinataires as $_dest) {
 
 // last check
 if (!$usermessage->_id) {
+  $usermessage->creator_id = $user->_id;
   // in reply to
   if ($in_reply_to) {
     $temp_message = new CUserMessage();
     $temp_message->load($in_reply_to);
     $usermessage->subject = "Re: ".$temp_message->subject;
     $usermessage->in_reply_to = $in_reply_to;
+    $usermessage->creator_id = $user->_id;
+
+    if ($answer_to_all) {
+      $temp_message->loadRefDests();
+      $usermessage->_ref_destinataires = array();
+      foreach ($temp_message->_ref_destinataires as $_destinataire) {
+        if ($_destinataire->to_user_id != $user->_id) {
+          $dest = new CUserMessageDest();
+          $dest->to_user_id = $_destinataire->to_user_id;
+          $dest->from_user_id = $usermessage->creator_id;
+          $dest->loadRefTo()->loadRefFunction();
+          $usermessage->_ref_destinataires[] = $dest;
+        }
+      }
+    }
   }
 
-  $usermessage->creator_id = $user->_id;
   if ($to_id) {
     $dest = new CUserMessageDest();
     $dest->to_user_id = $to_id;
@@ -72,15 +88,16 @@ if (!$usermessage->_id) {
 $usermessage->loadRefCreator()->loadRefFunction();
 
 
+if (CAppUI::pref('inputMode') == 'html') {
 // Initialisation de CKEditor
-$templateManager = new CTemplateManager();
-$templateManager->editor = "ckeditor";
-$templateManager->simplifyMode = true;
-if (!$usermessage->_can_edit) {
-  $templateManager->printMode = true;
+  $templateManager               = new CTemplateManager();
+  $templateManager->editor       = "ckeditor";
+  $templateManager->simplifyMode = true;
+  if (!$usermessage->_can_edit) {
+    $templateManager->printMode = true;
+  }
+  $templateManager->initHTMLArea();
 }
-$templateManager->initHTMLArea();
-
 // smarty
 $smarty = new CSmartyDP();
 $smarty->assign("usermessage", $usermessage);
