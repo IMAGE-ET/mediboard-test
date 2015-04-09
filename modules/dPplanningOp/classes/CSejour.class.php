@@ -969,6 +969,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (!$this->countBackRefs("affectations")
       && $this->service_id
       && CAppUI::conf("dPhospi CAffectation sejour_default_affectation", CGroups::loadCurrent())) {
+
+      $this->clearBackRefCache("affectations");
+
       $affectation = new CAffectation();
       $affectation->sejour_id = $this->_id;
       $affectation->service_id = $this->service_id;
