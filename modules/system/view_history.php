@@ -47,7 +47,7 @@ CView::enforceSlave();
 
 // Limit to a default one month for no context queries
 if (!$filter->_date_min && !$filter->object_id && !$filter->user_id && !$ex_class_id) {
-  $filter->_date_min = CMbDT::dateTime("-1 month");
+  $filter->_date_min = CMbDT::dateTime("-1 WEEK");
 }
 
 $object = new CMbObject();
