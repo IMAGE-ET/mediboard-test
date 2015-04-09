@@ -61,6 +61,9 @@ class CSetupdPpmsi extends CSetup {
 
     $this->mod_version = "0.15";
 
+    // Data source query
+    $query = "SHOW TABLES LIKE 'CIM10';";
+    $this->addDatasource("cim10", $query);
 
   }
 }
