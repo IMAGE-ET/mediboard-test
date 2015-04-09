@@ -534,7 +534,11 @@ var Url = Class.create({
       style.maxHeight = String.getCSSLength(options.maxHeight);
     }
 
+    // Dummy timestamp to allow iframe inside iframes recursion, with the same URL
+    this.addParam("__ts", Date.now());
     var href = options.baseUrl + this.make(questionMark);
+    delete this.oParams.__ts;
+
     this.modalObject = Control.Modal.open(new Element("a", {href: 'about:blank'}), options);
 
     var modalContainer = this.modalObject.container;
