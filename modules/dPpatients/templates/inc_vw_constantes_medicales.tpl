@@ -82,16 +82,16 @@
       });
 
       Control.Tabs.create("tabs-constantes-graph-table", true);
-    {{/if}}
 
-    var header_constants = $('header-constants');
-    var content_dossier = $('content-dossier-soins');
-    if (!content_dossier) {
-      ViewPort.SetAvlHeight('constantes-medicales', 1.0);
-      content_dossier = $('constantes-medicales');
-    }
-    var tab_constants = $('tab-constantes-medicales')
-    tab_constants.setStyle({height: (content_dossier.getHeight() - header_constants.getHeight()) + 'px'});
+      var header_constants = $('header-constants');
+      var content_dossier = $('content-dossier-soins');
+      if (!content_dossier) {
+        content_dossier = header_constants.up();
+        ViewPort.SetAvlHeight(content_dossier, 1.0);
+      }
+      var tab_constants = $('tab-constantes-medicales')
+      tab_constants.setStyle({height: (content_dossier.getHeight() - header_constants.getHeight()) + 'px'});
+    {{/if}}
   });
 
   loadConstantesMedicales  = function(context_guid) {
