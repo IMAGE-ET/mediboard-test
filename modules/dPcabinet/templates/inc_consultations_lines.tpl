@@ -13,9 +13,9 @@
     <strong>
     {{if $plageSel->_id}}
       <button class="print notext" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
-      <a class="button new" href="#" onclick="Consultation.editRDVModal(0, '{{$plageSel->chir_id}}', '{{$plageSel->_id}}');" style="float:right;">
+      <button class="new" type="button" onclick="Consultation.editRDVModal(0, '{{$plageSel->chir_id}}', '{{$plageSel->_id}}');" style="float:right;">
         Planifier dans cette plage
-      </a>
+      </button>
       {{mb_include module=system template=inc_object_notes object=$plageSel}}
         Consultations du {{$plageSel->date|date_format:$conf.longdate}}<br/>
         {{if $plageSel->chir_id != $chirSel}}
