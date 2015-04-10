@@ -48,6 +48,22 @@
         {{if (!$acte->_id || ($acte->executant_id == $codage->praticien_id && $acte->_id|@array_key_exists:$codage->_ref_actes_ccam)) &&
              (($_activite->numero != '4' && !$codage->activite_anesth) || ($_activite->numero == '4' && $codage->activite_anesth))}}
           {{math assign=count_codes_codage equation="x+1" x=$count_codes_codage}}
+
+          <script type="application/javascript">
+            Main.add(function() {
+              var dates = {};
+              dates.limit = {
+                start: '{{$codage->date|date_format:"%Y-%m-%d"}}',
+                stop: '{{$codage->date|date_format:"%Y-%m-%d"}}'
+              };
+
+              var oForm = getForm("codageActeExecution-{{$view}}");
+              if (oForm) {
+                Calendar.regField(oForm.execution, dates);
+              }
+            });
+          </script>
+
           {{if $display_code}}
             {{assign var=display_code value=0}}
             <tr>
@@ -119,7 +135,7 @@
             </td>
             <td>
               <form name="codageActeExecution-{{$view}}" action="?" method="post" onsubmit="return false;">
-                {{mb_field object=$acte field=execution form="codageActeExecution-$view" register=true onchange="syncCodageField(this, '$view');"}}
+                {{mb_field object=$acte field=execution form="codageActeExecution-$view" onchange="syncCodageField(this, '$view');"}}
               </form>
             </td>
             <td>
