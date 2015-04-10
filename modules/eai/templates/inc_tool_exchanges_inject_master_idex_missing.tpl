@@ -13,7 +13,6 @@
   <input type="hidden" name="suppressHeaders" value="1" />
 
   <table class="main form">
-
     <tr>
       <th>{{tr}}CExchangeDataFormat-msg-Type{{/tr}}</th>
       <td>
