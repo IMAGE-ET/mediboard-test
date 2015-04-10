@@ -2059,7 +2059,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
 
-
     // Affectation de l'UF hébergement
     $date_deb = $affectation->_id ? CMbDT::date($affectation->sortie) : CMbDT::date($newVenue->sortie);
     $date_fin = $affectation->_id ? CMbDT::date($affectation->entree) : CMbDT::date($newVenue->entree);

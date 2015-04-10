@@ -420,6 +420,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Décès
     $this->getDeces($node, $newPatient);
 
+    // NSS
+    $this->getNSS($node, $newPatient);
+
     if ($data["personIdentifiers"]) {
       // Mapping de l'INS-C
       if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
@@ -884,6 +887,22 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     return $medecin->_id;
+  }
+
+  /**
+   * Récupère le numéro de sécurité social du patient
+   *
+   * @param DOMNode  $node    PID
+   * @param CPatient $patient Patient
+   *
+   * @return void
+   */
+  function getNSS(DOMNode $node, CPatient $patient) {
+    $sender = $this->_ref_sender;
+
+    if ($sender->_configs["handle_NSS"] == "PID_19") {
+      $patient->matricule = $this->queryTextNode("PID.19", $node);
+    }
   }
 
   /**
