@@ -2058,6 +2058,7 @@ $locales['CTag'] = 'Étiquette';
 $locales['CTag-_nb_items'] = 'Nombre d\'utilisations';
 $locales['CTag-_nb_items-court'] = 'Nb. utilisations';
 $locales['CTag-_nb_items-desc'] = 'Nombre d\'utilisations de cette étiquette';
+$locales['CTag-action-Manage tags'] = 'Gérer les étiquettes';
 $locales['CTag-back-children'] = 'Étiquettes enfants';
 $locales['CTag-back-children.empty'] = 'Étiquettes enfants';
 $locales['CTag-back-items'] = 'Associations';

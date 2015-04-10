@@ -19,7 +19,7 @@
   -moz-osx-font-smoothing: grayscale
 }
 
-button.fa:before {
+a.button:before, button.fa:before {
   font-size: 15px !important;
   text-align: center;
   width: 16px;
