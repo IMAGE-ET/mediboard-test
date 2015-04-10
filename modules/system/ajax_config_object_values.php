@@ -42,12 +42,13 @@ unset($fields[$object->_spec->key]);
 unset($fields["object_id"]);
 
 if (!isset($object->_categories)) {
-  $categories = array("" => array_keys($fields));
+  $name = $object_id ? "$object_configs_class-$object_id" : $object_configs_class;
+  $categories = array("$name" => array_keys($fields));
 }
 else {
   $categories = $object->_categories;
 }
-    
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object"        , $object);

@@ -54,12 +54,12 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
 
   // Send
   public $modification_admit_code;
+  public $send_change_medical_responsibility;
+  public $send_change_nursing_ward;
   public $modification_before_admit;
   public $send_assigning_authority;
   public $send_all_patients;
   public $send_default_affectation;
-  public $send_change_medical_responsibility;
-  public $send_change_nursing_ward;
   public $send_change_attending_doctor;
   public $send_first_affectation;
   public $send_provisional_affectation;
@@ -172,31 +172,42 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     ),
 
     "send" => array(
-      "modification_admit_code",
-      "modification_before_admit",
-      "send_assigning_authority",
-      "send_change_medical_responsibility",
-      "send_change_nursing_ward",
-      "send_change_attending_doctor",
-      "send_all_patients",
-      "send_default_affectation",
-      "send_first_affectation",
-      "send_provisional_affectation",
-      "send_transfer_patient",
-      "send_own_identifier",
-      "send_self_identifier",
-      "send_actor_identifier",
-      "send_update_patient_information",
-      "send_change_after_admit",
-      "send_patient_with_visit",
-      "send_patient_with_current_admit",
-      "mode_identito_vigilance",
-      "send_no_facturable",
-      "send_a42_onmerge",
-      "send_expected_discharge_with_affectation",
-      "send_child_admit",
-      "send_not_master_IPP",
-      "send_not_master_NDA",
+      // choix des événements
+      "event" => array (
+        "modification_admit_code",
+        "send_change_medical_responsibility",
+        "send_change_nursing_ward",
+        "send_change_attending_doctor",
+        "send_first_affectation",
+        "send_transfer_patient",
+        "send_update_patient_information",
+      ),
+
+      // identifiants
+      "identifier" => array(
+        "send_assigning_authority",
+        "send_own_identifier",
+        "send_self_identifier",
+        "send_actor_identifier",
+        "send_not_master_IPP",
+        "send_not_master_NDA",
+      ),
+
+      // trigger
+      "trigger" => array(
+        "modification_before_admit",
+        "send_all_patients",
+        "send_default_affectation",
+        "send_provisional_affectation",
+        "send_change_after_admit",
+        "send_patient_with_visit",
+        "send_patient_with_current_admit",
+        "mode_identito_vigilance",
+        "send_no_facturable",
+        "send_a42_onmerge",
+        "send_expected_discharge_with_affectation",
+        "send_child_admit"
+      )
     ),
 
     "PID" => array(

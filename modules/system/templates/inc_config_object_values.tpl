@@ -41,6 +41,12 @@ importConfig = function(object_config_guid) {
 </button>
 {{/if}}
 
+<script type="text/javascript">
+  Main.add(function () {
+    Control.Tabs.create('tabs-object-config-{{$object->_id}}', true);
+  });
+</script>
+
 <form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="del" value="0" /> 
@@ -48,51 +54,57 @@ importConfig = function(object_config_guid) {
   <input type="hidden" name="@class" value="{{$object->_class}}" /> 
   {{mb_key object=$object}}
   
-  <input type="hidden" name="object_id" value="{{$object->object_id}}" /> 
+  <input type="hidden" name="object_id" value="{{$object->object_id}}" />
   <table class="form">
     <tr>
-      <th class="category">{{tr}}Name{{/tr}}</th>
-      <th class="category" colspan="2">{{tr}}Value{{/tr}}</th>
-      <th class="category">{{tr}}Default{{/tr}}</th>
-    </tr>
-    {{foreach from=$categories key=cat_name item=_fields}}
-      {{if $cat_name}}
-        <tr>
-          <th colspan="4" class="section" style="text-align: center;">{{$cat_name}}</th>
-        </tr>
-      {{/if}}
-      
-      {{foreach from=$_fields item=_field_name}}
-      <tr>
-        <th>{{mb_label object=$object field=$_field_name}}</th>
-        <td><button class="notext cancel" type="button" onclick="resetValue('{{$object->_id}}', '{{$_field_name}}');">{{tr}}Delete{{/tr}}</button></td>
-        <td>
-          {{if $object->_specs.$_field_name instanceof CEnumSpec || $object->_specs.$_field_name instanceof CBoolSpec}}
-          {{mb_field object=$object field=$_field_name typeEnum=select emptyLabel="Undefined"}}
-          {{else}}
-          {{mb_field object=$object field=$_field_name}}
-          {{/if}}
-        </td>
-        <td {{if $object->$_field_name !== null}}class="arretee"{{/if}}>
-          {{if $object->_default_specs_values}}
-            {{mb_value object=$default_config field=$_field_name}}
-          {{else}}
-            {{mb_value object=$default field=$_field_name}}
-          {{/if}}
-        </td>
-      </tr>
-      {{/foreach}}
-    {{/foreach}}
-    <tr>
-      <td class="button" colspan="4">
-        {{if $object->_id}}
-          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
-            {{tr}}Delete{{/tr}}
-          </button>
-        {{else}}
-           <button class="submit singleclick" type="submit">{{tr}}Create{{/tr}}</button>
-        {{/if}}
+      <td style="vertical-align: top; width: 15%">
+        <ul id="tabs-object-config-{{$object->_id}}" class="control_tabs_vertical small">
+          {{foreach from=$categories key=cat_name item=_fields}}
+            <li><a href="#object-config-{{$cat_name}}">{{$cat_name}} <small>({{$_fields|@count}})</small></a></li>
+          {{/foreach}}
+        </ul>
+      </td>
+      <td style="vertical-align: top;">
+        {{foreach from=$categories key=cat_name item=_fields}}
+          <div id="object-config-{{$cat_name}}" style="display: none">
+            <table class="form">
+              <tr>
+                <th class="category">{{tr}}Name{{/tr}}</th>
+                <th class="category">{{tr}}Value{{/tr}}</th>
+                <th class="category">{{tr}}Default{{/tr}}</th>
+              </tr>
+
+              {{foreach from=$_fields key=_field_section_name item=_field_name}}
+                {{if is_array($_field_name)}}
+                  {{if $_field_section_name}}
+                    <tr>
+                      <th colspan="4" class="section" style="text-align: center;">{{$_field_section_name}}</th>
+                    </tr>
+                  {{/if}}
+
+                  {{foreach from=$_field_name item=_item_field_name}}
+                    {{mb_include template=inc_config_object_value _field=$_item_field_name}}
+                  {{/foreach}}
+                {{else}}
+                  {{mb_include template=inc_config_object_value _field=$_field_name}}
+                {{/if}}
+              {{/foreach}}
+
+              <tr>
+                <td class="button" colspan="4">
+                {{if $object->_id}}
+                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
+                  {{tr}}Delete{{/tr}}
+                </button>
+                {{else}}
+                <button class="submit singleclick" type="submit">{{tr}}Create{{/tr}}</button>
+                {{/if}}
+                </td>
+              </tr>
+             </table>
+          </div>
+        {{/foreach}}
       </td>
     </tr>
   </table>
