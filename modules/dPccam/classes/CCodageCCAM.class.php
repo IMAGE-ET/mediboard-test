@@ -326,7 +326,20 @@ class CCodageCCAM extends CMbObject {
    * @see parent::check()
    */
   public function check() {
-    $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked', 'activite_anesth');
+    $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked', 'activite_anesth', 'date');
+
+    $codable = $this->loadCodable();
+    if($codable->_class == 'CConsultation') {
+      $codable->loadRefPlageConsult();
+      if ($this->date != $codable->_date) {
+        return 'Impossible de créer un codage CCAM a une date différente de celle de la consultation';
+      }
+    }
+    if ($codable->_class == 'COperation') {
+      if ($this->date != $codable->date) {
+        return 'Impossible de créer un codage CCAM a une date différente de celle de l\'intervention';
+      }
+    }
 
     if ($this->_old->locked && $this->locked && !CModule::getCanDo('dPpmsi')->edit) {
       return "Codage verrouillé";

@@ -269,7 +269,9 @@ class CActeCCAM extends CActe {
     if (CAppUI::conf('dPccam CCodeCCAM use_new_association_rules')) {
       $codage_ccam = CCodageCCAM::get($this->_ref_object, $this->executant_id, $this->code_activite, CMbDT::date(null, $this->execution));
       if (!$codage_ccam->_id) {
-        $codage_ccam->store();
+        if ($msg = $codage_ccam->store()) {
+          return $msg;
+        }
       }
     }
 
