@@ -1,5 +1,7 @@
 <?php
 $locales['CAffectation'] = 'Affectation';
+$locales['CAffectation-_anesth-court'] = 'Anesthésiste';
+$locales['CAffectation-_anesth-desc'] = 'Anesthésiste';
 $locales['CAffectation-_chambre'] = 'Chambre';
 $locales['CAffectation-_chambre-court'] = 'Chambre';
 $locales['CAffectation-_chambre-desc'] = 'Chambre';
@@ -8,6 +10,8 @@ $locales['CAffectation-_chambre_dep-desc'] = 'Chambre d\'origine';
 $locales['CAffectation-_duree'] = 'Durée';
 $locales['CAffectation-_duree-court'] = 'Durée';
 $locales['CAffectation-_duree-desc'] = 'Durée en nuits';
+$locales['CAffectation-_hour-court'] = 'Heure';
+$locales['CAffectation-_hour-desc'] = 'Heure d\'intervention';
 $locales['CAffectation-_mode_sortie'] = 'Mode de sortie';
 $locales['CAffectation-_mode_sortie-court'] = 'Mode';
 $locales['CAffectation-_mode_sortie-desc'] = 'Mode de sortie';

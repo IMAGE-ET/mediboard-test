@@ -48,6 +48,8 @@ class CAffectation extends CMbObject {
   public $_width_prolongation;
   public $_affectations_enfant_ids = array();
   public $_mutation_urg = false;
+  public $_hour;
+  public $_anesth;
 
   // Order fields
   public $_patient;

@@ -199,6 +199,8 @@ if ($type == "presents") {
     );
   }
 
+  otherOrder($presents, "", $order_col, $order_way);
+
   foreach ($presentsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
@@ -226,6 +228,8 @@ if ($type == "presents") {
       $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
+
+  otherOrder($presentsNP, "np", $order_col, $order_way);
 
   $presents_by_service = array();
   $presentsNP_by_service = array();
@@ -301,10 +305,12 @@ elseif ($type == "deplacements") {
       $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
-  
+
   $dep_entrants_by_service = array();
   $dep_sortants_by_service = array();
-  
+
+  otherOrder($dep_entrants, "", $order_col, $order_way);
+
   foreach ($dep_entrants as $_dep_entrant) {
     if (!isset($dep_entrants_by_service[$_dep_entrant->service_id])) {
       $dep_entrants_by_service[$_dep_entrant->service_id] = array();
@@ -313,7 +319,9 @@ elseif ($type == "deplacements") {
   }
   
   $dep_entrants = $dep_entrants_by_service;
-  
+
+  otherOrder($dep_sortants, "", $order_col, $order_way);
+
   foreach ($dep_sortants as $_dep_sortant) {
     if (!isset($dep_sortants_by_service[$_dep_sortant->service_id])) {
       $dep_sortants_by_service[$_dep_sortant->service_id] = array();
@@ -322,7 +330,6 @@ elseif ($type == "deplacements") {
   }
   
   $dep_sortants = $dep_sortants_by_service;
-  
 }
 // Récupération des entrées du jour
 elseif ($type_mouvement == "entrees") {
@@ -368,7 +375,9 @@ elseif ($type_mouvement == "entrees") {
 
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
-  
+
+  otherOrder($mouvements, "", $order_col, $order_way);
+
   // Patients non placés
   $whereNP["sejour.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
@@ -404,6 +413,8 @@ elseif ($type_mouvement == "entrees") {
       $sejour->loadLiaisonsForPrestation($prestation_id, $date);
     }
   }
+
+  otherOrder($mouvementsNP, "np", $order_col, $order_way);
 
   $update_count = count($mouvements)."/".count($mouvementsNP);
 
@@ -478,7 +489,9 @@ else {
 
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
-  
+
+  otherOrder($mouvements, "", $order_col, $order_way);
+
   // Patients non placés
   $whereNP["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
@@ -516,6 +529,8 @@ else {
     }
   }
 
+  otherOrder($mouvementsNP, "np", $order_col, $order_way);
+
   $update_count = count($mouvements)."/".count($mouvementsNP);
 
   $mouvements_by_service = array();
@@ -549,6 +564,34 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
     "actif" => "= '1'",
   );
   $list_mode_sortie = $mode_sortie->loadGroupList($where);
+}
+
+function otherOrder(&$mouvements = array(), $type, $order_col, $order_way) {
+  if (!in_array($order_col, array("_anesth", "_hour"))) {
+    return;
+  }
+  $sorter_patient   = $type == "np" ?
+    @CMbArray::pluck($mouvements, "_ref_patient", "_view") :
+    @CMbArray::pluck($mouvements, "_ref_sejour", "_ref_patient", "_view");
+
+  switch ($order_col) {
+    default:
+    case "_hour":
+      $sorter_other = $type == "np" ?
+        @CMbArray::pluck($mouvements, "_ref_curr_operation", "_datetime_best") :
+        @CMbArray::pluck($mouvements, "_ref_sejour", "_ref_curr_operation", "_datetime_best");
+      break;
+    case "_anesth":
+      $sorter_other = $type == "np" ?
+        @CMbArray::pluck($mouvements, "_ref_curr_operation", "_ref_anesth", "_view") :
+        @CMbArray::pluck($mouvements, "_ref_sejour", "_ref_curr_operation", "_ref_anesth", "_view");
+  }
+
+  @array_multisort(
+    $sorter_other, constant("SORT_$order_way"),
+    $sorter_patient, SORT_ASC,
+    $mouvements
+  );
 }
 
 // Création du template

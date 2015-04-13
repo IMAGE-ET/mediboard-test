@@ -67,8 +67,12 @@
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Motif</th>
         {{if $show_hour_anesth_mvt}}
-          <th>Heure</th>
-          <th>Anesthésiste</th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_hour" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}
+          </th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_anesth" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}
+          </th>
         {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Provenance</th>
@@ -115,8 +119,12 @@
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Motif</th>
         {{if $show_hour_anesth_mvt}}
-          <th>Heure</th>
-          <th>Anesthésiste</th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_hour" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}
+          </th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_anesth" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}
+          </th>
         {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Destination</th>
@@ -214,8 +222,12 @@
       </th>
       <th>Motif</th>
       {{if $show_hour_anesth_mvt}}
-        <th>Heure</th>
-        <th>Anesthésiste</th>
+        <th>
+          {{mb_colonne class="CAffectation" field="_hour" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
+        </th>
+        <th>
+          {{mb_colonne class="CAffectation" field="_anesth" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
+        </th>
       {{/if}}
       {{if "dmi"|module_active}}
         <th class="narrow">{{tr}}CDMI{{/tr}}</th>
@@ -293,8 +305,12 @@
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>Motif</th>
         {{if $show_hour_anesth_mvt}}
-          <th>Heure</th>
-          <th>Anesthésiste</th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_hour" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
+          </th>
+          <th>
+            {{mb_colonne class="CAffectation" field="_anesth" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
+          </th>
         {{/if}}
         {{if "dmi"|module_active}}
           <th class="narrow">{{tr}}CDMI{{/tr}}</th>
