@@ -113,6 +113,7 @@
 </head>
 
 <body class="
+{{if !$app->user_id}} login {{/if}}
 {{if @$app->user_prefs.accessibility_dyslexic == 1}} dyslexic {{/if}}
 {{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad' || $browser.useragent|stripos:'nexus 7' !== false}} touchscreen {{else}} desktop {{/if}}
 {{if $browser.name == 'ipad'}} ipad {{/if}}">
