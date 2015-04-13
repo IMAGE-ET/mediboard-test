@@ -66,7 +66,7 @@ class CChapitreMotif extends CMbObject {
     $where = array(
       "chapitre_id" => " = '$this->_id'",
     );
-
-    return $this->_ref_motifs = $motif->loadList($where);
+    $order = "code_diag";
+    return $this->_ref_motifs = $motif->loadList($where, $order);
   }
 }

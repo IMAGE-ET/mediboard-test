@@ -23,9 +23,18 @@ class CMotif extends CMbObject {
   public $code_diag;
   public $degre_min;
   public $degre_max;
-  
+  public $definition;
+  public $observations;
+  public $param_vitaux;
+  public $recommande;
+
   /** @var CChapitreMotif */
   public $_ref_chapitre;
+
+  /** @var CMotifQuestion */
+  public $_ref_questions;
+  /** @var CMotifQuestion */
+  public $_ref_questions_by_degre;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -37,11 +46,24 @@ class CMotif extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["chapitre_id"] = "ref class|CChapitreMotif notNull";
-    $props["nom"]         = "str notNull";
+    $props["nom"]         = "text notNull";
     $props["code_diag"]   = "num notNull";
     $props["degre_min"]   = "num notNull min|1 max|4";
     $props["degre_max"]   = "num notNull min|1 max|4";
+    $props["definition"]  = "text";
+    $props["observations"]= "text";
+    $props["param_vitaux"]= "text";
+    $props["recommande"]  = "text";
     return $props;
+  }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["questions"] = "CMotifQuestion motif_id";
+    return $backProps;
   }
 
   /**
@@ -63,5 +85,27 @@ class CMotif extends CMbObject {
    */
   function loadRefChapitre($cache = true){
     return $this->_ref_chapitre = $this->loadFwdRef("chapitre_id", $cache);
+  }
+
+  /**
+   * Chargement des questions du motif
+   *
+   * @return CMotifQuestion
+   */
+  function loadRefsQuestions(){
+    return $this->_ref_questions = $this->loadBackRefs("questions", 'degre ASC');
+  }
+
+  /**
+   * Chargement des questions du motif
+   *
+   * @return CMotifQuestion
+   */
+  function loadRefsQuestionsByDegre(){
+    $this->_ref_questions_by_degre = array();
+    foreach ($this->_ref_questions as $question) {
+      $this->_ref_questions_by_degre[$question->degre][] = $question;
+    }
+    return $this->_ref_questions_by_degre;
   }
 }

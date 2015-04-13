@@ -438,7 +438,41 @@ class CSetupdPurgences extends CSetup {
     $query = "ALTER TABLE `rpu`
                 ADD INDEX (`ide_responsable_id`);";
     $this->addQuery($query);
+    $this->makeRevision("0.52");
 
-    $this->mod_version = "0.52";
+    $query = "ALTER TABLE `motif_urgence`
+                ADD `definition` TEXT,
+                ADD `observations` TEXT,
+                ADD `param_vitaux` TEXT,
+                ADD `recommande` TEXT;";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `motif_question` (
+                `question_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `motif_id` INT (11) UNSIGNED NOT NULL,
+                `degre` TINYINT (4),
+                `nom` TEXT NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `motif_question`
+                ADD INDEX (`motif_id`);";
+    $this->addQuery($query);
+    $this->makeRevision("0.53");
+
+    $query = "CREATE TABLE `motif_reponse` (
+                `reponse_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `rpu_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `question_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `result` ENUM ('0','1') DEFAULT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `motif_reponse`
+                ADD INDEX (`rpu_id`),
+                ADD INDEX (`question_id`);";
+    $this->addQuery($query);
+    $this->addQuery($query);
+    $this->mod_version = "0.54";
   }  
 }

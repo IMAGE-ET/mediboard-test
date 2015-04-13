@@ -21,7 +21,7 @@ $motifs = $motif->loadList(null, "chapitre_id");
 $chapitre = new CChapitreMotif();
 
 /** @var CChapitreMotif[] $chapitres */
-$chapitres = $chapitre->loadList();
+$chapitres = $chapitre->loadList(null, "nom");
 
 foreach ($chapitres as $chap) {
   $chap->loadRefsMotifs();

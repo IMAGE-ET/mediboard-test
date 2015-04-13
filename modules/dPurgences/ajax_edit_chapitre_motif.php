@@ -12,15 +12,20 @@
 CCanDo::checkRead();
 $motif_id     = CValue::get("motif_id");
 $chapitre_id  = CValue::get("chapitre_id");
+$readonly     = CValue::get("readonly");
 
 $motif  = new CMotif();
 if ($motif_id) {
   $motif->load($motif_id);
   $motif->loadRefChapitre();
+  $motif->loadRefsQuestions();
+  if ($readonly) {
+    $motif->loadRefsQuestionsByDegre();
+  }
 }
 
 $chapitre = new CChapitreMotif();
-$chapitres = $chapitre->loadList();
+$chapitres = $chapitre->loadList(null, "nom");
 if ($chapitre_id) {
   $chapitre->load($chapitre_id);
   $chapitre->loadRefsMotifs();
@@ -34,5 +39,7 @@ $smarty->assign("motif_id"    , $motif_id);
 $smarty->assign("chapitre"    , $chapitre);
 $smarty->assign("chapitre_id" , $chapitre_id);
 $smarty->assign("chapitres"   , $chapitres);
+$smarty->assign("question"    , new CMotifQuestion());
+$smarty->assign("readonly"    , $readonly);
 
 $smarty->display("edit_chapitre_motif.tpl");
