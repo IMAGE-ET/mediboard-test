@@ -12,13 +12,11 @@
 
 {{if $nb_modeles_etiquettes}}
   <form name="download_etiq_{{$object->_class}}_{{$object->_id}}_{{$unique_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
-    <input type="hidden" name="m" value="dPhospi" />
-    <input type="hidden" name="a" value="print_etiquettes" />
+    <input type="hidden" name="m" value="hospi" />
+    <input type="hidden" name="raw" value="print_etiquettes" />
     <input type="hidden" name="object_class" value="{{$object->_class}}" />
     <input type="hidden" name="object_id" value="{{$object->_id}}" />
     <input type="hidden" name="modele_etiquette_id" />
-    <input type="hidden" name="suppressHeaders" value="1" />
-    <input type="hidden" name="dialog" value="1" />
   </form>
 {{/if}}
 
@@ -43,65 +41,34 @@
       var form = getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}');
       var url;
 
-      url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+      url = new Url("compteRendu", "ajax_modele_autocomplete");
       url.addParam("user_id", "{{$praticien->_id}}");
       url.addParam("function_id", "{{$praticien->function_id}}");
       url.addParam("object_class", '{{$object_class}}');
       url.addParam("object_id", '{{$object_id}}');
       url.autoComplete(form.keywords_modele, '', {
         minChars: 2,
-        afterUpdateElement: createDoc,
+        afterUpdateElement: Document.createDocAutocomplete.curry('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}'),
         dropdown: true,
         width: "250px"
       });
 
-      url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
+      url = new Url("compteRendu", "ajax_pack_autocomplete");
       url.addParam("user_id", "{{$praticien->_id}}");
       url.addParam("function_id", "{{$praticien->function_id}}");
       url.addParam("object_class", '{{$object_class}}');
       url.addParam("object_id", '{{$object_id}}');
       url.autoComplete(form.keywords_pack, '', {
         minChars: 2,
-        afterUpdateElement: createPack,
+        afterUpdateElement: Document.createPackAutocomplete.curry('{{$object_class}}', '{{$object_id}}', '{{$unique_id}}'),
         dropdown: true,
         width: "250px"
       });
 
       ModeleEtiquette.nb_printers  = {{$nb_printers|@json}};
-
-      function createDoc(input, selected) {
-        $V(input, '');
-        var id = selected.down(".id").innerHTML;
-        var object_class = null;
-
-        if (id == 0) {
-          object_class = '{{$object->_class}}';
-        }
-
-        if (selected.select(".fast_edit").length) {
-          Document.fastMode('{{$object_class}}', id, '{{$object_id}}', '{{$unique_id}}');
-        } else {
-          Document.create(id, '{{$object_id}}', null, object_class, null);
-        }
-      }
-
-      function createPack(input, selected) {
-        $V(input, '');
-        if (selected.select(".fast_edit").length) {
-          Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}', '{{$object_class}}', '{{$unique_id}}', selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
-        }
-        else if (selected.select(".merge_docs").length){
-          var form = getForm("unmergePack_{{$object->_guid}}");
-          $V(form.pack_id, selected.down(".id").innerHTML);
-          form.onsubmit();
-        }
-        else {
-          Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
-        }
-      }
     });
   
-    //Création via ModeleSelector
+    // Création via ModeleSelector
     modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id", "_fast_edit");
   </script>
   
@@ -150,7 +117,7 @@
              }
              $V(this, '', false);
              $V(this.form._fast_edit, '');
-             $V(this.form._modele_id, ''); "/>
+             $V(this.form._modele_id, '');"/>
   </form>
 {{/if}}
 

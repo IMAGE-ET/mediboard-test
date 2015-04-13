@@ -63,6 +63,10 @@ class CFile extends CDocumentItem implements IIndexableObject {
     wmf wpd wpg wps xlc xlm xls xlsb xlsm xlsx xlt xltm
     xltx xlw";
 
+  static $_files_types = array(
+    "excel", "image", "pdf", "text", "word"
+  );
+
   /**
    * @see parent::getSpec()
    */
@@ -1059,7 +1063,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
     if (strpos($this->file_type, "pdf") !== false) {
       $this->_file_type = "pdf";
     }
-    elseif (strpos($this->file_type, "image") !== false) {
+    elseif (strpos($this->file_type, "image") !== false && $this->file_type !== "image/fabricjs") {
       $this->_file_type = "image";
     }
     elseif (strpos($this->file_type, "text") !== false || strpos($this->file_type, "rtf") !== false) {

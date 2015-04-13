@@ -20,6 +20,9 @@
 <table class="tbl">
   <tr>
     <th colspan="{{$colspan}}">
+      <a class="button undo" style="float: left;" onclick="applyContext('{{$patient->_guid}}')">
+        Retour au contexte patient
+      </a>
       <h3><strong>Choix du contexte</strong></h3>
     </th>
   </tr>

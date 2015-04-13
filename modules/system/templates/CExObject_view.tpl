@@ -53,7 +53,7 @@
           {{mb_key object=$object}}
           <input type="hidden" name="_ex_class_id" value="{{$object->_ex_class_id}}" />
           <button class="trash" type="button"
-                  onclick="confirmDeletion(this.form, {typeName: 'le formulaire', objName: '{{$ex_class->name|JSAttribute}}'}, function() {
+                  onclick="confirmDeletion(this.form, {typeName: 'le formulaire', objName: '{{$ex_class->name|smarty:nodefaults|JSAttribute}}'}, function() {
                     if (window.loadAllDocs) {
                       window.loadAllDocs()
                     }

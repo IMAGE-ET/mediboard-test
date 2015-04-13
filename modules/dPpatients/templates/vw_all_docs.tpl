@@ -24,14 +24,12 @@
     $A(elts).each(function(elt) {
       var label = elt.up("label");
       if (elt.value == display) {
-        label.setStyle({"color": ""});
-        label.removeClassName("opacity-70");
+        label.removeClassName("opacity-30");
         label.addClassName("opacity-100");
       }
       else {
-        label.setStyle({"color": "#AAA"});
         label.removeClassName("opacity-100");
-        label.addClassName("opacity-70");
+        label.addClassName("opacity-30");
       }
     });
   };
@@ -61,14 +59,14 @@
           <option value="cat" {{if $tri == "cat"}}selected{{/if}}>Catégorie</option>
         </select>
         &nbsp; &nbsp;
-        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "icon"}}color: #AAA;{{/if}}"
-               class="{{if $display != "icon"}}opacity-70{{/if}}">
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;"
+               class="{{if $display != "icon"}}opacity-30{{/if}}">
           <input type="radio" name="display" value="icon" {{if $display == "icon"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf00a;
         </label>
         &nbsp; &nbsp;
-        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal; {{if $display != "list"}}color: #AAA;{{/if}}"
-               class="{{if $display != "list"}}opacity-70{{/if}}">
+        <label style="font-family: FontAwesome; font-size: 13pt; font-weight: normal;"
+               class="{{if $display != "list"}}opacity-30{{/if}}">
           <input type="radio" name="display" value="list" {{if $display == "list"}}checked{{/if}} onclick="toggleLabels(); loadAllDocs()"
                  style="display: none;" /> &#xf0ca;
         </label>

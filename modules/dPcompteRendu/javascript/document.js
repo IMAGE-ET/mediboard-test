@@ -263,6 +263,37 @@ Document = {
 
   showCancelled: function(button, table) {
     table.select("tr.doc_cancelled").invoke("toggle");
+  },
+
+  createDocAutocomplete: function(object_class, object_id, unique_id, input, selected) {
+    $V(input, '');
+    var id = selected.down(".id").innerHTML;
+    var call_object_class = null;
+
+    if (id == 0) {
+      call_object_class = object_class;
+    }
+
+    if (selected.select(".fast_edit").length) {
+      Document.fastMode(call_object_class, id, object_id, unique_id);
+    } else {
+      Document.create(id, object_id, null, call_object_class, null);
+    }
+  },
+
+  createPackAutocomplete: function(object_class, object_id, unique_id, input, selected) {
+    $V(input, '');
+    if (selected.select(".fast_edit").length) {
+      Document.fastModePack(selected.down(".id").innerHTML, object_id, object_class, unique_id, selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
+    }
+    else if (selected.select(".merge_docs").length){
+      var form = getForm("unmergePack_" + object_class + "-" + object_id);
+      $V(form.pack_id, selected.down(".id").innerHTML);
+      form.onsubmit();
+    }
+    else {
+      Document.createPack(selected.down(".id").innerHTML, object_id);
+    }
   }
 };
 

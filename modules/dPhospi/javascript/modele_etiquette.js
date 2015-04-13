@@ -18,19 +18,22 @@ ModeleEtiquette = {
     else {
       var form = getForm('download_etiq_'+object_class+'_'+object_id+'_'+uniq_id);
       if (modele_etiquette_id) {
-        Control.Modal.close();
         $V(form.modele_etiquette_id, modele_etiquette_id);
       }
       form.submit();
+      if (modele_etiquette_id) {
+        Control.Modal.close();
+      }
     }
   },
 
-  chooseModele: function(object_class, object_id, unique_id) {
+  chooseModele: function(object_class, object_id, unique_id, afterClose) {
     var url = new Url('hospi', 'ajax_choose_modele_etiquette');
     url.addParam('object_class', object_class);
     url.addParam('object_id', object_id);
     url.addParam("unique_id", unique_id);
     url.requestModal(400);
+    url.modalObject.observe("afterClose", Object.isFunction(afterClose) ? afterClose : Prototype.emptyFunction);
   },
 
   refreshList: function() {
@@ -45,7 +48,7 @@ ModeleEtiquette = {
     return onSubmitFormAjax(form, ModeleEtiquette.refreshList);
   },
 
-  onSubmitComplete: function (guid, properties) {
+  onSubmitComplete: function (guid) {
     Control.Modal.close();
     var id = guid.split('-')[1];
     ModeleEtiquette.edit(id);

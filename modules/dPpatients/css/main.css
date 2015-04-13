@@ -100,3 +100,7 @@ table.table_icon_fileview div.icon_fileview {
 table.table_icon_fileview:hover div.icon_fileview {
   box-shadow: 0 0 5px rgba(0, 0, 0, 1);
 }
+
+table.table_icon_fileview:hover {
+  background: #DDD;
+}

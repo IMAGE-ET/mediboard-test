@@ -20,8 +20,10 @@
     <tr>
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; border: 0 !important;" class="icon_fileview">
-          <img ondblclick="ExObject.display('{{$ex_object->_id}}', '{{$ex_object->_ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')"
-          src="images/pictures/medifile.png" />
+          <span ondblclick="ExObject.display('{{$ex_object->_id}}', '{{$ex_object->_ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')"
+            style="font-family: FontAwesome; font-size: 50pt;">
+            &#xf0f7;
+          </span>
         </div>
       </td>
     </tr>
@@ -36,7 +38,7 @@
   <td class="narrow">
     <span style="font-family: FontAwesome; font-size: 11pt;">&#xf0f7;</span>
   </td>
-  <td class="item_name">
+  <td class="item_name" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_class}}_{{$ex_class->_id}}-{{$ex_object->_id}}')">
     {{$ex_class->name}}
   </td>
   <td style="width: 25%">

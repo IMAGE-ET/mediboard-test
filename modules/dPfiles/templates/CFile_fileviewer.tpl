@@ -19,8 +19,18 @@
       <td style="text-align: center; height: 92px;">
         <div style="width: 64px; height: 92px; margin: auto; cursor: pointer;" class="icon_fileview"
              ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
-          <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
-               style="background: white; max-width: 64px; max-height: 92px;" />
+          {{if in_array($file->_file_type, "CFile"|static:"_files_types")}}
+            <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
+                 style="background: white; max-width: 64px; max-height: 92px;" />
+          {{else}}
+            <span style="font-family: FontAwesome; font-size: 50pt;">
+              {{if $file->file_type == "image/fabricjs"}}
+                &#xf1fc;
+              {{else}}
+                &#xf016;
+              {{/if}}
+            </span>
+          {{/if}}
         </div>
       </td>
     </tr>
@@ -37,7 +47,9 @@
 <tr>
   <td class="narrow">
     <span style="font-family: FontAwesome; font-size: 11pt;">
-      {{if $file->_file_type == "pdf"}}
+      {{if $file->file_type == "image/fabricjs"}}
+        &#xf1fc;
+      {{elseif $file->_file_type == "pdf"}}
         &#xf1c1;
       {{elseif $file->_file_type == "image"}}
         &#xf1c5;
