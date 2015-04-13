@@ -102,7 +102,7 @@ class CEvenementSSR extends CMbObject {
     $props["annule"]        = "bool default|0";
     $props["remarque"]      = "str";
     $props["seance_collective_id"] = "ref class|CEvenementSSR";
-    $props["type_seance"]   = "enum list|dediee|non_dediee|collective";
+    $props["type_seance"]   = "enum list|dediee|non_dediee|collective default|dediee";
     $props["nb_patient_seance"] = "num";
 
     $props["_traite"]       = "bool";
