@@ -30,7 +30,11 @@
   <tr>
     <td class="text {{if $curr_sejour->sortie_reelle}}hatching{{/if}}">
       {{if $curr_sejour->_ref_curr_affectation->_id}}
-        {{$curr_sejour->_ref_curr_affectation->_ref_lit}}
+        {{if $curr_sejour->_ref_curr_affectation->_ref_lit && $curr_sejour->_ref_curr_affectation->_ref_lit->_id}}
+          {{$curr_sejour->_ref_curr_affectation->_ref_lit}}
+        {{else}}
+          {{$curr_sejour->_ref_curr_affectation->_ref_service}}
+        {{/if}}
       {{else}}
         Non placé
       {{/if}}
@@ -42,6 +46,11 @@
     
     <td {{if $date == $curr_sejour->sortie|iso_date}}style="background-color: #afa"{{/if}}>
       {{$curr_sejour->sortie|date_format:"%d/%m %Hh%M"}}
+      {{if $curr_sejour->confirme}}
+        <span title="Sortie autorisée">
+           <img src="images/icons/tick.png" alt="Sortie autorisée"/>
+        </span>
+      {{/if}}
     </td>
     <td class="text">
       <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}">
