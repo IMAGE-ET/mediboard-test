@@ -97,7 +97,9 @@
   <input type="hidden" name="date" />
 </form>
 
-<div style="height: 100%; overflow-y: auto;">
+{{mb_include module=soins template=inc_patient_banner patient=$sejour->_ref_patient}}
+
+<div style="height: 85%; overflow-y: auto;">
   <form name="edit_prestations" method="post" action="?" onsubmit="return onSubmitLiaisons(this);">
     <input type="hidden" name="m" value="hospi"/>
     <input type="hidden" name="dosql" value="do_items_liaisons_aed" />

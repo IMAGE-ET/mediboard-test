@@ -32,6 +32,23 @@ foreach ($prestations_j as $_prestation) {
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+$sejour->loadRefPrescriptionSejour();
+$sejour->loadRefCurrAffectation();
+$sejour->loadRefsOperations();
+
+$dossier_medical_sejour = $sejour->loadRefDossierMedical();
+$dossier_medical_sejour->loadRefsAntecedents();
+
+$patient = $sejour->loadRefPatient();
+$patient->loadRefPhotoIdentite();
+$patient->loadRefLatestConstantes();
+
+$dossier_medical = $patient->loadRefDossierMedical();
+$dossier_medical->loadRefsAntecedents();
+$dossier_medical->loadRefsAllergies();
+$dossier_medical->countAntecedents();
+$dossier_medical->countAllergies();
+
 //droits d'édition
 $editRights = CModule::getCanDo("dPhospi")->edit;
 
