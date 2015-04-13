@@ -279,6 +279,19 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
                 $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
                 break;
 
+              case 'domain':
+                // Master domain
+                $group_domain = new CGroupDomain();
+                $group_domain->group_id     = $group->_id;
+                $group_domain->master       = 1;
+                $group_domain->object_class = "CSejour";
+                $group_domain->loadMatchingObject();
+
+                $domain = $group_domain->loadRefDomain();
+
+                $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
+                break;
+
               default:
                 $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
                 break;
