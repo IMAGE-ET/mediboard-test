@@ -21,6 +21,7 @@ $locales['CCSRF-form_corrupted'] = 'Le formulaire est corrompu';
 $locales['CCSRF-no_token'] = 'Aucun jeton soumis';
 $locales['CCSRF-token_does_not_exist'] = 'Le jeton soumis n\'existe pas';
 $locales['CCSRF-token_outdated'] = 'Le jeton soumis a expiré';
+$locales['CErrorLog|pl'] = 'Journaux d\'erreur';
 $locales['CMbFieldSpec.adeli'] = 'Numéro Adeli';
 $locales['CMbFieldSpec.alphaAndNum'] = 'Alphanumérique';
 $locales['CMbFieldSpec.autocomplete'] = 'Autocompleté';
