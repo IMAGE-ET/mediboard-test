@@ -213,7 +213,7 @@ if (CModule::getActive("dPprescription")) {
         $line->loadRefLogSignaturePrat();
         $line->loadRefsPrises();
         if (CAppUI::conf("dPprescription CPrescription show_initiales_pharma", $group->_guid)) {
-          $line->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+          $line->loadRefUserValidationPharma();
         }
         $line->calculVariations();
 
@@ -289,7 +289,7 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->loadRefsVariantes();
           $_line_med->countPlanifications();
           if ($show_initiales_pharma) {
-            $_line_med->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+            $_line_med->loadRefUserValidationPharma();
           }
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
@@ -326,7 +326,7 @@ if (CModule::getActive("dPprescription")) {
             $_prescription_line_mix->loadRefOperation();
           }
           if ($show_initiales_pharma) {
-            $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+            $_prescription_line_mix->loadRefUserValidationPharma();
           }
           $_prescription_line_mix->updateAlerteAntibio();
           $_prescription_line_mix->loadActiveDates();
@@ -381,7 +381,7 @@ if (CModule::getActive("dPprescription")) {
         foreach ($prescription->_ref_prescription_lines as $_line_med) {
           $_line_med->loadRefLogSignee();
           if ($show_initiales_pharma) {
-            $_line_med->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+            $_line_med->loadRefUserValidationPharma();
           }
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
@@ -415,7 +415,7 @@ if (CModule::getActive("dPprescription")) {
             $_prescription_line_mix->loadRefOperation();
           }
           if ($show_initiales_pharma) {
-            $_prescription_line_mix->loadRefLogValidationPharma()->loadRefUser()->loadRefMediuser();
+            $_prescription_line_mix->loadRefUserValidationPharma();
           }
           $_prescription_line_mix->updateAlerteAntibio();
           $_prescription_line_mix->loadActiveDates();
