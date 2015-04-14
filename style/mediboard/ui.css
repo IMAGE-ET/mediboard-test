@@ -449,6 +449,20 @@ ul.control_tabs_vertical li a.special.active {
   color: #000000;
 }
 
+/** Cancelled **/
+ul.control_tabs li a.cancelled,
+ul.control_tabs_vertical li a.cancelled,
+ul.control_tabs li a.cancelled:hover,
+ul.control_tabs_vertical li a.cancelled:hover {
+  background-color: #f88;
+}
+
+ul.control_tabs li a.cancelled.active,
+ul.control_tabs_vertical li a.cancelled.active {
+  background-color: #ffc3c3;
+  color: #000000;
+}
+
 ul.control_tabs .separator, 
 ul.control_tabs_vertical .separator {
   padding: 0 10px; 
