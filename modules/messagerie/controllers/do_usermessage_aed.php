@@ -14,6 +14,7 @@ $del = CValue::post("del", 0);
 $send_it = CValue::post("_send");
 $archive_mine = CValue::post("_archive");
 $read_only = CValue::post("_readonly");
+$callback = CValue::post('callback');
 
 $usermessage = new CUserMessage();
 
@@ -27,7 +28,6 @@ if ($del && $usermessage->_id) {
 }
 $usermessage->bind($_POST);
 if ($msg = $usermessage->store()) {
-  mbLog($msg);
   CAppUI::stepAjax($msg, UI_MSG_ERROR);
 }
 
@@ -54,7 +54,6 @@ foreach ($destinataires as $_dest) {
   }
 }
 
-
 foreach ($dests as $_dest) {
   $destinataire = new CUserMessageDest();
   $destinataire->user_message_id = $usermessage->_id;
@@ -67,4 +66,20 @@ foreach ($dests as $_dest) {
   if ($msg = $destinataire->store()) {
     CAppUI::stepAjax($msg, UI_MSG_ERROR);
   }
+}
+
+$msg = 'CUserMessage-msg-create';
+if ($send_it) {
+  $msg = 'CUserMessage-msg-sent';
+}
+CAppUI::setMsg($msg, UI_MSG_OK);
+
+$smarty = new CSmartyDP;
+$messages = CAppUI::getMsg();
+$smarty->assign('messages', $messages);
+
+$smarty->display('inc_callback_modal.tpl');
+
+if($callback) {
+  CAppUI::callbackAjax($callback);
 }

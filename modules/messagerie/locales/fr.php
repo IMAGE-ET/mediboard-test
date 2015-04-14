@@ -303,6 +303,7 @@ $locales['CUserMessage-msg-create'] = 'Message créé';
 $locales['CUserMessage-msg-delete'] = 'Message supprimé';
 $locales['CUserMessage-msg-modify'] = 'Message modifié';
 $locales['CUserMessage-msg-read'] = 'Message lu';
+$locales['CUserMessage-msg-sent'] = 'Message envoyé';
 $locales['CUserMessage-sentbox'] = 'Messages envoyés';
 $locales['CUserMessage-source'] = 'Corps';
 $locales['CUserMessage-source-court'] = 'Corps';

@@ -38,11 +38,14 @@ var UserMessage = {
     url.requestModal(900, 500, {onClose: UserMessage.refreshListCallback.curry()});
   },
   
-  create: function(to_id, in_reply_to, input_mode, answer_to_all) {
+  create: function(to_id, in_reply_to, subject, input_mode, answer_to_all) {
     var url = new Url("messagerie", "ajax_edit_usermessage");
     url.addParam("usermessage_id", 0);
     if (to_id) {
       url.addParam("to_id", to_id);
+    }
+    if (subject) {
+      url.addParam('subject', subject);
     }
     if (in_reply_to) {
       url.addParam("in_reply_to", in_reply_to);
@@ -56,6 +59,18 @@ var UserMessage = {
     else {
       url.requestModal(900, 420, {onClose: UserMessage.refreshListCallback.curry()});
     }
+  },
+
+  createWithSubject: function(to_id, subject) {
+    var url = new Url("messagerie", "ajax_edit_usermessage");
+    url.addParam("usermessage_id", 0);
+    if (to_id) {
+      url.addParam("to_id", to_id);
+    }
+    if (subject) {
+      url.addParam('subject', subject);
+    }
+    url.modal({width: 900, height: 420});
   },
 
   refresh: function(mode, start) {

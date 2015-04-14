@@ -189,7 +189,7 @@
       {{elseif $usermessage->to == $app->user_id}}
       <tr>
         <td colspan="2" style="text-align: center;">
-          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create({{$usermessage->_ref_user_from->_id}}, 'Re: {{$usermessage->_clean_subject}}'); ">
+          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.createWithSubject({{$usermessage->_ref_user_from->_id}}, 'Re: {{$usermessage->_clean_subject}}'); ">
             <img src="images/icons/usermessage.png" alt="message"/>
             {{tr}}CUserMessage.answer{{/tr}}
           </button>

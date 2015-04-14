@@ -60,13 +60,6 @@
     $('dest_'+id).remove();
   };
 
-  sendMessage = function(oform) {
-    $V(oform._send, 1);
-    oform.submit();
-    window.parent.Control.Modal.close();
-    UserMessage.refreshListCallback();
-  };
-
 </script>
 
 <form method="post" action="?" name="edit_usermessage" onsubmit="return onSubmitFormAjax(this);">
@@ -78,6 +71,7 @@
   <input type="hidden" name="_readonly" value="{{if $usermessage->_can_edit}}0{{else}}1{{/if}}" />
   <input type="hidden" name="usermessage_id" value="{{$usermessage->_id}}" />
   <input type="hidden" name="in_reply_to" value="{{$usermessage->in_reply_to}}" />
+  <input type="hidden" name="callback" value="callbackModalMessagerie" />
 
   <table class="main">
     <tr>
@@ -131,7 +125,7 @@
     <tr>
       <td colspan="2" class="button">
         {{if $usermessage->_can_edit}}
-          <button type="button" onclick="sendMessage(this.form);">
+          <button type="button" onclick="$V(this.form._send, 1); this.form.onsubmit();">
             <i class="msgicon fa fa-send"></i>
             {{tr}}Send{{/tr}}
           </button>

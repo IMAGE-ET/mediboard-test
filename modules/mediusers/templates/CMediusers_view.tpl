@@ -87,7 +87,7 @@
           </button>
         {{/if}}
         {{if "messagerie"|module_active && $modules.messagerie->_can->edit}}
-          <a class="action" href="#nothing" onclick="UserMessage.create('{{$mediuser->_id}}')">
+          <a class="action" href="#nothing" onclick="UserMessage.createWithSubject('{{$mediuser->_id}}', null)">
             <button type="button">
               <img src="images/icons/usermessage.png" title="Envoyer un message" /> Message
             </button>
