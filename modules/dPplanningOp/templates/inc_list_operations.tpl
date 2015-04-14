@@ -181,6 +181,7 @@
             </strong>
           </a>
           {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
+          <br/>{{$_operation->_ref_sejour->type|truncate:1:""|capitalize}}
         </td>
         <td class="text top">
           <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
@@ -265,7 +266,7 @@
             onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
         {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
-        
+        <br/>{{$_operation->_ref_sejour->type|truncate:1:""|capitalize}}
       </td>
       <td class="text top">
         <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">
