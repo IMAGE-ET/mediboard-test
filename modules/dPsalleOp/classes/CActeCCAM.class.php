@@ -515,7 +515,7 @@ class CActeCCAM extends CActe {
    * @return null|string
    */
   function checkExclusiveModifiers() {
-    $this->getLinkedActes(1, 1, 1);
+    $this->getLinkedActes(true, true, true, true);
 
     $exclusive_modifiers = array('F', 'U', 'P', 'S');
 
@@ -694,10 +694,11 @@ class CActeCCAM extends CActe {
    * @param bool $same_executant  Seulement les actes du même exécutant si vrai
    * @param bool $only_facturable Seulement les actes facturables si vrai
    * @param bool $same_activite   Seulement les actes ayant la même activité (4 ou (1,2,3,5))
+   * @param bool $same_day        Seulement les actes fait le même jour
    *
    * @return CActeCCAM[]
    */
-  function getLinkedActes($same_executant = true, $only_facturable = true, $same_activite = false) {
+  function getLinkedActes($same_executant = true, $only_facturable = true, $same_activite = false, $same_day = false) {
     $acte = new CActeCCAM();
     
     $where = array();
@@ -717,6 +718,11 @@ class CActeCCAM extends CActe {
       else {
         $where['code_activite'] = " IN(1, 2, 3, 5)";
       }
+    }
+    if ($same_day) {
+      $begin = CMbDT::format($this->execution, '%Y-%m-%d 00:00:00');
+      $end = CMbDT::format($this->execution, '%Y-%m-%d 23:59:59');
+      $where['execution'] = " BETWEEN '$begin' AND '$end'";
     }
 
     $this->_linked_actes = $acte->loadList($where);
