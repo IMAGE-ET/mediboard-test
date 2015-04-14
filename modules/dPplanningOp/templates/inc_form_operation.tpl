@@ -85,7 +85,7 @@ refreshFunction = function(chir_id) {
 {{mb_key object=$op}}
 
 {{if $dialog}}
-  {{if $op->plageop_id}}
+  {{if $op->plageop_id || !$modurgence}}
     <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_planning&dialog=1" />
   {{else}}
     <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_urgence&dialog=1" />
