@@ -469,7 +469,7 @@ class CCodageCCAM extends CMbObject {
    * @return integer
    */
   public static function countExclusiveModifiers(&$act) {
-    $act->getLinkedActes(1, 1, 1);
+    $act->getLinkedActes(true, true, true, true);
     $exclusive_modifiers = array('F', 'U', 'P', 'S');
     $count_exclusive_modifiers = count(array_intersect($act->_modificateurs, $exclusive_modifiers));
 
@@ -490,7 +490,7 @@ class CCodageCCAM extends CMbObject {
    * @return boolean
    */
   public static function isModifierchecked($mod, &$act) {
-    $act->getLinkedActes(false);
+    $act->getLinkedActes(true, true, true, true);
 
     $modifier = false;
     foreach ($act->_linked_actes as $_linked_act) {
