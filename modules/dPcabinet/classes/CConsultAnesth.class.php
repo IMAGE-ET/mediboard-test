@@ -79,6 +79,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   public $result_ecg;
   public $result_rp;
   public $result_autre;
+  public $result_com;
 
   // Check sur les codes cim10 de préfixe pour non-fumeur:
   //  F17 - T652 - Z720 - Z864 - Z587
@@ -187,6 +188,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $props["result_ecg"]       = "text helped";
     $props["result_rp"]        = "text helped";
     $props["result_autre"]     = "text helped";
+    $props["result_com"]       = "text helped";
     $props["premedication"]    = "text helped";
     $props["prepa_preop"]      = "text helped";
     $props["date_analyse"]     = "date show|0";

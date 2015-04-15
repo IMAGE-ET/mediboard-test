@@ -233,6 +233,12 @@
                 {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
               </td>
             </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="result_com"}}</th>
+              <td colspan="3">
+                {{mb_field object=$consult_anesth field="result_com" tabindex="117" onchange="submitForm(this.form)"}}
+              </td>
+            </tr>
           </table>
         </fieldset>
       {{/if}}

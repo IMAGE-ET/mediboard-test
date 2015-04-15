@@ -2270,6 +2270,11 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
                 ADD `motif_annulation` ENUM ('not_arrived','by_patient')";
     $this->addQuery($query);
-    $this->mod_version = '2.54';
+    $this->makeRevision("2.54");
+
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `result_com` TEXT;";
+    $this->addQuery($query);
+    $this->mod_version = '2.55';
   }
 }
