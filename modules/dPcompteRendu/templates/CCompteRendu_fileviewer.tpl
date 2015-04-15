@@ -19,7 +19,7 @@
 
   <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$doc->_guid}}')">
     <tr>
-      <td style="text-align: center; height: 120px;">
+      <td style="text-align: center; height: 120px; vertical-align: middle;">
         <div class="icon_fileview" ondblclick="popFile('{{$doc->_class}}', '{{$doc->_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
           <img src="{{$src}}" style="background: white; max-width: 64px; max-height: 92px;" />
         </div>
