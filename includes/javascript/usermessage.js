@@ -25,7 +25,7 @@ var UserMessage = {
     });
   },
   
-  create: function(to_id, in_reply_to) {
+  create: function(to_id, in_reply_to, subject) {
     var url = new Url("messagerie", "ajax_edit_usermessage");
     url.addParam("usermessage_id", 0);
     if (to_id) {
@@ -33,6 +33,9 @@ var UserMessage = {
     }
     if (in_reply_to) {
       url.addParam("in_reply_to", in_reply_to);
+    }
+    if (subject) {
+      url.addParam('subject', subject);
     }
     url.modal({width: 900, height: 420});
   },
