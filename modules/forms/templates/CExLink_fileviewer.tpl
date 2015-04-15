@@ -18,8 +18,8 @@
   {{mb_script module=patients script=fileviewer ajax=true}}
   <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_class}}_{{$ex_class->_id}}-{{$ex_object->_id}}')">
     <tr>
-      <td style="text-align: center; height: 92px;">
-        <div style="width: 64px; height: 92px; margin: auto; border: 0 !important;" class="icon_fileview">
+      <td style="text-align: center; height: 120px;">
+        <div class="icon_fileview">
           <span ondblclick="ExObject.display('{{$ex_object->_id}}', '{{$ex_object->_ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')"
             style="font-family: FontAwesome; font-size: 50pt;">
             &#xf0f7;

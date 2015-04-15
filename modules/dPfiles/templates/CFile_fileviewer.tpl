@@ -16,9 +16,8 @@
 
   <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')">
     <tr>
-      <td style="text-align: center; height: 92px;">
-        <div style="width: 64px; height: 92px; margin: auto; cursor: pointer;" class="icon_fileview"
-             ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
+      <td style="text-align: center; height: 120px; vertical-align: middle;">
+        <div class="icon_fileview" ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
           {{if in_array($file->_file_type, "CFile"|static:"_files_types")}}
             <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
                  style="background: white; max-width: 64px; max-height: 92px;" />

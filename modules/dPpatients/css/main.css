@@ -95,6 +95,11 @@ table.table_icon_fileview {
 
 table.table_icon_fileview div.icon_fileview {
   border: 1px solid black;
+  width: 64px;
+  height: 92px;
+  cursor: pointer;
+  background: white;
+  margin: auto;
 }
 
 table.table_icon_fileview:hover div.icon_fileview {
