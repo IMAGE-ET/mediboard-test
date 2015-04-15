@@ -302,5 +302,23 @@ PMSI = {
   importBaseCim : function () {
     var url = new Url('pmsi', 'ajax_import_cim_pmsi');
     url.requestUpdate("result-import");
+  },
+
+  submitDossier: function(sejour_id, champ, valeur) {
+    var form = getForm('sejour-'+sejour_id+'-'+champ+'_pmsi');
+    if (champ == 'reception_sortie') {
+      $V(form.reception_sortie, valeur);
+    }
+    else {
+      $V(form.completion_sortie, valeur);
+    }
+    return onSubmitFormAjax(form, {
+      onComplete: function() {
+        var url = new Url("pmsi", "ajax_recept_dossier_line");
+        url.addParam("sejour_id", sejour_id);
+        url.addParam("field"    , champ);
+        url.requestUpdate('CSejour-'+sejour_id+'-'+champ);
+      }
+    });
   }
 };

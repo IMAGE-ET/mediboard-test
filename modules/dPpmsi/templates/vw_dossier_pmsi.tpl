@@ -53,6 +53,19 @@
   };
 </script>
 
+{{if $sejour->_id && 'dPpmsi display see_recept_dossier'|conf:"CGroups-$g"}}
+  <form name="sejour-{{$sejour->_id}}-reception_sortie_pmsi" action="?" method="post" style="display: none">
+    {{mb_class object=$sejour}}
+    {{mb_key   object=$sejour}}
+    <input type="hidden" name="reception_sortie" value=""/>
+  </form>
+  <form name="sejour-{{$sejour->_id}}-completion_sortie_pmsi" action="?" method="post" style="display: none">
+    {{mb_class object=$sejour}}
+    {{mb_key   object=$sejour}}
+    <input type="hidden" name="completion_sortie" value=""/>
+  </form>
+{{/if}}
+
 <form name="dossier_pmsi_selector" action="?" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
@@ -62,7 +75,7 @@
     </tr>
     <tr>
       <th class="category halfPane" colspan="2">{{tr}}PMSI.search fields{{/tr}}</th>
-      <th class="category halfPane">{{tr}}PMSI.CSejour disponibles{{/tr}}</th>
+      <th class="category halfPane" colspan="2">{{tr}}PMSI.CSejour disponibles{{/tr}}</th>
     </tr>
     <tr>
       <th>
@@ -91,13 +104,18 @@
         {{/if}}
         <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
       </td>
+      <td class="button" id="{{$sejour->_guid}}-reception_sortie">
+        {{if $sejour->_id && 'dPpmsi display see_recept_dossier'|conf:"CGroups-$g"}}
+          {{mb_include module=pmsi template=inc_sejour_dossier_completion field='reception_sortie'}}
+        {{/if}}
+      </td>
     </tr>
     <tr>
       <th>
         <label for="NDA" title="Choisissez directement un numero de dossier">{{tr}}NDA{{/tr}}</label>
       </th>
       <td>
-        <input type="text" name="NDA" value="" />
+        <input type="text" name="NDA" class="barcode" value="" />
         <button type="submit" class="search notext compact">{{tr}}Search{{/tr}}</button>
       </td>
       <td>
@@ -117,6 +135,11 @@
             <span>{{tr}}CSejour.none{{/tr}}</span>
           {{/foreach}}
         </div>
+      </td>
+      <td class="button" id="{{$sejour->_guid}}-completion_sortie">
+        {{if $sejour->_id && 'dPpmsi display see_recept_dossier'|conf:"CGroups-$g"}}
+          {{mb_include module=pmsi template=inc_sejour_dossier_completion field='completion_sortie'}}
+        {{/if}}
       </td>
     </tr>
     <tr>

@@ -56,8 +56,8 @@
       {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>
     <th style="width:15%;">{{tr}}CSejour{{/tr}}</th>
-    <th>{{mb_label class=CSejour field=reception_sortie}}</th>
-    <th>{{mb_label class=CSejour field=completion_sortie}}</th>
+    <th>{{mb_title class=CSejour field=reception_sortie}}</th>
+    <th>{{mb_title class=CSejour field=completion_sortie}}</th>
   </tr>
 
   {{foreach from=$sejours item=_sejour}}

@@ -11,16 +11,24 @@
 
 CCanDo::checkRead();
 $sejour_id = CValue::get("sejour_id");
+$field     = CValue::get("field");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-
-$sejour->loadRefPatient();
-$sejour->loadRefPraticien();
-$sejour->loadNDA();
+if (!$field) {
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
+  $sejour->loadNDA();
+}
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("_sejour" , $sejour);
-
-$smarty->display("reception_dossiers/inc_recept_dossier_line.tpl");
+if (!$field) {
+  $smarty->assign("_sejour" , $sejour);
+  $smarty->display("reception_dossiers/inc_recept_dossier_line.tpl");
+}
+else {
+  $smarty->assign("field" , $field);
+  $smarty->assign("sejour" , $sejour);
+  $smarty->display("inc_sejour_dossier_completion.tpl");
+}
