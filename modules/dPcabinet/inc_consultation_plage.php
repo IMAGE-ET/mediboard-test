@@ -68,6 +68,8 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->loadRefPatient();
   $consultation->loadRefCategorie();
   $consultation->countDocItems();
+  $consultation->_view = "Consult. de ".$consultation->_ref_patient->_view;
+  $consultation->_view .= " (".CMbDT::format($plageSel->date, "%d/%m/%Y").")";
   //check 3333tel
   if (CModule::getActive("3333tel")) {
     C3333TelTools::checkConsults($consultation, $plageSel->_ref_chir->function_id);

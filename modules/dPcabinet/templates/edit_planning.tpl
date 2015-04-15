@@ -296,6 +296,7 @@
   <input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
   <input type="hidden" name="consultation_ids" value="" />
   <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
+  <input type="hidden" name="motif_annulation" value="{{$consult->motif_annulation}}" />
   <input type="hidden" name="_operation_id" value="" />
   {{mb_field object=$consult field=sejour_id hidden=1}}
   {{mb_field object=$consult field=element_prescription_id hidden=1}}
@@ -335,7 +336,10 @@
     </tr>
     {{if $consult->annule == 1}}
       <tr>
-        <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
+        <th class="category cancelled" colspan="3">
+          {{tr}}CConsultation-annule{{/tr}}
+          {{if $consult->motif_annulation}}({{mb_value object=$consult field=motif_annulation}}){{/if}}
+        </th>
       </tr>
     {{/if}}
 

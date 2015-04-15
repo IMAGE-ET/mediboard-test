@@ -78,6 +78,15 @@
     </td>
   </tr>
   {{/if}}
+
+  {{if $object->annule}}
+    <tr>
+      <td>
+        <strong>{{mb_title object=$object field=motif_annulation}}</strong>
+        <i>{{mb_value object=$object field=motif_annulation}}</i>
+      </td>
+    </tr>
+  {{/if}}
 </table>
 
 <table class="tbl">

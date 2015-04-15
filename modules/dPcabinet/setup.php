@@ -2265,6 +2265,11 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet`
                 ADD INDEX (`request_date`);";
     $this->addQuery($query);
-    $this->mod_version = '2.53';
+    $this->makeRevision("2.53");
+
+    $query = "ALTER TABLE `consultation`
+                ADD `motif_annulation` ENUM ('not_arrived','by_patient')";
+    $this->addQuery($query);
+    $this->mod_version = '2.54';
   }
 }

@@ -48,9 +48,7 @@ undoCancellation = function(oForm) {
 };
 
 cancelRdv = function(oForm) {
-  if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {
-    oForm.submit()
-  }
+  Modal.open('form-motif_annulation-'+oForm.consultation_id.value);
 };
 
 goToDate = function (oForm, date) {

@@ -40,6 +40,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $taux_tva;
   public $chrono;
   public $annule;
+  public $motif_annulation;
 
   public $patient_date_reglement;
   public $tiers_date_reglement;
@@ -277,6 +278,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["du_tva"]            = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $props["annule"]            = "bool show|0 default|0 notNull";
+    $props["motif_annulation"]  = "enum list|not_arrived|by_patient default|not_arrived";
     $props["_etat"]             = "str";
 
     $props["rques"]             = "text helped seekable";
@@ -1061,6 +1063,10 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
           }
         }
       }
+    }
+
+    if ($this->fieldModified("annule", "0") || ($this->annule == 0 && $this->motif_annulation)) {
+      $this->motif_annulation = "";
     }
 
     // Standard store

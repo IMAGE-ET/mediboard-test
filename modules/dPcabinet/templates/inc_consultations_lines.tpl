@@ -131,13 +131,37 @@
         <input type="hidden" name="arrivee" value="" />
       </form>
 
-      <form name="cancelFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
-        <input type="hidden" name="m" value="dPcabinet" />
-        <input type="hidden" name="dosql" value="do_consultation_aed" />
-        {{mb_key object=$_consult}}
-        <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
-        <input type="hidden" name="annule" value="1" />
-      </form>
+      <div id="form-motif_annulation-{{$_consult->_id}}" style="display: none">
+        <form name="cancelFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post" onsubmit="">
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="dosql" value="do_consultation_aed" />
+          {{mb_key object=$_consult}}
+          <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
+          <input type="hidden" name="annule" value="1" />
+          <table class="tbl main">
+            <tr>
+              <th colspan="2" class="title">
+                {{$_consult->_view}}
+                <button type="button" class="cancel notext" onclick="Control.Modal.close();" style="float:right;">{{tr}}Close{{/tr}}</button>
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2" class="text">
+                <div class="small-warning">{{tr}}CConsultation-confirm-cancel-1{{/tr}}</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: right"><strong>{{mb_title object=$_consult field=motif_annulation}}</strong></td>
+              <td>{{mb_field object=$_consult field=motif_annulation typeEnum="radio" separator="<br/>"}}</td>
+            </tr>
+            <tr>
+              <td colspan="4" class="button">
+                <button type="button" class="tick" onclick="this.form.submit();" id="submit_cancelFrm{{$_consult->_id}}">{{tr}}Validate{{/tr}}</button>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
 
       <a class="action" href="#" onclick="Consultation.editRDVModal('{{$_consult->_id}}')">
         <img src="images/icons/planning.png" title="Modifier le rendez-vous" />
