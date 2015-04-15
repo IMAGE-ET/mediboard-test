@@ -262,6 +262,8 @@ class CMbObject extends CStoredObject {
    * @return int
    */
   function countDocs() {
+    $this->_nb_cancelled_docs = $this->countBackRefs("documents", array("annule" => "= '1'"));
+    unset($this->_count["documents"]);
     return $this->_nb_docs = $this->countBackRefs("documents");
   }
   
@@ -270,7 +272,9 @@ class CMbObject extends CStoredObject {
    *
    * @return int
    */
-  function countFiles(){
+  function countFiles() {
+    $this->_nb_cancelled_files = $this->countBackRefs("files", array("annule" => "= '1'"));
+    unset($this->_count["files"]);
     return $this->_nb_files = $this->countBackRefs("files");
   }
   
