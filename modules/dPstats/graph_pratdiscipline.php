@@ -131,6 +131,8 @@ function graphPraticienDiscipline(
         if ($tick[1] == $r["mois"]) {
           $serie['data'][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
+
+          $total += $r['total'];
           $f = false;
         }
       }
