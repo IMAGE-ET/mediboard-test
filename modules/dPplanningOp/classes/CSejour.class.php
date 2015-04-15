@@ -3829,6 +3829,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $datetime                                 = CMbDT::format($_obs->date, CAppUI::conf('datetime'));
         $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
       }
+      ksort($observations);
     }
     $template->addListProperty("Sejour - Observations", $observations);
 
