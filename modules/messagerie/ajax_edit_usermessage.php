@@ -18,6 +18,7 @@ $to_id = CValue::get("to_id");
 $in_reply_to = CValue::get("in_reply_to");
 $message_id = CValue::getOrSession("usermessage_id");
 $dest_message = CValue::get("usermessage_dest_id");
+$subject = utf8_decode(CValue::get('subject'));
 
 // classic case
 $usermessage = new CUserMessage();
@@ -48,6 +49,9 @@ foreach ($destinataires as $_dest) {
 
 // last check
 if (!$usermessage->_id) {
+  if ($subject) {
+    $usermessage->subject = $subject;
+  }
   // in reply to
   if ($in_reply_to) {
     $temp_message = new CUserMessage();
