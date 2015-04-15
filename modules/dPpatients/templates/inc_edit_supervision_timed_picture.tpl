@@ -37,6 +37,11 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$picture field=in_doc_template}}</th>
+      <td>{{mb_field object=$picture field=in_doc_template typeEnum=checkbox}}</td>
+    </tr>
+
+    <tr>
       <th>{{mb_label object=$picture field=disabled}}</th>
       <td>{{mb_field object=$picture field=disabled typeEnum=checkbox}}</td>
     </tr>

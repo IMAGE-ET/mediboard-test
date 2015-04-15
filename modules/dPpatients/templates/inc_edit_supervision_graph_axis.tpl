@@ -42,10 +42,14 @@ Main.add(function(){
     </tr>
     <tr>
       <th>{{mb_label object=$axis field=show_points}}</th>
-      <td>{{mb_field object=$axis field=show_points}}</td>
+      <td>{{mb_field object=$axis field=show_points typeEnum=checkbox}}</td>
       
       <th>{{mb_label object=$axis field=symbol}}</th>
       <td>{{mb_field object=$axis field=symbol}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$axis field=in_doc_template}}</th>
+      <td colspan="3">{{mb_field object=$axis field=in_doc_template typeEnum=checkbox}}</td>
     </tr>
     
     <tr>

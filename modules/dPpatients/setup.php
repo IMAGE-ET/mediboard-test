@@ -2809,8 +2809,30 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`fin`),
                 ADD INDEX (`dossier_medical_id`);";
     $this->addQuery($query);
+    $this->makeRevision("2.34");
+    $query = "ALTER TABLE `supervision_graph_axis`
+                ADD `in_doc_template` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
 
-    $this->mod_version = '2.34';
+    $query = "ALTER TABLE `supervision_timed_data`
+                ADD `in_doc_template` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `supervision_timed_picture`
+                ADD `in_doc_template` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    /*$this->makeRevision('2.34');
+    $query = "ALTER TABLE `antecedent`
+                ADD `owner_id` INT (11) UNSIGNED,
+                ADD `creation_date` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `traitement`
+                ADD `owner_id` INT (11) UNSIGNED,
+                ADD `creation_date` DATETIME;";
+    $this->addQuery($query);*/
+
+    $this->mod_version = '2.35';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

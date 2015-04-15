@@ -1761,6 +1761,8 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addListProperty("Opération - Evenements per-opératoires", $evts);
     $template->addListProperty("Opération - Incidents per-opératoires", $incidents);
 
+    CSupervisionGraph::addObservationDataToTemplate($template, $this, "Opération");
+
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Opération");
     }

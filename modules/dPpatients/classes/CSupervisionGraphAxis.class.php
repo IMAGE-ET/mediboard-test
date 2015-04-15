@@ -21,6 +21,7 @@ class CSupervisionGraphAxis extends CMbObject {
   public $limit_high;
   public $display;
   public $show_points;
+  public $in_doc_template;
   public $symbol;
 
   /** @var CSupervisionGraphSeries[] */
@@ -75,6 +76,7 @@ class CSupervisionGraphAxis extends CMbObject {
     $props["limit_high"]           = "float"; // null => auto
     $props["display"]              = "enum list|points|lines|bars|stack|bandwidth";
     $props["show_points"]          = "bool notNull default|1";
+    $props["in_doc_template"]      = "bool notNull default|0";
     $props["symbol"]               = "enum notNull list|circle|square|diamond|cross|triangle";
     return $props;
   }

@@ -17,6 +17,7 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
 
   public $period;
   public $value_type_id;
+  public $in_doc_template;
 
   /**
    * @see parent::getSpec()
@@ -33,8 +34,9 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["period"] = "enum list|1|5|10|15|20|30|60";
-    $props["value_type_id"] = "ref notNull class|CObservationValueType autocomplete|label dependsOn|datatype";
+    $props["period"]          = "enum list|1|5|10|15|20|30|60";
+    $props["value_type_id"]   = "ref notNull class|CObservationValueType autocomplete|label dependsOn|datatype";
+    $props["in_doc_template"] = "bool notNull default|0";
     return $props;
   }
 

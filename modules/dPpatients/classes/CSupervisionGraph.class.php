@@ -252,4 +252,151 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
 
     return $graph->loadList($where, "title");
   }
+
+  /**
+   * Ajoute les données des graphiques de supervision
+   *
+   * @param CTemplateManager $template The template manager
+   * @param CMbObject        $object   The host object
+   * @param string           $name     The field name
+   *
+   * @return void
+   */
+  static function addObservationDataToTemplate(CTemplateManager $template, CMbObject $object, $name) {
+    $group_id = CGroups::loadCurrent()->_id;
+
+    $results = array();
+    $times = array();
+    if ($object->_id) {
+      list($results, $times) = CObservationResultSet::getResultsFor($object);
+      $times = array_combine($times, $times);
+    }
+
+    // CSupervisionGraphAxis
+    $axis = new CSupervisionGraphAxis();
+    $ds = $axis->getDS();
+
+    $where = array(
+      "supervision_graph_axis.in_doc_template" => "= '1'",
+      "supervision_graph.owner_class" => "= 'CGroups'",
+      "supervision_graph.owner_id" => $ds->prepare("= ?", $group_id),
+    );
+    $ljoin = array(
+      "supervision_graph" => "supervision_graph.supervision_graph_id = supervision_graph_axis.supervision_graph_id",
+    );
+    $order = array(
+      "supervision_graph.title",
+      "supervision_graph_axis.title",
+    );
+
+    /** @var CSupervisionGraphAxis[] $axes */
+    $axes = $axis->loadList($where, $order, null, null, $ljoin);
+
+    CStoredObject::massLoadFwdRef($axes, "supervision_graph_id", null, true);
+
+    foreach ($axes as $_axis) {
+      $_graph = $_axis->loadRefGraph();
+      $_series = $_axis->loadRefsSeries();
+      $_axis->loadRefsLabels();
+
+      $_data = array_fill_keys(array_keys($times), array());
+
+      foreach ($_series as $_serie) {
+        $_unit_id = $_serie->value_unit_id ?: "none";
+        $_unit_label = $_serie->loadRefValueUnit();
+
+        if (!isset($results[$_serie->value_type_id][$_unit_id])) {
+          continue;
+        }
+
+        foreach ($results[$_serie->value_type_id][$_unit_id] as $_value) {
+          foreach ($times as $_time => $_ts) {
+            if ($_value["ts"] == $_time) {
+              $times[$_time] = $_value["datetime"];
+              $_value["unit"] = $_unit_label->label;
+              $_data["$_time"][$_serie->_id] = $_value;
+              break;
+            }
+          }
+        }
+      }
+
+      $view = "";
+
+      if (count($_data)) {
+        $smarty = new CSmartyDP("modules/dPsalleOp");
+        $smarty->assign("data",   $_data);
+        $smarty->assign("series", $_series);
+        $smarty->assign("times",  $times);
+        $view = $smarty->fetch("inc_print_observation_result_set.tpl", '', '', 0);
+        $view = preg_replace('`([\\n\\r])`', '', $view);
+      }
+
+      $template->addProperty("$name - Pérop - $_graph->title - $_axis->title", trim($view), "", false);
+    }
+
+    // CSupervisionTimedPicture
+    // CSupervisionTimedData
+    $data = array(
+      "CSupervisionTimedPicture",
+      "CSupervisionTimedData",
+    );
+
+    foreach ($data as $_class) {
+      /** @var CSupervisionTimedPicture|CSupervisionTimedData $_object */
+      $_object = new $_class();
+      $_table = $_object->_spec->table;
+      $_ds = $_object->getDS();
+
+      $where = array(
+        "$_table.in_doc_template" => "= '1'",
+        "$_table.owner_class" => "= 'CGroups'",
+        "$_table.owner_id" => $_ds->prepare("= ?", $group_id),
+      );
+      $order = "title";
+
+      /** @var CSupervisionTimedPicture[]|CSupervisionTimedData[] $_objects */
+      $_objects = $_object->loadList($where, $order);
+
+      foreach ($_objects as $_timed) {
+        $_data = array_fill_keys(array_keys($times), null);
+
+        if (!isset($results[$_timed->value_type_id])) {
+          continue;
+        }
+
+        foreach ($results[$_timed->value_type_id]["none"] as $_value) {
+          foreach ($times as $_time => $_ts) {
+            if ($_value["ts"] == $_time) {
+              $times["$_time"] = $_value["datetime"];
+
+              if ($_value["file_id"]) {
+                $_file = new CFile();
+                $_file->load($_value["file_id"]);
+
+                $_value["datauri"] = $_file->getDataURI();
+                $_value["file"] = $_file;
+              }
+
+              $_data["$_time"] = $_value;
+              break;
+            }
+          }
+        }
+
+        $view = "";
+
+        if (count($_data)) {
+          $smarty = new CSmartyDP("modules/dPsalleOp");
+          $smarty->assign("data",   $_data);
+          $smarty->assign("times",  $times);
+          $smarty->assign("timed_data", true);
+          $view = $smarty->fetch("inc_print_observation_result_set.tpl", '', '', 0);
+          $view = preg_replace('`([\\n\\r])`', '', $view);
+        }
+
+        $template->addProperty("$name - Pérop - $_timed->title", trim($view), "", false);
+      }
+    }
+  }
 }

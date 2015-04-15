@@ -36,6 +36,11 @@
     *}}
 
     <tr>
+      <th>{{mb_label object=$timed_data field=in_doc_template}}</th>
+      <td>{{mb_field object=$timed_data field=in_doc_template typeEnum=checkbox}}</td>
+    </tr>
+
+    <tr>
       <th>{{mb_label object=$timed_data field=disabled}}</th>
       <td>{{mb_field object=$timed_data field=disabled typeEnum=checkbox}}</td>
     </tr>

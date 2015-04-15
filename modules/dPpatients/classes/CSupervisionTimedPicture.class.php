@@ -16,6 +16,7 @@ class CSupervisionTimedPicture extends CSupervisionTimedEntity {
   const PICTURES_ROOT = "modules/dPpatients/images/supervision";
 
   public $supervision_timed_picture_id;
+  public $in_doc_template;
 
   public $value_type_id;
 
@@ -34,7 +35,8 @@ class CSupervisionTimedPicture extends CSupervisionTimedEntity {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["value_type_id"] = "ref notNull class|CObservationValueType autocomplete|label dependsOn|datatype";
+    $props["value_type_id"]   = "ref notNull class|CObservationValueType autocomplete|label dependsOn|datatype";
+    $props["in_doc_template"] = "bool notNull default|0";
     return $props;
   }
 
