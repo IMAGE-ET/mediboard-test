@@ -113,8 +113,8 @@ CancelAction = {
     {{/if}}
 
     <tr id="cell_motif_annulation" style="display: none;">
-      <td style="text-align: right"><strong>{{mb_title object=$consult field=motif_annulation}}</strong></td>
-      <td>
+      <td style="text-align: right" colspan="2"><strong>{{mb_title object=$consult field=motif_annulation}}</strong></td>
+      <td colspan="2">
         <input type="radio" name="_motif_annulation" value="not_arrived" checked="checked" onclick="CancelAction.form.motif_annulation.value = this.value;">
         <label for="editFrm__motif_annulation_not_arrived" id="labelFor_editFrm__motif_annulation_not_arrived" class="">{{tr}}CConsultation.motif_annulation.not_arrived{{/tr}}</label> <br/>
 
