@@ -1653,7 +1653,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $this->annule = $annule;
 
-    if ($this->destination === 0) {
+    if ($this->destination === "0" || $this->destination === 0) {
       $this->destination = null;
     }
 
