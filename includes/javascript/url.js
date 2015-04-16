@@ -535,15 +535,17 @@ var Url = Class.create({
     }
 
     var href = options.baseUrl + this.make(questionMark);
-    this.modalObject = Control.Modal.open(new Element("a", {href: href}), options);
+    this.modalObject = Control.Modal.open(new Element("a", {href: 'about:blank'}), options);
 
     var modalContainer = this.modalObject.container;
     modalContainer.insert({top: titleElement});
 
     // Wrap iframe with div.content
-    var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
+    var iframe  = modalContainer.down("iframe");
+    var content = DOM.div({className: "content"}, iframe);
     modalContainer.insert(content);
     modalContainer.addClassName("modal-iframe");
+    iframe.src = href;
 
     /*var href = options.baseUrl + this.make(questionMark);
     var content = DOM.div({className: "content"});
