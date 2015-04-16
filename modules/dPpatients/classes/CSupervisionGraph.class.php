@@ -263,6 +263,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
    * @return void
    */
   static function addObservationDataToTemplate(CTemplateManager $template, CMbObject $object, $name) {
+    $prefix = "Supervision";
+
     $group_id = CGroups::loadCurrent()->_id;
 
     $results = array();
@@ -332,7 +334,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         $view = preg_replace('`([\\n\\r])`', '', $view);
       }
 
-      $template->addProperty("$name - Pérop - $_graph->title - $_axis->title", trim($view), "", false);
+      $template->addProperty("$name - $prefix - $_graph->title - $_axis->title", trim($view), "", false);
     }
 
     // CSupervisionTimedPicture
@@ -395,7 +397,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
           $view = preg_replace('`([\\n\\r])`', '', $view);
         }
 
-        $template->addProperty("$name - Pérop - $_timed->title", trim($view), "", false);
+        $template->addProperty("$name - $prefix - $_timed->title", trim($view), "", false);
       }
     }
   }
