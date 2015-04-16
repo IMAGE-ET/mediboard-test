@@ -61,12 +61,11 @@
 
 <table class="main">
   <tr>
-    <td style="text-align: center;">
-      <div style="width: 64px;">
-        <a href="#1" onclick="new Url().ViewFilePopup('{{$file->object_class}}', '{{$file->object_id}}', 'CFile', '{{$file->_id}}')">
-          <img style="width: 64px; height: 92px; background: white; border: 1px solid black;"
-               src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92" />
-        </a>
+    <td style="text-align: center;" class="narrow">
+      <div style="width: 66px; height: 92px; background: white; cursor: pointer;"
+           onclick="new Url().ViewFilePopup('{{$file->object_class}}', '{{$file->object_id}}', 'CFile', '{{$file->_id}}')">
+        <img style="background: white; max-width: 64px; max-height: 92px; border: 1px solid black; vertical-align: middle;"
+             src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=128&h=184" />
       </div>
     </td>
     <td style="vertical-align: top;" class="text">
