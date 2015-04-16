@@ -251,7 +251,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-16: Marital Status (CE) (table 0002)(optional)
-    $data[] = null;
+    $data[] = $patient->situation_famille;
     
     // PID-17: Religion (CE) (optional)
     $data[] = null;

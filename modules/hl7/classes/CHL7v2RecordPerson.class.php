@@ -414,6 +414,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // E-mail
     $this->getEmail($node, $newPatient);
 
+    // Situation famille
+    $this->getMaritalStatus($node, $newPatient);
+
     // Rang naissance
     $this->getRangNaissance($node, $newPatient);
 
@@ -660,6 +663,20 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
       
       $newPatient->email = $this->queryTextNode("XTN.4", $_PID13);
+    }
+  }
+
+  /**
+   * Get marital status
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
+  function getMaritalStatus(DOMNode $node, CPatient $newPatient) {
+    if ($marital_status = $this->queryTextNode("PID.25", $node)) {
+      $newPatient->situation_famille = $marital_status;
     }
   }
 
