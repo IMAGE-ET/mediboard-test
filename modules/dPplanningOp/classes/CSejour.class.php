@@ -18,7 +18,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   static $types = array("comp", "ambu", "exte", "seances", "ssr", "psy", "urg", "consult");
   static $fields_etiq = array(
     "NDOS", "NRA", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
-    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE"
+    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE", "PRESTATIONS DEMANDEES"
   );
 
   static $destination_values = array("1", "2", "3", "4", "6", "7");
@@ -1239,7 +1239,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Changement des liaisons de prestations si besoin
     // Seulement par rapport à l'entrée
-    if (CAppUI::conf("dPhospi systeme_prestations")) {
+    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
       $decalage = CMbDT::daysRelative($old->entree, $this->entree);
 
       if ($decalage != 0) {
@@ -3910,6 +3910,27 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $template->addListProperty("Sejour - Conclusions des consultations", $consults);
 
+    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+      $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
+      CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
+      CStoredObject::massLoadFwdRef($items_liaisons, "sous_item_id");
+
+      $souhaits = array();
+      foreach ($items_liaisons as $_liaison) {
+        $item_souhait = $_liaison->loadRefItem();
+        if ($item_souhait->object_class == "CPrestationPonctuelle") {
+          continue;
+        }
+        $sous_item = $_liaison->loadRefSousItem();
+        $nom = $item_souhait;
+        if ($sous_item->_id) {
+          $nom = $sous_item->nom;
+        }
+        $souhaits[] = $nom;
+      }
+      $template->addListProperty("Sejour - Prestations demandées", $souhaits);
+    }
+
     // Régime
     $regimes = array();
 
@@ -4226,20 +4247,43 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation = $this->getCurrAffectation($this->entree > $now ? $this->entree : null);
     $affectation->loadView();
 
-    $fields = array_merge(
-      $fields,
-      array(
-        "DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
-        "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
-        "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
-        "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
-        "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
-        "NDOS"             => $this->_NDA,
-        "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
-        "CODE BARRE NDOS"  => "@BARCODE_" . $this->_NDA . "@",
-        "CHAMBRE COURANTE" => $affectation->_view
-      )
+    $souhaits = array();
+    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+      $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
+      CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
+      CStoredObject::massLoadFwdRef($items_liaisons, "sous_item_id");
+
+      foreach ($items_liaisons as $_liaison) {
+        $item_souhait = $_liaison->loadRefItem();
+        if ($item_souhait->object_class == "CPrestationPonctuelle") {
+          continue;
+        }
+        $sous_item = $_liaison->loadRefSousItem();
+        $nom = $item_souhait;
+        if ($sous_item->_id) {
+          $nom = $sous_item->nom;
+        }
+        $souhaits[] = $nom;
+      }
+    }
+
+    $fields_sejour = array(
+      "DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
+      "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
+      "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
+      "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
+      "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+      "NDOS"             => $this->_NDA,
+      "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
+      "CODE BARRE NDOS"  => "@BARCODE_" . $this->_NDA . "@",
+      "CHAMBRE COURANTE" => $affectation->_view
     );
+
+    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+      $fields_sejour["PRESTATIONS DEMANDEES"] = implode(" - ", $souhaits);
+    }
+
+    $fields = array_merge($fields, $fields_sejour);
 
     if (CAppUI::conf("ref_pays") == 2) {
       $fields["NATURE SEJOUR"] = $this->getFormattedValue("_type_sejour");
