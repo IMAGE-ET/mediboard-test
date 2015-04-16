@@ -11,20 +11,20 @@
 
 CCanDo::checkAdmin();
 
-$sourcePath = "modules/ssr/base/nomenclature.CsARR.zip";
+$sourcePath = "modules/ssr/base/nomenclature.CsARR_v3.zip";
 $targetDir = "tmp/csarr";
 
 $targetTables    = "tmp/csarr/tables.sql";
 
 // Ajout des fichiers NX dans les tables
 $listTables = array(
-  "activite"             => "code_csarr_v2.txt",
-  "note_activite"        => "notes_code_csarr_v2.txt",
-  "geste_complementaire" => "geste_compl_csarr_v2.txt",
-  "modulateur"           => "modulateur_csarr_v2.txt",
-  "hierarchie"           => "hier_csarr_v2.txt",
-  "note_hierarchie"      => "note_hier_csarr_v2.txt",
-  "activite_reference"   => "acte_ref_csarr_v2.txt"
+  "activite"             => "code_csarr_v3.txt",
+  "note_activite"        => "note_code_csarr_v3.txt",
+  "geste_complementaire" => "geste_compl_csarr_v3.txt",
+  "modulateur"           => "modulateur_csarr_v3.txt",
+  "hierarchie"           => "hier_csarr_v3.txt",
+  "note_hierarchie"      => "note_hier_csarr_v3.txt",
+  "activite_reference"   => "acte_ref_csarr_v3.txt"
 );
 
 // Extract the SQL dump
@@ -121,7 +121,7 @@ function addFileIntoDB($file, $table) {
     }
 
     $query = "INSERT INTO $table VALUES('".implode("','", $data)."')";
-    
+
     $ds->exec($query);
     if ($ds->error()) {
       $echoue++;

@@ -548,7 +548,7 @@ class CSetupssr extends CSetup {
     $query = "SHOW TABLES LIKE 'type_activite'";
     $this->addDatasource("cdarr", $query);
 
-    $query = "SHOW TABLES LIKE 'activite_reference'";
+    $query = "SELECT * FROM `activite` WHERE `code` = 'AGR+102'";
     $this->addDatasource("csarr", $query);
   }
 }
