@@ -120,12 +120,7 @@ class CUniteFonctionnelle extends CMbObject {
     if (!CModule::getActive("atih")) {
       return null;
     }
-    $um  = new CUniteMedicaleInfos();
-    $um->um_code = $this->type_autorisation_um;
-    $um->loadMatchingObject();
-
-    return $this->_ref_um = $um;
-
+    return $this->_ref_um = $this->loadFwdRef("type_autorisation_um", true);
   }
 
   /**
