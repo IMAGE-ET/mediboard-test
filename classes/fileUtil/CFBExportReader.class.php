@@ -129,7 +129,8 @@ class CFBExportReader {
    * @throws Exception
    */
   function readLine() {
-    if (ftell($this->handle) >= $this->filesize) {
+    // Because file size may exceed 32 bit limit
+    if ($this->filesize > 0 && ftell($this->handle) >= $this->filesize) {
       return null;
     }
 

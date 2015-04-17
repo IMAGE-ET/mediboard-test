@@ -27,6 +27,9 @@ class CExternalDBImport {
   /** @var string Primary key name */
   protected $_key;
 
+  /** @var bool Tells if the key is numeric */
+  protected $_key_is_numeric = false;
+
   /** @var string SQL restriction */
   protected $_sql_restriction;
 
@@ -128,6 +131,15 @@ class CExternalDBImport {
   }
 
   /**
+   * Get SQL restriction
+   *
+   * @return string
+   */
+  function getSqlRestriction() {
+    return $this->_sql_restriction;
+  }
+
+  /**
    * Get SELECT query
    *
    * @param string $where WHERE statement
@@ -151,10 +163,10 @@ class CExternalDBImport {
     $query = "SELECT $select";
     $query .= " FROM $this->_table";
 
-    if ($this->_sql_restriction || $where) {
-      $query .= " WHERE $this->_sql_restriction";
+    if ($this->getSqlRestriction() || $where) {
+      $query .= " WHERE ".$this->getSqlRestriction();
 
-      if ($this->_sql_restriction && $where) {
+      if ($this->getSqlRestriction() && $where) {
         $query .= " AND ";
       }
 
@@ -187,7 +199,7 @@ class CExternalDBImport {
     }
 
     if ($date || $id) {
-      if ($object->_sql_restriction) {
+      if ($object->getSqlRestriction()) {
         $query .= " AND ";
       }
       else {
@@ -214,7 +226,17 @@ class CExternalDBImport {
 
     if ($order && $order_by || $id) {
       if ($id) {
-        $query .= ($key_multi) ? " ORDER BY CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) ASC" : " ORDER BY TRIM($object->_key) ASC";
+        if ($key_multi) {
+          $query .= " ORDER BY CONCAT(TRIM(" . implode("),'|',TRIM(", $key_multi) . ")) ASC";
+        }
+        else {
+          if ($self->_key_is_numeric) {
+            $query .= " ORDER BY $object->_key ASC";
+          }
+          else {
+            $query .= " ORDER BY TRIM($object->_key) ASC";
+          }
+        }
       }
       else {
         $query .= " ORDER BY $order_by DESC";
