@@ -187,13 +187,16 @@
 
                 <td style="vertical-align: top;">
                   {{if $sejour->_id}}
-                    <div style="width: 10px;
-                      {{if (($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
-                        ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)) || (!$is_aff && !$sejour->entree_reelle)}}
-                        color: #A33;
+                    <div style="width: 10px; margin-bottom: 1px;"
+                         class="
+                      {{if ($object->entree == $sejour->entree && !$sejour->entree_reelle) ||
+                        (!$is_aff && !$sejour->entree_reelle)}}
+                        patient-not-arrived
+                      {{elseif ($object->entree != $sejour->entree && !$object->_ref_prev->effectue)}}
+                        patient-not-moved
                       {{elseif $is_aff && $object->effectue}}
-                        text-decoration: line-through;
-                      {{/if}} margin-bottom: 1px;">
+                        effectue
+                      {{/if}}">
                       {{if $mode_vue_reelle == "compacte"}}
                         <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
                       {{/if}}

@@ -175,10 +175,18 @@
         </tr>
         <tr>
           <td>
-            <span style="color: #A33">M. X y</span>
+            <span class="patient-not-arrived">M. X y</span>
           </td>
           <td>
-            Patient non présent (après déplacement ou première affectation)
+            Patient non encore arrivé (première affectation)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="patient-not-moved">M. X y</span>
+          </td>
+          <td>
+            Patient non encore présent (après déplacement)
           </td>
         </tr>
         <tr>

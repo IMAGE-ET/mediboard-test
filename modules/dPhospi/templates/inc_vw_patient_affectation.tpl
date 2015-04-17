@@ -21,13 +21,14 @@
   {{if $_affectation->_ref_sejour->_id}}
     {{assign var=_sejour value=$_affectation->_ref_sejour}}
     {{assign var=patient   value=$_sejour->_ref_patient}}
-      <span 
-      {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||
-        ($_affectation->entree != $_sejour->entree && !$_affectation->effectue)}}
-        style="color: #A33;" 
+      <span class="
+      {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle)}}
+        patient-not-arrived
+      {{elseif $_affectation->entree != $_sejour->entree && !$_affectation->effectue}}
+        patient-not-moved
       {{elseif $_affectation->effectue}}
-        style="text-decoration: line-through;"
-      {{/if}}
+        deplace
+      {{/if}}"
       onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');" >{{$patient}}</span>
       <div class="ssr-sejour-bar" title="arrivée il y a {{$_sejour->_entree_relative}}j et départ prévu dans {{$_sejour->_sortie_relative}}j " style="position:absolute;top:0px;">      
       <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
