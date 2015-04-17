@@ -186,7 +186,7 @@ class CSearchLog extends CSearch {
     );
 
     //Search on the index.
-    $index = CAppUI::conf("db std dbname")."_log";
+    $index = CAppUI::conf("search index_name")."_log";
     $index = $this->loadIndex($index);
     $search = new \Elastica\Search($this->_client);
     $search->addIndex($index);
@@ -220,7 +220,7 @@ class CSearchLog extends CSearch {
     $elasticaQuery->setQuery($elasticaQueryString);
 
     //Search on the index.
-    $index = CAppUI::conf("db std dbname")."_log";
+    $index = CAppUI::conf("search index_name")."_log";
     $this->_index = $this->loadIndex($index);
     $search = new \Elastica\Search($this->_client);
     $search->addIndex($this->_index);

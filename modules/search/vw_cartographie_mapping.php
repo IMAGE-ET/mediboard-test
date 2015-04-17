@@ -27,19 +27,19 @@ try{
 }
 
 try{
-  // récupération des données pour les journaux utilisateur
+  // récupération des données pour les journaux utilisateurs
   $client_log   = new CSearchLog();
   $client_log->createClient();
   $infos_log = $client_log->loadCartoInfos();
 
 } catch (Exception $e) {
   $infos_log = array();
-  CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_WARNING);
+  CAppUI::displayAjaxMsg("Le serveur de recherche de journaux n'est pas connecté", UI_MSG_WARNING);
 
 }
 
 try {
-  // récupération des données pour les journaux utilisateur
+  // récupération des données pour les journaux utilisateurs
   $wrapper   = new CSearchFileWrapper(null, null);
   $infos_tika = $wrapper->loadTikaInfos();
 
