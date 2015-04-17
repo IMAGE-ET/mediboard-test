@@ -59,20 +59,28 @@ foreach ($sejours as $_sejour) {
 
     foreach ($prescriptions as $_type => $_prescription) {
       if ($_prescription->_id && in_array($_type, array("pre_admission", "sortie"))) {
-        $query = array(
-          "m"               => "prescription",
-          "raw"             => "print_prescription",
-          "prescription_id" => $_prescription->_id,
-          "dci"             => 0,
-          "in_progress"     => 0,
-          "preview"         => 0,
-        );
+        if (
+            $_prescription->countBackRefs("prescription_line_medicament") > 0 ||
+            $_prescription->countBackRefs("prescription_line_element")    > 0 ||
+            $_prescription->countBackRefs("prescription_line_comment")    > 0 ||
+            $_prescription->countBackRefs("prescription_line_mix")        > 0 ||
+            $_prescription->countBackRefs("prescription_line_dmi")        > 0
+        ) {
+          $query = array(
+            "m"               => "prescription",
+            "raw"             => "print_prescription",
+            "prescription_id" => $_prescription->_id,
+            "dci"             => 0,
+            "in_progress"     => 0,
+            "preview"         => 0,
+          );
 
-        $base = $_SERVER["SCRIPT_NAME"] . "?" . http_build_query($query, "", "&");
+          $base = $_SERVER["SCRIPT_NAME"] . "?" . http_build_query($query, "", "&");
 
-        CApp::serverCall("http://127.0.0.1$base");
+          CApp::serverCall("http://127.0.0.1$base");
 
-        CAppUI::stepAjax("Archive créée pour la prescription de %s", UI_MSG_OK, CAppUI::tr("CPrescription.type.$_type"));
+          CAppUI::stepAjax("Archive créée pour la prescription de %s", UI_MSG_OK, CAppUI::tr("CPrescription.type.$_type"));
+        }
       }
     }
   }
