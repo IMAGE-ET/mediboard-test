@@ -33,6 +33,9 @@ $ljoin["sender_mllp"] = "sender_mllp.sender_mllp_id = SUBSTR(source_mllp.name, "
 $source_mllp = new CSourceMLLP();
 $source_mllp->loadObject($where, null, null, $ljoin);
 
+$blink = new CBlink1();
+$blink->addPattern("orange flashes", "3,#FF9000,0.5,#000000,0.5");
+
 if (!$source_mllp->_id) {
   /*
   $message          = new CHL7v2Message();
@@ -126,6 +129,9 @@ if (!$source_mllp->_id) {
     
   ob_clean();
   echo $ACK;
+
+  $blink->playPattern("white flashes");
+
   CApp::rip();
 }
 
@@ -135,8 +141,20 @@ $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 // Dispatch EAI
 try {
   $ack = CEAIDispatcher::dispatch($message, $sender_mllp);
+
+  if (strpos($ack, "|AE|")) {
+    $blink->playPattern("orange flashes");
+  }
+  elseif (strpos($ack, "|AR|")) {
+    $blink->playPattern("red flashes");
+  }
+  else {
+    $blink->playPattern("green flashes");
+  }
 }
 catch (CHL7v2Exception $e) {
+  $blink->playPattern("red flashes");
+
   $sender_mllp->getConfigs(new CExchangeHL7v2());
   $configs = $sender_mllp->_configs;
 
