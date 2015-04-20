@@ -39,10 +39,10 @@ $source_mllp = new CSourceMLLP();
 $source_mllp->loadObject($where, null, null, $ljoin);
 
 $blink = new CBlink1();
-$blink->addPattern("mllp unknown", "3,#002851,0.5,#000000,0.5");
-$blink->addPattern("mllp error",   "3,#510000,0.5,#000000,0.5");
-$blink->addPattern("mllp warning", "3,#7f7f00,0.5,#000000,0.5");
-$blink->addPattern("mllp ok",      "3,#006100,0.5,#000000,0.5");
+//$blink->addPattern("mllp unknown", "3,#003688,0.5,#000000,0.5");
+//$blink->addPattern("mllp error",   "3,#800000,0.5,#000000,0.5");
+//$blink->addPattern("mllp warning", "3,#8B6500,0.5,#000000,0.5");
+//$blink->addPattern("mllp ok",      "3,#007500,0.5,#000000,0.5");
 
 if (!$source_mllp->_id) {
   /*

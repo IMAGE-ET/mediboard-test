@@ -99,6 +99,13 @@ class CSocketBasedServer {
    * @var integer
    */
   protected $request_count = 0;
+
+  /**
+   * Verbosity
+   *
+   * @var integer
+   */
+  protected $verbosity = 1;
   
   /**
    * The start date time
@@ -131,8 +138,18 @@ class CSocketBasedServer {
    * @param string  $certificate           The path to the SSL/TLS certificate
    * @param string  $passphrase            The SSL/TLS certificate passphrase
    * @param string  $certificate_authority The SSL/TLS certificate authority file
+   * @param int     $verbosity             Verbosity level (0 to 2)
    */
-  function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null, $certificate_authority = null){
+  function __construct(
+      $call_url,
+      $username,
+      $password,
+      $port,
+      $certificate = null,
+      $passphrase = null,
+      $certificate_authority = null,
+      $verbosity = 1
+  ) {
     $this->call_url    = rtrim($call_url, " /");
     $this->username    = $username;
     $this->password    = $password;
@@ -140,7 +157,8 @@ class CSocketBasedServer {
     $this->certificate = $certificate;
     $this->passphrase  = $passphrase;
     $this->certificate_authority = $certificate_authority;
-    
+    $this->verbosity   = $verbosity;
+
     $this->server = new SocketServer(AF_INET, SOCK_STREAM, SOL_TCP);
   }
   
@@ -341,16 +359,22 @@ class CSocketBasedServer {
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
     if ($buffer && $this->isHeader($request)) {
-      echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
+      if ($this->verbosity >= 1) {
+        echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
+      }
     }
-    
-    echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
+
+    if ($this->verbosity >= 1) {
+      echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
+    }
 
     $buffer .= $request;
     // Si on recoit le flag de fin de message, on effectue la requete web
     if ($this->isMessageFull($buffer)) {
-      
-      echo sprintf(" > Got a full message from %d\n", $id);
+      if ($this->verbosity >= 1) {
+        echo sprintf(" > Got a full message from %d\n", $id);
+      }
+
       $buffer = $this->encodeClientRequest($buffer);
       $post = array(
         "m"       => $this->module,
@@ -365,20 +389,27 @@ class CSocketBasedServer {
       
       $start = microtime(true);
 
-      $this->displayMessage($buffer);
+      if ($this->verbosity >= 2) {
+        $this->displayMessage($buffer);
+      }
 
       // We must keep m=$module in the GET because of user permissions
       $url = "$this->call_url/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
       $this->request_count++;
       $time = microtime(true) - $start;
-      echo sprintf(" > Request done in %f s\n", $time);
+
+      if ($this->verbosity >= 1) {
+        echo sprintf(" > Request done in %f s\n", $time);
+      }
       
       $buffer = "";
       return $this->decodeResponse($this->formatAck($ack));
     }
     else {
-      echo "Mise en buffer du message!\n";
+      if ($this->verbosity >= 1) {
+        echo "Mise en buffer du message!\n";
+      }
       // Mise en buffer du message
       $buffer = $this->appendRequest($buffer);
     }
@@ -460,7 +491,10 @@ class CSocketBasedServer {
       );
     }
 
-    echo sprintf(" > %s: New connection [%d] arrived from %s:%d\n", date("H:i:s"), $id, $addr, $port);
+    if ($this->verbosity >= 1) {
+      echo sprintf(" > %s: New connection [%d] arrived from %s:%d\n", date("H:i:s"), $id, $addr, $port);
+    }
+
     return true;
   }
   
@@ -473,7 +507,10 @@ class CSocketBasedServer {
    */
   function onCleanup($id) {
     unset($this->clients[$id]);
-    echo sprintf(" > Connection [%d] cleaned-up\n", $id);
+
+    if ($this->verbosity >= 1) {
+      echo sprintf(" > Connection [%d] cleaned-up\n", $id);
+    }
   }
   
   /**
@@ -484,7 +521,9 @@ class CSocketBasedServer {
    * @return void
    */
   function onClose($id) {
-    echo sprintf(" > Connection [%d] closed\n", $id);
+    if ($this->verbosity >= 1) {
+      echo sprintf(" > Connection [%d] closed\n", $id);
+    }
   }
   
   /**
@@ -495,7 +534,9 @@ class CSocketBasedServer {
    * @return void
    */
   function writeError($id) {
-    echo sprintf(" !!! Write error to [%d]\n", $id);
+    if ($this->verbosity >= 1) {
+      echo sprintf(" !!! Write error to [%d]\n", $id);
+    }
   }
   
   /**

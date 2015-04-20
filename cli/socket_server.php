@@ -121,6 +121,7 @@ Usage: {$argv[0]} <type> <root_url> <username> <password> [--port port]
   [--cert <cert>]     The SSL certificate file if the connection is secured, with both public and pricate key (PEM) (default: none)
   [--passphrase <passphrase>] The SSL passphrase (default: none)
   [--cafile <cafile>] The SSL certificate authority file (PEM) (default: none)
+  [--verbosity <verbosity>] Verbosity (default: 1)
 
 EOT;
   exit(0);
@@ -137,6 +138,7 @@ $options = array(
   "cert"       => null,
   "passphrase" => null,
   "cafile"     => null,
+  "verbosity"  => 1,
 );
 
 for ($i = 3; $i < $argc; $i++) {
@@ -149,6 +151,7 @@ for ($i = 3; $i < $argc; $i++) {
     case "--cert":
     case "--passphrase":
     case "--cafile":
+    case "--verbosity":
       $options[substr($argv[$i], 2)] = $argv[++$i];
       break;
   }
@@ -190,7 +193,8 @@ try {
     $options["port"], 
     $options["cert"],
     $options["passphrase"],
-    $options["cafile"]
+    $options["cafile"],
+    $options["verbosity"]
   );
   
   $handler->run();
