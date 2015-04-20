@@ -2475,6 +2475,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($newVenue->sortie_reelle) {
       $newVenue->sortie_reelle = $PV1_45;
     }
+
+    if (!$newVenue->entree_reelle) {
+      $newVenue->entree_reelle = CMbDT::dateTime();
+    }
       
     // Cas spécifique de certains segments
     // A11 : on supprime la date d'entrée réelle && on met en trash le numéro de dossier
