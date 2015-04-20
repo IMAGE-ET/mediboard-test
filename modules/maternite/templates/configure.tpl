@@ -34,11 +34,16 @@
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CGrossesse">{{tr}}CGrossesse{{/tr}}</a></li>
   <li><a href="#config_etab">Config par établissement</a></li>
+  <li><a href="#tools">Outils</a></li>
   <li><a href="#rattrapage_cesarienne">Rattrapage césariennes</a></li>
 </ul>
 
 <div id="CGrossesse" style="display: none">
   {{mb_include template=CGrossesse_configure}}
+</div>
+
+<div id="tools" style="display: none">
+  {{mb_include template=inc_maternite_tools}}
 </div>
 
 <div id="rattrapage_cesarienne" style="display: none;">

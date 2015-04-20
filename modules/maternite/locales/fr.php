@@ -193,6 +193,7 @@ $locales['mod-maternite-tab-ajax_modal_search_grossesse'] = 'Recherche de grosse
 $locales['mod-maternite-tab-ajax_vw_grossesse'] = 'Vue de la grossesse';
 $locales['mod-maternite-tab-ajax_vw_naissances'] = 'Vue des naissances';
 $locales['mod-maternite-tab-configure'] = 'Configurer';
+$locales['mod-maternite-tab-offline_print_fiches'] = 'Impression des fiches ARE';
 $locales['mod-maternite-tab-vw_admissions'] = 'Validation séjours';
 $locales['mod-maternite-tab-vw_consultations'] = 'Consultations';
 $locales['mod-maternite-tab-vw_grossesses'] = 'Grossesses';
