@@ -26,7 +26,21 @@ class CITI21Test extends CIHETestCase {
    * @return void
    */
   static function testQ22(CCnStep $step) {
-    // PDS-PDQ_Exact_Name
+    $profil      = "PDQ";
+    $transaction = "ITI21";
+    $message     = "QBP";
+    $code        = "Q22";
+
     mbTrace($step);
+
+    // PDQ_Multiple_Query
+    switch ($step->number) {
+      case '20':
+        // PID.5.1.1 = MOO*
+        break;
+
+
+      default:
+    }
   }
 }
