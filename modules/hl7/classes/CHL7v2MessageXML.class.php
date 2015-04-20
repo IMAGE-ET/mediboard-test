@@ -689,8 +689,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $function->group_id = $sender->group_id;
     $function->loadMatchingObjectEsc();
     if (!$function->_id) {
-      $function->type = "cabinet";
+      $function->type            = "cabinet";
       $function->compta_partagee = 0;
+      $function->color           = "ffffff";
       $function->store();
     }
     $mediuser->function_id = $function->_id;
