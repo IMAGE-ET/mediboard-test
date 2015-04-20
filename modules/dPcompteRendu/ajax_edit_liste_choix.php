@@ -18,14 +18,6 @@ $liste_id = CValue::getOrSession("liste_id");
 
 // Utilisateurs disponibles
 $user = CMediusers::get($user_id);
-$users = $user->loadUsers(PERM_EDIT);
-
-// Functions disponibles
-$func = new CFunctions();
-$funcs = $func->loadSpecialites(PERM_EDIT);
-
-// Etablissements disponibles
-$etabs = array(CGroups::loadCurrent());
 
 // Accès aux listes de choix de la fonction et de l'établissement
 $module = CModule::getActive("dPcompteRendu");
@@ -45,6 +37,7 @@ if ($liste->_id) {
     CAppUI::redirect("m=system&a=access_denied");
   }
 }
+
 $liste->loadRefOwner();
 $liste->loadRefModele();
 $liste->loadRefsNotes();
@@ -56,13 +49,8 @@ $owners  = $user->getOwners();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("users"           , $users);
 $smarty->assign("modeles"         , $modeles);
 $smarty->assign("owners"          , $owners);
-
-$smarty->assign("prats"           , $users);
-$smarty->assign("funcs"           , $funcs);
-$smarty->assign("etabs"           , $etabs);
 
 $smarty->assign("access_function" , $access_function);
 $smarty->assign("access_group"    , $access_group);

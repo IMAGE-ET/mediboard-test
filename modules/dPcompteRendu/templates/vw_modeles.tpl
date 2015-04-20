@@ -85,7 +85,7 @@
         <td>
           {{assign var=_spec value=$filtre->_specs.object_class}}
           <select name="object_class" onchange="this.form.onsubmit()">
-            <option value="">&mdash; {{tr}}CCompteRendu-type-all{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CCompteRendu-object_class-all{{/tr}}</option>
             {{foreach from=$_spec->_locales item=_locale key=_object_class}}
               <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected{{/if}}>{{$_locale}}</option>
             {{/foreach}}

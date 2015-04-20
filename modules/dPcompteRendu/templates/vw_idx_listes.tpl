@@ -19,6 +19,7 @@
       }
     });
 
+    {{if $access_function}}
     var urlFunctions = new Url("mediusers", "ajax_functions_autocomplete");
     urlFunctions.addParam("edit", "1");
     urlFunctions.addParam("input_field", "function_id_view");
@@ -33,6 +34,7 @@
         $V(form.function_id, id);
       }
     });
+    {{/if}}
 
     ListeChoix.filter();
   });
@@ -43,6 +45,9 @@
 </button>
     
 <form name="Filter" method="get" onsubmit="return ListeChoix.filter();">
+  {{if !$access_function}}
+    {{mb_field object=$filtre field=function_id hidden=1}}
+  {{/if}}
   <table class="form">
     <tr>
       <th class="category" colspan="4">{{tr}}Filter{{/tr}}</th>
@@ -50,14 +55,20 @@
     <tr>
       <th>{{mb_label object=$filtre field=user_id}}</th>
       <td>
-        {{mb_field object=$filtre field=user_id hidden=1 onchange="\$V(this.form.function_id, '', false); \$V(this.form.function_id_view, '', false); this.form.onsubmit();"}}
+        {{mb_field object=$filtre field=user_id hidden=1 onchange="\$V(this.form.function_id, '', false);
+          if (this.form.function_id_view) {
+            \$V(this.form.function_id_view, '', false);
+          }
+          this.form.onsubmit();"}}
         <input type="text" name="user_id_view" value="{{$filtre->_ref_user}}" />
       </td>
-      <th>{{mb_label object=$filtre field=function_id}}</th>
-      <td>
-        {{mb_field object=$filtre field=function_id hidden=1 onchange="\$V(this.form.user_id, '', false); \$V(this.form.user_id_view, '', false); this.form.onsubmit();"}}
-        <input type="text" name="function_id_view" value="{{$filtre->_ref_function}}" />
-      </td>
+      {{if $access_function}}
+        <th>{{mb_label object=$filtre field=function_id}}</th>
+        <td>
+          {{mb_field object=$filtre field=function_id hidden=1 onchange="\$V(this.form.user_id, '', false); \$V(this.form.user_id_view, '', false); this.form.onsubmit();"}}
+          <input type="text" name="function_id_view" value="{{$filtre->_ref_function}}" />
+        </td>
+      {{/if}}
     </tr>
   </table>
 </form>

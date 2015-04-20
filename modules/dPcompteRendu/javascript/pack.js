@@ -52,8 +52,7 @@ Pack = {
   refreshList: function() {
     var form = getForm('Filter');
     var url = new Url('compteRendu', 'ajax_list_pack');
-    url.addElement(form.user_id);
-    url.addElement(form.object_class)
+    url.addFormData(form);
     url.requestUpdate('list-packs');
   },
 

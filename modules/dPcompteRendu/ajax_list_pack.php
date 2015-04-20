@@ -14,11 +14,30 @@
 CCanDo::checkRead();
 
 $user_id      = CValue::getOrSession("user_id");
+$function_id  = CValue::getOrSession("function_id");
 $object_class = CValue::getOrSession("object_class");
 
 $user = CMediusers::get($user_id);
+$owner = "prat";
+$owner_id = $user->_id;
 $owners = $user->getOwners();
-$packs = CPack::loadAllPacksFor($user->_id, "prat", $object_class);
+
+if ($function_id) {
+  $function = new CFunctions();
+  $function->load($function_id);
+
+  $owner = "func";
+  $owner_id = $function->_id;
+  $owners = array(
+    "func" => $function,
+    "etab" => $function->loadRefGroup()
+  );
+}
+
+$packs = CPack::loadAllPacksFor($owner_id, $owner, $object_class);
+if ($function->_id) {
+  unset($packs["prat"]);
+}
 
 foreach ($packs as $_packs_by_owner) {
   foreach ($_packs_by_owner as $_pack) {
@@ -32,7 +51,6 @@ foreach ($packs as $_packs_by_owner) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user"  , $user);
 $smarty->assign("owners", $owners);
 $smarty->assign("packs" , $packs);
 

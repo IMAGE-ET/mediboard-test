@@ -18,18 +18,6 @@ $user_id = CValue::getOrSession("user_id", CAppUI::$user->_id);
 
 // Pour la création d'un pack, on affecte comme utilisateur celui de la session par défaut.
 $user = CMediusers::get($user_id);
-$user->loadRefFunction()->loadRefGroup();
-
-// Utilisateurs disponibles
-$user = new CMediusers();
-$users = $user->loadUsers(PERM_EDIT);
-
-// Fonctions disponibles
-$function = new CFunctions();
-$functions = $function->loadSpecialites(PERM_EDIT);
-
-// Groupes disponibles
-$groups = array(CGroups::loadCurrent());
 
 // Chargement du pack
 $pack = new CPack;
@@ -49,22 +37,20 @@ if ($pack->_id) {
     CAppUI::redirect("m=system&a=access_denied");
   }
   $pack->loadRefsNotes();
-  $pack->loadRefOwner();
   $pack->loadBackRefs("modele_links", "modele_to_pack_id");
 }
 else {
   $pack->user_id = $user->_id;
 }
 
+$pack->loadRefOwner();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("pack"            , $pack);
-$smarty->assign("user_id"         , $user_id);
-$smarty->assign("users"           , $users);
-$smarty->assign("functions"       , $functions);
-$smarty->assign("groups"          , $groups);
-$smarty->assign("access_function" , $access_function);
-$smarty->assign("access_group"    , $access_group);
+$smarty->assign("pack"           , $pack);
+$smarty->assign("user_id"        , $user_id);
+$smarty->assign("access_function", $access_function);
+$smarty->assign("access_group"   , $access_group);
 
 $smarty->display("inc_edit_pack.tpl"); 

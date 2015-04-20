@@ -1,9 +1,71 @@
 <!--  $Id: vw_idx_listes.tpl 12241 2011-05-20 10:29:53Z flaviencrochard $ -->
 
+<script>
+  Main.add(function() {
+    var form = getForm("Edit");
+
+    var urlUsers = new Url("mediusers", "ajax_users_autocomplete");
+    urlUsers.addParam("edit", "1");
+    urlUsers.addParam("input_field", "user_id_view");
+    urlUsers.autoComplete(form.user_id_view, null, {
+      minChars: 0,
+      method: "get",
+      select: "view",
+      dropdown: true,
+      afterUpdateElement: function(field, selected) {
+        var id = selected.getAttribute("id").split("-")[2];
+        $V(form.user_id, id);
+      }
+    });
+
+    {{if $access_function}}
+      var urlFunctions = new Url("mediusers", "ajax_functions_autocomplete");
+      urlFunctions.addParam("edit", "1");
+      urlFunctions.addParam("input_field", "function_id_view");
+      urlFunctions.addParam("view_field", "text");
+      urlFunctions.autoComplete(form.function_id_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        afterUpdateElement: function(field, selected) {
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.function_id, id);
+        }
+      });
+    {{/if}}
+
+    {{if $access_group}}
+      var urlGroups = new Url("etablissement", "ajax_groups_autocomplete");
+      urlGroups.addParam("edit", "1");
+      urlGroups.addParam("input_field", "group_id_view");
+      urlGroups.addParam("view_field", "text");
+      urlGroups.autoComplete(form.group_id_view, null, {
+        minChars: 0,
+        method: "get",
+        select: "view",
+        dropdown: true,
+        afterUpdateElement: function(field, selected) {
+          var id = selected.getAttribute("id").split("-")[2];
+          $V(form.group_id, id);
+        }
+      });
+    {{/if}}
+  });
+</script>
+
 <form name="Edit" method="post" class="{{$liste->_spec}}" onsubmit="return ListeChoix.onSubmit(this)">
   {{mb_class object=$liste}}
   {{mb_key   object=$liste}}
-  <input type="hidden" name="del"    value="0" />
+  <input type="hidden" name="del" value="0" />
+
+  {{if !$access_function}}
+    {{mb_field object=$liste field=function_id hidden=1}}
+  {{/if}}
+
+  {{if !$access_group}}
+    {{mb_field object=$liste field=group_id hidden=1}}
+  {{/if}}
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$liste}}
@@ -11,10 +73,17 @@
     <tr>
       <th>{{mb_label object=$liste field=user_id}}</th>
       <td>
-        <select name="user_id" class="{{$liste->_props.user_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->user_id}}
-        </select>
+        {{mb_field object=$liste field=user_id hidden=1
+        onchange="
+             \$V(this.form.function_id, '', false);
+             if (this.form.function_id_view) {
+               \$V(this.form.function_id_view, '', false);
+             }
+             \$V(this.form.group_id, '', false);
+             if (this.form.group_id_view) {
+               \$V(this.form.group_id_view, '', false);
+             }"}}
+        <input type="text" name="user_id_view" value="{{$liste->_ref_user}}" />
       </td>
     </tr>
 
@@ -22,10 +91,15 @@
     <tr>
       <th>{{mb_label object=$liste field=function_id}}</th>
       <td>
-        <select name="function_id" class="{{$liste->_props.function_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_function list=$funcs selected=$liste->function_id}}
-        </select>
+        {{mb_field object=$liste field=function_id hidden=1
+        onchange="
+             \$V(this.form.user_id, '', false);
+             \$V(this.form.user_id_view, '', false);
+             \$V(this.form.group_id, '', false);
+             if (this.form.group_id_view) {
+               \$V(this.form.group_id_view, '', false);
+             }"}}
+        <input type="text" name="function_id_view" value="{{$liste->_ref_function}}" />
       </td>
     </tr>
     {{/if}}
@@ -34,14 +108,15 @@
     <tr>
       <th>{{mb_label object=$liste field=group_id}}</th>
       <td>
-        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$etabs item=curr_etab}}
-            <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $liste->group_id}} selected="selected" {{/if}}>
-              {{$curr_etab->_view}}
-            </option>
-         {{/foreach}}
-        </select>
+        {{mb_field object=$liste field=group_id hidden=1
+        onchange="
+             \$V(this.form.user_id, '', false);
+             \$V(this.form.user_id_view, '', false);
+             \$V(this.form.function_id, '', false);
+             if (this.form.function_id_view) {
+               \$V(this.form.function_id_view, '', false);
+             }"}}
+        <input type="text" name="group_id_view" value="{{$liste->_ref_group}}" />
       </td>
     </tr>
     {{/if}}
@@ -50,21 +125,21 @@
       <th>{{mb_label object=$liste field=nom}}</th>
       <td>{{mb_field object=$liste field=nom}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$liste field=compte_rendu_id}}</th>
       <td>
         <select name="compte_rendu_id" style="width: 20em;">
           <option value="">&mdash; {{tr}}All{{/tr}}</option>
-          
+
           {{foreach from=$modeles key=owner item=_modeles}}
           <optgroup label="{{$owners.$owner}}">
             {{foreach from=$_modeles item=_modele}}
-            <option value="{{$_modele->_id}}" {{if $liste->compte_rendu_id == $_modele->_id}} selected="selected" {{/if}}>
+            <option value="{{$_modele->_id}}" {{if $liste->compte_rendu_id == $_modele->_id}}selected{{/if}}>
               [{{tr}}{{$_modele->object_class}}{{/tr}}] {{$_modele->nom}} 
             </option>
             {{foreachelse}}
-            <option disabled="disabled">{{tr}}None{{/tr}}</option>
+            <option disabled>{{tr}}None{{/tr}}</option>
             {{/foreach}}
           </optgroup>
           {{/foreach}}
