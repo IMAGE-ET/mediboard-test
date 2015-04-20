@@ -2595,6 +2595,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$newVenue->sortie_prevue) {
       $newVenue->sortie_prevue = $this->queryTextNode("PV1.45", $this->queryNode("PV1", $parentNode));
     }
+
+    // Entrée prévue vide
+    if (!$newVenue->entree_prevue) {
+      $newVenue->entree_prevue = CMbDT::dateTime();
+    }
     
     // Si les dates entrées/sorties sont incohérentes 
     $sender = $this->_ref_sender;
