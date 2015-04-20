@@ -505,7 +505,8 @@ var Url = Class.create({
       baseUrl: "",
       closeOnClick: closeButton,
       closeOnEscape: true,
-      onClose: null
+      onClose: null,
+      withTS: true
     }, options);
 
     var questionMark = true;
@@ -535,9 +536,13 @@ var Url = Class.create({
     }
 
     // Dummy timestamp to allow iframe inside iframes recursion, with the same URL
-    this.addParam("__ts", Date.now());
+    if (options.withTS) {
+      this.addParam("__ts", Date.now());
+    }
     var href = options.baseUrl + this.make(questionMark);
-    delete this.oParams.__ts;
+    if (options.withTS) {
+      delete this.oParams.__ts;
+    }
 
     this.modalObject = Control.Modal.open(new Element("a", {href: 'about:blank'}), options);
 
