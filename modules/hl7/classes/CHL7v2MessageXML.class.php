@@ -343,7 +343,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($this->queryTextNode("CX.5", $node) == "AN") {
+    if ($control_identifier_type_code) {
+      if ($this->queryTextNode("CX.5", $node) == "AN") {
+        $data["AN"] = $this->queryTextNode("CX.1", $node);
+      }
+    }
+    else {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
     }
   }
