@@ -2465,6 +2465,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // On récupére la sortie réelle ssi msg == A03
     if ($event_code == "A03") {
       $newVenue->sortie_reelle = $PV1_45;
+
+      // Si on reçoit un message de sortie réelle et que l'on a pas de date dans le message
+      if (!$newVenue->sortie_reelle) {
+        $newVenue->sortie_reelle =
+          CMbDT::addDateTime(
+            CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
+            $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue
+          );
+      }
     }
 
     // Dans tous les autres cas on synchronise l'entrée et la sortie réelle ssi on a déjà la donnée dans Mediboard
