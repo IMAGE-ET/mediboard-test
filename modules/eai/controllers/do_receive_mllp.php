@@ -34,7 +34,10 @@ $source_mllp = new CSourceMLLP();
 $source_mllp->loadObject($where, null, null, $ljoin);
 
 $blink = new CBlink1();
-$blink->addPattern("orange flashes", "3,#FF9000,0.5,#000000,0.5");
+$blink->addPattern("mllp unknown", "3,#002851,0.5,#000000,0.5");
+$blink->addPattern("mllp error",   "3,#510000,0.5,#000000,0.5");
+$blink->addPattern("mllp warning", "3,#7f7f00,0.5,#000000,0.5");
+$blink->addPattern("mllp ok",      "3,#006100,0.5,#000000,0.5");
 
 if (!$source_mllp->_id) {
   /*
@@ -130,7 +133,7 @@ if (!$source_mllp->_id) {
   ob_clean();
   echo $ACK;
 
-  $blink->playPattern("white flashes");
+  $blink->playPattern("mllp unknown");
 
   CApp::rip();
 }
@@ -142,14 +145,14 @@ $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 try {
   $ack = CEAIDispatcher::dispatch($message, $sender_mllp);
 
-  if (strpos($ack, "|AE|")) {
-    $blink->playPattern("orange flashes");
+  if (strpos($ack, "|AR|")) {
+    $blink->playPattern("mllp error");
   }
-  elseif (strpos($ack, "|AR|")) {
-    $blink->playPattern("red flashes");
+  elseif (strpos($ack, "|AE|")) {
+    $blink->playPattern("mllp warning");
   }
   else {
-    $blink->playPattern("green flashes");
+    $blink->playPattern("mllp ok");
   }
 }
 catch (CHL7v2Exception $e) {
