@@ -2481,7 +2481,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->entree_reelle = $PV1_44;
     }
 
-    if ($newVenue->sortie_reelle) {
+    if ($newVenue->sortie_reelle && $event_code != "A03") {
       $newVenue->sortie_reelle = $PV1_45;
     }
 
