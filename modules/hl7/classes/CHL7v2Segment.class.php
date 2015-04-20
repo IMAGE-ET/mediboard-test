@@ -715,16 +715,20 @@ class CHL7v2Segment extends CHL7v2Entity {
    *
    * @return array
    */
-  function getXPN(CMbObject $object, CInteropReceiver $receiver) {
+  function getXPN(CMbObject $object, CInteropReceiver $receiver = null) {
     $names = array();
 
     if ($object instanceof CPatient) {
       $anonyme                 = is_numeric($object->nom);
-      $mode_identito_vigilance = $receiver->_configs["mode_identito_vigilance"];
+
+      $mode_identito_vigilance = "light";
+      if ($receiver) {
+        $mode_identito_vigilance = $receiver->_configs["mode_identito_vigilance"];
+      }
 
       $nom    = CPatient::applyModeIdentitoVigilance($object->nom, false, $mode_identito_vigilance, $anonyme);
 
-      $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom, true, $mode_identito_vigilance, $anonyme);
+      $prenom   = CPatient::applyModeIdentitoVigilance($object->prenom  , true, $mode_identito_vigilance, $anonyme);
       $prenom_2 = CPatient::applyModeIdentitoVigilance($object->prenom_2, true, $mode_identito_vigilance, $anonyme);
       $prenom_3 = CPatient::applyModeIdentitoVigilance($object->prenom_3, true, $mode_identito_vigilance, $anonyme);
       $prenom_4 = CPatient::applyModeIdentitoVigilance($object->prenom_4, true, $mode_identito_vigilance, $anonyme);
@@ -774,7 +778,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
       $names[] = $patient_usualname;
 
-      if ($object->nom_jeune_fille &&  $receiver->_configs["build_PID_6"] == "none") {
+      if ($object->nom_jeune_fille && $receiver &&  $receiver->_configs["build_PID_6"] == "none") {
         $names[] = $patient_birthname;
       }
     }
