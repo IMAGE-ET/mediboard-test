@@ -14,7 +14,7 @@
 CCanDo::checkEdit();
 
 $client_addr = CValue::post("client_addr");
-$server_port = CValue::post("server_port");
+$server_port = CValue::post("port");
 $message     = stripslashes(CValue::post("message"));
 
 $guid_prefix = "CSenderMLLP-";
