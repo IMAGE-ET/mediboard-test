@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPplanningOp script=commande_mat}}
+{{mb_script module=dPplanningOp script=commande_mat ajax=true}}
 <script>
 checkFormPrint = function() {
   var form = document.PrintFilter;

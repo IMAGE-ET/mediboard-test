@@ -1,4 +1,4 @@
-var Commande = {
+Commande = {
   edit: function(commande_id) {
     var url = new Url('planningOp', 'ajax_edit_commande_mat');
     url.addParam('commande_id', commande_id);
