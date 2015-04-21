@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+CView::enforceSlave();
+
 $total["nbPrep"] = 0;
 $total["nbPlages"] = 0;
 $total["somme"] = 0;

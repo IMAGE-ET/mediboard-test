@@ -36,6 +36,8 @@ else {
 }
 CValue::setSession('class', $class);
 
+CView::enforceSlave();
+
 // Types d'erreurs qu'on peut prendre en compte
 $error_types = array('type', 'params', 'unsigned', 'zerofill', 'null', 'default', 'index', 'extra');
 

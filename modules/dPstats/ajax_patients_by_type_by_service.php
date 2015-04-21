@@ -22,6 +22,8 @@ $discipline_id = CValue::get("discipline_id");
 $type          = CValue::get("type");
 $septique      = CValue::get("septique");
 
+CView::enforceSlave();
+
 if ($date_min > $date_max) {
   list($date_min, $date_max) = array($date_max, $date_min);
 }

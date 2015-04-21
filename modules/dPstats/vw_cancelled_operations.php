@@ -20,6 +20,8 @@ $salle_id   = CValue::get("salle_id");
 $bloc_id    = CValue::get("bloc_id");
 $code_ccam  = CValue::get("code_ccam");
 
+CView::enforceSlave();
+
 $prat = new CMediusers;
 $prat->load($prat_id);
 

@@ -31,6 +31,8 @@ $filter->septique     = CValue::get("septique", 0);
 
 $type_data = CValue::get("type_data", "prevue");
 
+CView::enforceSlave();
+
 // Qualité de l'information
 $qualite = array();
 

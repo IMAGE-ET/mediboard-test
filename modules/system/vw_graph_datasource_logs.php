@@ -22,6 +22,10 @@ $hours    = range(0, 24);
 // Human/bot filter
 $human_bot = CValue::getOrSession("human_bot", "0");
 
+$interval = CValue::getOrSession("interval", "one-day");
+
+CView::enforceSlave();
+
 $module = null;
 if (!is_numeric($groupmod)) {
   $module   = $groupmod;
@@ -29,8 +33,7 @@ if (!is_numeric($groupmod)) {
 }
 
 $to = CMbDT::date("+1 DAY", $date);
-switch ($interval = CValue::getOrSession("interval", "one-day")) {
-  default:
+switch ($interval) {
   case "one-day":
     $today = CMbDT::date("-1 DAY", $to);
     // Hours limitation
@@ -57,6 +60,8 @@ switch ($interval = CValue::getOrSession("interval", "one-day")) {
   case "twenty-years":
     $from = CMbDT::date("-20 YEARS", $to);
     break;
+  default:
+    return;
 }
 
 $graphs = array();
@@ -72,9 +77,6 @@ switch ($groupmod) {
   case 2:
     $logs = array(new CDataSourceLog());
     break;
-
-  default:
-    return;
 }
 
 $series_by_module = array();

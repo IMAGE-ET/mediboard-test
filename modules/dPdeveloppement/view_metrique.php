@@ -12,7 +12,10 @@
 CCanDo::checkRead();
 
 $view_current = CValue::get("view_current", 0);
-$smarty       = new CSmartyDP();
+
+CView::enforceSlave();
+
+$smarty = new CSmartyDP();
 
 // Pour l'établissement courant
 if ($view_current) {

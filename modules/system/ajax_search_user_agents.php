@@ -19,6 +19,8 @@ $max_date = CValue::get("_max_date");
 CValue::setSession("ua_min_date", $min_date);
 CValue::setSession("ua_max_date", $max_date);
 
+CView::enforceSlave();
+
 $auth = new CUserAuthentication();
 $ua   = new CUserAgent();
 $ds   = $ua->getDS();

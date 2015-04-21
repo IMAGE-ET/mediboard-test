@@ -37,6 +37,8 @@ CValue::setSession("user_id",       $user_id);
 CValue::setSession("human",         $human);
 CValue::setSession("robot",         $robot);
 
+CView::enforceSlave();
+
 $where = array();
 
 $error_log = new CErrorLog();

@@ -17,6 +17,8 @@ $element  = CValue::getOrSession("element" , "duration");
 $interval = CValue::getOrSession("interval", "day");
 $numelem  = CValue::getOrSession("numelem" , 6);
 
+CView::enableSlave();
+
 CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 
 $next     = CMbDT::date("+1 DAY", $date);

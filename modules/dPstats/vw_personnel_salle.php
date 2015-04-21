@@ -15,6 +15,8 @@ $deb_personnel  = CValue::getOrSession("deb_personnel" , CMbDT::date("-1 WEEK"))
 $fin_personnel  = CValue::getOrSession("fin_personnel" , CMbDT::date(""));
 $prat_personnel = CValue::getOrSession("prat_personnel", null);
 
+CView::enforceSlave();
+
 $user = CMediusers::get();
 $listPrats = $user->loadPraticiens(PERM_READ);
   

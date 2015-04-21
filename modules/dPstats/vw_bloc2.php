@@ -12,15 +12,17 @@
 CCanDo::checkRead();
 
 $mode = CValue::get("mode", "html");
+$deblist = CValue::getOrSession("deblistbloc", CMbDT::date("-1 DAY"));
+$finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
+$bloc_id = CValue::getOrSession("bloc_id");
+$type    = CValue::get("type", "prevue");
+CView::enforceSlave();
+
 if ($mode == "html") {
   $miner = new COperationWorkflow();
   $miner->warnUsage();
 }
 
-$deblist = CValue::getOrSession("deblistbloc", CMbDT::date("-1 DAY"));
-$finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
-$bloc_id = CValue::getOrSession("bloc_id");
-$type    = CValue::get("type", "prevue");
 
 $blocs = CGroups::loadCurrent()->loadBlocs();
 $bloc = new CBlocOperatoire();

@@ -9,6 +9,7 @@
  */
 
 CCanDo::checkEdit();
+CView::enforceSlave();
 
 // Statistiques sur les id400
 $req = new CRequest;
