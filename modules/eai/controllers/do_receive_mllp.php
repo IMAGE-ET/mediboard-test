@@ -133,7 +133,7 @@ if (!$source_mllp->_id) {
   $ACK  = "MSH|^~\&|".CAppUI::conf("hl7 sending_application")."|".CAppUI::conf("hl7 sending_facility").
           "|||$now||ACK|$now|P|2.5||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
   $ACK .= "\r"."MSA|AR|$now";
-  $ACK .= "\r"."ERR||0^0|207|E|E200^Acteur inconnu|||||||";
+  $ACK .= "\r"."ERR||0^0|207|E|E200^Acteur inconnu|||||||\r";
     
   ob_clean();
   echo $ACK;
@@ -179,7 +179,7 @@ catch (CHL7v2Exception $e) {
   $ack  = "MSH|^~\&|$sending_app|$sending_fac|$recv_app|$recv_fac|$now||ACK^R01^ACK|$now|P|2.6||||||".
     CHL7v2TableEntry::mapTo("211", CApp::$encoding);
   $ack .= "\r\n"."MSA|CR|$now";
-  $ack .= "\r\n"."ERR||0^0|207|E|E200^".$e->getMessage()."|||||||";
+  $ack .= "\r\n"."ERR||0^0|207|E|E200^".$e->getMessage()."|||||||\r";
 }
 
 ob_clean();
