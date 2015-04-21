@@ -9,6 +9,12 @@
 *}}
 
 <ul id="performance">
+  {{if $performance.enslaved}}
+  <li class="performance-enslaved">
+    <strong>ENSLAVED</strong>
+  </li>
+  {{/if}}
+
   <li class="performance-time">
     <strong class="title">Temps de génération</strong>
     <span class="performance-time">{{$performance.genere}} s</span>

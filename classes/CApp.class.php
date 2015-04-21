@@ -523,6 +523,8 @@ class CApp {
       "total"  => Cache::$total,
     );
 
+    self::$performance["enslaved"] = CView::$enslaved;
+
     $time = 0;
 
     // Data sources performance

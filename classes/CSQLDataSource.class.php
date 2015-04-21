@@ -69,7 +69,7 @@ abstract class CSQLDataSource {
    */
   static function get($dsn, $quiet = false) {
     if ($dsn === "std" && CView::$slavestate) {
-      $dsn = "readonly";
+      $dsn = "slave";
     }
 
     if (array_key_exists($dsn, self::$dataSources)) {
@@ -728,7 +728,7 @@ abstract class CSQLDataSource {
    * @return bool job done
    */
   function insertObject($table, $object, $vars, $keyName = null, $insert_delayed = false/*, $updateDuplicate = false*/) {
-    if (CAppUI::conf("readonly")  || $this->dsn === "readonly") {
+    if (CAppUI::conf("readonly")  || $this->dsn === "slave") {
       return false;
     }
     
@@ -795,7 +795,7 @@ abstract class CSQLDataSource {
   }
 
   function deleteObject($table, $keyName, $keyValue) {
-    if (CAppUI::conf("readonly")  || $this->dsn === "readonly") {
+    if (CAppUI::conf("readonly")  || $this->dsn === "slave") {
       return false;
     }
 
@@ -883,7 +883,7 @@ abstract class CSQLDataSource {
    * @return bool job done
    */
   function updateObject($table, $vars, $keyName, $nullifyEmptyStrings = true) {
-    if (CAppUI::conf("readonly") || $this->dsn === "readonly") {
+    if (CAppUI::conf("readonly") || $this->dsn === "slave") {
       return false;
     }
     

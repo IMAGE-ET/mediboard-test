@@ -128,6 +128,9 @@ $dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";
 $dPconfig["migration"]["extranet_url"] = "http://extranet_server/mediboard/";
 $dPconfig["migration"]["limit_date"]   = "1970-01-01";
 
+// Slaving
+$dPconfig["enslaving_ratio"] = "100";
+
 // Time format
 $dPconfig["date"]     = "%d/%m/%Y";
 $dPconfig["time"]     = "%Hh%M";
@@ -146,6 +149,15 @@ $dPconfig["db"]["std"] = array(
   "dbname" => "", // Change to match your Mediboard Database Name
   "dbuser" => "", // Change to match your Username
   "dbpass" => "", // Change to match your Password
+);
+
+// Slave database config for readonly time consuming views
+$dPconfig["db"]["slave"] = array(
+  "dbtype" => "",
+  "dbhost" => "",
+  "dbname" => "",
+  "dbuser" => "",
+  "dbpass" => "",
 );
 
 // Compatibility mode
