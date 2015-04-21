@@ -242,7 +242,7 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 $user = CAppUI::$user;
 // Check whether the password is strong enough
 // If account is not a robot
-if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m == "admin" && $dosql == "do_chpwd_aed"))) {
+if ($user && $user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m == "admin" && $dosql == "do_chpwd_aed"))) {
   if (
       CAppUI::$instance->weak_password
       && (!CAppUI::$instance->user_remote || CAppUI::conf("admin CUser apply_all_users"))

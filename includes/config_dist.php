@@ -136,7 +136,6 @@ $dPconfig["timezone"] = "Europe/Paris";
 
 // PHP config
 $dPconfig["php"] = array(
-  "memory_limit" => "128M"
 );
 
 // Standard database config
