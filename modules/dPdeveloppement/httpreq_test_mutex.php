@@ -56,6 +56,7 @@ switch ($action) {
 
   case "dummy":
     // Nothing to do
+    CAppUI::stepAjax("test_mutex-dummy", UI_MSG_OK);
     break;
   
   default:

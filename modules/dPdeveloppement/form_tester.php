@@ -11,25 +11,37 @@
 
 CCanDo::checkRead();
 
-class CTestClass extends CMbObject {
+/**
+ * Class CTestClass for form GUI test purposes
+ */
+class CTestClass extends CStoredObject {
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
-    foreach (CMbFieldSpecFact::$classes as $spec => $class) {
-      $this->$spec = null;
+    foreach (CMbFieldSpecFact::$classes as $_prop => $class) {
+      $this->$_prop = null;
     }
 
     parent::__construct();
     
-    foreach ($this->_specs as $key => &$spec) {
-      $spec->sample($this);
+    foreach ($this->_specs as $_spec) {
+      $_spec->sample($this);
     }
   }
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec(){
     $spec = parent::getSpec();
     $spec->key = 'test_class_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     foreach (CMbFieldSpecFact::$classes as $spec => $class) {

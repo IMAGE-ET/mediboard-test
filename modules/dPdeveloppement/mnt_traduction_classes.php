@@ -1,10 +1,12 @@
 <?php
-
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author Poiron Yohann
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage developpement
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -79,7 +81,16 @@ $all_locales = $contenu_file[$language];
 $total_count = 0;
 $local_count = 0;
 
-// Ajoute un item de localisation
+/**
+ * Add a locale item in a three levels collection
+ * (Yet more of an internationalisation item)
+ *
+ * @param string $class Class name
+ * @param string $cat   Category name
+ * @param string $name  Item name
+ *
+ * @return void
+ */
 function addLocale($class, $cat, $name) {
   global $trans, $items, $completions, $language, $all_locales, $total_count, $local_count;
   
@@ -190,7 +201,16 @@ foreach ($classes as $class) {
   }
 }
 
-// Parcours des variables de configuration
+/**
+ * Add locale item for config category values
+ *
+ * @param string     $chapter  Chapter name
+ * @param string     $category Category name
+ * @param null|array $values   Key-value array when necessary
+ * @param bool       $add_desc Tell wether shoud add a description locale item
+ *
+ * @return void
+ */
 function addConfigConfigCategory($chapter, $category, $values, $add_desc = true) {
   $prefix = $chapter ? "$chapter-$category" : $category;
   

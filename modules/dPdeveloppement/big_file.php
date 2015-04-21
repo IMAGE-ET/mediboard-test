@@ -16,7 +16,8 @@ $size = CValue::get("size", 1024 * 1024);
 // max = 10MB
 $size = min($size, 1024 * 1024 * 10);
 
-$lorem = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ";
+$lorem = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy ";
+$lorem.= "nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ";
 
 $lorem_size = strlen($lorem);
 

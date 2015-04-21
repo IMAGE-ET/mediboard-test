@@ -9,11 +9,15 @@
  * @version    $Revision$
  */
 
-@include "PHP/CodeSniffer.php";
+
+if (!class_exists("PHP_CodeSniffer", false)) {
+  @include "PHP/CodeSniffer.php";
+}
 
 // Useful whenever you want to use GIT version 
 // @include "../PHP_CodeSniffer/CodeSniffer.php";
 
+// Still does not exist, just quit
 if (!class_exists("PHP_CodeSniffer", false)) {
   return;
 }
@@ -24,6 +28,7 @@ if (!class_exists("PHP_CodeSniffer", false)) {
  */
 class CMbCodeSniffer extends PHP_CodeSniffer {
   public $reports = array();
+  public $stats = array();
   
   /**
    * Adapt CLI behaviour to framework
@@ -109,7 +114,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   /**
    * Make a report file path
    * 
-   * @param string $file       
+   * @param string $file       File name
    * @param string $reportType One of full xml checkstyle csv emacs source summary svnblame gitblame
    *                           
    * @return string
@@ -123,19 +128,21 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
    * Check reports for file tree
    * 
    * @param array $files Tree
+   *
    * @return array Reports status for files
    */
   function checkReports($files) {
     $this->reports = array();
     $this->checkReport("", $files);
     return $this->reports;
-  } 
-  
+  }
+
   /**
    * Check report status for a specific file tree node
-   * 
+   *
    * @param string $basedir Tree node base directory context
-   * @param mixed  $files   Tree node, either a single file or a collection
+   * @param mixed  $file    Tree node, either a single file or a collection
+   *
    * @return void
    */
   function checkReport($basedir, $file) {
@@ -163,12 +170,26 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 
     $this->reports[$subpath] = $check;
   }
-  
+
+  /**
+   * Build sniff stats for entire tree of files
+   *
+   * @param string[] $files Files collection
+   *
+   * @return array
+   */
   function buildStats($files) {
     $this->stats = array();
     $this->buildStat("", $files);
 
-    // Sum count arrays from recursive array count
+    /**
+     * Internal sum count arrays from recursive array count
+     *
+     * @param string $key    Key name
+     * @param int[]  &$value Counters as array for leaf, branch otherwise
+     *
+     * @return void Value is altered in all nodes of the tree
+     */
     function sumCounts($key, &$value) {
       if ($key == "count" && is_array($value)) {
         $value = array_sum($value);
@@ -181,11 +202,20 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
         }
       }
     }
+
     sumCounts(null, $this->stats);
     
     return $this->stats;
-  } 
-  
+  }
+
+  /**
+   * Recursive stat building for given files
+   *
+   * @param string          $basedir Base directory of the node
+   * @param string|string[] $file    File or file collection of the node
+   *
+   * @return array|mixed
+   */
   function buildStat($basedir, $file) {
     $stat = array();
 
@@ -213,7 +243,12 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 
     return $this->stats[$subpath] = $stat;
   }
-  
+
+  /**
+   * Build an flattened array or alerts
+   *
+   * @return array
+   */
   function getFlattenAlerts() {
     $alerts = array();
     foreach ($this->getFilesErrors() as $_file => $_by_file) {
@@ -243,10 +278,24 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     array_multisort(CMbArray::pluck($alerts, "line"), SORT_ASC, $alerts);
     return $alerts;
   }
-  
+
+  /**
+   * Get all stats for one file
+   *
+   * @param string $file File name
+   *
+   * @return null
+   */
   function stat($file) {
     
-    // Recursive increment routine
+    /**
+     * Recursive increment routine
+     *
+     * @param array &$stats Stats
+     * @param array $parts  Parts
+     *
+     * @return array
+     */
     function increment(&$stats, $parts) {
       if (!isset ($stats)) {
         $stats = array (
@@ -278,4 +327,3 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     return $stats;
   }
 }
-?>

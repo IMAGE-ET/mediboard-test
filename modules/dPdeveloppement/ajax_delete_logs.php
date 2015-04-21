@@ -23,7 +23,7 @@ switch ($type) {
     $control_tabs_name = "debug";
     break;
 
-  default :
+  default:
     $filename = CError::LOG_PATH;
     $control_tabs_name = "error-file";
 }

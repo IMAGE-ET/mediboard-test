@@ -46,12 +46,20 @@ foreach ($error_types as $type) {
   $types[$type] = !isset($t) || in_array($type, $t);
 }
 
-function array_duplicates($array, $field) {
+/**
+ * Build an array of duplicates values for key-value array collection.
+ *
+ * @param mixed[][] $array Key-value array collection (array of arrays)
+ * @param string    $key   The key to inspect
+ *
+ * @return mixed[][]
+ */
+function array_duplicates($array, $key) {
   $ret = array();
   $count = count($array);
   for ($i = 0; $i < $count; $i++) {
     for ($j = 0; $j < $count; $j++) {
-      if ($i != $j && $array[$i][$field] == $array[$j][$field]) {
+      if ($i != $j && $array[$i][$key] == $array[$j][$key]) {
         $ret[$i][] = $array[$i];
       }
     }
@@ -245,8 +253,17 @@ foreach ($list_classes as $_class => &$class_details) {
   }
 }
 
-// Construit la requete correspondant à la spec d'une classe 
-// (avec prise en compte des erreurs qu'on souhaite)
+//
+//
+/**
+ * Construit la requete correspondant à la spec d'une classe
+ * avec prise en compte des erreurs que l'on souhaite mettre en évidence
+ *
+ * @param string $class  Le nom de la classe
+ * @param bool[] $errors Collection d'erreurs sélectionnées
+ *
+ * @return string
+ */
 function get_query_for_class($class, $errors = array()) {
   $change = array();
   $add = array();
@@ -318,10 +335,12 @@ function get_query_for_class($class, $errors = array()) {
   // creation / modification de la table
   if (count($change) > 0) {
     if ($add_table) {
-      $ret = "CREATE TABLE `{$class['table']}` (\n                " . implode($glue, $change) . "\n              )/*! ENGINE=MyISAM */;";
+      $ret = "CREATE TABLE `{$class['table']}` (\n                "
+        . implode($glue, $change) . "\n              )/*! ENGINE=MyISAM */;";
     }
     else {
-      $ret = "ALTER TABLE `{$class['table']}` \n                " . implode($glue, $change) . ";";
+      $ret = "ALTER TABLE `{$class['table']}` \n                "
+        . implode($glue, $change) . ";";
     }
   }
 
@@ -334,7 +353,8 @@ function get_query_for_class($class, $errors = array()) {
     if (count($drop_index) > 0) {
       $q[] = implode($glue, $drop_index);
     }
-    $ret .= "\nALTER TABLE `{$class['table']}` \n                " . implode($glue, $q) . ";";
+    $ret .= "\nALTER TABLE `{$class['table']}` \n                "
+      . implode($glue, $q) . ";";
   }
 
   if (count($class['duplicates']) > 0) {
