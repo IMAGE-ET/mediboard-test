@@ -15,7 +15,7 @@ $account_id   = CValue::get("account_id");
 $user = CMediusers::get();
 
 //filters
-$mode = CValue::get("mode", "unread");
+$mode = CValue::get("mode", "inbox");
 
 //others
 $page         = CValue::get("page", 0);
@@ -26,7 +26,7 @@ $account_pop = new CSourcePOP();
 $account_pop->load($account_id);
 
 if (($account_pop->object_id != $user->_id) && $account_pop->is_private) {
-  CAppUI::stepAjax("CSourcePOP-error-not_your_account_private", UI_MSG_ERROR);
+  CAppUI::stepAjax("CSourcePOP-error-private_account", UI_MSG_ERROR);
 }
 
 //no account_id, first of account of user
@@ -41,43 +41,29 @@ $mail = new CUserMail();
 
 switch ($mode) {
   case 'inbox':
-    $where['account_id'] = "= '$account_id' ";
-    $where['account_class'] = "= 'CSourcePOP' ";
-    $where['archived'] = "= '0' ";
-    $where['sent'] = "= '0' ";
-    //$where['date_read'] = ' IS NULL';
+    $nb_mails = CUserMail::countInbox($account_id);
+    $mails = CUserMail::loadInbox($account_id, $page, $limit_list);
     break;
 
   case 'archived':
-    $where['account_id'] = "= '$account_id'";
-    $where['account_class'] = "= 'CSourcePOP'";
-    $where['archived'] = "= '1' ";
+    $nb_mails = CUserMail::countArchived($account_id);
+    $mails = CUserMail::loadArchived($account_id, $page, $limit_list);
     break;
 
-  case 'favorited' :
-    $where['account_id'] = "= '$account_id'";
-    $where['account_class'] = "= 'CSourcePOP'";
-    $where['favorite'] = "= '1' ";
+  case 'favorites' :
+    $nb_mails = CUserMail::countFavorites($account_id);
+    $mails = CUserMail::loadFavorites($account_id, $page, $limit_list);
     break;
 
-  case 'sent':
-    $source_smtp = CExchangeSource::get("mediuser-$user->_id", "smtp");
-    if ($source_smtp->_id) {
-      $where[] = "(account_id = '$account_id' AND account_class = 'CSourcePOP') OR (account_id = '$source_smtp->_id' AND account_class = 'CSourceSMTP')";
-    }
-    else {
-      $where['account_id'] = "= '$account_id'";
-      $where['account_class'] = "= 'CSourcePOP'";
-    }
-    $where['sent'] = " = '1' ";
+  case 'sentbox':
+    $nb_mails = CUserMail::countSent($account_id);
+    $mails = CUserMail::loadSent($account_id, $page, $limit_list);
+    break;
+  case 'drafts':
+    $nb_mails = CUserMail::countDrafted($account_id);
+    $mails = CUserMail::loadDrafted($account_id, $page, $limit_list);
     break;
 }
-
-$order = "date_inbox DESC";
-$limit= "$page, $limit_list";
-
-$nb_mails = $mail->countList($where);
-$mails = $mail->loadList($where, $order, $limit);
 
 /** @var $mails CUserMail[] */
 foreach ($mails as $_mail) {

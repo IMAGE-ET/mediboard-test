@@ -73,9 +73,7 @@
       </td>
       <td onclick="{{$onclick}}">
         {{if $_usermessage->_ref_dest_user->_id && $_usermessage->_mode == 'in' && $_usermessage->_ref_dest_user->starred}}
-          <span style="float: right; margin : 2px;">
-            <i class="msgicon fa fa-star"></i>
-          </span>
+          <i style="float: right; color: #ffa306; margin : 2px;" class=" fa fa-star"></i>
         {{/if}}
 
         <a href="#">{{$_usermessage->subject}}</a>

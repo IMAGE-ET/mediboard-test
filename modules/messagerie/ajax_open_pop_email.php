@@ -32,11 +32,13 @@ $pop->open();
 //mail
 $mail = new CUserMail();
 $head = $pop->header($mail_id);
-$mail->uid = $head[0]->uid;
-$mail->loadMatchingObject();
+$content = $pop->getFullBody($_mail, false, false, true);
+$hash = $mail_unseen->makeHash($head, $content);
+
+$mail->loadMatchingFromHash($hash);
 if ($mail->_id && !$mail->text_plain_id) {
-  $mail->loadMatchingFromSource($head);
-  $mail->loadContentFromSource($pop->getFullBody($mail_id, false, false, true));
+  $mail->setHeaderFromSource($head);
+  $mail->setContentFromSource($pop->getFullBody($_mail, false, false, true));
   $mail->date_read = CMbDT::dateTime();
   $mail->user_id = $user->_id;
   //text plain

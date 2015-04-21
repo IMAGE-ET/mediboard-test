@@ -23,7 +23,7 @@
         <td {{if $mail->text_file_id}}class="ok"{{/if}}>
           <textarea style="width:100%; height:100px;">{{$mail->_text_plain->content}}</textarea>
           {{if $mail->text_file_id}}
-            <div style="text-align: center;" "><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
+            <div style="text-align: center;" "><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachments-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
           {{/if}}
         </td>
         <td class="plain"><input type="checkbox" name="attach_plain" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_plain->_id}}" onclick="checkrelation()"/></td>
@@ -32,7 +32,7 @@
       <tr>
         <td {{if $mail->text_file_id}}class="ok"{{/if}}><iframe src="?m={{$m}}&amp;a=vw_html_content&amp;mail_id={{$mail->_id}}&amp;suppressHeaders=1" style="width:100%;"></iframe>
           {{if $mail->text_file_id}}
-            <div><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
+            <div><img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachments-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$mail->_ref_file_linked->_ref_object->_guid}}')">{{$mail->_ref_file_linked->_ref_object->_view}}</span></div>
           {{/if}}
         </td>
         <td class="html"><input type="checkbox" name="attach_html" class="check_att" {{if !$mail->text_file_id}}checked="checked"{{/if}} value="{{$mail->_text_html->_id}}" onclick="checkrelation()"/></td>
@@ -69,7 +69,7 @@
           </div>
           {{if $_attachment->file_id}}
             <div style="text-align: left;">
-              <img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachment-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$_attachment->_file->_ref_object->_guid}}')">{{$_attachment->_file->_ref_object->_view}}</span>
+              <img src="style/mediboard/images/buttons/link.png" alt=""/>{{tr}}CMailAttachments-LinkedTo{{/tr}}<span onmouseover="ObjectTooltip.createEx(this, '{{$_attachment->_file->_ref_object->_guid}}')">{{$_attachment->_file->_ref_object->_view}}</span>
               <button type="button" class="cancel notext" onclick="messagerie.cancelAttachment('{{$_attachment->_id}}','{{$mail->_id}}')"></button>
             </div>
           {{/if}}
@@ -81,7 +81,7 @@
       <td class="check {{if $_attachment->file_id}}ok{{/if}}"><input type="checkbox" class="check_att" name="checkbox_att"  {{if !$_attachment->file_id}}checked="checked"{{/if}} value="{{$_attachment->_id}}" onclick="checkrelation()"/> </td>
     </tr>
     {{foreachelse}}
-    <tr><td colspan="3" class="empty">{{tr}}CMailAttachment-none{{/tr}}</td></tr>
+    <tr><td colspan="3" class="empty">{{tr}}CMailAttachments-none{{/tr}}</td></tr>
   {{/foreach}}
   </table>
 </form>

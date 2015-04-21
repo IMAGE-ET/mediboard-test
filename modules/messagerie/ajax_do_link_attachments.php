@@ -31,7 +31,7 @@ if (!$object->_id) {
 }
 
 if (str_replace("-", "", $attach_list) == "" && !$text_plain && !$text_html) {
-  CAppUI::stepAjax("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
+  CAppUI::stepAjax("CMailAttachments-msg-no_object_to_attach", UI_MSG_ERROR);
 }
 
 $attachments = trim($attach_list) ? explode("-", $attach_list) : array();
@@ -64,7 +64,7 @@ foreach ($attachments as $_attachment) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
       else {
-        CAppUI::stepAjax("CMailAttachment-msg-attachmentLinked-success", UI_MSG_OK);
+        CAppUI::stepAjax("CMailAttachments-msg-attachmentLinked-success", UI_MSG_OK);
       }
     }
   }
@@ -139,5 +139,5 @@ if ($text_html || $text_plain) {
 }
 
 if (!$text_html && !$text_plain && $attach_list == "" ) {
-  CAppUI::stepAjax("CMailAttachment-msg-noAttachSelected", UI_MSG_ERROR);
+  CAppUI::stepAjax("CMailAttachments-msg-noAttachSelected", UI_MSG_ERROR);
 }

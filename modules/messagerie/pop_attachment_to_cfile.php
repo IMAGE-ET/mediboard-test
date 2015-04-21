@@ -54,7 +54,7 @@ if ($attachment_id != 0) { //je récupère LA pièce jointe
       CAppUI::setMsg($str, UI_MSG_ERROR);
     }
     else {
-      CAppUI::setMsg("CMailAttachment-msg-attachmentsaved", UI_MSG_OK);
+      CAppUI::setMsg("CMailAttachments-msg-attachmentsaved", UI_MSG_OK);
     }
 
     $pop->close();
@@ -81,7 +81,7 @@ else {  //je récupère TOUTES les pièces jointes
         CAppUI::setMsg($str, UI_MSG_ERROR);
       }
       else {
-        CAppUI::setMsg("CMailAttachment-msg-attachmentsaved", UI_MSG_OK);
+        CAppUI::setMsg("CMailAttachments-msg-attachmentsaved", UI_MSG_OK);
       }
 
       $pop->close();

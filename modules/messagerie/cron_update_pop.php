@@ -86,7 +86,6 @@ foreach ($sources as $_source) {
     $unseen = $pop->search('BEFORE "'.$dateIMAP.'"', true);
   }
   else {
-
     $unseen = $pop->search('SINCE "'.$dateIMAP.'"', true);
   }
 
@@ -117,8 +116,12 @@ foreach ($sources as $_source) {
 
       //mail non existant
       $header = $pop->header($_mail);
-      if (!$mail_unseen->loadMatchingFromSource($header)) {
-        $mail_unseen->loadContentFromSource($pop->getFullBody($_mail, false, false, true));
+      $content = $pop->getFullBody($_mail, false, false, true);
+      $hash = $mail_unseen->makeHash($header, $content);
+
+      if (!$mail_unseen->loadMatchingFromHash($hash)) {
+        $mail_unseen->setHeaderFromSource($header);
+        $mail_unseen->setContentFromSource($pop->getFullBody($_mail, false, false, true));
 
         //text plain
         $mail_unseen->getPlainText($_source->object_id);

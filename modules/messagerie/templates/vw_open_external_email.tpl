@@ -12,6 +12,10 @@
 {{mb_script module="dPfiles" script="files" ajax=true}}
 {{mb_script module=patients    script=pat_selector    ajax=true}}
 
+<div id="actions" style="text-align: center; margin-bottom: 5px;">
+  {{mb_include module=messagerie template=inc_usermail_actions}}
+</div>
+
 <table class="form">
   <tr>
     <th class="title" colspan="4">{{mb_value object=$mail field=subject}}</th>
@@ -65,7 +69,17 @@
 
 {{if $mail->_attachments|count}}
   <table class="form">
-    <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>
+    <tr>
+      <th class="title">
+        {{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}})
+        {{if $nbAttachPicked != $nbAttachAll}}
+          <button type="button" tilte="{{tr}}CMailAttachments-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button">
+            <i class="msgicon fa fa-download"></i>
+            {{tr}}CMailAttachments-button-getAllAttachments{{/tr}}
+          </button>
+        {{/if}}
+      </th>
+    </tr>
   </table>
   <ul id="list_attachment">
     <style>
@@ -107,7 +121,10 @@
               <input type="hidden" name="dosql" value="do_file_aed" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="file_id" value="{{$file->_id}}"/>
-              <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$file->_view|smarty:nodefaults|JSAttribute}}'})">trash</button>
+              <button type="button" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$file->_view|smarty:nodefaults|JSAttribute}}'})" title="{{tr}}Delete{{/tr}}">
+                <i class="msgicon fa fa-trash"></i>
+                {{tr}}Delete{{/tr}}
+              </button>
             </form>
           </li>
         {{else}}
@@ -115,10 +132,13 @@
               <p>
                 <a href="#{{$_attachment->_id}}" onclick="messagerie.getAttachment('{{$_attachment->_id}}')" style="text-align: center;">
                   <img src="images/pictures/unknown.png" style="height:100px;" alt=""/><br/>
-          {{$_attachment->name}} ({{$_attachment->bytes}})
+                  {{$_attachment->name}} ({{$_attachment->bytes}})
                 </a>
               </p>
-              <a class="button download singleclick" href="#{{$_attachment->_id}}" onclick="messagerie.getAttachment('{{$mail->_id}}','{{$_attachment->_id}}')">{{tr}}CMailAttachment-button-getTheAttachment{{/tr}}</a>
+              <button type="button" class=" singleclick" onclick="messagerie.getAttachment('{{$mail->_id}}','{{$_attachment->_id}}')">
+                <i class="msgicon fa fa-download"></i>
+                {{tr}}CMailAttachments-button-getTheAttachment{{/tr}}
+              </button>
             </li>
             <td></td>
         {{/if}}
@@ -126,15 +146,3 @@
     {{/foreach}}
   </ul>
 {{/if}}
-<table class="form">
-    <tr><th class="title">Actions</th></tr>
-    <tr>
-      <td>
-      {{*<a href="#answer"  class="button"><img alt="message" src="images/icons/usermessage.png">{{tr}}CUserMail-button-answer{{/tr}}</a>*}}
-      {{if $app->user_prefs.LinkAttachment}}
-        <a href="#{{$mail->_id}}" class="button copy" onclick="messagerie.linkAttachment('{{$mail->_id}}');">{{tr}}CMailAttachments-button-append{{/tr}}</a>
-      {{/if}}
-      <a href="#{{$mail->_id}}" class="button change" onclick="messagerie.toggleArchived('{{$mail->_id}}'); Control.Modal.close();">{{tr}}CUserMail-button-archive{{/tr}}</a>
-      </td>
-    </tr>
-</table>

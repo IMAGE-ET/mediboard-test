@@ -24,16 +24,22 @@ class CUserMail extends CMbObject{
   public $_from;  //who sent it, readable
   public $to;  //complete recipient
   public $_to;  //recipient readable
+  public $cc;
+  public $_cc;
+  public $bcc;
+  public $_bcc;
   public $date_inbox;  //sent date
   public $date_read;  //date of the first read of the mail
   public $_msgno;  //message sequence number in the mailbox
   public $uid;
   public $answered;  //this message is flagged as answered
+  public $hash; //hash of the content of the mail, the subject, the addresses
 
   //status
   public $favorite;  // favorite, important email
   public $archived;  // is the mail archived, (hidden)
   public $sent;      // mail has been sent
+  public $draft;     // mail has been drafted
 
   public $in_reply_to_id; //is a reply to this message id
   public $text_file_id;
@@ -45,6 +51,7 @@ class CUserMail extends CMbObject{
   public $_ref_account_;
   public $_is_apicrypt;
   public $_is_hprim;
+  public $_content;
 
   public $text_html_id; //html text = CContentHTML_id
   public $_text_html;
@@ -55,6 +62,8 @@ class CUserMail extends CMbObject{
   public $_parts;
 
   public $_size; //size in bytes
+  public $_date_inbox;
+  public $_date_read;
 
   /**
    * @see parent::getSpec()
@@ -79,6 +88,10 @@ class CUserMail extends CMbObject{
     $props["_from"]         = "str";
     $props["to"]            = "str";
     $props["_to"]           = "str";
+    $props['cc']            = 'str';
+    $props['_cc']           = 'str';
+    $props['bcc']           = 'str';
+    $props['_bcc']          = 'str';
     $props["date_inbox"]    = "dateTime";
     $props["date_read"]     = "dateTime";
     $props["_msgno"]        = "num";
@@ -87,6 +100,9 @@ class CUserMail extends CMbObject{
     $props["favorite"]      = "bool default|0";
     $props["archived"]      = "bool default|0";
     $props["sent"]          = "bool default|0";
+    $props['draft']         = 'bool default|0';
+    $props['hash']          = "text";
+    $props['_content']      = 'html';
     //$props["msg_references"]= "str";
     $props["in_reply_to_id"] = "ref class|CUserMail";
     $props["text_file_id"]  = "ref class|CFile";
@@ -138,12 +154,30 @@ class CUserMail extends CMbObject{
       }
     }
 
-    // Remove html content
+    // Remove plain content
     $content = $this->loadContentPlain();
     if ($content->_id) {
       if ($msg = $content->delete()) {
         return $msg;
       }
+    }
+  }
+
+  public function updateFormFields() {
+    $this->_date_inbox = CMbDT::date(null, $this->date_inbox);
+    if ($this->_date_inbox == CMbDT::date()) {
+      $this->_date_inbox = CMbDT::format($this->date_inbox, '%H:%M');
+    }
+    else if (CMbDT::format($this->date_inbox, '%Y') == CMbDT::format(CMbDT::date(), '%Y')) {
+      $this->_date_inbox = CMbDT::format($this->date_inbox, '%d %B');
+    }
+
+    $this->_date_read = CMbDT::date(null, $this->date_read);
+    if ($this->_date_read == CMbDT::date()) {
+      $this->_date_read = CMbDT::format($this->date_read, '%H:%M');
+    }
+    else if (CMbDT::format($this->date_read, '%Y') == CMbDT::format(CMbDT::date(), '%Y')) {
+      $this->_date_read = CMbDT::format($this->date_read, '%d %B');
     }
   }
 
@@ -196,29 +230,37 @@ class CUserMail extends CMbObject{
 
 
   /**
-   * used to load the mail from SourcePOP
+   * Used to load the mail from SourcePOP
    *
-   * @param object $source object from imap structure
+   * @param string $hash The hash of the mail
    *
    * @return bool|int|null
    */
-  function loadMatchingFromSource($source) {
+  function loadMatchingFromHash($hash) {
+    $this->hash = $hash;
+    $this->loadMatchingObject();
+
+    return $this->_id;
+  }
+
+  public function setHeaderFromSource($source) {
     //assignment
     $this->uid          = $source->uid;
     $this->loadMatchingObject();
 
     $this->subject      = (isset($source->subject)) ? self::flatMimeDecode($source->subject) : null;
-    $this->from         = self::flatMimeDecode($source->from);
-    $this->to           = (isset($source->to)) ? self::flatMimeDecode($source->to) : null;
+    $this->from         = self::flatMimeDecode($source->fromaddress);
+    $this->to           = (isset($source->toaddress)) ? self::flatMimeDecode($source->toaddress) : null;
+    $this->cc           = (isset($source->ccaddress)) ? self::flatMimeDecode($source->ccaddress) : null;
+    $this->bcc          = (isset($source->bccaddress)) ? self::flatMimeDecode($source->bccaddress) : null;
     $this->date_inbox   = CMbDT::dateTime($source->date);
 
     //cleanup
-    if ($source->seen) {
+    if (empty($source->Unseen)) {
       $this->date_read = $this->date_inbox;
     }
 
     $this->unescapeValues();
-    return $this->_id;
   }
 
 
@@ -258,14 +300,13 @@ class CUserMail extends CMbObject{
   function getHtmlText($source_object_id) {
     if ($this->_text_html) {
       $textH = new CContentHTML();
-      $text = CMbString::purifyHTML($this->_text_html); //cleanup
+
       //apicrypt
       if (CModule::getActive("apicrypt") && $this->_is_apicrypt == "html") {
-        $textH->content = CApicrypt::uncryptBody($source_object_id, $text);
+        $this->_text_html = CApicrypt::uncryptBody($source_object_id, $this->_text_html);
       }
-      else {
-        $textH->content = $text;
-      }
+
+      $textH->content = CUserMail::purifyHTML($this->_text_html); //cleanup
 
       if (!$msg = $textH->store()) {
         $this->text_html_id = $textH->_id;
@@ -363,12 +404,36 @@ class CUserMail extends CMbObject{
    *
    * @return null
    */
-  function loadContentFromSource($contentsource) {
+  function setContentFromSource($contentsource) {
     $this->_text_plain   = $contentsource["text"]["plain"];
     $this->_is_apicrypt  = $contentsource["text"]["is_apicrypt"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
     return;
+  }
+
+  /**
+   * Make the hash for the given headers and mail content
+   *
+   * @param $header The headers, returned by the POP source
+   * @param $content The content, returned by the POP source
+   *
+   * @return bool|string
+   */
+  public function makeHash($header, $content) {
+    $data = "==FROM==\n" . self::flatMimeDecode($header->fromaddress) .
+      "\n==TO==\n" . self::flatMimeDecode($header->toaddress) .
+      "\n==SUBJECT==\n" . self::flatMimeDecode($header->subject);
+
+    if (!empty($content['text']['html'])) {
+      $content = $content['text']['html'];
+    }
+    elseif (!empty($content['text']['plain'])) {
+      $content = $content['text']['plain'];
+    }
+
+    $data .= "\n==CONTENT==\n$content";
+    return CMbSecurity::hash(CMbSecurity::SHA256, $data);
   }
 
   /**
@@ -395,6 +460,10 @@ class CUserMail extends CMbObject{
   private function flatMimeDecode($string) {
     $parts = imap_mime_header_decode($string);
     $str = implode("", CMbArray::pluck($parts, "text"));
+    if (strpos($string, 'UTF-8') !== false) {
+      $str = utf8_decode($str);
+    }
+
     return addslashes($str);
   }
 
@@ -417,7 +486,7 @@ class CUserMail extends CMbObject{
       $_attachment->id = preg_replace("/(<|>)/", "", $_attachment->id);
       if (preg_match("/$_attachment->id/", $this->_text_html->content)) {
         if (isset($_attachment->_file->_id)) {
-          $url = "?m=files&a=fileviewer&suppressHeaders=1&file_id=".$_attachment->_file->_id. "&amp;phpThumb=1&amp;f=png";
+          $url = "?m=files&a=fileviewer&suppressHeaders=1&file_id=".$_attachment->_file->_id;
           $this->_text_html->content = str_replace("cid:$_attachment->id", $url , $this->_text_html->content);
         }
       }
@@ -476,7 +545,7 @@ class CUserMail extends CMbObject{
    * @return CStoredObject[]
    */
   function loadAttachments() {
-    return  $this->_attachments = $this->loadBackRefs("mail_attachments");
+    return  $this->_attachments = $this->loadBackRefs("mail_attachments", 'part ASC');
   }
 
   /**
@@ -540,4 +609,251 @@ class CUserMail extends CMbObject{
     return;
   }
 
+  /**
+   * Count the unread mails for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countUnread($account_id) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['archived'] = "= '0'";
+    $where['sent'] = "= '0'";
+    $where['date_read'] = 'IS NULL';
+    $where['draft'] = "= '0'";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Count the mails in the inbox for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countInbox($account_id) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['archived'] = "= '0'";
+    $where['sent'] = "= '0'";
+    $where['draft'] = "= '0'";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Load the mails in the inbox for an account
+   *
+   * @param int $account_id The account id
+   * @param int $start      The start
+   * @param int $limit      The number of mails to load
+   *
+   * @return CUserMail[]
+   */
+  public static function loadInbox($account_id, $start, $limit) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['archived'] = "= '0'";
+    $where['sent'] = "= '0'";
+    $where['draft'] = "= '0'";
+
+    $order = "date_inbox DESC";
+    $limit= "$start, $limit";
+    $mail = new CUserMail();
+    return $mail->loadList($where, $order, $limit);
+  }
+
+  /**
+   * Count the archived mails for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countArchived($account_id) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['archived'] = "= '1' ";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Load the archived mails for an account
+   *
+   * @param int $account_id The account id
+   * @param int $start      The start
+   * @param int $limit      The number of mails to load
+   *
+   * @return CUserMail[]
+   */
+  public static function loadArchived($account_id, $start, $limit) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['archived'] = "= '1' ";
+
+    $order = "date_inbox DESC";
+    $limit= "$start, $limit";
+    $mail = new CUserMail();
+    return $mail->loadList($where, $order, $limit);
+  }
+
+  /**
+   * Count the favoured mails for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countFavorites($account_id) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['favorite'] = "= '1' ";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Load the favoured mails for an account
+   *
+   * @param int $account_id The account id
+   * @param int $start      The start
+   * @param int $limit      The number of mails to load
+   *
+   * @return CUserMail[]
+   */
+  public static function loadFavorites($account_id, $start, $limit) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['favorite'] = "= '1' ";
+
+    $order = "date_inbox DESC";
+    $limit= "$start, $limit";
+    $mail = new CUserMail();
+    return $mail->loadList($where, $order, $limit);
+  }
+
+  /**
+   * Count the number of sent mails for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countSent($account_id) {
+    $source_smtp = CExchangeSource::get('mediuser-' . CMediusers::get()->_id, "smtp");
+    if ($source_smtp->_id) {
+      $where[] = "(account_id = '$account_id' AND account_class = 'CSourcePOP') OR (account_id = '$source_smtp->_id' AND account_class = 'CSourceSMTP')";
+    }
+    else {
+      $where['account_id'] = "= '$account_id'";
+      $where['account_class'] = "= 'CSourcePOP'";
+    }
+    $where['sent'] = " = '1' ";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Load the sent mails for an account
+   *
+   * @param int $account_id The account id
+   * @param int $start      The start
+   * @param int $limit      The number of mails to load
+   *
+   * @return CUserMail[]
+   */
+  public static function loadSent($account_id, $start, $limit) {
+    $source_smtp = CExchangeSource::get('mediuser-' . CMediusers::get()->_id, "smtp");
+    if ($source_smtp->_id) {
+      $where[] = "(account_id = '$account_id' AND account_class = 'CSourcePOP') OR (account_id = '$source_smtp->_id' AND account_class = 'CSourceSMTP')";
+    }
+    else {
+      $where['account_id'] = "= '$account_id'";
+      $where['account_class'] = "= 'CSourcePOP'";
+    }
+    $where['sent'] = " = '1' ";
+
+    $order = "date_inbox DESC";
+    $limit= "$start, $limit";
+    $mail = new CUserMail();
+    return $mail->loadList($where, $order, $limit);
+  }
+
+  /**
+   * Count the number of drafted mails for an account
+   *
+   * @param int $account_id The account id
+   *
+   * @return int
+   */
+  public static function countDrafted($account_id) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['draft'] = "= '1' ";
+
+    $mail = new CUserMail();
+    return $mail->countList($where);
+  }
+
+  /**
+   * Load the drafted mails for an account
+   *
+   * @param int $account_id The account id
+   * @param int $start      The start
+   * @param int $limit      The number of mails to load
+   *
+   * @return CUserMail[]
+   */
+  public static function loadDrafted($account_id, $start, $limit) {
+    $where['account_id'] = "= '$account_id'";
+    $where['account_class'] = "= 'CSourcePOP'";
+    $where['draft'] = "= '1' ";
+
+    $order = "date_inbox DESC";
+    $limit= "$start, $limit";
+    $mail = new CUserMail();
+    return $mail->loadList($where, $order, $limit);
+  }
+
+  /**
+   * Purify a HTML string without deleting the embedded image
+   *
+   * @param string $html The HTML code to purify
+   *
+   * @return string
+   */
+  public static function purifyHTML($html) {
+    $matches = array();
+    $embedded_images = array();
+    /* We replace the img tags by div tags,
+     * because HTMLPurifier remove the img tag of the embedded images
+     */
+    if (preg_match_all('#<img[^>]*>#i', $html, $matches)) {
+      foreach ($matches[0] as $_key => $_img) {
+        $embedded_images[$_key] = $_img;
+        /* We close the unclosed img tags */
+        if (strpos($_img, '/>') === false){
+          $embedded_images[$_key] = str_replace('>', '/>', $_img);
+        }
+        $html = str_replace($_img, "<div class=\"image-$_key\"></div>", $html);
+      }
+    }
+    $html = CMbString::purifyHTML($html);
+
+    $search = array();
+    /* The div tags are  replaced by the img tags*/
+    foreach ($embedded_images as $index => $img) {
+      $search[$index] = "<div class=\"image-$index\"></div>";
+    }
+    return str_replace($search, $embedded_images, $html);
+  }
 }

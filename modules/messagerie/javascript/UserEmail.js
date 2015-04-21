@@ -39,12 +39,74 @@ messagerie = {
     url.addParam("account_id", messagerie.account_id);
     url.addParam("mode", messagerie.mode);
     url.addParam("page", messagerie.page);
-    url.requestUpdate(messagerie.mode);
+    url.requestUpdate('list-messages', {onComplete: messagerie.refreshCounts});
 
   },
 
   refreshListPage : function(page) {
     this.refreshList(null, null, page);
+  },
+
+  /**
+   * Do an action for one or several mails
+   *
+   * @param string action  The action to perform
+   * @param int    mail_id (Optional) The id of a mail
+   */
+  action : function(action, mail_id) {
+    var url = new Url('messagerie', 'ajax_do_action_usermail');
+    url.addParam('action', action);
+
+    if (mail_id) {
+      url.addParam('usermail_ids', JSON.stringify([mail_id]));
+    }
+    else {
+      url.addParam('usermail_ids', this.getSelectedMails());
+    }
+
+    url.requestUpdate('systemMsg', {onComplete: messagerie.refreshList})
+  },
+
+  /**
+   * Create a new mail, or edit one
+   *
+   * @param int  mail_id       (Optional) The id of the mail to edit, if not given, a ne mail will be created
+   * @param int  reply_to_id   (Optional) The id of the mail to answer
+   * @param bool answer_to_all (Optional) True for answering to all the recipients
+   */
+  edit: function(mail_id, reply_to_id, answer_to_all) {
+    var url = new Url('messagerie', 'ajax_edit_usermail');
+    url.addParam('account_id', messagerie.account_id);
+    if (mail_id) {
+      url.addParam('mail_id', mail_id);
+    }
+    if (reply_to_id) {
+      url.addParam('reply_to_id', reply_to_id);
+    }
+    if (answer_to_all) {
+      url.addParam('answer_to_all', answer_to_all);
+    }
+
+    url.modal({width: -40, height: -40, onClose: messagerie.refreshList()});
+  },
+
+  /**
+   * Mark a folder as selected, and reload the list of mails
+   *
+   * @param int    account_id The account id
+   * @param string folder     The name of the folder
+   */
+  selectFolder: function(account_id, folder) {
+    var old_icon = $$('div.folder.selected i.folder-icon')[0];
+    old_icon.removeClassName('fa-folder-open');
+    old_icon.addClassName('fa-folder');
+    $$('div.folder.selected')[0].removeClassName('selected');
+    $$('div.folder[data-folder=' + folder + ']')[0].addClassName('selected');
+    var new_icon = $$('div.folder.selected i.folder-icon')[0];
+    new_icon.removeClassName('fa-folder');
+    new_icon.addClassName('fa-folder-open');
+
+    messagerie.refreshList(account_id, folder);
   },
 
   toggleFavorite : function(mail_id) {
@@ -61,6 +123,28 @@ messagerie = {
     url.requestUpdate("systemMsg", function() {
       messagerie.refreshList();
     });
+  },
+
+  /**
+   * Return the ids of the selected mails
+   *
+   * @returns string
+   */
+  getSelectedMails: function() {
+    var selected_mails = $$('tr.message input[type=checkbox]:checked');
+    var mails_id = [];
+
+    selected_mails.each(function(message) {
+      mails_id.push(message.getAttribute('value'));
+    });
+
+    return JSON.stringify(mails_id);
+  },
+
+  openMailDebug: function(mail_id) {
+    var url = new Url(messagerie.module, 'vw_pop_mail');
+    url.addParam('id', mail_id);
+    url.requestModal();
   },
 
   /**
@@ -154,6 +238,48 @@ messagerie = {
     url.addParam("attachment_id", attach_id);
     url.requestUpdate("systemMsg", function() {
       messagerie.listAttachLink(mail_id);
+    });
+  },
+
+  /**
+   * Display the view for adding attachments to a mail
+   *
+   * @param int mail_id The id of the mail
+   */
+  addAttachment: function(mail_id) {
+    var url = new Url('messagerie', 'ajax_add_mail_attachment');
+    url.addParam('mail_id', mail_id);
+    url.requestModal(700, 300, {onClose: messagerie.reloadAttachments.curry(mail_id)});
+  },
+
+  /**
+   * Reload the attachments for the given mail
+   *
+   * @param int mail_id The id of the mail
+   */
+  reloadAttachments: function(mail_id) {
+    var url = new Url('messagerie', 'ajax_reload_mail_attachments');
+    url.addParam('mail_id', mail_id);
+    url.requestUpdate('list_attachments');
+  },
+
+  /**
+   * Refresh the counts for all the folders
+   */
+  refreshCounts: function() {
+    var url = new Url('messagerie', 'ajax_refresh_counts_usermails');
+    url.addParam('account_id', messagerie.account_id);
+    url.requestJSON(function(data) {
+      data.each(function (folder) {
+        var element = $$('div.folder[data-folder=' + folder.name + ']')[0].down('span.count');
+        element.innerHTML = folder.count;
+        if (folder.count > 0) {
+          element.show();
+        }
+        else {
+          element.hide();
+        }
+      });
     });
   }
 };

@@ -145,11 +145,8 @@ class CPop{
    * @return array|stdClass
    */
   function header($id) {
-    $header = imap_fetch_overview($this->_mailbox, $id, FT_UID);
-
-    if (count($header) > 0) {
-      return reset($header);
-    }
+    $header = imap_headerinfo($this->_mailbox, $id);
+    $header->uid = $id;
 
     return $header;
   }
