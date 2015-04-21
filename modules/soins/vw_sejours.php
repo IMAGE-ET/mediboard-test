@@ -272,8 +272,7 @@ if (!isset($sejours)) {
         $affectations = $affectation->loadList($where, $order, null, "affectation.sejour_id", $ljoin);
 
         /** @var CSejour[] $sejours */
-        $sejours = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
-
+        $sejours = CStoredObject::massLoadFwdRef($affectations, "sejour_id", null, true);
         /* @var CAffectation[] $affectations*/
         foreach($affectations as $_affectation){
           $_affectation->loadRefLit()->loadCompleteView();

@@ -30,9 +30,9 @@
               </select>
             </td>
             <td class="narrow">
-              <label>M<input type="checkbox" name="type_pec[]" value="M" checked onclick="reloadFullAdmissions();"/></label>
-              <label>C<input type="checkbox" name="type_pec[]" value="C" checked onclick="reloadFullAdmissions();"/></label>
-              <label>O<input type="checkbox" name="type_pec[]" value="O" checked onclick="reloadFullAdmissions();"/></label>
+              <label title="Médecine">M<input title="Médecine" type="checkbox" name="type_pec[]" value="M" checked onclick="reloadFullAdmissions();"/></label>
+              <label title="Chirurgie">C<input title="Chirurgie" type="checkbox" name="type_pec[]" value="C" checked onclick="reloadFullAdmissions();"/></label>
+              <label title="Obstétrique">O<input title="Obstétrique" type="checkbox" name="type_pec[]" value="O" checked onclick="reloadFullAdmissions();"/></label>
               <br/>
               {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullAdmissions()"}}
             </td>

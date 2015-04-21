@@ -22,7 +22,7 @@ PMSI = {
       url.addParam("confirmCloture", confirmCloture);
     }
 
-    url.requestUpdate("export_" + object_class + "-" + object_id);
+    url.requestUpdate("export_" + object_class + "_" + object_id);
   },
   
   exportActes: function(object_id, object_class, oOptions, module){
