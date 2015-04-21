@@ -39,6 +39,7 @@
           <option value="oneday" {{if $conf.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-oneday{{/tr}}</option>
           <option value="button" {{if $conf.$m.$class.$var == "button"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-button{{/tr}}</option>
           <option value="facturation" {{if $conf.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
+          <option value="48h" {{if $conf.$m.$class.$var == "48h"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-48h{{/tr}}</option>
         </select>
       </td>             
     </tr> 

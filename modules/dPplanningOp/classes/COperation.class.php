@@ -1542,7 +1542,8 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp();
     $this->_coded = (CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday" && $this->date < CMbDT::date()) ||
                     (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && $this->_ref_plageop->actes_locked) ||
-                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && $this->facture);
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && $this->facture) ||
+                    (CAppUI::conf('dPsalleOp COperation modif_actes') == '48h' && CMbDT::dateTime('+48 hours', $this->_datetime) < CMbDT::dateTime());
     return $this->_coded;
   }
 
