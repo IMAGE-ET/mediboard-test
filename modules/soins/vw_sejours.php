@@ -270,7 +270,7 @@ if (!isset($sejours)) {
       if ($service_id || $praticien_id || $function_id) {
         $affectations = $affectation->loadList($where, $order, null, "affectation.sejour_id", $ljoin);
 
-        CMbObject::massLoadFwdRef($affectations, "sejour_id");
+        CMbObject::massLoadFwdRef($affectations, "sejour_id", null, true);
 
         /* @var CAffectation[] $affectations*/
         foreach($affectations as $_affectation){
