@@ -60,6 +60,12 @@
         {{mb_field object=$function field="color" form="editFrm"}}
       </td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$function field=initials}}</th>
+      <td>{{mb_field object=$function field=initials}}</td>
+    </tr>
+
     <tr>
       <th>{{mb_label object=$function field="adresse"}}</th>
       <td>{{mb_field object=$function field="adresse"}}</td>

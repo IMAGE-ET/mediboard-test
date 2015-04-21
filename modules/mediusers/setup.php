@@ -673,6 +673,11 @@ class CSetupmediusers extends CSetup {
     $query = "ALTER TABLE `users_mediboard`
                 ADD `reminder_text` TEXT;";
     $this->addQuery($query);
-    $this->mod_version = '0.61';
+
+    $this->makeRevision("0.61");
+    $query = "ALTER TABLE `functions_mediboard`
+              ADD `initials` VARCHAR(255) AFTER `text`;";
+    $this->addQuery($query);
+    $this->mod_version = '0.62';
   }
 }

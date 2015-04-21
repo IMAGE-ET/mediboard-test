@@ -22,6 +22,7 @@ class CFunctions extends CMbObject {
   // DB Fields
   public $type;
   public $text;
+  public $initials;
   public $soustitre;
   public $color;
   public $adresse;
@@ -113,6 +114,7 @@ class CFunctions extends CMbObject {
     $props["group_id"]           = "ref notNull class|CGroups";
     $props["type"]               = "enum notNull list|administratif|cabinet";
     $props["text"]               = "str notNull confidential seekable";
+    $props["initials"]           = "str";
     $props["color"]              = "color notNull";
     $props["adresse"]            = "text";
     $props["cp"]                 = "numchar minLength|4 maxLength|5";
@@ -135,8 +137,29 @@ class CFunctions extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->text;
-    $this->_shortview = CMbString::truncate($this->text);
+
+    $this->_view      = $this->text;
+    $this->_shortview = $this->initials;
+
+    if (!$this->_shortview) {
+      $_initials = preg_replace('/[a-z]+\'/', '', $this->text);
+      $_initials = str_replace('-', ' ', $_initials);
+      $_initials = str_split($_initials);
+
+      $this->_shortview = '';
+      foreach ($_initials as $_letter) {
+        if (ctype_upper($_letter)) {
+          $this->_shortview .= $_letter;
+        }
+      }
+
+      if (strlen($this->_shortview) < 2) {
+        $this->_shortview = CMbString::upper(substr($this->text, 0, 3));
+      }
+      else {
+        $this->_shortview = substr($this->_shortview, 0, 5);
+      }
+    }
   }
 
   /**
