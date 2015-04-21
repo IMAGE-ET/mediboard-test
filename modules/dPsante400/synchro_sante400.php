@@ -36,15 +36,17 @@ if (!in_array($type, $types)) {
 
 // Mouvement type (or class) provided
 if ($type || $class) {
-  // Initialisation d'un fichier de verrou
-  $lock = new CMbLock("synchro_sante400/{$type}");
-
   // Mouvement construction by factory
   $mouv =  $class ? new $class : CMouvFactory::create($type);
+
   if (!$mouv) {
     CAppUI::stepMessage(UI_MSG_ERROR, "CMouvFactory-error-noclass", CValue::first($type, $class));
     return;
   }
+
+  // Initialisation d'un fichier de verrou
+  $class = $mouv->class;
+  $lock = new CMbLock("synchro_sante400/{$class}");
   
   // Mouvements counting
   $count = $mouv->count($marked);
