@@ -571,8 +571,6 @@ class SocketServer {
       if (in_array($this->__socket, $active)) {
         $peername = "";
         $conn = stream_socket_accept($this->__socket, 5, $peername);
-
-        echo "Peername: $peername\n";
         
         if (is_resource($conn)) {
           if (null !== $this->__motd) {

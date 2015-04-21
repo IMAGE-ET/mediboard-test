@@ -917,7 +917,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getNSS(DOMNode $node, CPatient $patient) {
     $sender = $this->_ref_sender;
 
-    if ($sender->_configs["handle_NSS"] == "PID_19") {
+    if ($sender && $sender->_configs["handle_NSS"] == "PID_19") {
       $patient->matricule = $this->queryTextNode("PID.19", $node);
     }
   }

@@ -359,21 +359,15 @@ class CSocketBasedServer {
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
     if ($buffer && $this->isHeader($request)) {
-      if ($this->verbosity >= 1) {
-        echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
-      }
+      $this->out(sprintf(" !!! Got a header, while having data in the buffer from %d", $id));
     }
 
-    if ($this->verbosity >= 1) {
-      echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
-    }
+    $this->out(sprintf("Got %d bytes from %d", strlen($request), $id));
 
     $buffer .= $request;
     // Si on recoit le flag de fin de message, on effectue la requete web
     if ($this->isMessageFull($buffer)) {
-      if ($this->verbosity >= 1) {
-        echo sprintf(" > Got a full message from %d\n", $id);
-      }
+      $this->out(sprintf("Got a full message from %d", $id));
 
       $buffer = $this->encodeClientRequest($buffer);
       $post = array(
@@ -390,7 +384,7 @@ class CSocketBasedServer {
       $start = microtime(true);
 
       if ($this->verbosity >= 2) {
-        $this->displayMessage($buffer);
+        $this->displayMessage($buffer, "QUERY");
       }
 
       // We must keep m=$module in the GET because of user permissions
@@ -399,17 +393,16 @@ class CSocketBasedServer {
       $this->request_count++;
       $time = microtime(true) - $start;
 
-      if ($this->verbosity >= 1) {
-        echo sprintf(" > Request done in %f s\n", $time);
-      }
+      $this->out(sprintf("Request done in %f s", $time));
+
+      $this->displayMessage($ack, "RESPONSE");
       
       $buffer = "";
       return $this->decodeResponse($this->formatAck($ack));
     }
     else {
-      if ($this->verbosity >= 1) {
-        echo "Mise en buffer du message!\n";
-      }
+      $this->out("Putting message in buffer");
+
       // Mise en buffer du message
       $buffer = $this->appendRequest($buffer);
     }
@@ -420,10 +413,11 @@ class CSocketBasedServer {
    * Displays the received message in the output
    *
    * @param string $message Message to display
+   * @param string $header  Message header
    *
    * @return void
    */
-  function displayMessage($message) {
+  function displayMessage($message, $header = null) {
 
   }
 
@@ -491,9 +485,7 @@ class CSocketBasedServer {
       );
     }
 
-    if ($this->verbosity >= 1) {
-      echo sprintf(" > %s: New connection [%d] arrived from %s:%d\n", date("H:i:s"), $id, $addr, $port);
-    }
+    $this->out(sprintf("New connection [%d] arrived from %s:%d", $id, $addr, $port));
 
     return true;
   }
@@ -508,9 +500,7 @@ class CSocketBasedServer {
   function onCleanup($id) {
     unset($this->clients[$id]);
 
-    if ($this->verbosity >= 1) {
-      echo sprintf(" > Connection [%d] cleaned-up\n", $id);
-    }
+    $this->out(sprintf("Connection [%d] cleaned-up", $id));
   }
   
   /**
@@ -521,9 +511,7 @@ class CSocketBasedServer {
    * @return void
    */
   function onClose($id) {
-    if ($this->verbosity >= 1) {
-      echo sprintf(" > Connection [%d] closed\n", $id);
-    }
+    $this->out(sprintf("Connection [%d] closed", $id));
   }
   
   /**
@@ -534,9 +522,7 @@ class CSocketBasedServer {
    * @return void
    */
   function writeError($id) {
-    if ($this->verbosity >= 1) {
-      echo sprintf(" !!! Write error to [%d]\n", $id);
-    }
+    $this->out(sprintf(" !!! Write error to [%d]", $id));
   }
   
   /**
@@ -579,6 +565,16 @@ class CSocketBasedServer {
     
     $ctx = stream_context_create($options);
     return file_get_contents($url, false, $ctx);
+  }
+
+  protected function time() {
+    return strftime("%Y-%m-%d %H:%M:%S");
+  }
+
+  function out($message, $verbosity = 1) {
+    if ($this->verbosity >= $verbosity) {
+      echo "[".$this->time()."] - ".$message."\n";
+    }
   }
   
   /**

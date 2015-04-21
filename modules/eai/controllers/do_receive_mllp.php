@@ -150,7 +150,10 @@ $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 try {
   $ack = CEAIDispatcher::dispatch($message, $sender_mllp);
 
-  if (strpos($ack, "|AR|")) {
+  if (!$ack) {
+    $blink->playPattern("purple flashes");
+  }
+  elseif (strpos($ack, "|AR|")) {
     $blink->playPattern("mllp error");
   }
   elseif (strpos($ack, "|AE|")) {
@@ -161,7 +164,7 @@ try {
   }
 }
 catch (CHL7v2Exception $e) {
-  $blink->playPattern("red flashes");
+  $blink->playPattern("mllp error");
 
   $sender_mllp->getConfigs(new CExchangeHL7v2());
   $configs = $sender_mllp->_configs;
