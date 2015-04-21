@@ -392,6 +392,7 @@ class CCodageCCAM extends CMbObject {
     $this->completeField("association_rule");
     $this->getActsByTarif();
     foreach ($this->_ref_actes_ccam as $_act) {
+      $_act->_calcul_montant_base = 1;
       $_act->_position = array_search($_act->_id, array_keys($this->_ordered_acts));
       $this->applyRule($this->association_rule, $_act);
       if ($msg = $_act->store()) {
