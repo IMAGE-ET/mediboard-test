@@ -24,14 +24,15 @@
   });
 </script>
 
-<table class="tbl">
+<table class="main tbl">
   <tr>
+    <th class="narrow"></th>
     <th>{{mb_label object=$actor field="nom"}}</th>
     <th>{{mb_label object=$actor field="group_id"}}</th>
-    <th>{{mb_label object=$actor field="_reachable"}}</th>
+    <th></th>
   </tr>
   {{foreach from=$actors key=type_actor item=_actors}}
-    <tr>
+    <tr class="alternate">
       <th class="section" colspan="6">
         <a style="float: right" class="button new notext" href="#"
             onclick="InteropActor.editActor(null, '{{$type_actor}}', '{{$parent_class}}');"
