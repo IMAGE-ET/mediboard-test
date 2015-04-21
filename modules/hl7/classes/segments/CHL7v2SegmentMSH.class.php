@@ -103,7 +103,8 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     // MSH-17: Country Code (ID) (optional)
     // FRA = 250
-    $data[] = CHL7v2TableEntry::mapTo("399", "250"); 
+    $country_code = isset($actor->_configs["country_code"]) && $actor->_configs["country_code"] == "FRA" ? "250" : "null";
+    $data[] = CHL7v2TableEntry::mapTo("399", $country_code);
     
     // MSH-18: Character Set (ID) (optional repeating)
     $encoding = isset($actor->_configs["encoding"]) ? $actor->_configs["encoding"] : "UTF-8";
@@ -112,7 +113,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     // MSH-19: Principal Language Of Message (CE) (optional)
     $data[] = array(
       "FR"
-    ); 
+    );
     
     // MSH-20: Alternate Character Set Handling Scheme (ID) (optional)
     $data[] = null;
