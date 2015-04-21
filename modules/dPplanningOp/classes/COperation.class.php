@@ -1212,9 +1212,17 @@ class COperation extends CCodable implements IPatientRelated {
    * @return CMediusers
    */
   function loadRefAnesth($cache = true) {
+    // Already loaded
+    if ($this->_ref_anesth) {
+      return $this->_ref_anesth;
+    }
+
+    // Direct reference
     if ($this->anesth_id) {
       return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
     }
+
+    // Distant refereence
     if ($this->plageop_id) {
       $plage = $this->_ref_plageop ?
         $this->_ref_plageop :
@@ -1222,6 +1230,8 @@ class COperation extends CCodable implements IPatientRelated {
 
       return $this->_ref_anesth = $plage->loadFwdRef("anesth_id", $cache);
     }
+
+    // Otherwise blank user
     return $this->_ref_anesth = new CMediusers();
   }
 
@@ -1551,17 +1561,19 @@ class COperation extends CCodable implements IPatientRelated {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    if (!$this->_ref_chir) {
-      $this->loadRefChir();
-    }
+    $chir  = $this->loadRefChir();
+    $chir2 = $this->loadRefChir2();
+    $chir3 = $this->loadRefChir3();
+    $chir4 = $this->loadRefChir4();
+    $anesth = $this->loadRefAnesth();
 
-    if (!$this->_ref_anesth) {
-      $this->loadRefPlageOp();
-    }
-
-    return (
-      ($this->_ref_chir->getPerm($permType) ||
-        ($this->_ref_anesth->_id && $this->_ref_anesth->getPerm($permType))
+    // Permission sur l'un des praticien et sur le module
+    return ((
+        $chir->getPerm($permType)
+        || ($chir2->_id && $chir2->getPerm($permType))
+        || ($chir3->_id && $chir3->getPerm($permType))
+        || ($chir4->_id && $chir4->getPerm($permType))
+        || ($anesth->_id && $anesth->getPerm($permType))
       )
       && $this->_ref_module->getPerm($permType)
     );
