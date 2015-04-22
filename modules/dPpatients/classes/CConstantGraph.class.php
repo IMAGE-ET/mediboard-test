@@ -47,12 +47,18 @@ class CConstantGraph {
    * @param CMbObject|string $host         The host of the configs (CGroups|CFunction|CService)
    * @param string           $context_guid The selected context of the constants
    * @param bool             $widget       Full display or limited display for synthesis
+   * @param bool             $full_time    If true, the graph will be displayed in time mode (with no selected periods, unlike the display mode config)
    */
-  function __construct($host, $context_guid, $widget = false) {
+  function __construct($host, $context_guid, $widget = false, $full_time = false) {
     $this->host = $host;
     $this->context_guid = $context_guid;
     $this->widget = $widget;
-    $this->display = self::getDisplayMode($host);
+    if ($full_time) {
+      $this->display = array('mode' => 'time', 'time' => 'full');
+    }
+    else {
+      $this->display = self::getDisplayMode($host);
+    }
     $this->colors = self::getColors($this->host);
   }
 
@@ -287,15 +293,25 @@ class CConstantGraph {
     $xaxis = array();
     $min_x_index = 0;
     if ($this->display['mode'] == 'time') {
-      $dtz = new DateTimeZone('Europe/Paris');
-      $tz_ofsset = $dtz->getOffset(new DateTime('now', $dtz));
-
       $ticks = self::createTicksTimeMode($constants);
-      $min_x_value = (time() - ($this->display['time'] * 3600) + $tz_ofsset) * 1000;
-      $min = $min_x_value;
-      $max = (time() + $tz_ofsset) * 1000;
       $xaxis['mode']  = 'time';
-      $xaxis['timeformat'] = '%d/%m/%y<br/>%H:%M';
+
+      if ($this->display['time'] == 'full') {
+        $max = end($ticks);
+        $min_x_value = reset($ticks);
+        $min = $min_x_value;
+        $xaxis['timeformat'] = '%d/%m/%y';
+      }
+      else {
+        $dtz = new DateTimeZone('Europe/Paris');
+        $tz_ofsset = $dtz->getOffset(new DateTime('now', $dtz));
+
+        $ticks = self::createTicksTimeMode($constants);
+        $min_x_value = (time() - ($this->display['time'] * 3600) + $tz_ofsset) * 1000;
+        $min = $min_x_value;
+        $max = (time() + $tz_ofsset) * 1000;
+        $xaxis['timeformat'] = '%d/%m/%y<br/>%H:%M';
+      }
     }
     else {
       $ticks = $this->createTicks($constants);

@@ -103,7 +103,9 @@
   <table class="tbl" id="tableConstant" style="width: 1px;">
     <tr>
       <th rowspan="2" class="category narrow">
-        <button class="stats notext" type="button" onclick="displayGraph();"></button>
+        <button class="stats notext" type="button" onclick="displayGraph();">
+          {{tr}}CConstantGraph-msg-display{{/tr}}
+        </button>
       </th>
       <th rowspan="2" class="category">
         {{tr}}Name{{/tr}}

@@ -92,6 +92,15 @@ emptyAndSubmit = function(const_name) {
   return submitConstantesMedicales(form);
 };
 
+displayConstantGraph = function(constant) {
+  var form = getForm('edit-constantes-medicales{{$unique_id}}');
+  var url = new Url('patients', 'ajax_select_constants_graph_period');
+  url.addParam('patient_id', $V(form.patient_id));
+  url.addParam('constants', JSON.stringify([constant]));
+  url.addParam('period', 'month');
+  url.pop(650, 220);
+};
+
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales{{$unique_id}}');
   calculImcVst(oForm);
@@ -174,6 +183,9 @@ Main.add(function () {
                   {{assign var=at_least_one_hidden value=true}}
                   {{/if}}>
                   <th style="text-align: left;" class="text">
+                    <button type="button" class="stats notext" style="float: right;" onclick="displayConstantGraph('{{$_constant}}');">
+                      {{tr}}CConstantGraph-msg-display{{/tr}}
+                    </button>
                     <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}">
                       {{tr}}CConstantesMedicales-{{$_constant}}-court{{/tr}}
 
