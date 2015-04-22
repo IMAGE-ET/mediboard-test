@@ -26,3 +26,6 @@
 {{if $_duree}}
   <th>Durée</th>
 {{/if}}
+{{if $_by_prat}}
+  <th>Salle</th>
+{{/if}}

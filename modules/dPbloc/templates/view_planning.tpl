@@ -1,21 +1,11 @@
 {{assign var=show_duree_preop value=$conf.dPplanningOp.COperation.show_duree_preop}}
+{{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
+{{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
+{{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
 
 <table class="tbl">
-  <tr class="clear">
-    <th colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}">
-      <h1 style="margin: auto;">
-        <a href="#" onclick="window.print()">
-          Planning du {{$filter->_datetime_min|date_format:$conf.date}} {{$filter->_datetime_min|date_format:$conf.time}}
-          au {{$filter->_datetime_max|date_format:$conf.date}} {{$filter->_datetime_max|date_format:$conf.time}}
-          -
-          {{$numOp}} intervention(s)
-          {{if $operations|@count && $_hors_plage}}
-            (dont {{$operations|@count}} hors plage)
-          {{/if}}
-        </a>
-      </h1>
-    </th>
-  </tr>
+  {{mb_include module=bloc template=inc_view_planning_header}}
+
   {{foreach from=$listDates key=curr_date item=listPlages}}
     {{foreach from=$listPlages key=curr_plage_id item=curr_plageop}}
       <tr class="clear">
@@ -58,64 +48,17 @@
           {{/if}}
         </td>
       </tr>
-      <tr>
-        <th class="title" {{if $show_duree_preop}}colspan="2"{{/if}}></th>
-        {{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
-        {{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
-        {{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
 
-        {{assign var=suffixe value="_title.tpl"}}
-        {{include file=inc_planning/$col1$suffixe}}
-        {{include file=inc_planning/$col2$suffixe}}
-        {{include file=inc_planning/$col3$suffixe}}
-      </tr>
-      <tr>
-        {{assign var=suffixe value="_header.tpl"}}
-        {{if $show_duree_preop}}<th>Heure US</th>{{/if}}
-        <th>Heure</th>
-        {{include file=inc_planning/$col1$suffixe}}
-        {{include file=inc_planning/$col2$suffixe}}
-        {{include file=inc_planning/$col3$suffixe}}
-      </tr>
+      {{mb_include module=bloc template=inc_view_planning_title}}
+
       {{if $curr_plage_id == "hors_plage"}}
         {{assign var=listOperations value=$curr_plageop}}
       {{else}}
         {{assign var=listOperations value=$curr_plageop->_ref_operations}}
       {{/if}}
       {{assign var=salle_id value=""}}
-      {{foreach from=$listOperations item=curr_op}}
-          {{if $salle_id != $curr_op->salle_id && $curr_plage_id == "hors_plage"}}
-            {{assign var=salle_id value=$curr_op->salle_id}}
-            <tr>
-              <th class="section" colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+13}}">
-                {{$curr_op->_ref_salle->_view}}
-              </th>
-            </tr>
-          {{/if}}
-          <tr>
-          {{if $show_duree_preop}}
-            <td>{{mb_value object=$curr_op field=_heure_us}}</td>
-          {{/if}}
-          {{if $curr_op->annulee}}
-            <td class="cancelled">ANNULEE</td>
-          {{elseif $curr_op->rank || !$curr_op->plageop_id}}
-            <td class="text">
-              {{if $curr_plageop|is_array && $curr_op->salle_id}}
-                {{$curr_op->_ref_salle->_view}} à
-              {{/if}}
-              {{$curr_op->time_operation|date_format:$conf.time}} <br/>({{$curr_op->temp_operation|date_format:$conf.time}})
-            </td>
-          {{else}}
-            <td>NP</td>
-          {{/if}}
-          {{assign var=sejour value=$curr_op->_ref_sejour}}
-          {{assign var=patient value=$sejour->_ref_patient}}
-          {{assign var=suffixe value="_content.tpl"}}
-          {{include file=inc_planning/$col1$suffixe}}
-          {{include file=inc_planning/$col2$suffixe}}
-          {{include file=inc_planning/$col3$suffixe}}
-        </tr>
-      {{/foreach}}
+
+      {{mb_include module=bloc template=inc_view_planning_content}}
     {{/foreach}}
   {{/foreach}}
 </table>

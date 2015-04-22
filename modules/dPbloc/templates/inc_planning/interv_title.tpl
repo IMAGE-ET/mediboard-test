@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=colspan value=$_extra+$_duree+4}}
+{{assign var=colspan value=$_extra+$_duree+$_by_prat+4}}
 {{if !$_compact}}
   {{assign var=colspan value=$colspan+$_materiel}}
 {{/if}}

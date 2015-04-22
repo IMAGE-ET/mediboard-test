@@ -216,7 +216,7 @@
                 {{foreach from=$listBlocs item=curr_bloc}}
                   <optgroup label="{{$curr_bloc->_view}}">
                   {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-                    <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+                    <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected{{/if}}>
                       {{$curr_salle->nom}}
                     </option>
                   {{/foreach}}
@@ -266,180 +266,227 @@
     </tr>
     <tr>
       <td colspan="2">
+        {{assign var="class" value="CPlageOp"}}
         <table class="form">
           <tr>
             <th class="category" colspan="2">Paramètres d'affichage</th>
           </tr>
-          {{assign var="class" value="CPlageOp"}}
-
-          <tr class="not-full">
-            <th>
-              <label for="_coordonnees_1" title="Afficher ou cacher le numéro de tel du patient">Afficher les coordonnées du patient</label>
-            </th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_coordonnees" value="1" />
-              </label>
-              <label>
-                Non <input type="radio" name="_coordonnees" value="0" checked />
-              </label>
+          <tr>
+            <td class="halfPane">
+              <fieldset>
+                <legend>Données Patient</legend>
+                <table class="form">
+                  <tr>
+                    <th style="width: 50%">
+                      <label for="_print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
+                    </th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_print_ipp" value="1" />
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_print_ipp" value="0" checked/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <label for="_coordonnees_1" title="Afficher ou cacher le numéro de tel du patient">Afficher les coordonnées du patient</label>
+                    </th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_coordonnees" value="1" />
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_coordonnees" value="0" checked />
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label title="Afficher ou cacher l'identité du patient">Afficher l'identité du patient</label></th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_show_identity" value="1" checked/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_show_identity" value="0" />
+                      </label>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
             </td>
-          </tr>
-
-          <tr class="not-full">
-            <th>
-              <label for="_print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
-            </th>
             <td>
-              <label>
-                Oui <input type="radio" name="_print_numdoss" value="1" />
-              </label>
-              <label>
-                Non <input type="radio" name="_print_numdoss" value="0" checked />
-              </label>
-            </td>
-          </tr>
-
-          <tr class="not-full">
-            <th>
-              <label for="_print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
-            </th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_print_ipp" value="1" />
-              </label>
-              <label>
-                Non <input type="radio" name="_print_ipp" value="0" checked/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
-            <td>
-              {{assign var="var" value="plage_vide"}}
-              <label>
-                Oui <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
-            <td>
-              {{assign var="var" value="libelle_ccam"}}
-              <label>
-                Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th>
-              <label for="print_annulees_1" title="Afficher ou cacher les interventions annulées">Afficher les interventions annulées</label>
-            </th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_print_annulees" value="1" />
-              </label>
-              <label>
-                Non <input type="radio" name="_print_annulees" value="0" checked="checked"/>
-              </label>
+              <fieldset>
+                <legend>Données Séjour</legend>
+                <table class="form">
+                  <tr>
+                    <th style="width: 50%">
+                      <label for="_print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
+                    </th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_print_numdoss" value="1" />
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_print_numdoss" value="0" checked />
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label title="Afficher ou cacher les remarques de séjour">Afficher les remarques de séjour</label></th>
+                    <td>
+                      {{assign var="var" value="show_comment_sejour"}}
+                      <label>
+                        Oui <input type="radio" name="_show_comment_sejour" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_show_comment_sejour" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
             </td>
           </tr>
           <tr>
-            <th>
-              <label for="print_full" title="Imprimer le planning complet de tous les blocs">Imprimer le planning complet de tous les blocs</label>
-            </th>
             <td>
-              <label>
-                Oui <input type="radio" name="_print_full" value="1" onclick="togglePrintFull(true)"/>
-              </label>
-              <label>
-                Non <input type="radio" name="_print_full" value="0" checked onclick="togglePrintFull(false)"/>
-              </label>
+              <fieldset>
+                <legend>Données Intervention</legend>
+                <table class="form">
+                  <tr>
+                    <th style="width: 50%">{{mb_label object=$filter field="_ccam_libelle"}}</th>
+                    <td>
+                      {{assign var="var" value="libelle_ccam"}}
+                      <label>
+                        Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label for="_materiel_1" title="Afficher ou cacher le materiel">Afficher le matériel</label></th>
+                    <td>
+                      {{assign var="var" value="view_materiel"}}
+                      <label>
+                        Oui <input type="radio" name="_materiel" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label for="_missing_materiel_1" title="Afficher ou cacher le materiel manquant">Afficher le matériel manquant</label></th>
+                    <td>
+                      {{assign var="var" value="view_missing_materiel"}}
+                      <label>
+                        Oui <input type="radio" name="_missing_materiel" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_missing_materiel" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label for="_extra_1" title="Afficher ou cacher les extras">Afficher les extra</label></th>
+                    <td>
+                      {{assign var="var" value="view_extra"}}
+                      <label>
+                        Oui <input type="radio" name="_extra" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_extra" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label for="_duree_1" title="Afficher ou cacher la durée de l'intervention">Afficher la durée de l'intervention</label></th>
+                    <td>
+                      {{assign var="var" value="view_duree"}}
+                      <label>
+                        Oui <input type="radio" name="_duree" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
+            </td>
+            <td>
+              <fieldset>
+                <legend>Mode d'affichage</legend>
+                <table class="form">
+                  <tr>
+                    <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
+                    <td>
+                      {{assign var="var" value="plage_vide"}}
+                      <label>
+                        Oui <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <label for="print_annulees_1" title="Afficher ou cacher les interventions annulées">Afficher les interventions annulées</label>
+                    </th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_print_annulees" value="1" />
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_print_annulees" value="0" checked />
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label for="_hors_plage_1" title="Afficher ou cacher la mention hors plage">Afficher ou cacher la mention hors plage</label></th>
+                    <td>
+                      {{assign var="var" value="view_hors_plage"}}
+                      <label>
+                        Oui <input type="radio" name="_hors_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked{{/if}}/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_hors_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked{{/if}}/>
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><label title="Regrouper par praticien">Regrouper par praticien</label></th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_by_prat" value="1" />
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_by_prat" value="0" checked />
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <label for="print_full" title="Imprimer le planning complet de tous les blocs">Imprimer le planning complet de tous les blocs</label>
+                    </th>
+                    <td>
+                      <label>
+                        Oui <input type="radio" name="_print_full" value="1" onclick="togglePrintFull(true)"/>
+                      </label>
+                      <label>
+                        Non <input type="radio" name="_print_full" value="0" checked onclick="togglePrintFull(false)"/>
+                      </label>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
             </td>
           </tr>
-          <tr class="not-full">
-            <th><label for="_materiel_1" title="Afficher ou cacher le materiel">Afficher le matériel</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_materiel == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_materiel == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label for="_missing_materiel_1" title="Afficher ou cacher le materiel manquant">Afficher le matériel manquant</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_missing_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_missing_materiel == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_missing_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_missing_materiel == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label for="_extra_1" title="Afficher ou cacher les extras">Afficher les extra</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_extra" value="1" {{if $conf.dPbloc.CPlageOp.view_extra == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_extra" value="0" {{if $conf.dPbloc.CPlageOp.view_extra == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label for="_duree_1" title="Afficher ou cacher la durée de l'intervention">Afficher la durée de l'intervention</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_duree" value="1" {{if $conf.dPbloc.CPlageOp.view_duree == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.CPlageOp.view_duree == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label for="_hors_plage_1" title="Afficher ou cacher la mention hors plage">Afficher ou cacher la mention hors plage</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_hors_plage" value="1" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_hors_plage" value="0" {{if $conf.dPbloc.CPlageOp.view_hors_plage == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label title="Afficher ou cacher les remarques de séjour">Afficher les remarques de séjour</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_show_comment_sejour" value="1" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "1"}}checked{{/if}}/>
-              </label>
-              <label>
-                Non <input type="radio" name="_show_comment_sejour" value="0" {{if $conf.dPbloc.CPlageOp.show_comment_sejour == "0"}}checked{{/if}}/>
-              </label>
-            </td>
-          </tr>
-          <tr class="not-full">
-            <th><label title="Afficher ou cacher l'identité du patient">Afficher l'identité du patient</label></th>
-            <td>
-              <label>
-                Oui <input type="radio" name="_show_identity" value="1" checked/>
-              </label>
-              <label>
-                Non <input type="radio" name="_show_identity" value="0" />
-              </label>
-            </td>
-          </tr>
+
           <tr>
             <td colspan="2" class="button">
               <button class="print" id="print_button" type="button" onclick="checkFormPrint(this.form)">Afficher</button>

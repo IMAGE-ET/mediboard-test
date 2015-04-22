@@ -13,7 +13,7 @@
   {{if $curr_op->exam_extempo}}
     <img src="images/icons/extempo.png" title="{{tr}}COperation-exam_extempo{{/tr}}" style="float: right;"/>
   {{/if}}
-  {{if $curr_plageop|is_array || $curr_plageop->spec_id}}
+  {{if $curr_plageop|is_array || ($curr_plageop && $curr_plageop->spec_id)}}
     <strong>Dr {{$curr_op->_ref_chir}}</strong>
     <br />
   {{/if}}
@@ -126,4 +126,13 @@
 {{/if}}
 {{if $_duree}}
   <td>{{mb_value object=$curr_op field=_duree_interv}}</td>
+{{/if}}
+{{if $_by_prat}}
+  <td class="text">
+    {{$curr_op->_ref_salle}}
+
+    {{if !$curr_op->plageop_id}}
+      <br /> Hors plage
+    {{/if}}
+  </td>
 {{/if}}

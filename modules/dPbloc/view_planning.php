@@ -28,6 +28,7 @@ $filter->exam_extempo    = CValue::get("exam_extempo");
 $filter->_ccam_libelle   = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 $filter->_planning_perso = CValue::get("planning_perso");
 $filter->_nb_days        = CValue::get("_nb_days", 0);
+$filter->_by_prat        = CValue::get("_by_prat");
 
 $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
@@ -205,6 +206,8 @@ CStoredObject::massLoadFwdRef($operations, "chir_id");
 $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
 $listDates = array();
+$listDatesByPrat = array();
+$listPrats = array();
 
 $prestation_id = CAppUI::pref("prestation_id_hospi");
 
@@ -270,7 +273,7 @@ foreach ($plagesop as $plage) {
 
     // Chargement de l'affectation
     $affectation = $operation->getAffectation();
-    
+
     if ($affectation->_id) {
       $affectation->loadRefLit()->loadCompleteView();
     }
@@ -310,6 +313,13 @@ foreach ($plagesop as $plage) {
   }
 
   $listDates[$plage->date][$plage->_id] = $plage;
+
+  if ($filter->_by_prat) {
+    foreach ($plage->_ref_operations as $_op) {
+      $listPrats[$_op->chir_id] = $_op->_ref_chir;
+      $listDatesByPrat[$plage->date][$_op->chir_id][$_op->_id] = $_op;
+    }
+  }
 }
 
 foreach ($operations as $key => $operation) {
@@ -349,7 +359,7 @@ foreach ($operations as $key => $operation) {
 
   // Chargement de l'affectation
   $affectation = $operation->getAffectation();
-  
+
   if ($affectation->_id) {
     $affectation->loadRefLit()->loadCompleteView();
   }
@@ -364,6 +374,11 @@ foreach ($operations as $key => $operation) {
   }
 
   $listDates[$operation->date]["hors_plage"][] = $operation;
+
+  if ($filter->_by_prat) {
+    $listPrats[$operation->chir_id] = $operation->_ref_chir;
+    $listDatesByPrat[$operation->date][$operation->chir_id][$operation->_id] = $operation;
+  }
 }
 
 $numOp += count($operations);
@@ -379,6 +394,19 @@ if ($format_print == "advanced") {
         $ordre_passage[$_op->_id] = $i;
         $i++;
       }
+    }
+  }
+}
+
+if ($filter->_by_prat) {
+  foreach ($listPrats as $_prat) {
+    $_prat->loadRefFunction();
+  }
+
+  ksort($listDatesByPrat);
+  foreach ($listDatesByPrat as &$_listDatesByPrat) {
+    foreach ($_listDatesByPrat as &$listOps) {
+      array_multisort(CMbArray::pluck($listOps, "time_operation"), SORT_ASC, $listOps);
     }
   }
 }
@@ -405,12 +433,21 @@ $smarty->assign("_show_comment_sejour", $_show_comment_sejour);
 $smarty->assign('_compact'            , $_compact);
 $smarty->assign("_show_identity"      , $_show_identity);
 $smarty->assign("ordre_passage"       , $ordre_passage);
+$smarty->assign("_by_prat"            , $filter->_by_prat);
 
-switch ($format_print) {
-  default:
-  case "standard":
-    $smarty->display("view_planning.tpl");
-    break;
-  case "advanced":
-    $smarty->display("view_planning_advanced.tpl");
+if ($filter->_by_prat) {
+  $smarty->assign("listDatesByPrat"   , $listDatesByPrat);
+  $smarty->assign("listPrats"         , $listPrats);
+
+  $smarty->display("view_planning_by_prat.tpl");
+}
+else {
+  switch ($format_print) {
+    default:
+    case "standard":
+      $smarty->display("view_planning.tpl");
+      break;
+    case "advanced":
+      $smarty->display("view_planning_advanced.tpl");
+  }
 }
