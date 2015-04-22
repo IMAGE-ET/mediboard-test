@@ -261,7 +261,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     return array_merge(
       $qpd3pid, array(
         // Patient class
-        $this->setDemographicsFields($sejour, "type", "2.1", "4"),
+        $this->setDemographicsFields($sejour, "type", "2", "4"),
 
         // Assigned Patient Location
         $this->setDemographicsValues($sejour, $sejour->_service, "3.1"),
