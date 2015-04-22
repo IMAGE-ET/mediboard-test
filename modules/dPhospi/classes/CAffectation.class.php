@@ -374,10 +374,7 @@ class CAffectation extends CMbObject {
         "item_prestation.item_prestation_id = item_liaison.item_souhait_id
       OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
 
-      $filter_entree =
-        $this->_ref_prev->_id && CMbDT::date($this->_ref_prev->sortie) > CMbDT::date($this->entree) ?
-          CMbDT::date("+1 day", $this->entree) :
-          CMbDT::date($this->entree);
+      $filter_entree = CMbDT::date($this->entree);
       foreach ($liaisons_lit as $_liaison) {
         $item_liaison = new CItemLiaison();
         $_item = $_liaison->loadRefItemPrestation();
