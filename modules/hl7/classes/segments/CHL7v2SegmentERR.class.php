@@ -206,6 +206,35 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = null;
       // ERR-12
       $data[] = null;
+
+      if ($version > "2.5") {
+        // ERR-13 : Sequence Number
+        $data[] = null;
+
+        // ERR-14 : Continuation Pointer
+        $data[] = null;
+
+        // ERR-15 : Accept Acknowledgment Type
+        $data[] = null;
+
+        // ERR-16 : Application Acknowledgment Type
+        $data[] = null;
+
+        // ERR-17 : Country Code
+        $data[] = null;
+
+        // ERR-18 : Character Set
+        $data[] = null;
+
+        // ERR-19 : Principal Language Of Message
+        $data[] = null;
+
+        // ERR-20 : Alternate Character Set Handling Scheme
+        $data[] = null;
+
+        // ERR-21 : Message Profile Identifier
+        $data[] = "IHE_PCD_001^IHE PCD^1.3.6.1.4.1.19376.1.6.1.1.1^ISO";
+      }
     }
 
     $this->fill($data);
