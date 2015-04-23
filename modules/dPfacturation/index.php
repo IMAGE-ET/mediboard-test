@@ -30,3 +30,7 @@ if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
 if (CAppUI::conf("dPfacturation CReglement use_debiteur")) {
   $module->registerTab("vw_debiteurs"       , TAB_READ);
 }
+
+if (CAppUI::conf("dPfacturation Other see_reject_xml", CGroups::loadCurrent())) {
+  $module->registerTab("vw_rejects_xml"       , TAB_READ);
+}

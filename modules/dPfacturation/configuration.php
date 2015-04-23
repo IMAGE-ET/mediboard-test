@@ -34,6 +34,10 @@ if (CAppUI::conf("ref_pays") == "2") {
           "CEditBill" => array(
             "store_envoi_xml" => "bool default|0",
           ),
+          "Other" => array(
+            "see_reject_xml"        => "bool default|0",
+            "delfile_read_reject"   => "bool default|1",
+          ),
         )
       )
     )

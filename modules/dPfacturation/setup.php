@@ -455,6 +455,28 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement`
                 ADD INDEX (`request_date`);";
     $this->addQuery($query);
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+
+    $query = "CREATE TABLE `facture_rejet` (
+                `facture_rejet_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `praticien_id` INT (11) UNSIGNED,
+                `file_name` VARCHAR (255),
+                `num_facture` VARCHAR (255),
+                `date` DATE,
+                `motif_rejet` TEXT,
+                `statut` ENUM ('attente','traite') DEFAULT 'attente',
+                `name_assurance` VARCHAR (255),
+                `traitement` DATETIME,
+                `facture_id` INT (11) UNSIGNED,
+                `facture_class` ENUM ('CFactureCabinet','CFactureEtablissement')
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_rejet`
+                ADD INDEX (`praticien_id`),
+                ADD INDEX (`date`),
+                ADD INDEX (`traitement`),
+                ADD INDEX (`facture_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.47";
   }
 }
