@@ -1,4 +1,5 @@
 {{mb_script module="dPcabinet" script="edit_consultation" ajax=$ajax}}
+{{mb_script module="dPcabinet" script="plage_consultation" ajax=$ajax}}
 
 <script>
 
@@ -59,13 +60,6 @@ updatePratDisplayed = function() {
   var oform = getForm('selCabinet');
   $V(oform.prats_selected, selected.join("-"));
   oform.submit();
-};
-
-printPlage = function(plage_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_plages");
-  url.addParam("plage_id", plage_id);
-  url.popup(700, 550, "Planning");
 };
 
 Reconvocation = {

@@ -9,22 +9,32 @@
 *}}
 
 <tr>
-  <th class="title" colspan="6">
+  <th class="title" colspan="10">
     <strong>
     {{if $plageSel->_id}}
-      <button class="print notext" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
-      <button class="new" type="button" onclick="Consultation.editRDVModal(0, '{{$plageSel->chir_id}}', '{{$plageSel->_id}}');" style="float:right;">
-        Planifier dans cette plage
+      <button class="print notext" style="float: right;"
+              onclick="PlageConsultation.print({{$plageSel->_id}})">
+        {{tr}}Print{{/tr}}
       </button>
-      {{mb_include module=system template=inc_object_notes object=$plageSel}}
-        Consultations du {{$plageSel->date|date_format:$conf.longdate}}<br/>
-        {{if $plageSel->chir_id != $chirSel}}
-         remplacement de {{$plageSel->_ref_chir->_view}}
-        {{elseif $plageSel->remplacant_id}}
-         remplacé par {{$plageSel->_ref_remplacant->_view}}
-        {{elseif $plageSel->pour_compte_id}}
-         pour le compte de {{$plageSel->_ref_pour_compte->_view}}
-        {{/if}}
+      <button class="new notext" type="button" style="float: right;"
+              onclick="Consultation.editRDVModal(0, '{{$plageSel->chir_id}}', '{{$plageSel->_id}}');">
+        {{tr}}Add{{/tr}}
+      </button>
+      <div>
+        {{mb_include module=system template=inc_object_notes object=$plageSel}}
+        {{$plageSel->date|date_format:$conf.longdate}}
+      </div>
+      <div>
+        {{$plageSel->debut|date_format:$conf.time}}
+        à {{$plageSel->fin|date_format:$conf.time}}
+      </div>
+      {{if $plageSel->chir_id != $chirSel}}
+        remplacement de {{$plageSel->_ref_chir->_view}}
+      {{elseif $plageSel->remplacant_id}}
+        remplacé par {{$plageSel->_ref_remplacant->_view}}
+      {{elseif $plageSel->pour_compte_id}}
+        pour le compte de {{$plageSel->_ref_pour_compte->_view}}
+      {{/if}}
     {{else}}
       {{tr}}CPlageconsult.none{{/tr}}
     {{/if}}
@@ -37,7 +47,7 @@
   <th>{{mb_title class=CConsultation field=patient_id}}</th>
   <th>{{mb_title class=CConsultation field=motif}}</th>
   <th>{{mb_title class=CConsultation field=rques}}</th>
-  <th id="inc_consult_notify_arrivate" >RDV</th>
+  <th id="inc_consult_notify_arrivate" colspan="2">RDV</th>
   <th id="th_inc_consult_etat">{{mb_title class=CConsultation field=_etat}}</th>
 </tr>
 {{foreach from=$plageSel->_ref_consultations item=_consult}}
@@ -103,26 +113,23 @@
 
       {{if $patient->_id}}
         <a href="{{$href_consult}}" title="Voir la consultation">
-          {{$_consult->motif|truncate:35:"...":false|nl2br}}
+          {{$_consult->motif|spancate:35:"...":false|nl2br}}
         </a>
       {{else}}
-        {{$_consult->motif|truncate:35:"...":false|nl2br}}
+        {{$_consult->motif|spancate:35:"...":false|nl2br}}
       {{/if}}
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
       {{if $patient->_id}}
-        <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->rques|truncate:35:"...":false|nl2br}}</a>
+        <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->rques|spancate:35:"...":false|nl2br}}</a>
       {{else}}
-        {{$_consult->rques|truncate:35:"...":false|nl2br}}
+        {{$_consult->rques|spancate:35:"...":false|nl2br}}
       {{/if}}
       {{if @$modules.3333tel->mod_active}}
         {{mb_include module=3333tel template=inc_check_3333tel object=$_consult tiny=1}}
       {{/if}}
     </td>
     <td {{$style|smarty:nodefaults}}>
-      {{if $_consult->duree > 1}}
-        <div style="float:right;">({{math equation="a*b" a=$_consult->duree b=$_consult->_ref_plageconsult->_freq}} min)</div>
-      {{/if}}
       <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -190,6 +197,11 @@
           <input type="hidden" name="annule" value="0" />
         </form>
         <button class="undo button notext" type="button" onclick="undoCancellation(document.cancel_annulation_{{$_consult->_id}});">Rétablir</button>
+      {{/if}}
+    </td>
+    <td {{$style|smarty:nodefaults}}>
+      {{if $_consult->duree > 1}}
+        ({{math equation="a*b" a=$_consult->duree b=$_consult->_ref_plageconsult->_freq}} min)
       {{/if}}
     </td>
     <td {{$style|smarty:nodefaults}} {{if $_consult->annule}}class="error"{{/if}}>

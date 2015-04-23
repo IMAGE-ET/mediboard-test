@@ -21,6 +21,13 @@ PlageConsultation  = window.PlageConsultation || {
       url.modalObject.observe("afterClose", callback);
     }
   },
+
+  print: function(plageconsult_id) {
+    var url = new Url;
+    url.setModuleAction("cabinet", "print_plages");
+    url.addParam("plage_id", plageconsult_id);
+    url.popup(700, 550, "Planning");
+  },
   
   onSubmit: function(form) {
     return onSubmitFormAjax(form, function() {

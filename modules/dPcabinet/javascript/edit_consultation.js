@@ -37,9 +37,10 @@ ListConsults = {
 };
 
 Consultation = window.Consultation || {
+  moduleConsult : "cabinet",
   onCloseEditModal : null,
   editRDV: function(consult_id, chir_id, plage_id) {
-    var url = new Url("dPcabinet", "edit_planning", "tab");
+    var url = new Url("cabinet", "edit_planning", "tab");
     url.addParam("consultation_id", consult_id);
     if (chir_id) {
       url.addParam('chir_id', chir_id);
@@ -51,7 +52,7 @@ Consultation = window.Consultation || {
   },
 
   editRDVModal: function(consult_id, chir_id, plage_id) {
-    var url = new Url("dPcabinet", "edit_planning");
+    var url = new Url("cabinet", "edit_planning");
     url.addParam("consultation_id", consult_id);
     if (chir_id) {
       url.addParam('chir_id', chir_id);
@@ -69,7 +70,7 @@ Consultation = window.Consultation || {
   },
   
   edit: function(consult_id, fragment) {
-    var url = new Url("dPcabinet", "edit_consultation", "tab");
+    var url = new Url(this.moduleConsult, "edit_consultation", "tab");
     url.addParam("selConsult", consult_id);
     if (fragment) {
       url.setFragment(fragment);
@@ -78,7 +79,7 @@ Consultation = window.Consultation || {
   },
   
   editModal: function (consult_id, fragment) {
-    var url = new Url("dPcabinet", "ajax_full_consult");
+    var url = new Url(this.moduleConsult, "ajax_full_consult");
     url.addParam("consult_id", consult_id);
     if (fragment) {
       url.setFragment(fragment);
@@ -91,7 +92,7 @@ Consultation = window.Consultation || {
 
   editModalDossierAnesth: function (consult_id, dossier_anesth_id, callback) {
     callback = callback || this.modalCallback;
-    var url = new Url("dPcabinet", "ajax_full_consult");
+    var url = new Url("cabinet", "ajax_full_consult");
     url.addParam("consult_id", consult_id);
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.modal({
