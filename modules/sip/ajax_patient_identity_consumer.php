@@ -73,6 +73,39 @@ $patient->_domains_returned  = array(
 // Envoi de l'évènement
 $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 
+$objects = array();
 if ($ack_data) {
-  mbTrace($ack_data);
+  $hl7_message = new CHL7v2Message;
+  $hl7_message->parse($ack_data);
+
+  $xml = $hl7_message->toXML();
+  $xpath = new DOMXPath($xml);
+
+  // Patient
+  $_pids = $xpath->query("//PID");
+  foreach ($_pids as $_element) {
+    $ids = $xpath->query("PID.3", $_element);
+    $_ids = array();
+    foreach ($ids as $_id) {
+      $_domain_parts = array();
+      foreach ($xpath->query("CX.4/*", $_id) as $_domain_part) {
+        $_domain_parts[] = $_domain_part->nodeValue;
+      }
+
+      $_ids[] = array(
+        "id"     => $xpath->query("CX.1", $_id)->item(0)->nodeValue,
+        "domain" => $_domain_parts,
+      );
+    }
+
+    $objects[] = $_ids;
+  }
 }
+
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("objects", $objects);
+$smarty->display("inc_list_identifiers.tpl");
+
+
+CApp::rip();
