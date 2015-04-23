@@ -1,7 +1,6 @@
 {{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
 
 {{mb_default var=mode_vue value=vertical}}
-{{mb_default var=leftView value=0}}
 {{assign var=patient value=$_consult->_ref_patient}}
   
 {{if !$patient->_id}}
@@ -133,16 +132,6 @@
       {{mb_include module=cabinet template=inc_icone_categorie_consult
         categorie=$categorie
         onclick="IconeSelector.changeCategory('$consult_id', this)"}}
-    </td>
-  {{/if}}
-
-  {{if $leftView}}
-    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
-      {{if $patient->_id}}
-        <button class="right notext" onclick="loadTdbPatient('{{$patient->_id}}');">
-          {{tr}}Show{{/tr}}
-        </button>
-      {{/if}}
     </td>
   {{/if}}
 
