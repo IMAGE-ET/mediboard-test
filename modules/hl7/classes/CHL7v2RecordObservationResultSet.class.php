@@ -100,7 +100,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $sejour = null;
 
     // Sejour
-    $venueAN = CValue::read($data["admitIdentifiers"], "AN");
+    $venueAN = CValue::read($data["personIdentifiers"], "AN");
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
 
@@ -129,11 +129,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Recherche par date
     $observation_dt = $this->getOBRObservationDateTime($first_result["OBR"]);
-    $sejours = $patient->getCurrSejour($observation_dt); //FIXME ignorer les annulés
-    $sejour = reset($sejours);
+    if (!$sejour) {
+      $sejours = $patient->getCurrSejour($observation_dt); //FIXME ignorer les annulés
+      $sejour = reset($sejours);
 
-    if (!$sejour->_id) {
-      return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+      if (!$sejour || !$sejour->_id) {
+        return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+      }
     }
 
     // Récupération des observations
