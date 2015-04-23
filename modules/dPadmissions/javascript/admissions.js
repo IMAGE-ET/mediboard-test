@@ -430,5 +430,12 @@ Admissions = {
     }
 
     return true;
+  },
+
+  selectServices: function(view) {
+    var url = new Url("hospi", "ajax_select_services");
+    url.addParam("view", view);
+    url.addParam("ajax_request", 0);
+    url.requestModal(null, null, {maxHeight: '600'});
   }
 };

@@ -21,11 +21,11 @@ $lastmonth     = CMbDT::date("last day of -1 month" , $date);
 $nextmonth     = CMbDT::date("first day of +1 month", $date);
 
 $type          = CValue::getOrSession("type");
-$service_id    = CValue::getOrSession("service_id");
+$services_ids  = CValue::getOrSession("services_ids");
 $prat_id       = CValue::getOrSession("prat_id");
 $bank_holidays = CMbDate::getHolidays($date);
-$service_id    = explode(",", $service_id);
-CMbArray::removeValue("", $service_id);
+
+CMbArray::removeValue("", $services_ids);
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -51,9 +51,9 @@ else {
 }
 
 // filtre sur les services
-if (count($service_id)) {
+if (count($services_ids)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
 
 // filtre sur le praticien

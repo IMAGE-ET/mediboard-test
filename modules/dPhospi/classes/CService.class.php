@@ -594,4 +594,44 @@ class CService extends CInternalStructure {
 
     return $this->_ref_uf_soins;
   }
+
+  static function getServicesIdsPref($services_ids = array()) {
+    // Détection du changement d'établissement
+    $group_id = CValue::get("g");
+
+    if (!$services_ids || $group_id) {
+      $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+
+      $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
+
+      // Si la préférence existe, alors on la charge
+      if (isset($pref_services_ids->{"g$group_id"})) {
+        $services_ids = $pref_services_ids->{"g$group_id"};
+        $services_ids = explode("|", $services_ids);
+        CMbArray::removeValue("", $services_ids);
+      }
+      // Sinon, chargement de la liste des services en accord avec le droit de lecture
+      else {
+        $service = new CService();
+        $where = array();
+        $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+        $where["cancelled"] = "= '0'";
+        $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
+      }
+    }
+
+    if (is_array($services_ids)) {
+      CMbArray::removeValue("", $services_ids);
+    }
+
+    global $m;
+    $save_m = $m;
+    foreach (array("dPhospi", "dPadmissions") as $_module) {
+      $m = $_module;
+      CValue::setSession("services_ids", $services_ids);
+    }
+    $m = $save_m;
+
+    return $services_ids;
+  }
 }

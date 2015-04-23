@@ -145,6 +145,7 @@
   }
 
   Main.add(function() {
+    Admissions.table_id = "listSorties";
     var totalUpdater = new Url("admissions", "httpreq_vw_all_sorties");
     totalUpdater.addParam("current_m" , App.m);
     Admissions.totalUpdater = totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
@@ -154,7 +155,7 @@
       frequency: 120,
       onCreate: function() {
         WaitingMessage.cover($('listSorties'));
-        Admissions.rememberSelection('listSorties');
+        Admissions.rememberSelection();
       }
     });
   });

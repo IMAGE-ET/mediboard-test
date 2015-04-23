@@ -15,8 +15,7 @@ CCanDo::checkRead();
 
 // Type d'admission
 $type           = CValue::getOrSession("type");
-$service_id     = CValue::getOrSession("service_id");
-$secteur_id     = CValue::getOrSession("secteur_id");
+$services_ids   = CValue::getOrSession("services_ids");
 $prat_id        = CValue::getOrSession("prat_id");
 $selAdmis       = CValue::getOrSession("selAdmis", "0");
 $selSaisis      = CValue::getOrSession("selSaisis", "0");
@@ -26,8 +25,10 @@ $date           = CValue::getOrSession("date", CMbDT::date());
 $filterFunction = CValue::getOrSession("filterFunction");
 $period         = CValue::getOrSession("period");
 $type_pec       = CValue::get("type_pec" , array("M", "C", "O"));
-$service_id     = explode(",", $service_id);
-CMbArray::removeValue("", $service_id);
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -51,7 +52,7 @@ if ($period) {
 }
 
 // Entrées de la journée
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $group = CGroups::loadCurrent();
 
@@ -60,18 +61,9 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if (count($service_id)) {
+if (count($services_ids)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
-}
-//filtre sur les secteurs
-elseif ($secteur_id) {
-  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $secteur             = new CSecteur();
-  $secteur->load($secteur_id);
-  $secteur->loadRefsServices();
-  $service_id = CMbArray::pluck($secteur->_ref_services, "_id");
-  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
 
 // Filtre sur le type du séjour

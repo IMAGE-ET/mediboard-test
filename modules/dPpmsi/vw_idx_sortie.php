@@ -30,12 +30,7 @@ $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
 $demain        = CMbDT::date("+ 1 day", $date);
 
-// Récupération de la liste des services
-$where = array();
-$where["externe"]   = "= '0'";
-$where["cancelled"] = "= '0'";
-$service = new CService();
-$services = $service->loadGroupList($where);
+$service_id = CService::getServicesIdsPref($service_id);
 
 // Récupération de la liste des praticiens
 $prat = CMediusers::get();
@@ -43,7 +38,6 @@ $prats = $prat->loadPraticiens();
 
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
-$sejour->service_id      = explode(",", $service_id);
 $sejour->praticien_id    = $prat_id;
 
 // Création du template
@@ -56,7 +50,6 @@ $smarty->assign("date"         , $date);
 $smarty->assign("selSortis"    , $selSortis);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
-$smarty->assign("services"     , $services);
 $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);

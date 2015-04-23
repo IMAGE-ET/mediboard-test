@@ -15,7 +15,7 @@ CCanDo::checkRead();
 
 // Type d'admission
 $type           = CValue::getOrSession("type");
-$service_id     = CValue::getOrSession("service_id");
+$services_ids   = CValue::getOrSession("services_ids");
 $prat_id        = CValue::getOrSession("prat_id");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
@@ -23,8 +23,9 @@ $date           = CValue::getOrSession("date", CMbDT::date());
 $next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
-$service_id = explode(",", $service_id);
-CMbArray::removeValue("", $service_id);
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -45,9 +46,9 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if (count($service_id)) {
+if (count($services_ids)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
 
 // Filtre sur le type du séjour

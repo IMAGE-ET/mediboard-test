@@ -6,6 +6,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+
 <table class="layout">
   <tr>
     <td>
@@ -22,7 +23,7 @@
         <table class="tbl layout">
           <tr>
             <td class="narrow">
-              <br/r>
+              <br />
               <select name="period" onchange="reloadAdmission();">
                 <option value=""      {{if !$period          }}selected{{/if}}>&mdash; {{tr}}dPAdmission.admission all the day{{/tr}}</option>
                 <option value="matin" {{if $period == "matin"}}selected{{/if}}>{{tr}}dPAdmission.admission morning{{/tr}}</option>
@@ -37,30 +38,9 @@
               {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullAdmissions()"}}
             </td>
             <td>
-              {{if $secteurs|@count >0 }}
-                <select name="secteur_id" onchange="reloadFilterAdmission(); reloadFullAdmissions(); ">
-                  <option value="">&mdash; {{tr}}CSecteur.all{{/tr}}</option>
-                  <{{foreach from=$secteurs item=_secteur}}
-                  <option value="{{$_secteur->_id}}" {{if $_secteur->_id === $secteur_id}}selected{{/if}}>{{$_secteur->nom}}</option>
-                  {{/foreach}}
-                </select>
-                <br/>
-                <select name="service_id" onchange="reloadFilterAdmission(); reloadFullAdmissions();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
-                  <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
-                  {{foreach from=$services item=_service}}
-                    <option data-secteur_id="{{$_service->secteur_id}}" value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected{{/if}}>{{$_service}}</option>
-                  {{/foreach}}
-                </select>
-              {{else}}
-                <select name="service_id" onchange="reloadFullAdmissions();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
-                  <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
-                  {{foreach from=$services item=_service}}
-                    <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected{{/if}}>{{$_service}}</option>
-                  {{/foreach}}
-                </select>
-              {{/if}}
+              <br />
+              <button type="button" onclick="Admissions.selectServices('listAdmissions');" class="search">Services</button>
 
-              <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked{{/if}}/>
               <select name="prat_id" onchange="reloadFullAdmissions();">
                 <option value="">&mdash; {{tr}}CMediusers.praticiens.all{{/tr}}</option>
                 {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$sejour->praticien_id}}

@@ -16,34 +16,18 @@ CCanDo::checkRead();
 // Filtres d'affichage
 
 $date         = CValue::getOrSession("date", CMbDT::date());
-$type         = CValue::getOrSession("type");
-$type_externe = CValue::getOrSession("type_externe");
-$service_id   = CValue::getOrSession("service_id");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
 $demain        = CMbDT::date("+ 1 day", $date);
 
-// Récupération de la liste des services
-$where = array();
-$where["externe"]   = "= '1'";
-$where["cancelled"] = "= '0'";
-$service = new CService();
-$services = $service->loadGroupList($where);
-
-$sejour = new CSejour();
-$sejour->_type_admission = $type;
-$sejour->service_id      = $service_id;
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"       , $sejour);
 $smarty->assign("date_demain"  , $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"         , $date);
-$smarty->assign("services"     , $services);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 

@@ -24,13 +24,14 @@ $nextmonth     = CMbDT::date("first day of +1 month", $date);
 $selAdmis      = CValue::getOrSession("selAdmis", "0");
 $selSaisis     = CValue::getOrSession("selSaisis", "0");
 $type          = CValue::getOrSession("type");
-$service_id    = CValue::getOrSession("service_id");
-$secteur_id    = CValue::getOrSession("secteur_id");
+$services_ids  = CValue::getOrSession("services_ids");
 $prat_id       = CValue::getOrSession("prat_id");
 $type_pec      = CValue::get("type_pec", array("M", "C", "O"));
 $bank_holidays = CMbDate::getHolidays($date);
-$service_id    = explode(",", $service_id);
-CMbArray::removeValue("", $service_id);
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -50,23 +51,9 @@ $where = array();
 $leftjoin = array();
 
 // filtre sur les services
-if (count($service_id)) {
+if (count($services_ids)) {
   $leftjoin["affectation"] = " affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $where["affectation.service_id"] = $ds->prepareIn($service_id);
-}
-//filtre sur les secteurs
-elseif ($secteur_id) {
-  $leftjoin["affectation"] = " affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $leftjoin["lit"] = " affectation.lit_id = lit.lit_id";
-  $leftjoin["chambre"] = " lit.chambre_id = chambre.chambre_id";
-  $leftjoin["service"] = " chambre.service_id = service.service_id";
-  $leftjoin["secteur"] = " service.secteur_id = secteur.secteur_id";
-
-  $secteur             = new CSecteur();
-  $secteur->load($secteur_id);
-  $secteur->loadRefsServices();
-  $service_id = CMbArray::pluck($secteur->_ref_services, "_id");
-  $where["sejour.service_id"] = $ds->prepareIn($service_id)." OR affectation.service_id ". $ds->prepareIn($service_id);
+  $where["affectation.service_id"] = $ds->prepareIn($services_ids);
 }
 
 // filtre sur les types pec des sejours

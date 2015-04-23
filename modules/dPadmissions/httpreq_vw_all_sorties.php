@@ -26,12 +26,14 @@ $current_m = CValue::get("current_m");
 
 $selSortis      = CValue::getOrSession("selSortis", "0");
 $type           = CValue::getOrSession("type");
-$service_id     = CValue::getOrSession("service_id");
+$services_ids   = CValue::getOrSession("services_ids");
 $prat_id        = CValue::getOrSession("prat_id");
 $only_confirmed = CValue::getOrSession("only_confirmed");
 $bank_holidays  = CMbDate::getHolidays($date);
-$service_id     = explode(",", $service_id);
-CMbArray::removeValue("", $service_id);
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -57,10 +59,10 @@ else {
 }
 
 // filtre sur les services
-if (count($service_id)) {
+if (count($services_ids)) {
   $leftjoinService = "LEFT JOIN affectation
                         ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $filterService   = "AND affectation.service_id " . CSQLDataSource::prepareIn($service_id);
+  $filterService   = "AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids);
 }
 else {
   $leftjoinService = $filterService = "";

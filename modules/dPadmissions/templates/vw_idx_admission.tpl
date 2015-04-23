@@ -38,41 +38,17 @@
     url.popup(700, 550, "Entrees");
   }
 
-  function reloadFilterAdmission() {
-    var form = getForm("selType");
-    var secteur_id = $V(form.secteur_id);
-    $A(form.service_id.options).invoke("show");
-    if (secteur_id) {
-      $A(form.service_id.options).each(function(item) {
-        var option_secteur_id = item.get("secteur_id");
-        if (!item.value) {return;}
-        if (option_secteur_id == secteur_id) {
-          item.show();
-        }
-        else {
-          item.hide();
-          item.selected = null;
-        }
-      });
-    }
-  }
-
   function reloadFullAdmissions() {
     var form = getForm("selType");
     var url = new Url("admissions", "httpreq_vw_all_admissions");
     url.addParam("date"      , $V(form.date));
     url.addParam("type"      , $V(form._type_admission));
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
-    if (form.secteur_id) {
-      url.addParam("secteur_id", $V(form.secteur_id));
-    }
     url.addParam("prat_id"   , $V(form.prat_id));
     url.addParam("selAdmis"  , $V(form.selAdmis));
     url.addParam("selSaisis" , $V(form.selSaisis));
     url.addParam("type_pec[]" , $V(form.elements['type_pec[]']), true);
-    url.requestUpdate('allAdmissions' , {onComplete : function() {
-        reloadAdmission();
-    }});
+    url.requestUpdate('allAdmissions' , reloadAdmission);
   }
 
   function reloadAdmission() {
@@ -178,7 +154,7 @@
     $V(oForm._modifier_entree, '1');
   }
 
-  updateModeEntree = function(select) {
+  function updateModeEntree(select) {
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_entree, selected.get("mode"));

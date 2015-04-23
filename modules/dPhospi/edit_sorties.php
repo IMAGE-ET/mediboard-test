@@ -18,6 +18,7 @@ $group_id   = CValue::get("g");
 $mode       = CValue::getOrSession("mode", 0);
 $hour_instantane = CValue::getOrSession("hour_instantane", CMbDT::format(CMbDT::time(), "%H"));
 $prestation_id = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_id_hospi"));
+$services_ids = CValue::getOrSession("services_ids", null);
 
 // Si c'est la préférence utilisateur, il faut la mettre en session
 CValue::setSession("prestation_id", $prestation_id);
@@ -40,37 +41,8 @@ $where = array(
            "group_id" => "= '$group->_id'"
          );
 $order      = "nom";
-$service    = new CService();
-$services_ids = CValue::getOrSession("services_ids", null);
 
-// Détection du changement d'établissement
-if (!isset($_SESSION["dPhospi"]["services_ids"]) || $group_id) {
-  $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
-  
-  $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
-  
-  // Si la préférence existe, alors on la charge
-  if (isset($pref_services_ids->{"g$group_id"})) {
-    $services_ids = $pref_services_ids->{"g$group_id"};
-    if ($services_ids) {
-      $services_ids = explode("|", $services_ids); 
-    }
-    CValue::setSession("services_ids", $services_ids);
-  }
-  // Sinon, chargement de la liste des services en accord avec le droit de lecture
-  else {
-    $service = new CService();
-    $where = array();
-    $where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
-    $where["cancelled"] = "= '0'";
-    $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
-    CValue::setSession("services_ids", $services_ids);
-  }
-}
-
-if (is_array($services_ids)) {
-  CMbArray::removeValue("", $services_ids);
-}
+$services_ids = CService::getServicesIdsPref($services_ids);
 
 // Récupération de la liste des praticiens et du praticien selectionné
 $praticien    = new CMediusers();

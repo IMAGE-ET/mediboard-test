@@ -242,13 +242,9 @@
           <option value="soir"  {{if $period == "soir" }}selected{{/if}}>Soir</option>
         </select>
         {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();" style="max-width: 15em;"}}
-        <select name="service_id" onchange="reloadFullSorties();" style="max-width: 15em;" {{if $sejour->service_id|@count > 1}}size="5" multiple{{/if}}>
-          <option value="">&mdash; Tous les services</option>
-          {{foreach from=$services item=_service}}
-            <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}>{{$_service}}</option>
-          {{/foreach}}
-        </select>
-        <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
+
+        <button type="button" onclick="Admissions.selectServices('sortie');" class="search">Services</button>
+
         <select name="prat_id" onchange="reloadFullSorties();" style="max-width: 15em;">
           <option value="">&mdash; Tous les praticiens</option>
           {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$sejour->praticien_id}}
