@@ -235,6 +235,13 @@ if ($update_date_print) {
   }
 }
 
+// Ajout de l'autoprint pour wkhtmltopdf (Cas où le pdf est déjà généré)
+if ($compte_rendu->factory == "CWkHtmlToPDFConverter") {
+  $content = file_get_contents($file->_file_path);
+  $content = CWkHtmlToPDFConverter::addAutoPrint($content);
+  file_put_contents($file->_file_path, $content);
+}
+
 if ($stream) {
   $file->streamFile();
   CApp::rip();
