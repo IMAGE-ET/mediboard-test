@@ -2413,7 +2413,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       $_consultation->loadRefPlageConsult();
       $_consultation->loadRefPraticien()->loadRefFunction();
-      $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
+      $this->_ref_suivi_medical[$_consultation->_guid . $_consultation->_datetime] = $_consultation;
     }
 
     // Ajout des consultations d'anesthésie hors séjour
@@ -2429,7 +2429,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       $_consultation->loadRefPlageConsult();
       $_consultation->loadRefPraticien()->loadRefFunction();
-      $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
+      $this->_ref_suivi_medical[$_consultation->_guid . $_consultation->_datetime] = $_consultation;
     }
 
     if (
