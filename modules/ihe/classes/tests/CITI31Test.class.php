@@ -97,15 +97,16 @@ class CITI31Test extends CIHETestCase {
 
     $step_number = null;
     switch ($scenario->option) {
-      case 'HISTORIC_MVT' :
+      case 'HISTORIC_MVT':
         $step_number = 10;
+
         break;
 
-      default :
-        if ($step->number == 90) {
+      default:
+        if ($step->number == 70) {
           $step_number = 30;
         }
-        if ($step->number == 100) {
+        if ($step->number == 80) {
           $step_number = 40;
         }
 
@@ -120,7 +121,11 @@ class CITI31Test extends CIHETestCase {
     $patient = self::loadPatientPES($step, $step_number);
     $sejour  = self::loadAdmitPES($patient);
 
-    $sejour->sortie_reelle = $sejour->sortie_prevue;
+    if ($scenario->option == "HISTORIC_MVT" && $step_number == "10") {
+      $sortie_reelle = CMbDT::date($sejour->sortie_prevue) . " 12:00:00";
+    }
+
+    $sejour->sortie_reelle = $sortie_reelle ? $sortie_reelle : $sejour->sortie_prevue;
 
     self::storeObject($sejour);
   }

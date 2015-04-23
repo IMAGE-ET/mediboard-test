@@ -25,7 +25,8 @@ $result_sets = $ors->loadMatchingList();
 
 foreach ($result_sets as $_result_set) {
   $_result_set->loadRefPatient();
-  $_result_set->loadRefContext();
+  $_result_set->loadRefContext()->loadComplete();
+  $_result_set->loadLastLog()->loadRefUser();
   $_results = $_result_set->loadRefsResults();
 
   foreach ($_results as $_result) {

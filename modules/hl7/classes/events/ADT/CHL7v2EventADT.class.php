@@ -225,6 +225,10 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     /** @var CHL7v2SegmentPV2 $PV2 */
     $PV2            = CHL7v2Segment::create("PV2", $this->message);
     $PV2->sejour    = $sejour;
+
+    if ($sejour) {
+      $PV2->curr_affectation = $sejour->_ref_hl7_affectation;
+    }
     $PV2->build($this);
   }
   

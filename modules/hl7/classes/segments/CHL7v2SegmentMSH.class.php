@@ -112,15 +112,25 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     // MSH-19: Principal Language Of Message (CE) (optional)
     $data[] = array(
-      "FR"
+      //"FR"
     );
     
     // MSH-20: Alternate Character Set Handling Scheme (ID) (optional)
     $data[] = null;
     
-    // MSH-21: Message Profile Identifier (EI) (optional repeating) 
-    $data[] = null;
-    
+    // MSH-21: Message Profile Identifier (EI) (optional repeating)
+    if ($event->version == "2.6") {
+      $data[] = array( array(
+        "IHE_PCD_001",
+        "IHE PCD",
+        "1.3.6.1.4.1.19376.1.6.1.1.1",
+        "ISO"
+      ));
+    }
+    else {
+      $data[] = null;
+    }
+
     $this->fill($data);
   }
 

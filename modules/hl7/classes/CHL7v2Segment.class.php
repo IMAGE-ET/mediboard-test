@@ -667,7 +667,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         // XCN-9
         // Autorité d'affectation
-        $xcn9,
+        //$xcn9,
         // XCN-10
         // Table - 0200
         // L - Legal Name - Nom de famille
@@ -681,7 +681,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // ADELI - Numéro au répertoire ADELI du professionnel de santé
         // RPPS  - N° d'inscription au RPPS du professionnel de santé 
         // RI    - Ressource interne
-        $xcn13,
+        //$xcn13,
         // XCN-14
         null,
         // XCN-15

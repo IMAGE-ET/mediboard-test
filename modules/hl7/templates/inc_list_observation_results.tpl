@@ -9,9 +9,11 @@
     <td class="narrow">
       <ul class="control_tabs_vertical small" id="result-sets-tab">
         {{foreach from=$result_sets item=_result_set}}
+          {{assign var=log value=$_result_set->_ref_last_log}}
+
           <li>
             <a href="#result-set-{{$_result_set->_id}}" style="white-space: nowrap;">
-              {{mb_value object=$_result_set field=datetime}}
+              {{mb_value object=$_result_set field=datetime}} ({{$log->_ref_user->_view}})
             </a>
           </li>
         {{/foreach}}
@@ -23,6 +25,9 @@
           <tr>
             <td style="width: 50%;">
               <table class="main tbl">
+                <tr>
+                  <th class="section" colspan="5">{{$_result_set->_ref_context->_view}}</th>
+                </tr>
                 <tr>
                   <th>{{mb_title class=CObservationResult field=value_type_id}}</th>
                   <th>{{mb_title class=CObservationResult field=value}}</th>
