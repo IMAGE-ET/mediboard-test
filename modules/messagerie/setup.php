@@ -51,37 +51,40 @@ class CSetupmessagerie extends CSetup {
     $ds = CSQLDataSource::get("std");
 
     $mails = $ds->loadList("SELECT m.user_mail_id, m.account_class, m.account_id, m.from, m.to, m.subject, c.content FROM user_mail as m, content_html as c WHERE m.account_class IS NOT NULL AND m.account_id IS NOT NULL AND m.text_html_id = c.content_id ORDER BY m.user_mail_id DESC;");
-    $values = array();
+    if (count($mails)) {
+      $values = array();
 
-    foreach ($mails as $_mail) {
-      $data = "==FROM==\n" . $_mail['from'] .
-        "\n==TO==\n" . $_mail['to'] .
-        "\n==SUBJECT==\n" . $_mail['subject'] .
-        "\n==CONTENT==\n" . $_mail['content'];
+      foreach ($mails as $_mail) {
+        $data = "==FROM==\n" . $_mail['from'] .
+          "\n==TO==\n" . $_mail['to'] .
+          "\n==SUBJECT==\n" . $_mail['subject'] .
+          "\n==CONTENT==\n" . $_mail['content'];
 
-      $hash = CMbSecurity::hash(CMbSecurity::SHA256, $data);
-      $values[] = '(' . $_mail['user_mail_id'] . ', ' . $_mail['account_id'] . ', \'' . $_mail['account_class'] . "', '$hash')";
-    }
+        $hash     = CMbSecurity::hash(CMbSecurity::SHA256, $data);
+        $values[] = '(' . $_mail['user_mail_id'] . ', ' . $_mail['account_id'] . ', \'' . $_mail['account_class'] . "', '$hash')";
+      }
 
-    $mails = $ds->loadList("SELECT m.user_mail_id, m.account_class, m.account_id, m.from, m.to, m.subject, c.content FROM user_mail as m, content_any as c WHERE m.account_class IS NOT NULL AND m.account_id IS NOT NULL AND m.text_html_id IS NULL AND m.text_plain_id = c.content_id ORDER BY m.user_mail_id DESC;");
+      $mails = $ds->loadList("SELECT m.user_mail_id, m.account_class, m.account_id, m.from, m.to, m.subject, c.content FROM user_mail AS m, content_any AS c WHERE m.account_class IS NOT NULL AND m.account_id IS NOT NULL AND m.text_html_id IS NULL AND m.text_plain_id = c.content_id ORDER BY m.user_mail_id DESC;");
 
-    foreach ($mails as $_mail) {
-      $data = "==FROM==\n" . $_mail['from'] .
-        "\n==TO==\n" . $_mail['to'] .
-        "\n==SUBJECT==\n" . $_mail['subject'] .
-        "\n==CONTENT==\n" . $_mail['content'];
+      foreach ($mails as $_mail) {
+        $data = "==FROM==\n" . $_mail['from'] .
+          "\n==TO==\n" . $_mail['to'] .
+          "\n==SUBJECT==\n" . $_mail['subject'] .
+          "\n==CONTENT==\n" . $_mail['content'];
 
-      $hash = CMbSecurity::hash(CMbSecurity::SHA256, $data);
-      $values[] = '(' . $_mail['user_mail_id'] . ', ' . $_mail['account_id'] . ', \'' . $_mail['account_class'] . "', '$hash')";
-    }
+        $hash     = CMbSecurity::hash(CMbSecurity::SHA256, $data);
+        $values[] = '(' . $_mail['user_mail_id'] . ', ' . $_mail['account_id'] . ', \'' . $_mail['account_class'] . "', '$hash')";
+      }
 
-    $query = "INSERT INTO `user_mail` (`user_mail_id`, `account_id`, `account_class`, `hash`) VALUES " .
-      implode(', ', $values) . " ON DUPLICATE KEY UPDATE `hash` = VALUES(`hash`);";
+      $query = "INSERT INTO `user_mail` (`user_mail_id`, `account_id`, `account_class`, `hash`) VALUES " .
+        implode(', ', $values) . " ON DUPLICATE KEY UPDATE `hash` = VALUES(`hash`);";
 
-    $ds->query($query);
-    if ($msg = $ds->error()) {
-      CAppUI::stepAjax($msg, UI_MSG_WARNING);
-      return false;
+      $ds->query($query);
+      if ($msg = $ds->error()) {
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
+
+        return false;
+      }
     }
 
     return true;
