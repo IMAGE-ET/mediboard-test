@@ -86,7 +86,7 @@ if ($session_lifetime) {
 $smarty = new CSmartyDP();
 
 // Tasking
-if (CModule::getActive("tasking")) {
+if (CModule::getActive("tasking") && CModule::getVisible('tasking')) {
   $tasking = CTaskingTicket::getPrefs($prefs, $user);
 
   $smarty->assign("owners", $tasking["owners"]);
@@ -94,7 +94,7 @@ if (CModule::getActive("tasking")) {
 }
 
 // oxExploitation
-if (CModule::getActive("oxExploitation")) {
+if (CModule::getActive("oxExploitation") && CModule::getVisible('oxExploitation')) {
   $customers = COXOperation::getPrefs($prefs, $user);
 
   $smarty->assign("customers", $customers);
