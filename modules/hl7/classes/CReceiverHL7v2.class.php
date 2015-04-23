@@ -235,6 +235,8 @@ class CReceiverHL7v2 extends CInteropReceiver {
     $exchange->_acquittement       = $ack_data;
     $exchange->store();
 
+    CSyslogITI21::logExchange($exchange);
+
     return $ack_data;
   }
 }

@@ -97,12 +97,7 @@ class CSyslogSource extends CSocketSource {
       $this->connect();
     }
 
-    try {
-      $this->send($msg);
-    }
-    catch (Exception $e) {
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
-    }
+    $this->send($msg);
   }
 
   function sendTestMessage() {

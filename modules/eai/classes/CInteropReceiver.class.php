@@ -205,7 +205,7 @@ class CInteropReceiver extends CInteropActor {
   /**
    * Load exchanges sources
    *
-   * @return void
+   * @return CExchangeSource[]
    */
   function loadRefsExchangesSources() {
     if (!$this->_ref_msg_supported_family) {

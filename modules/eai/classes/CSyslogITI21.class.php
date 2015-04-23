@@ -106,6 +106,77 @@ class CSyslogITI21 extends CSyslogAuditMessage {
     return $object;
   }
 
+  /**
+   * Log a syslog exchange
+   *
+   * @param CExchangeHL7v2 $exchange The exchange to log
+   *
+   * @return void
+   */
+  static function logExchange(CExchangeHL7v2 $exchange) {
+    $syslog = CSyslogITI21::getInstance($exchange);
+
+    $syslog_receiver = new CSyslogReceiver();
+    $syslog_receiver->loadObject();
+    $exchanges_sources = $syslog_receiver->loadRefsExchangesSources();
+
+    $xml_source = $syslog->getSyslogMsg();
+
+    /** @var CSyslogSource $_source */
+    foreach ($exchanges_sources as $_source) {
+      if (!$_source->active) {
+        continue;
+      }
+
+      $ok = true;
+      $ack = "";
+      try {
+        $_source->sendMessage($xml_source);
+
+        $ack = $_source->recv();
+      }
+      catch (Exception $e) {
+        $ok = true;
+      }
+
+      // XML content
+      $xml_content = new CContentXML();
+      $xml_content->content = $xml_source;
+      $xml_content->store();
+
+      $xml_content_ack = null;
+      if ($ack != "") {
+        $xml_content_ack = new CContentXML();
+        $xml_content_ack->content = $ack;
+        $xml_content_ack->store();
+      }
+
+      $exchange_syslog                  = new CSyslogExchange();
+      $exchange_syslog->date_production = CMbDT::dateTime();
+      $exchange_syslog->receiver_id     = $syslog_receiver->_id;
+      $exchange_syslog->group_id        = $syslog_receiver->group_id;
+      $exchange_syslog->sender_id       = null;
+      $exchange_syslog->sender_class    = null;
+      $exchange_syslog->type            = $exchange->type;
+      $exchange_syslog->sous_type       = $exchange->sous_type;
+      $exchange_syslog->object_id       = $exchange->_id;
+      $exchange_syslog->object_class    = $exchange->_class;
+      $exchange_syslog->message_content_id = $xml_content->_id;
+      $exchange_syslog->acquittement_content_id = $xml_content_ack ? $xml_content_ack->_id : null;
+
+      $status_ack = "ok";
+      if (!$ok) {
+        $status_ack = "err";
+      }
+      elseif ($ack == "") {
+        $status_ack = "none";
+      }
+      $exchange_syslog->statut_acquittement = $status_ack;
+
+      $exchange_syslog->store();
+    }
+  }
+
   static function isSource($msh_data) {
     $sending_facility    = CAppUI::conf('hl7 sending_facility');
     $sending_application = CAppUI::conf('hl7 sending_application');
