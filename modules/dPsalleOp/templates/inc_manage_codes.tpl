@@ -96,6 +96,7 @@
 </script>
 
 {{if $conf.dPccam.CCodeCCAM.use_new_association_rules}}
+  {{assign var=codage_rights value='dPccam codage rights'|conf:"CGroups-$g"}}
 <!-- Nouvel affichage en se basant sur le codage de chaque praticien -->
 <table class="main layout">
   <tr>
@@ -218,11 +219,11 @@
                   {{section name=count_actes loop=$smarty.foreach.codages_by_prat.total}}
                     {{math assign=count_actes_by_prat equation="x+y" x=$count_actes_by_prat y=$_codages_by_prat[$smarty.section.count_actes.index]->_ref_actes_ccam|@count}}
                   {{/section}}
-
                   <td rowspan="{{$_codages_by_prat|@count}}" class="button">
                     {{if !$_codage->locked}}
                       <button type="button" class="notext edit" onclick="editCodages('{{$subject->_class}}', {{$subject->_id}}, {{$_codage->praticien_id}})"
-                              title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})">
+                              title="{{$_codage->association_rule}} ({{mb_value object=$_codage field=association_mode}})"
+                              {{if $codage_rights == 'self' && ($user->_id != $_codage->praticien_id && !@$modules.dPpmsi->_can->edit)}} disabled="disabled"{{/if}}>
                         {{tr}}Edit{{/tr}}
                       </button>
                     {{/if}}

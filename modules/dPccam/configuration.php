@@ -15,6 +15,9 @@ CConfiguration::register(
   array(
     'CGroups' => array(
       'dPccam' => array(
+        'codage' => array(
+          'rights' => 'enum list|user_rights|self default|user_rights'
+        ),
         'associations' => array(
           'mode'  => 'enum list|auto|manual localize default|auto',
           'rules' => array(
