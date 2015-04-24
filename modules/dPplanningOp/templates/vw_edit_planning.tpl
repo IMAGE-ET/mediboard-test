@@ -333,6 +333,17 @@ modeExpertDisplay = function() {
             <td style="vertical-align: top;">
               {{mb_include template=inc_documents_operation operation=$op}}
               {{mb_include template=inc_files_operation operation=$op}}
+
+              <fieldset style="width: 50%">
+                <legend>{{tr}}CDevisCodage{{/tr}}</legend>
+                {{mb_script module=ccam script=DevisCodage ajax=1}}
+                <script>
+                  Main.add(function() {
+                    DevisCodage.list('{{$op->_class}}', '{{$op->_id}}');
+                  });
+                </script>
+                <div id="view-devis"></div>
+              </fieldset>
             </td>
             {{if "forms"|module_active}}
               <td style="vertical-align: top;">
