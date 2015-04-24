@@ -341,7 +341,7 @@ class CCodageCCAM extends CMbObject {
       }
     }
 
-    if ($this->_old->locked && $this->locked) {
+    if ($this->_old->locked && $this->locked && !CModule::getCanDo('dPpmsi')->edit) {
       return "Codage verrouillé";
     }
     if (!$this->_id || $this->fieldModified('association_mode', 'auto')) {
