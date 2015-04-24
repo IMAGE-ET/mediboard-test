@@ -95,7 +95,7 @@ class CSyslogITI9 extends CSyslogAuditMessage {
     $msg = $exchange->getMessage();
 
     if (self::isSource($msg->toXML()->getMSHEvenementXML())) {
-      $object = new CSyslogQ22Consumer();
+      $object = new CSyslogQ23Consumer();
     }
     else {
       // Not implemented yet
