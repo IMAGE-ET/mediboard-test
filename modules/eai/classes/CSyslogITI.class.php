@@ -17,6 +17,7 @@
 class CSyslogITI extends CInteropNorm {
   /** @var array */
   static $evenements = array(
+    "iti9"  => "CSyslogITI9",
     "iti21" => "CSyslogITI21",
     "iti22" => "CSyslogITI22",
     "iti41" => "CSyslogITI41"
