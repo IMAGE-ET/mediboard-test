@@ -183,6 +183,14 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * @see parent::isInstalled()
+   */
+  function isInstalled() {
+    // Prevents zillions of uncachable SQL queries on table existence
+    return CModule::getInstalled("mediusers");
+  }
+
+  /**
    * @return CFunctions[]
    */
   static function loadCurrentFunctions() {
