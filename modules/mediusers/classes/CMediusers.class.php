@@ -178,6 +178,15 @@ class CMediusers extends CPerson {
     return CAppUI::$instance->_ref_user;
   }
 
+
+  /**
+   * @see parent::isInstalled()
+   */
+  function isInstalled() {
+    // Prevents zillions of uncachable SQL queries on table existence
+    return CModule::getInstalled("mediusers");
+  }
+
   /**
    * @return CFunctions[]
    */
