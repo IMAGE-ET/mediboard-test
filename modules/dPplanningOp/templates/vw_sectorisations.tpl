@@ -48,14 +48,19 @@
     <th>{{tr}}CRegleSectorisation-date_max{{/tr}}</th>
     <th>{{tr}}CRegleSectorisation-type_admission{{/tr}}</th>
     <th>{{tr}}CRegleSectorisation-type_pec{{/tr}}</th>
+    <th>{{mb_title class=CRegleSectorisation field=age_min}}</th>
+    <th>{{mb_title class=CRegleSectorisation field=age_max}}</th>
+    <th>{{mb_title class=CRegleSectorisation field=handicap}}</th>
     <th>Direction</th>
   </tr>
+
   {{foreach from=$regles item=_regle}}
     <tr {{if $_regle->_inactive}}class="hatching"{{/if}}>
       <td>
         <button class="edit notext" onclick="editSRF('{{$_regle->_id}}', 0)">{{tr}}Edit{{/tr}}</button>
         <button class="duplicate notext" onclick="editSRF('{{$_regle->_id}}', 1)">{{tr}}Duplicate{{/tr}}</button>
       </td>
+
       <td style="text-align: center"><strong>{{mb_value object=$_regle field=priority}}</strong></td>
       <td>{{if $_regle->_ref_function->_id}}{{mb_include module="mediusers" template="inc_vw_function" function=$_regle->_ref_function}}{{/if}}</td>
       <td>{{if $_regle->_ref_praticien->_id}}{{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$_regle->_ref_praticien}}{{/if}}</td>
@@ -65,11 +70,15 @@
       <td>{{mb_value object=$_regle field=date_max}}</td>
       <td>{{if $_regle->type_admission}}{{tr}}CSejour._type_admission.{{$_regle->type_admission}}{{/tr}}{{/if}}</td>
       <td>{{if $_regle->type_pec}}{{tr}}CSejour.type_pec.{{$_regle->type_pec}}{{/tr}}{{/if}}</td>
+      <td style="text-align: center">{{mb_value object=$_regle field=age_min}}</td>
+      <td style="text-align: center">{{mb_value object=$_regle field=age_max}}</td>
+      <td style="text-align: center">{{mb_value object=$_regle field=handicap}}</td>
+
       <td><strong> >> {{$_regle->_ref_service}}</strong></td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="10">{{tr}}CRegleSectorisation.none{{/tr}}</td>
+      <td class="empty" colspan="14">{{tr}}CRegleSectorisation.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

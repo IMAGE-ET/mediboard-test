@@ -544,7 +544,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["transport_sortie"]              = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["rques_transport_sortie"]        = "text";
     $props["type_pec"]                      = "enum list|M|C|O";
-    $props["handicap"]                      = "bool default|0";
+    $props["handicap"]                      = "bool";
 
     $props["date_accident"]   = "date";
     $props["nature_accident"] = "enum list|P|T|D|S|J|C|L|B|U";
@@ -911,25 +911,35 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (!CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation") || $this->service_id) {
       return false;
     }
-    $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec");
-    $this->updatePlainFields(); // make sure entree & sortie well defined
+
+    $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec", "handicap");
+    // make sure entree & sortie well defined
+    $this->updatePlainFields();
+
     $praticien = $this->loadRefPraticien();
+    $patient   = $this->loadRefPatient();
+
+    $ds = CSQLDataSource::get('std');
 
     $where                   = array();
-    $where["type_admission"] = " = '$this->type' OR `type_admission` IS NULL";
-    $where["praticien_id"]   = " = '$this->praticien_id' OR `praticien_id` IS NULL";
-    $where["function_id"]    = " = '$praticien->function_id' OR `function_id` IS NULL";
-    $where["date_min"]       = " <= '$this->entree' OR `date_min` IS NULL";
-    $where["date_max"]       = " >= '$this->entree' OR `date_max` IS NULL";
-    $where["group_id"]       = " = '$this->group_id'";
+    $where["type_admission"] = $ds->prepare("= ? OR `type_admission` IS NULL", $this->type);
+    $where["praticien_id"]   = $ds->prepare("= ? OR `praticien_id` IS NULL", $this->praticien_id);
+    $where["function_id"]    = $ds->prepare("= ? OR `function_id` IS NULL", $praticien->function_id);
+    $where["date_min"]       = $ds->prepare("<= ? OR `date_min` IS NULL", $this->entree);
+    $where["date_max"]       = $ds->prepare(">= ? OR `date_max` IS NULL", $this->entree);
+    $where["group_id"]       = $ds->prepare("= ?", $this->group_id);
 
     if ($this->type_pec) {
-      $where["type_pec"] = " = '$this->type_pec' OR `type_pec` IS NULL";
+      $where["type_pec"] = $ds->prepare("= ? OR `type_pec` IS NULL", $this->type_pec);
     }
 
     $duree              = CMbDT::daysRelative($this->entree, $this->sortie);
-    $where["duree_min"] = " <= '$duree' OR `duree_min` IS NULL";
-    $where["duree_max"] = " >= '$duree' OR `duree_max` IS NULL";
+    $where["duree_min"] = $ds->prepare("<= ? OR `duree_min` IS NULL", $duree);
+    $where["duree_max"] = $ds->prepare(">= ? OR `duree_max` IS NULL", $duree);
+
+    $where['age_min']  = $ds->prepare('<= ? OR `age_min` IS NULL', $patient->evalAge($this->entree));
+    $where['age_max']  = $ds->prepare('>= ? OR `age_max` IS NULL', $patient->evalAge($this->entree));
+    $where['handicap'] = $ds->prepare('= ? OR `handicap` IS NULL', $this->handicap);
 
     $regle = new CRegleSectorisation();
 

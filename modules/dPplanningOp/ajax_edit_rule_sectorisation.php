@@ -31,7 +31,7 @@ $functions = $function->loadList(null, "text");
 
 //services
 $service = new CService();
-$services = $service->loadList();
+$services = $service->loadGroupList();
 
 //services
 $group = new CGroups();

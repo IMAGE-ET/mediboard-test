@@ -25,6 +25,15 @@ class CRegleSectorisation extends CMbObject {
   public $type_pec;
   public $group_id;
 
+  /** @var integer Minimal patient age */
+  public $age_min;
+
+  /** @var integer Maximal patient age */
+  public $age_max;
+
+  /** @var boolean Is the patient invalid? */
+  public $handicap;
+
   //form field
   public $_ref_service;
   public $_ref_function;
@@ -59,6 +68,9 @@ class CRegleSectorisation extends CMbObject {
     $props["duree_max"]         = "num moreEquals|duree_min";
     $props["date_min"]          = "dateTime";
     $props["date_max"]          = "dateTime moreEquals|date_min";
+    $props["age_min"]           = "num";
+    $props["age_max"]           = "num moreEquals|age_min";
+    $props["handicap"]          = "bool default|0";
     $props["type_admission"]    = "enum list|".implode("|", $types_admission);
     $props["type_pec"]          = "enum list|".implode("|", $types_pec);
     $props["group_id"]          = "ref class|CGroups notNull";

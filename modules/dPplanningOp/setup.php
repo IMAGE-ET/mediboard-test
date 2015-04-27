@@ -1974,6 +1974,13 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE operations ADD INDEX consult_related_id (consult_related_id)";
     $this->addQuery($query, true);
 
-    $this->mod_version = '2.12';
+    $this->makeRevision("2.12");
+    $query = "ALTER TABLE `regle_sectorisation`
+                ADD `age_min` TINYINT UNSIGNED,
+                ADD `age_max` TINYINT UNSIGNED,
+                ADD `handicap` ENUM('0', '1');";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.13';
   }
 }

@@ -10,6 +10,12 @@
 *}}
 
 <script>
+  Main.add(function() {
+    var form = getForm('editRegleSectorisation');
+    form.elements.age_min.addSpinner({min: 0, step: 10});
+    form.elements.age_max.addSpinner({min: 0, step: 10});
+  });
+
   changePrio = function(more) {
     var oform = getForm('editRegleSectorisation');
     var old_value = $V(oform.priority) || 0;
@@ -42,9 +48,9 @@
     <tr>
       <th>{{mb_label object=$rule field=priority}}</th>
       <td>
-        <button type="button" class="remove" onclick="changePrio();"></button>
+        <button type="button" class="remove notext" onclick="changePrio();"></button>
         {{mb_field object=$rule field=priority}}
-        <button type="button" class="add" onclick="changePrio(1)"></button>
+        <button type="button" class="add notext" onclick="changePrio(1)"></button>
       </td>
     </tr>
 
@@ -134,10 +140,31 @@
     </tr>
 
     <tr>
+      <th class="category" colspan="2">{{tr}}CPatient{{/tr}}</th>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$rule field=age_min}}</th>
+      <td>{{mb_field object=$rule field=age_min}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$rule field=age_max}}</th>
+      <td>{{mb_field object=$rule field=age_max}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$rule field=handicap}}</th>
+      <td>{{mb_field object=$rule field=handicap typeEnum='select' emptyLabel='CRegleSectorisation-handicap.any'}}</td>
+    </tr>
+
+    <tr>
       <td colspan="2" class="button">
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
       {{if $rule->_id}}
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{objName:'{{$rule->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{objName:'{{$rule->_view|smarty:nodefaults|JSAttribute}}'})">
+          {{tr}}Delete{{/tr}}
+        </button>
       {{/if}}
       </td>
     </tr>
