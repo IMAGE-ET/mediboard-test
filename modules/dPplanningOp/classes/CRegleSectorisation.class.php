@@ -70,7 +70,7 @@ class CRegleSectorisation extends CMbObject {
     $props["date_max"]          = "dateTime moreEquals|date_min";
     $props["age_min"]           = "num";
     $props["age_max"]           = "num moreEquals|age_min";
-    $props["handicap"]          = "bool default|0";
+    $props["handicap"]          = "bool";
     $props["type_admission"]    = "enum list|".implode("|", $types_admission);
     $props["type_pec"]          = "enum list|".implode("|", $types_pec);
     $props["group_id"]          = "ref class|CGroups notNull";
