@@ -95,13 +95,16 @@
         <td style="{{$cell_style}}">
           {{if $canAdmissions->edit}}
             <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post">
-
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_sejour_aed" />
               <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
               <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
+
+              {{mb_include module=forms template=inc_widget_ex_class_register_multiple object=$_sejour cssStyle="display: inline-block;"}}
+
               {{if !$_sejour->entree_preparee}}
                 <input type="hidden" name="entree_preparee" value="1" />
+                <input type="hidden" name="_entree_preparee_trigger" value="1" />
                 <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
                   {{tr}}CSejour-entree_preparee{{/tr}}
                 </button>

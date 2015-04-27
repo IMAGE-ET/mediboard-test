@@ -388,12 +388,18 @@ class CSejour extends CFacturable implements IPatientRelated {
     $spec->table       = 'sejour';
     $spec->key         = 'sejour_id';
     $spec->measureable = true;
-    $spec->events      = array(
-      "modification"   => array(
-        "reference1" => array("CMediusers", "praticien_id"),
-        "reference2" => array("CPatient", "patient_id"),
-      ),
-      "suivi_clinique" => array(
+
+    $references = array(
+      "reference1" => array("CMediusers", "praticien_id"),
+      "reference2" => array("CPatient", "patient_id"),
+    );
+
+    $spec->events = array(
+      "modification"            => $references,
+      "suivi_clinique"          => $references,
+      "preparation_entree"      => $references,
+      "preparation_entree_auto" => array(
+        "auto"       => true,
         "reference1" => array("CMediusers", "praticien_id"),
         "reference2" => array("CPatient", "patient_id"),
       ),

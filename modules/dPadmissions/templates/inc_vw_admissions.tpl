@@ -103,3 +103,5 @@
   </tr>
   {{/foreach}}
 </table>
+
+{{mb_include module=forms template=inc_widget_ex_class_register_multiple_end event_name=preparation_entree object_class="CSejour"}}

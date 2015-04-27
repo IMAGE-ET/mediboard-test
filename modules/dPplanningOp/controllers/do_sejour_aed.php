@@ -13,14 +13,14 @@ if ($praticien_id = CValue::post("praticien_id")) {
   CValue::setSession("praticien_id", $praticien_id);
 }
 
-$lit_id             = CValue::post("lit_id");
-$service_sortie_id  = CValue::post("service_sortie_id");
-$mode_sortie        = CValue::post("mode_sortie");
-$type               = CValue::post("type");
+$lit_id                  = CValue::post("lit_id");
+$service_sortie_id       = CValue::post("service_sortie_id");
+$mode_sortie             = CValue::post("mode_sortie");
+$type                    = CValue::post("type");
+$entree_preparee_trigger = CValue::post("_entree_preparee_trigger");
+$sejour_id               = CValue::post("sejour_id");
 
 $create_affectation = CAppUI::conf("urgences create_affectation");
-
-$sejour_id = CValue::post("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -49,6 +49,12 @@ if ($create_affectation && $mode_sortie == "mutation" &&
   $affectation_hospit->_mutation_urg = true;
 
   $sejour_hospit->forceAffectation($affectation_hospit);
+}
+
+// Lancement des formulaires automatiques sur le champ entrée préparée
+if ($sejour->_id && $entree_preparee_trigger && CModule::getActive("forms")) {
+  $ex_class_events = CExClassEvent::getForObject($sejour, "preparation_entree_auto", "required");
+  echo CExClassEvent::getJStrigger($ex_class_events);
 }
 
 $do = new CDoObjectAddEdit("CSejour");

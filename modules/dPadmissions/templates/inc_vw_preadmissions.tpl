@@ -80,10 +80,12 @@
     <th>DH</th>
   </tr>
   {{foreach from=$listConsultations item=curr_consult}}
-    {{include file="inc_vw_preadmission_line.tpl"}}
+    {{mb_include module=admissions template="inc_vw_preadmission_line" nodebug=true}}
   {{foreachelse}}
     <tr>
       <td colspan="9" class="empty">Aucune pré-admission</td>
     </tr>
   {{/foreach}}
 </table>
+
+{{mb_include module=forms template=inc_widget_ex_class_register_multiple_end event_name=preparation_entree object_class="CSejour"}}

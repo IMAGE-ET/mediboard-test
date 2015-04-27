@@ -1,4 +1,5 @@
 {{assign var=patient value=$_sejour->_ref_patient}}
+{{mb_default var=single_line value=false}}
 
 <td>
   {{if $canAdmissions->edit}}
@@ -147,8 +148,15 @@
       {{mb_key object=$_sejour}}
       <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
 
+      {{if $single_line}}
+        {{mb_include module=forms template=inc_widget_ex_class_register object=$_sejour event_name=preparation_entree cssStyle="display: inline-block;"}}
+      {{else}}
+        {{mb_include module=forms template=inc_widget_ex_class_register_multiple object=$_sejour cssStyle="display: inline-block;"}}
+      {{/if}}
+
       {{if !$_sejour->entree_preparee}}
         <input type="hidden" name="entree_preparee" value="1" />
+        <input type="hidden" name="_entree_preparee_trigger" value="1" />
         <button class="tick" type="button" onclick="submitAdmission(this.form, 1);">
           {{tr}}CSejour-entree_preparee{{/tr}}
         </button>

@@ -87,5 +87,6 @@ $smarty->assign("prestations"     , CPrestation::loadCurrentList());
 $smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("single_line"     , true); // Indique qu'on charge la ligne seulement (pour les evenements de formulaire)
 
 $smarty->display("inc_vw_admission_line.tpl");
