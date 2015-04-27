@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 $group = CGroups::loadCurrent();
 
 // Récupération des paramètres
@@ -45,8 +44,7 @@ $ds    = CSQLDataSource::get("std");
 //
 // Cas de l'affichage des lits libres
 //
-if ($typeVue == 0) {
-
+if ($typeVue == 0 || $typeVue == 2) {
   // Recherche de tous les lits disponibles
   $sql = "SELECT lit.lit_id
           FROM affectation
@@ -55,8 +53,12 @@ if ($typeVue == 0) {
           WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
           AND chambre.annule = '0'
           AND lit.annule = '0'
-          AND affectation.effectue = '0'
-          GROUP BY lit.lit_id";
+          AND affectation.effectue = '0'";
+  if ($typeVue == 2) {
+    $sql .= " AND affectation.sejour_id IS NULL
+             AND affectation.function_id IS NOT NULL";
+  }
+  $sql .= " GROUP BY lit.lit_id";
 
   $occupes = $ds->loadlist($sql);
   $arrayIn = array();
@@ -77,8 +79,12 @@ if ($typeVue == 0) {
             AND chambre.annule = '0'
             AND lit.annule = '0'
             AND service.group_id = '$group->_id'
-            AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
-            GROUP BY lit.lit_id
+            AND service.service_id ".CSQLDataSource::prepareIn($services_ids);
+    if ($typeVue == 2) {
+      $sql .= " AND affectation.sejour_id IS NULL
+             AND affectation.function_id IS NOT NULL";
+    }
+    $sql .= " GROUP BY lit.lit_id
             ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
     $libre = $ds->loadList($sql);
 
@@ -92,8 +98,13 @@ if ($typeVue == 0) {
             WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
             AND affectation.lit_id IS NOT NULL
             AND lit.chambre_id ".CSQLDataSource::prepareIn(CMbArray::pluck($libre, "chambre_id")).
-           " AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id")).
-           " GROUP BY lit.lit_id";
+           " AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id"));
+    if ($typeVue == 2) {
+      $sql .= " AND affectation.sejour_id IS NULL
+             AND affectation.function_id IS NOT NULL";
+    }
+    $sql .= " GROUP BY lit.lit_id";
+
     $autre_sexe_chambre = $ds->loadList($sql);
     foreach ($autre_sexe_chambre as $key=>$_autre) {
       $autre_sexe_chambre[$_autre["chambre_id"]] = $_autre;
