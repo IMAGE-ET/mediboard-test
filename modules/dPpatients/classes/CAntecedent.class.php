@@ -23,7 +23,10 @@ class CAntecedent extends CMbObject {
   public $rques;
   public $dossier_medical_id;
   public $annule;
-  
+
+  public $owner_id;
+  public $creation_date;
+
   // Form Fields
   public $_search;
   public $_aides_all_depends;
@@ -74,13 +77,16 @@ class CAntecedent extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["type"]  = "enum list|".CAppUI::conf("patients CAntecedent types");
-    $props["appareil"] = "enum list|".CAppUI::conf("patients CAntecedent appareils");
-    $props["date"]  = "date progressive";
-    $props["rques"] = "text helped|type|appareil";
+    $props["type"]               = "enum list|" . CAppUI::conf("patients CAntecedent types");
+    $props["appareil"]           = "enum list|" . CAppUI::conf("patients CAntecedent appareils");
+    $props["date"]               = "date progressive";
+    $props["rques"]              = "text helped|type|appareil";
     $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
-    $props["annule"] = "bool";
-    $props["_search"] = "str";
+    $props["annule"]             = "bool";
+    $props["owner_id"]           = "ref class|CMediusers";
+    $props["creation_date"]      = "dateTime";
+    $props["_search"]            = "str";
+
     return $props;
   }
 
@@ -117,7 +123,30 @@ class CAntecedent extends CMbObject {
   function loadView(){
     parent::loadView();
     $this->loadLogs();
+    $this->updateOwnerAndDates();
     $this->loadRefDossierMedical();
+  }
+
+  /**
+   * Update owner and creation date from user logs
+   *
+   * @return void
+   */
+  function updateOwnerAndDates(){
+    if (!$this->_id || $this->owner_id && $this->creation_date) {
+      return;
+    }
+
+    if (empty($this->_ref_logs)) {
+      $this->loadLogs();
+    }
+
+    $first_log = $this->_ref_first_log;
+
+    $this->owner_id      = $first_log->user_id;
+    $this->creation_date = $first_log->date;
+
+    $this->rawStore();
   }
 
   /**
@@ -130,6 +159,16 @@ class CAntecedent extends CMbObject {
       $dossier_medical = $this->_ref_dossier_medical;
       if ($dossier_medical->object_class == "CPatient") {
         DSHM::remKeys("alertes-*-CPatient-".$dossier_medical->object_id);
+      }
+    }
+
+    // Save owner and creation date
+    if (!$this->_id) {
+      $now = CMbDT::dateTime();
+      $this->creation_date = $now;
+
+      if (!$this->owner_id) {
+        $this->owner_id = CMediusers::get()->_id;
       }
     }
     
@@ -176,7 +215,7 @@ class CAntecedent extends CMbObject {
    * @return void
    */
   function checkCodeCim10(){
-    preg_match_all("/\b[A-Z]\d{2}\.?\d{0,2}\b/i", $this->rques, $matches);
+    preg_match_all('/\b[A-Z]\d{2}\.?\d{0,2}\b/i', $this->rques, $matches);
 
     foreach ($matches as $match_) {
       foreach ($match_ as &$match) {
@@ -210,7 +249,10 @@ class CAntecedent extends CMbObject {
    */
   function check() {
     //Si on merge le dossier médical et que le type n'existe pas
-    if ($this->_forwardRefMerging && (in_array($this->type, CAntecedent::$non_types) || !in_array($this->type, CAntecedent::$types))) {
+    if (
+        $this->_forwardRefMerging && in_array($this->type, CAntecedent::$non_types) || !in_array($this->type, CAntecedent::$types) ||
+        $this->fieldModified("annule", "1") // On ne verifie pas le type si on annule un ATCD
+    ) {
       return null;
     }
     return parent::check();

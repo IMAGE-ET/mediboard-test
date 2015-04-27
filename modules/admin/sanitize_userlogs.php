@@ -33,6 +33,10 @@ $copies = array(
   array("CConstantesMedicales",     "date",               "creation_date"),
   array("CAlert",                   "date",               "creation_date"),
   array("CCompteRendu",             "date",               "creation_date"),
+  array("CAntecedent",              "user_id",            "owner_id"),
+  array("CAntecedent",              "date",               "creation_date"),
+  array("CTraitement",              "user_id",            "owner_id"),
+  array("CTraitement",              "date",               "creation_date"),
 );
 
 // Ajout des classes de formulaires

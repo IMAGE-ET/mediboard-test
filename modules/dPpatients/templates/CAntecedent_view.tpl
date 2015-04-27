@@ -86,7 +86,7 @@
           </button>
         {{/if}}
         
-        {{if $object->_ref_first_log && $object->_ref_first_log->user_id == $app->user_id}}
+        {{if $object->owner_id == $app->user_id}}
           {{if $dossier_medical->object_class == "CPatient"}}
           <button type="button" class="edit"
             onclick="Antecedent.editAntecedents('{{$dossier_medical->object_id}}', '', '{{$reload}}', '{{$object->_id}}')">

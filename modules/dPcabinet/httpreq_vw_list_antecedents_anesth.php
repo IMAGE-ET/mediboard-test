@@ -28,8 +28,8 @@ if ($dossier_medical->_ref_antecedents_by_type) {
   $dossier_medical->countAntecedents();
   $dossier_medical->countTraitements();
   foreach ($dossier_medical->_ref_antecedents_by_type as &$type) {
-    foreach ($type as &$ant) {
-      $ant->loadLogs();
+    foreach ($type as $_ant) {
+      $_ant->updateOwnerAndDates();
     }
   }
 }

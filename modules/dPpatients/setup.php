@@ -2822,7 +2822,7 @@ class CSetupdPpatients extends CSetup {
                 ADD `in_doc_template` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    /*$this->makeRevision('2.34');
+    $this->makeRevision('2.35');
     $query = "ALTER TABLE `antecedent`
                 ADD `owner_id` INT (11) UNSIGNED,
                 ADD `creation_date` DATETIME;";
@@ -2830,9 +2830,13 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `traitement`
                 ADD `owner_id` INT (11) UNSIGNED,
                 ADD `creation_date` DATETIME;";
-    $this->addQuery($query);*/
+    $this->addQuery($query);
+    $query = "ALTER TABLE `pathologie`
+                ADD `owner_id` INT (11) UNSIGNED NOT NULL,
+                ADD `creation_date` DATETIME NOT NULL;";
+    $this->addQuery($query);
 
-    $this->mod_version = '2.35';
+    $this->mod_version = '2.36';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

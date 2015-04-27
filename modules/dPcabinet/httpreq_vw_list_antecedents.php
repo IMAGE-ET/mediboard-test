@@ -59,10 +59,10 @@ if ($dossier_medical->_id) {
   $prescription = $dossier_medical->loadRefPrescription();
 
   foreach ($dossier_medical->_all_antecedents as $_antecedent) {
-    $_antecedent->loadLogs();
+    $_antecedent->updateOwnerAndDates();
   }
   foreach ($dossier_medical->_ref_traitements as $_traitement) {
-    $_traitement->loadLogs();
+    $_traitement->updateOwnerAndDates();
   }
   
   if ($prescription && is_array($prescription->_ref_prescription_lines)) {

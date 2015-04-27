@@ -465,6 +465,9 @@ class CMediusers extends CPerson {
     $backProps['mssante_account']                  = 'CMSSanteUserAccount user_id';
     $backProps['drawing_category_user']            = 'CDrawingCategory user_id';
     $backProps['cleanup_operator']                 = 'CBedCleanup cleanup_operator_id';
+    $backProps['antecedents']                      = 'CAntecedent owner_id';
+    $backProps['traitements']                      = 'CTraitement owner_id';
+    $backProps['pathologies']                      = 'CPathologie owner_id';
     return $backProps;
   }
 

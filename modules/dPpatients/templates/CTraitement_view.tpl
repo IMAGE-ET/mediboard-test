@@ -36,7 +36,7 @@
           </button>
         {{/if}}
         
-        {{if $object->_ref_first_log && $object->_ref_first_log->user_id == $app->user_id}}
+        {{if $object->owner_id == $app->user_id}}
           <button title="{{tr}}Delete{{/tr}}" class="trash" type="button" onclick="Traitement.remove(this.form, {{$reload}}); $('{{$object->_guid}}_tooltip').up('.tooltip').remove();">
             {{tr}}Delete{{/tr}}
           </button>

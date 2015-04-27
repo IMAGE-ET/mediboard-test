@@ -69,7 +69,7 @@
       {{foreach from=$list_antecedent item=_antecedent}}
         <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
           <!-- Seulement si l'utilisateur est le créateur -->
-          {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
+          {{if $_antecedent->owner_id == $app->user_id}}
           <form name="Del-{{$_antecedent->_guid}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="del" value="0" />

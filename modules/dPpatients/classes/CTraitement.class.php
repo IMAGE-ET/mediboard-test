@@ -23,6 +23,9 @@ class CTraitement extends CMbObject {
   public $dossier_medical_id;
   public $annule;
 
+  public $owner_id;
+  public $creation_date;
+
   // Form Fields
   public $_search;
 
@@ -43,16 +46,18 @@ class CTraitement extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["debut"       ] = "date progressive";
-    $specs["fin"         ] = "date progressive moreEquals|debut";
-    $specs["traitement"  ] = "text helped seekable";
-    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
-    $specs["annule"] = "bool show|0";
+    $props = parent::getProps();
+    $props["debut"]              = "date progressive";
+    $props["fin"]                = "date progressive moreEquals|debut";
+    $props["traitement"]         = "text helped seekable";
+    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
+    $props["annule"]             = "bool show|0";
+    $props["owner_id"]           = "ref class|CMediusers";
+    $props["creation_date"]      = "dateTime";
 
-    $specs["_search"] = "str";
+    $props["_search"] = "str";
     
-    return $specs;
+    return $props;
   }
 
   /**
@@ -73,11 +78,51 @@ class CTraitement extends CMbObject {
   }
 
   /**
+   * @see parent::store()
+   */
+  function store() {
+    // Save owner and creation date
+    if (!$this->_id) {
+      $now = CMbDT::dateTime();
+      $this->creation_date = $now;
+
+      if (!$this->owner_id) {
+        $this->owner_id = CMediusers::get()->_id;
+      }
+    }
+
+    return parent::store();
+  }
+
+  /**
+   * Update owner and creation date from user logs
+   *
+   * @return void
+   */
+  function updateOwnerAndDates(){
+    if (!$this->_id || $this->owner_id && $this->creation_date) {
+      return;
+    }
+
+    if (empty($this->_ref_logs)) {
+      $this->loadLogs();
+    }
+
+    $first_log = $this->_ref_first_log;
+
+    $this->owner_id      = $first_log->user_id;
+    $this->creation_date = $first_log->date;
+
+    $this->rawStore();
+  }
+
+  /**
    * @see parent::loadView()
    */
   function loadView(){
     parent::loadView();
     $this->loadLogs();
+    $this->updateOwnerAndDates();
     $this->loadRefDossierMedical();
   }
 }

@@ -71,10 +71,9 @@
         {{if $type}}
           <td style="width: 40%; text-align: left; padding-left: 2em;" rowspan="{{$type|ternary:2:3}}" class="text">
             {{foreach from=$antecedents item=_antecedent}}
-              {{assign var=first_log value=$_antecedent->_ref_first_log}}
               <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
                 <div  {{if $antecedent->_id == $_antecedent->_id}}class="selected"{{/if}}>
-                  {{if $first_log && $first_log->user_id == $app->user_id}}
+                  {{if $antecedent->owner_id == $app->user_id}}
                     <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button"
                         onclick="var form = getForm('delAntecedent'); $V(form.antecedent_id, '{{$_antecedent->_id}}');
                           Antecedent.remove(form)">
@@ -90,11 +89,11 @@
                   {{if $_antecedent->date}}
                     {{mb_value object=$_antecedent field=date}} :
                   {{/if}}
-                  {{if $first_log && $first_log->user_id == $app->user_id}}
+                  {{if $antecedent->owner_id == $app->user_id}}
                     <a href="#1" onclick="editAntecedent('{{$_antecedent->_id}}')">
                   {{/if}}
                     {{$_antecedent->rques|nl2br}}
-                  {{if $first_log && $first_log->user_id == $app->user_id}}
+                  {{if $antecedent->owner_id == $app->user_id}}
                     </a>
                   {{/if}}
                 </div>

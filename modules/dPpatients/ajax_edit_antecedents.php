@@ -27,7 +27,7 @@ if ($type) {
   $antecedents = $dossier_medical->loadRefsAntecedentsOfType($type);
 
   foreach ($antecedents as $_antecedent) {
-    $_antecedent->loadFirstLog();
+    $_antecedent->updateOwnerAndDates();
   }
 }
 

@@ -23,6 +23,9 @@ class CPathologie extends CMbObject {
   public $annule;
   public $dossier_medical_id;
 
+  public $owner_id;
+  public $creation_date;
+
   /** @var CDossierMedical */
   public $_ref_dossier_medical;
 
@@ -40,14 +43,16 @@ class CPathologie extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["debut"]              = "date progressive";
-    $specs["fin"]                = "date progressive moreEquals|debut";
-    $specs["pathologie"]         = "text helped seekable";
-    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
-    $specs["annule"]             = "bool show|0";
+    $props = parent::getProps();
+    $props["debut"]              = "date progressive";
+    $props["fin"]                = "date progressive moreEquals|debut";
+    $props["pathologie"]         = "text helped seekable";
+    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
+    $props["annule"]             = "bool show|0";
+    $props["owner_id"]           = "ref notNull class|CMediusers";
+    $props["creation_date"]      = "dateTime notNull";
     
-    return $specs;
+    return $props;
   }
 
   /**
@@ -73,6 +78,23 @@ class CPathologie extends CMbObject {
   function loadView(){
     parent::loadView();
     $this->loadRefDossierMedical();
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    // Save owner and creation date
+    if (!$this->_id) {
+      $now = CMbDT::dateTime();
+      $this->creation_date = $now;
+
+      if (!$this->owner_id) {
+        $this->owner_id = CMediusers::get()->_id;
+      }
+    }
+
+    return parent::store();
   }
 }
 

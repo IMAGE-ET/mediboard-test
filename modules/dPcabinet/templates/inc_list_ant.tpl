@@ -122,7 +122,7 @@ showModalTP = function() {
           <input type="hidden" name="annule" value="" />
 
           <!-- Seulement si l'utilisateur est le créateur -->
-          {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
+          {{if $_antecedent->owner_id == $app->user_id}}
           <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="
             Antecedent.remove(this.form, function() {
               DossierMedical.reloadDossierPatient(null, '{{$type_see}}');
@@ -302,7 +302,7 @@ showModalTP = function() {
       <input type="hidden" name="dosql" value="do_traitement_aed" />
       {{mb_key object=$_traitement}}
 
-      {{if $_traitement->_ref_first_log && $_traitement->_ref_first_log->user_id == $app->user_id}}
+      {{if $_traitement->owner_id == $app->user_id}}
       <button class="trash notext" type="button" onclick="Traitement.remove(this.form, function() {DossierMedical.reloadDossierPatient(null, '{{$type_see}}');})">
         {{tr}}delete{{/tr}}
       </button>
