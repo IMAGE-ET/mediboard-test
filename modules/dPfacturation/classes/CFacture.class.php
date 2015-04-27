@@ -47,6 +47,8 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $date_cas;
   public $request_date;
 
+  static $accident_lamal = array("enfant", "enceinte", "etudiant", "retraite");
+
   // Form fields
   public $_consult_id;
   public $_sejour_id;

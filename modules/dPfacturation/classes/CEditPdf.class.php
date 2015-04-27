@@ -979,6 +979,10 @@ class CEditPdf{
     if ($this->facture->type_facture == "accident" && $this->facture->_coeff == $conf_cab) {
       $motif = "Accident (Caisse-Maladie)";
     }
+    if ($this->facture->type_facture == "maladie" && in_array($this->facture->statut_pro, CFacture::$accident_lamal)) {
+      $motif = "Accident";
+    }
+
     $naissance =  CMbDT::format($this->patient->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 35, 50);
     if ($this->facture->_class == "CFactureCabinet") {
