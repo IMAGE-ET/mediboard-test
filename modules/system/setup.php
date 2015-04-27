@@ -2095,6 +2095,10 @@ class CSetupsystem extends CSetup {
                 ADD `session_read` FLOAT AFTER `session_wait`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.88";
+    $this->makeRevision("1.1.88");
+    $query = "ALTER TABLE user_authentication ADD INDEX user_auth_date (user_id,datetime_login)";
+    $this->addQuery($query, true);
+
+    $this->mod_version = "1.1.89";
   }
 }

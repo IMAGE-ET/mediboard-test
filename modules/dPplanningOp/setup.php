@@ -1967,6 +1967,13 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `date_entree_reelle_provenance` DATETIME;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.11';
+    $this->makeRevision('2.11');
+    $query = "ALTER TABLE sejour ADD INDEX consult_related_id (consult_related_id)";
+    $this->addQuery($query, true);
+
+    $query = "ALTER TABLE operations ADD INDEX consult_related_id (consult_related_id)";
+    $this->addQuery($query, true);
+
+    $this->mod_version = '2.12';
   }
 }
