@@ -399,3 +399,5 @@ $locales['pref-precode_modificateur_7'] = 'Précodage du modificateur 7';
 $locales['pref-precode_modificateur_7-desc'] = 'Codage automatique du modificateur indiquant la présence d\'un anesthésiste pendant toute l\'intervention';
 $locales['pref-precode_modificateur_J'] = 'Précodage du modificateur J';
 $locales['pref-precode_modificateur_J-desc'] = 'Codage automatique du modificateur de majoration transitoire de chirurgie';
+$locales['pref-spread_modifiers'] = 'Propagation des modificateurs';
+$locales['pref-spread_modifiers-desc'] = 'Autorise la propagation des modificateurs 7, K et R aux autre actes du même praticien';

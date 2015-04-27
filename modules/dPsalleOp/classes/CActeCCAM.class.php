@@ -73,6 +73,7 @@ class CActeCCAM extends CActe {
   public $_adapt_object = false;
   public $_calcul_montant_base = false;
   public $_edit_modificateurs = false;
+  public $_spread_modifiers = true;
 
   // References
   /** @var  CDatedCodeCCAM */
@@ -575,7 +576,20 @@ class CActeCCAM extends CActe {
         }
       }
     }
-    
+
+    /* Propagation des modificateurs */
+    if (($this->fieldModified('modificateurs') || !$this->_id) && $this->_spread_modifiers && CAppUI::pref('spread_modifiers')) {
+      $this->_modificateurs = str_split($this->modificateurs);
+      $old = $this->loadOldObject();
+      $old_modifiers = str_split($old->modificateurs);
+      /* Récupération des nouveaux modificateurs appliqués */
+      $new_modifiers = array_diff($this->_modificateurs, $old_modifiers);
+
+      if (!empty($spread_modifiers)) {
+        CActeCCAM::spreadModifiers($this, $new_modifiers);
+      }
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -1292,5 +1306,44 @@ class CActeCCAM extends CActe {
       return $msg;
     }
     return null;
+  }
+
+  /**
+   * Spread the modifiers K, R and 7 to the linked acts of the given act
+   *
+   * @param CActeCCAM &$act      The dateTime of the execution of the act
+   * @param array     $modifiers The modifiers to spread
+   */
+  public static function spreadModifiers(&$act, $modifiers) {
+    $acts = $act->getLinkedActes(true, true, true, true);
+    $codable = $act->loadRefObject();
+
+    foreach ($acts as $_act) {
+      $_act->loadRefExecutant();
+      $_act->_spread_modifiers = false;
+      foreach ($modifiers as $_modifier) {
+        switch ($_modifier) {
+          case '7':
+            if ($_act->object_class == 'COperation' && $_act->_ref_executant->isAnesth() && !in_array($_modifier, $_act->_modificateurs)) {
+              $_act->modificateurs .= $_modifier;
+            }
+            break;
+          case 'K':
+            if (!$_act->montant_depassement && !in_array($_modifier, $_act->_modificateurs)) {
+              $_act->modificateurs .= $_modifier;
+            }
+            break;
+          case 'R':
+            if (!in_array($_modifier, $_act->_modificateurs)) {
+              $_act->modificateurs .= $_modifier;
+            }
+            break;
+          default:
+            break;
+        }
+      }
+
+      $_act->store();
+    }
   }
 }
