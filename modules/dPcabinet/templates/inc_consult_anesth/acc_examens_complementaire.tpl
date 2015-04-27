@@ -236,7 +236,7 @@
             <tr>
               <th>{{mb_label object=$consult_anesth field="result_com"}}</th>
               <td colspan="3">
-                {{mb_field object=$consult_anesth field="result_com" tabindex="117" onchange="submitForm(this.form)"}}
+                {{mb_field object=$consult_anesth field="result_com" tabindex="117" onchange="submitForm(this.form)" form="editExamCompFrm"}}
               </td>
             </tr>
           </table>
