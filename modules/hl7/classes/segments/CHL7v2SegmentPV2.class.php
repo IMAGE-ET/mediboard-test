@@ -25,6 +25,9 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
   /** @var CSejour */
   public $sejour;
 
+  /** @var CAffectation */
+  public $curr_affectation;
+
   /**
    * Build PV2 segement
    *
@@ -242,8 +245,13 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-47: Expected LOA Return Date/Time (TS) (optional)
-    $data[] = null;
-    
+    if ($event->code == "A21" && $this->curr_affectation) {
+      $data[] = $this->curr_affectation->sortie;
+    }
+    else {
+      $data[] = null;
+    }
+
     // PV2-48: Expected Pre-admission Testing Date/Time (TS) (optional)
     $data[] = null;
     

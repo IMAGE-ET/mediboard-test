@@ -98,10 +98,18 @@ $sejour->_praticien_referring  = $admit_referring_doctor; // Nom du médecin adre
 $sejour->_praticien_admitting  = $admit_admitting_doctor; // Médecin traitant
 $sejour->_praticien_consulting = $admit_consulting_doctor;
 
-$receiver_hl7v2           = new CReceiverHL7v2();
-$receiver_hl7v2->actif    = 1;
-$receiver_hl7v2->group_id = CGroups::loadCurrent()->_id;
-$receivers = $receiver_hl7v2->loadMatchingList();
+$cn_receiver_guid = CValue::sessionAbs("cn_receiver_guid");
+
+if ($cn_receiver_guid) {
+  $receiver_hl7v2 = CMbObject::loadFromGuid($cn_receiver_guid);
+  $receivers = array($receiver_hl7v2);
+}
+else {
+  $receiver_hl7v2           = new CReceiverHL7v2();
+  $receiver_hl7v2->actif    = 1;
+  $receiver_hl7v2->group_id = CGroups::loadCurrent()->_id;
+  $receivers = $receiver_hl7v2->loadMatchingList();
+}
 
 $profil      = "PDQ";
 $transaction = "ITI21";

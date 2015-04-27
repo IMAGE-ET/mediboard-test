@@ -43,8 +43,11 @@ class CMLLPServer extends CSocketBasedServer{
   /**
    * @see parent::displayMessage
    */
-  function displayMessage($message) {
-    echo " ----- Message reçu :\n";
+  function displayMessage($message, $header = null) {
+    if ($header) {
+      $this->out(" ----- $header ----- ", 0);
+    }
+
     $message = preg_replace("/[\r\n]+/", "\n", $message);
 
     $colors = array(
@@ -60,8 +63,7 @@ class CMLLPServer extends CSocketBasedServer{
       $message = str_replace($_char, shColorText($_char, $_color), $message);
     }
 
-    $sep = str_repeat("-", 10);
-    echo "$sep\n$message\n$sep\n";
+    echo "$message\n ------------------ \n";
   }
 
   /**
@@ -72,7 +74,7 @@ class CMLLPServer extends CSocketBasedServer{
    * @return string
    */
   function appendRequest($buffer) {
-    return "$buffer\n";
+    return "$buffer";
   }
   
   /**

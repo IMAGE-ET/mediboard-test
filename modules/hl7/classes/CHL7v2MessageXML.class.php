@@ -343,7 +343,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return;
     }
 
-    if ($this->queryTextNode("CX.5", $node) == "AN") {
+    if ($control_identifier_type_code) {
+      if ($this->queryTextNode("CX.5", $node) == "AN") {
+        $data["AN"] = $this->queryTextNode("CX.1", $node);
+      }
+    }
+    else {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
     }
   }
@@ -684,8 +689,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $function->group_id = $sender->group_id;
     $function->loadMatchingObjectEsc();
     if (!$function->_id) {
-      $function->type = "cabinet";
+      $function->type            = "cabinet";
       $function->compta_partagee = 0;
+      $function->color           = "ffffff";
       $function->store();
     }
     $mediuser->function_id = $function->_id;

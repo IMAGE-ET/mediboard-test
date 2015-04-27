@@ -176,7 +176,7 @@ class CHTTPClient {
    * @return void
    */
   function setSSLPeer($ca_cert) {
-    $this->setOption(CURLOPT_SSL_VERIFYPEER, 1);
+    $this->setOption(CURLOPT_SSL_VERIFYPEER, 0);
     $this->setOption(CURLOPT_CAINFO, $ca_cert);
   }
 

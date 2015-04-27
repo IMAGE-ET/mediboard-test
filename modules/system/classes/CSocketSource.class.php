@@ -87,6 +87,7 @@ class CSocketSource extends CExchangeSource {
   }
 
   function send($data) {
-    fwrite($this->getSocketClient(), $data, strlen($data));
+    $data = strlen($data)." ".$data;
+    fwrite($this->getSocketClient(), $data);
   }
 }

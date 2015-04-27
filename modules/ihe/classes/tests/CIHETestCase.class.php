@@ -27,6 +27,12 @@ class CIHETestCase {
    * @return void
    */
   static function run($code, CCnStep $step) {
+    $receiver = $step->_ref_test->loadRefPartner()->loadReceiverHL7v2();
+
+    if ($receiver) {
+      CValue::setSessionAbs("cn_receiver_guid", $receiver->_guid);
+    }
+
     $transaction = str_replace("-", "", $step->transaction);
 
     if (!$transaction) {

@@ -106,7 +106,7 @@ class CInteropReceiver extends CInteropActor {
         $where["group_id"] = " != '$no_group'";
       }
       
-      $order = "group_id ASC, nom ASC";
+      $order = "group_id ASC, libelle ASC, nom ASC";
       // Récupération de la liste des destinataires
       $objects[$_interop_receiver] = $receiver->loadList($where, $order);
       if (!is_array($objects[$_interop_receiver])) {
@@ -205,7 +205,7 @@ class CInteropReceiver extends CInteropActor {
   /**
    * Load exchanges sources
    *
-   * @return void
+   * @return CExchangeSource[]
    */
   function loadRefsExchangesSources() {
     if (!$this->_ref_msg_supported_family) {

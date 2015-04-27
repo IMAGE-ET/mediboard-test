@@ -12,12 +12,12 @@
  */
 
 /**
- * Class CITI21Test
- * PDQ - ITI-21 - Tests
+ * Class CITI9Test
+ * PIX - ITI-9 - Tests
  */
-class CITI21Test extends CIHETestCase {
+class CITI9Test extends CIHETestCase {
   /**
-   * Test Q22 - Find Candidates
+   * Test Q23  - Find Candidates
    *
    * @param CCnStep $step Step
    *
@@ -26,21 +26,5 @@ class CITI21Test extends CIHETestCase {
    * @return void
    */
   static function testQ22(CCnStep $step) {
-    $profil      = "PDQ";
-    $transaction = "ITI21";
-    $message     = "QBP";
-    $code        = "Q22";
-
-    mbTrace($step);
-
-    // PDQ_Multiple_Query
-    switch ($step->number) {
-      case '20':
-        // PID.5.1.1 = MOO*
-        break;
-
-
-      default:
-    }
   }
 }

@@ -100,7 +100,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $sejour = null;
 
     // Sejour
-    $venueAN = CValue::read($data["admitIdentifiers"], "AN");
+    $venueAN = CValue::read($data["personIdentifiers"], "AN");
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
 
@@ -129,11 +129,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Recherche par date
     $observation_dt = $this->getOBRObservationDateTime($first_result["OBR"]);
-    $sejours = $patient->getCurrSejour($observation_dt); //FIXME ignorer les annulés
-    $sejour = reset($sejours);
+    if (!$sejour) {
+      $sejours = $patient->getCurrSejour($observation_dt); //FIXME ignorer les annulés
+      $sejour = reset($sejours);
 
-    if (!$sejour->_id) {
-      return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+      if (!$sejour || !$sejour->_id) {
+        return $exchange_hl7v2->setAckAR($ack, "E220", null, $patient);
+      }
     }
 
     // Récupération des observations
@@ -164,7 +166,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         // Recherche de l'objet avec la date correspondante fourni dans l'observation
         $object = $this->getObjectWithDate($date, $patient, $praticien_id, $sejour);
 
-        if (!$object) {
+        if (!$object || !$object->_id) {
           return $exchange_hl7v2->setAckAR($ack, "E301", null, $patient);
         }
 
@@ -193,7 +195,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           case "DTM":
           case "NM":
           case "SN":
-            if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $object)) {
+            if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $object, $observation_dt)) {
               return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $object);
             }
 
@@ -284,10 +286,15 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $where = array(
       "sejour.patient_id"  => "= '$patient->_id'",
       "plagesop.date"      => "BETWEEN '$date_before' AND '$date'",
-      "operations.chir_id" => "= '$praticien_id'",
+
       "operations.annulee" => "= '0'",
       "sejour.sejour_id"   => "= '$sejour->_id'",
     );
+
+    if ($praticien_id) {
+      $where["operations.chir_id"] = "= '$praticien_id'";
+    }
+
     $leftjoin = array(
       "plagesop" => "operations.plageop_id = plagesop.plageop_id",
       "sejour"   => "operations.sejour_id = sejour.sejour_id",
@@ -461,17 +468,19 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    *
    * @return bool
    */
-  function getPulseGeneratorAndLeadObservationResults(DOMNode $OBX, CPatient $patient, COperation $operation) {
+  function getPulseGeneratorAndLeadObservationResults(DOMNode $OBX, CPatient $patient, COperation $operation, $date) {
     $result_set = new CObservationResultSet();
 
-    $dateTimeOBX = $this->getOBXObservationDateTime($OBX);
-    if ($dateTimeOBX) {
+    $datetime = $this->getOBXObservationDateTime($OBX) ?: $date;
+    if ($datetime) {
       $result_set->patient_id    = $patient->_id;
-      $result_set->context_class = "COperation";
+      $result_set->context_class = $operation->_class;
       $result_set->context_id    = $operation->_id;
-      $result_set->datetime      = CMbDT::dateTime($dateTimeOBX);
-      if ($msg = $result_set->store()) {
-        $this->codes[] = "E302";
+      $result_set->datetime      = CMbDT::dateTime($datetime);
+      if (!$result_set->loadMatchingObject()) {
+        if ($msg = $result_set->store()) {
+          $this->codes[] = "E302";
+        }
       }
     }
 

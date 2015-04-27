@@ -14,6 +14,7 @@
 CCanDo::checkEdit();
 
 $client_addr = CValue::post("client_addr");
+$server_port = CValue::post("port");
 $message     = stripslashes(CValue::post("message"));
 
 $guid_prefix = "CSenderMLLP-";
@@ -23,6 +24,10 @@ $where = array();
 $where["source_mllp.host"]   = " = '$client_addr'";
 $where["source_mllp.active"] = " = '1'";
 $where["source_mllp.name"]   = "LIKE '$guid_prefix%'";
+
+if ($server_port) {
+  $where["source_mllp.port"]   = " = '$server_port'";
+}
 
 // Sender
 $where["sender_mllp.actif"] = " = '1'";

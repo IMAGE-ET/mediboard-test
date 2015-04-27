@@ -121,4 +121,24 @@ class CPDQ extends CIHE {
       }
     }
   }
+
+  /**
+   * Retrieve transaction from actor
+   *
+   * @param string $actor_name Actor name
+   *
+   * @return array Messages
+   */
+  static function getTransactionFromActor($actor_name) {
+    $actors = array(
+      "PDC" => array_merge(self::$transaction_iti21, self::$transaction_iti22),
+      "PDS" => array_merge(self::$transaction_iti21, self::$transaction_iti22),
+    );
+
+    if (array_key_exists($actor_name, $actors)) {
+      return $actors[$actor_name];
+    }
+
+    return array();
+  }
 }

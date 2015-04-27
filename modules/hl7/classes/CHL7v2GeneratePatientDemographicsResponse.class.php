@@ -445,7 +445,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $where_returns = array();
     if ($service_name = $this->getDemographicsFields($node, "CSejour", "3.1")) {
       $service_name = preg_replace("/\*+/", "%", $service_name);
-      $where["nom"] = $ds->prepare("LIKE %", $service_name);
+      $where["code"] = $ds->prepare("LIKE %", $service_name);
       $ids = array_unique($service->loadIds($where, null, 100));
 
       // FIXME prendre les affectations en compte
@@ -511,15 +511,17 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return array
    */
   function getDemographicsFields(DOMNode $node, $object_class, $field) {
-
     $seg = null;
     switch ($object_class) {
-      case "CPatient" :
+      case "CPatient":
         $seg = "PID";
         break;
-      case "CSejour" :
+
+      case "CSejour":
         $seg = "PV1";
         break;
+
+      default:
     }
 
     foreach ($this->queryNodes("QPD.3", $node) as $_QPD_3) {

@@ -93,9 +93,9 @@ class CSourceMLLP extends CSocketSource {
       }
     }
     
-    $this->_socket_client = stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
+    $this->_socket_client = @stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
     if (!$this->_socket_client) {
-      throw new CMbException("CSourceMLLP-unreachable-source", $this->name);
+      throw new CMbException("CSourceMLLP-unreachable-source", $this->name, $errno, $errstr);
     }
 
     stream_set_blocking($this->_socket_client, 0);

@@ -99,4 +99,23 @@ class CDEC extends CIHE {
       }
     }
   }
+
+  /**
+   * Retrieve transaction from actor
+   *
+   * @param string $actor_name Actor name
+   *
+   * @return array Messages
+   */
+  static function getTransactionFromActor($actor_name) {
+    $actors = array(
+      "DEV_OBS_CONSUMER" => self::$transaction_pcdO1
+    );
+
+    if (array_key_exists($actor_name, $actors)) {
+      return $actors[$actor_name];
+    }
+
+    return array();
+  }
 }

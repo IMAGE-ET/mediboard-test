@@ -27,7 +27,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
 
   /** @var CSejour */
   public $sejour;
-  
 
   /** @var CAffectation */
   public $curr_affectation;

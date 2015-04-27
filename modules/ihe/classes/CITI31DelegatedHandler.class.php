@@ -1175,9 +1175,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         if ($affectation->effectue) {
           $code = "A53";
         }
+        else {
+          $code = "A52";
+        }
       }
       else {
-        // Annulation d'une affectation
+        // Annulation (suppression) d'une affectation
         $code = "A12";
       }
             

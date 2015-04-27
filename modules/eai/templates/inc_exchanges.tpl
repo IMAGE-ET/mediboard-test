@@ -16,7 +16,21 @@ orderColonne = function(order_col, order_way) {
   $V(form.order_col, order_col);
   $V(form.order_way, order_way);
   form.onsubmit();
-}
+};
+
+filterColonne = function(input, type) {
+  var table = $("exchanges-list");
+  table.select(".table-row").invoke("show");
+
+  var term = $V(input);
+  if (!term) return;
+
+  table.select(".exchange-"+type).each(function(e) {
+    if (!e.getText().like(term)) {
+      e.up(".table-row").hide();
+    }
+  });
+};
 </script>
 
 {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
@@ -27,7 +41,7 @@ orderColonne = function(order_col, order_way) {
   <button type="submit" class="lookup notext">{{tr}}search_exchange_by_id-button{{/tr}}</button>
 </form>
 
-<table class="tbl">
+<table class="tbl" id="exchanges-list">
   <tr>
     <th class="narrow"></th>
     <th class="narrow"></th>
@@ -36,8 +50,14 @@ orderColonne = function(order_col, order_way) {
     <th>{{mb_title object=$exchange field="object_id"}}</th>
     <th>{{mb_title object=$exchange field="id_permanent"}}</th>
     <th>{{mb_colonne class=$exchange->_class field="date_production" order_col=$order_col order_way=$order_way function=orderColonne}}</th>
-    <th>{{mb_title object=$exchange field="sender_id"}}</th>
-    <th>{{mb_title object=$exchange field="receiver_id"}}</th>
+    <th>
+      {{mb_title object=$exchange field="sender_id"}}
+      <input type="search" onkeyup="filterColonne(this, 'sender')" size="6" />
+    </th>
+    <th>
+      {{mb_title object=$exchange field="receiver_id"}}
+      <input type="search" onkeyup="filterColonne(this, 'receiver')" size="6" />
+    </th>
     <th>{{mb_title object=$exchange field="type"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
     {{if $exchange instanceof CExchangeHL7v2}}
@@ -53,7 +73,7 @@ orderColonne = function(order_col, order_way) {
     <th>{{mb_title object=$exchange field="acquittement_valide"}}</th>
   </tr>
   {{foreach from=$exchanges item=_exchange}}
-    <tbody id="exchange_{{$_exchange->_guid}}">
+    <tbody id="exchange_{{$_exchange->_guid}}" class="table-row">
       {{mb_include template=inc_exchange object=$_exchange}}
     </tbody>
   {{foreachelse}}
