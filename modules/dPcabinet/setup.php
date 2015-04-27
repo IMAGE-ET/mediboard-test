@@ -2275,6 +2275,11 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation_anesth`
                 ADD `result_com` TEXT;";
     $this->addQuery($query);
-    $this->mod_version = '2.55';
+    $this->makeRevision("2.55");
+
+    $query = "ALTER TABLE `facture_cabinet`
+                CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi','enfant','enceinte');";
+    $this->addQuery($query);
+    $this->mod_version = '2.56';
   }
 }

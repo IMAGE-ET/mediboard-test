@@ -173,7 +173,7 @@ class CFacture extends CMbObject implements IPatientRelated {
     $props["send_assur_compl"]          = "bool default|0";
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
     $props["ref_accident"]              = "text";
-    $props["statut_pro"]                = "enum list|chomeur|etudiant|non_travailleur|independant|invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
+    $props["statut_pro"]                = "enum list|chomeur|etudiant|non_travailleur|independant|invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi|enfant|enceinte";
     $props["num_reference"]             = "str minLength|16 maxLength|27";
     $props["envoi_xml"]                 = "bool default|1";
     $props["annule"]                    = "bool default|0";
