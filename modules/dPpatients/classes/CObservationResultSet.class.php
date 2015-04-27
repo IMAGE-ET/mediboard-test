@@ -99,17 +99,19 @@ class CObservationResultSet extends CMbObject {
    * Get observation results for this object
    *
    * @param CMbObject $object Reference object
+   * @param bool      $utf8   Encode data int UTF-8
    *
-   * @return array|self[]
+   * @return array|CObservationResultSet[]
    */
-  static function getResultsFor(CMbObject $object) {
+  static function getResultsFor(CMbObject $object, $utf8 = true) {
     $request = new CRequest();
     $request->addTable("observation_result");
     $request->addSelect("*");
     $request->addLJoin(
       array(
         "observation_result_set" => "observation_result_set.observation_result_set_id = observation_result.observation_result_set_id",
-        "user_log"               => "observation_result_set.observation_result_set_id = user_log.object_id AND user_log.object_class = 'CObservationResultSet' AND user_log.type = 'create'",
+        "user_log"               => "observation_result_set.observation_result_set_id = user_log.object_id AND
+                                     user_log.object_class = 'CObservationResultSet' AND user_log.type = 'create'",
         "users"                  => "users.user_id = user_log.user_id",
       )
     );
@@ -129,7 +131,7 @@ class CObservationResultSet extends CMbObject {
     
     foreach ($results as $_result) {
       $_time = CMbDate::toUTCTimestamp($_result["datetime"]);
-      $times[$_time] = $_time;
+      $times[$_time] = $_result["datetime"];
 
       $unit_id = $_result["unit_id"] ? $_result["unit_id"] : "none";
 
@@ -143,6 +145,8 @@ class CObservationResultSet extends CMbObject {
       $float_value = $_result["value"];
       $float_value = CMbFieldSpec::checkNumeric($float_value, false);
 
+      $_user_name = $_result["user_first_name"]." ".$_result["user_last_name"];
+
       $data[$_result["value_type_id"]][$unit_id][] = array(
         0           => $_time,
         1           => $float_value,
@@ -153,13 +157,16 @@ class CObservationResultSet extends CMbObject {
         "set_id"    => $_result["observation_result_set_id"],
         "result_id" => $_result["observation_result_id"],
         "label_id"  => $_result["label_id"],
-        "label"     => utf8_encode($label),
+        "label"     => $utf8 ? utf8_encode($label) : $label,
         "user_id"   => $_result["user_id"],
-        "user"      => utf8_encode($_result["user_first_name"]." ".$_result["user_last_name"]),
+        "user"      => $utf8 ? utf8_encode($_user_name) : $_user_name,
       );
     }
     
-    return array($data, array_values($times));
+    return array(
+      $data,
+      $times,
+    );
   }
 
   /**

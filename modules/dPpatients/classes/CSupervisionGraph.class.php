@@ -270,7 +270,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
     $results = array();
     $times = array();
     if ($object->_id) {
-      list($results, $times) = CObservationResultSet::getResultsFor($object);
+      list($results, $times) = CObservationResultSet::getResultsFor($object, false);
       $times = array_combine($times, $times);
     }
 
@@ -301,7 +301,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
       $_series = $_axis->loadRefsSeries();
       $_axis->loadRefsLabels();
 
-      $_data = array_fill_keys(array_keys($times), array());
+      $_data = array_fill_keys($times, array());
 
       foreach ($_series as $_serie) {
         $_unit_id = $_serie->value_unit_id ?: "none";
@@ -312,13 +312,14 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         }
 
         foreach ($results[$_serie->value_type_id][$_unit_id] as $_value) {
-          foreach ($times as $_time => $_ts) {
-            if ($_value["ts"] == $_time) {
-              $times[$_time] = $_value["datetime"];
-              $_value["unit"] = $_unit_label->label;
-              $_data["$_time"][$_serie->_id] = $_value;
-              break;
+          foreach ($times as $_time) {
+            if ($_value["datetime"] != $_time) {
+              continue;
             }
+
+            $_value["unit"] = $_unit_label->label;
+            $_data["$_time"][$_serie->_id] = $_value;
+            break;
           }
         }
       }
@@ -361,28 +362,28 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
       $_objects = $_object->loadList($where, $order);
 
       foreach ($_objects as $_timed) {
-        $_data = array_fill_keys(array_keys($times), null);
+        $_data = array_fill_keys($times, null);
 
         if (!isset($results[$_timed->value_type_id])) {
           continue;
         }
 
         foreach ($results[$_timed->value_type_id]["none"] as $_value) {
-          foreach ($times as $_time => $_ts) {
-            if ($_value["ts"] == $_time) {
-              $times["$_time"] = $_value["datetime"];
-
-              if ($_value["file_id"]) {
-                $_file = new CFile();
-                $_file->load($_value["file_id"]);
-
-                $_value["datauri"] = $_file->getDataURI();
-                $_value["file"] = $_file;
-              }
-
-              $_data["$_time"] = $_value;
-              break;
+          foreach ($times as $_time) {
+            if ($_value["datetime"] != $_time) {
+              continue;
             }
+
+            if ($_value["file_id"]) {
+              $_file = new CFile();
+              $_file->load($_value["file_id"]);
+
+              $_value["datauri"] = $_file->getDataURI();
+              $_value["file"] = $_file;
+            }
+
+            $_data["$_time"] = $_value;
+            break;
           }
         }
 

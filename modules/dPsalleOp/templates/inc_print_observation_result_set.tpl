@@ -5,7 +5,13 @@
     {{foreach from=$data key=_time item=_data}}
       <tr>
         <th>{{$times.$_time|date_format:$conf.datetime}}</th>
-        <td style="text-align: center;">{{if $_data.file_id}}<img src="{{$_data.datauri}}" height="45" /><br/>{{$_data.file->_no_extension}}{{else}}{{$_data.value}}{{/if}}</td>
+        <td {{if $_data.file_id}} style="text-align: center;" {{/if}}>
+          {{if $_data.file_id}}
+            <img src="{{$_data.datauri}}" height="45" /><br/>{{$_data.file->_no_extension}}
+          {{else}}
+            {{$_data.value}}
+          {{/if}}
+        </td>
       </tr>
     {{/foreach}}
   </table>
@@ -19,25 +25,27 @@
     </tr>
 
     {{foreach from=$data key=_time item=_data}}
-      <tr>
-        <th>{{$times.$_time|date_format:$conf.datetime}}</th>
-        {{foreach from=$series key=_serie_id item=_serie}}
-          {{if array_key_exists($_serie_id,$_data)}}
-            {{assign var=_datum value=$_data.$_serie_id}}
-            <td>
-              {{if $_datum.label}}
-                {{$_datum.label}}
-              {{else}}
-                {{$_datum.value}}
-              {{/if}}
+      {{if $_data}}
+        <tr>
+          <th>{{$times.$_time|date_format:$conf.datetime}}</th>
+          {{foreach from=$series key=_serie_id item=_serie}}
+            {{if array_key_exists($_serie_id,$_data)}}
+              {{assign var=_datum value=$_data.$_serie_id}}
+              <td>
+                {{if $_datum.label}}
+                  {{$_datum.label}}
+                {{else}}
+                  {{$_datum.value}}
+                {{/if}}
 
-              {{$_datum.unit}}
-            </td>
-          {{else}}
-            <td></td>
-          {{/if}}
-        {{/foreach}}
-      </tr>
+                {{$_datum.unit}}
+              </td>
+            {{else}}
+              <td></td>
+            {{/if}}
+          {{/foreach}}
+        </tr>
+      {{/if}}
     {{/foreach}}
   </table>
 {{/if}}
