@@ -43,7 +43,7 @@
     return $("dossier-"+sejour_id) || $(document.documentElement);
   };
   
-  printDossierFromSejour = function(sejour_id){
+  printDossierFromSejour = function(sejour_id) {
     var dossier = $("dossier-"+sejour_id);
     if (dossier) {
       Element.print(dossier.childElements());
@@ -116,7 +116,7 @@
     ExObject.loadExObjects("CSejour", sejour_id, "ex-objects-"+sejour_id, 3, null, {
       print: 1, 
       limit: {{$forms_limit}},
-      onComplete: function(){
+      onComplete: function() {
         loading.hide();
         $$("button.print").each(function(e){ e.disabled = null; });
       }
@@ -133,6 +133,9 @@
     dossier_soin.select(".print_prescription")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
     {{/if}}
     dossier_soin.select(".print_tasks")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
+    dossier_soin.select(".print_transmission")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
+    dossier_soin.select(".print_observation")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
+    dossier_soin.select(".print_constante")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
   };
 </script>
 
@@ -141,13 +144,16 @@
   <tr>
     <td style="vertical-align: middle;">
       <strong>Choix des blocs à imprimer : </strong>
-      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_patient', '{{$sejour->_id}}')" /> {{tr}}CPatient{{/tr}}</label>
-      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_sejour', '{{$sejour->_id}}')" /> {{tr}}CSejour{{/tr}}</label>
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_patient', '{{$sejour->_id}}')" /> {{tr}}CPatient{{/tr}}</label>
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_sejour', '{{$sejour->_id}}')" /> {{tr}}CSejour{{/tr}}</label>
       {{if "dPprescription"|module_active}}
-        <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_prescription', '{{$sejour->_id}}')"/> {{tr}}CPrescription{{/tr}}</label>
+        <label><input type="checkbox" checked onclick="togglePrintZone('print_prescription', '{{$sejour->_id}}')"/> {{tr}}CPrescription{{/tr}}</label>
       {{/if}}
-      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_tasks', '{{$sejour->_id}}')"/> Tâches</label>
-      
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_tasks', '{{$sejour->_id}}')"/> Tâches</label>
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_transmission', '{{$sejour->_id}}')"/> Transmissions</label>
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_observation', '{{$sejour->_id}}')"/> Observations</label>
+      <label><input type="checkbox" checked onclick="togglePrintZone('print_constante', '{{$sejour->_id}}')"/> Constantes</label>
+
       {{if "forms"|module_active}}
         <label><input type="checkbox" onclick="{{if !$offline}} loadExForms(this, '{{$sejour->_id}}'); {{/if}} togglePrintZone('print_forms', '{{$sejour->_id}}')" /> Formulaires</label>
         <div class="loading" style="height: 16px; display: none;" id="forms-loading-{{$sejour->_id}}">Chargement des formulaires en cours</div>
@@ -200,7 +206,7 @@
   {{/if}}
   <tr>
     <td>
-      {{include file="../../dPpatients/templates/print_constantes.tpl"}}
+      {{mb_include module=patients template=print_constantes}}
     </td>
   </tr>
 </table>
@@ -245,7 +251,7 @@
     {{foreach from=$lines_med_by_atc item=line_med}}
       <tr>
         <td class="text">
-          {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false dci=0}}
+          {{mb_include module=prescription template=inc_print_medicament med=$line_med nodebug=true print=false dci=0}}
         </td>
       </tr>
     {{/foreach}}
@@ -254,7 +260,7 @@
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=line_med_comment}}
     <tr>
       <td class="text">
-        {{mb_include module="dPprescription"  template="inc_print_commentaire" comment=$line_med_comment nodebug=true}}
+        {{mb_include module=prescription  template=inc_print_commentaire comment=$line_med_comment nodebug=true}}
       </td>
     </tr>
   {{/foreach}}
@@ -268,7 +274,7 @@
   {{foreach from=$_prescription_line_mixes item=_prescription_line_mix}}
   <tr>
     <td class="text">
-      {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
+      {{mb_include module=prescription template=inc_print_prescription_line_mix perf=$_prescription_line_mix nodebug=true}}
     </td>
   </tr>
   {{/foreach}}
@@ -295,7 +301,7 @@
                   {{assign var=cat_displayed value="1"}}
                   <strong>{{$line_elt->_ref_element_prescription->_ref_category_prescription->nom}} :</strong>
                 {{/if}}
-                {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+                {{mb_include module=prescription template=inc_print_element elt=$line_elt nodebug=true}}
               {{/foreach}}
             {{/if}}
             {{if array_key_exists('comment', $_lines_by_cat)}}
@@ -319,7 +325,7 @@
           {{foreach from=$_lines_by_cat.element item=line_elt}}
             <tr>
               <td class="text">
-                 {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+                 {{mb_include module=prescription template=inc_print_element elt=$line_elt nodebug=true}}
               </td>
             </tr>
           {{/foreach}}

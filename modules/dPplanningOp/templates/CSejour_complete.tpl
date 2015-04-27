@@ -31,7 +31,7 @@ printDossier = function(rpu_id) {
     <th class="title text" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
 
-      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
+      <a style="float:left" href="?m=patients&tab=vw_full_patients&patient_id={{$sejour->_ref_patient->_id}}">
        {{mb_include module=patients template=inc_vw_photo_identite patient=$sejour->_ref_patient size=42}}
       </a>
 
@@ -44,7 +44,7 @@ printDossier = function(rpu_id) {
         <br />
         {{mb_include module=system template=inc_object_idsante400}}
         {{mb_include module=system template=inc_object_history}}
-        <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
+        <a style="float:right" class="action" title="Modifier le sejour" href="?m=planningOp&tab=vw_edit_sejour&sejour_id={{$object->_id}}">
           <img src="images/icons/edit.png" />
         </a>
       </div>
@@ -321,8 +321,8 @@ printDossier = function(rpu_id) {
 </table>
 
 {{if !$rpu || !$rpu->_id}}
-  {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
-  {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
+  {{mb_include module=planningOp template=inc_infos_hospitalisation}}
+  {{mb_include module=planningOp template=inc_infos_operation}}
 {{/if}}
 
 <table class="tbl">
@@ -331,5 +331,5 @@ printDossier = function(rpu_id) {
   </tr>
 </table>
 
-{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=true list_transmissions=$sejour->_ref_suivi_medical}}
+{{mb_include module=hospi template=inc_list_transmissions readonly=true list_transmissions=$sejour->_ref_suivi_medical}}
 

@@ -4,7 +4,7 @@
 {{unique_id var=uniq_ditto}}
 {{assign var=cste_grid value=$constantes_medicales_grid}}
 
-<table class="tbl constantes" style="width: 1%; font-size: inherit;">
+<table class="tbl constantes print_constante" style="width: 1%; font-size: inherit;">
   {{if $offline && isset($sejour|smarty:nodefaults)}}
     <thead>
       <tr>

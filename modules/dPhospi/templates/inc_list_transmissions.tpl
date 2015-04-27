@@ -69,6 +69,7 @@
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
   <tr class="{{if is_array($_suivi)}}
+               print_transmission
              {{if $_suivi.0->degre == "high"}}
                transmission_haute
              {{/if}}
@@ -82,8 +83,10 @@
                  transmission_haute
                {{/if}}
              {{elseif $_suivi instanceof CConsultation && $_suivi->type == "entree"}}
+               print_observation
                consultation_entree
              {{elseif $_suivi instanceof CObservationMedicale}}
+               print_observation
                {{if $_suivi->degre == "info"}}
                  observation_info
                {{elseif $_suivi->degre == "high"}}
