@@ -255,7 +255,7 @@ foreach ($etats as $key => $list) {
 $listChamps = array(
   1 => array("date_analyse", "hb", "ht", "ht_final", "plaquettes"),
   2 => array("creatinine", "_clairance", "fibrinogene", "na", "k"),
-  3 => array("tp", "tca", "tsivy", "ecbu")
+  3 => array("tp", "tca", "tsivy", "ecbu", "result_com")
 );
 
 foreach ($listChamps as $keyCol => $aColonne) {
@@ -293,6 +293,7 @@ $unites["tp"]           = array("nom" => "TP", "unit" => "%");
 $unites["tca"]          = array("nom" => "TCA", "unit" => "s");
 $unites["tsivy"]        = array("nom" => "TS Ivy", "unit" => "");
 $unites["ecbu"]         = array("nom" => "ECBU", "unit" => "");
+$unites["result_com"]   = array("nom" => "Commentaire", "unit" => "");
 $unites["date_analyse"] = array("nom" => "Date", "unit" => "");
 
 // Création du template

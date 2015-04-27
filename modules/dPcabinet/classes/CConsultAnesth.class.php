@@ -632,6 +632,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - TCA"                    , "$this->tca_temoin s / $this->tca s");
     $template->addProperty("Anesthésie - TS Ivy"                 , "$this->_min_tsivy min $this->_sec_tsivy s");
     $template->addProperty("Anesthésie - ECBU"                   , $this->ecbu);
+    $template->addProperty("Anesthésie - Commentaire"            , $this->result_com);
     
     $template->addProperty("Anesthésie - ASA"                    , $this->_ref_operation->ASA ? $this->_ref_operation->getFormattedValue("ASA") : $this->getFormattedValue("ASA"));
     $template->addProperty("Anesthésie - Préparation pré-opératoire", $this->prepa_preop);

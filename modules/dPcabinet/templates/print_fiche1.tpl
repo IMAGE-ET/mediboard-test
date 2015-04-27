@@ -438,6 +438,13 @@
                   {{/if}}
                 </td>
               </tr>
+              {{if $dossier_anesth->result_com}}
+                <tr>
+                  <td colspan="2">
+                    {{mb_label object=$dossier_anesth field=result_com}}&nbsp;:&nbsp;{{$dossier_anesth->result_com}}&nbsp;<br />
+                  </td>
+                </tr>
+              {{/if}}
             </table>
           </td>
         </tr>
