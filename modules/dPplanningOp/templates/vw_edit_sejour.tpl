@@ -193,7 +193,7 @@
         </tr>
         {{/if}}
 
-        {{if "forms"|module_active}}
+        {{if $sejour->_id && "forms"|module_active}}
           <tr>
             <th class="title">
               {{tr}}CMbObject-back-ex_links_meta{{/tr}}
