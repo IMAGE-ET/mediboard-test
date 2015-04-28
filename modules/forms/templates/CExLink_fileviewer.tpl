@@ -19,9 +19,9 @@
   <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_class}}_{{$ex_class->_id}}-{{$ex_object->_id}}')">
     <tr>
       <td style="text-align: center; height: 120px; vertical-align: middle;">
-        <div class="icon_fileview">
+        <div class="icon_fileview" style="line-height: 90px;">
           <span ondblclick="ExObject.display('{{$ex_object->_id}}', '{{$ex_object->_ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')"
-            style="font-family: FontAwesome; font-size: 50pt;">
+            style="font-family: FontAwesome; font-size: 11pt;">
             &#xf0f7;
           </span>
         </div>

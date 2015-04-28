@@ -17,18 +17,17 @@
   <table class="layout table_icon_fileview" onmouseover="ObjectTooltip.createEx(this, '{{$file->_guid}}')">
     <tr>
       <td style="text-align: center; height: 120px; vertical-align: middle;">
-        <div class="icon_fileview" ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')">
-          {{if in_array($file->_file_type, "CFile"|static:"_files_types")}}
+        <div class="icon_fileview" ondblclick="popFile('{{$file->object_class}}', '{{$file->object_id}}', '{{$file->_class}}', '{{$file->_id}}', '0')"
+          style="line-height: 90px;">
+          {{if in_array($file->_file_type, array("pdf", "image"))}}
             <img src="?m=files&raw=fileviewer&file_id={{$file->_id}}&phpThumb=1&w=64&h=92"
                  style="background: white; max-width: 64px; max-height: 92px;" />
-          {{else}}
-            <span style="font-family: FontAwesome; font-size: 50pt;">
-              {{if $file->file_type == "image/fabricjs"}}
-                &#xf1fc;
-              {{else}}
-                &#xf016;
-              {{/if}}
+          {{elseif $file->file_type == "image/fabricjs"}}
+            <span style="font-family: FontAwesome; font-size: 11pt;">
+              &#xf1fc;
             </span>
+          {{else}}
+            <img src="images/pictures/medifile_black.png" style="background: white; max-width: 64px; max-height: 92px;" />
           {{/if}}
         </div>
       </td>
