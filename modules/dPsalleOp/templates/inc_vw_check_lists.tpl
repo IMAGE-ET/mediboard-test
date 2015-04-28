@@ -8,6 +8,7 @@
         <tr>
           <th class="title">
             Checklist {{mb_value object=$check_list field=type}}
+            {{if !$check_list->type && $check_list->_ref_list_type}}{{$check_list->_ref_list_type}}{{/if}}
           </th>
         </tr>
         

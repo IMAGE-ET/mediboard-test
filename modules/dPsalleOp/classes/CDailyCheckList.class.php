@@ -101,9 +101,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   /**
    * Get non-HAS classes
    *
+   * @param bool $operation see operations
+   *
    * @return array
    */
-  static function getNonHASClasses(){
+  static function getNonHASClasses($operation = false){
     static $check_list = null;
     if ($check_list === null) {
       $check_list = new self;
@@ -111,8 +113,24 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
     $target_classes = array_keys($check_list->_specs["object_class"]->_locales);
     $target_classes = array_diff($target_classes, CDailyCheckList::$_HAS_classes);
+    if ($operation) {
+      $target_classes[] = "COperation";
+    }
 
     return $target_classes;
+  }
+
+  /**
+   * Get types by values
+   *
+   * @return array
+   */
+  static function getTypeByValues() {
+    $list = array();
+    foreach (CDailyCheckList::$types as $name => $type) {
+      $list[$type][] = $name;
+    }
+    return $list;
   }
 
   /**

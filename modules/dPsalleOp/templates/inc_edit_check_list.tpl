@@ -75,8 +75,11 @@ refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}} = function(i
   var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}");
 
   if ($V(form.validator_id) && $V(form._validator_password) && !$("systemMsg").select(".warning, .error").length) {
-    if ($("{{$check_list->type}}-title")) {
-      $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
+    if ($('{{$check_list->type}}'+'-title')) {
+      $('{{$check_list->type}}'+'-title').down("img").src = "images/icons/tick.png";
+    }
+    else if ($('{{$check_list->list_type_id}}'+'-param-title')) {
+      $('{{$check_list->list_type_id}}'+'-param-title').down("img").src = "images/icons/tick.png";
     }
     var url = new Url("dPsalleOp", "httpreq_vw_check_list");
     url.addParam("check_list_id", id);
@@ -132,7 +135,8 @@ Main.add(function(){
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
   <input type="hidden" name="group_id" value="{{$check_list->group_id|ternary:$check_list->group_id:$g}}" />
 
-  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->_ref_list_type->type == "fermeture_salle"}}
+  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->_ref_list_type->type == "fermeture_salle"
+  || $check_list->_ref_list_type->type == "intervention"}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}}" />
   {{else}}
     <input type="hidden" name="callback" value="saveCheckListIdCallback{{$check_list->type}}_{{$check_list->list_type_id}}" />
@@ -221,7 +225,17 @@ Main.add(function(){
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
           {{assign var=type_validateur value='|'|explode:$check_list->_ref_list_type->type_validateur}}
 
-          {{if $check_list->object_class == "COperation"}}
+          {{if $check_list->object_class == "COperation" && $check_list->list_type_id && in_array("chir_interv", $type_validateur)}}
+            <optgroup label="Praticiens">
+              {{assign var=_obj value=$check_list->_ref_object}}
+              <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
+              {{if $anesth_id && isset($anesth|smarty:nodefaults)}}
+                <option value="{{$anesth->_id}}">{{$anesth}}</option>
+              {{/if}}
+            </optgroup>
+          {{/if}}
+
+          {{if $check_list->object_class == "COperation" && !$check_list->list_type_id}}
             <optgroup label="Praticiens">
               {{assign var=_obj value=$check_list->_ref_object}}
               <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
@@ -230,21 +244,22 @@ Main.add(function(){
               {{/if}}
             </optgroup>
           {{else}}
-            {{if $list_chirs && (in_array("chir", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
+            {{if $list_chirs && (in_array("chir", $type_validateur) ||
+            ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire" && !$check_list->list_type_id))}}
               <optgroup label="Chirurgiens">
                 {{mb_include module=mediusers template=inc_options_mediuser list=$list_chirs selected=$app->user_id}}
               </optgroup>
             {{/if}}
 
-            {{if $list_anesths && (in_array("anesth", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
+            {{if $list_anesths && (in_array("anesth", $type_validateur) ||
+            ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire" && !$check_list->list_type_id))}}
               <optgroup label="Anesthésistes">
                 {{mb_include module=mediusers template=inc_options_mediuser list=$list_anesths selected=$app->user_id}}
               </optgroup>
             {{/if}}
           {{/if}}
           <optgroup label="Personnel">
-            {{if $check_list->object_class == "CSalle" || $check_list->object_class == "CBlocOperatoire"}}
-              {{assign var=type_validateur value='|'|explode:$check_list->_ref_list_type->type_validateur}}
+            {{if $check_list->object_class == "CSalle" || $check_list->object_class == "CBlocOperatoire" || ($check_list->object_class == "COperation" && $check_list->list_type_id)}}
               {{foreach from=$personnel item=curr_personnel}}
                 {{if in_array($curr_personnel->emplacement, $type_validateur)}}
                   {{assign var=curr_user value=$curr_personnel->_ref_user}}

@@ -201,6 +201,7 @@ class CGroups extends CEntity {
     $backProps["supervision_instant_data"]  = "CSupervisionInstantData owner_id";
     $backProps["type_brancard_group"]       = "CBrancardageTransport group_id";
     $backProps["drawing_category_group"]    = "CDrawingCategory group_id";
+    $backProps["daily_check_list_group"]    = "CDailyCheckListGroup group_id";
     //$backProps["ex_object"]                 = "CExObject group_id"; // DO NOT ADD THIS BACK PROP
     return $backProps;
   }

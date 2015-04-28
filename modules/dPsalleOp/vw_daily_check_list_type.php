@@ -10,21 +10,27 @@
  */
 
 CCanDo::checkAdmin();
-
 $list_type_id = CValue::getOrSession('list_type_id');
 $type         = CValue::get('type', "ouverture_salle");
 
 $list_type = new CDailyCheckListType();
 if ($list_type->load($list_type_id)) {
-  $list_type->loadRefsNotes();
-  $list_type->loadRefsCategories();
+  if ($list_type->type == "intervention" || $list_type->check_list_group_id) {
+    $list_type = new CDailyCheckListType();
+  }
+  else {
+    $list_type->loadRefsNotes();
+    $list_type->loadRefsCategories();
+  }
 }
-else {
+if (!$list_type->_id) {
   $list_type->group_id = CGroups::loadCurrent()->_id;
   $list_type->type = $type;
 }
 
 $list_type->makeLinksArray();
+
+unset($list_type->_specs["type_validateur"]->_locales["chir_interv"]);
 
 list($targets, $by_type) = CDailyCheckListType::getListTypesTree();
 
@@ -46,7 +52,9 @@ foreach ($targets as $_targets) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("list_type", $list_type);
-$smarty->assign("by_type",  $by_type);
-$smarty->assign("targets",   $targets);
+
+$smarty->assign("list_type" , $list_type);
+$smarty->assign("by_type"   , $by_type);
+$smarty->assign("targets"   , $targets);
+
 $smarty->display("vw_daily_check_list_type.tpl");

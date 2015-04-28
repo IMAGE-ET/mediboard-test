@@ -31,6 +31,7 @@ if (!$user->_is_praticien || ($user->_is_praticien && $can->edit)) {
   $module->registerTab("vw_interv_non_cotees", TAB_EDIT);
   $module->registerTab("vw_daily_check_traceability", TAB_READ);
   $module->registerTab("vw_daily_check_list_type"   , TAB_ADMIN);
+  $module->registerTab("vw_daily_check_list_group"  , TAB_ADMIN);
 }
 
 if (CModule::getActive("vivalto")) {

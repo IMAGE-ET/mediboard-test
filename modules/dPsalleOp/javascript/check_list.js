@@ -27,20 +27,24 @@ CheckList = {
     $V(form.object_id,   (parts[1] === "none" ? "" : parts[1]));
   },
 
-  editItemCategory: function(list_type_id, cat_id) {
+  editItemCategory: function(list_type_id, cat_id, callback) {
     var url = new Url('dPsalleOp', 'vw_daily_check_item_category');
     url.addParam("list_type_id", list_type_id);
     url.addParam("item_category_id", cat_id);
     url.requestModal(800, 700);
 
     url.modalObject.observe("afterClose", function(){
-      location.reload();
+      if (callback) {
+        CheckListGroup.modal_checklist.refreshModal();
+      }
+      else {
+        location.reload();
+      }
     });
-
     CheckList.urlCategory = url;
   },
   callbackItemCategory: function(id, obj) {
-    CheckList.editItemCategory(obj.list_type_id, id);
+    CheckList.editItemCategory(obj.list_type_id, id, 0);
   },
 
   editItemType: function(category_id, item_type_id) {

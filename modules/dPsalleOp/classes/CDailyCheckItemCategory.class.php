@@ -115,28 +115,34 @@ class CDailyCheckItemCategory extends CMbObject {
   /**
    * Get categories tree
    *
+   * @param bool $operation see operations
+   *
    * @return array
    */
-  static function getCategoriesTree(){
+  static function getCategoriesTree($operation = false){
     $object = new self();
 
-    $target_classes = CDailyCheckList::getNonHASClasses();
+    $target_classes = CDailyCheckList::getNonHASClasses($operation);
 
     $targets = array();
     $by_class = array();
 
     foreach ($target_classes as $_class) {
-      /** @var CSalle|CBlocOperatoire $_object */
-      $_object = new $_class;
-      //$_targets = $_object->loadGroupList();
-      $_targets = $_object->loadList();
-      array_unshift($_targets, $_object);
+      if ($_class != "COperation") {
+        /** @var CSalle|CBlocOperatoire $_object */
+        $_object = new $_class;
+        //$_targets = $_object->loadGroupList();
+        $_targets = $_object->loadList();
+        array_unshift($_targets, $_object);
 
-      $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
+        $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
+      }
 
-      $where = array(
-        "target_class" => "= '$_class'",
-      );
+      $where = array("target_class" => "= '$_class'");
+
+      if ($_class == "COperation") {
+        $where["list_type_id"] = ' IS NOT NULL';
+      }
 
       /** @var CDailyCheckItemCategory[] $_list */
       $_list = $object->loadList($where, "target_id+0, title"); // target_id+0 to have NULL at the beginning

@@ -18,6 +18,7 @@ class CDailyCheckListType extends CMbObject {
   //public $object_class;// @todo REMOVE
   //public $object_id; // @todo REMOVE
   public $group_id;
+  public $check_list_group_id;
   public $type;
   public $title;
   public $type_validateur;
@@ -58,15 +59,16 @@ class CDailyCheckListType extends CMbObject {
     //$props['object_class'] = 'enum notNull list|CSalle|CBlocOperatoire default|CSalle';
     //$props['object_id']    = 'ref class|CMbObject meta|object_class autocomplete';
 
-    $props['group_id']     = 'ref notNull class|CGroups';
-    $props['type']         = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle default|ouverture_salle';
-    $props['title']        = 'str notNull';
-    $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur";
-    $props['description']  = 'text';
+    $props['group_id']        = 'ref notNull class|CGroups';
+    $props['check_list_group_id'] = 'ref class|CDailyCheckListGroup';
+    $props['type']            = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle|intervention default|ouverture_salle';
+    $props['title']           = 'str notNull';
+    $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur|chir_interv";
+    $props['description']     = 'text';
 
-    $props['_object_guid'] = 'str';
-    $props['_links']       = 'str';
-    $props['_duplicate']   = 'bool default|0';
+    $props['_object_guid']    = 'str';
+    $props['_links']          = 'str';
+    $props['_duplicate']      = 'bool default|0';
     return $props;
   }
 
@@ -140,7 +142,8 @@ class CDailyCheckListType extends CMbObject {
         list($_object_class, $_object_id) = explode("-", $_object_guid);
         // Exclude types from other class
         if (($this->type == "ouverture_salle" && $_object_class != "CSalle") ||
-          (($this->type == "ouverture_sspi" || $this->type == "ouverture_preop") && $_object_class != "CBlocOperatoire")) {
+          (($this->type == "ouverture_sspi" || $this->type == "ouverture_preop") && $_object_class != "CBlocOperatoire")
+        || $this->type == "intervention") {
           continue;
         }
 
@@ -195,19 +198,22 @@ class CDailyCheckListType extends CMbObject {
     $by_type = array();
 
     foreach ($object->_specs["type"]->_locales as $type => $trad) {
-      /** @var CSalle|CBlocOperatoire $_object */
-      $_object = ($type == "ouverture_salle" || $type == "fermeture_salle") ?  new CSalle() : new CBlocOperatoire();
-      $_targets = $_object->loadGroupList();
-      array_unshift($_targets, $_object);
+      if ($type != "intervention") {
+        /** @var CSalle|CBlocOperatoire $_object */
+        $_object = ($type == "ouverture_salle" || $type == "fermeture_salle") ?  new CSalle() : new CBlocOperatoire();
+        $_targets = $_object->loadGroupList();
+        array_unshift($_targets, $_object);
 
-      $targets[$type] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
+        $targets[$type] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
 
-      $where = array(
-        "type"    => "= '$type'",
-        "group_id"=> "= '$group_id'",
-      );
+        $where = array(
+          "type"    => "= '$type'",
+          "group_id"=> "= '$group_id'",
+          "check_list_group_id"=> " IS NULL",
+        );
 
-      $by_type[$type] = $object->loadList($where, "title");
+        $by_type[$type] = $object->loadList($where, "title");
+      }
     }
 
     return array(

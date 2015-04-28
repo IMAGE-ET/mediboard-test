@@ -1640,13 +1640,30 @@ class CSetupdPsalleOp extends CSetup {
     $query = "ALTER TABLE `daily_check_list_type`
                 CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop', 'fermeture_salle') NOT NULL DEFAULT 'ouverture_salle';";
     $this->addQuery($query);
-
     $this->makeRevision('0.67');
 
     $query = "ALTER TABLE `acte_ccam`
                 CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation', 'CDevisCodage') NOT NULL;";
     $this->addQuery($query);
+    $this->makeRevision('0.68');
 
-    $this->mod_version = '0.68';
+    $query = "ALTER TABLE `daily_check_list_type`
+                ADD `check_list_group_id` INT (11) UNSIGNED,
+                CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop','fermeture_salle','intervention') NOT NULL DEFAULT 'ouverture_salle';";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `daily_check_list_group` (
+                `check_list_group_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `title` VARCHAR (255) NOT NULL,
+                `description` TEXT,
+                `actif` ENUM ('0','1') DEFAULT '1'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list_group`
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.69';
   }
 }

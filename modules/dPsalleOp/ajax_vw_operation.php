@@ -80,6 +80,8 @@ if ($salle_id) {
 // Don't load them if we have a daily check list to fill...
 
 $operation_check_lists = $operation_check_item_categories = array();
+$check_lists_no_has    = $check_items_no_has_categories   = $listValidateurs_no_has = array();
+
 $listAnesthType = array();
 
 if ($selOp->_id) {
@@ -157,7 +159,9 @@ if ($selOp->_id) {
   // Chargement des 3 check lists de l'OMS
   $operation_check_list = new CDailyCheckList();
   $cat = new CDailyCheckItemCategory();
-  $cat->target_class = "COperation";
+  $where_cat = array();
+  $where_cat["target_class"] = " = 'COperation'";
+  $where_cat["list_type_id"] = "IS NULL";
   $lists = array();
 
   // Pre-anesth, pre-op, post-op
@@ -170,9 +174,31 @@ if ($selOp->_id) {
     $list->_ref_object->loadRefPraticien();
     $operation_check_lists[$type] = $list;
 
-    $cat->type = $type;
-    $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+    $where_cat["type"] = " = '$type'";
+    $operation_check_item_categories[$type] = $cat->loadList($where_cat, "title");
   }
+  $type_personnel_no_has = array();
+  foreach (CDailyCheckListGroup::loadChecklistGroup() as $_checklist_group) {
+    foreach ($_checklist_group->_ref_check_liste_types as $_checklist_type) {
+      $list = CDailyCheckList::getList($selOp, null, null, $_checklist_type->_id);
+      $list->loadItemTypes();
+      $list->loadRefsFwd();
+      $list->loadBackRefs('items');
+      $list->isReadonly();
+      $list->_ref_object->loadRefPraticien();
+      $check_lists_no_has[$_checklist_type->_id] = $list;
+
+      $where_cat = array();
+      $where_cat["target_class"] = " = 'COperation'";
+      $where_cat["list_type_id"] = " = '$_checklist_type->_id'";
+      $check_items_no_has_categories[$_checklist_type->_id] = $cat->loadList($where_cat, "title");
+    }
+    $validateurs = explode("|", $list->loadRefListType()->type_validateur);
+    foreach ($validateurs as $validateur) {
+      $type_personnel_no_has[] = $validateur;
+    }
+  }
+  $listValidateurs_no_has = CPersonnel::loadListPers(array_unique(array_values($type_personnel_no_has)), true, true);
 
   $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
   $listValidateurs = CPersonnel::loadListPers($type_personnel, true, true);
@@ -190,6 +216,7 @@ $smarty->assign("date"                   , $date);
 $smarty->assign("currUser"               , $currUser);
 $smarty->assign("listAnesthType"         , $listAnesthType);
 $smarty->assign("listAnesths"            , $listAnesths);
+$smarty->assign("list_anesths"           , $listAnesths);
 $smarty->assign("operateurs_disp_vasc"   , $operateurs_disp_vasc);
 $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedical DAS"));
 $smarty->assign("modif_operation"        , $selOp->canEdit() || $date >= CMbDT::date());
@@ -201,8 +228,12 @@ $smarty->assign("anesth_id"              , $anesth_id);
 $smarty->assign("create_dossier_anesth"  , 1);
 $smarty->assign("require_check_list"     , 0);
 // Operation check lists
-$smarty->assign("operation_check_lists"          , $operation_check_lists);
-$smarty->assign("operation_check_item_categories", $operation_check_item_categories);
+$smarty->assign("operation_check_lists"           , $operation_check_lists);
+$smarty->assign("operation_check_item_categories" , $operation_check_item_categories);
+$smarty->assign("check_lists_no_has"              , $check_lists_no_has);
+$smarty->assign("check_items_no_has_categories"   , $check_items_no_has_categories);
+$smarty->assign("list_chirs"                      , $listChirs);
+$smarty->assign("listValidateurs_no_has"          , $listValidateurs_no_has);
 
 
 $smarty->display("inc_operation.tpl");

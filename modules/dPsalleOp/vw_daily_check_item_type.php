@@ -32,7 +32,11 @@ foreach (CDailyCheckList::$_HAS_classes as $_class) {
   unset($item_category->_specs["target_class"]->_locales[$_class]);
 }
 
-list($targets, $item_categories_by_class) = CDailyCheckItemCategory::getCategoriesTree();
+$category = new CDailyCheckItemCategory();
+$category->load($item_category_id);
+
+$op = $category->target_class == "COperation" ? 1 : 0;
+list($targets, $item_categories_by_class) = CDailyCheckItemCategory::getCategoriesTree($op);
 
 $target_class_list = array_keys($item_category->_specs["target_class"]->_locales);
 
