@@ -72,7 +72,7 @@
       <td>{{if $_regle->type_pec}}{{tr}}CSejour.type_pec.{{$_regle->type_pec}}{{/tr}}{{/if}}</td>
       <td style="text-align: center">{{mb_value object=$_regle field=age_min}}</td>
       <td style="text-align: center">{{mb_value object=$_regle field=age_max}}</td>
-      <td style="text-align: center">{{mb_value object=$_regle field=handicap}}</td>
+      <td style="text-align: center">{{if $_regle->handicap}} {{mb_value object=$_regle field=handicap}} {{/if}}</td>
 
       <td><strong> >> {{$_regle->_ref_service}}</strong></td>
     </tr>
