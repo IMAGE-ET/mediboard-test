@@ -1344,7 +1344,7 @@ class CActeCCAM extends CActe {
         }
       }
 
-      ml($_act->store());
+      $_act->store();
     }
   }
 }
