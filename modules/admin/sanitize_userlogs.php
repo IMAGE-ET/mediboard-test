@@ -37,6 +37,9 @@ $copies = array(
   array("CAntecedent",              "date",               "creation_date"),
   array("CTraitement",              "user_id",            "owner_id"),
   array("CTraitement",              "date",               "creation_date"),
+  array("CProductDelivery",         "user_id",            "preparateur_id"),
+  array("CProductDeliveryTrace",    "user_id",            "preparateur_id"),
+  array("CRefusDispensation",       "user_id",            "preparateur_id"),
 );
 
 // Ajout des classes de formulaires
@@ -205,6 +208,7 @@ if ($execute) {
         }
 
         $ds->exec($_query);
+        $counts["copy"] += $ds->affectedRows();
       }
     }
   }

@@ -37,6 +37,7 @@ class CProductDelivery extends CMbObject {
   public $comments;
   public $comments_deliver;
   public $type;
+  public $preparateur_id;
 
   /** @var CProductStockGroup */
   public $_ref_stock;
@@ -92,7 +93,6 @@ class CProductDelivery extends CMbObject {
   public $_code_ucd;
   public $_code_cip;
   public $_count_delivered;
-  public $_preparateur_id;
   public $_validateur_id;
 
   public $_auto_trace;
@@ -142,6 +142,7 @@ class CProductDelivery extends CMbObject {
     $props['comments']          = 'text';
     $props['comments_deliver']  = 'text';
     $props['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
+    $props['preparateur_id']    = 'ref class|CMediusers';
 
     $props['_date_min']         = 'date notNull';
     $props['_date_max']         = 'date notNull moreEquals|_date_min';
@@ -150,7 +151,6 @@ class CProductDelivery extends CMbObject {
     $props['_datetime_min']     = 'dateTime notNull';
     $props['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
 
-    $props['_preparateur_id']   = 'ref class|CMediusers show|1';
     $props['_validateur_id']    = 'ref class|CMediusers show|1';
     return $props;
   }
@@ -258,14 +258,16 @@ class CProductDelivery extends CMbObject {
    * @return CMediusers
    */
   function loadRefPreparateur() {
-    $this->_preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
+    $this->completeField("preparateur_id");
+
+    if ($this->_id && !$this->preparateur_id) {
+      $this->preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
+      $this->rawStore();
+    }
 
     /** @var CMediusers $preparateur */
-    $preparateur = $this->loadFwdRef("_preparateur_id");
-
-    if ($preparateur && $preparateur->_id) {
-      $preparateur->loadRefFunction();
-    }
+    $preparateur = $this->loadFwdRef("preparateur_id");
+    $preparateur->loadRefFunction();
 
     return $this->_ref_preparateur = $preparateur;
   }
@@ -444,6 +446,10 @@ class CProductDelivery extends CMbObject {
 
       if (!$this->datetime_max) {
         $this->datetime_max = $this->date_dispensation;
+      }
+
+      if (!$this->preparateur_id) {
+        $this->preparateur_id = CMediusers::get()->_id;
       }
     }
 

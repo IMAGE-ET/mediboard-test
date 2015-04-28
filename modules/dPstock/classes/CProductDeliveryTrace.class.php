@@ -22,6 +22,7 @@ class CProductDeliveryTrace extends CMbObject {
   public $code;
   public $quantity;
   public $target_location_id;
+  public $preparateur_id;
 
   /** @var CProductDelivery */
   public $_ref_delivery;
@@ -42,7 +43,6 @@ class CProductDeliveryTrace extends CMbObject {
   public $_datetime_min;
   public $_code_cis;
   public $_code_cip;
-  public $_preparateur_id;
 
   /**
    * @see parent::getSpec()
@@ -78,9 +78,10 @@ class CProductDeliveryTrace extends CMbObject {
     $specs['date_delivery']  = 'dateTime';
     $specs['date_reception'] = 'dateTime';
     $specs['target_location_id'] = 'ref class|CProductStockLocation'; // can be null if nominative
+    $specs['preparateur_id'] = 'ref class|CMediusers';
+
     $specs['_date_min']      = 'dateTime notNull';
     $specs['_date_max']      = 'dateTime notNull moreThan|_date_min';
-    $specs['_preparateur_id'] = 'ref class|CMediusers';
     return $specs;
   }
 
@@ -99,6 +100,10 @@ class CProductDeliveryTrace extends CMbObject {
    */
   function store() {
     $this->completeField('delivery_id', 'quantity');
+
+    if (!$this->_id && !$this->preparateur_id) {
+      $this->preparateur_id = CMediusers::get()->_id;
+    }
 
     $this->loadRefsFwd();
     $stock = $this->getStock();
@@ -364,14 +369,16 @@ class CProductDeliveryTrace extends CMbObject {
    * @return CMediusers
    */
   function loadRefPreparateur() {
-    $this->_preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
+    $this->completeField("preparateur_id");
+
+    if ($this->_id && !$this->preparateur_id) {
+      $this->preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
+      $this->rawStore();
+    }
 
     /** @var CMediusers $preparateur */
-    $preparateur = $this->loadFwdRef("_preparateur_id");
-
-    if ($preparateur && $preparateur->_id) {
-      $preparateur->loadRefFunction();
-    }
+    $preparateur = $this->loadFwdRef("preparateur_id");
+    $preparateur->loadRefFunction();
 
     return $this->_ref_preparateur = $preparateur;
   }

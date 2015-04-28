@@ -958,6 +958,14 @@ class CSetupdPstock extends CSetup {
                 WHERE `address_id` = 0";
     $this->addQuery($query);
 
-    $this->mod_version = "1.57";
+    $this->makeRevision("1.57");
+    $query = "ALTER TABLE `product_delivery`
+                ADD `preparateur_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_delivery_trace`
+                ADD `preparateur_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.58";
   }
 }
