@@ -585,7 +585,7 @@ class CActeCCAM extends CActe {
       /* Récupération des nouveaux modificateurs appliqués */
       $new_modifiers = array_diff($this->_modificateurs, $old_modifiers);
 
-      if (!empty($spread_modifiers)) {
+      if (!empty($new_modifiers)) {
         CActeCCAM::spreadModifiers($this, $new_modifiers);
       }
     }
@@ -1315,6 +1315,7 @@ class CActeCCAM extends CActe {
    * @param array     $modifiers The modifiers to spread
    */
   public static function spreadModifiers(&$act, $modifiers) {
+    ml('spreadModifiers');
     $acts = $act->getLinkedActes(true, true, true, true);
     $codable = $act->loadRefObject();
 
@@ -1343,7 +1344,7 @@ class CActeCCAM extends CActe {
         }
       }
 
-      $_act->store();
+      ml($_act->store());
     }
   }
 }
