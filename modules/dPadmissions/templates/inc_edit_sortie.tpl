@@ -55,6 +55,7 @@
   <form name="{{$form_name}}" method="post"
       onsubmit="return ContraintesRPU.checkObligatory('{{$rpu->_id}}',
         Admissions.confirmationSortie.curry(this, {{$modify_sortie_prevue}}, '{{$sejour->sortie_prevue}}',
+        '{{"dPurgences CRPU impose_lit_service_mutation"|conf:"CGroups-$g"}}',
         function() {
           {{if $atu && $atu->_id && $conf.dPurgences.valid_cotation_sortie_reelle}}
             onSubmitFormAjax(getForm('ValidCotation_{{$sejour->_id}}'), function() {
@@ -66,7 +67,7 @@
          }))">
 {{else}}
 <form name="{{$form_name}}" method="post"
-      onsubmit="return Admissions.confirmationSortie(this, {{$modify_sortie_prevue}}, '{{$sejour->sortie_prevue}}',
+      onsubmit="return Admissions.confirmationSortie(this, {{$modify_sortie_prevue}}, '{{$sejour->sortie_prevue}}', 0,
         function() { document.fire('mb:valider_sortie'); document.stopObserving('mb:valider_sortie'); Control.Modal.close();})">
 {{/if}}
   <input type="hidden" name="dosql" value="do_sejour_aed" />

@@ -321,7 +321,14 @@ Admissions = {
     form_sortie.onsubmit()
   },
 
-  confirmationSortie : function (form, modify_sortie_prevue, sortie_prevue, callback) {
+  confirmationSortie : function (form, modify_sortie_prevue, sortie_prevue, impose_lit_service_mutation, callback) {
+    if (impose_lit_service_mutation && App.m == "dPurgences") {
+      if ((!form.lit_id || !form.lit_id.value) && !form.service_sortie_id.value) {
+        alert($T('CRPU-_missing_lit_service_mutation'));
+        return false;
+      }
+    }
+
     if (!modify_sortie_prevue && !$V(form.entree_reelle)) {
       if (!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')) {
         return false;

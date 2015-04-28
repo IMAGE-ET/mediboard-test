@@ -26,7 +26,8 @@ CConfiguration::register(
           "display_motif_sfmu"              => "bool default|0",
           "defer_sfmu_diag_inf"             => "bool default|0",
           "diag_prat_view"                  => "bool default|0",
-          "search_visit_days_count"         => "num default|1 min|0 max|15"
+          "search_visit_days_count"         => "num default|1 min|0 max|15",
+          "impose_lit_service_mutation"     => "bool default|0",
         ),
         "Display" => array(
           "check_cotation"  => "enum list|0|1 default|1 localize",
