@@ -1315,7 +1315,6 @@ class CActeCCAM extends CActe {
    * @param array     $modifiers The modifiers to spread
    */
   public static function spreadModifiers(&$act, $modifiers) {
-    ml('spreadModifiers');
     $acts = $act->getLinkedActes(true, true, true, true);
     $codable = $act->loadRefObject();
 
