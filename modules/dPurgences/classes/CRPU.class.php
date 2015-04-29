@@ -109,6 +109,12 @@ class CRPU extends CMbObject {
   /** @var  CMediusers */
   public $_ref_ide_responsable;
 
+  /** @var  CMotifReponse */
+  public $_ref_reponses;
+
+  /** @var  CEchelleTri */
+  public $_ref_echelle_tri;
+
   // Behaviour fields
   public $_bind_sejour;
   public $_sortie;
@@ -120,6 +126,9 @@ class CRPU extends CMbObject {
   public $_transport;
   public $_old_service_id;
   public $_validation;
+  public $_ref_cts_degre;
+  public $_ref_latest_constantes;
+  public $_estimation_ccmu;
 
   /**
    * @see parent::getSpec()
@@ -217,7 +226,9 @@ class CRPU extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["passages"] = "CRPUPassage rpu_id";
+    $backProps["passages"]     = "CRPUPassage rpu_id";
+    $backProps["reponses_rpu"] = "CMotifReponse rpu_id";
+    $backProps["echelle_tri"]  = "CEchelleTri rpu_id";
     return $backProps;
   }
 
@@ -541,12 +552,13 @@ class CRPU extends CMbObject {
         return $msg;
       }
     }
-    
-    if ($this->code_diag) {
+
+    if ($this->fieldModified("code_diag") && $this->code_diag) {
       $this->loadRefMotif();
       $this->diag_infirmier = $this->_ref_motif->_ref_chapitre->nom;
       $this->diag_infirmier .= "\n".$this->code_diag.": ".$this->_ref_motif->nom;
       $this->diag_infirmier .= "\n Degrés d'urgence entre ".$this->_ref_motif->degre_min." et ".$this->_ref_motif->degre_max;
+      $this->ccmu = "";
     }
 
     // Bind affectation
@@ -555,7 +567,24 @@ class CRPU extends CMbObject {
         return $msg;
       }
     }
-    
+
+    if ($this->fieldModified("code_diag") && $this->_old->code_diag != $this->code_diag) {
+      foreach ($this->loadRefsReponses() as $_reponse) {
+        if ($msg = $_reponse->delete()) {
+          return $msg;
+        }
+      }
+      if ($this->code_diag) {
+        foreach ($this->loadRefMotif()->loadRefsQuestions() as $_question) {
+          $reponse = new CMotifReponse();
+          $reponse->question_id = $_question->_id;
+          $reponse->rpu_id = $this->_id;
+          if ($msg = $reponse->store()) {
+            return $msg;
+          }
+        }
+      }
+    }
     // Standard Store
     if ($msg = parent::store()) {
       return $msg;
@@ -756,5 +785,229 @@ class CRPU extends CMbObject {
     }
 
     return $msg;
+  }
+
+  /**
+   * Charge toutes les réponses du RPU
+   *
+   * @return CMotifReponse[]
+   */
+  function loadRefsReponses() {
+    return $this->_ref_reponses = $this->loadBackRefs("reponses_rpu");
+  }
+
+  /**
+   * Charge l'échelle tri
+   *
+   * @return CEchelleTri
+   */
+  function loadRefEchelleTri(){
+    return $this->_ref_echelle_tri = $this->loadUniqueBackRef("echelle_tri");
+  }
+
+  /**
+   * Mise à jour du CCMu en fonction des réponses
+   *
+   * @return void
+   */
+  function majCCMU() {
+    $this->completeField("ccmu");
+    $this->orderCtes();
+    $ccmu = 4;
+    foreach ($this->loadRefsReponses() as $_reponse) {
+      if ($_reponse->result) {
+        $ccmu = $_reponse->_degre < $ccmu ? $_reponse->_degre : $ccmu;
+      }
+    }
+    $this->ccmu = count($this->_ref_reponses) && $ccmu != 4 ? $ccmu : $this->_estimation_ccmu;
+    if ($msg = $this->store()) {
+      return $msg;
+    }
+  }
+
+
+  /**
+   * Ordonnancement par degré des constantes notées
+   *
+   * @return void
+   */
+  function orderCtes() {
+    if (!$this->_id) {
+      return null;
+    }
+    $this->_ref_cts_degre = array(
+      1 => array(), 2 => array(),
+      3 => array(), 4 => array(),
+    );
+    $this->_estimation_ccmu = 4;
+    $this->_ref_latest_constantes = CConstantesMedicales::getLatestFor($this->_patient_id, null, array(), $this->_ref_sejour, false);
+    $latest_constantes = $this->_ref_latest_constantes;
+    $grossesse = $this->_ref_sejour->loadRefGrossesse();
+    $sa_grossesse = $grossesse->_semaine_grossesse;
+    $echelle_tri = $this->loadRefEchelleTri();
+
+    if ($glasgow = $latest_constantes[0]->glasgow) {
+      $degre = $glasgow <= 8 ? 1 : 4;
+      if ($glasgow >= 9 && $glasgow <= 13)      { $degre = 2;}
+      elseif ($glasgow == 14 && $glasgow == 15) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'glasgow';
+    }
+    if ($pouls = $latest_constantes[0]->pouls) {
+      $degre = $pouls < 40 || $pouls > 150 ? 1 : 4;
+      if (($pouls >= 40 && $pouls <= 50) || ($pouls >= 130 && $pouls <= 150)) { $degre = 2;}
+      elseif ($pouls >= 51 && $pouls <= 129) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'pouls';
+    }
+    //@todo refactorer la tension!
+    if ($latest_constantes[0]->ta_gauche) {
+      $tas = $latest_constantes[0]->_ta_gauche_systole;
+      $tad = $latest_constantes[0]->_ta_gauche_diastole;
+      $degre = 4;
+      //Si la femme est enceinte et >= 20 SA et 1 mois PP
+      if ($grossesse->_id && $sa_grossesse >= 20) {
+        if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
+        elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
+        elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
+      }
+      else {
+        if ($tas >= 230 || $tas <= 70 || $tad >= 130) { $degre = 1;}
+        elseif (($tas > 180 && $tas < 230) || ($tas > 70 && $tas <= 90) || ($tad >= 115 && $tad < 130)) { $degre = 2;}
+        elseif (($tas > 90 && $tas <= 180) || ($tad < 115)) { $degre = 3;}
+      }
+      $this->_ref_cts_degre[$degre][] = 'ta_gauche';
+
+      if ($echelle_tri->proteinurie && $grossesse->_id && $tas >= 140 && $tad >= 90) {
+        $degre_prot = 3;
+        if ($echelle_tri->proteinurie == 'positive') {
+          $degre_prot = $degre >= 2 ? 1 : 2;
+        }
+        $this->_ref_cts_degre[$degre_prot][] = 'proteinurie';
+      }
+
+      //Index de choc
+      if ($pouls = $latest_constantes[0]->pouls) {
+        $degre = $pouls > $tas ? 2 : 3;
+        $this->_ref_cts_degre[$degre][] = 'index_de_choc';
+      }
+    }
+
+    if ($latest_constantes[0]->ta_droit) {
+      $tas = $latest_constantes[0]->_ta_droit_systole;
+      $tad = $latest_constantes[0]->_ta_droit_diastole;
+      $degre = 4;
+      //Si la femme est enceinte et >= 20 SA et 1 mois PP
+      if ($grossesse->_id && $sa_grossesse >= 20) {
+        if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
+        elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
+        elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
+      }
+      else {
+        if ($tas >= 230 || $tas <= 70 || $tad >= 130) { $degre = 1; }
+        elseif (($tas > 180 && $tas < 230) || ($tas > 70 && $tas <= 90) || ($tad >= 115 && $tad < 130)) {$degre = 2;}
+        elseif (($tas > 90 && $tas <= 180) || ($tad < 115)) {$degre = 3;}
+      }
+      $this->_ref_cts_degre[$degre][] = 'ta_droit';
+
+      if ($echelle_tri->proteinurie && $grossesse->_id && $tas >= 140 && $tad >= 90) {
+        $degre_prot = 3;
+        if ($echelle_tri->proteinurie == 'positive') {
+          $degre_prot = $degre >= 2 ? 1 : 2;
+        }
+        $this->_ref_cts_degre[$degre_prot][] = 'proteinurie';
+      }
+
+      //Index de choc
+      if ($pouls = $latest_constantes[0]->pouls) {
+        $degre = $pouls > $tas ? 2 : 3;
+        if (!in_array('index_de_choc', $this->_ref_cts_degre[$degre])) {
+          $this->_ref_cts_degre[$degre][] = 'index_de_choc';
+        }
+      }
+    }
+    if ($frequence = $latest_constantes[0]->frequence_respiratoire) {
+      $degre = $frequence >35 || $frequence <= 8 ? 1 : 4;
+      if (($frequence >= 25 && $frequence <= 35) || ($frequence >= 9 && $frequence <= 12)) { $degre = 2;}
+      elseif ($frequence >= 13 && $frequence <= 24) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'frequence_respiratoire';
+    }
+    if ($spo2 = $latest_constantes[0]->spo2) {
+      $degre = $spo2 < 90 ? 1 : 4;
+      if ($spo2 >= 90 && $spo2 <= 93) { $degre = 2;}
+      elseif ($spo2 >= 94 && $spo2 <= 100) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'spo2';
+    }
+    if ($temp = $latest_constantes[0]->temperature) {
+      $degre = $temp < 32 ? 1 : 4;
+      if (($temp >= 32 && $temp <= 35) || $temp > 40) { $degre = 2;}
+      elseif ($temp > 35 && $temp <= 40) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'temperature';
+    }
+    if ($glycemie = $latest_constantes[0]->glycemie) {
+      if ($glycemie < 4 || $glycemie >= 25) { $degre = 2;}
+      elseif ($glycemie >= 4 && $glycemie < 25) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'glycemie';
+    }
+    if ($cetonemie = $latest_constantes[0]->cetonemie) {
+      if ($cetonemie >= 0.6) { $degre = 2;}
+      elseif ($cetonemie < 0.6) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'cetonemie';
+    }
+
+    $patient = $this->_ref_sejour->_ref_patient;
+    if ($latest_constantes[0]->peak_flow && $latest_constantes[0]->taille && $patient->_annees && $patient->sexe) {
+      //(H)DEPTh = Exp[(0,544 x Log(Age)) - (0,0151 x Age) - (74,7 / Taille) + 5,48]
+      //((F)DEPTh = Exp[(0,376 x Log(Age)) - (0,0120 x Age) - (58,8 / Taille) + 5,63]
+      if ($patient->sexe == 'f') {
+        $depth = round(exp((0.376 * log($patient->_annees)) - (0.0120 * $patient->_annees) - (58.8 / $latest_constantes[0]->taille) + 5.63), 2);
+      }
+      else {
+        $depth = round(exp((0.544 * log($patient->_annees)) - (0.0151 * $patient->_annees) - (74.7 / $latest_constantes[0]->taille) + 5.48));
+      }
+      $taux = round(($latest_constantes[0]->peak_flow / $depth) *100, 2);
+      $degre = $taux > 50 ? 3 : 2;
+      $this->_ref_cts_degre[$degre][$depth] = 'peak_flow';
+    }
+    if ($eva = $latest_constantes[0]->EVA) {
+      $degre = $eva >= 8 ? 1 : 4;
+      if ($eva >= 2 && $eva <= 7) { $degre = 2;}
+      elseif ($eva < 2) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'EVA';
+    }
+    if ($contraction_uterine = $latest_constantes[0]->contraction_uterine) {
+      $degre = $contraction_uterine >= 3 ? 1 : 4;
+      if ($contraction_uterine >= 1 && $contraction_uterine <= 2) { $degre = 2;}
+      elseif ($eva <= 1) { $degre = 3;}
+      $this->_ref_cts_degre[$degre][] = 'contraction_uterine';
+    }
+    if ($latest_constantes[0]->bruit_foetal && $grossesse->_id && $sa_grossesse > 13) {
+      $bruit_foetal = $latest_constantes[0]->bruit_foetal;
+      $degre = 4;
+      if ($sa_grossesse > 24) {
+        if (($bruit_foetal >= 40 && $bruit_foetal <= 100) || $bruit_foetal >= 180) { $degre = 1;}
+        elseif ($bruit_foetal == 0 || ($bruit_foetal >= 101 && $bruit_foetal <= 119) || ($bruit_foetal >= 160 && $bruit_foetal <= 179)) { $degre = 2;}
+        elseif ($bruit_foetal >= 120 && $bruit_foetal <= 159) { $degre = 3;}
+      }
+      else {
+        $degre = $bruit_foetal >0 ? 3 : 2;
+      }
+      $this->_ref_cts_degre[$degre][] = 'bruit_foetal';
+    }
+    if ($echelle_tri->liquide && $grossesse->_id) {
+      $degre = $echelle_tri->liquide == 'meconial' ? 2 : 3;
+      $this->_ref_cts_degre[$degre][] = 'liquide';
+    }
+
+    if ($echelle_tri->pupille_droite || $echelle_tri->pupille_gauche) {
+      $gauche = $echelle_tri->pupille_gauche;
+      $droit = $echelle_tri->pupille_droite;
+      $degre = $gauche == 3 || $gauche == 1 || $droit == 3 || $droit == 1 ? 2 : 3;
+      $this->_ref_cts_degre[$degre][] = 'pupilles';
+    }
+
+    unset($this->_ref_cts_degre[4]);
+    if (count($this->_ref_cts_degre[1])) {$this->_estimation_ccmu = 1;}
+    elseif (count($this->_ref_cts_degre[2])) {$this->_estimation_ccmu = 2;}
+    elseif (count($this->_ref_cts_degre[3])) {$this->_estimation_ccmu = 3;}
+    ksort($this->_ref_cts_degre);
   }
 }

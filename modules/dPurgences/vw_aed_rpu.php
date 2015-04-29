@@ -142,7 +142,10 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
 }
 
 if (CAppUI::conf("ref_pays") == 2) {
+  $rpu->loadRefEchelleTri();
   $rpu->loadRefMotif();
+  $rpu->loadRefsReponses();
+  $rpu->orderCtes();
   $chapitre = new CChapitreMotif();
   $chapitres = $chapitre->loadList();
   $motif    = new CMotif();

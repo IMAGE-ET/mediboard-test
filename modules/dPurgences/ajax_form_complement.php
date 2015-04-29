@@ -10,8 +10,6 @@
  */
 
 CCanDo::checkRead();
-$chapitre_id  = CValue::get("_chapitre_id");
-$motif_id     = CValue::get("_motif_id");
 $rpu_id       = CValue::getOrSession("rpu_id");
 $sejour_id    = CValue::get("sejour_id");
 
@@ -46,40 +44,11 @@ else {
   $sejour               = new CSejour;
 }
 
-// Chargement des boxes 
-$services = array();
-// Urgences pour un séjour "urg"
-$services = CService::loadServicesUrgence();
-// UHCD pour un séjour "comp" et en UHCD
-if ($sejour->type == "comp" && $sejour->UHCD) {
-  $services = CService::loadServicesUHCD();
-}
-
 $rpu->loadRefMotif();
-$chapitre = new CChapitreMotif();
-$chapitres = $chapitre->loadList();
-$motif    = new CMotif();
-if ($motif_id) {
-  $motif_tmp = new CMotif();
-  $motif_tmp->load($motif_id);
-  $motif->chapitre_id = $motif_tmp->chapitre_id;
-  $chapitre_id        = $motif_tmp->chapitre_id;
-  $rpu->code_diag     = $motif_tmp->code_diag;
-  $rpu->_ref_motif    = $motif_tmp;
-}
-elseif ($chapitre_id) {
-  $motif->chapitre_id = $chapitre_id;
-}
-$motifs = $motif->loadMatchingList();
+$rpu->orderCtes();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("chapitre_id"         , $chapitre_id);
-$smarty->assign("chapitres"           , $chapitres);
-$smarty->assign("motif_id"            , $motif_id);
-$smarty->assign("motifs"              , $motifs);
-$smarty->assign("services"            , $services);
-$smarty->assign("rpu"                 , $rpu);
-$smarty->assign("sejour"              , $sejour);
+$smarty->assign("rpu" , $rpu);
 
 $smarty->display("inc_form_complement.tpl");

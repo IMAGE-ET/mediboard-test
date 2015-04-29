@@ -113,6 +113,18 @@ Motif= {
     });
   },
 
+  deleteDiag: function(form, see_reload) {
+    return onSubmitFormAjax(form, {
+      onComplete: function() {
+        if (see_reload && !form.echelle_tri_id.value) {
+          Motif.reloadComplementEchelle(form);
+        }
+        Motif.refreshComplement();
+        Motif.loadQuestionsRpu();
+      }
+    });
+  },
+
   loadQuestionsRpu: function() {
     var form = getForm("editRPUtri");
     var url = new Url("urgences", "ajax_form_questions_motif");
@@ -126,7 +138,87 @@ Motif= {
         Motif.refreshComplement();
       }
     });
+  },
+
+  seeTraitements: function(form) {
+    return onSubmitFormAjax(form, {
+      onComplete: function() {
+        if (!form.echelle_tri_id.value) {
+          Motif.reloadComplementEchelle(form);
+        }
+        form.antidiabetique.hidden = 'hidden';
+        form.anticoagulant.hidden = 'hidden';
+        if (form.antidiabet_use.value == 'oui') {
+          form.antidiabetique.hidden = '';
+        }
+        if (form.anticoagul_use.value == 'oui') {
+          form.anticoagulant.hidden = '';
+        }
+      }
+    });
+  },
+
+  reloadComplementEchelle: function(form) {
+    var url = new Url("urgences", "ajax_echelle_tri");
+    url.addParam('rpu_id'       , form.rpu_id.value);
+    url.requestUpdate('form-echelle_tri');
+  },
+
+  setPupilles: function(cote, add) {
+    form = getForm('formEchelleTri');
+    var niveau = form.pupille_droite.value;
+    if (cote == 'pupille_gauche') {
+      niveau = form.pupille_gauche.value;
+    }
+
+    if (add == 0) {
+      niveau = niveau-1;
+      if (niveau == -1) niveau = 3;
+    }
+    var new_niveau = 0;
+    switch (parseInt(niveau)) {
+      case 0:
+        new_niveau = 1;
+        $(cote+'_circle').style.border = "2px solid black";
+        $(cote+'_circle').style.margin = "8px";
+        break;
+      case 1:
+        new_niveau = 2;
+        $(cote+'_circle').style.border = "5px solid black";
+        $(cote+'_circle').style.margin = "5px";
+        break;
+      case 2:
+        new_niveau = 3;
+        $(cote+'_circle').style.border = "8px solid black";
+        $(cote+'_circle').style.margin = "2px";
+        break;
+      default :
+        new_niveau = 0;
+        $(cote+'_circle').style.border = "0px solid black";
+        $(cote+'_circle').style.margin = "1px";
+        break;
+    }
+    if (add) {
+      if (cote == 'pupille_gauche') {
+        $V(form.pupille_gauche, new_niveau);
+      }
+      else {
+        $V(form.pupille_droite, new_niveau);
+      }
+      Motif.deleteDiag(form, 1);
+    }
+  },
+
+  saveGlasgow: function(form, context_guid) {
+    return onSubmitFormAjax(form, {
+      onComplete: function() {
+        Motif.refreshComplement();
+        refreshConstantesMedicalesTri(context_guid);
+        refreshConstantesMedicales(context_guid);
+      }
+    });
   }
+
 };
 
 Question = {

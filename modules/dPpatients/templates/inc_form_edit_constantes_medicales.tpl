@@ -11,6 +11,9 @@
 submitConstantesMedicales = function(oForm) {
   return onSubmitFormAjax(oForm, {
     onComplete: function () {
+      if ($('glasgow_tooltip')) {
+        Motif.refreshComplement();
+      }
       {{if $display_graph}}
         refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
       {{/if}}
@@ -186,7 +189,14 @@ Main.add(function () {
                     <button type="button" class="stats notext" style="float: right;" onclick="displayConstantGraph('{{$_constant}}');">
                       {{tr}}CConstantGraph-msg-display{{/tr}}
                     </button>
-                    <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}">
+                    <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}" onmouseover="">
+                      <script>
+                        Main.add(function () {
+                          if ($('{{$_constant}}'+'_tooltip')) {
+                            $('labelFor_edit-constantes-medicales'+'{{$unique_id}}'+'_'+'{{$_constant}}').onmouseover = function() {ObjectTooltip.createDOM(this,'{{$_constant}}'+'_tooltip');};
+                          }
+                        });
+                      </script>
                       {{tr}}CConstantesMedicales-{{$_constant}}-court{{/tr}}
 
                       {{assign var=_params value=$constants_list.$_constant}}

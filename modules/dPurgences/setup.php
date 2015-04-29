@@ -472,7 +472,28 @@ class CSetupdPurgences extends CSetup {
                 ADD INDEX (`rpu_id`),
                 ADD INDEX (`question_id`);";
     $this->addQuery($query);
+    $this->makeRevision("0.54");
+
+    $query = "CREATE TABLE `echelle_tri` (
+                `echelle_tri_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `rpu_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `proteinurie` ENUM ('positive','negative'),
+                `liquide` ENUM ('meconial','teinte'),
+                `antidiabet_use` ENUM ('NP','oui','non') DEFAULT 'NP',
+                `anticoagul_use` ENUM ('NP','oui','non') DEFAULT 'NP',
+                `anticoagulant` ENUM ('sintrom','other'),
+                `antidiabetique` ENUM ('oral','insuline','oral_insuline'),
+                `pupille_droite` TINYINT (4) UNSIGNED NOT NULL DEFAULT '0',
+                `pupille_gauche` TINYINT (4) UNSIGNED NOT NULL DEFAULT '0',
+                `ouverture_yeux` ENUM ('spontane','bruit','douleur','jamais'),
+                `rep_verbale` ENUM ('oriente','confuse','inapproprie','incomprehensible','aucune'),
+                `rep_motrice` ENUM ('obeit','oriente','evitement','decortication','decerebration','rien')
+              )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $this->mod_version = "0.54";
+
+    $query = "ALTER TABLE `echelle_tri`
+                ADD INDEX (`rpu_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.55";
   }  
 }

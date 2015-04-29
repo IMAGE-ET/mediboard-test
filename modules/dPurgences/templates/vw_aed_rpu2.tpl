@@ -52,23 +52,15 @@
     }
     requestInfoPatTri();
   });
-  function refreshComplement(colonne) {
-    var form = getForm("editBox");
-    var chapitre = form._chapitre_id.value;
-    var motif = form._motif_id.value;
-    if (colonne == 'chapitre') {
-      motif = null;
-    }
-    else {
-      chapitre = null;
-    }
-    var url = new Url("urgences", "ajax_form_complement");
+
+  function searchMotif() {
+    var form = getForm("editRPUtri");
+    var url = new Url("urgences", "vw_search_motif");
     url.addParam('rpu_id'       , form.rpu_id.value);
-    url.addParam('_chapitre_id' , chapitre);
-    url.addParam('_motif_id'    , motif);
-    url.requestUpdate('form-edit-complement');
+    url.requestModal(600, 600);
   }
 </script>
+{{mb_script module=urgences script=motif ajax=true}}
 
 <table class="form">
   <tr>
@@ -135,8 +127,12 @@
               {{mb_label object=$rpu field="_patient_id"}}
             </th>
             <td>
+              {{assign var=can_edit_pat value=false}}
+              {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}}
+                {{assign var=can_edit_pat value=true}}
+              {{/if}}
               <input type="text" name="_patient_view" style="width: 15em;" value="{{$patient->_view}}" 
-                {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+                {{if $can_edit_pat}}
                   onfocus="PatSelector.init()" 
                 {{/if}}
               readonly="readonly" />
@@ -158,6 +154,35 @@
                 {{tr}}Edit{{/tr}}
               </button>
               {{/if}}
+              <br/>
+              <input type="text" name="_seek_patient" style="width: 13em; {{if !$can_edit_pat}}display:none;{{/if}}" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"  />
+
+              <script>
+                Main.add(function(){
+                  {{if $can_edit_pat}}
+                    var form = getForm("editRPUtri");
+                    var url = new Url("system", "ajax_seek_autocomplete");
+                    url.addParam("object_class", "CPatient");
+                    url.addParam("field", "patient_id");
+                    url.addParam("view_field", "_patient_view");
+                    url.addParam("input_field", "_seek_patient");
+                    url.autoComplete(form.elements._seek_patient, null, {
+                      minChars: 3,
+                      method: "get",
+                      select: "view",
+                      dropdown: false,
+                      width: "300px",
+                      afterUpdateElement: function(field,selected){
+                        $V(field.form._patient_id, selected.getAttribute("id").split("-")[2]);
+                        $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
+                        $V(field.form.elements._seek_patient, "");
+                      }
+                    });
+                    Event.observe(form.elements._seek_patient, 'keydown', PatSelector.cancelFastSearch);
+                  {{/if}}
+                });
+              </script>
+
             </td>
           </tr>
 
@@ -170,6 +195,52 @@
             </tr>
           {{/if}}
 
+          <tr>
+            <th>{{mb_label object=$rpu field="box_id"}}</th>
+            <td>
+              {{mb_include module=dPhospi template="inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=0 listService=$services}}
+              <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex = 0"></button>
+              &mdash; {{tr}}CRPU-_service_id{{/tr}} :
+              {{if $services|@count == 1}}
+                {{assign var=first_service value=$services|@reset}}
+                {{$first_service->_view}}
+              {{else}}
+                <select name="_service_id" class="{{$sejour->_props.service_id}}">
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                  {{foreach from=$services item=_service}}
+                    <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
+                      {{$_service->_view}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              {{/if}}
+              <br/>
+              <script type="text/javascript">
+                Main.add(function(){
+                  var form = getForm("editRPUtri");
+
+                  if (form.elements._service_id) {
+                    var box = form.elements.box_id;
+                    box.observe("change", function(event){
+                      var service_id = box.options[box.selectedIndex].up("optgroup").get("service_id");
+                      $V(form.elements._service_id, service_id);
+                    });
+                  }
+                });
+              </script>
+            </td>
+          </tr>
+
+          <tr>
+            <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
+            <td>
+              {{mb_field object=$rpu field="diag_infirmier" class="autocomplete" form="editRPUtri"
+              aidesaisie="validate: function() { form.onsubmit() },
+                                        validateOnBlur: 0,
+                                        resetSearchField: 0,
+                                        resetDependFields: 0"}}
+            </td>
+          </tr>
           <tr>
             <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
             <td>
@@ -220,25 +291,23 @@
           </tr>
         </table> 
       </form>
-      <div id="antecedentstri">
-        {{assign var="current_m" value="dPurgences"}}
-        {{assign var="_is_anesth" value="0"}}
-        {{assign var=sejour_id value=""}}
-        <table class="form">
-          {{mb_include module=cabinet template=inc_ant_consult_trait addform="tri"}}
-        </table>
-      </div>
       <fieldset style="width:48%;float:left;">
+        {{mb_include module=urgences template=inc_tooltip_cte_ccmu}}
         <legend>Constantes</legend>
         <div id="constantes-tri" style="position: relative; height: 400px;"></div>
       </fieldset>
-      
-      <div style="float:left;width:48%;" id="form-edit-complement">
-        {{mb_include module=urgences template=inc_form_complement}}
+
+      <div style="float:left;width:48%;" id="form-echelle_tri">
+        {{mb_include module=urgences template=vw_echelle_tri}}
       </div>
     </td>
-    
     <td style="width:40%;">
+      <div id="form-edit-complement">
+        {{mb_include module=urgences template=inc_form_complement}}
+      </div>
+      <div id="form-question_motif" style="margin-bottom: 2px;">
+        {{mb_include module=urgences template=inc_form_questions_motif}}
+      </div>
       <table class="form">
         <tr>
           <th class="category" colspan="2">
