@@ -306,6 +306,7 @@ class CFacture extends CMbObject implements IPatientRelated {
         /** @var CFactureItem $item*/
         $item->delete();
       }
+      $this->facture = 0;
     }
 
     // Etat des règlement à propager sur les consultations
