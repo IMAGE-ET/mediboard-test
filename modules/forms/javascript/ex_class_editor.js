@@ -490,3 +490,14 @@ ExFieldProperty = {
     this.edit("0", object_class, object_id, form);
   }
 };
+
+ExClassCategory = {
+  edit: function(id) {
+    var url = new Url("forms", "ajax_edit_ex_class_category");
+    url.addParam("category_id", id);
+    url.requestModal(600, 300);
+  },
+  create: function() {
+    this.edit("0");
+  }
+};

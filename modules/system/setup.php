@@ -2099,6 +2099,21 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE user_authentication ADD INDEX user_auth_date (user_id,datetime_login)";
     $this->addQuery($query, true);
 
-    $this->mod_version = "1.1.89";
+    $this->makeRevision("1.1.89");
+    $query = "CREATE TABLE `ex_class_category` (
+                `ex_class_category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `title` VARCHAR (255) NOT NULL,
+                `description` TEXT,
+                `color` VARCHAR (6),
+                INDEX (`group_id`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class`
+                ADD `category_id` INT (11) UNSIGNED,
+                ADD INDEX (`category_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.90";
   }
 }

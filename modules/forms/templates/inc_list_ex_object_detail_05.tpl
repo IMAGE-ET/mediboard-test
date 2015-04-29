@@ -50,6 +50,7 @@ filterExClasses = function(input){
 
 <table class="main tbl treegrid">
   <tr>
+    <td style="width: 1px;"></td>
     <td colspan="3">
       {{if $ex_classes_creation|@count}}
         <select onchange="ExObject.showExClassFormSelect.defer(this, '{{$self_guid}}')" style="width: 20em; max-width: 35em; float: left;">
@@ -91,43 +92,59 @@ filterExClasses = function(input){
       </label>
     </td>
   </tr>
- 
-  
-  {{foreach from=$ex_objects_counts item=_ex_objects_count key=_ex_class_id}}
-    {{if $_ex_objects_count}}
-    <tbody data-name="{{$ex_classes.$_ex_class_id->name}}">
+
+  {{foreach from=$ex_class_categories item=_category}}
+    {{if $_category->ex_class_category_id}}
       <tr>
-        <td class="text">
-          <strong style="float: right;" class="ex-object-result">
-            {{if $ex_objects_results.$_ex_class_id !== null}}
-              = {{$ex_objects_results.$_ex_class_id}}
-            {{/if}}
-          </strong>
-
-          <a href="#1" class="tree-folding" onclick="loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}'); return false;">
-            {{$ex_classes.$_ex_class_id->name}}
-          </a>
-        </td>
-
-        <td class="narrow">
-          {{if isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
-            {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
-            <button class="add notext compact"
-                    onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
-              {{tr}}New{{/tr}}
-            </button>
-          {{/if}}
-        </td>
-
-        <td class="narrow ex-object-count" style="text-align: right;">
-          {{$_ex_objects_count}}
-        </td>
+        <td style="background: #{{$_category->color}}"></td>
+        <th colspan="3" style="text-align: left;" title="{{$_category->description}}">
+          {{$_category}}
+        </th>
       </tr>
-      <tr style="display: none;" class="list-container">
-        <td colspan="3"></td>
-      </tr>
-    </tbody>
     {{/if}}
+
+    {{foreach from=$_category->_ref_ex_classes item=_ex_class}}
+      {{assign var=_ex_class_id value=$_ex_class->_id}}
+
+      {{if array_key_exists($_ex_class_id,$ex_objects_counts)}}
+        {{assign var=_ex_objects_count value=$ex_objects_counts.$_ex_class_id}}
+        {{if $_ex_objects_count}}
+          <tbody data-name="{{$ex_classes.$_ex_class_id->name}}">
+            <tr>
+              <td style="background: #{{$_category->color}}"></td>
+              <td class="text">
+                <strong style="float: right;" class="ex-object-result">
+                  {{if $ex_objects_results.$_ex_class_id !== null}}
+                    = {{$ex_objects_results.$_ex_class_id}}
+                  {{/if}}
+                </strong>
+
+                <a href="#1" class="tree-folding" onclick="loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}'); return false;">
+                  {{$ex_classes.$_ex_class_id->name}}
+                </a>
+              </td>
+
+              <td class="narrow">
+                {{if isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
+                  {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
+                  <button class="add notext compact"
+                          onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
+                    {{tr}}New{{/tr}}
+                  </button>
+                {{/if}}
+              </td>
+
+              <td class="narrow ex-object-count" style="text-align: right;">
+                {{$_ex_objects_count}}
+              </td>
+            </tr>
+            <tr style="display: none;" class="list-container">
+              <td colspan="3"></td>
+            </tr>
+          </tbody>
+        {{/if}}
+      {{/if}}
+    {{/foreach}}
   {{foreachelse}}
     <tr>
       <td colspan="3" class="empty">Aucun formulaire saisi</td>

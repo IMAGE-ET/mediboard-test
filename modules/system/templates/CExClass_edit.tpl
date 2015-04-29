@@ -21,9 +21,26 @@
 {{mb_script module=files script=file ajax=true}}
 
 <script type="text/javascript">
+restrictGroup = function() {
+  var form = getForm("edit-{{$object->_guid}}");
+  var group_id = $V(form.elements.group_id);
+  var categories_select = form.elements.category_id;
+  $A(categories_select.options).each(function(option){
+    var active = !option.value || option.get("group_id") == group_id;
+    option.setVisible(active);
+    option.disabled = !active;
+
+    if (!active) {
+      option.selected = false;
+    }
+  });
+};
+
 Main.add(function(){
   ExClass.id = "{{$object->_id}}";
   ExClass.layourEditorReady = false;
+
+  restrictGroup();
 });
 </script>
 
@@ -52,7 +69,7 @@ Main.add(function(){
           <tr>
             <th>{{mb_label object=$object field=group_id}}</th>
             <td>
-              <select name="group_id" style="width: 20em;">
+              <select name="group_id" style="width: 20em;" onclick="restrictGroup()">
                 <option value=""> &ndash; Tous </option>
                 {{foreach from=$object->_groups item=_group}}
                   <option value="{{$_group->_id}}" {{if $object->group_id == $_group->_id}} selected="selected" {{/if}}>{{$_group}}</option>
@@ -73,7 +90,18 @@ Main.add(function(){
           {{/if}}
 
           <tr>
-            <td colspan="2"></td>
+            <th>{{mb_label object=$object field=category_id}}</th>
+            <td>
+              <select name="category_id" class="">
+                <option value="">&ndash; {{tr}}CExClassCategory.none{{/tr}}</option>
+
+                {{foreach from=$object->_categories item=_category}}
+                  <option value="{{$_category->_id}}" {{if $_category->_id == $object->category_id}}selected{{/if}} data-group_id="{{$_category->group_id}}">
+                    {{$_category}}
+                  </option>
+                {{/foreach}}
+              </select>
+            </td>
 
             <th>{{mb_label object=$object field=cross_context_class}}</th>
             <td>{{mb_field object=$object field=cross_context_class emptyLabel="None"}}</td>

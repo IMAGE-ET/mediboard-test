@@ -63,11 +63,23 @@ if ($ex_class_id) {
 }
 
 if (empty(CExClass::$_list_cache)) {
-  $ex_class = new CExClass;
-  CExClass::$_list_cache = $ex_class->loadList($where, "name");
+  $ex_class = new CExClass();
+
+  /** @var CExClass[] $ex_classes */
+  $ex_classes = $ex_class->loadList($where, "name");
+
+  $categories = CStoredObject::massLoadFwdRef($ex_classes, "category_id");
+  $categories = CStoredObject::naturalSort($categories, array("title"));
+
+  $categories = array(new CExClassCategory()) + $categories;
+
+  foreach ($ex_classes as $_ex_class) {
+    $_category_id = $_ex_class->category_id ?: 0;
+    $categories[$_category_id]->_ref_ex_classes[$_ex_class->_id] = $_ex_class;
+  }
 
   if (!CExObject::$_locales_cache_enabled && $detail > 1) {
-    foreach (CExClass::$_list_cache as $_ex_class) {
+    foreach ($ex_classes as $_ex_class) {
       foreach ($_ex_class->loadRefsGroups() as $_group) {
         $_group->loadRefsFields();
 
@@ -77,6 +89,9 @@ if (empty(CExClass::$_list_cache)) {
       }
     }
   }
+
+  CExClass::$_list_cache = $ex_classes;
+  CExClassCategory::$_list_cache = $categories;
 }
 
 /** @var CExObject[] $ex_objects */
@@ -400,6 +415,7 @@ $smarty->assign("step",                $step);
 $smarty->assign("total",               $total);
 $smarty->assign("ex_classes_creation", $ex_classes_creation);
 $smarty->assign("ex_classes",          CExClass::$_list_cache);
+$smarty->assign("ex_class_categories", CExClassCategory::$_list_cache);
 $smarty->assign("detail",              $detail);
 $smarty->assign("ex_class_id",         $ex_class_id);
 $smarty->assign("target_element",      $target_element);

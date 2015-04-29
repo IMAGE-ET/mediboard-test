@@ -46,41 +46,54 @@
       {{/if}}
 
       <table class="main tbl">
-        {{foreach from=$ex_objects_counts item=_ex_objects_count key=_ex_class_id}}
-          {{if $_ex_objects_count}}
-          <tr>
-            <td class="text">
-              <strong style="float: right;" class="ex-object-result">
-                {{if $ex_objects_results.$_ex_class_id !== null}}
-                   = {{$ex_objects_results.$_ex_class_id}}
-                {{/if}}
-              </strong>
-
-              <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}, cross_context_class: '{{$cross_context_class}}', cross_context_id: '{{$cross_context_id}}'}); return false;">
-                {{$ex_classes.$_ex_class_id->name}}
-              </a>
-            </td>
-            <td class="narrow">
-              {{if $can_create && isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
-                {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
-                <button class="add notext compact"
-                        onclick="showExClassForm('{{$_ex_class_id}}', '{{$creation_context->_guid}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
-                  {{tr}}New{{/tr}}
-                </button>
-              {{/if}}
-            </td>
-            <td class="narrow" style="text-align: right;">
-              <span class="compact ex-object-count">{{$_ex_objects_count}}</span>
-              <button class="right notext compact"
-                      onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}, cross_context_class: '{{$cross_context_class}}', cross_context_id: '{{$cross_context_id}}'})">
-              </button>
-            </td>
-          </tr>
+        {{foreach from=$ex_class_categories item=_category}}
+          {{if $_category->ex_class_category_id}}
+            <tr>
+              <td style="width: 1px; background: #{{$_category->color}}"></td>
+              <th colspan="3" style="text-align: left;" title="{{$_category->description}}">
+                {{$_category}}
+              </th>
+            </tr>
           {{/if}}
-        {{foreachelse}}
-          <tr>
-            <td colspan="3" class="empty">Aucun formulaire saisi</td>
-          </tr>
+
+          {{foreach from=$_category->_ref_ex_classes item=_ex_class}}
+            {{assign var=_ex_class_id value=$_ex_class->_id}}
+
+            {{if array_key_exists($_ex_class_id,$ex_objects_counts)}}
+              {{assign var=_ex_objects_count value=$ex_objects_counts.$_ex_class_id}}
+              {{if $_ex_objects_count}}
+                <tr>
+                  <td style="width: 1px; background: #{{$_category->color}}"></td>
+                  <td class="text">
+                    <strong style="float: right;" class="ex-object-result">
+                      {{if $ex_objects_results.$_ex_class_id !== null}}
+                        = {{$ex_objects_results.$_ex_class_id}}
+                      {{/if}}
+                    </strong>
+
+                    <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}, cross_context_class: '{{$cross_context_class}}', cross_context_id: '{{$cross_context_id}}'}); return false;">
+                      {{$ex_classes.$_ex_class_id->name}}
+                    </a>
+                  </td>
+                  <td class="narrow">
+                    {{if $can_create && isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
+                      {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
+                      <button class="add notext compact"
+                              onclick="showExClassForm('{{$_ex_class_id}}', '{{$creation_context->_guid}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
+                        {{tr}}New{{/tr}}
+                      </button>
+                    {{/if}}
+                  </td>
+                  <td class="narrow" style="text-align: right;">
+                    <span class="compact ex-object-count">{{$_ex_objects_count}}</span>
+                    <button class="right notext compact"
+                            onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list-{{$uid_exobject}}', 2, '{{$_ex_class_id}}', {other_container: this.up('tr'), readonly: {{$readonly|ternary:1:0}}, cross_context_class: '{{$cross_context_class}}', cross_context_id: '{{$cross_context_id}}'})">
+                    </button>
+                  </td>
+                </tr>
+              {{/if}}
+            {{/if}}
+          {{/foreach}}
         {{/foreach}}
       </table>
     </td>

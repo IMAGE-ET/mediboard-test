@@ -20,6 +20,7 @@ class CExClass extends CMbObject {
   public $group_id;
   public $native_views;
   public $cross_context_class;
+  public $category_id;
 
   public $pixel_positionning;
 
@@ -31,6 +32,9 @@ class CExClass extends CMbObject {
 
   /** @var CExClassFieldGroup[] */
   public $_ref_groups;
+
+  /** @var CExClassCategory */
+  public $_ref_category;
   
   public $_fields_by_name;
   public $_dont_create_default_group;
@@ -68,6 +72,9 @@ class CExClass extends CMbObject {
 
   /** @var CMbObject[] */
   public $_host_objects;
+
+  /** @var CExClassCategory[] */
+  public $_categories;
 
   /**
    * Compare values with each other with a comparison operator
@@ -142,6 +149,7 @@ class CExClass extends CMbObject {
     $props["group_id"]            = "ref class|CGroups";
     $props["native_views"]        = "set vertical list|" . implode("|", array_keys(self::$_native_views));
     $props["cross_context_class"] = "enum list|CPatient";
+    $props["category_id"]         = "ref class|CExClassCategory";
     return $props;
   }
 
@@ -197,6 +205,9 @@ class CExClass extends CMbObject {
     }
 
     $this->_host_objects = $instances;
+
+    $category = new CExClassCategory();
+    $this->_categories = $category->loadList(null, "title");
   }
 
   /**
@@ -458,6 +469,15 @@ class CExClass extends CMbObject {
    */
   function loadRefsEvents(){
     return $this->_ref_events = $this->loadBackRefs("events");
+  }
+
+  /**
+   * Load the category
+   *
+   * @return CExClassCategory
+   */
+  function loadRefCategory(){
+    return $this->_ref_category = $this->loadFwdRef("category_id");
   }
 
   /**
