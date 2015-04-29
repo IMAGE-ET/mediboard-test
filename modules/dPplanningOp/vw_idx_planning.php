@@ -14,6 +14,7 @@ $ds = CSQLDataSource::get("std");
 
 $date           = CValue::getOrSession("date", CMbDT::date());
 $canceled       = CValue::getOrSession("canceled", 0);
+$refresh        = CValue::get('refresh', 0);
 
 $nextmonth = CMbDT::date("first day of next month"   , $date);
 $lastmonth = CMbDT::date("first day of previous month", $date);
@@ -181,6 +182,8 @@ else {
   $sql = "SELECT plagesop.*, plagesop.date AS opdate,
         SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
         COUNT(operations.operation_id) AS total,
+        SUM(operations.rank_voulu > 0) AS planned_by_chir,
+        COUNT(IF(operations.rank > 0, NULLIF(operations.rank, operations.rank_voulu), NULL)) AS order_validated,
         functions_mediboard.text AS nom_function, functions_mediboard.color as color_function
       FROM plagesop
       LEFT JOIN operations
@@ -236,5 +239,9 @@ else {
   $smarty->assign("selPrat"     , $selPrat);
   $smarty->assign("listDays"    , $listDays);
 
-  $smarty->display("vw_idx_planning.tpl");
+  if (!$refresh) {
+    $smarty->display("vw_idx_planning.tpl");
+  } else {
+    $smarty->display('inc_list_plagesop.tpl');
+  }
 }

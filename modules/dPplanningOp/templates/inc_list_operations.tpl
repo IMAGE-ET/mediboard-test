@@ -9,6 +9,13 @@
     $V(form.canceled, canceled);
     form.submit();
   }
+
+  togglePlage = function(plage_id) {
+    var rows = $$('tbody[data-plage_id="' + plage_id + '"]');
+    rows.each(function(row) {
+      row.toggle();
+    });
+  };
 </script>
 
 <form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
@@ -63,6 +70,7 @@
       {{mb_include module=system template=inc_object_notes object=$_plage}}
     </th>
     <th colspan="2" class="section">
+      <input type="checkbox" name="showPlage" data-plage_id="{{$_plage->_id}}" onclick="togglePlage('{{$_plage->_id}}');"{{if $hiddenPlages|strpos:$_plage->_id === false}} checked="checked"{{/if}} style="float: right;"/>
       {{if $g != $_plage->_ref_salle->_ref_bloc->group_id}}
         <span style="font-size: 1.2em">{{$_plage->_ref_salle->_ref_bloc->_ref_group}}</span><br/>
       {{/if}}
@@ -77,7 +85,7 @@
   
   {{assign var=list_operations value=$_plage->_ref_operations|@array_values}}
   {{foreach from=$list_operations item=_operation name=_operation}}
-    <tbody class="hoverable">
+    <tbody class="hoverable" data-plage_id="{{$_plage->_id}}"{{if $hiddenPlages|strpos:$_plage->_id !== false}} style="display: none;"{{/if}}>
       <tr>
         {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
         {{assign var=background value=""}}
@@ -180,13 +188,49 @@
               {{$patient}}
             </strong>
           </a>
-          {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
-          <br/>{{$_operation->_ref_sejour->type|truncate:1:""|capitalize}}
+          {{if $_operation->rank == 0}}
+            <form name="edit-time_operation-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
+                  onsubmit="return onSubmitFormAjax(this, function() {updateListOperations('{{$date}}'); refreshListPlage();})">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
+              <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+              {{mb_label object=$_operation field=temp_operation}} : {{mb_field object=$_operation field=temp_operation register=true form="edit-time_operation-"|cat:$_operation->_guid onchange="this.form.onsubmit();"}}
+            </form>
+          {{else}}
+            {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}<br/>
+          {{/if}}
+
+          {{tr}}CSejour.type.{{$_operation->_ref_sejour->type}}.short{{/tr}} - le {{mb_value object=$_operation->_ref_sejour field=entree_prevue}}
+
+          {{if $_operation->rank == 0 && $listDay|@count > 1}}
+            <form name="change-plage-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
+                  onsubmit="return onSubmitFormAjax(this, function() {updateListOperations('{{$date}}'); refreshListPlage();})">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
+              <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+              <select name="plageop_id" onchange="this.form.onsubmit();">
+                <option value="{{$_operation->plageop_id}}">&mdash; Basculer vers</option>
+                {{foreach from=$listDay item=__plage}}
+                  {{if $__plage->_id != $_operation->plageop_id}}
+                    <option value="{{$__plage->_id}}">
+                      {{$__plage->_ref_salle->_view}} - {{mb_value object=$__plage field=debut}} à {{mb_value object=$__plage field=fin}}
+                    </option>
+                  {{/if}}
+                {{/foreach}}
+              </select>
+            </form>
+          {{/if}}
         </td>
         <td class="text top">
           <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
             Dossier bloc
           </button>
+          <span style="float: right; margin: 5px;"
+                {{if $_operation->_codes_ccam|@count == 0}} class="circled error" title="{{tr}}COperation-msg-codage-none{{/tr}}"
+                {{elseif $_operation->_count.codes_ccam != $_operation->_count.actes_ccam}} class="circled warning" title="{{tr}}COperation-msg-codage-pending{{/tr}}"
+                {{else}} class="circled ok" title="{{tr}}COperation-msg-codage-complete{{/tr}}"{{/if}}>
+            {{tr}}COperation-msg-codage{{/tr}}
+          </span>
           <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)" style="float: left;">
             {{mb_include template=inc_vw_operation}}
             ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
@@ -213,7 +257,11 @@
   
   {{assign var=real_prev_interv value=$_operation}}
   {{foreachelse}}
-  <tr><td colspan="3" class="empty">Aucune intervention dans cette plage</td></tr>
+    <tbody data-plage_id="{{$_plage->_id}}"{{if $hiddenPlages|strpos:$_plage->_id !== false}} style="display: none;"{{/if}}>
+      <tr>
+        <td colspan="3" class="empty">Aucune intervention dans cette plage</td>
+      </tr>
+    </tbody>
   {{/foreach}}
  
   {{foreachelse}}
@@ -222,12 +270,15 @@
   
   {{if $listUrgences|@count}}
   <tr>
-    <th colspan="10" class="section">Hors plage</th>
+    <th colspan="10" class="section">
+      <input type="checkbox" name="showPlage" data-plage_id="hors_plage" onclick="togglePlage('hors_plage');"{{if $hiddenPlages|strpos:'hors_plage' === false}} checked="checked"{{/if}} style="float: right;"/>
+      Hors plage
+    </th>
   </tr>
   {{/if}}
   
   {{foreach from=$listUrgences item=_operation}}
-  <tbody class="hoverable">
+  <tbody class="hoverable" data-plage_id="hors_plage"{{if $hiddenPlages|strpos:'hors_plage' !== false}} style="display: none;"{{/if}}>
     <tr>
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
@@ -265,13 +316,44 @@
             class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
-        {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
-        <br/>{{$_operation->_ref_sejour->type|truncate:1:""|capitalize}}
+
+        <form name="edit-time_operation-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
+              onsubmit="return onSubmitFormAjax(this, function() {updateListOperations('{{$date}}'); refreshListPlage();})">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          {{mb_label object=$_operation field=temp_operation}} : {{mb_field object=$_operation field=temp_operation register=true form="edit-time_operation-"|cat:$_operation->_guid onchange="this.form.onsubmit();"}}
+        </form>
+
+        {{tr}}CSejour.type.{{$_operation->_ref_sejour->type}}.short{{/tr}} - le {{mb_value object=$_operation->_ref_sejour field=entree_prevue}}
+
+        <form name="change-salle-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
+              onsubmit="return onSubmitFormAjax(this, function() {updateListOperations('{{$date}}'); refreshListPlage();})">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          <select name="salle_id" onchange="this.form.onsubmit();">
+            <option value="{{$_operation->salle_id}}">&mdash; Basculer vers</option>
+            {{foreach from=$salles item=_salle}}
+              {{if $_salle->_id != $_operation->salle_id}}
+                <option value="{{$_salle->_id}}">
+                  {{$_salle->_view}}
+                </option>
+              {{/if}}
+            {{/foreach}}
+          </select>
+        </form>
       </td>
       <td class="text top">
         <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">
           Dossier bloc
         </button>
+        <span style="float: right; margin: 5px;"
+          {{if $_operation->_codes_ccam|@count == 0}} class="circled error" title="{{tr}}COperation-msg-codage-none{{/tr}}"
+          {{elseif $_operation->_count.codes_ccam != $_operation->_count.actes_ccam}} class="circled warning" title="{{tr}}COperation-msg-codage-pending{{/tr}}"
+          {{else}} class="circled ok" title="{{tr}}COperation-msg-codage-complete{{/tr}}"{{/if}}>
+            {{tr}}COperation-msg-codage{{/tr}}
+          </span>
         <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)" style="float: left;">
           {{if $_operation->salle_id}}Effectué en salle {{$_operation->_ref_salle}}{{/if}}
           {{mb_include template=inc_vw_operation}}

@@ -42,6 +42,7 @@ if ($userSel->_id) {
 
   $sejours = CMbObject::massLoadFwdRef($list_urgences, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
+  CMbObject::massCountBackRefs($list_urgences, 'actes_ccam');
 
   foreach ($list_urgences as $_urg) {
     $_urg->canDo();
@@ -51,6 +52,12 @@ if ($userSel->_id) {
     $_urg->loadRefsDocs();
     foreach ($_urg->_ref_documents as $_document) {
       $_document->canDo();
+    }
+
+    /* Comptage du nombre d'activités CCAM */
+    $_urg->_count['codes_ccam'] = 0;
+    foreach (CMbArray::pluck($_urg->_ext_codes_ccam, "activites") as $_code) {
+      $_urg->_count['codes_ccam'] += count($_code);
     }
     
     $_sejour->loadRefsFwd();
@@ -137,6 +144,7 @@ if ($userSel->_id) {
     // Chargement d'optimisation
 
     CMbObject::massLoadFwdRef($_plage->_ref_operations, "chir_id");
+    CMbObject::massCountBackRefs($_plage->_ref_operations, 'actes_ccam');
     $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
     CMbObject::massLoadFwdRef($sejours, "patient_id");
     
@@ -153,6 +161,12 @@ if ($userSel->_id) {
       $_sejour->loadRefsFwd();
       $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
       $_sejour->loadRefsDocs();
+
+      /* Comptage du nombre d'activités CCAM */
+      $_op->_count['codes_ccam'] = 0;
+      foreach (CMbArray::pluck($_op->_ext_codes_ccam, "activites") as $_code) {
+        $_op->_count['codes_ccam'] += count($_code);
+      }
 
       $presc = $_sejour->loadRefPrescriptionSejour();
       if ($presc && $presc->_id) {
@@ -202,6 +216,12 @@ if (CModule::getActive("printing")) {
 
 $compte_rendu = new CCompteRendu();
 
+$salles = array();
+if (!empty($list_urgences)) {
+  $salle = new CSalle();
+  $salles = $salle->loadGroupList();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -217,5 +237,7 @@ $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("can_create_docs", $compte_rendu->canClass()->edit);
 $smarty->assign("nb_modeles_etiquettes_sejour", $nb_modeles_etiquettes_sejour);
 $smarty->assign("nb_modeles_etiquettes_operation", $nb_modeles_etiquettes_operation);
+$smarty->assign('hiddenPlages', stripslashes(CValue::get('hiddenPlages', '')));
+$smarty->assign('salles', $salles);
 
 $smarty->display("inc_list_operations.tpl");
