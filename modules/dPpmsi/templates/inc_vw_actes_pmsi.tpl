@@ -205,7 +205,7 @@
           </tr>
           <tr>
             <td>
-              <div id="export_{{$sejour->_guid}}"></div>
+              <div id="export_CSejour_{{$sejour->_id}}"></div>
             </td>
           </tr>
         </table>

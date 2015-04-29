@@ -66,7 +66,7 @@
     <td>
       {{if $sejour->_ext_diagnostic_principal}}
         <ul class="tags" style="float: none;">
-          <li class="tag">
+          <li class="tag" style="white-space:normal">
             <button type="button" class="delete notext" onclick="DiagPMSI.deleteDiag(getForm('editDP'), getForm('editDP').DP);" style="display: inline-block !important;"></button>
             {{if "atih"|module_active && $conf.dPpmsi.use_cim_pmsi == "1"}}
               <span class="circled {{if $sejour->_DP_state}}ok{{else}}error{{/if}}">
@@ -85,7 +85,7 @@
       <td class="text">
         {{if $rss->_ref_DP}}
           <ul class="tags" style="float: none;">
-            <li class="tag">
+            <li class="tag" style="white-space: normal">
               <button type="button" class="delete notext" onclick="DiagPMSI.deleteDiag(getForm('editDPPMSI'), getForm('editDPPMSI').dp);" style="display: inline-block !important;"></button>
               <span title="{{tr}}CCIM10.type.{{$rss->_ref_DP->type}}{{/tr}}"
                   class="circled {{if $rss->_ref_DP->type == 0}}ok{{else}}error{{/if}}">

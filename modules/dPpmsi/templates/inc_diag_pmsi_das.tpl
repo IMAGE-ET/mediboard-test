@@ -68,7 +68,7 @@
     <td style="vertical-align: top">
       <ul class="tags" style="float: none;">
         {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item=curr_cim}}
-          <li class="tag">
+          <li class="tag" style="white-space:normal">
             <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post"
                   onsubmit="return onSubmitFormAjax(this, PMSI.afterEditDiag.curry('{{$sejour->_id}}'));">
               <input type="hidden" name="m" value="patients" />
@@ -98,7 +98,7 @@
       <td style="vertical-align: top">
         <ul class="tags" style="float: none;">
           {{foreach from=$rss->_ref_DAS item=_da}}
-            <li class="tag">
+            <li class="tag" style="white-space:normal">
               <form name="delCodeAsso-{{$_da->code}}" action="?m={{$m}}" method="post"
                     onsubmit="return onSubmitFormAjax(this, PMSI.afterEditDiag.curry('{{$sejour->_id}}'));">
                 {{mb_key object=$rss}}

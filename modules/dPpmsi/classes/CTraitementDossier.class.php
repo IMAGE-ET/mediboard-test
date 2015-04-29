@@ -25,10 +25,12 @@ class CTraitementDossier extends CMbObject {
   public $GHS;
   public $rss_id;
   public $sejour_id;
+  public $dim_id;
 
 
   //Distant fields
   public $_ref_rss;
+  public $_ref_dim;
 
   /**
    * Initialize the class specifications
@@ -67,7 +69,17 @@ class CTraitementDossier extends CMbObject {
     $props["traitement"] = "dateTime";
     $props["validate"]   = "dateTime";
     $props["GHS"]        = "str";
+    $props["dim_id"]     = "ref class|CMediusers";
 
     return $props;
+  }
+
+  /**
+   * Charge le DIM ayant validé le groupage.
+   *
+   * @return CMediusers
+   */
+  function loadRefDim () {
+    return $this->_ref_dim = $this->loadFwdRef("dim_id");
   }
 }

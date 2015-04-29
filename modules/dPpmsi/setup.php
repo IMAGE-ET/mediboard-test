@@ -77,7 +77,18 @@ class CSetupdPpmsi extends CSetup {
                 ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $query = "  ALTER TABLE `traitement_dossier`
+                CHANGE `rss_id` `rss_id` INT (11) UNSIGNED,
+                CHANGE `sejour_id` `sejour_id` INT (11) UNSIGNED,
+                ADD `dim_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `traitement_dossier`
+                ADD INDEX (`dim_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.17";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'CIM10';";
