@@ -2836,7 +2836,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `creation_date` DATETIME NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.36';
+    $this->makeRevision("2.36");
+    $query = "ALTER TABLE `constantes_medicales`
+            ADD `contraction_uterine` FLOAT,
+            ADD `bruit_foetal` FLOAT;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.37';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

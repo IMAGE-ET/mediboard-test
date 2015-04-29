@@ -248,6 +248,17 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "",
       "min" => 0, "max" => 10
     ),
+    "contraction_uterine"=> array(
+      "type" => "physio",
+      "unit" => "/10min",
+      "min" => 0, "max" => 10
+    ),
+    "bruit_foetal"=> array(
+      "type" => "physio",
+      "unit" => "bpm",
+      "min" => 0, "max" => 220
+    ),
+
     "glycemie"          => array(
       "type" => "biolo",
       "unit" => "g/l",
@@ -1027,6 +1038,8 @@ class CConstantesMedicales extends CMbObject {
     $props['EVA']                    = 'float min|0 max|10';
     $props['score_sedation']         = 'float';
     $props['frequence_respiratoire'] = 'float pos';
+    $props['contraction_uterine']    = 'float min|0 max|10';
+    $props['bruit_foetal']           = 'float min|0 max|220';
 
     $props['glycemie']               = 'float min|0 max|10';
     $props['_glycemie']              = $props['glycemie'];
