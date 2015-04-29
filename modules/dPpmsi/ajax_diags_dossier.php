@@ -48,13 +48,12 @@ if (CModule::getActive("atih") && CAppUI::conf("dPpmsi use_cim_pmsi")) {
 
   if ($sejour->_ref_patient->_ref_dossier_medical->_id) {
     foreach ($sejour->_ref_patient->_ref_dossier_medical->_ext_codes_cim as $_da) {
-      $code = CCIM10::get($_da);
-
+      $code = CCIM10::get($_da->code);
       if ($code->type != 3) {
-        $cim_das_patient[preg_replace("/\./", "", $_da)] = true;
+        $cim_das_patient[preg_replace("/\./", "", $_da->code)] = true;
       }
       else {
-        $cim_das_patient[preg_replace("/\./", "", $_da)] = false;
+        $cim_das_patient[preg_replace("/\./", "", $_da->code)] = false;
       }
     }
   }

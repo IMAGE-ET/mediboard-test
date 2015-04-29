@@ -129,6 +129,21 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
   $functions[$filterFunction] = $_function;
 }
 
+// Groupage en temps réel
+$groupage = new CGroupageTemporaire();
+$total = 0;
+$sejour_groupes = 0;
+if ($groupage->testFG()) {
+  $groupage->loadResultGroupageTemporaire($sejours);
+
+  foreach ($groupage->_refs_infos_ghs as $key =>$_ghs) {
+    $total += $_ghs->ghs_pri;
+    if ($_ghs->ghm_nro !== "90Z00Z") {
+      $sejour_groupes ++;
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -145,5 +160,8 @@ $smarty->assign("date_max"      , $date_max);
 $smarty->assign("date_demain"   , $date_demain);
 $smarty->assign("date_actuelle" , $date_actuelle);
 $smarty->assign("period"        , $period);
+$smarty->assign("groupage"      , $groupage);
+$smarty->assign("sejour_groupes", $sejour_groupes);
+$smarty->assign("total"         , $total);
 
 $smarty->display("traitement_dossiers/inc_traitement_dossiers_lines.tpl");

@@ -63,10 +63,14 @@
     </th>
     <th>{{tr}}CSejour{{/tr}}</th>
     <th>{{tr}}CTraitementDossier-traitement{{/tr}} / {{tr}}CTraitementDossier-validate{{/tr}}</th>
-    <th>{{tr}}GHS{{/tr}}</th>
+    <th>
+      {{tr}}GHS{{/tr}} <br/>
+      ({{$sejour_groupes}}/{{$sejours|@count}}) <br/>
+      Somme : {{$total}}&euro;
+    </th>
   </tr>
 
-  {{foreach from=$sejours item=_sejour}}
+  {{foreach from=$sejours key=_key item=_sejour}}
       {{mb_include module=pmsi template="traitement_dossiers/inc_traitement_dossier_line"}}
     {{foreachelse}}
     <tr>

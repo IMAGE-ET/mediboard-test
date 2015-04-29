@@ -58,5 +58,20 @@
       </form>
   </td>
 
-  <td class="narrow"></td>
+  <td class="text" >
+    {{if isset($groupage->_ref_errors_bloq.$_key|smarty:nodefaults) && $groupage->_ref_errors_bloq.$_key|@count > 0}}
+      <div class="warning" style="height: 13px; display: inline-block"></div>
+      <span class="text compact" onmouseover="ObjectTooltip.createDOM(this, 'details-errors-bloq-{{$_key}}')">{{$groupage->_refs_infos_ghs.$_key->ghm_nro}} - {{$groupage->_refs_infos_ghs.$_key->ghs_lib}}</span>
+      <div id="details-errors-bloq-{{$_key}}" style="display:none">
+        {{foreach from=$groupage->_ref_errors_bloq.$_key item=_code_erreur}}
+          <span class="text compact" style="width:100px"> {{tr}}module-atih-erreur-FG-{{$_code_erreur}}-court{{/tr}}</span>
+          <br/>
+        {{/foreach}}
+      </div>
+    {{/if}}
+
+    {{if isset($groupage->_refs_infos_ghs.$_key|smarty:nodefaults) && !isset($groupage->_ref_errors_bloq.$_key|smarty:nodefaults) && $groupage->_refs_infos_ghs.$_key|@count > 0}}
+      <span class="text" onmouseover="ObjectTooltip.createEx(this, 'CGHS-{{$groupage->_refs_infos_ghs.$_key->id}}')"><strong>{{$groupage->_refs_infos_ghs.$_key->ghm_nro}}</strong> - {{$groupage->_refs_infos_ghs.$_key->ghs_lib}}</span>
+    {{/if}}
+    </td>
 </tr>
