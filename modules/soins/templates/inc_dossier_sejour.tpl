@@ -254,6 +254,17 @@
     {{/if}}
   };
 
+  updateInfoPatient = function() {
+    var url = new Url('soins', 'ajax_update_infos_patient');
+    url.addParam('patient_id', '{{$patient->_id}}');
+    url.addParam('sejour_id', '{{$sejour->_id}}');
+    url.requestJSON(function(data) {
+      $$('.poids_patient')[0].innerHTML = data['poids'];
+      $$('.taille_patient')[0].innerHTML = data['taille'];
+      $$('.imc_patient')[0].innerHTML = data['imc'];
+    });
+  };
+
   Main.add(function() {
     Prescription.mode_pharma = "{{$mode_pharma}}";
     File.use_mozaic = 1;
@@ -309,6 +320,8 @@
     content.on('scroll', function() {
       header.setClassName('shadow', content.scrollTop);
     });
+
+    updateInfoPatient();
   });
 </script>
 

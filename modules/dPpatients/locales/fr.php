@@ -1814,6 +1814,7 @@ $locales['CPatient-medecin_traitant_declare-desc'] = 'Indique si le patient a dé
 $locales['CPatient-merge-warning-venue-conflict'] = 'Conflit de dates entre \'%s\' et  \'%s\'  (en annuler un pour permettre la fusion)';
 $locales['CPatient-msg-create'] = 'Patient créé';
 $locales['CPatient-msg-delete'] = 'Patient supprimé';
+$locales['CPatient-msg-Entry is outdated'] = 'Cette saisie a été réalisée en dehors de la période de ce contexte';
 $locales['CPatient-msg-modify'] = 'Patient modifié';
 $locales['CPatient-mutuelle_types_contrat'] = 'Types de contrat Mutuelle';
 $locales['CPatient-mutuelle_types_contrat-court'] = 'Types contrat Mut.';
