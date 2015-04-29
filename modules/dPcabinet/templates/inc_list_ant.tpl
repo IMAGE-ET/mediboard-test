@@ -125,7 +125,9 @@ showModalTP = function() {
           {{if $_antecedent->owner_id == $app->user_id}}
           <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="
             Antecedent.remove(this.form, function() {
-              DossierMedical.reloadDossierPatient(null, '{{$type_see}}');
+              if (window.DossierMedical) {
+                DossierMedical.reloadDossierPatient(null, '{{$type_see}}');
+              }
               if (window.reloadAtcd) {
                 reloadAtcd();
               }

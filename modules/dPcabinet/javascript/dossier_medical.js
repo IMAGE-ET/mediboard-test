@@ -102,9 +102,11 @@ DossierMedical = {
 
   },
   reloadDossierSejour: function(){
-    var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");
-    antUrl.addParam("sejour_id", DossierMedical.sejour_id);
-    antUrl.requestUpdate('listAntCAnesth');
+    if ($('listAntCAnesth')) {
+      var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");
+      antUrl.addParam("sejour_id", DossierMedical.sejour_id);
+      antUrl.requestUpdate('listAntCAnesth');
+    }
   },
 
   reloadDossiersMedicaux: function(){
