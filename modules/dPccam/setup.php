@@ -292,6 +292,8 @@ class CSetupdPccam extends CSetup {
 
     $this->makeRevision('0.30');
 
+    $this->makeRevision('0.31');
+
     $this->addPrefQuery('spread_modifiers', 0);
 
     $this->mod_version = '0.32';
