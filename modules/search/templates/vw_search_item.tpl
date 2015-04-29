@@ -8,14 +8,15 @@
  * @link     http://www.mediboard.org*}}
 {{mb_script module=atih script=atih ajax=true}}
 <form method="post" name="addSearchItem" class="watched prepared"  onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close.curry(),
-onClose: atih.loadSearchItems.curry('{{$search_item->rss_id}}'')
+onClose: atih.loadSearchItems.curry('{{$search_item->rss_id}}')
 });">
   {{mb_key   object=$search_item}}
   {{mb_class object=$search_item}}
-  <input type="hidden"  name="del" value="0"/>
-  <input type="hidden"  name="rss_id" value="{{$search_item->rss_id}}"/>
-  <input type="hidden"  name="search_id" value="{{$search_item->search_id}}"/>
-  <input type="hidden"  name="search_class" value="{{$search_item->search_class}}"/>
+  <input type="hidden" name="del" value="0"/>
+  {{mb_field object=$search_item field=rss_id hidden=true}}
+  {{mb_field object=$search_item field=search_id hidden=true}}
+  {{mb_field object=$search_item field=search_class hidden=true}}
+
   <table class="main form">
     <tr>
       <th class="title" colspan="2"> Formulaire d'ajout/édition de l'élement au RSS n° {{$search_item->rss_id}}</th>

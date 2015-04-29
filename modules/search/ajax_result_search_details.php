@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
-CCanDo::checkAdmin();
+CCanDo::checkEdit();
 
 $object_ref_id  = CValue::get("object_ref_id");
 $object_ref_class  = CValue::get("object_ref_class");

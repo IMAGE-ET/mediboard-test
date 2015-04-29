@@ -109,6 +109,23 @@ class CSetupsearch extends CSetup {
         ;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    $query = "DROP TABLE IF EXISTS `rss_search_items`";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `rss_search_items` (
+                `rss_search_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `rss_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `search_id` INT (11),
+                `search_class` VARCHAR (40),
+                `rmq` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `rss_search_items`
+                ADD INDEX (`rss_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.09";
   }
 }

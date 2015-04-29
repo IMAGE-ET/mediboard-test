@@ -246,7 +246,7 @@ Thesaurus = window.Thesaurus || {
       minChars: 2,
       method: "get",
       dropdown: true,
-      updateElement: function (selected, element_input) {
+      updateElement: function (selected) {
         if(selected.down("span", "1").getText() != "") {
           var _name = selected.down("span", "1").getText();
           $V(element_input, _name);

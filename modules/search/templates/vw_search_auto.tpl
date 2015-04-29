@@ -54,15 +54,16 @@
         <div id="tab-{{$_search}}" style="display: none;">
           <table class="tbl">
             <tr>
-              <th class="category" colspan="2">Résultats ({{$_result.nb_results}} obtenus en {{$_result.time}}ms)
+              <th class="category" colspan="3">Résultats ({{$_result.nb_results}} obtenus en {{$_result.time}}ms)
               </th>
             </tr>
             <tr>
               <th class="narrow">Date <br /> Type</th>
-              <th>Document</th>
+              <th colspan="2">Document</th>
             </tr>
             <tr>
               <th class="section" colspan="2">Triés par pertinence - limités aux 30 premiers résultats</th>
+              {{if $contexte == "pmsi" && "atih"|module_active}}<th class="section"></th>{{/if}}
             </tr>
             {{if isset($_result.results|smarty:nodefaults)}}
               {{foreach from=$_result.results item=__result}}
@@ -89,6 +90,11 @@
                       <div class="compact">{{$__result.highlight.body.0|purify|smarty:nodefaults}}</div>
                     {{/if}}
                   </td>
+                  {{if $contexte == "pmsi" && "atih"|module_active}}
+                    <td class="button narrow not-printable">
+                      <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$__result._type}}', '{{$__result._source.id}}', null)"></button>
+                    </td>
+                  {{/if}}
                 </tr>
                 {{foreachelse}}
                 <tr>
