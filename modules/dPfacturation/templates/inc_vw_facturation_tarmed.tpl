@@ -81,13 +81,20 @@
       {{/if}}
     </td>
   </tr>
-
   {{if ($facture->type_facture == "maladie" && $facture->assurance_maladie && !$facture->_ref_assurance_maladie->type_pec) ||
-      ($facture->type_facture == "accident" && $facture->assurance_accident && !$facture->_ref_assurance_accident->type_pec)}}
+  ($facture->type_facture == "accident" && $facture->assurance_accident && !$facture->_ref_assurance_accident->type_pec)}}
     <tr style="height:30px;">
       <td colspan="8">
         <div class="small-warning" style="display:inline">
           Le type de prise en charge de cette assurance n'est pas spécifié, merci de le renseigner
+        </div>
+      </td>
+    </tr>
+  {{elseif ($facture->type_facture == "maladie" && !$facture->assurance_maladie) || ($facture->type_facture == "accident" && !$facture->assurance_accident)}}
+    <tr style="height:30px;">
+      <td colspan="8">
+        <div class="small-warning" style="display:inline">
+          Pas d'assurance de renseignée
         </div>
       </td>
     </tr>
