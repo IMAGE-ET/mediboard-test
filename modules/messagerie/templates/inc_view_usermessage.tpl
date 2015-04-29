@@ -10,7 +10,7 @@
 *}}
 
 <div id="actions" style="text-align: center; margin-bottom: 5px;">
-  {{if $mode == 'inbox'}}
+  {{if $mode == 'inbox' || $mode == 'archive'}}
     <button type="button" onclick="Control.Modal.close();UserMessage.create('{{$usermessage->creator_id}}', '{{$usermessage->_id}}', '{{$app->user_prefs.inputMode}}');">
       <i class="msgicon fa fa-reply"></i>
       {{tr}}CUserMessage.answer{{/tr}}
@@ -23,10 +23,12 @@
       </button>
     {{/if}}
 
-    <button type="button" title="{{tr}}CUserMessageDest-title-to_archive-0{{/tr}}" onclick="UserMessage.editAction('archive', '1', '{{$usermessage->_ref_dest_user->_id}}');">
-      <i class="msgicon fa fa-archive"></i>
-      {{tr}}CUserMessageDest-title-to_archive-0{{/tr}}
-    </button>
+    {{if $mode != 'archive'}}
+      <button type="button" title="{{tr}}CUserMessageDest-title-to_archive-0{{/tr}}" onclick="UserMessage.editAction('archive', '1', '{{$usermessage->_ref_dest_user->_id}}');">
+        <i class="msgicon fa fa-archive"></i>
+        {{tr}}CUserMessageDest-title-to_archive-0{{/tr}}
+      </button>
+    {{/if}}
   {{/if}}
 
   {{if $mode == 'archive'}}
@@ -54,15 +56,17 @@
       {{tr}}CUserMessageDest-title-unread{{/tr}}
     </button>
 
-    <button type="button" title="{{tr}}CUserMessageDest-title-to_star-0{{/tr}}" onclick="UserMessage.editAction('star', '1', '{{$usermessage->_ref_dest_user->_id}}');">
-      <i class="msgicon fa fa-star"></i>
-      {{tr}}CUserMessageDest-title-to_star-0{{/tr}}
-    </button>
-
-    <button type="button" title="{{tr}}CUserMessageDest-title-to_star-0{{/tr}}" onclick="UserMessage.editAction('star', '0', '{{$usermessage->_ref_dest_user->_id}}');">
-      <i class="msgicon fa fa-star-o"></i>
-      {{tr}}CUserMessageDest-title-to_star-1{{/tr}}
-    </button>
+    {{if $usermessage->_ref_dest_user->starred == 0}}
+      <button type="button" title="{{tr}}CUserMessageDest-title-to_star-0{{/tr}}" onclick="UserMessage.editAction('star', '1', '{{$usermessage->_ref_dest_user->_id}}');">
+        <i class="msgicon fa fa-star"></i>
+        {{tr}}CUserMessageDest-title-to_star-0{{/tr}}
+      </button>
+    {{else}}
+      <button type="button" title="{{tr}}CUserMessageDest-title-to_star-0{{/tr}}" onclick="UserMessage.editAction('star', '0', '{{$usermessage->_ref_dest_user->_id}}');">
+        <i class="msgicon fa fa-star-o"></i>
+        {{tr}}CUserMessageDest-title-to_star-1{{/tr}}
+      </button>
+    {{/if}}
   {{/if}}
 </div>
 
