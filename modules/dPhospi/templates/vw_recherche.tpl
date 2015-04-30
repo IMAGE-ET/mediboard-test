@@ -38,7 +38,7 @@ Main.add(function () {
   <select name="typeVue" onchange="this.form.submit()">
     <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Afficher les lits disponibles</option>
     <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients présents</option>
-    <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Afficher les list bloqués pour les urgences</option>
+    <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Afficher les lits bloqués pour les urgences</option>
   </select>
 
   <button type="button" onclick="selectServices();" class="search">Services</button>
