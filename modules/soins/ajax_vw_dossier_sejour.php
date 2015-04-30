@@ -11,7 +11,9 @@
 
 $sejour_id    = CValue::get("sejour_id");
 $date         = CValue::get("date");
-$default_tab  = CValue::get("default_tab", CMedicament::getBase() == "vidal" ? "prescription_sejour" : "dossier_traitement");
+$default_tab  = CValue::get("default_tab", CMedicament::getBase() == "vidal" ?
+    "prescription_sejour" :
+    "dossier_traitement" . (CAppUI::conf("soins Other vue_condensee_dossier_soins", CGroups::loadCurrent()) ? "_compact" : ""));
 $popup        = CValue::get("popup", 0);
 $modal        = CValue::get("modal", 0);
 $operation_id = CValue::get("operation_id");
