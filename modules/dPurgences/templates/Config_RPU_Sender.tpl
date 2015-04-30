@@ -29,7 +29,7 @@
 
 <hr class="control_tabs" />
 
-<div id="Config_RPU_sender">
+<div id="Config_RPU_sender" style="display: none">
   <form name="editConfigOpale" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
     <input type="hidden" name="dosql" value="do_configure" />
     <input type="hidden" name="m" value="system" />
@@ -132,7 +132,7 @@
   </form>
 </div>
 
-<div id="RPU_sender_source">
+<div id="RPU_sender_source" style="display: none">
   <table class="main">
     <tr>
       <td style="width: 10%">
