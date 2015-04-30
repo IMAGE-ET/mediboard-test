@@ -181,7 +181,7 @@ Main.add(function () {
     <tr>
       <th class="title" colspan="5">
         <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
-        {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) bloqué(s) pour les urgences
+        {{$date_recherche|date_format:$conf.datetime}} : {{$occupes|@count}} lit(s) bloqué(s) pour les urgences
       </th>
     </tr>
     <tr>
