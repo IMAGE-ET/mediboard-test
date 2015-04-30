@@ -36,6 +36,7 @@ if ($prescription_id) {
 }
 
 $favoris = new CSearchThesaurusEntry();
+$favoris_sans_cibles = new CSearchThesaurusEntry();
 $targets = new CSearchTargetEntry();
 $actes_ccam = array();
 $diags_cim = array();
@@ -69,16 +70,56 @@ if ($_ref_object instanceof CSejour) {
   }
 
   if ($_ref_object->DP || $_ref_object->DR) {
-    $diags_actes[] = $_ref_object->DP;
-    $diags_actes[] = $_ref_object->DR;
+    if ($_ref_object->DP) {
+      $diags_actes[] = $_ref_object->DP;
+    }
+    if ($_ref_object->DR) {
+      $diags_actes[] = $_ref_object->DR;
+    }
   }
 
   foreach ($_ref_object->loadDiagnosticsAssocies(false) as $_das) {
     $diags_actes[] = $_das;
   }
 
+  $_ref_object->loadRefPrescriptionSejour();
+  $meds = $_ref_object->_ref_prescription_sejour->loadRefsLinesMed();
+  foreach ($_ref_object->_ref_prescription_sejour->_ref_prescription_lines as $_med) {
+    if ($_med->atc) {
+      $arbre = $_med->atc;
+      $diags_actes[] = $_med->atc;
+      do {
+        $med = new CMedicamentClasseATC();
+        $arbre = $med->getCodeNiveauSup($arbre);
+        if ($arbre) {
+          $diags_actes[] = $arbre;
+        }
+      } while ($arbre);
+    }
+  }
+
+  $mix = $_ref_object->_ref_prescription_sejour->loadRefsPrescriptionLineMixes();
+  foreach ($_ref_object->_ref_prescription_sejour->_ref_prescription_line_mixes as $_mix) {
+    foreach ($_mix->loadRefsLines() as $item) {
+      if ($item->atc) {
+        $arbre = $item->atc;
+        $diags_actes[] = $item->atc;
+        do {
+          $med = new CMedicamentClasseATC();
+          $arbre = $med->getCodeNiveauSup($arbre);
+          if ($arbre) {
+            $diags_actes[] = $arbre;
+          }
+        } while ($arbre);
+      }
+    }
+  }
+
+  // récupération des favoris avec cibles pour le dossier de soins
   if (isset($diags_actes)) {
-    $where["object_class"] = " = 'CCodeCIM10' OR object_class = 'CCodeCCAM'";
+    $diags_actes = array_unique($diags_actes);
+    $list = array("CCodeCIM10", "CCodeCCAM", "CMedicamentClasseATC");
+    $where["object_class"] = " ". CSQLDataSource::prepareIn($list);
     $where["object_id"] = " ". CSQLDataSource::prepareIn($diags_actes);
     $targets = $targets->loadList($where);
 
@@ -107,6 +148,26 @@ if ($_ref_object instanceof CSejour) {
 
     $tab_favoris = $tab_favoris_user + $tab_favoris_function + $tab_favoris_group;
   }
+
+  // récupération des favoris sans cibles avec search_auto à "oui"
+  $whereFavorisSansCibles["contextes"] = CSQLDataSource::prepareIn(array("generique", $contexte));
+  $whereFavorisSansCibles["function_id"] = " IS NULL";
+  $whereFavorisSansCibles["group_id"] = " IS NULL";
+  $whereFavorisSansCibles["user_id"] = "= '$user->_id'";
+  $whereFavorisSansCibles["search_auto"] = " LIKE '1'";
+  $tab_favoris_user_sans_cibles = $favoris_sans_cibles->loadList($whereFavorisSansCibles);
+
+  unset($whereFavorisSansCibles["user_id"]);
+  $function_id = $user->loadRefFunction()->_id;
+  $whereFavoris["function_id"] = " = '$function_id'";
+  $tab_favoris_function_sans_cibles =  $favoris_sans_cibles->loadList($whereFavoris);
+
+  unset($whereFavorisSansCibles["function_id"]);
+  $group_id = $user->loadRefFunction()->group_id;
+  $whereFavorisSansCibles["group_id"] = " = '$group_id'";
+  $tab_favoris_group_sans_cibles =  $favoris->loadList($whereFavorisSansCibles);
+
+  $tab_favoris += $tab_favoris_user_sans_cibles + $tab_favoris_function_sans_cibles + $tab_favoris_group_sans_cibles;
 }
 
 // On effectue la recherche automatique

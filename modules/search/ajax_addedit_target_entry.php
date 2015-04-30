@@ -17,6 +17,13 @@ $thesaurus_entry = new CSearchThesaurusEntry();
 $thesaurus_entry->load($thesaurus_entry_id);
 $thesaurus_entry->loadRefsTargets();
 
+foreach ($thesaurus_entry->_atc_targets as $_target) {
+  foreach ($_target->_ref_target as $_atc) {
+    $object = new CMedicamentClasseATC();
+    $_target->_libelle = $object->getLibelle($_target->object_id);
+  }
+}
+
 $smarty = new CSmartyDP();
 $smarty->assign("thesaurus_entry_id", $thesaurus_entry_id);
 $smarty->assign("thesaurus_entry", $thesaurus_entry);

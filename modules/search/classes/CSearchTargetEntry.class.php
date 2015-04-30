@@ -77,6 +77,12 @@ class CSearchTargetEntry extends CMbObject {
           $object->loadMatchingObject();
           $this->_ref_target = $object;
           break;
+        case "CMedicamentClasseATC" :
+          $object = new CMedicamentClasseATC();
+          $niveau = $object->getNiveau($this->object_id);
+          $object->loadClasseATC($niveau, $this->object_id);
+          $this->_ref_target = $object;
+          break;
         default:
           // nothing to do
           break;

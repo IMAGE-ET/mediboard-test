@@ -28,11 +28,13 @@ class CSearchThesaurusEntry extends CMbObject {
   public $group_id;
   public $function_id;
   public $user_id;
+  public $search_auto;
 
   public $_refs_targets;
   public $_cim_targets;
   public $_ccam_targets;
   public $_ngap_targets;
+  public $_atc_targets;
   /**
    * Initialize the class specifications
    *
@@ -72,6 +74,7 @@ class CSearchThesaurusEntry extends CMbObject {
     $props["function_id"]   = "ref class|CFunctions";
     $props["user_id"]       = "ref class|CMediusers notNull";
     $props["agregation"]    = "enum list|0|1 default|0";
+    $props["search_auto"]   = "enum list|0|1 default|0";
 
     return $props;
   }
@@ -82,7 +85,7 @@ class CSearchThesaurusEntry extends CMbObject {
    * @return array
    */
   function loadRefsTargets() {
-    $this->_cim_targets  = $this->_ccam_targets = $this->_ngap_targets = array();
+    $this->_cim_targets  = $this->_ccam_targets = $this->_ngap_targets = $this->_atc_targets = array();
     $this->_refs_targets = $this->loadBackRefs("target_entry");
     /** @var CSearchTargetEntry $_target */
 
@@ -98,6 +101,9 @@ class CSearchThesaurusEntry extends CMbObject {
           break;
         case "CActeNGAP":
           $this->_ngap_targets[] = $_target;
+          break;
+        case "CMedicamentClasseATC":
+          $this->_atc_targets[] = $_target;
           break;
         default:
           // nothing to do

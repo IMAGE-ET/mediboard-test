@@ -203,7 +203,14 @@ Thesaurus = window.Thesaurus || {
    */
   insertTag : function (id, name, obj_class) {
     var tag = $(obj_class + "-" + id);
-    var color = (obj_class == "CCodeCIM10" )? "#CCFFCC" : "rgba(153, 204, 255, 0.6)";
+    var color = "";
+    switch (obj_class) {
+      case "CCodeCIM10" : color = "#CCFFCC"; break;
+      case "CCodeCCAM"  : color = "rgba(153, 204, 255, 0.6)"; break;
+      case "CMedicamentClasseATC"  : color = "rgba(240, 255, 163,0.6)"; break;
+      default : color = "";
+    }
+
     if (!tag) {
       var btn = DOM.button({
         "type": "submit",

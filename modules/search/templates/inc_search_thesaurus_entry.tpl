@@ -15,12 +15,17 @@
   </th>
   </tr>
   <tr>
-    <th class="category narrow"></th>
-    <th class="category">{{mb_label object=$entry field=titre}}</th>
-    <th class="category">{{mb_label object=$entry field=entry}}</th>
-    <th class="category">{{mb_label object=$entry field=types}}</th>
-    <th class="category">{{tr}}CSearchTargetEntry{{/tr}} <br/> Codes CCAM | Codes CIM10</th>
-    <th class="category narrow"></th>
+    <th class="category narrow" rowspan="2"></th>
+    <th class="category" rowspan="2">{{mb_label object=$entry field=titre}}</th>
+    <th class="category" rowspan="2">{{mb_label object=$entry field=entry}}</th>
+    <th class="category" rowspan="2">{{mb_label object=$entry field=types}}</th>
+    <th class="category" colspan="3" rowspan="1">{{tr}}CSearchTargetEntry{{/tr}}</th>
+    <th class="category narrow" rowspan="2"></th>
+  </tr>
+  <tr>
+    <th class="section" colspan="1">Codes CCAM</th>
+    <th class="section" colspan="1">Codes CIM10</th>
+    <th class="section" colspan="1">Classes ATC</th>
   </tr>
   {{foreach from=$thesaurus item=_entry}}
     <tr>
@@ -60,8 +65,8 @@
         <span>{{tr}}CSearchThesaurusEntry-all-types{{/tr}}</span>
         {{/if}}
       </td>
-      <td>
-        {{if $_entry->_cim_targets|@count > 0 || $_entry->_ccam_targets|@count > 0}}
+      {{if $_entry->_cim_targets|@count > 0 || $_entry->_ccam_targets|@count > 0}}
+        <td>
           <div style="float: right;" >
             <ul class="tags">
               {{foreach from=$_entry->_cim_targets item=_target}}
@@ -72,6 +77,8 @@
               {{/foreach}}
             </ul>
           </div>
+        </td>
+        <td>
           <div>
             <ul class="tags">
               {{foreach from=$_entry->_ccam_targets item=_target}}
@@ -82,12 +89,26 @@
               {{/foreach}}
             </ul>
           </div>
-        {{else}}
-          <div class="empty" colspan="7" style="text-align: center">
+        </td>
+        <td>
+          <div>
+            <ul class="tags">
+              {{foreach from=$_entry->_atc_targets item=_target}}
+                <li class="tag" title="{{$_target->_libelle}}" style="background-color: rgba(240, 255, 163, 0.6); cursor:auto">
+                  <span>{{$_target->object_id}}</span>
+                </li>
+                <br/>
+              {{/foreach}}
+            </ul>
+          </div>
+        </td>
+      {{else}}
+        <td colspan="3">
+          <div class="empty" colspan="10" style="text-align: center">
             {{tr}}CSearchCibleEntry.none{{/tr}}
           </div>
-        {{/if}}
-      </td>
+        </td>
+      {{/if}}
       <td class="button">
         <button class="edit notext" onclick="Thesaurus.addeditThesaurusEntry(null, '{{$_entry->_id}}', null)"></button>
       </td>

@@ -62,6 +62,12 @@ $nbThesaurus = $entry->countList($where);
 foreach ($thesaurus as $_thesaurus) {
   /** @var $_thesaurus  CSearchThesaurusEntry*/
   $_thesaurus->loadRefsTargets();
+  foreach ($_thesaurus->_atc_targets as $_target) {
+    foreach ($_target->_ref_target as $_atc) {
+      $object = new CMedicamentClasseATC();
+      $_target->_libelle = $object->getLibelle($_target->object_id);
+    }
+  }
 }
 
 $smarty = new CSmartyDP();

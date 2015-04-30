@@ -126,6 +126,23 @@ class CSetupsearch extends CSetup {
                 ADD INDEX (`rss_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.09";
+    $this->makeRevision("0.09");
+
+    $query = "ALTER TABLE `search_thesaurus_entry`
+                CHANGE `entry` `entry` TEXT,
+                CHANGE `types` `types` VARCHAR (255),
+                CHANGE `contextes` `contextes` ENUM ('generique','pharmacie','pmsi','prescription','classique'),
+                CHANGE `agregation` `agregation` ENUM ('0','1') DEFAULT '0',
+                CHANGE `user_id` `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `search_auto` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `search_thesaurus_entry`
+                ADD INDEX (`group_id`),
+                ADD INDEX (`function_id`),
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.10";
   }
 }

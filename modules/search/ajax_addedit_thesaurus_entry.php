@@ -22,6 +22,12 @@ if ($thesaurus_entry_id) {
   $thesaurus_entry->load($thesaurus_entry_id);
   $search_types = explode("|", $thesaurus_entry->types);
   $thesaurus_entry->loadRefsTargets();
+  foreach ($thesaurus_entry->_atc_targets as $_target) {
+    foreach ($_target->_ref_target as $_atc) {
+      $object = new CMedicamentClasseATC();
+      $_target->_libelle = $object->getLibelle($_target->object_id);
+    }
+  }
 }
 else {
   $thesaurus_entry->agregation = $search_agregation;

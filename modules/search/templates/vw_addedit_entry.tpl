@@ -58,7 +58,7 @@
         <td>
           <table>
             <tr>
-              <td class="halfPane">
+              <td>
                 <fieldset>
                   <legend>Codes CIM10 : </legend>
                   <ul class="tags">
@@ -72,13 +72,27 @@
                   </ul>
                 </fieldset>
               </td>
-              <td class="halfPane">
+              <td>
                 <fieldset>
                   <legend>Codes CCAM : </legend>
                   <ul class="tags">
                     {{foreach from=$thesaurus_entry->_ccam_targets item=_target}}
                       <li class="tag" title="{{$_target->_ref_target->libelle_long}}" style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
                         {{$_target->_ref_target->code}}
+                      </li>
+                      {{foreachelse}}
+                      <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
+                    {{/foreach}}
+                  </ul>
+                </fieldset>
+              </td>
+              <td>
+                <fieldset>
+                  <legend>Classes ATC : </legend>
+                  <ul class="tags">
+                    {{foreach from=$thesaurus_entry->_atc_targets item=_target}}
+                      <li class="tag" title="{{$_target->_libelle}}" style="background-color: rgba(240, 255, 163, 0.6); cursor:auto">
+                        {{$_target->object_id}}
                       </li>
                       {{foreachelse}}
                       <li><span class="empty">{{tr}}CSearchCibleEntry.none{{/tr}}</span></li>
@@ -166,6 +180,14 @@
       </td>
       <td>
         {{mb_field object=$thesaurus_entry field=agregation}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {{mb_label object=$thesaurus_entry field=search_auto}}
+      </td>
+      <td>
+        {{mb_field object=$thesaurus_entry field=search_auto}}
       </td>
     </tr>
     <tr>
