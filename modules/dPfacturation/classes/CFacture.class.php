@@ -65,7 +65,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_montant_dh = 0.0;
   //Champ à supprimer
   public $_montant_total;
-  public $_no_round = false;
+  public $_no_round = true;
 
   public $_total_tarmed;
   public $_total_caisse;
