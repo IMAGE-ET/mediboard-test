@@ -38,13 +38,14 @@ $services = $services->loadListWithPerms(PERM_READ, $where, $order);
 $listAff = null;
 $libre = null;
 $autre_sexe_chambre = array();
+$occupes = array();
 
 $ds    = CSQLDataSource::get("std");
 
 //
 // Cas de l'affichage des lits libres
 //
-if ($typeVue == 0 || $typeVue == 2) {
+if ($typeVue == 0) {
   // Recherche de tous les lits disponibles
   $sql = "SELECT lit.lit_id
           FROM affectation
@@ -53,12 +54,8 @@ if ($typeVue == 0 || $typeVue == 2) {
           WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
           AND chambre.annule = '0'
           AND lit.annule = '0'
-          AND affectation.effectue = '0'";
-  if ($typeVue == 2) {
-    $sql .= " AND affectation.sejour_id IS NULL
-             AND affectation.function_id IS NOT NULL";
-  }
-  $sql .= " GROUP BY lit.lit_id";
+          AND affectation.effectue = '0'
+          GROUP BY lit.lit_id";
 
   $occupes = $ds->loadlist($sql);
   $arrayIn = array();
@@ -79,12 +76,8 @@ if ($typeVue == 0 || $typeVue == 2) {
             AND chambre.annule = '0'
             AND lit.annule = '0'
             AND service.group_id = '$group->_id'
-            AND service.service_id ".CSQLDataSource::prepareIn($services_ids);
-    if ($typeVue == 2) {
-      $sql .= " AND affectation.sejour_id IS NULL
-             AND affectation.function_id IS NOT NULL";
-    }
-    $sql .= " GROUP BY lit.lit_id
+            AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
+            GROUP BY lit.lit_id
             ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
     $libre = $ds->loadList($sql);
 
@@ -98,12 +91,8 @@ if ($typeVue == 0 || $typeVue == 2) {
             WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
             AND affectation.lit_id IS NOT NULL
             AND lit.chambre_id ".CSQLDataSource::prepareIn(CMbArray::pluck($libre, "chambre_id")).
-           " AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id"));
-    if ($typeVue == 2) {
-      $sql .= " AND affectation.sejour_id IS NULL
-             AND affectation.function_id IS NOT NULL";
-    }
-    $sql .= " GROUP BY lit.lit_id";
+           " AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id"))."
+           GROUP BY lit.lit_id";
 
     $autre_sexe_chambre = $ds->loadList($sql);
     foreach ($autre_sexe_chambre as $key=>$_autre) {
@@ -173,11 +162,32 @@ else if ($typeVue == 1) {
     }
   }
 }
+else if ($typeVue == 2) {
+  // Recherche de tous les lits bloques pour urgences
+  $ljoin = array();
+  $ljoin["lit"] = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+  $where = array();
+  $where["chambre.annule"]= " = '0'";
+  $where["lit.annule"]= " = '0'";
+  $where["affectation.effectue"]= " = '0'";
+  $where["affectation.sejour_id"]= " IS NULL";
+  $where["affectation.function_id"]= " IS NOT NULL";
+  $where[]= " '$date_recherche' BETWEEN affectation.entree AND affectation.sortie";
+
+  $affectation = new CAffectation();
+  $occupes = $affectation->loadList($where, null, null, null, $ljoin);
+  foreach ($occupes as $_affectation) {
+    /* @var CAffectation $_affectation*/
+    $_affectation->loadRefLit()->loadRefChambre()->loadRefService();
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("date_recherche", $date_recherche);
+$smarty->assign("occupes"       , $occupes);
 $smarty->assign("libre"         , $libre);
 $smarty->assign("typeVue"       , $typeVue);
 $smarty->assign("selPrat"       , $selPrat);

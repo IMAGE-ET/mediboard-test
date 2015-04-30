@@ -48,12 +48,11 @@ Main.add(function () {
 {{/if}}
 
 <table class="tbl main">
-  {{if $typeVue == 0 || $typeVue == 2}}
+  {{if $typeVue == 0}}
     <tr>
       <th class="title" colspan="5">
         <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
-        {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s)
-        {{if $typeVue == 0}}disponible(s){{else}}bloqué(s) pour les urgences{{/if}}
+        {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) disponible(s)
       </th>
     </tr>
     <tr>
@@ -177,6 +176,31 @@ Main.add(function () {
 
     </tr>
     {{/foreach}}
+    {{/foreach}}
+  {{elseif $typeVue == 2}}
+    <tr>
+      <th class="title" colspan="5">
+        <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
+        {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) bloqué(s) pour les urgences
+      </th>
+    </tr>
+    <tr>
+      <th>{{tr}}CService{{/tr}}</th>
+      <th>{{tr}}CChambre{{/tr}}</th>
+      <th>{{tr}}CLit{{/tr}}</th>
+      <th>Fin de d'indisponibilité</th>
+    </tr>
+    {{foreach from=$occupes item=_affectation}}
+      <tr>
+        <td class="text">{{$_affectation->_ref_lit->_ref_chambre->_ref_service}}</td>
+        <td class="text">{{$_affectation->_ref_lit->_ref_chambre}}</td>
+        <td class="text">{{$_affectation->_ref_lit}}</td>
+        <td class="text">{{$_affectation->sortie|date_format:"%A %d %B %Y à %Hh%M"}}
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td class="empty" colspan="5">{{tr}}CLit.none{{/tr}} disponible</td>
+      </tr>
     {{/foreach}}
   {{/if}}
 </table>
