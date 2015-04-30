@@ -778,7 +778,7 @@ class CEditPdf{
       $tarif["Relance:"]      = sprintf('%0.2f', $this->relance->_montant);
     }
     $tarif["Remise:"]         = sprintf('%0.2f', -$this->facture->remise);
-    $tarif["Montant total:"]  = sprintf('%0.2f', round($montant_total, 1));
+    $tarif["Montant total:"]  = sprintf('%0.2f', $montant_total);
     $tarif["Acompte:"]        = sprintf('%0.2f', $acompte);
     $tarif["Montant dû $title_montant:"]  = $montant_facture;
     
