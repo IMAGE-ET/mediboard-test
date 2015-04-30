@@ -22,7 +22,7 @@
       </td>
     </tr>
     <tr>
-      <th>{{tr}}CChapitreMotif-see_hors_ccmu{{/tr}}</th>
+      <th class="narrow">{{tr}}CChapitreMotif-see_hors_ccmu{{/tr}}</th>
       <td>
         <input name="see_hors_ccmu" type="hidden" value="{{$see_hors_ccmu}}"/>
         <input name="_see_hors_ccmu" type="checkbox" value="{{$see_hors_ccmu}}" {{if $see_hors_ccmu}}checked="checked" {{/if}} onclick="$V(this.form.see_hors_ccmu, this.checked?1:0)" />
