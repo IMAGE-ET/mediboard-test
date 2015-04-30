@@ -44,7 +44,7 @@ if ($patient->_id) {
   }
 
   if ($constantes[0]->taille) {
-    $poids = "{$constantes[0]->taille} {$unit_taille}";
+    $taille = "{$constantes[0]->taille} {$unit_taille}";
   }
 
   if ($constantes[0]->_imc) {
