@@ -297,8 +297,9 @@
           <tr>
             <td class="button">
               <script>
-                function createNotifications(){
-                  var sejours = {{$visites.non_effectuee|@json}};
+                function createNotifications(type){
+                  var sejours = (type == "effectue") ? {{$visites.effectuee|@json}} : {{$visites.non_effectuee|@json}};
+
                   var url = new Url("soins", "httpreq_notifications_visite");
                   url.addParam("sejours[]", sejours);
                   url.requestUpdate("systemMsg", { onComplete: function() {
@@ -312,13 +313,23 @@
             </a>
             
             <table class="form" id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
+              <tr>
+                <th colspan="2" class="title">Validation des visites</th>
+              </tr>
               {{if $visites.effectuee|@count}}
                 <tr>
                   <th>Visites effectuée(s)</th>
                   <td>{{$visites.effectuee|@count}}</td>
                 </tr>
+                <tr>
+                  <td colspan="2" class="button">
+                    <button type="button tick" class="tick" onclick="createNotifications('effectue');">
+                      Revalider les visites déjà effectuées
+                    </button>
+                  </td>
+                </tr>
               {{/if}}
-              
+
               {{if $visites.non_effectuee|@count}}
                 <tr>
                   <th>Visites à effectuer</th>
@@ -327,8 +338,8 @@
 
                 <tr>
                   <td colspan="2" class="button">
-                    <button type="button tick" class="tick" onclick="createNotifications();">
-                      Valider les visites
+                    <button type="button tick" class="tick" onclick="createNotifications('non_effectue');">
+                      Valider les visites non effectuées
                     </button>
                   </td>
                 </tr>

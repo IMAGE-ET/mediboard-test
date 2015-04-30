@@ -103,6 +103,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
   /**
    * @see parent::check()
    */
+  /*
   function check(){
     if (!$this->_id && $this->degre == "info" && $this->text == "Visite effectuée") {
       if ($this->countNotifSiblings()) {
@@ -111,6 +112,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
     }
     return parent::check();
   }
+  */
 
   /**
    * Compte les visites effectuées
