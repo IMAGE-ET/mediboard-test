@@ -47,43 +47,41 @@
     <div style="display: inline-block;">
       <input type="text" style="width: 7em;" onkeyup="filter(this, 'non_places_temporel')" class="search" />
     </div>
-    <form name="chgFilter" action="?" method="get" onsubmit="return onSubmitFormAjax(this,null, 'list_affectations');">
-      <input type="hidden" name="m" value="dPhospi" />
+    <form name="chgFilter" method="get" onsubmit="return onSubmitFormAjax(this,null, 'list_affectations');">
+      <input type="hidden" name="m" value="hospi" />
       <input type="hidden" name="a" value="ajax_vw_non_places" />
       {{mb_field object=$_sejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
     
-      <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
+      <select name="triAdm" style="width: 12em;" onchange="this.form.onsubmit()">
         <option value=""> &mdash; {{tr}}Choose{{/tr}}</option>
-        <option value="praticien"   {{if $triAdm == "praticien"}}  selected="selected"{{/if}}>Tri par praticien</option>
-        <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Tri par heure d'entrée</option>
-        <option value="patient"     {{if $triAdm == "patient"}}    selected="selected"{{/if}}>Tri par patient</option>
+        <option value="praticien"   {{if $triAdm == "praticien"}}  selected{{/if}}>Tri par praticien</option>
+        <option value="date_entree" {{if $triAdm == "date_entree"}}selected{{/if}}>Tri par heure d'entrée</option>
+        <option value="patient"     {{if $triAdm == "patient"}}    selected{{/if}}>Tri par patient</option>
       </select>
-      <select name="filter_function" style="width: 16em;" onchange="this.form.onsubmit()">
+      <select name="filter_function" style="width: 12em;" onchange="this.form.onsubmit()">
         <option value=""> &mdash; Toutes les fonctions</option>
         {{foreach from=$functions_filter item=_function}}
-          <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
+          <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function}}selected{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
         {{/foreach}}
       </select>
+      {{if $items_prestation|@count}}
+        <select name="item_prestation_id" onchange="this.form.onsubmit();" style="width: 13em;">
+          <option value="">&mdash; Tous les niveaux de prestation</option>
+          {{foreach from=$items_prestation item=_item}}
+            <option value="{{$_item->_id}}" {{if $_item->_id == $item_prestation_id}}selected{{/if}}>{{$_item->rank}} - {{$_item}}</option>
+          {{/foreach}}
+        </select>
+      {{/if}}
       <label>
-        <input type="checkbox" name="duree_uscpo_view" {{if $duree_uscpo}}checked="checked"{{/if}} onchange="$V(this.form.duree_uscpo, this.checked ? 1 : 0);"/>
+        <input type="checkbox" name="duree_uscpo_view" {{if $duree_uscpo}}checked{{/if}} onchange="$V(this.form.duree_uscpo, this.checked ? 1 : 0);"/>
         <input type="hidden" name="duree_uscpo" value="{{$duree_uscpo}}" onchange="this.form.onsubmit();"/>
         Durée uscpo
       </label>
       <label>
-        <input type="checkbox" name="isolement_view" {{if $isolement}}checked="checked"{{/if}} onchange="$V(this.form.isolement, this.checked ? 1 : 0);"/>
+        <input type="checkbox" name="isolement_view" {{if $isolement}}checked{{/if}} onchange="$V(this.form.isolement, this.checked ? 1 : 0);"/>
         <input type="hidden" name="isolement" value="{{$isolement}}" onchange="this.form.onsubmit();"/>
         Isolement
       </label>
-      {{if $items_prestation|@count}}
-        &mdash;
-        Niveau de prestation :
-        <select name="item_prestation_id" onchange="this.form.onsubmit();">
-          <option value="">&mdash; Tous les niveaux</option>
-          {{foreach from=$items_prestation item=_item}}
-            <option value="{{$_item->_id}}" {{if $_item->_id == $item_prestation_id}}selected="selected"{{/if}}>{{$_item->rank}} - {{$_item}}</option>
-          {{/foreach}}
-        </select>
-      {{/if}}
     </form>
     <div id="lit_bloque" class="clit_bloque draggable" style="display: inline-block;">
       <strong>[BLOQUER UN LIT]</strong>
