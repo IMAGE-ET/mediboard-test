@@ -1,4 +1,4 @@
-man telnet<?php
+<?php
 
 /**
  * $Id$
