@@ -24,10 +24,10 @@ $writable = is_writable($home);
 $source_name = isset($source_name) ? $source_name : $m;
 
 // Source
-$source = CExchangeSource::get($source_name, "ftp", true, null, false);
+$source = CExchangeSource::get($source_name, null, true, null, false);
 
 // Source rescue
-$source_rescue = CExchangeSource::get("$source_name-rescue", "ftp", true, null, false);
+$source_rescue = CExchangeSource::get("$source_name-rescue", null, true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPurgences");
