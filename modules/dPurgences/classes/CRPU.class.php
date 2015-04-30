@@ -84,6 +84,7 @@ class CRPU extends CMbObject {
   public $_etablissement_entree_id;
   public $_service_entree_id;
   public $_service_sortie_id;
+  public $_grossesse_id;
 
   /** @var CSejour */
   public $_ref_sejour;
@@ -199,6 +200,7 @@ class CRPU extends CMbObject {
     $props["_etablissement_entree_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["_service_entree_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
     $props["_service_sortie_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["_grossesse_id"]            = "ref class|CGrossesse unlink";
     $props["_attente"]                 = "time";
     $props["_presence"]                = "time";
     $props["_can_leave"]               = "time";
@@ -439,6 +441,7 @@ class CRPU extends CMbObject {
     $sejour->transport               = $this->_transport;
     $sejour->UHCD                    = $this->_UHCD;
     $sejour->entree_preparee         = $this->_entree_preparee;
+    $sejour->grossesse_id            = $this->_grossesse_id;
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;

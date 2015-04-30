@@ -38,7 +38,8 @@
   });
 </script>
 
-<input type="hidden" name="grossesse_id" value="{{$grossesse->_id}}" id="grossesse_id"/>
+<input type="hidden" name="_grossesse_id" value="{{$grossesse->_id}}"/>
+<input type="hidden" name="grossesse_id" value="{{$grossesse->_id}}" id="grossesse_id" onchange="$V(this.form._grossesse_id, this.value);"/>
 <input type="hidden" name="_patient_sexe" value="" onchange="Grossesse.toggleGrossesse(this.value, this.form)"/>
 <input type="hidden" name="_large_icon" value="{{$large_icon}}" />
 
