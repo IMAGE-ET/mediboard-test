@@ -16,10 +16,19 @@ onClose: atih.loadSearchItems.curry('{{$search_item->rss_id}}')
   {{mb_field object=$search_item field=rss_id hidden=true}}
   {{mb_field object=$search_item field=search_id hidden=true}}
   {{mb_field object=$search_item field=search_class hidden=true}}
+  {{mb_field object=$search_item field=user_id value=$app->user_id hidden=true}}
 
   <table class="main form">
     <tr>
       <th class="title" colspan="2"> Formulaire d'ajout/édition de l'élement au RSS n° {{$search_item->rss_id}}</th>
+    </tr>
+    <tr>
+      <td class="narrow">
+        {{mb_label object=$search_item field=user_id}}
+      </td>
+      <td>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=`$search_item->_ref_mediuser`}}
+      </td>
     </tr>
     <tr>
       <td class="narrow">

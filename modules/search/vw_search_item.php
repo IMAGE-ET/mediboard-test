@@ -26,12 +26,14 @@ if ($rss_id) {
 $searchItem = new CSearchItem();
 if ($search_item_id) {
   $searchItem->load($search_item_id);
+  $searchItem->loadRefMediuser();
 }
 else {
   $searchItem->rss_id = $rss->_id;
   $searchItem->search_id = $object_id;
   $searchItem->search_class = $class;
   $searchItem->rmq = $rmq;
+  $searchItem->_ref_mediuser = CMediusers::get();
 }
 
 $smarty = new CSmartyDP();

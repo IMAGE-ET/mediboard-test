@@ -143,6 +143,15 @@ class CSetupsearch extends CSetup {
                 ADD INDEX (`user_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.10";
+    $this->makeRevision("0.10");
+    $query = "ALTER TABLE `rss_search_items`
+                ADD `user_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `rss_search_items`
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.11";
   }
 }

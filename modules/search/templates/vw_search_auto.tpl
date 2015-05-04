@@ -54,16 +54,14 @@
         <div id="tab-{{$_search}}" style="display: none;">
           <table class="tbl">
             <tr>
-              <th class="category" colspan="3">Résultats ({{$_result.nb_results}} obtenus en {{$_result.time}}ms)
-              </th>
+              <th class="category" colspan="4">Résultats ({{$_result.nb_results}} obtenus en {{$_result.time}}ms)</th>
             </tr>
             <tr>
               <th class="narrow">Date <br /> Type</th>
-              <th colspan="2">Document</th>
+              <th colspan="3">Document</th>
             </tr>
             <tr>
-              <th class="section" colspan="2">Triés par pertinence - limités aux 30 premiers résultats</th>
-              {{if $contexte == "pmsi" && "atih"|module_active}}<th class="section"></th>{{/if}}
+              <th class="section" colspan="4">Triés par pertinence - limités aux 30 premiers résultats</th>
             </tr>
             {{if isset($_result.results|smarty:nodefaults)}}
               {{foreach from=$_result.results item=__result}}
@@ -91,8 +89,17 @@
                     {{/if}}
                   </td>
                   {{if $contexte == "pmsi" && "atih"|module_active}}
-                    <td class="button narrow not-printable">
-                      <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$__result._type}}', '{{$__result._source.id}}', null)"></button>
+                    <td class="narrow not-printable">
+                      {{if !in_array("`$__result._type`-`$__result._source.id`", $items)}}
+                        <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$__result._type}}', '{{$__result._source.id}}', null)"></button>
+                      {{/if}}
+                      {{foreach from=$rss_items key=_key item=_item}}
+                        {{if $__result._type == $_item->search_class && $__result._source.id == $_item->search_id}}
+                          <span id="{{$_item->_guid}}" onmouseover="ObjectTooltip.createEx(this, 'CSearchItem-{{$_item->_id}}')">
+                            <i class="fa fa-check fa-2x" style="color:green"></i>
+                          </span>
+                        {{/if}}
+                      {{/foreach}}
                     </td>
                   {{/if}}
                 </tr>

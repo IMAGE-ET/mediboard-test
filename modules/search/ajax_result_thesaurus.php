@@ -53,5 +53,6 @@ $smarty->assign("start", $start);
 $smarty->assign("results", $array_results);
 $smarty->assign("time", $time);
 $smarty->assign("nbresult", $nbresult);
+$smarty->assign("show_score", false);
 
 $smarty->display("inc_search_result_thesaurus.tpl");

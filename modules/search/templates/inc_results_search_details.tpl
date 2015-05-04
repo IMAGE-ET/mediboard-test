@@ -11,7 +11,7 @@
 <table class="tbl form" style="height: 70%" id="results_without_aggreg">
   <tbody>
   <tr>
-    <th class="title" colspan="6">Résultats ({{$nbresult}} obtenus en {{$time}}ms)
+    <th class="title" colspan="7">Résultats ({{$nbresult}} obtenus en {{$time}}ms)
       <button class="print notext not-printable" type="button" onclick="$('results_without_aggreg').print();">
         {{tr}}Print{{/tr}}
       </button>
@@ -26,10 +26,12 @@
     <th class="narrow">Auteur</th>
     <th class="narrow">Patient</th>
     <th class="narrow not-printable"></th>
-    {{if $contexte == "pmsi" && "atih"|module_active}}<th></th>{{/if}}
+    {{if $contexte == "pmsi" && "atih"|module_active}}
+      <th colspan="2">Marq.</th>
+    {{/if}}
   </tr>
   <tr>
-    <th colspan="6" class="section">Triés par pertinence</th>
+    <th colspan="7" class="section">Triés par pertinence</th>
   </tr>
   {{foreach from=$results key=_key item=_result}}
     <tr>
@@ -85,15 +87,24 @@
         </span>
       </td>
       {{if $contexte == "pmsi" && "atih"|module_active}}
-        <td class="button narrow not-printable">
-          <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._source.id}}', null)"></button>
+        <td class="narrow not-printable">
+          {{if !in_array("`$_result._type`-`$_result._source.id`", $items)}}
+            <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._source.id}}', null)"></button>
+          {{/if}}
+          {{foreach from=$rss_items key=_key item=_item}}
+            {{if $_result._type == $_item->search_class && $_result._source.id == $_item->search_id}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}')">
+                <i class="fa fa-check fa-2x" style="color:green"></i>
+              </span>
+            {{/if}}
+          {{/foreach}}
         </td>
       {{/if}}
     </tr>
     {{foreachelse}}
     <tr>
       <td colspan="6" class="empty" style="text-align: center">
-        Aucun document ne correspond à la recherche
+        {{tr}}CSearch-result.none{{/tr}}
       </td>
     </tr>
   {{/foreach}}

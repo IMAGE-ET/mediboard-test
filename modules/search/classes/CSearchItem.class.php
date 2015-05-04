@@ -22,6 +22,11 @@ class CSearchItem extends CMbObject {
   public $search_id;
   public $search_class;
   public $rmq;
+  public $user_id;
+
+  /** @var  CMediusers $_ref_mediuser */
+  public $_ref_mediuser;
+
   /**
    * Initialize the class specifications
    *
@@ -46,6 +51,30 @@ class CSearchItem extends CMbObject {
     $props['search_id'] = "num";
     $props['search_class'] = "str maxLength|40";
     $props['rmq'] = "text";
+    $props['user_id'] = "ref class|CMediusers";
+
     return $props;
+  }
+
+  /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->rmq;
+  }
+
+  /**
+   * Load method for ref mediuser
+   *
+   * @return CMediusers|null
+   */
+  function loadRefMediuser() {
+    return $this->_ref_mediuser = $this->loadFwdRef("user_id");
+  }
+
+  function loadView() {
+    parent::loadView();
+    $this->loadRefMediuser()->loadRefFunction();
   }
 }

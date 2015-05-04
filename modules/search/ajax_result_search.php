@@ -105,6 +105,19 @@ catch (Exception $e) {
   mbLog($e->getMessage());
 }
 
+$rss_items = array();
+$items = array();
+if ($contexte == "pmsi" && CModule::getActive("atih")) {
+  $rss = new CRSS();
+  $rss->sejour_id = $sejour_id;
+  $rss->loadMatchingObject();
+  $rss_items = $rss->loadRefsSearchItems();
+
+  foreach ($rss_items as $_items) {
+    $items[] = $_items->search_class."-".$_items->search_id;
+  }
+}
+
 $smarty = new CSmartyDP();
 $smarty->assign("start", $start);
 $smarty->assign("authors", $authors);
@@ -118,5 +131,7 @@ $smarty->assign("words", $words);
 $smarty->assign("contexte", $contexte);
 $smarty->assign("sejour_id", $sejour_id);
 $smarty->assign("fuzzy_search", $fuzzy_search);
+$smarty->assign("rss_items", $rss_items);
+$smarty->assign("items", $items);
 
 $smarty->display("inc_results_search.tpl");

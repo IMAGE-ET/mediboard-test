@@ -182,6 +182,20 @@ if (isset($tab_favoris)) {
   }
 }
 
+// Récupération des rss items pour le marquage pmsi.
+$rss_items = array();
+$items = array();
+if ($contexte == "pmsi" && CModule::getActive("atih")) {
+  $rss = new CRSS();
+  $rss->sejour_id = $sejour_id;
+  $rss->loadMatchingObject();
+  $rss_items = $rss->loadRefsSearchItems();
+
+  foreach ($rss_items as $_items) {
+    $items[] = $_items->search_class."-".$_items->search_id;
+  }
+}
+
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $_ref_object);
 $smarty->assign("sejour_id", $_ref_object->_id);
@@ -189,4 +203,7 @@ $smarty->assign("results", $results);
 $smarty->assign("date", $date);
 $smarty->assign("types", $types);
 $smarty->assign("contexte", $contexte);
+$smarty->assign("rss_items", $rss_items);
+$smarty->assign("items", $items);
+
 $smarty->display("vw_search_auto.tpl");

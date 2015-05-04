@@ -13,11 +13,10 @@
     <th class="category" colspan="4">Liste des search items ajoutés au RSS n°{{$rss->sejour_id}}</th>
   </tr>
   <tr>
-    <th class="narrow">
-      Document
-    </th>
+    <th class="narrow">Document</th>
+    <th class="text" style="width:20%">Ajouté par</th>
     <th>
-      {{mb_label object=$search_item field=rmq}}
+      {{mb_title class=CSearchItem field=rmq}}
     </th>
     <th class="narrow"></th>
   </tr>
@@ -25,6 +24,9 @@
     <tr>
       <td class="text">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_search_item->search_class}}-{{$_search_item->search_id}}')">{{tr}}{{$_search_item->search_class}}{{/tr}}</span>
+      </td>
+      <td class="text">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=`$_search_item->_ref_mediuser`}}
       </td>
       <td class="text">
         {{mb_value object=$_search_item field=rmq}}

@@ -7,6 +7,8 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+{{mb_default var=show_score value=true}}
+
 <table class="tbl form">
   <tr>
     <th class="title" colspan="4">Liste des Résultats  <br/> ({{$nbresult}} obtenus en {{$time}}ms)</th>
@@ -16,7 +18,9 @@
     <th class="narrow">Date <br /> Type</th>
     <th>Document</th>
     <th class="narrow"></th>
-    <th class="text narrow"></th>
+    {{if $show_score}}
+      <th class="text narrow"></th>
+    {{/if}}
   </tr>
   <tr>
     <th colspan="6" class="section">Triés par pertinence</th>
@@ -30,17 +34,20 @@
       <td class="text">
         <span> {{$_result._source.body}}</span>
       </td>
-      <td class="button">
-        {{assign var=score value=$_result._score*100}}
-        <script>
-          Main.add (function () {
-            Search.progressBar('{{$_key}}', '{{$score}}');
-          });
-        </script>
+      {{if $show_score}}
+        <td class="button">
+          {{assign var=score value=$_result._score*100}}
+          <script>
+            Main.add (function () {
+              Search.progressBar('{{$_key}}', '{{$score}}');
+            });
+          </script>
         <span title="Score de pertinence : {{$score|round}}%">
           <div id="score_{{$_key}}" style="width: 25px; height: 25px; display: inline-block"></div>
         </span>
-      </td>
+        </td>
+      {{/if}}
+
       <td class="button">
         <button class="favoris notext" title="Ajouter aux favoris"
                 onclick="Thesaurus.addeditThesaurusEntryManual('{{$_result._source.aggregation}}', '{{$_result._source.body}}', '{{$_result._source.user_id}}', '{{$_result._source.types}}', '{{$_result._type}}', null)"></button>
