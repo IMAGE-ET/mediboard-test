@@ -18,14 +18,14 @@
   };
 </script>
 
-<form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
+<form name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
   {{$date|date_format:$conf.longdate}}
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
   <div style="float: right;">
     Afficher les interventions annulées ({{$nb_canceled}})
-    <input type="checkbox" name="_canceled" value="1" {{if $canceled}}checked="checked"{{/if}} onchange="synchronizeView(this.form)" />
+    <input type="checkbox" name="_canceled" value="1" {{if $canceled}}checked{{/if}} onchange="synchronizeView(this.form)" />
     <input type="hidden" name ="canceled" value="{{$canceled}}" />
   </div>
 </form>
@@ -44,7 +44,7 @@
     url.addParam("_datetime_max", date + " 23:59:59");
     url.addParam("_prat_id", prat_id);
     url.pop('800', '600');
-  }
+  };
 </script>
 
 <table class="tbl" {{if $board}}style="font-size: 9px;"{{/if}}>
@@ -85,9 +85,11 @@
   
   {{assign var=list_operations value=$_plage->_ref_operations|@array_values}}
   {{foreach from=$list_operations item=_operation name=_operation}}
+    {{assign var=sejour value=$_operation->_ref_sejour}}
+    {{assign var=patient value=$sejour->_ref_patient}}
+
     <tbody class="hoverable" data-plage_id="{{$_plage->_id}}"{{if $hiddenPlages|strpos:$_plage->_id !== false}} style="display: none;"{{/if}}>
       <tr>
-        {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
         {{assign var=background value=""}}
         {{if $_operation->entree_salle && $_operation->sortie_salle}}
           {{assign var=background value="background-image:url(images/icons/ray.gif); background-repeat:repeat;"}}
@@ -165,7 +167,7 @@
           {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
             <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
           {{/if}}
-          {{assign var=prescription value=$_operation->_ref_sejour->_ref_prescription_sejour}}
+          {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
           {{if $prescription && $prescription->_id && $prescription->_counts_by_chapitre|@array_sum}}
             <img src="images/icons/ampoule_blue.png" style="float: right;" title="{{$prescription->_counts_by_chapitre|@array_sum}} ligne(s) prescrite(s) par le praticien" />
           {{/if}}
@@ -183,7 +185,7 @@
 
           <a href="{{$patient->_dossier_cabinet_url}}">
             <strong
-              class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
+              class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}}"
               onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
               {{$patient}}
             </strong>
@@ -200,7 +202,7 @@
             {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}<br/>
           {{/if}}
 
-          {{tr}}CSejour.type.{{$_operation->_ref_sejour->type}}.short{{/tr}} - le {{mb_value object=$_operation->_ref_sejour field=entree_prevue}}
+          {{tr}}CSejour.type.{{$sejour->type}}.short{{/tr}} - le {{mb_value object=$sejour field=entree_prevue}}
 
           {{if $_operation->rank == 0 && $listDay|@count > 1}}
             <form name="change-plage-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
@@ -278,10 +280,10 @@
   {{/if}}
   
   {{foreach from=$listUrgences item=_operation}}
+    {{assign var=sejour value=$_operation->_ref_sejour}}
+    {{assign var=patient value=$sejour->_ref_patient}}
   <tbody class="hoverable" data-plage_id="hors_plage"{{if $hiddenPlages|strpos:'hors_plage' !== false}} style="display: none;"{{/if}}>
     <tr>
-      {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
-      
       {{assign var=background value=""}}
       {{if $_operation->entree_salle && $_operation->sortie_salle}}
         {{assign var=background value="background-image:url(images/icons/ray.gif); background-repeat:repeat;"}}
@@ -295,7 +297,7 @@
       <td rowspan="2" class="narrow" style="{{$background}}"></td>
       
       <td class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
-        {{assign var=prescription value=$_operation->_ref_sejour->_ref_prescription_sejour}}
+        {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
         {{if $prescription && $prescription->_id && $prescription->_counts_by_chapitre|@array_sum}}
           <img src="images/icons/ampoule_blue.png" style="float: right;" />
         {{/if}}
@@ -313,7 +315,7 @@
         
         <a href="{{$patient->_dossier_cabinet_url}}">
           <strong
-            class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
+            class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
 
@@ -325,11 +327,11 @@
           {{mb_label object=$_operation field=temp_operation}} : {{mb_field object=$_operation field=temp_operation register=true form="edit-time_operation-"|cat:$_operation->_guid onchange="this.form.onsubmit();"}}
         </form>
 
-        {{tr}}CSejour.type.{{$_operation->_ref_sejour->type}}.short{{/tr}} - le {{mb_value object=$_operation->_ref_sejour field=entree_prevue}}
+        {{tr}}CSejour.type.{{$sejour->type}}.short{{/tr}} - le {{mb_value object=$sejour field=entree_prevue}}
 
-        <form name="change-salle-{{$_operation->_guid}}" action="?m={{$m}}" method="post" class="prepared" style="display: block;"
+        <form name="change-salle-{{$_operation->_guid}}" method="post" class="prepared" style="display: block;"
               onsubmit="return onSubmitFormAjax(this, function() {updateListOperations('{{$date}}'); refreshListPlage();})">
-          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
           <select name="salle_id" onchange="this.form.onsubmit();">

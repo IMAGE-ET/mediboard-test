@@ -49,21 +49,18 @@ if ($userSel->_id) {
     $_urg->loadRefsFwd();
     $_urg->loadRefCommande();
     $_sejour = $_urg->_ref_sejour;
-    $_urg->loadRefsDocs();
-    foreach ($_urg->_ref_documents as $_document) {
-      $_document->canDo();
-    }
+    $_urg->countDocItems();
 
     /* Comptage du nombre d'activités CCAM */
     $_urg->_count['codes_ccam'] = 0;
     foreach (CMbArray::pluck($_urg->_ext_codes_ccam, "activites") as $_code) {
       $_urg->_count['codes_ccam'] += count($_code);
     }
-    
+
     $_sejour->loadRefsFwd();
     $_sejour->canDo();
     $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
-    $_sejour->loadRefsDocs();
+    $_sejour->countDocItems();
 
     $presc = $_sejour->loadRefPrescriptionSejour();
     if ($presc && $presc->_id) {
@@ -151,16 +148,13 @@ if ($userSel->_id) {
     foreach ($_plage->_ref_operations as $_op) {
       $_op->loadRefsFwd();
       $_sejour = $_op->_ref_sejour;
-      $_op->loadRefsDocs();
-      foreach ($_op->_ref_documents as $_doc) {
-        $_doc->canDo();
-      }
+      $_op->countDocItems();
       $_op->canDo();
       $_op->loadRefCommande();
       $_sejour->canDo();
       $_sejour->loadRefsFwd();
       $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
-      $_sejour->loadRefsDocs();
+      $_sejour->countDocItems();
 
       /* Comptage du nombre d'activités CCAM */
       $_op->_count['codes_ccam'] = 0;
