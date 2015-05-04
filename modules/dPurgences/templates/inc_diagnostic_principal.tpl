@@ -33,6 +33,12 @@
         oElement.observe("change", notNullOK)
                 .observe("ui:change", notNullOK);
         oElement.fire("ui:change");
+
+        // Ne donne pas la main sur les select des autres formulaires si on ne fait pas ça
+        if (Prototype.Browser.IE) {
+          form.keywords_code.select();
+          form.keywords_code.blur();
+        }
       });
     }
     if ($("cim")) {
