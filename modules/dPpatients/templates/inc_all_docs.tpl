@@ -53,7 +53,7 @@
   <table class="tbl">
 {{/if}}
 
-{{foreach from=$patient->_all_docs item=_docs_by_context key=context}}
+{{foreach from=$context->_all_docs item=_docs_by_context key=context}}
   {{if $tri != "date"}}
     {{if $display == "list"}}
       <tr>

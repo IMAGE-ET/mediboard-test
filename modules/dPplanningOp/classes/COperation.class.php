@@ -2014,7 +2014,7 @@ class COperation extends CCodable implements IPatientRelated {
    *
    * @return CLiaisonLibelleInterv[]
    */
-  function loadLiaisonLibelle () {
+  function loadLiaisonLibelle() {
     return $this->_ref_liaison_libelles = $this->loadBackRefs("liaison_libelle", "numero");
   }
 
@@ -2027,4 +2027,10 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_commande_mat = $this->loadUniqueBackRef("commande_op");
   }
 
+  function loadAllDocs($tri = "date", $with_cancelled = false) {
+    $this->loadRefsDocItems($with_cancelled);
+    $this->mapDocs($this, $with_cancelled, $tri);
+
+    ksort($this->_all_docs);
+  }
 }

@@ -5,14 +5,15 @@
   *}}
 
 {{if @$preloaded}}
+  {{assign var=patient_id value=$operation->_ref_sejour->patient_id}}
   {{assign var=object value=$operation}}
-  <div class="documents-{{$object->_guid}} praticien-{{$object->chir_id}} mode-collapse" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
-    {{mb_include module=compteRendu template=inc_widget_documents mode=collapse nb_modeles_etiquettes=$nb_modeles_etiquettes_operation}}
+  <div class="documentsV2-{{$object->_guid}} patient-{{$patient_id}} praticien-{{$object->chir_id}}" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
+    {{mb_include module=patients template=inc_widget_documents}}
   </div>
   
   {{assign var=object value=$operation->_ref_sejour}}
-  <div class="documents-{{$object->_guid}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
-    {{mb_include module=compteRendu template=inc_widget_documents mode=collapse nb_modeles_etiquettes=$nb_modeles_etiquettes_sejour}}
+  <div class="documentsV2-{{$object->_guid}} patient-{{$patient_id}} praticien-{{$object->praticien_id}}" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
+    {{mb_include module=patients template=inc_widget_documents}}
   </div>
 {{else}}
   {{assign var=object value=$operation}}

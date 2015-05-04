@@ -1,56 +1,48 @@
 {{mb_script module="dPplanningOp" script="operation"}}
 
 <script>
-function printFicheAnesth(dossier_anesth_id) {
-  var url = new Url("cabinet", "print_fiche");
-  url.addParam("dossier_anesth_id", dossier_anesth_id);
-  url.popup(700, 500, "printFiche");
-  return;
-}
-
-function editVisite(operation_id) {
-  var url = new Url("planningOp", "edit_visite_anesth");
-  url.addParam("operation_id", operation_id);
-  url.popup(800, 500, "editVisite");
-  return;
-}
-
-Main.add(function(){
-  Calendar.regField(getForm("selectPraticien").date, null, {noView: true});
-  if ($('type_sejour')) {
-    Control.Tabs.create('type_sejour', true);
+  function printFicheAnesth(dossier_anesth_id) {
+    new Url("cabinet", "print_fiche").
+    addParam("dossier_anesth_id", dossier_anesth_id).
+    popup(700, 500, "printFiche");
   }
-});
+
+  function editVisite(operation_id) {
+    new Url("planningOp", "edit_visite_anesth").
+    addParam("operation_id", operation_id).
+    popup(800, 500, "editVisite");
+  }
+
+  Main.add(function() {
+    Calendar.regField(getForm("selectPraticien").date, null, {noView: true});
+    if ($('type_sejour')) {
+      Control.Tabs.create('type_sejour', true);
+    }
+  });
 </script>
 
 <table class="main">
   <tr>
     <th>
-      <form action="?" name="selectPraticien" method="get">
+      <form name="selectPraticien" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <label for="selPrat">Praticien</label>
         <select name="selPrat" onchange="this.form.submit()" style="max-width: 150px;">
           <option value="-1">&mdash; Choisir un praticien</option>
-          {{foreach from=$listPrat item=curr_prat}}
-          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $selPrat}} selected="selected" {{/if}}>
-            {{$curr_prat->_view}}
-          </option>
-          {{/foreach}}
+          {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$selPrat}}
         </select>
         - Interventions du {{$date|date_format:$conf.longdate}}
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_idx_planning" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         <input type="hidden" name="sans_anesth" value="{{$sans_anesth}}"/>
         <input type="hidden" name="canceled" value="{{$canceled}}"/>
         <label>
-          <input type="checkbox" name="_canceled" {{if $canceled}}checked="checked"{{/if}}
+          <input type="checkbox" name="_canceled" {{if $canceled}}checked{{/if}}
             onclick="$V(this.form.canceled, this.checked ? 1 : 0); this.form.submit()"/>
             Afficher les annulées
         </label>
         <label>
-          <input type="checkbox" name="_sans_anesth" {{if $sans_anesth}}checked="checked"{{/if}}
+          <input type="checkbox" name="_sans_anesth" {{if $sans_anesth}}checked{{/if}}
             onclick="$V(this.form.sans_anesth, this.checked ? 1 : 0); this.form.submit()"/>
             Inclure les interventions sans anesthésiste
         </label>
@@ -70,7 +62,7 @@ Main.add(function(){
         </li>
       {{/foreach}}
       </ul>
-      <hr class="control_tabs" />
+
       {{foreach from=$listInterv key=_key_type item=_services}}
       {{assign var=count_ops_by_type value=$count_ops.$_key_type}}
       <div id="{{$_key_type}}_tab" style="display:none">
@@ -135,7 +127,11 @@ Main.add(function(){
                   {{$_operation->time_operation|date_format:$conf.time}}
                 </td>
                 <td class="button {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
-                  {{$_operation->_ref_affectation->_ref_lit->_view}}
+                  {{if $_operation->_ref_affectation->lit_id}}
+                    {{$_operation->_ref_affectation->_ref_lit}}
+                  {{else}}
+                    {{$_operation->_ref_affectation->_ref_service}}
+                  {{/if}}
                 </td>
                 {{assign var=dossier_anesth value=$_operation->_ref_consult_anesth}}
                 {{assign var=consult_anesth value=$dossier_anesth->_ref_consultation}}
@@ -143,7 +139,7 @@ Main.add(function(){
                 <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
                   {{if $dossier_anesth->_id}}
                     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult_anesth->_ref_chir initials=border}}
-                    <a class="action" href="?m=cabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_id}}">
+                    <a class="action" href="?m=cabinet&tab=edit_consultation&selConsult={{$consult_anesth->_id}}">
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$dossier_anesth->_guid}}')">
                       le {{mb_value object=$consult_anesth field="_date"}} 
                       </span>

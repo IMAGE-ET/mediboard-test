@@ -27,6 +27,7 @@ class CMbObject extends CStoredObject {
   public $_nb_cancelled_files;
   public $_nb_cancelled_docs;
   public $_nb_docs;
+  public $_nb_forms;
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
   public $_degree_notes;
@@ -53,6 +54,8 @@ class CMbObject extends CStoredObject {
   /** @var CFile[] */
   public $_ref_named_files    = array();
 
+  public $_ref_forms          = array();
+
   /** @var CTagItem[] */
   public $_ref_tag_items      = array();
 
@@ -68,6 +71,7 @@ class CMbObject extends CStoredObject {
   public $_ref_affectations_personnel;
   public $_count_affectations_personnel;
 
+  public $_all_docs;
 
   function countAlertsNotHandled($level = null, $tag = null) {
     $alert = new CAlert();
@@ -212,6 +216,18 @@ class CMbObject extends CStoredObject {
   }
 
   /**
+   * Load forms for object with PERM_READ
+   *
+   * @return int|null Forms count, null if unavailable
+   */
+  function loadRefsForms() {
+    $ex_link = new CExLink();
+    $ex_link->setObject($this);
+    $ex_link->level = "object";
+    return $this->_ref_forms = $ex_link->loadMatchingList();
+  }
+
+  /**
    * Load documents and files for object and sort by category
    *
    * @param boolean $with_cancelled Inclure les fichiers annulés
@@ -277,7 +293,19 @@ class CMbObject extends CStoredObject {
     unset($this->_count["files"]);
     return $this->_nb_files = $this->countBackRefs("files");
   }
-  
+
+  /**
+   * Count forms
+   *
+   * @return int
+   */
+  function countForms() {
+    $ex_link = new CExLink();
+    $ex_link->setObject($this);
+    $ex_link->level = "object";
+    return $this->_nb_forms = $ex_link->countMatchingList();
+  }
+
   /**
    * Count doc items (that is documents and files), delegate when permission type defined
    *
@@ -288,7 +316,7 @@ class CMbObject extends CStoredObject {
   function countDocItems($permType = null) {
     $this->_nb_files_docs = $permType ? 
       $this->countDocItemsWithPerm($permType) : 
-      $this->countFiles() + $this->countDocs();
+      $this->countFiles() + $this->countDocs() + $this->countForms();
     return $this->_nb_files_docs;
   }
 
@@ -325,6 +353,12 @@ class CMbObject extends CStoredObject {
     if ($this->_ref_documents) {
       self::filterByPerm($this->_ref_documents, $permType);
       $this->_nb_docs = count($this->_ref_documents);
+    }
+
+    $this->loadRefsForms();
+    if ($this->_ref_forms) {
+      self::filterByPerm($this->_ref_forms, $permType);
+      $this->_nb_forms = count($this->_ref_forms);
     }
 
     return $this->_nb_files + $this->_nb_docs;
@@ -516,7 +550,6 @@ class CMbObject extends CStoredObject {
     $backProps["interop_sender_objects"] = "CObjectToInteropSender object_id";
     $backProps["bris_de_glace_meta"]     = "CBrisDeGlace object_id";
     $backProps["log_access_medical"]     = "CLogAccessMedicalData object_id";
-
 
     return $backProps;
   }
@@ -954,5 +987,76 @@ class CMbObject extends CStoredObject {
    * @return string
    */
   function getDynamicTag() {
+  }
+
+  function loadAllDocs() {
+    return array();
+  }
+
+  function mapDocs($object, $with_cancelled, $tri) {
+    // Documents et fichiers
+    $object->loadRefsDocItems($with_cancelled);
+    CStoredObject::massLoadFwdRef($object->_ref_documents, "file_category_id");
+
+    foreach ($object->_ref_documents as $_doc) {
+      CDocumentItem::makeIconName($_doc);
+      $_doc->loadContent(false);
+      $_doc->loadRefCategory();
+      $_doc->_ref_object = $object;
+      $this->_all_docs[$this->makePrefix($tri, $object, $_doc)][] = $_doc;
+    }
+
+    CStoredObject::massLoadFwdRef($object->_ref_files, "file_category_id");
+    foreach ($object->_ref_files as $_file) {
+      CDocumentItem::makeIconName($_file);
+      $_file->loadRefCategory();
+      $_file->_ref_object = $object;
+      $this->_all_docs[$this->makePrefix($tri, $object, $_file)][] = $_file;
+    }
+
+    // Formulaires
+    $ex_link = new CExLink();
+    $ex_link->setObject($object);
+    $ex_link->level = "object";
+    $ex_links = $ex_link->loadMatchingList();
+    $ex_objects = CExLink::massLoadExObjects($ex_links);
+    CStoredObject::massLoadFwdRef($ex_objects, "object_id");
+
+    foreach ($ex_links as $_link) {
+      $_ex = $_link->loadRefExObject();
+
+      $_ex->updateCreationFields();
+      $object = $_ex->loadTargetObject();
+      $_ex->_ex_class_id = $_link->ex_class_id;
+      $_ex->loadRefExClass();
+      CDocumentItem::makeIconName($_ex->_ref_ex_class);
+      $this->_all_docs[$this->makePrefix($tri, $object, $_ex)][] = $_link;
+    }
+  }
+
+  function makePrefix($tri, $object, $item) {
+    switch ($tri) {
+      default:
+      case "date":
+        switch ($object->_class) {
+          case "CCompteRendu":
+            return $object->_ref_content->last_modified;
+            break;
+          case "CFile":
+            return $object->file_date;
+            break;
+          case "CExObject":
+            return $object->datetime_edit;
+        }
+        break;
+      case "context":
+        return $object->_view;
+        break;
+      case "cat":
+        if ($item->_class == "CExObject") {
+          return "Autres";
+        }
+        return $item->_ref_category->_id ? $item->_ref_category->nom : "Autres";
+    }
   }
 }

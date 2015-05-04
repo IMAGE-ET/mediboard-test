@@ -95,7 +95,7 @@
           {{else}}
             <button type="button" class="archive" onclick="archiveFile(this.form, '{{$file}}')">{{tr}}Archive{{/tr}}</button>
           {{/if}}
-          <button type="button" class="trash" onclick="trashFile(this.form, '{{$file}}')">{{tr}}Delete{{/tr}}</button>
+          <button type="button" class="trash" onclick="trashFile(this.form, '{{$file|smarty:nodefaults|JSAttribute}}')">{{tr}}Delete{{/tr}}</button>
         </form>
       {{/if}}
     </td>

@@ -129,9 +129,17 @@ Document = {
   
   refreshList: function(category_id, object_class, object_id) {
     var selector = printf("div.documents-%s-%s", object_class, object_id);
-    $$(selector).each(Document.refresh);
+    $$(selector).each(function(elt) {
+      Document.refresh(elt);
+    });
     if (window.loadAllDocs) {
       loadAllDocs();
+    }
+    if (window.DocumentV2) {
+      var selector = printf("div.documentsV2-%s-%s", object_class, object_id);
+      $$(selector).each(function(elt) {
+        DocumentV2.refresh(elt);
+      });
     }
   },
     

@@ -5042,7 +5042,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $file->file_name = "$title.pdf";
     $file->file_type = "application/pdf";
 
-    if ($file->loadMatchingObject()) {
+    /*if ($file->loadMatchingObject()) {
       if ($replace) {
         $file->delete();
 
@@ -5052,10 +5052,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $file->file_name = "$title.pdf";
         $file->file_type = "application/pdf";
       }
-      else {
-        return true;
-      }
-    }
+    }*/
 
     $file->fillFields();
     $file->updateFormFields();
@@ -5092,6 +5089,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_traitement_dossier = $this->loadUniqueBackRef("traitement_dossier");
   }
 
+  function loadAllDocs($tri = "date", $with_cancelled = false) {
+    $this->mapDocs($this, $with_cancelled, $tri);
+
+    ksort($this->_all_docs);
+  }
 }
 
 if (CAppUI::conf("ref_pays") == 2) {

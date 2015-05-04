@@ -28,13 +28,24 @@
   // Refresh de l'explorateur après ajout d'un fichier
   reloadAfterUpload = function() {
     Control.Modal.close();
-    loadAllDocs();
+    refreshAfterAdd();
+  };
+
+  // Callback de refresh
+  refreshAfterAdd = function() {
+    if (window.loadAllDocs) {
+      loadAllDocs();
+    }
+    if (window.DocumentV2) {
+      var selector = printf("div.documentsV2-%s-%s", "{{$context->_class}}", "{{$context->_id}}");
+      $$(selector).each(function(elt) {
+        DocumentV2.refresh(elt);
+      });
+    }
   };
 
   // Refresh de l'explorateur après ajout d'un formulaire
-  ExObject.refreshSelf['{{$self_guid}}'] = function() {
-    loadAllDocs();
-  };
+  ExObject.refreshSelf['{{$self_guid}}'] = refreshAfterAdd;
 
   Main.add(function() {
     var form = getForm("addDoc-{{$context->_guid}}");
@@ -213,7 +224,7 @@
 
         <div style="text-align: center;">
           <button class="big new" style="width: 100px;"
-                  onclick="Control.Modal.close(); File.createMozaic('{{$context->_guid}}', '', loadAllDocs)"></button>
+                  onclick="Control.Modal.close(); File.createMozaic('{{$context->_guid}}', '', refreshAfterAdd)"></button>
         </div>
       </fieldset>
     </td>
@@ -225,7 +236,7 @@
 
         <div style="text-align: center;">
           <button class="big drawing" style="width: 100px;"
-                  onclick="Control.Modal.close(); editDrawing(null, null, '{{$context->_guid}}', loadAllDocs)"></button>
+                  onclick="Control.Modal.close(); editDrawing(null, null, '{{$context->_guid}}', refreshAfterAdd)"></button>
         </div>
       </fieldset>
     </td>

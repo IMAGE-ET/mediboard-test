@@ -10,6 +10,7 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{mb_default var=object_class value=$object->_class}}
 {{mb_default var=object_id value=$object->_id}}
+
 {{if $mode != "hide"}}
   
   {{if $doc_count && $mode == "collapse"}}
