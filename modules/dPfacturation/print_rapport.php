@@ -19,6 +19,7 @@ $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers")
 $filter->_mode_reglement = CValue::getOrSession("mode", 0);
 $filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
 $all_group_money  = CValue::getOrSession("_all_group_money" , 1);
+$all_impayes      = CValue::get("all_impayes" , 0);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if ($filter->_type_affichage == "complete") {
@@ -86,20 +87,26 @@ foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
 }
 
 // Etat des règlements
-if ($filter->_etat_reglement_patient == "reglee") {
-  $where["patient_date_reglement"] = "IS NOT NULL";
+if ($all_impayes) {
+  $where[] = "(patient_date_reglement IS NULL AND du_patient > 0)
+    || (tiers_date_reglement IS NULL AND du_tiers > 0)";
 }
-if ($filter->_etat_reglement_patient == "non_reglee") {
-  $where["patient_date_reglement"] = "IS NULL";
-  $where["du_patient"] = "> 0";
-}
+else {
+  if ($filter->_etat_reglement_patient == "reglee") {
+    $where["patient_date_reglement"] = "IS NOT NULL";
+  }
+  if ($filter->_etat_reglement_patient == "non_reglee") {
+    $where["patient_date_reglement"] = "IS NULL";
+    $where["du_patient"] = "> 0";
+  }
 
-if ($filter->_etat_reglement_tiers == "reglee") {
-  $where["tiers_date_reglement"] = "IS NOT NULL";
-}
-if ($filter->_etat_reglement_tiers == "non_reglee") {
-  $where["tiers_date_reglement"] = "IS NULL";
-  $where["du_tiers"] = "> 0";
+  if ($filter->_etat_reglement_tiers == "reglee") {
+    $where["tiers_date_reglement"] = "IS NOT NULL";
+  }
+  if ($filter->_etat_reglement_tiers == "non_reglee") {
+    $where["tiers_date_reglement"] = "IS NULL";
+    $where["du_tiers"] = "> 0";
+  }
 }
 
 // Reglements via les factures de consultation
@@ -134,7 +141,9 @@ foreach ($listFactures as $_facture) {
     $_facture->updateMontants();
     $_facture->loadRefsReglements();
     $_facture->loadRefsNotes();
-
+    if ($all_impayes) {
+      $_facture->loadRefsRelances();
+    }
     // Ajout de reglements
     $_facture->_new_reglement_patient = new CReglement();
     $_facture->_new_reglement_patient->setObject($_facture);
@@ -231,5 +240,6 @@ $smarty->assign("listPlages"    , $listPlages);
 $smarty->assign("recapReglement", $recapReglement);
 $smarty->assign("reglement"     , $reglement);
 $smarty->assign("banques"       , $banques);
+$smarty->assign("all_impayes"   , $all_impayes);
 
 $smarty->display("print_rapport.tpl");

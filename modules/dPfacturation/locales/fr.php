@@ -607,6 +607,7 @@ $locales['CRetrocession.type.'] = '-';
 $locales['CRetrocession.type.autre'] = 'Autre';
 $locales['CRetrocession.type.montant'] = 'Montant';
 $locales['CRetrocession.type.pct'] = 'Pourcentage';
+$locales['See_pdf.relance'] = 'Voir la relance en Pdf';
 $locales['config-dPfacturation-CEditBill'] = 'Envoi en XML';
 $locales['config-dPfacturation-CEditBill-store_envoi_xml'] = 'Une facture transmise ne peut pas être renvoyée';
 $locales['config-dPfacturation-CEditBill-store_envoi_xml-desc'] = 'Une facture transmise ne peut pas être renvoyée (sauf si le renvoi est forcé)';

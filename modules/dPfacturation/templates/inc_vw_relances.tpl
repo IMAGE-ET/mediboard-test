@@ -23,10 +23,8 @@
           {{if $relance->statut == "poursuite"}}({{mb_value object=$relance field=poursuite}}){{/if}}
         </td>
         <td>
-          {{if $conf.ref_pays == 2}}
-            <button type="button" class="pdf notext"   onclick="Relance.printRelance('{{$facture->_class}}', '{{$facture->_id}}', 'relance', '{{$relance->_id}}');">  </button>
-          {{/if}}
-          <button type="button" class="edit notext"  onclick="Relance.modify('{{$relance->_id}}');"> </button>
+          <button type="button" class="pdf notext" onclick="Relance.printRelance('{{$facture->_class}}', '{{$facture->_id}}', 'relance', '{{$relance->_id}}');">Pdf</button>
+          <button type="button" class="edit notext" onclick="Relance.modify('{{$relance->_id}}');"> </button>
           {{if $facture->_ref_last_relance->_id == $relance->_id && $relance->etat != "regle"}}
             <form name="{{$relance->_guid}}" method="post" action="" onsubmit="return Relance.create(this);">
               {{mb_class object=$relance}}

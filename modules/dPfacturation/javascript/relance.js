@@ -13,6 +13,7 @@ Relance = {
   pdf: function(relance_id) {
     var url = new Url('facturation', 'ajax_edit_bvr');
     url.addParam('suppressHeaders' , '1');
+    url.addParam('type_pdf'        , 'relance');
     url.addParam('relance_id'      , relance_id);
     url.popup(1000, 600);
   },

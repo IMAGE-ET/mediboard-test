@@ -27,6 +27,12 @@ foreach ($factures as $value) {
   $factures_id[$value] = $value;
 }
 
+if ($type_pdf == "relance" && !$facture_class) {
+  $relance = new CRelance();
+  $relance->load($relance_id);
+  $facture_class = $relance->object_class;
+}
+
 $factures = array();
 $facture = new $facture_class;
 //si on a une facture_id on la charge
@@ -101,6 +107,9 @@ if ($type_pdf == "impression") {
 if ($type_pdf == "relance") {
   $relance = new CRelance();
   $relance->load($relance_id);
+  if ($relance->_id) {
+    $facture_pdf->factures = array($relance->loadRefFacture());
+  }
   $facture_pdf->relance = $relance;
   $facture_pdf->editRelance();
 }

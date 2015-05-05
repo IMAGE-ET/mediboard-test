@@ -256,7 +256,9 @@ class CEditPdf{
       elseif ($this->type_pdf == "relance") {
         $this->editRelanceEntete();
         //$this->editHautFacture(1, $this->relance->_montant, true);
-        $this->editBVR($this->relance->_montant);
+        if (CAppUI::conf("ref_pays") == 2) {
+          $this->editBVR($this->relance->_montant);
+        }
       }
     }
   }
@@ -553,6 +555,10 @@ class CEditPdf{
       $this->patient->cp." ".$this->patient->ville
     );
 
+    if (CAppUI::conf("ref_pays") != 2) {
+      unset($tab[$colonne2][41]);
+    }
+
     // Ecriture de C, D, E, F
     $this->pdf->setFont($this->font, '', 8);
     $x = $y = 0;
@@ -570,7 +576,9 @@ class CEditPdf{
     }
     $this->editCell(20, $this->pdf->getY()+20, 35, CAppUI::tr("CRelance.statut.".$this->relance->statut), "C", 1, 4);
     $this->pdf->setX(110);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_ville", CGroups::loadCurrent()).", le ".CMbDT::format(CMbDT::date(), "%d %B %Y"));
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_ville", CGroups::loadCurrent()).", le ".CMbDT::format(CMbDT::date(), "%d %B %Y"));
+    }
 
     $frais = 0;
     $messages = array(0 => "", 1 => "");
@@ -625,7 +633,9 @@ class CEditPdf{
     $this->pdf->setXY(10, $this->pdf->getY()+14);
     $this->pdf->Write(4, $messages[1]);
     $this->pdf->setXY(120, $this->pdf->getY()+14);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom", CGroups::loadCurrent()));
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom", CGroups::loadCurrent()));
+    }
     $this->pdf->setXY(120, $this->pdf->getY()+4);
     $this->pdf->Write(3, "Service comptabilité");
   }
@@ -686,7 +696,7 @@ class CEditPdf{
       $patient_adrr["group2"],
       $this->patient->cp." ".$this->patient->ville
     );
-    
+
     $tab[$colonne2] = $patient;
     $this->pdf->SetTextColor(80, 80, 80);
   

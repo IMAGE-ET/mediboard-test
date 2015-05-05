@@ -1,5 +1,8 @@
 {{mb_script module=cabinet script=reglement}}
 {{mb_script module=facturation script=rapport}}
+{{if $conf.dPfacturation.CRelance.use_relances && $all_impayes}}
+  {{mb_script module=facturation script=relance}}
+{{/if}}
 
 {{assign var=type_aff value=1}}
 {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -98,6 +101,9 @@
           {{/if}}
           
           <th>{{mb_title class=CConsultation field=patient_date_reglement}}</th>
+          {{if $conf.dPfacturation.CRelance.use_relances && $all_impayes}}
+            <th>{{tr}}CRelance{{/tr}}</th>
+          {{/if}}
         </tr>
         
         {{foreach from=$_plage.factures item=_facture}}
@@ -228,6 +234,24 @@
               </script>
             </form>
           </td>
+          {{if $conf.dPfacturation.CRelance.use_relances && $all_impayes}}
+            <td class="button">
+              {{if $_facture->_ref_relances|@count}}
+                <button type="button" class="pdf notext" onclick="Relance.printRelance('{{$_facture->_class}}', '{{$_facture->_id}}', 'relance', '{{$_facture->_ref_last_relance->_id}}');">
+                  {{tr}}See_pdf.relance{{/tr}}
+                </button>
+              {{elseif $_facture->_is_relancable}}
+                <form name="relance_{{$_facture->_guid}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete : function() {location.reload();}});">
+                  {{mb_class object=$_facture->_ref_last_relance}}
+                  <input type="hidden" name="relance_id" value=""/>
+                  <input type="hidden" name="object_id" value="{{$_facture->_id}}"/>
+                  <input type="hidden" name="object_class" value="{{$_facture->_class}}"/>
+                  <input type="hidden" name="callback" value="Relance.pdf" />
+                  <button class="add notext" type="submit">Créer une relance</button>
+                </form>
+              {{/if}}
+            </td>
+          {{/if}}
         </tr>
         
         {{/foreach}}
@@ -246,7 +270,7 @@
           {{if $type_aff}}
             <td><strong>{{$_plage.total.tiers|currency}}</strong></td>
           {{/if}}
-          <td></td>
+          <td {{if $conf.dPfacturation.CRelance.use_relances && $all_impayes}}colspan="2"{{/if}}></td>
         </tr>
       </table>
     </td>
