@@ -22,12 +22,16 @@ class CPathologie extends CMbObject {
   public $pathologie;
   public $annule;
   public $dossier_medical_id;
+  public $indication_id;
+  public $indication_group_id;
 
   public $owner_id;
   public $creation_date;
 
   /** @var CDossierMedical */
   public $_ref_dossier_medical;
+
+  public $_ref_indication;
 
   /**
    * @see parent::getSpec()
@@ -44,14 +48,16 @@ class CPathologie extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["debut"]              = "date progressive";
-    $props["fin"]                = "date progressive moreEquals|debut";
-    $props["pathologie"]         = "text helped seekable";
-    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
-    $props["annule"]             = "bool show|0";
-    $props["owner_id"]           = "ref notNull class|CMediusers";
-    $props["creation_date"]      = "dateTime notNull";
-    
+    $props["debut"]               = "date progressive";
+    $props["fin"]                 = "date progressive moreEquals|debut";
+    $props["pathologie"]          = "text helped seekable";
+    $props["dossier_medical_id"]  = "ref notNull class|CDossierMedical show|0";
+    $props["indication_id"]       = "num show|0";
+    $props["indication_group_id"] = "num show|0";
+    $props["annule"]              = "bool show|0";
+    $props["owner_id"]            = "ref notNull class|CMediusers";
+    $props["creation_date"]       = "dateTime notNull";
+
     return $props;
   }
 
@@ -75,7 +81,7 @@ class CPathologie extends CMbObject {
   /**
    * @see parent::loadView()
    */
-  function loadView(){
+  function loadView() {
     parent::loadView();
     $this->loadRefDossierMedical();
   }
@@ -95,6 +101,11 @@ class CPathologie extends CMbObject {
     }
 
     return parent::store();
+  }
+
+  function loadRefIndication() {
+    $medicament_indication = new CMedicamentIndication();
+    return $this->_ref_indication = $medicament_indication->getIndication($this->indication_id, $this->indication_group_id);
   }
 }
 

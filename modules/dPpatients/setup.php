@@ -2842,7 +2842,13 @@ class CSetupdPpatients extends CSetup {
             ADD `bruit_foetal` FLOAT;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.37';
+    $this->makeRevision("2.37");
+    $query = "ALTER TABLE `pathologie`
+      ADD `indication_id` INT (11),
+      ADD `indication_group_id` INT (11);";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.38';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
