@@ -18,7 +18,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   static $types = array("comp", "ambu", "exte", "seances", "ssr", "psy", "urg", "consult");
   static $fields_etiq = array(
     "NDOS", "NRA", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
-    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE", "PRESTATIONS DEMANDEES"
+    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE", "PRESTATIONS SOUHAITEES"
   );
 
   static $destination_values = array("1", "2", "3", "4", "6", "7");
@@ -3944,7 +3944,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         }
         $souhaits[] = $nom;
       }
-      $template->addListProperty("Sejour - Prestations demandées", $souhaits);
+      $template->addListProperty("Sejour - Prestations souhaitées", $souhaits);
     }
 
     // Régime
@@ -4296,7 +4296,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     );
 
     if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
-      $fields_sejour["PRESTATIONS DEMANDEES"] = implode(" - ", $souhaits);
+      $fields_sejour["PRESTATIONS SOUHAITEES"] = implode(" - ", $souhaits);
     }
 
     $fields = array_merge($fields, $fields_sejour);
