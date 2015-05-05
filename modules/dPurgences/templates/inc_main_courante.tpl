@@ -339,7 +339,7 @@
               {{/if}}
 
               {{if $rpu->mutation_sejour_id}}
-                <img src="images/icons/mutation.png" />
+                <span class="texticon texticon-mutation">Muta</span>
               {{/if}}
             </form>
           </div>
@@ -390,8 +390,8 @@
             {{if $admin_urgences}}
               <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
             {{/if}}
-            {{if $rpu->date_at}} 
-            <img src="images/icons/accident_travail.png" />
+            {{if $rpu->date_at}}
+              <span class="texticon texticon-at">AT</span>
             {{/if}}
             {{if $rpu->motif && "dPurgences CRPU diag_prat_view"|conf:"CGroups-$g"}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">

@@ -50,15 +50,16 @@
           {{if (!$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id) && $conf.dPhospi.show_uf}}
             <a style="margin-top: 3px; display: inline" href="#1"
               onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{if $_affectation->_ref_lit}}{{$_affectation->_ref_lit->_guid}}{{else}}CLit-none{{/if}}')">
-              <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" />
+              <span class="texticon texticon-uf-warning" title="Affecter les UF">UF</span>
             </a>
           {{/if}}
           {{if $_affectation->sejour_id}}
             {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id && $conf.dPhospi.show_uf}}
               <a style="margin-top: 3px; display: inline" href="#1"
                  onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{if $_affectation->_ref_lit}}{{$_affectation->_ref_lit->_guid}}{{else}}CLit-none{{/if}}')">
-                <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                  onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
+                <span class="texticon texticon-uf opacity-40" title="Affecter les UF"
+                      onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')">UF</span>
+              </a>
             {{/if}}
           {{/if}}
           {{if $conf.dPadmissions.show_deficience}}

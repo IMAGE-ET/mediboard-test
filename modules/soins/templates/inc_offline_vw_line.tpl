@@ -78,20 +78,16 @@
       {{/if}}
       <div>
         {{if $line->conditionnel}}
-          {{if $line->_current_active}}
-            <img src="images/icons/cond.png" />
-          {{else}}
-            <img src="images/icons/cond_barre.png" />
-          {{/if}}
+          {{mb_include module=prescription template=line/inc_line_cond_icon condition=$line->_current_active}}
         {{/if}}
         {{if $line->_class == "CPrescriptionLineMedicament" && $line->traitement_personnel}}
           <img src="images/icons/tp.png" />
         {{/if}}
         {{if $line->premedication}}
-          <img src="images/icons/premed.png" />
+          <span class="texticon texticon-premed">Prémed</span>
         {{/if}}
         {{if $line->_class == "CPrescriptionLineMedicament" && $line->_ref_produit->_is_stupefiant}}
-          <img src="images/icons/stup.png" />
+          <span class="texticon texticon-stup" title="Produit Stupéfiant">Stup</span>
         {{/if}}
       </div>
     </td>
@@ -268,7 +264,7 @@
       <td class="text {{if $smarty.foreach.lines_items.first}}first_perf{{/if}} {{if $smarty.foreach.lines_items.last}}last_perf{{/if}}" style="vertical-align: top;">
         {{$_line_item->_ucd_view}}
         {{if $_line_item->_ref_produit->_is_stupefiant}}
-          <img src="images/icons/stup.png" />
+          <span class="texticon texticon-stup" title="Produit Stupéfiant">Stup</span>
         {{/if}}
         <br />
         <strong>
@@ -308,17 +304,13 @@
         {{/if}}
         <div>
           {{if $line->conditionnel}}
-            {{if $line->_current_active}}
-              <img src="images/icons/cond.png" />
-            {{else}}
-              <img src="images/icons/cond_barre.png" />
-            {{/if}}
+            {{mb_include module=prescription template=line/inc_line_cond_icon condition=$line->_current_active}}
           {{/if}}
           {{if $line->traitement_personnel}}
             <img src="images/icons/tp.png" />
           {{/if}}
           {{if $line->premedication}}
-            <img src="images/icons/premed.png" />
+            <span class="texticon texticon-premed">Prémed</span>
           {{/if}}
         </div>
         {{if $smarty.foreach.lines_items.first || $mode_dupa}}

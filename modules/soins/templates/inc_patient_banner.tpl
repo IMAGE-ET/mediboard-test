@@ -54,7 +54,7 @@
             {{mb_include module=maternite template=inc_input_grossesse object=$sejour modify_grossesse=0}}
           {{/if}}
           {{if $sejour->isolement}}
-            <img src="images/icons/isol.png" title="Isolement">
+            <span class="texticon texticon-isolement" title="Isolement">Isol</span>
           {{/if}}
           <br/>
           <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">

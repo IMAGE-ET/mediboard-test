@@ -130,7 +130,7 @@
       {{mb_value object=$_op field=cote}}
       {{if $_op->exam_extempo}}
         <br />
-        <img src="images/icons/extempo.png" title="{{tr}}COperation-exam_extempo{{/tr}}"/>
+        <span class="texticon texticon-extempo" title="{{tr}}COperation-exam_extempo{{/tr}}">Ext</span>
       {{/if}}
       {{if $_op->materiel}}
         <br />

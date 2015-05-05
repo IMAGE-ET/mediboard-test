@@ -4,6 +4,6 @@
   <a style="float: right;" href="#1" title=""
      onclick="Idex.edit('{{$object->_guid}}', '{{$tag}}')"
      onmouseover="ObjectTooltip.createEx(this,'{{$object->_guid}}', 'identifiers')">
-    <img src="images/icons/idex.png" width="16" height="16" />
+    <span class="texticon texticon-idext">ID</span>
   </a>
 {{/if}}

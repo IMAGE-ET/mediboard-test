@@ -145,7 +145,7 @@
     {{if $sejour->_ref_dossier_medical && $sejour->_ref_dossier_medical->_id}}
       {{assign var=dossier_medical value=$sejour->_ref_dossier_medical}}
     {{/if}}
-    <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createEx(this, '{{$dossier_medical->_guid}}', 'antecedents');" />
+    <span class="texticon texticon-atcd" onmouseover="ObjectTooltip.createEx(this, '{{$dossier_medical->_guid}}', 'antecedents');">Atcd</span>
   {{/if}}
 </td>
 <td>

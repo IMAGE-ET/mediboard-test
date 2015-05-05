@@ -3,9 +3,9 @@
 
   {{mb_script module=hospi script=affectation_uf ajax=true}}
 
-  <a style="float: right;" href="#1" title=""
-    onclick="AffectationUf.edit('{{$object->_guid}}')"
-    onmouseover="ObjectTooltip.createEx(this,'{{$object->_guid}}', 'objectUFs')">
-    <img src="images/icons/uf.png" width="16" height="16" />
+  <a style="float: right;" href="#1"
+     onclick="AffectationUf.edit('{{$object->_guid}}')"
+     onmouseover="ObjectTooltip.createEx(this,'{{$object->_guid}}', 'objectUFs')">
+    <span class="texticon texticon-uf" title="Affecter les UF">UF</span>
   </a>
 {{/if}}

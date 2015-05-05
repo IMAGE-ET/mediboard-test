@@ -256,9 +256,9 @@
     <tr class="dates">
       <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ({{mb_value object=$patient field=naissance}})
         {{if $conf.dPhospi.show_uf}}
-          <a style="float: right;" href="#1" title=""
+          <a style="float: right;" href="#1"
             onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  >
-            <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF"/>
+            <span class="texticon texticon-uf" title="Affecter les UF">UF</span>
           </a>
         {{/if}}
       </td>

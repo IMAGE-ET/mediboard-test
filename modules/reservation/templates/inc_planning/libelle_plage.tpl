@@ -86,7 +86,7 @@
   {{/if}}
 
   {{if $count_atcd > 0}}
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_dossier_medical->_guid}}', 'antecedents');" ><img src="images/icons/antecedents.gif" alt=\"WRN\"/></span>
+    <span class="texticon texticon-atcd" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_dossier_medical->_guid}}', 'antecedents');">Atcd</span>
   {{/if}}
   <hr/>
 

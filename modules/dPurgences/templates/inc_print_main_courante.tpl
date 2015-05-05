@@ -41,11 +41,11 @@
     </td>
     <td class="text">
       {{if $rpu->date_at}}
-        <img src="images/icons/accident_travail.png" />
+        <span class="texticon texticon-at">AT</span>
       {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-                {{$rpu->diag_infirmier|nl2br}}
-              </span>
+        {{$rpu->diag_infirmier|nl2br}}
+      </span>
     </td>
     <td>{{mb_value object=$consult field="heure"}}</td>
     <td>

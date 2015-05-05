@@ -12,7 +12,7 @@
 
 <!-- Affichage des autres antecedents -->
  {{if $dossier_medical->_count_antecedents || ($dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents)}}
-  <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
+   <span class="texticon texticon-atcd" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')">Atcd</span>
 
   <div id="antecedents{{$sejour_id}}" style="text-align:left;  display: none;">
     <table class="tbl">
@@ -22,10 +22,10 @@
         </th>
       </tr>
       {{if $dossier_medical_sejour && $dossier_medical_sejour->_count_antecedents && $dossier_medical->_count_antecedents}}
-        <th class="halfPane" class="category">
+        <th class="category">
           Significatifs
         </th>
-        <th class="halfPane" class="category">
+        <th class="category">
           Autres antécédents
         </th>
       {{/if}}

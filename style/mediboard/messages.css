@@ -284,3 +284,122 @@ button.nav-history {
 .nav-history .nav-time a {
   color: #999;
 }
+
+/* Text icons */
+.texticon {
+  border: 1px solid !important;
+  border-radius: 3px;
+  background: #fafafa;
+  display: inline-block;
+  padding: 1px 2px;
+  line-height: 1;
+  font-size: 10px;
+  position: relative;
+  box-sizing: border-box;
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.texticon-stroke:after {
+  border-bottom: 2px solid red;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: -1px;
+  height: 4px;
+  transform: rotate(18deg);
+}
+
+.texticon-allergies-ok {
+  color: #007f00;
+}
+
+.texticon-allergies-warning {
+  color: red;
+}
+
+.texticon-arisque {
+  color: red;
+}
+
+.texticon-atcd {
+  color: #fd7d26;
+}
+
+.texticon-at {
+  color: #037f48;
+}
+
+.texticon-cond {
+  color: blueviolet;
+}
+
+.texticon-extempo {
+  color: #14c20b;
+}
+
+.texticon-generique {
+  color: #009866;
+}
+
+.texticon-ghs {
+  color: #047f49;
+}
+
+.texticon-idext {
+  color: #990303;
+}
+
+.texticon-hopital {
+  color: #0833b5;
+}
+
+.texticon-isolement {
+  color: #029902;
+}
+
+.texticon-lt {
+  color: #980000;
+}
+
+.texticon-medicament {
+  color: #6698fe;
+}
+
+.texticon-mutation {
+  color: #0134fe;
+}
+
+/* Never used */
+.texticon-perop {
+  color: #cb0000;
+}
+
+.texticon-premed {
+  color: #c49c01;
+}
+
+.texticon-referents {
+  color: #0066cb;
+}
+
+.texticon-stup {
+  color: #ff0000;
+}
+
+.texticon-t2a {
+  color: #027f48;
+}
+
+.texticon-uf {
+  color: #346701;
+}
+
+.texticon-uf-warning {
+  color: #fd0101;
+}
+
+/* Never used */
+.texticon-uhcd {
+  color: #356702;
+}

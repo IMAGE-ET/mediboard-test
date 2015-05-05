@@ -113,7 +113,7 @@
     {{/if}}
 
     {{if $rpu->mutation_sejour_id}}
-      <img src="images/icons/mutation.png" />
+      <span class="texticon texticon-mutation">Muta</span>
     {{/if}}
 
     {{if $sejour->_ref_curr_affectation &&

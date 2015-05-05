@@ -11,7 +11,7 @@
 <!-- Intervention -->
 <td class="text">
   {{if $curr_op->exam_extempo}}
-    <img src="images/icons/extempo.png" title="{{tr}}COperation-exam_extempo{{/tr}}" style="float: right;"/>
+    <span class="texticon texticon-extempo" title="{{tr}}COperation-exam_extempo{{/tr}}" style="float: right;">Ext</span>
   {{/if}}
   {{if $curr_plageop|is_array || ($curr_plageop && $curr_plageop->spec_id)}}
     <strong>Dr {{$curr_op->_ref_chir}}</strong>
