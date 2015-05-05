@@ -48,12 +48,23 @@
       <table class="main tbl">
         {{foreach from=$ex_class_categories item=_category}}
           {{if $_category->ex_class_category_id}}
-            <tr>
-              <td style="width: 1px; background: #{{$_category->color}}"></td>
-              <th colspan="3" style="text-align: left;" title="{{$_category->description}}">
-                {{$_category}}
-              </th>
-            </tr>
+            {{assign var=_show_catgegory value=false}}
+
+            {{foreach from=$_category->_ref_ex_classes item=_ex_class}}
+              {{assign var=_ex_class_id value=$_ex_class->_id}}
+              {{if array_key_exists($_ex_class_id,$ex_objects_counts) && $ex_objects_counts.$_ex_class_id > 0}}
+                {{assign var=_show_catgegory value=true}}
+              {{/if}}
+            {{/foreach}}
+
+            {{if $_show_catgegory}}
+              <tr>
+                <td style="width: 1px; background: #{{$_category->color}}"></td>
+                <th colspan="3" style="text-align: left;" title="{{$_category->description}}">
+                  {{$_category}}
+                </th>
+              </tr>
+            {{/if}}
           {{/if}}
 
           {{foreach from=$_category->_ref_ex_classes item=_ex_class}}
