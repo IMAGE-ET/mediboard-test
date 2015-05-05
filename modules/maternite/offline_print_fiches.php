@@ -44,24 +44,11 @@ $params = array(
 
 /** @var CGrossesse $_grossesse */
 foreach ($grossesses as $_grossesse) {
-  foreach ($_grossesse->loadRefsSejours() as $_sejour) {
-    // Le séjour lié à l'intervention doit être de type obstétrique
-    if ($_sejour->type_pec == "O") {
-      $_sejour->loadRefsOperations();
-
-      /** @var COperation $op */
-      $op = $_sejour->_ref_last_operation;
-      if ($op->_id) {
-        $dossier_anesth = $op->loadRefsConsultAnesth();
-
-        if ($dossier_anesth->_id) {
-          $params["dossier_anesth_id"] = $op->_ref_consult_anesth->_id;
-          $params["operation_id"]      = $op->_id;
-          $fiches_anesth[$op->_id]     = CApp::fetch("dPcabinet", "print_fiche", $params);
-        }
-      }
+  foreach ($_grossesse->loadRefsConsultations() as $_consult) {
+    foreach ($_consult->loadRefsDossiersAnesth() as $_dossier_anesth) {
+      $params["dossier_anesth_id"] = $_dossier_anesth->_id;
+      $fiches_anesth[$_dossier_anesth->_id]     = CApp::fetch("dPcabinet", "print_fiche", $params);
     }
-    break;
   }
 }
 
