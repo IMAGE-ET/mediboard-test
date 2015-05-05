@@ -16,7 +16,7 @@
     {{assign var=var value=use_frais_divers}}
     {{foreach from=$childs_codable_class item=_child_codable_class}}
     {{assign var=type value=$_child_codable_class}}
-    {{if $type != "CFacturable"}}
+    {{if $type != "CFacturable" && $type != 'CDevisCodage'}}
       <tr>
         <th style="width: 50%">
           <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}">
