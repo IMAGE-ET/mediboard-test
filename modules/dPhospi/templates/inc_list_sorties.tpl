@@ -131,13 +131,15 @@
         <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
       </tr>
       {{foreach from=$dep_sortants item=_dep_sortants_by_service key=_service_id}}
-        {{if isset($services.$_service_id|smarty:nodefaults)}}
-          <tr>
-            <th class="title text" colspan="100">
+        <tr>
+          <th class="title text" colspan="100">
+            {{if isset($services.$_service_id|smarty:nodefaults)}}
               {{$services.$_service_id}}
-            </th>
-          </tr>
-        {{/if}}
+            {{else}}
+              Non placés
+            {{/if}}
+          </th>
+        </tr>
         {{foreach from=$_dep_sortants_by_service item=_sortie key=_service_id}}
           {{mb_include module=hospi template=inc_check_deplacement_line sens="sortants"}}
         {{/foreach}}
@@ -254,13 +256,15 @@
       {{/if}}
     </tr>
     {{foreach from=$mouvements item=_mouvements_by_service key=_service_id}}
-      {{if isset($services.$_service_id|smarty:nodefaults)}}
-        <tr>
-          <th class="title text" colspan="100">
+      <tr>
+        <th class="title text" colspan="100">
+          {{if isset($services.$_service_id|smarty:nodefaults)}}
             {{$services.$_service_id}}
-          </th>
-        </tr>
-      {{/if}}
+          {{else}}
+            Non placés
+          {{/if}}
+        </th>
+      </tr>
       {{foreach from=$_mouvements_by_service item=_affectation}}
         {{mb_include module=hospi template=inc_check_sortie_line affectation=$_affectation sejour=$_affectation->_ref_sejour}}
       {{/foreach}}
@@ -333,13 +337,15 @@
         {{/if}}
       </tr>
       {{foreach from=$mouvementsNP item=_mouvemementsNP_by_service key=_service_id}}
-        {{if isset($services.$_service_id|smarty:nodefaults)}}
-          <tr>
-            <th class="title text" colspan="100">
+        <tr>
+          <th class="title text" colspan="100">
+            {{if isset($services.$_service_id|smarty:nodefaults)}}
               {{$services.$_service_id}}
-            </th>
-          </tr>
-        {{/if}}
+            {{else}}
+              Non placés
+            {{/if}}
+          </th>
+        </tr>
         {{foreach from=$_mouvemementsNP_by_service item=_sejour}}
           {{mb_include module=hospi template=inc_check_sortie_line affectation=0 sejour=$_sejour}}
         {{/foreach}}
