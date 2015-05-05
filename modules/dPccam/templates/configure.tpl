@@ -64,6 +64,7 @@
   <li><a href="#ccam_NGAP">CCAM ngap</a></li>
   <li><a href="#FraisDivers">{{tr}}CFraisDivers{{/tr}}</a></li>
   <li><a href="#Configs">{{tr}}CConfiguration{{/tr}}</a></li>
+  <li><a href="#maintenance">{{tr}}Maintenance{{/tr}}</a></li>
 </ul>
 
 <div id="CCAM" style="display: none;">
@@ -97,4 +98,8 @@
 
 <div id="Configs" style="display: none;">
 
+</div>
+
+<div id="maintenance" style="display: none;">
+  {{mb_include template=inc_configure_actions}}
 </div>
