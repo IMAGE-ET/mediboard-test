@@ -15,6 +15,8 @@
 // Beginning of this file or installer will fail on config loading.
 global $dPconfig;
 
+$dPconfig = array();
+
 // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["root_dir"]            = "/var/www/mediboard";
 $dPconfig["company_name"]        = "mediboard.org";
@@ -122,10 +124,12 @@ $dPconfig["template_placeholders"] = array(
 );
 
 // Mode migration
-$dPconfig["migration"]["active"]       = "0";
-$dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";
-$dPconfig["migration"]["extranet_url"] = "http://extranet_server/mediboard/";
-$dPconfig["migration"]["limit_date"]   = "1970-01-01";
+$dPconfig["migration"] = array(
+  "active"       => "0",
+  "intranet_url" => "http://intranet_server/mediboard/",
+  "extranet_url" => "http://extranet_server/mediboard/",
+  "limit_date"   => "1970-01-01",
+);
 
 // Slaving
 $dPconfig["enslaving_ratio"] = "100";
@@ -160,7 +164,9 @@ $dPconfig["db"]["slave"] = array(
 );
 
 // Compatibility mode
-$dPconfig["interop"]["mode_compat"] = "default";
+$dPconfig["interop"] = array(
+  "mode_compat" => "default",
+);
 
 // File parsers to return indexing information about uploaded files
 $dPconfig["ft"] = array(
