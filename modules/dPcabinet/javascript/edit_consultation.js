@@ -86,7 +86,21 @@ Consultation = window.Consultation || {
     }
     url.modal({
       width: "95%",
-      height: "95%"
+      height: "95%",
+      onClose: function() {
+        if (window.refreshConsultations) {
+          refreshConsultations();
+        }
+        if (window.refreshResume) {
+          refreshResume();
+        }
+        if (window.TdBTamm) {
+          var form = getForm("filtreTdb");
+          if (form) {
+            TdBTamm.initUpdateListConsults(form.praticien_id.value, form.date.value);
+          }
+        }
+      }
     });
   },
 

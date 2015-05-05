@@ -2676,4 +2676,10 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
 
     return $this->_ref_brancardage = $brancardage;
   }
+
+  function loadAllDocs($tri = "date", $with_cancelled = false) {
+    $this->mapDocs($this, $with_cancelled, $tri);
+
+    ksort($this->_all_docs);
+  }
 }
