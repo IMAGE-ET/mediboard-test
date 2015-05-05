@@ -57,15 +57,16 @@ if ($plageSel->_affected && count($plageSel->_ref_consultations)) {
 }
 
 $consults = $plageSel->_ref_consultations;
-CMbObject::massLoadFwdRef($consults, "sejour_id");
-CMbObject::massLoadFwdRef($consults, "patient_id");
-CMbObject::massLoadFwdRef($consults, "categorie_id");
+CStoredObject::massLoadFwdRef($consults, "sejour_id");
+$patients = CMbObject::massLoadFwdRef($consults, "patient_id");
+CStoredObject::massCountBackRefs($patients, "notes");
+CStoredObject::massLoadFwdRef($consults, "categorie_id");
 
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->_ref_plageconsult = $plageSel;
   $consultation->loadRefSejour();
-  $consultation->loadRefPatient();
+  $consultation->loadRefPatient()->loadRefsNotes();;
   $consultation->loadRefCategorie();
   $consultation->countDocItems();
   $consultation->_view = "Consult. de ".$consultation->_ref_patient->_view;

@@ -90,8 +90,9 @@
       {{if !$patient->_id}}
         [PAUSE]
       {{else}}
-        <button class="edit notext button" style="float: right;"  title="Modifier le dossier administratif" onclick="Patient.editModal('{{$patient->_id}}')">Modifier le patient
-        </button>
+        <div style="float: right;">
+          {{mb_include module=system template=inc_object_notes object=$patient}}
+        </div>
         <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
         {{mb_value object=$patient}}
         </a>

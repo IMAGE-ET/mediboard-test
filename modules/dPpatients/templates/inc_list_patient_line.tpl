@@ -26,9 +26,22 @@
       {{/if}}
 
       <div class="text noted">
-        <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
-          {{mb_value object=$_patient field="_view"}}
-        </a>
+        {{if !$board}}
+          <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
+            {{mb_value object=$_patient field="_view"}}
+          </a>
+        {{else}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
+            {{mb_value object=$_patient field="_view"}}
+            ({{mb_value object=$_patient field="_age"}})
+          </span>
+          <span class="compact" style="display: block;">
+            {{$_patient->adresse|spancate:35}}
+          </span>
+          <span class="compact" style="display: block;">
+            {{$_patient->cp}} {{$_patient->ville|spancate:35}}
+          </span>
+        {{/if}}
       </div>
 
     </td>
@@ -37,10 +50,12 @@
         {{mb_value object=$_patient field="naissance"}}
       </span>
     </td>
+    {{if !$board}}
     <td class="text compact">
       <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
       <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
     </td>
+    {{/if}}
     <td>
       {{if !$board}}
         <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}"

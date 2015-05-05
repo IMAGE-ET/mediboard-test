@@ -50,7 +50,9 @@
       {{/if}}
       <th id="inc_list_patient_th_patient">{{tr}}CPatient{{/tr}}</th>
       <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
-      <th>{{tr}}CPatient-adresse{{/tr}}</th>
+      {{if !$board}}
+        <th>{{tr}}CPatient-adresse{{/tr}}</th>
+      {{/if}}
       <th class="narrow"></th>
     </tr>
 
