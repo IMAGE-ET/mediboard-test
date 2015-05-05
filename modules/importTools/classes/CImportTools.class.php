@@ -15,6 +15,14 @@
  * Import tools class
  */
 class CImportTools  {
+  /**
+   * Get columns information from a table
+   *
+   * @param CSQLDataSource $ds    Datasource object
+   * @param string         $table Table name
+   *
+   * @return array
+   */
   static function getColumnsInfo(CSQLDataSource $ds, $table) {
     $columns = $ds->loadHashAssoc("SHOW COLUMNS FROM `{$table}`");
     $xpath = null;
@@ -40,6 +48,14 @@ class CImportTools  {
     return $columns;
   }
 
+  /**
+   * Get table information
+   *
+   * @param CSQLDataSource $ds    Datasource object
+   * @param string         $table Table name
+   *
+   * @return array
+   */
   static function getTableInfo(CSQLDataSource $ds, $table) {
     $xpath = null;
 
@@ -59,6 +75,15 @@ class CImportTools  {
     return $info;
   }
 
+  /**
+   * Get full database structure
+   *
+   * @param string $dsn   Datasource name
+   * @param bool   $count Count each table entries
+   *
+   * @return mixed
+   * @throws Exception
+   */
   static function getDatabaseStructure($dsn, $count = false) {
     $databases = CImportTools::getAllDatabaseInfo();
 
@@ -95,6 +120,13 @@ class CImportTools  {
     return $db_info;
   }
 
+  /**
+   * Get a database description DOM document
+   *
+   * @param string $dsn Datasource name
+   *
+   * @return DOMDocument|null
+   */
   static function getDescription($dsn) {
     static $cache = array();
 
@@ -122,6 +154,11 @@ class CImportTools  {
     return $cache[$dsn] = $description;
   }
 
+  /**
+   * Load all databases basic information
+   *
+   * @return array
+   */
   static function getAllDatabaseInfo() {
     static $databases = null;
 
