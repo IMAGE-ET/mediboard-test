@@ -302,6 +302,10 @@ if ($service_id) {
     foreach ($service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lits) {
         foreach ($_lits->_ref_affectations as $_affectation) {
+          if ($_affectation->_ref_sejour->annule) {
+            unset($_lits->_ref_affectations[$_affectation->_id]);
+            continue;
+          }
           if ($_is_anesth || ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id)) {
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
@@ -332,7 +336,10 @@ if ($service_id) {
 
     foreach ($service->_ref_affectations_couloir as $_affectation) {
       $_affectation->loadRefSejour();
-
+      if ($_affectation->_ref_sejour->annule) {
+        unset($service->_ref_affectations_couloir[$_affectation->_id]);
+        continue;
+      }
       if ($_is_anesth || ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id)) {
         $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
       }
