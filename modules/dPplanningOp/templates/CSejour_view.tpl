@@ -101,7 +101,7 @@
 
       {{if !$sejour->sortie_reelle && $sejour->entree_reelle}}
         <button class="tick" type="button"
-                onclick='Admissions.validerSortie("{{$sejour->_id}}", false);'>
+                onclick='Admissions.validerSortie("{{$sejour->_id}}", true);'>
           Valider la sortie
         </button>
       {{/if}}
