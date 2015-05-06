@@ -323,7 +323,7 @@ Admissions = {
 
   confirmationSortie : function (form, modify_sortie_prevue, sortie_prevue, impose_lit_service_mutation, callback) {
     if (impose_lit_service_mutation && App.m == "dPurgences") {
-      if ((!form.lit_id || !form.lit_id.value) && !form.service_sortie_id.value) {
+      if (form.mode_sortie.value == "mutation" && (!form.lit_id || !form.lit_id.value) && !form.service_sortie_id.value) {
         alert($T('CRPU-_missing_lit_service_mutation'));
         return false;
       }

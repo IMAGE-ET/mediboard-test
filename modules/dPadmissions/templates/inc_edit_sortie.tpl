@@ -325,7 +325,7 @@
             {{tr}}Cancel{{/tr}}
             {{mb_label object=$sejour field=sortie}}
           </button>
-          <button type="submit" class="save oneclick">
+          <button type="submit" class="save singleclick">
             {{tr}}Validate{{/tr}}
             {{mb_label object=$sejour field=sortie}}
           </button>
