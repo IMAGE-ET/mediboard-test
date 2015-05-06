@@ -341,6 +341,10 @@ showModalTP = function() {
         {{tr}}Add{{/tr}}
       </button>
       {{/if}}
+      {{if "vidal"|module_active && $conf.dPmedicament.base == "vidal"}}
+        {{mb_include module=vidal template=inc_button_reco_cim code_cim=$_code->code}}
+      {{/if}}
+
       {{$_code->code}}: {{$_code->libelle}}
     </li>
     {{foreachelse}}
