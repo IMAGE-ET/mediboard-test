@@ -62,7 +62,7 @@ if (!empty($whereOr)) {
   $where[] = implode(' OR ', $whereOr);
 }
 $constant = new CConstantesMedicales();
-$constants = $constant->loadList($where, 'datetime DESC');
+$constants = $constant->loadList($where, 'datetime DESC', null, 'datetime');
 
 $smarty = new CSmartyDP();
 
@@ -85,6 +85,9 @@ if (!empty($constants)) {
   $smarty->assign('graphs', array(1 => $graph->graphs[1][0]));
   $smarty->assign('min_x_index', $graph->min_x_index);
   $smarty->assign('min_x_value', $graph->min_x_value);
+  if (!$period) {
+    $smarty->assign('patient', $patient);
+  }
 }
 else {
   $smarty->assign('msg', CAppUI::tr('CConstantGraph-msg-no_values'));

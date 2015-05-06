@@ -96,12 +96,38 @@ emptyAndSubmit = function(const_name) {
 };
 
 displayConstantGraph = function(constant) {
+  var checkboxes = $$('input[name="_displayGraph"]:checked');
+  var selection = [];
+  checkboxes.each(function(checkbox) {
+    selection.push(checkbox.getAttribute('data-constant'));
+  });
+
+  if (selection.length == 0) {
+    alert('Vous devez au moins sélectionner une constante!');
+    return;
+  }
+
   var form = getForm('edit-constantes-medicales{{$unique_id}}');
   var url = new Url('patients', 'ajax_select_constants_graph_period');
   url.addParam('patient_id', $V(form.patient_id));
-  url.addParam('constants', JSON.stringify([constant]));
+  url.addParam('constants', JSON.stringify(selection));
   url.addParam('period', 'month');
-  url.pop(650, 220);
+  url.pop(900, 300);
+};
+
+checkGraph = function() {
+  var checkboxes = $$('input[name="_displayGraph"]:checked');
+
+  if (checkboxes.length >= 5) {
+    checkboxes = $$('input[name="_displayGraph"]:not(:checked)').each(function(elt) {
+      elt.disable();
+    });
+  }
+  else {
+    checkboxes = $$('input[name="_displayGraph"]:not(:checked)').each(function(elt) {
+      elt.enable();
+    });
+  }
 };
 
 Main.add(function () {
@@ -163,6 +189,11 @@ Main.add(function () {
       {{/if}}
       <table class="main form constantes" style="margin-right:20px;">
         <tr>
+          <th class="category narrow">
+            <button class="stats notext" type="button" onclick="displayConstantGraph();">
+              {{tr}}CConstantGraph-msg-display{{/tr}}
+            </button>
+          </th>
           <th class="category"></th>
           {{if $can_edit}}<th class="category">Saisie</th>{{/if}}
           <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
@@ -185,8 +216,9 @@ Main.add(function () {
                   style="display: none;" class="secondary"
                   {{assign var=at_least_one_hidden value=true}}
                   {{/if}}>
+                  <td><input name="_displayGraph" type="checkbox" data-constant="{{$_constant}}" onclick="checkGraph();"/></td>
                   <th style="text-align: left;" class="text">
-                    <button type="button" class="stats notext" style="float: right;" onclick="displayConstantGraph('{{$_constant}}');">
+                    <button type="button" class="stats notext" style="float: right; display: none;" onclick="displayConstantGraph('{{$_constant}}');">
                       {{tr}}CConstantGraph-msg-display{{/tr}}
                     </button>
                     <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}" onmouseover="">

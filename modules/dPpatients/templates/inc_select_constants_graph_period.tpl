@@ -12,7 +12,7 @@
 <script type="text/javascript">
   changePeriod = function(select) {
     var url = new Url('patients', 'ajax_custom_constants_graph');
-    url.addParam('patient_id', '{{$patient_id}}');
+    url.addParam('patient_id', '{{$patient->_id}}');
     url.addParam('context_guid', '{{$context_guid}}');
     url.addParam('constants', {{$constants|smarty:nodefaults|@json}});
     url.addParam('period', $V(select));
@@ -23,6 +23,14 @@
     changePeriod($('period'));
   });
 </script>
+
+<table class="tbl">
+  <tr>
+    <th class="title">
+      {{$patient->_view}} - {{mb_value object=$patient field=naissance}}
+    </th>
+  </tr>
+</table>
 
 <div style="text-align: center;">
   <span>{{tr}}Period{{/tr}} : </span>

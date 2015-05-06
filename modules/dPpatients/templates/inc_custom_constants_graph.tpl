@@ -11,6 +11,7 @@
 
 {{mb_script module=patients script=constants_graph ajax=true}}
 {{mb_default var=msg value=0}}
+{{mb_default var=patient value=0}}
 
 {{if $msg}}
   <div class="small info">
@@ -34,12 +35,22 @@
     });
   </script>
 
+  {{if $patient}}
+    <table class="tbl">
+      <tr>
+        <th class="title">
+          {{$patient->_view}} - {{mb_value object=$patient field=naissance}}
+        </th>
+      </tr>
+    </table>
+  {{/if}}
+
   {{foreach from=$graphs item=_graph key=_id}}
     <div id="tab-{{$_id}}">
       <table class="layout">
         <tr>
           <td>
-            <div id="placeholder_{{$_id}}" style="width: {{$_graph.width}}px; height: 175px; margin-bottom: 5px;"></div>
+            <div id="placeholder_{{$_id}}" style="width: 800px; height: 250px; margin-bottom: 5px;"></div>
           </td>
           <td id="legend_{{$_id}}" class="graph-legend"></td>
         </tr>

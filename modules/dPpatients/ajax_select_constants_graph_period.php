@@ -16,8 +16,10 @@ $patient_id = CValue::get('patient_id');
 $context_guid = CValue::get('context_guid');
 $period = CValue::get('period', 'month');
 
+$patient = CMbObject::loadFromGuid("CPatient-$patient_id");
+
 $smarty = new CSmartyDP();
-$smarty->assign('patient_id', $patient_id);
+$smarty->assign('patient', $patient);
 $smarty->assign('context_guid', $context_guid);
 $smarty->assign('constants', json_encode($selection));
 $smarty->assign('period', $period);
