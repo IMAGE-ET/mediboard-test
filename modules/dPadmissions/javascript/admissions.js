@@ -125,16 +125,20 @@ Admissions = {
   },
 
   beforePrint: function() {
-    Admissions.totalUpdater.stop();
-    Admissions.listUpdater.stop();
+    if (Admissions.totalUpdater) {
+      Admissions.totalUpdater.stop();
+      Admissions.listUpdater.stop();
+    }
   },
 
   afterPrint: function() {
     Control.Modal.close();
-    Admissions.totalUpdater.resume();
-    Admissions.listUpdater.resume();
+    if (Admissions.totalUpdater) {
+      Admissions.totalUpdater.resume();
+      Admissions.listUpdater.resume();
+    }
   },
-  
+
   toggleMultipleServices: function(elt) {
     var status = elt.checked;
     var form = elt.form;
@@ -142,22 +146,26 @@ Admissions = {
     elt_service_id.multiple = status;
     elt_service_id.size = status ? 5 : 1;
   },
-  
+
   showLegend: function() {
     new Url("admissions", "vw_legende").requestModal();
   },
 
   showDocs: function(sejour_id) {
-    Admissions.totalUpdater.stop();
-    Admissions.listUpdater.stop();
+    if (Admissions.totalUpdater) {
+      Admissions.totalUpdater.stop();
+      Admissions.listUpdater.stop();
+    }
     var url = new Url("hospi", "httpreq_documents_sejour");
     url.addParam("sejour_id", sejour_id);
     url.addParam("only_sejour", 1);
     url.addParam("with_patient", 1);
     url.requestModal(700, 400);
     url.modalObject.observe("afterClose", function() {
-      Admissions.totalUpdater.resume();
-      Admissions.listUpdater.resume();
+      if (Admissions.totalUpdater) {
+        Admissions.totalUpdater.resume();
+        Admissions.listUpdater.resume();
+      }
     });
   },
 
