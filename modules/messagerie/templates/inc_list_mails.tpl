@@ -51,9 +51,6 @@
                 <i class="msgicon fa fa-wrench"></i>
               </button>
             {{/if}}
-            {{if $_mail->_is_apicrypt}}
-              <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="attachments" style="height:15px;"/>
-            {{/if}}
           </td>
         {{/if}}
         <td onclick="{{$onclick}}">
@@ -77,7 +74,9 @@
             <i class="msgicon fa fa-paperclip" style="font-size: 1.5em; float: right; margin-right: 2px;" title="{{tr}}Attachments{{/tr}} : {{$_mail->_attachments|@count}}"></i>
           {{/if}}
           {{if $_mail->_is_apicrypt}}
-            <i class="msgicon fa fa-key" style="font-size: 1.5em; float: right; margin-right: 2px;" title="Apicrypt"></i>
+            {{if $_mail->_is_apicrypt}}
+              <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="Apicrypt" style="height:15px; float: right; margin-right: 2px;"/>
+            {{/if}}
           {{/if}}
           <a href="#{{$_mail->_id}}" style="display: inline; vertical-align: middle;">
             {{if $subject}}{{mb_include template=inc_vw_type_message}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}

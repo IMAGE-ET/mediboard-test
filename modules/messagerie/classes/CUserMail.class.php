@@ -249,11 +249,11 @@ class CUserMail extends CMbObject{
     $this->loadMatchingObject();
 
     $this->subject      = (isset($source->subject)) ? self::flatMimeDecode($source->subject) : null;
-    $this->from         = self::flatMimeDecode($source->fromaddress);
+    $this->from         = (isset($source->fromaddress)) ? self::flatMimeDecode($source->fromaddress) : null;
     $this->to           = (isset($source->toaddress)) ? self::flatMimeDecode($source->toaddress) : null;
     $this->cc           = (isset($source->ccaddress)) ? self::flatMimeDecode($source->ccaddress) : null;
     $this->bcc          = (isset($source->bccaddress)) ? self::flatMimeDecode($source->bccaddress) : null;
-    $this->date_inbox   = CMbDT::dateTime($source->date);
+    $this->date_inbox   = (isset($source->date)) ? CMbDT::dateTime($source->date) : CMbDT::dateTime();
 
     //cleanup
     if (empty($source->Unseen)) {
@@ -421,6 +421,10 @@ class CUserMail extends CMbObject{
    * @return bool|string
    */
   public function makeHash($header, $content) {
+    if (isset($header->fromaddress) && isset($header->toaddress) && isset($header->subject)) {
+      return null;
+    }
+
     $data = "==FROM==\n" . self::flatMimeDecode($header->fromaddress) .
       "\n==TO==\n" . self::flatMimeDecode($header->toaddress) .
       "\n==SUBJECT==\n" . self::flatMimeDecode($header->subject);
