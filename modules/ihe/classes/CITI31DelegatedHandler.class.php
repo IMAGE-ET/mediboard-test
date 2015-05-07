@@ -770,6 +770,17 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("annule", "1")) {
         return "A11";
       }
+
+      // Cas d'une rétablissement on simule une nouvelle admission
+      if ($sejour->fieldModified("annule", "0")) {
+        // Patient externe
+        if (in_array($sejour->type, self::$outpatient)) {
+          return "A04";
+        }
+
+        // Admission hospitalisé
+        return "A01";
+      }
       
       // Annulation de la sortie réelle
       if ($sejour->_old->sortie_reelle && !$sejour->sortie_reelle) {

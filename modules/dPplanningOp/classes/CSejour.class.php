@@ -1239,10 +1239,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     $this->getUFs();
+
+    $eai_sender_guid = $this->_eai_sender_guid;
+
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
     }
+
+    $this->_eai_sender_guid = $eai_sender_guid;
 
     if ($change_grossesse) {
       foreach ($naissances as $_naissance) {
@@ -1309,10 +1314,18 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Cas d'une annulation de séjour
     if ($this->annule) {
+      // Suppression des affectations
       if ($msg = $this->delAffectations()) {
         return $msg;
       }
+
+      // Suppression des opérations
       if ($msg = $this->cancelOperations()) {
+        return $msg;
+      }
+
+      // Annulation des mouvements
+      if ($msg = $this->cancelMovements()) {
         return $msg;
       }
     }
@@ -1433,7 +1446,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Module might not be active
     if ($this->_ref_affectations) {
       foreach ($this->_ref_affectations as $key => $value) {
-        $msg .= $this->_ref_affectations[$key]->deleteOne();
+        $affectation = $this->_ref_affectations[$key];
+        $affectation->_eai_sender_guid = $this->_eai_sender_guid;
+
+        $msg .= $affectation->deleteOne();
       }
     }
 
@@ -1452,6 +1468,23 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($this->_ref_operations as $key => $value) {
       $value->annulee = 1;
       $msg .= $this->_ref_operations[$key]->store();
+    }
+
+    return $msg;
+  }
+
+  /**
+   * Cancel all movements
+   *
+   * @return null|string
+   */
+  function cancelMovements() {
+    $this->loadRefsMovements();
+
+    $msg = null;
+    foreach ($this->_ref_movements as $movement) {
+      $movement->cancel = 1;
+      $msg .= $movement->store();
     }
 
     return $msg;
