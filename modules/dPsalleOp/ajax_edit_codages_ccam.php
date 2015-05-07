@@ -78,7 +78,7 @@ foreach ($codable->_ext_codes_ccam as $_code) {
         $_acte =& $_phase->_connected_acte;
         /* On met la date d'execution des actes non cotés à la date du codage pour les séjours */
         if (!$_acte->_id) {
-          $_acte->execution = CMbDT::format($codage->date, '%Y-%m-%d ') . CMbDT::format(CMbDT::dateTime(), '%T');
+          $_acte->execution = CMbDT::format($codage->date, '%Y-%m-%d ') . CMbDT::format(CMbDT::dateTime(), '%H:%M:%S');
         }
       }
     }
