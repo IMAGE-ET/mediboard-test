@@ -156,9 +156,10 @@ else {
 }
 
 $fields = array(
-    "user_id"     => $user_id,
-    "function_id" => $user->function_id,
-    "group_id"    => $group->_id);
+  "user_id"     => $user_id,
+  "function_id" => $user->function_id,
+  "group_id"    => $group->_id
+);
 
 // Création du template
 $smarty = new CSmartyDP();

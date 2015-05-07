@@ -35,7 +35,7 @@ if ($function_id) {
 }
 
 $packs = CPack::loadAllPacksFor($owner_id, $owner, $object_class);
-if ($function->_id) {
+if ($function_id) {
   unset($packs["prat"]);
 }
 

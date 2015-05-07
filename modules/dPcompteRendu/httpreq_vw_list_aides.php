@@ -14,8 +14,9 @@
 CCanDO::checkRead();
 
 // Utilisateur sélectionné ou utilisateur courant
-$filter_user_id = CValue::getOrSession("filter_user_id");
-$filter_class   = CValue::getOrSession("filter_class");
+$user_id        = CValue::getOrSession("user_id");
+$function_id    = CValue::getOrSession("function_id");
+$class          = CValue::getOrSession("class");
 $start          = CValue::getOrSession("start");
 $keywords       = CValue::getOrSession("keywords");
 $order_col_aide = CValue::getOrSession("order_col_aide");
@@ -24,12 +25,16 @@ $aide_id        = CValue::getOrSession("aide_id", "0");
 
 $order_by = $order_col_aide ? $order_col_aide . " " . $order_way : null;
 
-$userSel = CMediusers::get($filter_user_id);
+$userSel = CMediusers::get($user_id);
 $userSel->loadRefFunction()->loadRefGroup();
 
+$function = new CFunctions();
+$function->load($function_id);
+$function->loadRefGroup();
+
 $where = array();
-if ($filter_class) {
-  $where["class"] = "= '$filter_class'";
+if ($class) {
+  $where["class"] = "= '$class'";
 }
 
 // Liste des aides pour le praticien
@@ -43,8 +48,10 @@ $access_group    = $is_admin || CAppUI::conf("compteRendu CAideSaisie access_gro
 $aides      = array();
 $aidesCount = array();
 
-$aides["user"]      = array();
-$aidesCount["user"] = 0;
+if (!$function_id) {
+  $aides["user"]      = array();
+  $aidesCount["user"] = 0;
+}
 if ($access_function) {
   $aides["func"]      = array();
   $aidesCount["func"] = 0;
@@ -56,56 +63,47 @@ if ($access_group) {
 
 $_aide = new CAideSaisie();
 
-$where["user_id"]   = "= '$userSel->user_id'";
-$aides["user_ids"]  = array_keys($_aide->seek($keywords, $where, 1000));
-$aides["user"]      = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
-$aidesCount["user"] = $_aide->_totalSeek;
+foreach ($aides as $owner => $_aides_by_owner) {
+  switch ($owner) {
+    case "user":
+      $key_where = "user_id";
+      $where[$key_where]   = "= '$userSel->user_id'";
 
-CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
-if (isset($aides['func'])) {
-  CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
-}
-if (isset($aides['etab'])) {
-  CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
-}
+      break;
+    case "func":
+      $key_where = "function_id";
+      $where[$key_where] = "= '".($function_id ? $function_id : $userSel->function_id) ."'";
 
-/** @var CAideSaisie $aide */
-foreach ($aides["user"] as $aide) {
-  $aide->loadRefUser();
-  $aide->loadBackRefs('hypertext_links');
-}
-unset($where["user_id"]);
-if (isset($aides["func"])) {
-  $where["function_id"] = "= '$userSel->function_id'";
-  $aides["func_ids"]    = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["func"]        = $_aide->seek($keywords, $where, $start["func"].", 30", true, null, $order_by);
-  $aidesCount["func"]   = $_aide->_totalSeek;
-  foreach ($aides["func"] as $aide) {
+      break;
+    case "etab":
+      $key_where = "group_id";
+      $where[$key_where]  = "= '".($function_id ? $function->_ref_group->_id  : $userSel->_ref_function->group_id) ."'";
+
+      break;
+  }
+
+  $aides["{$owner}_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
+  $aides[$owner] = $_aide->seek($keywords, $where, $start[$owner].", 30", true, null, $order_by);
+  $aidesCount[$owner] = $_aide->_totalSeek;
+  unset($where[$key_where]);
+
+  foreach ($aides[$owner] as $aide) {
+    $aide->loadRefUser();
     $aide->loadRefFunction();
-    $aide->loadBackRefs('hypertext_links');
-  }
-  unset($where["function_id"]);
-}
-
-if (isset($aides["etab"])) {
-  $where["group_id"]  = "= '{$userSel->_ref_function->group_id}'";
-  $aides["etab_ids"]  = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["etab"]      = $_aide->seek($keywords, $where, $start["etab"].", 30", true, null, $order_by);
-  $aidesCount["etab"] = $_aide->_totalSeek;
-  foreach ($aides["etab"] as $aide) {
     $aide->loadRefGroup();
-    $aide->loadBackRefs('hypertext_links');
   }
-  unset($where["group_id"]);
+
+  CStoredObject::massLoadBackRefs($aides[$owner], 'hypertext_links');
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("userSel"       , $userSel);
+$smarty->assign("function"      , $function);
 $smarty->assign("aides"         , $aides);
 $smarty->assign("aidesCount"    , $aidesCount);
-$smarty->assign("filter_class"  , $filter_class);
+$smarty->assign("class"         , $class);
 $smarty->assign("start"         , $start);
 $smarty->assign("order_col_aide", $order_col_aide);
 $smarty->assign("order_way"     , $order_way);
