@@ -173,21 +173,36 @@ class CCSVFile {
     
     return $content;
   }
-  
+
   /**
    * Stream the content to the browser
-   * 
-   * @param string $file_name File name for the browser
-   * 
+   *
+   * @param string $file_name      File name for the browser
+   * @param bool   $real_streaming Real streaming, not loading all the data in memory
+   *
    * @return string
    */
-  function stream($file_name) {
-    $content = $this->getContent();
-    
+  function stream($file_name, $real_streaming = false) {
     header("Content-Type: text/plain;charset=".CApp::$encoding);
     header("Content-Disposition: attachment;filename=\"$file_name.csv\"");
+
+    // Real streaming never loads the full file into memory
+    if ($real_streaming) {
+      // End output buffering
+      ob_end_clean();
+      rewind($this->handle);
+
+      while ($s = fgets($this->handle)) {
+        echo $s;
+      }
+
+      return;
+    }
+
+    $content = $this->getContent();
+
     header("Content-Length: ".strlen($content).";");
-    
+
     echo $content;
   }
 }

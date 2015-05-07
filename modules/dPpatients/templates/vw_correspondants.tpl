@@ -142,6 +142,8 @@
             <button class="search" type="button" onclick="$V(this.form.annuaire, 1); this.form.onsubmit()">{{tr}}Search{{/tr}} dans l'annuaire</button>
           {{/if}}
           <button class="new" type="button" onclick="Medecin.editMedecin('0', refreshPageMedecin.curry('0'));">{{tr}}Create{{/tr}}</button>
+
+          <a class="button download" href="?m=patients&amp;raw=export_medecins_csv" target="_blank">{{tr}}CMedecin-action-Export with e-mail address{{/tr}}</a>
         </td>
       </tr>
     </table>
