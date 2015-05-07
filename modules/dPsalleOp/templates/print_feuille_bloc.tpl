@@ -66,7 +66,7 @@ Main.add(function(){
         <tr>
           <th>{{mb_label object=$operation->_ref_plageop field=date}}</th>
           <td class="greedyPane">
-            {{mb_value object=$operation->_ref_plageop field=date}}
+            {{mb_value object=$operation field=_datetime}}
           </td>
         </tr>
         <tr>
