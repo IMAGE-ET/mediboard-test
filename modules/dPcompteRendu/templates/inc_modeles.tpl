@@ -9,6 +9,17 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{if $can->admin}}
+  <button class="hslip"
+          {{if $modeles|@count}}
+          onclick="Modele.exportXML('{{$owners.$owner|escape:"javascript"}}', '{{$filtre->object_class}}', {{$modeles|@array_keys|@json}})"
+          {{/if}}>
+    {{tr}}Export-XML{{/tr}}
+  </button>
+  {{assign var=owner_export value=$owners.$owner}}
+  <button onclick="Modele.importXML('{{$owner_export->_guid}}');" class="hslip">{{tr}}Import-XML{{/tr}}</button>
+{{/if}}
+
 <table class="tbl">
   <tr>
     <th style="width: 30%">{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way function=sortBy}}</th>

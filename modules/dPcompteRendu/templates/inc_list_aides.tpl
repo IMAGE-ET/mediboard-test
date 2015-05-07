@@ -1,7 +1,4 @@
 {{if $can->admin}}
-  <script>
-
-  </script>
   <button class="hslip"
           onclick="Aide.exportAidesCSV('{{$owner|escape:"javascript"}}', '{{$class}}', {{$aides_ids|@json}})">
     {{tr}}Export-CSV{{/tr}}

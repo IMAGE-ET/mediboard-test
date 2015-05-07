@@ -173,6 +173,14 @@ class CCompteRendu extends CDocumentItem implements IIndexableObject {
     )
   );
 
+  static $fields_import_export = array(
+    "nom", "object_class", "type", "factory", "language", "font", "size", "height",
+    "margin_top", "margin_bottom", "margin_left", "margin_right", "page_height", "page_width",
+    "fast_edit", "fast_edit_pdf", "purge_field", "_source",
+    "header_id", "footer_id", "preface_id", "ending_id"
+  );
+
+
   /**
    * @see parent::getSpec()
    */
