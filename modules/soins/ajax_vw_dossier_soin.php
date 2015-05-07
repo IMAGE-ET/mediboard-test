@@ -92,6 +92,7 @@ $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
 $risques_cis = array();
 
+global $atc_classes;
 $atc_classes = array();
 $hidden_lines_count = 0;
 $hide_inactive_count = 0;
@@ -347,16 +348,11 @@ if (CModule::getActive("dPprescription")) {
               }
             }
             if (count($atcs) == 1) {
-              foreach ($atcs as $_atc) {
-                if (!isset($atc_classes[$_atc])) {
-                  $medicament_produit = new CMedicamentProduit();
-                  $atc_classes[$_atc] = $medicament_produit->getLibelleATC($_atc);
-                }
-                $prescription->_ref_all_med_for_plan[$_atc][$_prescription_line_mix->_id]["aucune_prise"] = $_prescription_line_mix;
+              $_atc = reset($atcs);
+              if (!isset($atc_classes[$_atc])) {
+                $medicament_produit = new CMedicamentProduit();
+                $atc_classes[$_atc] = $medicament_produit->getLibelleATC($_atc);
               }
-            }
-            else {
-              $prescription->_ref_all_med_for_plan["other_perf"][$_prescription_line_mix->_id][] = $_prescription_line_mix;
             }
           }
         }
@@ -624,7 +620,7 @@ function compareATC($atc1, $atc2) {
   return strcmp($atc_classes[$atc1], $atc_classes[$atc2]);
 }
 
-if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group) && CAppUI::pref("regroupement_med_plan_soins") && $prescription->object_id && count($prescription->_ref_all_med_for_plan)) {
+if (CAppUI::conf("dPprescription CPrescription group_perf_atc", $group) && CAppUI::pref("regroupement_med_plan_soins") && $prescription->object_id && count($prescription->_ref_all_med_for_plan) && $chapitre) {
   uksort($prescription->_ref_all_med_for_plan, "compareATC");
   if (isset($prescription->_ref_all_med_for_plan["other_perf"])) {
     $other = $prescription->_ref_all_med_for_plan["other_perf"];
