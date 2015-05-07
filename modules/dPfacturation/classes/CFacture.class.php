@@ -401,6 +401,14 @@ class CFacture extends CMbObject implements IPatientRelated {
       $_object_class = "CSejour";
     }
 
+    $this->completeField("assurance_maladie", "assurance_accident", "type_facture");
+    if ($this->type_facture != "accident" && $this->assurance_accident){
+      $this->assurance_accident = "";
+    }
+    if ($this->type_facture != "maladie" && $this->assurance_maladie){
+      $this->assurance_maladie = "";
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
