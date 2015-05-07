@@ -170,7 +170,7 @@ class CDevisCodage extends CCodable {
   public function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_ttc = round($this->ht + $this->ht * $this->tax_rate, 2);
+    $this->_ttc = round($this->ht * $this->tax_rate / 100, 2);
     $this->_total = round($this->base + $this->dh + $this->_ttc, 2);
     $this->_praticien_id = $this->praticien_id;
     $this->getActeExecution();
