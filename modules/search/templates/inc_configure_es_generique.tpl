@@ -56,9 +56,13 @@
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td>
       <input type="checkbox" name="names_types" id="CExObject" value="CExObject">
       <label for="CExObject">{{tr}}CExObject{{/tr}}</label>
+    </td>
+    <td>
+      <input type="checkbox" name="names_types" id="COperation" value="COperation">
+      <label for="COperation">{{tr}}COperation{{/tr}}</label>
     </td>
   </tr>
   <tr>

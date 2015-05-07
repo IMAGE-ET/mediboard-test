@@ -12,7 +12,7 @@
 /**
  * Opération
  */
-class COperation extends CCodable implements IPatientRelated {
+class COperation extends CCodable implements IPatientRelated, IIndexableObject {
   // static lists
   static $fields_etiq = array("ANESTH", "LIBELLE", "DATE", "COTE");
 
@@ -2032,5 +2032,69 @@ class COperation extends CCodable implements IPatientRelated {
     $this->mapDocs($this, $with_cancelled, $tri);
 
     ksort($this->_all_docs);
+  }
+
+  /**
+   * Get the patient of CMbobject
+   *
+   * @return CPatient
+   */
+  function getIndexablePatient () {
+    return $this->loadRelPatient();
+  }
+
+  /**
+   * Get the praticien_id of CMbobject
+   *
+   * @return CMediusers
+   */
+  function getIndexablePraticien() {
+    return $this->loadRefChir();
+  }
+
+  /**
+   * Loads the related fields for indexing datum
+   *
+   * @return array
+   */
+  function getIndexableData () {
+    $this->getIndexablePraticien();
+    $array["id"]          = $this->_id;
+    $array["author_id"]   = $this->_ref_chir->_id;
+    $array["prat_id"]     = $this->_ref_chir->_id;
+    $array["title"]       = $this->libelle;
+    $array["body"]        = $this->getIndexableBody("");
+    $array["date"]        = str_replace("-", "/", $this->date);
+    $array["function_id"] = $this->_ref_chir->function_id;
+    $array["group_id"]    = $this->_ref_chir->loadRefFunction()->group_id;
+    $array["patient_id"]  = $this->getIndexablePatient()->_id;
+    $this->loadRefSejour();
+    $array["object_ref_id"]  = $this->_ref_sejour->_id;
+    $array["object_ref_class"]  = $this->_ref_sejour->_class;
+
+    return $array;
+  }
+
+  /**
+   * Redesign the content of the body you will index
+   *
+   * @param string $content The content you want to redesign
+   *
+   * @return string
+   */
+  function getIndexableBody ($content) {
+    // champs textes
+    $fields = $this->getTextcontent();
+    foreach ($fields as $_field) {
+      $content .= " " . $this->$_field;
+    }
+
+    // Actes de l'opération
+    $this->loadExtCodesCCAM();
+    foreach ($this->_ext_codes_ccam as $_ccam) {
+      $content .= " " . $_ccam->code . " ". $_ccam->libelleCourt . " " . $_ccam->libelleLong . "\n";
+    }
+
+    return $content;
   }
 }
