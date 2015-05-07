@@ -39,22 +39,22 @@ class CAntecedent extends CMbObject {
 
   /** @var CDossierMedical */
   public $_ref_dossier_medical;
-  
+
   // Types
   static $types = array(
-    'med', 'alle', 'trans', 'obst', 'deficience', 'chir', 'fam', 'anesth', 'gyn', 
-    'cardio', 'pulm', 'stomato', 'plast', 'ophtalmo', 'digestif', 'gastro', 
+    'med', 'alle', 'trans', 'obst', 'deficience', 'chir', 'fam', 'anesth', 'gyn',
+    'cardio', 'pulm', 'stomato', 'plast', 'ophtalmo', 'digestif', 'gastro',
     'stomie', 'uro', 'ortho', 'traumato', 'amput', 'neurochir', 'greffe', 'thrombo',
-    'cutane', 'hemato', 'rhumato', 'neuropsy', 'infect', 'endocrino', 'carcino', 
+    'cutane', 'hemato', 'rhumato', 'neuropsy', 'infect', 'endocrino', 'carcino',
     'orl', 'addiction', 'habitus', 'coag'
   );
-  
+
   // Types that should not be types, mostly appareils
   static $non_types = array(
-    'obst', 'gyn', 'cardio', 'stomato', 'digestif', 'gastro', 'stomie', 'neuropsy', 
+    'obst', 'gyn', 'cardio', 'stomato', 'digestif', 'gastro', 'stomie', 'neuropsy',
     'endocrino', 'orl', 'uro', 'ortho', 'pulm',
   );
-  
+
   // Appareils
   static $appareils = array(
     'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
@@ -112,7 +112,7 @@ class CAntecedent extends CMbObject {
    *
    * @return CDossierMedical
    */
-  function loadRefDossierMedical() { 
+  function loadRefDossierMedical() {
     $this->_ref_dossier_medical = new CDossierMedical();
     return $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
@@ -164,14 +164,15 @@ class CAntecedent extends CMbObject {
 
     // Save owner and creation date
     if (!$this->_id) {
-      $now = CMbDT::dateTime();
-      $this->creation_date = $now;
+      if (!$this->creation_date) {
+        $this->creation_date = CMbDT::dateTime();
+      }
 
       if (!$this->owner_id) {
         $this->owner_id = CMediusers::get()->_id;
       }
     }
-    
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -197,7 +198,7 @@ class CAntecedent extends CMbObject {
    */
   function delete() {
     $this->completeField("type", "dossier_medical_id");
-    
+
     if ($this->type == "alle") {
       $this->loadRefDossierMedical();
       $dossier_medical = $this->_ref_dossier_medical;
@@ -205,7 +206,7 @@ class CAntecedent extends CMbObject {
         DSHM::remKeys("alertes-*-CPatient-".$dossier_medical->object_id);
       }
     }
-    
+
     return parent::delete();
   }
 
@@ -222,15 +223,15 @@ class CAntecedent extends CMbObject {
         // Transformation du code CIM pour le tester
         $match = str_replace(".", "", $match);
         $match = strtoupper($match);
-        
+
         // Chargement du code CIM 10
         $code_cim10 = CCodeCIM10::get($match);
-    
+
         if ($code_cim10->libelle != "Code CIM inexistant") {
           // Cas du code valide, sauvegarde du code CIM
           $dossier_medical = new CDossierMedical();
           $dossier_medical->load($this->dossier_medical_id);
-          
+
           // si le code n'est pas deja present, on le rajoute
           if (!array_key_exists($match, $dossier_medical->_ext_codes_cim)) {
             if ($dossier_medical->codes_cim != "") {
@@ -270,7 +271,7 @@ class CAntecedent extends CMbObject {
       $strict = "true"
   ) {
     parent::loadAides($user_id, $needle, $depend_value_1, $depend_value_2);
-    
+
     $rques_aides =& $this->_aides_all_depends["rques"];
     if (!isset($rques_aides)) {
       return;
