@@ -1,12 +1,19 @@
 <tr id="line_{{$_actor->_guid}}" {{if !$_actor->actif}} class="opacity-30" {{/if}}>
   <td>
     <button title="Modifier {{$_actor->_view}}" class="edit notext compact" onclick="InteropActor.editActor('{{$_actor->_guid}}');">
-      Modifier {{$_actor->_view}}
+      {{tr}}Edit{{/tr}} {{$_actor->_view}}
     </button>
   </td>
   <td class="text">
     <a href="#" onclick="InteropActor.viewActor('{{$_actor->_guid}}', null, this);" title="Afficher l'acteur d'intégration">
-      {{$_actor->_view}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_actor->_guid}}');">
+
+      {{if $_actor instanceof CInteropReceiver}}
+        <i class="fa {{if $_actor->synchronous}}fa-exchange{{else}}fa-long-arrow-right{{/if}}"></i>
+      {{/if}}
+
+         {{$_actor->_view}}
+      </span>
     </a>
   </td>
   <td class="compact">{{$_actor->_ref_group->_view}}</td>
