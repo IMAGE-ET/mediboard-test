@@ -41,7 +41,12 @@ $query = $request->makeSelect($medecin);
 $res = $ds->exec($query);
 
 while ($data = $ds->fetchAssoc($res)) {
-  $csv->writeLine($data);
+  $_new_data = array();
+  foreach ($line as $_field) {
+    $_new_data[] = $data[$_field];
+  }
+
+  $csv->writeLine($_new_data);
 }
 
 $name = "Correspondants médicaux - ".CMbDT::dateTime();
