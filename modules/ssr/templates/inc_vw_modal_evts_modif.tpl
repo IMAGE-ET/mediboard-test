@@ -128,13 +128,15 @@ Main.add(function() {
     </td>
   </tr>
 
-  <tr>
-    <td colspan="5" class="text">
-      <input type="text" name="code_{{$_type}}" class="autocomplete" canNull=true size="6" />
-      <div style="display: none;" class="autocomplete" id="other_{{$_type}}_auto_complete"></div>
-      <span class="other_codes"></span>
-    </td>
-  </tr>
+  {{if $_type != "cdarr"}}
+    <tr>
+      <td colspan="5" class="text">
+        <input type="text" name="code_{{$_type}}" class="autocomplete" canNull=true size="6" />
+        <div style="display: none;" class="autocomplete" id="other_{{$_type}}_auto_complete"></div>
+        <span class="other_codes"></span>
+      </td>
+    </tr>
+  {{/if}}
 
   {{/foreach}}
 

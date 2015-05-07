@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -50,6 +50,8 @@ class CRHS extends CMbObject {
   public $_in_bounds_fri;
   public $_in_bounds_sat;
   public $_in_bounds_sun;
+
+  public $_count_cdarr = 0;
 
   // Object References
   /** @var  CSejour */
@@ -427,6 +429,9 @@ class CRHS extends CMbObject {
       // Use guids for keys instead of ids to prevent key corruption by multisorting
       $executants[$executant->_guid] = $executant;
       $lines_by_executant[$executant->_guid][] = $_line;
+      if ($_line->code_activite_cdarr) {
+        $this->_count_cdarr +=1;
+      }
     }
 
     // Sort by executants then by code

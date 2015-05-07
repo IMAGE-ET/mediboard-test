@@ -109,20 +109,6 @@ CotationRHS = {
     }
   },
 
-  autocompleteCdARR: function(form) {
-    var url = new Url('ssr', 'httpreq_do_cdarr_autocomplete');
-    url.autoComplete(form.code_activite_cdarr, form.down('.autocomplete.activite'), {
-      dropdown: true,
-      minChars: 2,
-      updateElement: function(element) { CotationRHS.updateCdARR(element, form); }
-    } );
-  },
-
-  updateCdARR: function(selected, form) {
-    var value = selected.down('.value');
-    $V(form.code_activite_cdarr, value ? value.textContent : '');
-  },
-
   autocompleteCsARR: function(form) {
     var url = new Url('ssr', 'httpreq_do_csarr_autocomplete');
     url.autoComplete(form.code_activite_csarr, form.down('.autocomplete.activite'), {

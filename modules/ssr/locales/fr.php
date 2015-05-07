@@ -1115,7 +1115,6 @@ $locales['mod-ssr-tab-ajax_sejours_technicien'] = 'Séjours de rééducateur';
 $locales['mod-ssr-tab-ajax_sejours_to_rhs_date_monday'] = 'Facturation des RHS d\'une semaine';
 $locales['mod-ssr-tab-ajax_totaux_rhs'] = 'Totaux RHS';
 $locales['mod-ssr-tab-ajax_update_modal_evenements'] = 'Dialogue de validation des evénements SSR';
-$locales['mod-ssr-tab-ajax_update_modal_evts_modif'] = 'Dialogue de modification d\'actes CdARR';
 $locales['mod-ssr-tab-ajax_vw_list_files'] = 'Listes des fichiers';
 $locales['mod-ssr-tab-ajax_vw_list_lines'] = 'Liste des lignes';
 $locales['mod-ssr-tab-ajax_vw_list_sejours'] = 'Listes des séjours';

@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
 $token_evts = CValue::getOrSession("token_evts");
 
 $_evenements = array();
@@ -24,7 +23,6 @@ $count_actes = $actes = array(
 );
 
 $evenements = array();
-
 foreach ($_evenements as $_evenement_id) {
   $evenement = new CEvenementSSR();
   $evenement->load($_evenement_id);
@@ -66,10 +64,15 @@ foreach ($actes as $_type => &$_actes) {
   ksort($_actes);
 }
 
+if (!count($count_actes["cdarr"])) {
+  unset($actes["cdarr"]);
+  unset($count_actes["cdarr"]);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("token_evts", $token_evts);
-$smarty->assign("evenements", $evenements);
-$smarty->assign("actes", $actes);
-$smarty->assign("count_actes", $count_actes);
+$smarty->assign("token_evts"  , $token_evts);
+$smarty->assign("evenements"  , $evenements);
+$smarty->assign("actes"       , $actes);
+$smarty->assign("count_actes" , $count_actes);
 $smarty->display("inc_vw_modal_evts_modif.tpl");

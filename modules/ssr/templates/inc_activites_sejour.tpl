@@ -15,12 +15,7 @@ countCodesCsarr = function() {
   csarr_count += oFormEvenementSSR.select('input.checkbox-other-csarrs').length;
 
   $$("input[name='type_seance']").each(function(input){
-    if (csarr_count != 0) {
-      input.disabled = true;
-    }
-    else{
-      input.disabled = false;
-    }
+    input.disabled = csarr_count != 0 ? true : false;
   });
 };
 
@@ -47,17 +42,9 @@ selectActivite = function(activite) {
   // Affichage des techniciens correspondants à l'activité selectionnée
   $("techniciens-"+activite).show();
 
-  // On masque les codes Cdarrs
-  $$("div.cdarrs").invoke("hide");
-  $$("div.type-cdarrs").invoke("hide");
-
-  $('div_other_cdarr').hide(); 
-  $('div_other_csarr').hide(); 
-  $('other_cdarr').hide();
+  $('div_other_csarr').hide();
   $('other_csarr').hide();
-  $V(oFormEvenementSSR.code_cdarr, '');
   $V(oFormEvenementSSR.code_csarr, '');
-  oFormEvenementSSR._cdarr.checked = false;
 
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
@@ -68,18 +55,9 @@ selectElement = function(line_id){
   $V(oFormEvenementSSR.line_id, line_id);
 
   $$("button.line").invoke("removeClassName", "selected");
-  $$(".button-type-cdarrs").invoke("removeClassName","selected");
   $("line-"+line_id).addClassName("selected");
 
-  $$("div.cdarrs").invoke("hide");
-  $$("div.type-cdarrs").invoke("hide");
-
-  $V(getForm("editEvenementSSR").cdarr, '');
-  $("cdarrs-"+line_id).show();
   $("csarrs-"+line_id).show();
-  $("type-cdarrs-"+line_id).show();
-
-  $('div_other_cdarr').show();
   $('div_other_csarr').show();
 
   // Deselection de tous les codes
@@ -88,14 +66,6 @@ selectElement = function(line_id){
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
   refreshSelectSeances();
-};
-
-selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
-  $$('.cdarrs').invoke('hide'); 
-  $('cdarrs-'+line_id+'-'+type_cdarr).show();
-
-  $$(".button-type-cdarrs").invoke("removeClassName","selected");
-  buttonSelected.addClassName("selected");
 };
 
 selectTechnicien = function(kine_id, buttonSelected) {
@@ -151,37 +121,25 @@ refreshSelectSeances = function(){
 };
 
 hideCodes = function() {
-  // Deselection des codes cdarrs et csarrs
-  $V(oFormEvenementSSR._cdarr, false);
+  // Deselection des codes csarrs
   $V(oFormEvenementSSR._csarr, false);
-  $$('#other_cdarr span').invoke('remove'); 
-  $$('#other_csarr span').invoke('remove'); 
-  $('other_cdarr').hide();
+  $$('#other_csarr span').invoke('remove');
   $('other_csarr').hide();
 };
 
 removeCodes = function() {
-  oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
-    e.checked = false;
-  });
-
   oFormEvenementSSR.select('input[name^="csarrs"]').each(function(e){
     e.checked = false;
   });
-
-  $$('.counts_cdarr').invoke('update','')
 };
 
 submitSSR = function(){
   // Test de la presence d'au moins un code SSR
-  var cdarr_count = $V(oFormEvenementSSR.code_cdarr) ? 1 : 0;
-  cdarr_count += oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length;
-  cdarr_count += oFormEvenementSSR.select('input.checkbox-other-cdarrs').length;
   var csarr_count = $V(oFormEvenementSSR.code_csarr) ? 1 : 0;
   csarr_count += oFormEvenementSSR.select('input.checkbox-csarrs:checked').length;
   csarr_count += oFormEvenementSSR.select('input.checkbox-other-csarrs').length;
 
-  if (cdarr_count + csarr_count == 0) {
+  if (csarr_count == 0) {
     alert("Veuillez selectionner au moins un code CsARR ou CsARR");
     return false;
   }
@@ -222,7 +180,7 @@ submitSSR = function(){
     $V(oFormEvenementSSR._heure_fin_da, '');
     $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
     $V(oFormEvenementSSR.seance_collective_id, '');
-    $V(oFormEvenementSSR.type_seance, '');
+    $V(oFormEvenementSSR.type_seance, 'dediee');
     $$("input[name='type_seance']").each(function(input){
       input.disabled = false;
     });
@@ -294,17 +252,8 @@ addBorderEvent = function(){
   }
 };
 
-updateCdarrCount = function(line_id, type_cdarr){
-  var countCdarr = ($('cdarrs-'+line_id+'-'+type_cdarr).select('input:checked')).length;  
-  if(countCdarr){
-    $('count-'+line_id+'-'+type_cdarr).update('('+countCdarr+')');
-  } else {
-    $('count-'+line_id+'-'+type_cdarr).update('');
-  }
-};
-
-updateModalCdarr = function(){
-  var oFormEvents = getForm("form_list_cdarr");
+updateModalSsr = function(){
+  var oFormEvents = getForm("form_list_ssr");
   var url = new Url("ssr", "ajax_update_modal_evts_modif");
   url.addParam("token_evts", $V(oFormEvents.token_evts));
   url.requestModal(420, 400);
@@ -330,17 +279,6 @@ Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
   window.toCheck = false;
 
-  // CdARR other code autocomplete
-  if ($('code_cdarr_autocomplete')) {
-    var url = new Url("ssr", "httpreq_do_cdarr_autocomplete");
-    url.autoComplete(oFormEvenementSSR.code_cdarr, "code_cdarr_autocomplete", {
-      dropdown: true,
-      minChars: 2,
-      select: "value",
-      updateElement: updateFieldCodeCdarr
-    } );
-  }
-
   // CsARR other code autocomplete
   if ($('code_csarr_autocomplete')) {
     var url = new Url("ssr", "httpreq_do_csarr_autocomplete");
@@ -364,13 +302,11 @@ Main.add(function(){
   {{/if}}
 
   {{if !$prescription}}
-  $('div_other_cdarr').show();
-  $('div_other_csarr').show();
+    $('div_other_csarr').show();
   {{/if}}
 });
 
 </script>
-
 
 {{if !$bilan->technicien_id}} 
 <div class="small-warning">
@@ -419,7 +355,6 @@ Main.add(function(){
         </td>
       </tr>
 
-
       <tr>
         <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
         <td>
@@ -442,7 +377,6 @@ Main.add(function(){
     <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
-
     {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
     <input type="hidden" name="line_id" value="" />
     <input type="hidden" name="_element_id" value="" />
@@ -479,7 +413,6 @@ Main.add(function(){
       <tr>
         <th>Eléments</th>
         <td class="text">
-
           {{foreach from=$lines_by_element item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat item=_lines_by_elt name=category}}
@@ -533,97 +466,32 @@ Main.add(function(){
       </tr>
       {{/if}}
 
-      <tr id='tr-cdarrs'>
-        <th>Codes CdARR</th>
+      <tr id='tr-csarrs'>
+        <th>Codes CsARR</th>
         <td class="text">
           <button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
 
           {{if $prescription}}
+            <!-- Affichage des codes csarrs -->
+            {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+              {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+                {{foreach from=$_lines_by_cat.element item=_line}}
 
-          <!-- Boutons de type de code cdarr-->
-          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-              {{foreach from=$_lines_by_cat.element item=_line}}
-                <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
-                  {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
-                    <button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">
-                      {{$type_cdarr}} <span class="counts_cdarr" id="count-{{$_line->_id}}-{{$type_cdarr}}"></span>
-                    </button>
-                  {{/foreach}}
-                </div>
+                  <div id="csarrs-{{$_line->_id}}" style="display : none;">
+                    {{foreach from=$_line->_ref_element_prescription->_ref_csarrs item=_csarr}}
+                      <label>
+                        <input type="checkbox" class="checkbox-csarrs nocheck" name="csarrs[{{$_csarr->code}}]" value="{{$_csarr->code}}" onchange="countCodesCsarr();"/>
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_csarr->_guid}}')">
+                          {{$_csarr->code}}
+                        </span>
+                      </label>
+                      {{/foreach}}
+                      </div>
+                  </div>
+
+                {{/foreach}}
               {{/foreach}}
             {{/foreach}}
-          {{/foreach}}  
-
-          <!-- Affichage des codes cdarrs -->
-          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-              {{foreach from=$_lines_by_cat.element item=_line}}
-
-                <div id="cdarrs-{{$_line->_id}}" style="display : none;">
-                  {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
-
-                  <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
-                  {{foreach from=$_cdarrs item=_cdarr}}
-                    <label>
-                      <input type="checkbox" class="checkbox-cdarrs nocheck" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
-                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
-                      {{$_cdarr->code}}
-                      </span>
-                    </label>
-                    {{/foreach}}
-                    </div>
-
-                  {{/foreach}}
-                </div>
-
-              {{/foreach}}
-            {{/foreach}}
-          {{/foreach}}
-
-          {{/if}} 
-
-          <!-- Autre code CdARR -->
-          <div id="div_other_cdarr" style="display: none;">
-            <label>
-              <input type="checkbox" name="_cdarr" value="other" onclick="toggleOtherCdarr(this);" /> Autre:
-            </label>
-
-            <span id="other_cdarr" style="display: block;">
-               <input type="text" name="code_cdarr" class="autocomplete" canNull=true size="2" />
-               <div style="display:none;" class="autocomplete" id="code_cdarr_autocomplete"></div>
-            </span>
-          </div>
-
-        </td>
-      </tr> 
-
-      <tr id='tr-csarrs'>
-        <th>Codes CsARR</th>
-        <td class="text">
-          {{if $prescription}}
-
-          <!-- Affichage des codes cdarrs -->
-          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-              {{foreach from=$_lines_by_cat.element item=_line}}
-
-                <div id="csarrs-{{$_line->_id}}" style="display : none;">
-                  {{foreach from=$_line->_ref_element_prescription->_ref_csarrs item=_csarr}}
-                    <label>
-                      <input type="checkbox" class="checkbox-csarrs nocheck" name="csarrs[{{$_csarr->code}}]" value="{{$_csarr->code}}" onchange="countCodesCsarr();"/>
-                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_csarr->_guid}}')">
-                        {{$_csarr->code}}
-                      </span>
-                    </label>
-                    {{/foreach}}
-                    </div>
-                </div>
-
-              {{/foreach}}
-            {{/foreach}}
-          {{/foreach}}
-
           {{/if}} 
 
           <!-- Autre code CsARR -->
@@ -631,13 +499,11 @@ Main.add(function(){
             <label>
               <input type="checkbox" name="_csarr" value="other" onclick="toggleOtherCsarr(this);" /> Autre:
             </label>
-
             <span id="other_csarr" style="display: block;">
                <input type="text" name="code_csarr" class="autocomplete" canNull=true size="2" />
                <div style="display: none;" class="autocomplete" id="code_csarr_autocomplete"></div>
             </span>
           </div>
-
         </td>
       </tr> 
 
@@ -732,7 +598,6 @@ Main.add(function(){
         </td>
       </tr>
       {{/if}}
-
 
       <tr id="seances" style="display: none;">
         <th>{{mb_label object=$evenement field="seance_collective_id"}}</th>
@@ -833,47 +698,12 @@ Main.add(function(){
       $V(oForm.equipement_id, ''); 
     }
 
-    toggleOtherCdarr = function(elem) {
-      var toggle = $V(elem);
-
-      $('other_cdarr').setVisible(toggle); 
-      $V(elem.form.code_cdarr, '');
-      $(elem.form.code_cdarr).tryFocus();
-      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = toggle ? false : 'disabled';}, elem);
-    }
-
     toggleOtherCsarr = function(elem) {
       var toggle = $V(elem);
 
       $('other_csarr').setVisible(toggle); 
       $V(elem.form.code_csarr, '');
       $(elem.form.code_csarr).tryFocus();
-      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = toggle ? false : 'disabled';}, elem);
-    }
-
-    updateFieldCodeCdarr = function(selected, input) {
-      var code_selected = selected.childElements()[0];
-      $('other_cdarr').insert({bottom: 
-        DOM.span({}, 
-          DOM.input({
-            type: 'hidden', 
-            id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
-            name:'_cdarrs['+code_selected.innerHTML+']',
-            value: code_selected.innerHTML,
-            className: 'checkbox-other-cdarrs'
-          }),
-          DOM.button({
-            className: "cancel notext", 
-            type: "button",
-            onclick: "deleteCode(this)"
-          }),
-          DOM.label({}, code_selected.innerHTML)
-        )
-      });
-
-      var input = $('editEvenementSSR_code_cdarr');
-      input.value = '';
-      input.tryFocus();
     }
 
     updateFieldCodeCsarr = function(selected, input) {
@@ -998,20 +828,18 @@ Main.add(function(){
   </form>
 
   <form name="duplicateSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
-
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="event_ids" value="" /> 
-    <input type="hidden" name="propagate" value="" /> 
-
+    <input type="hidden" name="propagate" value="" />
     <table class="form">
       <tr>
         <th colspan="2" class="category">
           Duplication / Propagation
         </th>
       </tr>
-      <tr>
 
+      <tr>
         <th>
           <select name="period">
             <option value="+1 WEEK">{{tr}}Week-after{{/tr}}</option>
@@ -1019,7 +847,6 @@ Main.add(function(){
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
         </th>
-
         <td class="button">
           <button type="button" class="duplicate singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
             {{tr}}Duplicate{{/tr}}
@@ -1042,29 +869,27 @@ Main.add(function(){
             </tr>
           </table>
         </th>
-
         <td class="button">
           <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '1'); this.form.onsubmit();">
             {{tr}}Propagate{{/tr}}
           </button>
         </td>
-      </tr> 
-
+      </tr>
     </table>
   </form>
 
   <!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
-  <form name="form_list_cdarr" method="post">
+  <form name="form_list_ssr" method="post">
     <input type="hidden" name="token_evts" />
   </form>
 
   <table class="form">
     <tr>
-      <th class="category">Codes CdARR</th>
+      <th class="category">Codes</th>
     </tr>
     <tr>
       <td class="button">
-        <button type="button" class="submit" onclick="updateSelectedEvents(getForm('form_list_cdarr').token_evts); updateModalCdarr();">Modifier les codes CdARR</button>
+        <button type="button" class="submit" onclick="updateSelectedEvents(getForm('form_list_ssr').token_evts); updateModalSsr();">Modifier les codes</button>
       </td>
     </tr>
   </table>

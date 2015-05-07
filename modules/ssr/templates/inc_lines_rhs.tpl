@@ -18,10 +18,7 @@
 <table class="tbl">
   <tr>
     <th class="narrow"></th>
-    <th colspan="2">
-      {{mb_title class=CLigneActivitesRHS field=code_activite_cdarr}} /
-      {{mb_title class=CLigneActivitesRHS field=code_activite_csarr}}
-    </th>
+    <th colspan="2">Codes</th>
     <th>{{mb_title class=CLigneActivitesRHS field=modulateurs}}</th>
     <th>{{mb_title class=CLigneActivitesRHS field=phases}}</th>
     <th>{{mb_title class=CLigneActivitesRHS field=nb_patient_seance}}</th>

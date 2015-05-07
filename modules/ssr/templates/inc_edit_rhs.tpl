@@ -39,7 +39,6 @@
 
       Main.add( function(){
         var form = getForm("new-line-{{$rhs->_guid}}");
-        CotationRHS.autocompleteCdARR(form);
         CotationRHS.autocompleteCsARR(form);
         CotationRHS.autocompleteExecutant(form);
       } );
@@ -54,13 +53,6 @@
       <table class="form">
         <tr>
           <th class="title" colspan="2">Ajouter une ligne d'activité</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$rhs_line field=code_activite_cdarr}}</th>
-          <td>
-            {{mb_field object=$rhs_line field=code_activite_cdarr class="autocomplete"}}
-            <div style="display: none;" class="autocomplete activite" id="{{$rhs->_guid}}_cdarr_auto_complete"></div>
-          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$rhs_line field=code_activite_csarr}}</th>
