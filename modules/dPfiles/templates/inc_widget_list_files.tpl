@@ -23,3 +23,8 @@
     </td>
   </tr>
 {{/foreach}}
+
+{{if $object->_ref_hypertext_links}}
+  {{mb_include module=sante400 template=inc_widget_list_hypertext_links}}
+{{/if}}
+

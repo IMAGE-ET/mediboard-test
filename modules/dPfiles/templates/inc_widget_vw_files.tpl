@@ -44,3 +44,6 @@
   {{mb_include module=cabinet template=inc_widget_list_files}}
 </table>
 
+{{if $object->_ref_hypertext_links}}
+  {{mb_include module=sante400 template=inc_widget_list_hypertext_links}}
+{{/if}}

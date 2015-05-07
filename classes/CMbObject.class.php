@@ -59,6 +59,9 @@ class CMbObject extends CStoredObject {
   /** @var CTagItem[] */
   public $_ref_tag_items      = array();
 
+  /** @var CHyperTextLink[] */
+  public $_ref_hypertext_links = array();
+
   /** @var CDocumentItem[][] */
   public $_refs_docitems_by_cat = array();
 
@@ -734,6 +737,21 @@ class CMbObject extends CStoredObject {
     }
 
     return $this->_ref_tag_items = $tag_items;
+  }
+
+  /**
+   * Load the object's hyperlink text
+   *
+   * @param bool $cache Use cache
+   *
+   * @return array
+   */
+  function loadRefsHyperTextLink($cache = true) {
+    if ($cache && !empty($this->_ref_hypertext_links)) {
+      return $this->_ref_hypertext_links;
+    }
+
+    return $this->_ref_hypertext_links = $this->loadBackRefs("hypertext_links");
   }
 
   /**

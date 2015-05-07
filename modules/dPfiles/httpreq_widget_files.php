@@ -21,6 +21,7 @@ CSessionHandler::writeClose();
 
 // Chargement des fichiers
 $object->loadRefsFiles();
+$object->loadRefsHyperTextLink();
 $object->canDo();
 
 if ($object->_ref_files) {
