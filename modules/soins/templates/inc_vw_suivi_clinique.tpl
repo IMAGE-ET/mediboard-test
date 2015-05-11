@@ -215,10 +215,11 @@
 <!-- Correspondance -->
 <table class="tbl">
   <tr>
-    <th style="width: 1%;">
+    <th class="narrow">
       <button type="button" class="add notext" style="float: left;"
               onclick="Correspondant.edit(0, '{{$patient->_id}}', afterEditCorrespondant);"></button>
     </th>
+    <th class="narrow">{{tr}}CCorrespondantPatient-relation{{/tr}}</th>
     <th class="category">
       {{tr}}CCorrespondantPatient-nom{{/tr}} / {{tr}}CCorrespondantPatient-prenom{{/tr}}
     </th>
@@ -232,6 +233,9 @@
   {{foreach from=$patient->_ref_cp_by_relation item=_correspondants}}
     {{foreach from=$_correspondants item=_correspondant}}
       <tr>
+        <td>
+          <button class="copy notext">Copier le correspondant</button>
+        </td>
         <td>
           <strong>{{mb_value object=$_correspondant field=relation}}</strong>
         </td>

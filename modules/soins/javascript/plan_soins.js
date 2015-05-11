@@ -9,7 +9,6 @@ PlanSoins = {
   anciennete:          null,
   time_anciennete:     [],
   timer_anciennete:    [],
-  with_navigation:     null,
   nb_decalage:         null,
   save_nb_decalage:    null,
   plan_soin_id:        null,// L'id de l'element plan de soin
@@ -307,9 +306,6 @@ PlanSoins = {
       url.addParam("regroup_lines", PlanSoins.regroup_lines ? "1" : "0");
     }
 
-    if (PlanSoins.with_navigation) {
-      url.addParam("with_navigation", PlanSoins.with_navigation);
-    }
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, function() {
