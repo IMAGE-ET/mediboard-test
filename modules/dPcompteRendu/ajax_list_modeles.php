@@ -16,10 +16,10 @@ CCanDo::checkRead();
 // Filtres
 $filtre = new CCompteRendu();
 $filtre->_id          = CValue::getOrSession("compte_rendu_id");
-$filtre->user_id      = CView::get("user_id", "num", true);
-$filtre->function_id  = CView::get("function_id", "num", true);
-$filtre->object_class = CView::get("object_class", $filtre->_specs["_list_classes"]->prop, true);
-$filtre->type         = CView::get("type", $filtre->_specs["type"]->prop, true);
+$filtre->user_id      = CValue::getOrSession("user_id");
+$filtre->function_id  = CValue::getOrSession("function_id");
+$filtre->object_class = CValue::getOrSession("object_class");
+$filtre->type         = CValue::getOrSession("type");
 
 $order_col = CView::get("order_col", "enum list|nom|object_class|file_category_id|type|_count_utilisation default|object_class", true);
 $order_way = CView::get("order_way", "enum list|ASC|DESC default|DESC", true);

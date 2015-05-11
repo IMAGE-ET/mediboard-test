@@ -41,7 +41,7 @@ $root->appendChild($key);
 // Catégorie
 $cat = $modele->loadRefCategory();
 $key = $doc->createAttribute("cat");
-$value = $doc->createTextNode($cat->nom);
+$value = $doc->createTextNode(utf8_encode($cat->nom));
 $key->appendChild($value);
 $root->appendChild($key);
 

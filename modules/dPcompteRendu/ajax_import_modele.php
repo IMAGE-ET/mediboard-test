@@ -87,7 +87,7 @@ foreach ($root as $_modele) {
   }
 
   // Recherche de la catégorie
-  $cat = $_modele->getAttribute("cat");
+  $cat = utf8_decode($_modele->getAttribute("cat"));
   if ($cat) {
     $categorie = new CFilesCategory();
     $categorie->nom = $cat;
@@ -109,4 +109,4 @@ foreach ($root as $_modele) {
   $modeles_ids[$_modele->getAttribute("modele_id")] = $modele->_id;
 }
 
-mbTrace($modeles_ids);
+CAppUI::js("window.opener.getForm('filterModeles').onsubmit()");
