@@ -11,6 +11,7 @@
 
 /**
  * Class CSearchObjectHandler
+ * Attention celui ci n'est pas actif par défaut dans le module Administration.
  */
 class CSearchObjectHandler extends CMbObjectHandler {
   /**
@@ -98,16 +99,17 @@ class CSearchObjectHandler extends CMbObjectHandler {
    * function to call in static way in class.
    *
    * @param CMbObject $object the object you want to handled
-   * @param string    $type   [optionnal]
+   * @param string    $type   [optionnal] the action to do
    *
    * @return bool
    */
   static function requesthandler(CMbObject $object, $type = null) {
     self::checkHandled($object);
     if ($object instanceof CCompteRendu && !$object->object_id) {
+      // si c'est un modèle de document
       return false;
     }
-    if ($object instanceof CFile && in_array($object->object_class, array('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation'))) {
+    if ($object instanceof CFile && !in_array($object->object_class, array('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation'))) {
       return false;
     }
 
@@ -124,7 +126,7 @@ class CSearchObjectHandler extends CMbObjectHandler {
     $search_indexing->type         = $type;
     $search_indexing->date         = CMbDT::dateTime();
     $search_indexing->object_class = $object->_class;
-    $search_indexing->object_id    = ($object->_id) ? $object->_id : $object->_save_id ;
+    $search_indexing->object_id    = ($object->_id) ? $object->_id : $object->_save_id ;// save_id dans le cas du delete
 
     $group = self::loadRefGroup($object);
     if (!CAppUI::conf("search active_handler active_handler_search", $group)) {

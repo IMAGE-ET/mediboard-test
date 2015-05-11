@@ -86,16 +86,21 @@ class CSearch {
    * @return Elastica\Index
    */
   function createIndex ($name, $params, $bool=false) {
+    // Pour le nom soit on récupère celui la configuration (important avec la réindexation) soit celui de la DB
     if (!$name) {
       $conf_name = CAppUI::conf("search index_name");
       $name = ($conf_name) ? $conf_name : CAppUI::conf("db std name");
     }
+
     if (!$params) {
       $params = self::$settings_default;
       $params["number_of_replicas"] = CAppUI::conf("search nb_replicas");
     }
+
+    // la méthode getIndex de Elastica retourne un new Index
     $this->_index = $this->_client->getIndex($name);
     $this->_index->create($params, $bool);
+
     return $this->_index;
   }
 
@@ -107,10 +112,8 @@ class CSearch {
    * @return void
    */
   function updateIndex ($index) {
-    if (!$index) {
-      $this->_index = $this->createIndex(null, null, false);
-    }
-    $index = $this->loadIndex();
+    $index = (!$index) ? $this->createIndex(null, null, false) : $this->loadIndex();
+
     $this->updateIndexSettings($index);
   }
 
@@ -126,6 +129,7 @@ class CSearch {
       $settings = self::$settings_default;
     }
     $index->close();
+    // La méthode bug à partir d'ici. Attention l'index reste fermé.... il faut le réouvir
     $index->setSettings($settings);
     $index->open();
   }
@@ -202,7 +206,7 @@ class CSearch {
     if (!$index) {
       $this->_index = $this->createIndex(null, null, false);
     }
-    /** @var Elastica\Type $elasticaType */
+    // $names_types sont ceux que l'on coche dans la configuration d'ES
     foreach ($names_types as $name_type) {
       $type  = $this->createType($this->_index, $name_type);
       $this->createMapping($type, self::$mapping_default);
@@ -257,11 +261,13 @@ class CSearch {
     if ($datum['type'] != 'delete') {
       /** @var IIndexableObject|CStoredObject $object */
       $object = CModelObject::getInstance($datum["object_class"]);
+      // cas où l'objet a été supprimé avant son indexation en create ou update
       if (!$object->load($datum['object_id'])) {
         $datum_to_index["id"]  = $datum['object_id'];
         $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
           return $datum_to_index;
       }
+
       //On récupère les champs à indexer.
       $datum_to_index = $object->getIndexableData();
 
@@ -269,6 +275,7 @@ class CSearch {
         $datum_to_index["id"]          = $datum['object_id'];
         $datum_to_index["date"] = CMbDT::format(CMbDT::dateTime(), "%Y/%m/%d");
       }
+
       $datum_to_index['body'] = $this->normalizeEncoding($datum_to_index['body']);
       $datum_to_index['title'] = $this->normalizeEncoding($datum_to_index['title']);
     }
@@ -290,6 +297,8 @@ class CSearch {
   function constructBulkData ($data) {
     $data_to_index = array();
     foreach ($data as $key => $_datum) {
+      // on construit le table avec la hiérarchie suivante :
+      // Classe du CMbObject > Type[create/update/delete] > key
       $data_to_index[$_datum['object_class']][$_datum['type']][$key] = $this->constructDatum($_datum);;
     }
     return $data_to_index;
@@ -297,6 +306,7 @@ class CSearch {
 
   /**
    * Construit les données afin que celles-ci soient indexées (avec les fields corrects)
+   * Méthode non testée et non utilisée pour le moment (Préférable de la tester avant..)
    *
    * @param CMbObject     $datum the datum you want to construct
    * @param Elastica\Type $type  the type where you want to index the data
@@ -331,17 +341,19 @@ class CSearch {
   /**
    * indexation en bulk avec les données contstruites (avec les fields corrects)
    *
-   * @param array $data les datas que vous voulez indexer
+   * @param array $data les data que vous voulez indexer
    *
    * @return bool
    */
   function bulkIndexing ($data) {
     $data_to_index = $this->constructBulkData($data);
     foreach ($data_to_index as $type_name => $_type) {
+      // cas particulier des formulaires
       $typeES = (strpos($type_name, 'CExObject') === 0 ) ? $this->_index->getType("CExObject") : $this->_index->getType($type_name);
       foreach ($_type as $action => $_data) {
         $documents = array();
         foreach ($_data as $_datum) {
+          // cas particulier des formulaires
           if (strpos($type_name, 'CExObject') === 0) {
             $_id = $_datum["ex_class_id"]."_".$_datum["id"];
           }
@@ -379,8 +391,11 @@ class CSearch {
             return false;
         }
       }
+      // Pour avoir la dernière version de l'index
       $typeES->getIndex()->refresh();
     }
+
+    // Suppression dans la table buffer
     $ids_to_delete = CMbArray::pluck($data, "search_indexing_id");
     $this->deleteDataTemporaryTable($ids_to_delete);
 
@@ -408,12 +423,16 @@ class CSearch {
     $query_string =  $query->searchQueryString($words, $start, $limit, $aggregation, $sejour_id, $specific_user, $details, $date, $fuzzy_search);
 
     //Search on the index.
+    // on charge l'index
     $this->_index = $this->loadIndex();
     $search = new \Elastica\Search($this->_client);
+    // on ajoute l'index à la recherche
     $search->addIndex($this->_index);
+    // on ajoute les types à la recherche
     if ($names_types) {
       $search->addTypes($names_types);
     }
+
     return $search->search($query_string);
   }
 
@@ -457,6 +476,7 @@ class CSearch {
     $search = new \Elastica\Search($this->_client);
     $search->addIndex($this->_index);
 
+    // Pour chacun des favoris je fais la recherche associée.
     foreach ($favoris as $_favori) {
       if ($_favori->types) {
         $search->addTypes(explode("|", $_favori->types));
@@ -469,6 +489,7 @@ class CSearch {
       $tab_search[$_favori->_id]["nb_results"] = $results_query->getTotalHits();
       foreach ($results_query->getResults() as $_result) {
         $item = $_result->getHit();
+        // je récupère les highlights de la recherche s'il y a
         if (isset($item["highlight"]["body"][0])) {
           $item["highlight"]["body"][0] = mb_convert_encoding($item["highlight"]["body"][0], "WINDOWS-1252",  "UTF-8");
         }
@@ -479,13 +500,23 @@ class CSearch {
     return $tab_search;
   }
 
+  /**
+   * Méthode utilisée pour la loupe dans les recherches classique qui affiche les volets avec les résultats de chaque type.
+   *
+   * @param string $words Les mots recherchés
+   * @param string $name  Le nom de l'index
+   * @param array $types  Les types sur lesquels on effectue la recherche
+   *
+   * @return \Elastica\ResultSet
+   */
   function queryByType ($words, $name, $types) {
-
+    // La query de recherche
     $query_words = new Elastica\Query\QueryString();
     $query_words->setQuery($words);
     $query_words->setFields(array("body", "title"));
     $query_words->setDefaultOperator("and");
 
+    // Aggregation par type
     $agg_by_type = new CSearchAggregation("Terms", "ref_type", "_type", 100);
     $query = new Query($query_words);
     $query->addAggregation($agg_by_type->_aggregation);
@@ -559,6 +590,7 @@ class CSearch {
   function loadCartoInfos() {
     $query = new CSearchQuery();
     $query_aggreg = $query->aggregCartoCountByType();
+
     //Search on the index.
     $this->_index = $this->loadIndex();
     $search = new \Elastica\Search($this->_client);
@@ -689,6 +721,7 @@ class CSearch {
       $search = new \Elastica\Search($this->_client);
       $search->addIndex($index);
       $this->_client->getCluster();
+
     } catch (Exception $e) {
       if (CAppUI::conf("search active_handler active_handler_search", $group)) {
         CAppUI::displayAjaxMsg("Le serveur de recherche n'est pas connecté", UI_MSG_ERROR);
@@ -698,49 +731,6 @@ class CSearch {
       }
     }
   }
-
-  // static settings
-  static $settings = array(
-    "analysis" => array(
-      "analyzer" => array(
-        "custom_analyzer" => array(
-          "type" => "custom",
-          'tokenizer' => 'nGram',
-          'filter' => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        ),
-        "custom_search_analyzer" => array(
-          "type" => "custom",
-          "tokenizer" => "standard",
-          "filter" => array("stopwords", "asciifolding", "lowercase", "snowball", "worddelimiter", "elision")
-        )
-      ),
-      "tokenizer" => array (
-        "nGram" => array(
-          "type" => "nGram",
-          "min_gram" => "3",
-          "max_gram" => "20"
-        )
-      ),
-      "filter" => array(
-        "snowball" => array (
-          "type"=> "snowball",
-          "language"=> "French"
-        ),
-        "stopwords" => array (
-          "type" => "stop",
-          "stopwords"=> array ("_french_"),
-          "ignore_case" => "true"
-        ),
-        "elision" => array (
-          "type" => "elision",
-          "articles" => array("l", "m", "t", "qu", "n", "s", "j", "d")
-        ),
-        "worddelimiter" => array(
-          "type" => "word_delimiter"
-        )
-      )
-    )
-  );
 
   static $settings_default = array(
     'number_of_shards'   => 5,

@@ -11,7 +11,7 @@
  */
 
 /**
- * Description
+ * Classe utilisée pour le marquage des éléments pertinents du Pmsi
  */
 class CSearchItem extends CMbObject {
   /**

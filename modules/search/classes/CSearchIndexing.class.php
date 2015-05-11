@@ -11,7 +11,7 @@
  */
 
 /**
- * Description
+ * Classe permettant la manipualtion de la table buffer
  */
 class CSearchIndexing extends CStoredObject {
   /**
@@ -20,10 +20,11 @@ class CSearchIndexing extends CStoredObject {
   public $search_indexing_id;
 
   // DB Fields
-  public $type;
-  public $object_class;
-  public $object_id;
-  public $date;
+  public $type; //[create|update|delete]
+  public $object_class; //[CmbObject class]
+  public $object_id; //[CmbObject id]
+  public $date; //[date de l'insertion dans la table buffer]
+
   /**
    * Initialize the class specifications
    *
@@ -55,6 +56,7 @@ class CSearchIndexing extends CStoredObject {
 
   /**
    * store into temporary table all the data from CMbObject
+   * Méthode effectuant tous les remplissages de la table buffer selon les CMbObject
    *
    * @param string $name_type the name of the CMbObject required
    *
@@ -155,6 +157,7 @@ class CSearchIndexing extends CStoredObject {
 
       default: $queries = array();
     }
+    // on retourne un tableau à cause des formulaires.
     return $queries;
   }
 

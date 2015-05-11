@@ -14,7 +14,7 @@ CAppUI::requireLibraryFile("Elastica/autoloader", false);
 use Elastica\Aggregation;
 /**
  * Class CSearchAggregation
- * Manage Elastica Library in order to index documents
+ * Manage Elastica Library in order to aggregate documents
  */
 class CSearchAggregation {
   /** @var  Elastica\Aggregation\AbstractAggregation */

@@ -32,8 +32,6 @@ class CSearchFileWrapper {
   /**
    * Méthode permettant de démarrer le jar d'apache tika afin d'en extraire le contenu souhaité
    *
-   * @param string $option l'option spécifiée pour l'extraction.
-   *
    * @return string
    */
   function run () {
@@ -45,85 +43,6 @@ class CSearchFileWrapper {
     $content = $client->putFile($this->_fichier);
 
     return $content;
-  }
-
-  /**
-   * Méthode permettant la récupération du contenu principal du document. (body)
-   *
-   * @return string
-   */
-  function getPlainText () {
-    $option = "--text-main --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant la récupération du contenu global du document. (en-tête, corp, pied-de-page)
-   *
-   * @return string
-   */
-  function getText () {
-    $option = "--text --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /** Méthode permettant de récupérer le contenu du document sous format xml valide.
-   *
-   * @return string
-   */
-  function getXHTML () {
-    $option = "--xml --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant de récupérer le contenu du document sous format HTML.
-   *
-   * @return string
-   */
-  function getHTML () {
-    $option = "--html --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant de récupérer les métadonnées du document.
-   *
-   * @return string
-   */
-  function getMetadata () {
-    $option = "--metadata --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant de récupérer les métadonnées du document au format JSON.
-   *
-   * @return string
-   */
-  function getMetadataJson () {
-    $option = "--json --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant de récuperer les métadonnées du document au format Xmp
-   *
-   * @return string
-   */
-  function getMetadataXmp () {
-    $option = "--xmp --encoding=utf-8";
-    return $this->run($option);
-  }
-
-  /**
-   * Méthode permettant de récuperer le langage du document.
-   *
-   * @return string
-   */
-  function getLanguage () {
-    $option = "--language --encoding=utf-8";
-    return $this->run($option);
   }
 
   /**

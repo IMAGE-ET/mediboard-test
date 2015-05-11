@@ -13,9 +13,10 @@ CCanDo::checkAdmin();
 $table       = CValue::get("table");
 $mapping     = CValue::get("mapping");
 $log         = CValue::get("log", "");
-$names_types = CValue::get("names_types");
+$names_types = CValue::get("names_types"); // les catégories de documents cochées.
 $error       = "";
 
+// Remplissage de la table temporaire avec le bouton "Remplir table temporaire"
 if ($table) {
   $ds    = CSQLDataSource::get("std");
   $search_indexing = new CSearchIndexing();
@@ -28,6 +29,7 @@ if ($table) {
   CAppUI::displayAjaxMsg("l'opération en base s'est déroulée avec succès ", UI_MSG_OK);
 }
 
+// Création du mapping pour l'index principal
 try {
   if ($mapping) {
     $client_index = new CSearch();

@@ -51,8 +51,9 @@ try {
   $client_index->loadIndex();
   // Passage à l'indexation en tps réel pour améliorer la performance du bulk indexing
   $client_index->_index->setSettings(array("index" => array( "refresh_interval" => "-1")));
-
+  // récupère données de la table buffer avec le pas fournit en configuration
   $data = $client_index->getDataTemporaryTable(CAppUI::conf("search interval_indexing"), null);
+  // on bulk index les data
   $client_index->bulkIndexing($data);
   CAppUI::displayAjaxMsg("L'indexation s'est correctement déroulée ", UI_MSG_OK);
   $error = "";
