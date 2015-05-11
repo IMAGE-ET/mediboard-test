@@ -14,9 +14,12 @@ CConfiguration::register(
   array(
     "CGroups" => array(
       "dPcabinet" => array(
+        "CConsultation" => array(
+          "keep_motif_rdv_multiples"  => "bool default|1"
+        ),
         "CPrescription" => array(
           "view_prescription"         => "bool default|0",
-          "view_prescription_externe"  => "bool default|0"
+          "view_prescription_externe" => "bool default|0"
         ),
       )
     )

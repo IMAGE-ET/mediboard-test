@@ -20,6 +20,8 @@ $chrono     = CValue::post("chrono");
 $premiere   = CValue::post("premiere");
 $pause      = CValue::post("_pause");
 
+$keep_motif = CAppUI::conf("dPcabinet CConsultation keep_motif_rdv_multiples", CGroups::loadCurrent());
+
 for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
   $_consult_id     = CValue::post("consult_id_$a");
   $_heure          = CValue::post("heure_$a");
@@ -55,7 +57,9 @@ for ($a = 1; $a <= CAppUI::pref("NbConsultMultiple"); $a ++) {
 
     $consult->plageconsult_id         = $_plage_id;
     $consult->heure                   = $_heure;
-    $consult->motif                   = $motif;
+    if ($keep_motif) {
+      $consult->motif                 = $motif;
+    }
     $consult->rques                   = $_rques ? "$rques\n$_rques" : $rques;
     $consult->chrono                  = $chrono;
     $consult->premiere                = $premiere;
