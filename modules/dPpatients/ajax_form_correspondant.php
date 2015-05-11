@@ -18,7 +18,11 @@ $patient = new CPatient();
 
 if ($correspondant_id) {
   $correspondant->load($correspondant_id);
-  $patient->load($correspondant->patient_id);
+  $patient = $correspondant->loadRefPatient();
+
+  if ($duplicate) {
+    $correspondant->_id = "";
+  }
 }
 else {
   if ($patient_id) {
@@ -33,11 +37,11 @@ else {
   }
 }
 
-
-
 $patient->loadRefsCorrespondantsPatient();
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
+
 $smarty->assign("correspondant" , $correspondant);
 $smarty->assign("patient"       , $patient);
+
 $smarty->display("inc_form_correspondant.tpl");

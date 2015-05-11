@@ -1,11 +1,12 @@
 Correspondant = {
-  edit: function(correspondant_id, patient_id, callback) {
+  edit: function(correspondant_id, patient_id, callback, duplicate) {
     var url = new Url('dPpatients', 'ajax_form_correspondant');
     url.addParam('correspondant_id', correspondant_id);
     url.addParam("patient_id", patient_id);
+    url.addNotNullParam("duplicate", duplicate);
     url.requestModal(600);
     if (!Object.isUndefined(callback)) {
-      url.modalObject.observe("afterClose", function(){
+      url.modalObject.observe("afterClose", function() {
         callback();
       });
     }

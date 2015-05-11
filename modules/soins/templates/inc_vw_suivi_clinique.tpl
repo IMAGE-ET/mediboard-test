@@ -234,7 +234,7 @@
     {{foreach from=$_correspondants item=_correspondant}}
       <tr>
         <td>
-          <button class="copy notext">Copier le correspondant</button>
+          <button class="copy notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, afterEditCorrespondant, 1)">Copier le correspondant</button>
         </td>
         <td>
           <strong>{{mb_value object=$_correspondant field=relation}}</strong>
