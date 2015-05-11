@@ -118,6 +118,10 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
     }
   }
 
+  foreach ($lits as $_lit) {
+    array_multisort(CMbArray::pluck($_lit->_ref_affectations, "_ref_sejour", "entree"), SORT_ASC, $_lit->_ref_affectations);
+  }
+
   if ($with_dossier_medical) {
     CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
   }
