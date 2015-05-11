@@ -844,6 +844,7 @@ $locales['mod-dPcompteRendu-tab-ajax_form_modeles_links'] = 'Liste des modèles d
 $locales['mod-dPcompteRendu-tab-ajax_generate_docs_sejour'] = 'Génération de documents de séjours';
 $locales['mod-dPcompteRendu-tab-ajax_get_document_source'] = 'Source d\'un document';
 $locales['mod-dPcompteRendu-tab-ajax_headers_footers'] = 'Entêtes et pieds de pages';
+$locales['mod-dPcompteRendu-tab-ajax_vw_import_modele'] = 'Import de modèle de document';
 $locales['mod-dPcompteRendu-tab-ajax_list_choix'] = 'Liste des choix';
 $locales['mod-dPcompteRendu-tab-ajax_list_listes_choix'] = 'Liste de liste de choix';
 $locales['mod-dPcompteRendu-tab-ajax_list_modeles'] = 'Liste des modèles';

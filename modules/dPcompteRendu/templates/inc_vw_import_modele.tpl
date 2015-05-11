@@ -9,23 +9,11 @@
  * @link     http://www.mediboard.org
 *}}
 
+<h2>Import de modèles pour {{$owner}}</h2>
+
 <form name="editImport" method="post" enctype="multipart/form-data"
       action="?m=compteRendu&a=ajax_import_modele&dialog=1">
-  <input type="hidden" name="owner_guid" value="{{$owner_guid}}" />
-
-  <table class="form">
-    <tr>
-      <th class="category">{{tr}}CCompteRendu.choose_file{{/tr}}</th>
-    </tr>
-    <tr>
-      <td>
-        <input type="file" name="datafile" size="40" />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <button class="tick">Importer</button>
-      </td>
-    </tr>
-  </table>
+  <input type="hidden" name="owner_guid" value="{{$owner->_guid}}" />
+  <input type="file" name="datafile" size="40" />
+  <button class="tick">Importer</button>
 </form>

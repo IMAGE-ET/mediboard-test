@@ -19,6 +19,6 @@ CView::checkin();
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("owner_guid", $owner_guid);
+$smarty->assign("owner", CMbObject::loadFromGuid($owner_guid));
 
 $smarty->display("inc_vw_import_modele.tpl");
