@@ -2680,6 +2680,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   function loadAllDocs($tri = "date", $with_cancelled = false) {
     $this->mapDocs($this, $with_cancelled, $tri);
 
-    ksort($this->_all_docs);
+    if (count($this->_all_docs)) {
+      ksort($this->_all_docs);
+    }
   }
 }
