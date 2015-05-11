@@ -66,6 +66,7 @@
 
   deleteCodages = function(praticien_id, date) {
     var forms = $$('form[data-praticien_id="' + praticien_id + '"][data-date="' + date + '"]');
+    console.debug(forms);
     forms.each(function(form) {
       $V(form.del, 1);
       form.onsubmit();
@@ -195,16 +196,17 @@
                       {{assign var=codage_locked value=$_codage->locked}}
                       {{math assign=count_actes equation="x+y" x=$count_actes y=$_codage->_ref_actes_ccam|@count}}
                       {{math assign=total equation="x+y" x=$total y=$_codage->_total}}
-                      {{if $_codage->_ref_actes_ccam|@count != 0}}
-                        <form name="formCodage-{{$_praticien_id}}-{{$_day}}_{{$_codage}}" data-date="{{$_codage->date}}" data-praticien_id="{{$_codage->praticien_id}}" action="?" method="post"
-                        onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_day.first}}
-                                      , {
-                                        onComplete: loadCodagesCCAM.curry({{$_codage->codable_id}},'{{$_codage->date}}')}{{/if}});">
-                          <input type="hidden" name="m" value="ccam" />
-                          <input type="hidden" name="dosql" value="do_codageccam_aed" />
-                          <input type="hidden" name="del" value="0" />
-                          <input type="hidden" name="locked" value="{{$_codage->locked}}"/>
-                          {{mb_key object=$_codage}}
+
+                      <form name="formCodage-{{$_praticien_id}}-{{$_day}}_{{$_codage}}" data-date="{{$_codage->date}}" data-praticien_id="{{$_codage->praticien_id}}" action="?" method="post"
+                      onsubmit="return onSubmitFormAjax(this{{if $smarty.foreach.codages_by_day.first}}
+                                    , {
+                                      onComplete: loadCodagesCCAM.curry({{$_codage->codable_id}},'{{$_codage->date}}')}{{/if}});">
+                        <input type="hidden" name="m" value="ccam" />
+                        <input type="hidden" name="dosql" value="do_codageccam_aed" />
+                        <input type="hidden" name="del" value="0" />
+                        <input type="hidden" name="locked" value="{{$_codage->locked}}"/>
+                        {{mb_key object=$_codage}}
+                        {{if $_codage->_ref_actes_ccam|@count != 0}}
 
                           <div style="position: relative; min-height: 22px; vertical-align: middle;{{if $smarty.foreach.codages_by_day.first && !$smarty.foreach.codages_by_day.last}}border-bottom: 1pt dotted #93917e;{{/if}}">
                             <span style="position: absolute; right: 0%; top: 40%; height: 20px; margin-top: -10px; float: right;">
@@ -225,8 +227,8 @@
                                 {{/if}}
                             </span>
                           </div>
-                        </form>
-                      {{/if}}
+                        {{/if}}
+                      </form>
                     {{/foreach}}
 
                     {{if $total != 0}}
