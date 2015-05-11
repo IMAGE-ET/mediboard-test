@@ -27,7 +27,6 @@ $object_class       = CValue::get("object_class");
 $unite_prise        = CValue::get("unite_prise");
 $without_check_date = CValue::get("without_check_date", "0");
 $hide_close         = CValue::get("hide_close", 0);
-$with_navigation    = CValue::get("with_navigation");
 $regroup_lines      = CValue::get("regroup_lines");
 $hide_old_lines     = CValue::get("hide_old_lines", CAppUI::conf("soins suivi hide_old_line", $group->_guid));
 $hide_line_inactive = CValue::get("hide_line_inactive", CAppUI::pref("hide_line_inactive"));
@@ -680,7 +679,6 @@ if ($object_id && $object_class) {
   $smarty->assign("nodebug", true);
   if ($line->_class == "CPrescriptionLineMix") {
     $smarty->assign("_prescription_line_mix", $line);
-    $smarty->assign("with_navigation", $with_navigation);
     $smarty->display("../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl");
   }
   else {
