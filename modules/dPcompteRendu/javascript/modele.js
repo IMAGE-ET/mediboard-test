@@ -87,5 +87,22 @@ Modele = {
         e.up('tr').show();
       }
     });
+  },
+
+  exportXML: function(owner, object_class, modeles_ids) {
+    var url = new Url("compteRendu", "ajax_export_modeles", "raw");
+    url.addParam("owner", owner);
+    url.addParam("object_class", object_class);
+    url.pop(400, 300, "export_csv", null, null, {
+      modeles_ids:  modeles_ids.join("-"),
+      owner:        owner,
+      object_class: object_class
+    })
+  },
+
+  importXML: function(owner_guid) {
+    var url = new Url("compteRendu", "ajax_vw_import_modele");
+    url.addParam("owner_guid", owner_guid);
+    url.pop(500, 400, "Import de modèles");
   }
-}
+};
