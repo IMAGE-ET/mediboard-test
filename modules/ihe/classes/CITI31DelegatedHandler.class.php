@@ -179,6 +179,50 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       $code = $code ? $code : $this->getCodeSejour($sejour);
 
+      // Dans le cas d'une création et que l'on renseigne entrée réelle et sortie réelle,
+      // il est nécessaire de créer deux flux (A01 et A03)
+      if ($sejour->_ref_last_log->type == "create" && $sejour->entree_reelle && $sejour->sortie_reelle) {
+        $code = "A01";
+
+        // Cas où :très souvent
+        // * on est l'initiateur du message
+        // * le destinataire ne supporte pas le message
+        if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+          return;
+        }
+
+        if (!$sejour->_NDA) {
+          // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+          if ($msg = $sejour->generateNDA()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+
+          $NDA = new CIdSante400();
+          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+          $sejour->_NDA = $NDA->id400;
+        }
+
+        $patient = $sejour->_ref_patient;
+        $patient->loadIPP($receiver->group_id);
+        if (!$patient->_IPP) {
+          if ($msg = $patient->generateIPP()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+        }
+
+        // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
+        if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
+          $current_affectation = $sejour->getCurrAffectation();
+        }
+
+        $this->createMovement($code, $sejour, $current_affectation);
+
+        // Envoi de l'événement
+        $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
+
+        $code = "A03";
+      }
+
       if (!$code) {
         return;
       }
