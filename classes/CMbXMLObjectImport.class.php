@@ -101,10 +101,8 @@ abstract class CMbXMLObjectImport {
     $values = self::getValuesFromElement($element);
     foreach ($values as $_field => $_value) {
       if ($_value && $object->_specs[$_field] instanceof CRefSpec && $_field !== $object->_spec->key) {
-        /** @var DOMElement $_element */
-        $_element = $this->xpath->query("//*[@id='$_value']")->item(0);
-        $this->importObject($_element);
-        
+        $this->importObjectByGuid($_value);
+
         if (isset($this->map[$_value])) {
           $values[$_field] = self::getIdFromGuid($this->map[$_value]);
         }
@@ -114,6 +112,19 @@ abstract class CMbXMLObjectImport {
     bindHashToObject($values, $object);
     
     return $object;
+  }
+
+  /**
+   * Import an object by looking it up in the document, if it exists
+   *
+   * @param string $guid Guid of the object to import
+   *
+   * @return void
+   */
+  function importObjectByGuid($guid) {
+    /** @var DOMElement $_element */
+    $_element = $this->xpath->query("//*[@id='$guid']")->item(0);
+    $this->importObject($_element);
   }
 
   /**
@@ -152,7 +163,7 @@ abstract class CMbXMLObjectImport {
         continue;
       }
 
-      $values[$_element->getAttribute("name")] = utf8_decode($_element->nodeValue);
+      $values[$_element->getAttribute("name")] = self::getNodeValue($_element);
     }
     
     foreach ($element->attributes as $_attribute) {
@@ -204,7 +215,11 @@ abstract class CMbXMLObjectImport {
       return null;
     }
     
-    return utf8_decode($fields->item(0)->nodeValue);
+    return self::getNodeValue($fields->item(0));
+  }
+
+  static function getNodeValue(DOMElement $element) {
+    return utf8_decode(addslashes($element->nodeValue));
   }
 
   /**

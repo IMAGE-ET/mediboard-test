@@ -186,6 +186,15 @@
             </tr>
 
             <tr>
+              <th>
+                <label for="all_prats">Tous les praticiens</label>
+              </th>
+              <td colspan="5">
+                <input type="checkbox" name="all_prats" value="1" {{if $all_prats}}checked{{/if}} />
+              </td>
+            </tr>
+
+            <tr>
               <td colspan="6">
                 <button class="change">{{tr}}Export{{/tr}}</button>
               </td>
