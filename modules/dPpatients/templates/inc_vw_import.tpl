@@ -18,6 +18,10 @@
       form.onsubmit();
     }
   }
+
+  function QDImport(start, count) {
+
+  }
 </script>
 
 
@@ -59,6 +63,7 @@
                 Import de patients
               </th>
             </tr>
+
             <tr>
               <td colspan="2">
                 <div class="small-info">Import du fichier <code>{{$conf.dPpatients.imports.pat_csv_path}}</code></div>
@@ -66,6 +71,7 @@
                 Attention à vider les logs fichier avant import</div>
               </td>
             </tr>
+
             <tr>
               <th>
                 <label for="start">{{tr}}config-dPpatients-imports-pat_start{{/tr}}</label>
@@ -74,6 +80,7 @@
                 <input type="number" name="start" value="{{$start_pat}}" size="5" />
               </td>
             </tr>
+
             <tr>
               <th>
                 <label for="count">{{tr}}config-dPpatients-imports-pat_count{{/tr}}</label>
@@ -82,6 +89,7 @@
                 <input type="number" name="count" value="{{$count_pat}}" size="5" />
               </td>
             </tr>
+
             <tr>
               <th>
                 <label for="auto">Automatique</label>
@@ -90,8 +98,17 @@
                 <input type="checkbox" name="auto" />
               </td>
             </tr>
+
             <tr>
-              <td colspan="2" style="text-align: center;"><button class="change">{{tr}}Import{{/tr}}</button></td>
+              <td colspan="2" style="text-align: center;">
+                <button type="submit" class="change" onclick="$V(this.form.elements.dosql, 'do_import_patient');">
+                  {{tr}}Import{{/tr}}
+                </button>
+
+                <button type="submit" class="tick" onclick="$V(this.form.elements.dosql, 'do_import_patient_qd');">
+                  Importer par IPP
+                </button>
+              </td>
             </tr>
           </table>
         </form>

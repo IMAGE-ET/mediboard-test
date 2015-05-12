@@ -14,10 +14,10 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="4" class="title">{{tr}}{{$class}}{{/tr}} <button class="forms" onclick="Modal.open('import_csv_line_{{$class}}', {width:'-30', showClose:true})">header CSV</button></th>
+    <th colspan="4" class="title">{{tr}}{{$class}}{{/tr}} <button class="forms" onclick="Modal.open('import_csv_line_{{$class}}', {width:'-30', showClose:true})">En-tête CSV</button></th>
   </tr>
   <tr>
-    <th>Nb</th>
+    <th>#</th>
     <th>Champ</th>
     <th>Propriétés</th>
     <th>Description</th>
@@ -30,7 +30,7 @@
       {{assign var=desc value="CAppUI::tr"|static_call:"$class_name-$field_name-desc"}}
       {{assign var=trad value="CAppUI::tr"|static_call:"$class_name-$field_name"}}
       <tr>
-        <th style="text-align: right"><span title="{{$_spec->fieldName}}">{{$iterator}}</span></th>
+        <th><span title="{{$_spec->fieldName}}">{{$iterator}}</span></th>
         <td>
           {{if $_spec->notNull}}<strong>{{/if}}
           {{if $context != "main"}}
