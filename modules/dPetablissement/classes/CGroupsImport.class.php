@@ -41,9 +41,6 @@ class CGroupsImport extends CMbXMLObjectImport {
       $idex->store();
       CAppUI::stepAjax("Idex '%s' créé sur '%s'", UI_MSG_OK, $idex->id400, $object);
     }
-    else {
-      CAppUI::stepAjax("Idex '%s' retrouvé sur '%s'", UI_MSG_OK, $idex->id400, $object);
-    }
   }
 
   /**
@@ -51,9 +48,17 @@ class CGroupsImport extends CMbXMLObjectImport {
    */
   function importObject(DOMElement $element) {
     $id = $element->getAttribute("id");
-    
+
     if (isset($this->imported[$id])) {
       return;
+    }
+
+    $_class = $element->getAttribute("class");
+    $group = CGroups::loadCurrent();
+
+
+    if ($_class == "CGroups") {
+      $this->storeIdExt($group, $id);
     }
     
     $this->name_suffix = " (import du ".CMbDT::dateTime().")";
@@ -65,13 +70,11 @@ class CGroupsImport extends CMbXMLObjectImport {
       return;
     }
     
-    switch ($element->getAttribute("class")) {
+    switch ($_class) {
       // --------------------
       case "CGroups":
-        $group = CGroups::loadCurrent();
-
         CAppUI::stepAjax("Etablissement de rattachement : '%s'", UI_MSG_OK, $group->text);
-        
+
         $map_to = $group->_guid;
         break;
 
