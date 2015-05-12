@@ -1981,6 +1981,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `handicap` ENUM('0', '1');";
     $this->addQuery($query);
 
-    $this->mod_version = '2.13';
+    $this->makeRevision("2.13");
+    $query = "ALTER TABLE `operations`
+               CHANGE `position` `position` ENUM ('DD','DV','DL','GP','AS','TO','GYN','DDA')";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.14';
   }
 }
