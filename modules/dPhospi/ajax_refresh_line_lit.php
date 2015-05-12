@@ -109,29 +109,31 @@ $affectations = $affectation->loadList($where, "parent_affectation_id ASC");
 // Ajout des prolongations anormales
 // (séjours avec entrée réelle et sortie non confirmée et sortie < maintenant
 $nb_days_prolongation = CAppUI::conf("dPhospi nb_days_prolongation");
-$sejour = new CSejour();
-$max = CMbDT::dateTime();
-$min = CMbDT::date("-$nb_days_prolongation days", $max) . " 00:00:00";
-$where = array(
-  "entree_reelle"   => "IS NOT NULL",
-  "sortie_reelle"   => "IS NULL",
-  "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
-  "sejour.confirme" => "IS NULL",
-  "group_id"        => "= '$group_id'"
-);
+if ($nb_days_prolongation) {
+  $sejour = new CSejour();
+  $max    = CMbDT::dateTime();
+  $min    = CMbDT::date("-$nb_days_prolongation days", $max) . " 00:00:00";
+  $where  = array(
+    "entree_reelle"   => "IS NOT NULL",
+    "sortie_reelle"   => "IS NULL",
+    "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
+    "sejour.confirme" => "IS NULL",
+    "group_id"        => "= '$group_id'"
+  );
 
-/** @var CSejour[] $sejours_prolonges */
-$sejours_prolonges = $sejour->loadList($where);
+  /** @var CSejour[] $sejours_prolonges */
+  $sejours_prolonges = $sejour->loadList($where);
 
-$affectations_prolong = array();
-foreach ($sejours_prolonges as $_sejour) {
-  $aff = $_sejour->getCurrAffectation($_sejour->sortie);
-  if (!$aff->_id || $aff->lit_id != $lit_id) {
-    continue;
+  $affectations_prolong = array();
+  foreach ($sejours_prolonges as $_sejour) {
+    $aff = $_sejour->getCurrAffectation($_sejour->sortie);
+    if (!$aff->_id || $aff->lit_id != $lit_id) {
+      continue;
+    }
+
+    $aff->_is_prolong = true;
+    $affectations[$aff->_id] = $aff;
   }
-
-  $aff->_is_prolong = true;
-  $affectations[$aff->_id] = $aff;
 }
 
 $sejours  = CStoredObject::massLoadFwdRef($affectations, "sejour_id");
