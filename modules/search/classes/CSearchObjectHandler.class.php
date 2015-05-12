@@ -107,7 +107,11 @@ class CSearchObjectHandler extends CMbObjectHandler {
     if ($object instanceof CCompteRendu && !$object->object_id) {
       return false;
     }
-    if ($object instanceof CFile && in_array($object->object_class, array('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation'))) {
+    if ($object instanceof CFile && !in_array($object->object_class, array('CSejour', 'CConsultation', 'CConsultAnesth', 'COperation'))) {
+      return false;
+    }
+
+    if ($object instanceof CPrescriptionLineMedicament && $object->loadRefPrescription()->loadRefObject() instanceof CDossierMedical) {
       return false;
     }
 
