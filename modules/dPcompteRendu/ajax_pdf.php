@@ -240,7 +240,7 @@ if ($compte_rendu->factory == "CWkHtmlToPDFConverter") {
   $content = file_get_contents($file->_file_path);
   $content = CWkHtmlToPDFConverter::addAutoPrint($content);
   file_put_contents($file->_file_path, $content);
-  $file->doc_size = filesize($file->_file_path);
+  $file->doc_size = strlen($content);
   $file->store();
 }
 
