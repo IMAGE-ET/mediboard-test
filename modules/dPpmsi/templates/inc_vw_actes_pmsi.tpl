@@ -203,6 +203,11 @@
               </fieldset>
             </td>
           </tr>
+          <tr>
+            <td>
+              <div id="export_CSejour_{{$sejour->_id}}"></div>
+            </td>
+          </tr>
         </table>
         {{mb_include module=pmsi template=inc_codage_actes subject=$sejour}}
       </div>
