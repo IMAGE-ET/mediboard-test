@@ -195,7 +195,7 @@ class CStrSpec extends CMbFieldSpec {
    * @see parent::getLitteralDescription()
    */
   function getLitteralDescription() {
-    $litteral = "Chaîne de caractère, longueurs : ";
+    $litteral = "Chaîne de caractère, longueur : ";
 
     $properties =  array();
 

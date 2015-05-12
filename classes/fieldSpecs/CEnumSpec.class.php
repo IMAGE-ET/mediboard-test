@@ -245,7 +245,7 @@ class CEnumSpec extends CMbFieldSpec {
     foreach ($this->_list as $_list) {
       $litterals[] = "'$_list' (".CAppUI::tr($this->className.".".$this->fieldName.".".$_list).")";
     }
-    return "Chaine de caractère dont les valeurs possibles sont : ".implode(", ", $litterals).". ".
+    return "Chaîne de caractère dont les valeurs possibles sont : ".implode(", ", $litterals).". ".
     parent::getLitteralDescription();
   }
 
