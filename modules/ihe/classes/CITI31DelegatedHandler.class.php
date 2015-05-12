@@ -645,16 +645,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    */
   function getBasculeCode(CSejour $from, CSejour $to) {
     $matrix = array(    // comp/M   comp/C   comp/O   bebe/*   ambu/*   urg/*   seances/* exte/*
-      "comp/M"    => array( null,   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
-      "comp/C"    => array("A06",    null,   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
-      "comp/O"    => array("A06",   "A06",    null,   "A06",   "A06",   "A07",   "A06",   "A07"),
+      "comp/M"    => array( null,   "Z99",   "Z99",   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
+      "comp/C"    => array("Z99",    null,   "Z99",   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
+      "comp/O"    => array("Z99",   "Z99",    null,   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
       "bebe/*"    => array("A06",   "A06",   "A06",    null,   "A06",   "A07",   "A06",   "A07"),
-      "ambu/*"    => array("A06",   "A06",   "A06",   "A06",    null,   "A07",   "A06",   "A07"),
-      "urg/*"     => array("A06",   "A06",   "A06",   "A06",   "A06",    null,   "A06",   "A07"),
-      "seances/*" => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",    null,   "A07"),
-      "exte/*"    => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",    null),
+      "ambu/*"    => array("Z99",   "Z99",   "Z99",   "Z99",    null,   "A07",   "Z99",   "A07"),
+      "urg/*"     => array("A06",   "A06",   "A06",   "A06",   "A06",    null,   "A06",   "Z99"),
+      "seances/*" => array("Z99",   "Z99",   "Z99",   "Z99",   "Z99",   "A07",    null,   "A07"),
+      "exte/*"    => array("A06",   "A06",   "A06",   "A06",   "A06",   "Z99",   "A06",    null),
     );
-    
+
     $from->completeField("type", "type_pec");
     $type_from     = $from->type;
     $type_pec_from = $from->type_pec;
