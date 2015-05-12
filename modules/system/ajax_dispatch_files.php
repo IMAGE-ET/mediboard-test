@@ -93,6 +93,9 @@ foreach (array_diff($files_excludes, $array_diff) as $_file_exclude) {
 if (empty($files)) {
   CCronJobLog::$log = CAppUI::tr("CEAIDispatcher-no-file");
   CAppUI::stepAjax("CEAIDispatcher-no-file", UI_MSG_WARNING);
+
+  // Libère le verrou
+  $lock->release();
   return;
 }
 
