@@ -113,6 +113,10 @@ class CSearchObjectHandler extends CMbObjectHandler {
       return false;
     }
 
+    if ($object instanceof CPrescriptionLineMedicament && $object->loadRefPrescription()->loadRefObject() instanceof CDossierMedical) {
+      return false;
+    }
+
     if (!$type) {
       if (!$object->_ref_current_log) {
         $type = "create";
