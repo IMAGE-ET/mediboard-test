@@ -1315,6 +1315,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       if ($msg = $this->cancelOperations()) {
         return $msg;
       }
+
+      // Annulation des mouvements
+      if ($msg = $this->cancelMovements()) {
+        return $msg;
+      }
     }
 
     // Synchronisation des affectations
@@ -1452,6 +1457,23 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($this->_ref_operations as $key => $value) {
       $value->annulee = 1;
       $msg .= $this->_ref_operations[$key]->store();
+    }
+
+    return $msg;
+  }
+
+  /**
+   * Cancel all movements
+   *
+   * @return null|string
+   */
+  function cancelMovements() {
+    $this->loadRefsMovements();
+
+    $msg = null;
+    foreach ($this->_ref_movements as $movement) {
+      $movement->cancel = 1;
+      $msg .= $movement->store();
     }
 
     return $msg;

@@ -179,6 +179,50 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       $code = $code ? $code : $this->getCodeSejour($sejour);
 
+      // Dans le cas d'une création et que l'on renseigne entrée réelle et sortie réelle,
+      // il est nécessaire de créer deux flux (A01 et A03)
+      if ($sejour->_ref_last_log->type == "create" && $sejour->entree_reelle && $sejour->sortie_reelle) {
+        $code = "A01";
+
+        // Cas où :très souvent
+        // * on est l'initiateur du message
+        // * le destinataire ne supporte pas le message
+        if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+          return;
+        }
+
+        if (!$sejour->_NDA) {
+          // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+          if ($msg = $sejour->generateNDA()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+
+          $NDA = new CIdSante400();
+          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+          $sejour->_NDA = $NDA->id400;
+        }
+
+        $patient = $sejour->_ref_patient;
+        $patient->loadIPP($receiver->group_id);
+        if (!$patient->_IPP) {
+          if ($msg = $patient->generateIPP()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+        }
+
+        // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
+        if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
+          $current_affectation = $sejour->getCurrAffectation();
+        }
+
+        $this->createMovement($code, $sejour, $current_affectation);
+
+        // Envoi de l'événement
+        $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
+
+        $code = "A03";
+      }
+
       if (!$code) {
         return;
       }
@@ -601,14 +645,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    */
   function getBasculeCode(CSejour $from, CSejour $to) {
     $matrix = array(    // comp/M   comp/C   comp/O   bebe/*   ambu/*   urg/*   seances/* exte/*
-      "comp/M"    => array( null,   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
-      "comp/C"    => array("A06",    null,   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
-      "comp/O"    => array("A06",   "A06",    null,   "A06",   "A06",   "A07",   "A06",   "A07"),
+      "comp/M"    => array( null,   "Z99",   "Z99",   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
+      "comp/C"    => array("Z99",    null,   "Z99",   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
+      "comp/O"    => array("Z99",   "Z99",    null,   "Z99",   "Z99",   "A07",   "Z99",   "A07"),
       "bebe/*"    => array("A06",   "A06",   "A06",    null,   "A06",   "A07",   "A06",   "A07"),
-      "ambu/*"    => array("A06",   "A06",   "A06",   "A06",    null,   "A07",   "A06",   "A07"),
-      "urg/*"     => array("A06",   "A06",   "A06",   "A06",   "A06",    null,   "A06",   "A07"),
-      "seances/*" => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",    null,   "A07"),
-      "exte/*"    => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",    null),
+      "ambu/*"    => array("Z99",   "Z99",   "Z99",   "Z99",    null,   "A07",   "Z99",   "A07"),
+      "urg/*"     => array("A06",   "A06",   "A06",   "A06",   "A06",    null,   "A06",   "Z99"),
+      "seances/*" => array("Z99",   "Z99",   "Z99",   "Z99",   "Z99",   "A07",    null,   "A07"),
+      "exte/*"    => array("A06",   "A06",   "A06",   "A06",   "A06",   "Z99",   "A06",    null),
     );
     
     $from->completeField("type", "type_pec");
@@ -769,6 +813,17 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas d'une annulation
       if ($sejour->fieldModified("annule", "1")) {
         return "A11";
+      }
+
+      // Cas d'un rétablissement on simule une nouvelle admission
+      if ($sejour->fieldModified("annule", "0")) {
+        // Patient externe
+        if (in_array($sejour->type, self::$outpatient)) {
+          return "A04";
+        }
+
+        // Admission hospitalisé
+        return "A01";
       }
       
       // Annulation de la sortie réelle
