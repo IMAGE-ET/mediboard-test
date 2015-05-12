@@ -123,62 +123,44 @@ if (!isset($sejours)) {
     // Chargement du service
     $service->load($service_id);
 
-    // Chargement des sejours pour le service selectionné
-    $affectation = new CAffectation();
+    $order = "sejour.service_id, ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
 
+    // Chargement des sejours pour le service selectionné
     $ljoin = array();
     $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
     $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+    $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
 
     $where = array();
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
     $where["sejour.praticien_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
-    $order = "ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
+    $where["sejour.annule"] = " = '0'";
+    $where["affectation.entree"] = "<= '$date_max'";
+    $where["affectation.sortie"] = ">= '$date'";
+
+    if ($mode == 'instant') {
+      $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
+      $where[] = "'". CMbDT::dateTime() . "' BETWEEN affectation.entree AND affectation.sortie";
+    }
 
     if ($_type_admission) {
       $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp', 'ssr')" : "= '$_type_admission'";
     }
 
     if ($service_id) {
-      $where["affectation.entree"] = "<= '$date_max'";
-      $where["affectation.sortie"] = ">= '$date'";
-      if ($mode == 'instant') {
-        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
-      }
-      $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-      $where["sejour.annule"] = " = '0'";
       $where["affectation.service_id"] = " = '$service_id'";
     }
-    elseif ($praticien_id && !$only_non_checked) {
-      $where["affectation.entree"] = "<= '$date_max'";
-      $where["affectation.sortie"] = ">= '$date'";
-      if ($mode == 'instant') {
-        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
-      }
-      $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-      $where["sejour.annule"] = " = '0'";
-      
-      //$where["sejour.praticien_id"] = " = '$praticien_id'";
-    }
     elseif ($function_id) {
-      $where["affectation.entree"] = "<= '$date_max'";
-      $where["affectation.sortie"] = ">= '$date'";
-      if ($mode == 'instant') {
-        $where[] = "affectation.effectue = '0' OR sejour.sortie_reelle >= '".CMbDT::dateTime()."'";
-      }
-      $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
-      $where["sejour.annule"] = " = '0'";
-      
       $ljoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
       $ljoin["secondary_function"] = "sejour.praticien_id = secondary_function.user_id";
       $where[] = "$function_id IN (users_mediboard.function_id, secondary_function.function_id)";
     }
-    
+
     if ($praticien_id && $only_non_checked) {
       $where_line = array();
-      
-      $user_id = CAppUI::$user->_id;
+
+      $user_id = CMediusers::get()->_id;
       $where_line["sejour.entree"] = "<= '$date_max'";
       $where_line["sejour.sortie"] = ">= '$date'";
       $where_line["sejour.annule"] = " = '0'";
@@ -210,7 +192,7 @@ if (!isset($sejours)) {
       
       // Lignes de commentaire
       $ljoin_line = array();
-      $line = new CPrescriptionLineComment;
+      $line = new CPrescriptionLineComment();
       $ljoin_line["prescription"] = "prescription.prescription_id = prescription_line_comment.prescription_id";
       $ljoin_line["sejour"] = "prescription.object_id = sejour.sejour_id";
       unset($where_line["prescription_line_medicament.praticien_id"]);
@@ -229,7 +211,7 @@ if (!isset($sejours)) {
       
       // Lignes d'éléments
       $ljoin_line = array();
-      $line = new CPrescriptionLineElement;
+      $line = new CPrescriptionLineElement();
       unset($where_line["prescription_line_comment.praticien_id"]);
       $where_line["prescription_line_element.praticien_id"] = " = '$user_id'";
       $ljoin_line["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id";
@@ -249,7 +231,7 @@ if (!isset($sejours)) {
       $where_line["prescription_line_mix.variante_for_id"] = "IS NULL";
       $where_line["prescription_line_mix.variante_active"] = " = '1'";
       $ljoin_line = array();
-      $line_mix = new CPrescriptionLineMix;
+      $line_mix = new CPrescriptionLineMix();
       unset($where_line["prescription_line_element.praticien_id"]);
       $where["prescription_line_mix.praticien_id"] = " = '$user_id'";
       unset($where_line["signee"]);
@@ -269,6 +251,7 @@ if (!isset($sejours)) {
     else {
       $sejours = array();
       if ($service_id || $praticien_id || $function_id) {
+        $affectation = new CAffectation();
         $affectations = $affectation->loadList($where, $order, null, "affectation.sejour_id", $ljoin);
 
         /** @var CSejour[] $sejours */
@@ -285,7 +268,7 @@ if (!isset($sejours)) {
   }
 }
 
-/* @var CPatient[] $patients*/
+/* @var CPatient[] $patients */
 $patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
 CPatient::massLoadIPP($patients);
 CStoredObject::massLoadBackRefs($patients, "dossier_medical");
