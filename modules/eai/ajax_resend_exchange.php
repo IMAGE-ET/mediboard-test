@@ -82,7 +82,8 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefPraticien();
   $_sejour->loadRefPatient();
   $_sejour->loadNDA($receiver->group_id);
-  
+
+  $_sejour->loadLastLog();
   $_sejour->_ref_last_log->type = "create";
   
   if (CValue::get("only_pread") && ($_sejour->_etat != "preadmission")) {
