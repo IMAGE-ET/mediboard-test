@@ -58,19 +58,18 @@
     {{assign var=href_planning value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
     {{assign var=href_patient  value="?m=patients&tab=vw_edit_patients&patient_id=$patient->_id"}}
 
+    {{assign var="classe" value=""}}
     {{if !$patient->_id}}
-      {{assign var="style" value="style='background: #ffa;'"}}
+      {{assign var="classe" value="pause_consult"}}
     {{elseif $_consult->premiere}}
-      {{assign var="style" value="style='background: #faa;'"}}
+      {{assign var="classe" value="premiere_consult"}}
     {{elseif $_consult->derniere}}
-      {{assign var="style" value="style='background: #faf;'"}}
+      {{assign var="classe" value="derniere_consult"}}
     {{elseif $_consult->_ref_sejour->_id}}
-      {{assign var="style" value="style='background: #CFFFAD;'"}}
-    {{else}}
-      {{assign var="style" value=""}}
+      {{assign var="classe" value="consult_sejour"}}
     {{/if}}
 
-    <td {{$style|smarty:nodefaults}}>
+    <td class="{{$classe}}">
       <div style="float: left">
       {{if $patient->_id}}
         <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
@@ -86,7 +85,7 @@
       </div>
     </td>
 
-    <td {{$style|smarty:nodefaults}} class="text">
+    <td class="text {{$classe}}">
       {{if !$patient->_id}}
         [PAUSE]
       {{else}}
@@ -99,7 +98,7 @@
       {{/if}}
     </td>
 
-    <td class="text" {{$style|smarty:nodefaults}}>
+    <td class="text {{$classe}}">
       {{assign var=categorie value=$_consult->_ref_categorie}}
 
       {{if $categorie->_id}}
@@ -120,7 +119,7 @@
         {{$_consult->motif|spancate:35:"...":false|nl2br}}
       {{/if}}
     </td>
-    <td class="text" {{$style|smarty:nodefaults}}>
+    <td class="text {{$classe}}">
       {{if $patient->_id}}
         <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->rques|spancate:35:"...":false|nl2br}}</a>
       {{else}}
@@ -130,7 +129,7 @@
         {{mb_include module=3333tel template=inc_check_3333tel object=$_consult tiny=1}}
       {{/if}}
     </td>
-    <td {{$style|smarty:nodefaults}}>
+    <td class="{{$classe}}">
       <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -200,12 +199,12 @@
         <button class="undo button notext" type="button" onclick="undoCancellation(document.cancel_annulation_{{$_consult->_id}});">Rétablir</button>
       {{/if}}
     </td>
-    <td {{$style|smarty:nodefaults}}>
+    <td class="{{$classe}}">
       {{if $_consult->duree > 1}}
         ({{math equation="a*b" a=$_consult->duree b=$_consult->_ref_plageconsult->_freq}} min)
       {{/if}}
     </td>
-    <td {{$style|smarty:nodefaults}} {{if $_consult->annule}}class="error"{{/if}}>
+    <td class="{{if $_consult->annule}}error{{/if}} {{$classe}}">
       {{if $patient->_id}}
         {{$_consult->_etat}}
       {{/if}}

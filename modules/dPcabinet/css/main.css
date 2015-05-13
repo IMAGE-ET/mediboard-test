@@ -228,3 +228,23 @@ table#weber tr.moyenne td.osseux {
 table#weber td {
   text-align: center;
 }
+
+table.tbl td.pause_consult,
+div.pause_consult {
+  background-color: #ffa;
+}
+
+table.tbl td.premiere_consult,
+div.premiere_consult {
+  background-color: #faa;
+}
+
+table.tbl td.derniere_consult,
+div.derniere_consult {
+  background-color: #faf;
+}
+
+table.tbl td.consult_sejour,
+div.consult_sejour {
+  background-color: #CFFFAD;
+}
