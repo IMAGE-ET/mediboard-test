@@ -101,6 +101,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Sejour
     $venueAN = CValue::read($data["personIdentifiers"], "AN");
+    if (!$venueAN) {
+      $venueAN = CValue::read($data["admitIdentifiers"], "AN");
+    }
+
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
 
@@ -609,12 +613,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $pointer = CMbArray::get($rp, 0);
     $type    = CMbArray::get($rp, 2);
 
-    //Création d'un lien Hypertext sur l'objet
+    // Création d'un lien Hypertext sur l'objet
     if ($type == "HTML") {
       $hyperlink = new CHyperTextLink();
       $hyperlink->setObject($object);
       $hyperlink->name = $name;
       $hyperlink->link = $pointer;
+      $hyperlink->loadMatchingObject();
 
       if ($msg = $hyperlink->store()) {
         $this->codes[] = "E343";
