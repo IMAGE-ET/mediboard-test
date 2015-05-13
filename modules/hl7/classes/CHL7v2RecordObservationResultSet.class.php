@@ -1,16 +1,16 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage hl7
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 /**
- * Class CHL7v2RecordObservationResultSet 
+ * Class CHL7v2RecordObservationResultSet
  * Record observation result set, message XML
  */
 class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
@@ -25,26 +25,26 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    */
   function getContentNodes() {
     $data = $patient_results = array();
-    
+
     $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
-    
+
     $patient_results = $this->queryNodes("ORU_R01.PATIENT_RESULT", null, $varnull, true);
-    
+
     foreach ($patient_results as $_patient_result) {
       // Patient
       $oru_patient = $this->queryNode("ORU_R01.PATIENT", $_patient_result, $varnull);
       $PID = $this->queryNode("PID", $oru_patient, $data, true);
       $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID, $sender);
-      
+
       // Venue
       $oru_visit = $this->queryNode("ORU_R01.VISIT", $oru_patient, $varnull);
       $PV1 = $this->queryNode("PV1", $oru_visit, $data, true);
       if ($PV1) {
         $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
       }
-      
+
       // Observations
       $order_observations = $this->queryNodes("ORU_R01.ORDER_OBSERVATION", $_patient_result, $varnull);
       $data["observations"] = array();
@@ -52,17 +52,17 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $tmp = array();
         // OBR
         $this->queryNode("OBR", $_order_observation, $tmp, true);
-        
+
         // OBXs
         $oru_observations = $this->queryNodes("ORU_R01.OBSERVATION", $_order_observation, $varnull);
         foreach ($oru_observations as $_oru_observation) {
           $this->queryNodes("OBX", $_oru_observation, $tmp, true);
         }
-        
+
         $data["observations"][] = $tmp;
       }
     }
-    
+
     return $data;
   }
 
@@ -89,7 +89,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     if (!$patientPI) {
       return $exchange_hl7v2->setAckAR($ack, "E007", null, $patient);
     }
-   
+
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     // Patient non retrouvé par son IPP
     if (!$IPP->_id) {
@@ -101,6 +101,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Sejour
     $venueAN = CValue::read($data["personIdentifiers"], "AN");
+    if (!$venueAN) {
+      $venueAN = CValue::read($data["admitIdentifiers"], "AN");
+    }
+
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
 
@@ -217,7 +221,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $idex->store();
       }
     }
-    
+
     return $exchange_hl7v2->setAckCA($ack, $this->codes, $comment, $object);
   }
 
@@ -377,13 +381,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function mappingObservationResult(DOMNode $node, CObservationResult $result) {
     // OBX-3: Observation Identifier
     $this->getObservationIdentifier($node, $result);
-    
+
     // OBX-6: Units
     $this->getUnits($node, $result);
-    
+
     // OBX-5: Observation Value (Varies)
     $result->value = $this->getObservationValue($node);
-    
+
     // OBX-11: Observation Result Status
     $result->status =$this->getObservationResultStatus($node);
   }
@@ -400,7 +404,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $identifier    = $this->queryTextNode("OBX.3/CE.1", $node);
     $text          = $this->queryTextNode("OBX.3/CE.2", $node);
     $coding_system = $this->queryTextNode("OBX.3/CE.3", $node);
-    
+
     $value_type = new CObservationValueType();
     $result->value_type_id = $value_type->loadMatch($identifier, $coding_system, $text);
   }
@@ -417,7 +421,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $identifier    = $this->queryTextNode("OBX.6/CE.1", $node);
     $text          = $this->queryTextNode("OBX.6/CE.2", $node);
     $coding_system = $this->queryTextNode("OBX.6/CE.3", $node);
-    
+
     $unit_type = new CObservationValueUnit();
     $result->unit_id = $unit_type->loadMatch($identifier, $coding_system, $text);
   }
@@ -609,12 +613,13 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $pointer = CMbArray::get($rp, 0);
     $type    = CMbArray::get($rp, 2);
 
-    //Création d'un lien Hypertext sur l'objet
+    // Création d'un lien Hypertext sur l'objet
     if ($type == "HTML") {
       $hyperlink = new CHyperTextLink();
       $hyperlink->setObject($object);
       $hyperlink->name = $name;
       $hyperlink->link = $pointer;
+      $hyperlink->loadMatchingObject();
 
       if ($msg = $hyperlink->store()) {
         $this->codes[] = "E343";
