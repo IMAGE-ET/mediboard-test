@@ -28,7 +28,7 @@
     </td>
     <td>
       Le <strong {{if $object->plageop_id}}onmouseover="ObjectTooltip.createEx(this, '{{$object->_ref_plageop->_guid}}')"{{/if}}>
-        {{mb_value object=$object field=_datetime}}</strong>
+        {{mb_value object=$object field=_datetime_best}}</strong>
     </td>
   </tr>
   <tr>
