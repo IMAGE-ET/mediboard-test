@@ -431,12 +431,17 @@ elseif ($type_mouvement == "entrees") {
   }
   
   $mouvements = $mouvements_by_service;
-  
+
+  CSejour::massLoadCurrAffectation($mouvementsNP, $date . " " . CMbDT::time());
   foreach ($mouvementsNP as $_mouvement) {
-    if (!isset($mouvementsNP_by_service[$_mouvement->service_id])) {
-      $mouvementsNP_by_service[$_mouvement->service_id] = array();
+    $_service_id = $_mouvement->service_id;
+    if ($_mouvement->_ref_curr_affectation->service_id && !$_mouvement->_ref_curr_affectation->lit_id) {
+      $_service_id = $_mouvement->_ref_curr_affectation->service_id;
     }
-    $mouvementsNP_by_service[$_mouvement->service_id][] = $_mouvement;
+    if (!isset($mouvementsNP_by_service[$_service_id])) {
+      $mouvementsNP_by_service[$_service_id] = array();
+    }
+    $mouvementsNP_by_service[$_service_id][] = $_mouvement;
   }
   
   $mouvementsNP = $mouvementsNP_by_service;
@@ -546,12 +551,17 @@ else {
   }
   
   $mouvements = $mouvements_by_service;
-  
+
+  CSejour::massLoadCurrAffectation($mouvementsNP, "$date 00:00:00");
   foreach ($mouvementsNP as $_mouvement) {
-    if (!isset($mouvementsNP_by_service[$_mouvement->service_id])) {
-      $mouvementsNP_by_service[$_mouvement->service_id] = array();
+    $_service_id = $_mouvement->service_id;
+    if ($_mouvement->_ref_curr_affectation->service_id && !$_mouvement->_ref_curr_affectation->lit_id) {
+      $_service_id = $_mouvement->_ref_curr_affectation->service_id;
     }
-    $mouvementsNP_by_service[$_mouvement->service_id][] = $_mouvement;
+    if (!isset($mouvementsNP_by_service[$_service_id])) {
+      $mouvementsNP_by_service[$_service_id] = array();
+    }
+    $mouvementsNP_by_service[$_service_id][] = $_mouvement;
   }
   
   $mouvementsNP = $mouvementsNP_by_service;
