@@ -330,6 +330,8 @@
 
 {{if $offline}}
   <button class="print not-printable" style="float: right;" onclick="window.print();">{{tr}}Print{{/tr}}</button>
+
+  <h4>Impression du {{$dtnow|date_format:$conf.longdate}} à {{$dtnow|date_format:$conf.time}}</h4>
 {{/if}}
 
 {{if $trans_and_obs|@count}}
