@@ -157,10 +157,11 @@ if ($_ref_object instanceof CSejour) {
   $whereFavorisSansCibles["search_auto"] = " LIKE '1'";
   $tab_favoris_user_sans_cibles = $favoris_sans_cibles->loadList($whereFavorisSansCibles);
 
+
   unset($whereFavorisSansCibles["user_id"]);
   $function_id = $user->loadRefFunction()->_id;
   $whereFavoris["function_id"] = " = '$function_id'";
-  $tab_favoris_function_sans_cibles =  $favoris_sans_cibles->loadList($whereFavoris);
+  $tab_favoris_function_sans_cibles =  $favoris_sans_cibles->loadList($whereFavorisSansCibles);
 
   unset($whereFavorisSansCibles["function_id"]);
   $group_id = $user->loadRefFunction()->group_id;
@@ -182,7 +183,7 @@ if (isset($tab_favoris)) {
   }
 }
 
-// Récupération des rss items pour le marquage pmsi.
+// Récupération des rss items pour le marquage pmsi (preuves de recherche PMSI)
 $rss_items = array();
 $items = array();
 if ($contexte == "pmsi" && CModule::getActive("atih")) {
