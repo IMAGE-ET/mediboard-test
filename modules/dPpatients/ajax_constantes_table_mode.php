@@ -44,6 +44,16 @@ elseif ($context instanceof CMbObject) {
 $latest_constantes = $patient->loadRefLatestConstantes(CMbDT::dateTime(), $selection, $context, false);
 
 $where = array();
+if (!empty($selection)) {
+  $whereOr = array();
+
+  foreach ($selection as $_constant) {
+    $whereOr[] = "$_constant IS NOT NULL";
+  }
+
+  $where[] = implode(" OR ", $whereOr);
+}
+
 if ($context) {
   if ($context instanceof CCsejour) {
     $whereOr = array();
