@@ -671,8 +671,6 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $path = str_replace("\\", "/", $pointer);
     $path = basename($path);
 
-    $filename = $path;
-
     if ($source instanceof CSourceFileSystem) {
       $path = $source->getFullPath()."/$path";
     }
@@ -695,7 +693,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     // Gestion du CFile
     $file = new CFile();
     $file->setObject($object);
-    $file->file_name = $filename;
+    $file->file_name = $name;
     $file->file_type = $file_type;
     $file->loadMatchingObject();
 

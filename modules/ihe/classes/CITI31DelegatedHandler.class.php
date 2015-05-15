@@ -1007,7 +1007,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    * @return string
    */
   function getModificationAdmitCode(CReceiverHL7v2 $receiver) {
-    mbLog($receiver);
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
       case "FR":
