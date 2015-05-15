@@ -691,7 +691,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $file_type = $this->getFileType($type);
 
     // Gestion du CFile
-    $file = new CFile();ref: Changement du nom de fichier importé
+    $file = new CFile();
     $file->setObject($object);
     $file->file_name = $name;
     $file->file_type = $file_type;
