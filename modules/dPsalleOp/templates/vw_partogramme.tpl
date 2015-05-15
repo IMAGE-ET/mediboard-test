@@ -166,7 +166,12 @@
         </tr>
         <tr>
           <th>{{mb_label object=$operation field=date_visite_anesth}}</th>
-          <td>{{$operation->date_visite_anesth|date_format:$conf.date}}</td>
+          <td>
+            {{$operation->date_visite_anesth|date_format:$conf.date}}
+            {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g" && $operation->time_visite_anesth}}
+              à {{$operation->time_visite_anesth|date_format:$conf.time}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$operation field=rques_visite_anesth}}</th>

@@ -35,10 +35,16 @@
 
     {{if !$selOp->date_visite_anesth}}
       Calendar.regField(oFormVisiteAnesth.date_visite_anesth);
-      
+
       // Initialisation du champ date
       $("visiteAnesth_date_visite_anesth_da").value = "Date actuelle";
       $V(oFormVisiteAnesth.date_visite_anesth, "current");
+
+      {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g"}}
+        Calendar.regField(oFormVisiteAnesth.time_visite_anesth);
+        $("visiteAnesth_time_visite_anesth_da").value = "Heure actuelle";
+        $V(oFormVisiteAnesth.time_visite_anesth, "now");
+      {{/if}}
     {{/if}}
 
     if ($('anesth_tab_group')){
@@ -59,6 +65,8 @@
   {{if $selOp->date_visite_anesth}}
     <input name="prat_visite_anesth_id" type="hidden" value="{{$selOp->prat_visite_anesth_id}}" />
     <input name="date_visite_anesth"    type="hidden" value="" />
+    <input name="time_visite_anesth"    type="hidden" value="" />
+    <input name="rques_visite_anesth"   type="hidden" value="" />
   {{/if}}
   {{if $callback}}
     <input type="hidden" name="ajax" value="1" />
@@ -73,8 +81,14 @@
     <td>
       {{if $selOp->date_visite_anesth}}
         {{mb_value object=$selOp field="date_visite_anesth"}}
+        {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g" && $selOp->time_visite_anesth}}
+          {{mb_value object=$selOp field="time_visite_anesth"}}
+        {{/if}}
       {{else}}
         {{mb_field object=$selOp field="date_visite_anesth"}}
+        {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g"}}
+          {{mb_field object=$selOp field="time_visite_anesth"}}
+        {{/if}}
       {{/if}}
     </td>
   </tr>
@@ -139,9 +153,6 @@
     {{/if}}
     <tr>
       <td class="button" colspan="2">
-        {{mb_field class="COperation" hidden="hidden" field="date_visite_anesth"}}
-        {{mb_field class="COperation" hidden="hidden" field="rques_visite_anesth"}}
-        {{mb_field class="COperation" hidden="hidden" field="autorisation_anesth"}}
         <button class="trash" {{if $callback}}type="button" onclick="onSubmitFormAjax(this.form)"{{/if}}>
           {{tr}}Cancel{{/tr}}
         </button>

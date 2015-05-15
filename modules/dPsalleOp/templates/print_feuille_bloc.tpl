@@ -9,20 +9,20 @@
 *}}
 
 <script>
-Main.add(function(){
-  var url = new Url("patients", "httpreq_vw_constantes_medicales");
-  url.addParam("patient_id", {{$operation->_ref_sejour->patient_id}});
-  url.addParam("context_guid", "{{$operation->_ref_sejour->_guid}}");
-  url.addParam("selection[]", ["pouls", "ta_gauche", "frequence_respiratoire", "score_sedation", "spo2", "diurese"]);
-  url.addParam("date_min", "{{$operation->_datetime_reel}}");
-  url.addParam("date_max", "{{$operation->_datetime_reel_fin}}");
-  url.addParam("print", 1);
-  url.requestUpdate("constantes");
-  
-  {{if "forms"|module_installed}}
-    ExObject.loadExObjects("{{$operation->_class}}", "{{$operation->_id}}", "ex_objects_list", 3, null, {print: 1});
-  {{/if}}
-});
+  Main.add(function() {
+    var url = new Url("patients", "httpreq_vw_constantes_medicales");
+    url.addParam("patient_id", {{$operation->_ref_sejour->patient_id}});
+    url.addParam("context_guid", "{{$operation->_ref_sejour->_guid}}");
+    url.addParam("selection[]", ["pouls", "ta_gauche", "frequence_respiratoire", "score_sedation", "spo2", "diurese"]);
+    url.addParam("date_min", "{{$operation->_datetime_reel}}");
+    url.addParam("date_max", "{{$operation->_datetime_reel_fin}}");
+    url.addParam("print", 1);
+    url.requestUpdate("constantes");
+
+    {{if "forms"|module_installed}}
+      ExObject.loadExObjects("{{$operation->_class}}", "{{$operation->_id}}", "ex_objects_list", 3, null, {print: 1});
+    {{/if}}
+  });
 </script>
 
 {{assign var=sejour value=$operation->_ref_sejour}}
@@ -218,7 +218,12 @@ Main.add(function(){
         </tr>
         <tr>
           <th>{{mb_label object=$operation field=date_visite_anesth}}</th>
-          <td>{{$operation->date_visite_anesth|date_format:$conf.date}}</td>
+          <td>
+            {{$operation->date_visite_anesth|date_format:$conf.date}}
+            {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g" && $operation->time_visite_anesth}}
+              à {{$operation->time_visite_anesth|date_format:$conf.time}}
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$operation field=rques_visite_anesth}}</th>

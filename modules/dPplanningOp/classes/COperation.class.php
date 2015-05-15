@@ -115,6 +115,7 @@ class COperation extends CCodable implements IPatientRelated, IIndexableObject {
 
   // Visite de préanesthésie
   public $date_visite_anesth;
+  public $time_visite_anesth;
   public $prat_visite_anesth_id;
   public $rques_visite_anesth;
   public $autorisation_anesth;
@@ -373,6 +374,7 @@ class COperation extends CCodable implements IPatientRelated, IIndexableObject {
 
     // Visite de préanesthésie
     $props["date_visite_anesth"]     = "date";
+    $props["time_visite_anesth"]     = "time";
     $props["prat_visite_anesth_id"]  = "ref class|CMediusers";
     $props["rques_visite_anesth"]    = "text helped show|0";
     $props["autorisation_anesth"]    = "bool default|0";

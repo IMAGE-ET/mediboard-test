@@ -18,7 +18,8 @@ CConfiguration::register(
         "COperation" => array(
           "use_sortie_reveil_reel" => "bool default|0",
           "use_tto"                => "bool default|0",
-          "password_sortie"        => "bool default|0"
+          "password_sortie"        => "bool default|0",
+          "use_time_vpa"           => "bool default|0"
         )
       )
     )

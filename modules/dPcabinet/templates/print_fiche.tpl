@@ -892,7 +892,14 @@
   {{/if}}
 
   <tr>
-    <th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.date}}{{/if}}</th>
+    <th class="category">Visite de pré-anesthésie
+      {{if $operation->date_visite_anesth}}
+        - {{$operation->date_visite_anesth|date_format:$conf.date}}
+        {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g" && $operation->time_visite_anesth}}
+          à {{$operation->time_visite_anesth|date_format:$conf.time}}
+        {{/if}}
+      {{/if}}
+    </th>
   </tr>
   {{if $operation->date_visite_anesth}}
   <tr>

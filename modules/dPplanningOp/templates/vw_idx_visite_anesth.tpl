@@ -166,6 +166,9 @@
                   {{if $_operation->date_visite_anesth}}
                     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_anesth_visite initials=border}}
                     le {{$_operation->date_visite_anesth|date_format:$conf.date}}
+                    {{if "dPsalleOp COperation use_time_vpa"|conf:"CGroups-$g" && $_operation->time_visite_anesth}}
+                      à {{$_operation->time_visite_anesth|date_format:$conf.time}}
+                    {{/if}}
                   {{else}}
                     non effectuée
                   {{/if}}

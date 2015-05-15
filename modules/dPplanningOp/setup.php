@@ -1986,6 +1986,11 @@ class CSetupdPplanningOp extends CSetup {
                CHANGE `position` `position` ENUM ('DD','DV','DL','GP','AS','TO','GYN','DDA')";
     $this->addQuery($query);
 
-    $this->mod_version = '2.14';
+    $this->makeRevision("2.14");
+    $query = "ALTER TABLE `operations`
+      ADD `time_visite_anesth` TIME AFTER `date_visite_anesth`";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.15';
   }
 }
