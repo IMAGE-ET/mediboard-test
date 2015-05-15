@@ -7,6 +7,8 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+<!--Vue générale de recherche dans le journal de recherche. onglet du même nom -->
+
 {{mb_script module="search" script="Search" ajax=true}}
 <script>
   Main.add(function () {

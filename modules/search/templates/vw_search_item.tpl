@@ -6,6 +6,9 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
  * @link     http://www.mediboard.org*}}
+
+<!--Formulaire d'ajout/édition de la preuve de recherche, utilisée dans le PMSI-->
+
 {{mb_script module=atih script=atih ajax=true}}
 <form method="post" name="addSearchItem" class="watched prepared"  onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close.curry(),
 onClose: atih.loadSearchItems.curry('{{$search_item->rss_id}}')
@@ -20,7 +23,7 @@ onClose: atih.loadSearchItems.curry('{{$search_item->rss_id}}')
 
   <table class="main form">
     <tr>
-      <th class="title" colspan="2"> Formulaire d'ajout/édition de l'élement au RSS n° {{$search_item->rss_id}}</th>
+      <th class="title" colspan="2"> Formulaire d'ajout/édition de la preuve de recherche au RSS n° {{$search_item->rss_id}}</th>
     </tr>
     <tr>
       <td class="narrow">

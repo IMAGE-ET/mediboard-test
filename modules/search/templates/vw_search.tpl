@@ -7,6 +7,8 @@
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
  * @link     http://www.mediboard.org*}}
 
+<!--Vue de recherche classique utilisée partout (TDB, Search, PMSI)-->
+
 {{mb_script module="search" script="Search" ajax=true}}
 {{mb_script module="search" script="Thesaurus" ajax=true}}
 <script>

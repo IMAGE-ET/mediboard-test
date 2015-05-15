@@ -36,34 +36,15 @@ class CSearchSnapshot extends CSearch {
   }
 
   /**
-   * Supprime l'index
-   */
-  public function deleteIndexSnapshot() {
-    $this->_index->delete();
-  }
-
-  /**
-   * Methode permettant la création du répertoire pour le snapshot
-   *
-   * @param string $name_repository Le nom du répertoire
-   * @param string $location        Le chemin du répertoire
-   *
-   * @return bool Si la création est ok
-   */
-  public function registerRepository($name_repository, $location) {
-    $response = $this->_snapshot->registerRepository($name_repository, "fs", array("location" => $location));
-    return $response->isOk();
-  }
-
-  /**
    * Méthode accesseur du répertoire pour le snapshot
    *
-   * @param string$name_repository Le nom du répertoire
+   * @param string $name_repository Le nom du répertoire
    *
    * @return string Le chemin du répertoire
    */
-  public function getRepository ($name_repository) {
+  public function getRepository($name_repository) {
     $response = $this->_snapshot->getRepository($name_repository);
+
     return $response["settings"]["location"];
   }
 
@@ -79,11 +60,49 @@ class CSearchSnapshot extends CSearch {
   public function snapshot($repositoryName, $location, $snapshotName) {
     // register the repository
     $this->registerRepository($repositoryName, $location);
-    if ($this->getSnapshot($repositoryName, $snapshotName )) {
+    if ($this->getSnapshot($repositoryName, $snapshotName)) {
       $this->deleteSnapshot($repositoryName, $snapshotName);
     }
     $response = $this->_snapshot->createSnapshot($repositoryName, $snapshotName, array("indices" => $this->_index->getName()), true);
+
     return $response->isOk();
+  }
+
+  /**
+   * Methode permettant la création du répertoire pour le snapshot
+   *
+   * @param string $name_repository Le nom du répertoire
+   * @param string $location        Le chemin du répertoire
+   *
+   * @return bool Si la création est ok
+   */
+  public function registerRepository($name_repository, $location) {
+    $response = $this->_snapshot->registerRepository($name_repository, "fs", array("location" => $location));
+
+    return $response->isOk();
+  }
+
+  /**
+   * Accesseur du snapshot
+   *
+   * @param string $repositoryName Le nom du répertoire du snapshot
+   * @param string $snapshotName   Le nom du snapshot
+   *
+   * @return array
+   */
+  public function getSnapshot($repositoryName, $snapshotName) {
+
+    return $this->_snapshot->getSnapshot($repositoryName, $snapshotName);
+  }
+
+  /**
+   * @param string $repositoryName Le nom du répertoire du snapshot
+   * @param string $snapshotName   Le nom du snapshot
+   *
+   * @return \Elastica\Response
+   */
+  public function deleteSnapshot($repositoryName, $snapshotName) {
+    return $this->_snapshot->deleteSnapshot($repositoryName, $snapshotName);
   }
 
   /**
@@ -97,7 +116,7 @@ class CSearchSnapshot extends CSearch {
    *
    * @return void
    */
-  public function deleteIndexAndRestore ($repositoryName, $snapshotName, $delete_index = false, $restore = false) {
+  public function deleteIndexAndRestore($repositoryName, $snapshotName, $delete_index = false, $restore = false) {
     $this->loadIndex();
 
     if ($delete_index) {
@@ -115,26 +134,9 @@ class CSearchSnapshot extends CSearch {
   }
 
   /**
-   * @param string $repositoryName Le nom du répertoire du snapshot
-   * @param string $snapshotName   Le nom du snapshot
-   *
-   * @return \Elastica\Response
+   * Supprime l'index
    */
-  public function deleteSnapshot ($repositoryName, $snapshotName) {
-    return $this->_snapshot->deleteSnapshot($repositoryName, $snapshotName);
-  }
-
-  /**
-   * Accesseur du snapshot
-   *
-   * @param string $repositoryName Le nom du répertoire du snapshot
-   * @param string $snapshotName   Le nom du snapshot
-   *
-   * @return array
-   */
-  public function getSnapshot ($repositoryName, $snapshotName) {
-
-    return $this->_snapshot->getSnapshot($repositoryName, $snapshotName);
-
+  public function deleteIndexSnapshot() {
+    $this->_index->delete();
   }
 }

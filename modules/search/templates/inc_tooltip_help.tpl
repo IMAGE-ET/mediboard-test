@@ -6,9 +6,13 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+
+<!--Vue appellée lors du hover sur l'image d'aide (point d'interrogation) dans la recherche-->
+
 {{mb_default var=display value=true}}
 {{if $display}}
-  <img src="style/mediboard/images/icons/help.png" alt="Aide" onmouseover="ObjectTooltip.createDOM(this, 'help-tooltip', {duration: 0})"/>
+  <img src="style/mediboard/images/icons/help.png" alt="Aide"
+       onmouseover="ObjectTooltip.createDOM(this, 'help-tooltip', {duration: 0})" />
   <table class="tbl" id="help-tooltip" style="display: none;">
     <tr>
       <th class="title" colspan="2">Recherche avec opérateurs</th>

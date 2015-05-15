@@ -6,16 +6,21 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+
+<!--Vue de recherche automatique utilisée dans le dossier de soins (prescription, pharmacie) et le pmsi-->
+
 {{mb_script module=search script=search}}
 <script>
   Main.add(function () {
     var tab = Control.Tabs.create('tabs-favoris', true, {
-      afterChange :function(container){
-        switch(container.id){
-          case "tab-General"    : var form = getForm("esSearch");
+      afterChange: function (container) {
+        switch (container.id) {
+          case "tab-General"    :
+            var form = getForm("esSearch");
             form.words.focus();
             break;
-          default : break;
+          default :
+            break;
         }
       }
     });
@@ -24,12 +29,14 @@
 <table class="main layout" id="table_main">
   <tr>
     <td class="button">
-      <button type="button" class="favoris" onclick="Search.manageThesaurus('{{$sejour_id}}', '{{$contexte}}')">Gérer mes favoris</button>
+      <button type="button" class="favoris" onclick="Search.manageThesaurus('{{$sejour_id}}', '{{$contexte}}')">Gérer mes favoris
+      </button>
     </td>
   </tr>
   <tr>
     <td class="narrow" style="vertical-align: top">
       <ul id="tabs-favoris" class="control_tabs_vertical" style="width: 15em">
+        <!--Vue de recherche classique-->
         <li>
           <a href="#tab-General" style="line-height: 1em">{{tr}}CSearch classic search{{/tr}}</a>
         </li>
@@ -48,6 +55,7 @@
     </td>
     <td style="vertical-align: top">
       <div id="tab-General" style="display: none;">
+        <!--Vue de recherche classique-->
         {{mb_include module=search template=vw_search_manual}}
       </div>
       {{foreach from=$results key=_search item=_result}}
@@ -82,7 +90,7 @@
                     {{if $__result._source.title != ""}}
                       <span>{{$__result._source.title|utf8_decode}}</span>
                     {{else}}
-                      <span> ---- Titre non présent ---</span>
+                      <span> ---- Titre non présent --- </span>
                     {{/if}}
                     {{if isset($__result.highlight|smarty:nodefaults)}}
                       <div class="compact">{{$__result.highlight.body.0|purify|smarty:nodefaults}}</div>
@@ -91,7 +99,8 @@
                   {{if $contexte == "pmsi" && "atih"|module_active}}
                     <td class="narrow not-printable">
                       {{if !in_array("`$__result._type`-`$__result._source.id`", $items)}}
-                        <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$__result._type}}', '{{$__result._source.id}}', null)"></button>
+                        <button class="add notext"
+                                onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$__result._type}}', '{{$__result._source.id}}', null)"></button>
                       {{/if}}
                       {{foreach from=$rss_items key=_key item=_item}}
                         {{if $__result._type == $_item->search_class && $__result._source.id == $_item->search_id}}

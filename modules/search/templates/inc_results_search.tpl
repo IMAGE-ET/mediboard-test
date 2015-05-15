@@ -7,7 +7,7 @@
  * @license  OXOL, see http://www.mediboard.org/public/OXOL
  * @link     http://www.mediboard.org*}}
 
-{{mb_script module="files" script="file" ajax=true}}
+
 <script>
   Main.add (function () {
     Search.words_request = '{{$words}}';

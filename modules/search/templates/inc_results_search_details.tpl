@@ -6,6 +6,9 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
+
+<!--Vue appellée lors du de la recherche classique sans aggrégation-->
+
 {{mb_script module=search script=search}}
 
 <table class="tbl form" style="height: 70%" id="results_without_aggreg">
@@ -78,7 +81,7 @@
       <td class="not-printable">
         {{assign var=score value=$_result._score*100}}
         <script>
-          Main.add (function () {
+          Main.add(function () {
             Search.progressBar('{{$_result._source.id}}', '{{$score}}');
           });
         </script>
@@ -89,7 +92,8 @@
       {{if $contexte == "pmsi" && "atih"|module_active}}
         <td class="narrow not-printable">
           {{if !in_array("`$_result._type`-`$_result._source.id`", $items)}}
-            <button class="add notext" onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._source.id}}', null)"></button>
+            <button class="add notext"
+                    onclick="Search.addItemToRss(null, '{{$sejour_id}}', '{{$_result._type}}', '{{$_result._source.id}}', null)"></button>
           {{/if}}
           {{foreach from=$rss_items key=_key item=_item}}
             {{if $_result._type == $_item->search_class && $_result._source.id == $_item->search_id}}

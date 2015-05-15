@@ -8,8 +8,8 @@
  * @link     http://www.mediboard.org */
 
 Search = window.Search || {
-  words_request : null,
-  export_csv : null,
+  words_request: null,
+  export_csv:    null,
 
   /**
    * Method to display result from search
@@ -19,7 +19,7 @@ Search = window.Search || {
    * @return bool
    */
   displayResults: function (form) {
-    var url = new Url('search',  'ajax_result_search');
+    var url = new Url('search', 'ajax_result_search');
     url.addFormData(form);
     url.requestUpdate('list_result');
     return false;
@@ -33,31 +33,31 @@ Search = window.Search || {
    *
    */
   showdiff: function (before, after) {
-    var url = new Url('search',  'ajax_show_diff_mapping');
-    url.addParam("before" , before);
-    url.addParam("after" , after);
-    url.requestModal("85%","50%");
+    var url = new Url('search', 'ajax_show_diff_mapping');
+    url.addParam("before", before);
+    url.addParam("after", after);
+    url.requestModal("85%", "50%");
   },
 
   /**
    * Method to configure the serveur
    */
-  configServeur : function () {
-    var url    = new Url('search', 'ajax_configure_serveur');
+  configServeur: function () {
+    var url = new Url('search', 'ajax_configure_serveur');
     url.requestUpdate("CConfigServeur");
   },
 
   /**
    * Method to configure the serveur
    */
-  configES : function () {
-    var url    = new Url('search', 'ajax_configure_es');
+  configES: function () {
+    var url = new Url('search', 'ajax_configure_es');
     url.requestUpdate("CConfigES");
     return false;
   },
 
-  configReIndexing : function () {
-    var url    = new Url('search', 'ajax_configure_reindexing');
+  configReIndexing: function () {
+    var url = new Url('search', 'ajax_configure_reindexing');
     url.requestUpdate("CConfigReIndexing");
   },
 
@@ -66,8 +66,8 @@ Search = window.Search || {
    *
    * @param {Element} elt
    */
-  toggleElement : function (elt) {
-    if (elt.hasClassName('down') || elt.hasClassName('up')){
+  toggleElement: function (elt) {
+    if (elt.hasClassName('down') || elt.hasClassName('up')) {
       elt.toggleClassName('down');
       elt.toggleClassName('up');
     }
@@ -82,17 +82,17 @@ Search = window.Search || {
    * @param {Element} element2
    * @param {Element} element
    */
-  selectPraticien : function (element2, element) {
+  selectPraticien: function (element2, element) {
     // Autocomplete des users
     var url = new Url("mediusers", "ajax_users_autocomplete");
     url.addParam("praticiens", '1');
     url.addParam("input_field", element.name);
     url.autoComplete(element, null, {
-      minChars: 0,
-      method: "get",
-      select: "view",
-      dropdown: true,
-      afterUpdateElement: function(field, selected) {
+      minChars:           0,
+      method:             "get",
+      select:             "view",
+      dropdown:           true,
+      afterUpdateElement: function (field, selected) {
         if ($V(element) == "") {
           $V(element, selected.down('.view').innerHTML);
         }
@@ -107,26 +107,27 @@ Search = window.Search || {
    *
    * @param {Element} table
    * @param {Element} mapping
-   * @param {Element} types
+   * @param {Element[]} types
    */
   firstIndexing: function (table, mapping, types) {
 
     if (table) {
       Modal.confirm(" Voulez-vous remplir la table ? Si cette action a déjà été effectuée, cela entraînera une nouvelle indexation des données. ATTENTION : l'opération sera irréversible. ",
-        {onOK: function() {
-          var url = new Url('search',  'first_indexing');
-          url.addParam("table" , table);
-          url.addParam("mapping" , mapping);
-          url.addParam("names_types[]" , types, true);
-          url.requestUpdate("tab_config_es");
-        }
-      });
+        {
+          onOK: function () {
+            var url = new Url('search', 'first_indexing');
+            url.addParam("table", table);
+            url.addParam("mapping", mapping);
+            url.addParam("names_types[]", types, true);
+            url.requestUpdate("tab_config_es");
+          }
+        });
     }
     else {
-      var url = new Url('search',  'first_indexing');
-      url.addParam("table" , table);
-      url.addParam("mapping" , mapping);
-      url.addParam("names_types[]" ,types, true);
+      var url = new Url('search', 'first_indexing');
+      url.addParam("table", table);
+      url.addParam("mapping", mapping);
+      url.addParam("names_types[]", types, true);
       url.requestUpdate("tab_config_es");
     }
   },
@@ -135,7 +136,7 @@ Search = window.Search || {
    * Method to index in mode routine
    */
   routineIndexing: function () {
-    var url = new Url('search',  'routine_indexing');
+    var url = new Url('search', 'routine_indexing');
     url.requestUpdate("tab_config_es");
   },
 
@@ -144,7 +145,7 @@ Search = window.Search || {
    */
   updateListStats: function () {
     var url = new Url('search', 'vw_cartographie_mapping');
-    setInterval(function() {
+    setInterval(function () {
       url.requestUpdate("cartographie_systeme");
     }, 300000);
   },
@@ -157,22 +158,22 @@ Search = window.Search || {
    */
   checkAllCheckboxes: function (input, name) {
     var oform = input.form;
-    var elements = oform.select('input[name="'+name+'"]');
+    var elements = oform.select('input[name="' + name + '"]');
 
-    elements.each(function(element) {
+    elements.each(function (element) {
       element.checked = input.checked;
     });
   },
-  searchByType: function (date, user_id, object_id, object_ref, fuzzy_search, types) {
-    new Url('search',  'ajax_result_search_details_aggreg')
+  searchByType:       function (date, user_id, object_id, object_ref, fuzzy_search, types) {
+    new Url('search', 'ajax_result_search_details_aggreg')
       .addParam("date", date)
       .addParam("user_id", user_id)
       .addParam("words", this.words_request)
       .addParam("object_ref_id", object_id)
-      .addParam("object_ref_class",object_ref)
+      .addParam("object_ref_class", object_ref)
       .addParam("fuzzy_search", fuzzy_search)
       .addParam("types", types, true)
-      .requestModal("60%","60%");
+      .requestModal("60%", "60%");
   },
   /**
    * Method to search more details about an item
@@ -182,11 +183,11 @@ Search = window.Search || {
    * @param {bool}    fuzzy_search
    * @param {String}  type
    */
-  searchMoreDetails: function (object_id, object_ref, fuzzy_search, type) {
-    var container = "tab-"+type;
-    new Url('search',  'ajax_result_search_details')
+  searchMoreDetails:  function (object_id, object_ref, fuzzy_search, type) {
+    var container = "tab-" + type;
+    new Url('search', 'ajax_result_search_details')
       .addParam("object_ref_id", object_id)
-      .addParam("object_ref_class",object_ref)
+      .addParam("object_ref_class", object_ref)
       .addParam("type", type)
       .addParam("words", this.words_request)
       .addParam("fuzzy_search", fuzzy_search)
@@ -200,8 +201,8 @@ Search = window.Search || {
    * @param {String} type
    */
   searchMoreDetailsLog: function (date, user_id, type) {
-    var container = "tab-"+type;
-    new Url('search',  'ajax_result_search_log_details')
+    var container = "tab-" + type;
+    new Url('search', 'ajax_result_search_log_details')
       .addParam("date", date)
       .addParam("type", type)
       .addParam("user_id", user_id)
@@ -222,10 +223,12 @@ Search = window.Search || {
     table.select("tr").invoke("show");
     var nameClass = "." + classe;
     var terms = $V(input);
-    if (!terms) return;
-    terms= terms.split(" ");
-    table.select(nameClass).each(function(e) {
-      terms.each(function(term){
+    if (!terms) {
+      return;
+    }
+    terms = terms.split(" ");
+    table.select(nameClass).each(function (e) {
+      terms.each(function (term) {
         if (!e.getText().like(term)) {
           e.up("tr").hide();
         }
@@ -243,8 +246,8 @@ Search = window.Search || {
    * @param {String}  rmq
    *
    */
-  addItemToRss : function (id, rss_id, type, object_id, rmq) {
-    new Url('search',  'vw_search_item')
+  addItemToRss: function (id, rss_id, type, object_id, rmq) {
+    new Url('search', 'vw_search_item')
       .addParam("search_item_id", id)
       .addParam("rss_id", rss_id)
       .addParam("object_id", object_id)
@@ -259,27 +262,27 @@ Search = window.Search || {
    * @param {Element} types
    *
    */
-  updateIndex : function (types) {
-    new Url('search',  'update_index')
-      .addParam("types[]",  types, true)
+  updateIndex: function (types) {
+    new Url('search', 'update_index')
+      .addParam("types[]", types, true)
       .requestUpdate($('tab_config_es'));
   },
 
   /**
    * Method to create mapping for logs
    */
-  createLogMapping : function () {
-   new Url('search',  'first_indexing')
-    .addParam("log" , true)
-    .requestUpdate("tab_config_es");
+  createLogMapping: function () {
+    new Url('search', 'first_indexing')
+      .addParam("log", true)
+      .requestUpdate("tab_config_es");
   },
 
   /**
    * Method to display logs results
    * @param {Element} form
    */
-  displayLogResults : function (form) {
-    var url = new Url('search',  'ajax_result_log_search');
+  displayLogResults: function (form) {
+    var url = new Url('search', 'ajax_result_log_search');
     url.addFormData(form);
     url.requestUpdate('list_log_result');
     return false;
@@ -298,15 +301,18 @@ Search = window.Search || {
   /**
    * Method to generate a csv file
    */
-  downloadCSV: function() {
+  downloadCSV: function () {
     var url = new Url('search', 'download_search_results', 'raw');
-    url.pop(10,10, "export_recherches", null, null,
-      {"results" : this.export_csv, "accept_utf8" : "1"});
+    url.pop(10, 10, "export_recherches", null, null,
+      {"results": this.export_csv, "accept_utf8": "1"});
   },
 
   getAutocompleteUser: function (form, contexte) {
     var element = form.elements.user_id,
-      tokenField = new TokenField(element, {onChange: function(){}.bind(element)});
+      tokenField = new TokenField(element, {
+        onChange: function () {
+        }.bind(element)
+      });
 
     var element_input = form.elements.user_view;
     var url = new Url("mediusers", "ajax_users_autocomplete");
@@ -316,22 +322,25 @@ Search = window.Search || {
     switch (contexte) {
       case "pharmacie" :
       case "prescription" :
-      case "dPboard" : url.addParam("edit", "1");
+      case "dPboard" :
+        url.addParam("edit", "1");
         url.addParam("praticiens", "1");
         break;
       case "log" :
       case "pmsi" :
         break;
-      default : url.addParam("praticiens", "1"); break;
+      default :
+        url.addParam("praticiens", "1");
+        break;
     }
 
     url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "get",
-      dropdown: true,
-      updateElement: function(selected) {
+      minChars:      2,
+      method:        "get",
+      dropdown:      true,
+      updateElement: function (selected) {
         var guid = selected.get("id");
-        var _name  = selected.down().down().getText();
+        var _name = selected.down().down().getText();
 
         var to_insert = !tokenField.contains(guid);
         tokenField.add(guid);
@@ -348,7 +357,7 @@ Search = window.Search || {
     window.user_tag_token = tokenField;
   },
 
-  toggleColumn: function(toggler, column) {
+  toggleColumn: function (toggler, column) {
     var visible = column.visible();
     toggler.toggleClassName("expand", visible);
 
@@ -356,7 +365,7 @@ Search = window.Search || {
   },
 
   progressBar: function (id, score) {
-    var container = $('score_'+id);
+    var container = $('score_' + id);
     var color = '#f00';
     if (score > 25 && score < 75) {
       color = '#E8AC07';
@@ -365,36 +374,38 @@ Search = window.Search || {
       color = '#93D23F';
     }
     var data = [
-      { data: score, color: color },
-      { data: 100 - score, color: '#BBB' }
+      {data: score, color: color},
+      {data: 100 - score, color: '#BBB'}
     ];
 
     jQuery.plot(container, data, {
       series: {
         pie: {
           innerRadius: 0.4,
-          show: true,
-          label: { show: false }
+          show:        true,
+          label:       {show: false}
         }
       },
-      legend: { show: false }
+      legend: {show: false}
     });
   },
 
   manageThesaurus: function (sejour_id, contexte, callback) {
-    callback = callback || function() {Search.reloadSearchAuto(sejour_id, contexte)};
-    new Url('search',  'vw_search_thesaurus')
+    callback = callback || function () {
+      Search.reloadSearchAuto(sejour_id, contexte)
+    };
+    new Url('search', 'vw_search_thesaurus')
       .requestModal("90%", "90%", {onClose: callback});
   },
 
-  reloadSearchAuto : function(sejour_id, contexte) {
+  reloadSearchAuto: function (sejour_id, contexte) {
     var container = 'table_main';
     if (contexte == 'pmsi') {
-       container = "tab-search";
+      container = "tab-search";
     }
-    new Url('search',  'vw_search_auto')
-    .addParam("sejour_id", sejour_id)
-    .addParam("contexte", contexte)
-    .requestUpdate(container);
+    new Url('search', 'vw_search_auto')
+      .addParam("sejour_id", sejour_id)
+      .addParam("contexte", contexte)
+      .requestUpdate(container);
   }
 };

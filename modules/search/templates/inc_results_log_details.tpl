@@ -7,6 +7,8 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+<!--Vue appellée lors du clic sur la loupe dans le journal utilisateur afin d'avoir les détails sous format de volets (spécifiques aux logs)-->
+
 {{mb_script module=search script=search}}
 <table class="tbl form" style="height: 70%">
   <tbody>

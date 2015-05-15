@@ -169,7 +169,6 @@
                       <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title like{{/tr}}" onclick="Thesaurus.addPatternToEntry('like', this.form)">{{tr}}CSearchThesaurusEntry-Pattern like{{/tr}}</button>
                       <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title obligation{{/tr}}" onclick="Thesaurus.addPatternToEntry('obligation', this.form)">{{tr}}CSearchThesaurusEntry-Pattern obligation{{/tr}}</button>
                       <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title prohibition{{/tr}}" onclick="Thesaurus.addPatternToEntry('prohibition', this.form)">{{tr}}CSearchThesaurusEntry-Pattern prohibition{{/tr}}</button>
-                      <button type="button" title="{{tr}}CSearchThesaurusEntry-Pattern-title without negatif{{/tr}}" onclick="Thesaurus.addPatternToEntry('without_negatif', this.form)">{{tr}}CSearchThesaurusEntry-Pattern without negatif{{/tr}}</button>
                     </td>
                   </tr>
                 </table>

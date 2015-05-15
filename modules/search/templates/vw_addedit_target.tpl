@@ -7,6 +7,8 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org*}}
 
+<!--Formulaire d'ajout/édition d'une cible de favoris-->
+
 {{mb_script module="search" script="Thesaurus" ajax=true}}
 <script>
   Main.add(function () {
@@ -23,9 +25,9 @@
     var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
     url.addParam("keywords_code", $V(element_input));
     url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "post",
-      dropdown: true,
+      minChars:      2,
+      method:        "post",
+      dropdown:      true,
       updateElement: function (selected) {
         var _code = selected.down("span").getText();
         var _name = selected.down("div").getText();
@@ -34,7 +36,7 @@
         $V(form.elements.object_class, "CCodeCIM10");
         $V(form.elements.del, '0');
         Thesaurus.name_code = _code + " " + _name;
-        if (!$("CCodeCIM10-"+_code)) {
+        if (!$("CCodeCIM10-" + _code)) {
           form.onsubmit();
         }
       }
@@ -47,10 +49,10 @@
     var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
     url.addParam("_codes_ccam", $V(element_input));
     url.autoComplete(element_input, null, {
-      minChars: 2,
-      method: "post",
-      dropdown: true,
-      width:"130%",
+      minChars:      2,
+      method:        "post",
+      dropdown:      true,
+      width:         "130%",
       updateElement: function (selected) {
         var _code = selected.down("strong").getText();
         var _name = selected.down("small").getText();
@@ -59,7 +61,7 @@
         $V(form.elements.object_class, "CCodeCCAM");
         $V(form.elements.del, '0');
         Thesaurus.name_code = _code + " " + _name;
-        if (!$("CCodeCCAM-"+_code)) {
+        if (!$("CCodeCCAM-" + _code)) {
           form.onsubmit();
         }
       }
@@ -72,10 +74,10 @@
     var url = new Url("dPmedicament", "ajax_atc_autocomplete");
     url.addParam("keywords_atc", $V(element_input));
     url.autoComplete(element_input, null, {
-      minChars: 1,
-      method: "post",
-      dropdown: true,
-      width:"130%",
+      minChars:      1,
+      method:        "post",
+      dropdown:      true,
+      width:         "130%",
       updateElement: function (selected) {
         var _code = selected.down("span").getText();
         var _name = selected.down("div").getText();
@@ -84,7 +86,7 @@
         $V(form.elements.object_class, "CMedicamentClasseATC");
         $V(form.elements.del, '0');
         Thesaurus.name_code = _code + " " + _name;
-        if (!$("CClasseATC-"+_code)) {
+        if (!$("CClasseATC-" + _code)) {
           form.onsubmit();
         }
       }
@@ -93,11 +95,11 @@
 </script>
 
 <form method="post" name="cibleTarget" class="watched prepared" onsubmit="return onSubmitFormAjax(this);">
-  <input type="hidden" name="object_class"/>
-  <input type="hidden" name="object_id"/>
-  <input type="hidden" name="del" value="0"/>
+  <input type="hidden" name="object_class" />
+  <input type="hidden" name="object_id" />
+  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="search_thesaurus_entry_id" value="{{$thesaurus_entry_id}}" />
-  <input type="hidden"  name="callback" value="Thesaurus.addTargetCallback"/>
+  <input type="hidden" name="callback" value="Thesaurus.addTargetCallback" />
   {{mb_key   object=$target}}
   {{mb_class object=$target}}
   <table class="layout">
@@ -120,7 +122,7 @@
             <tr>
               <td style="vertical-align: top;">
                 <label><input type="search" id="keywords_code" name="keywords_code" value="" class="autocomplete" /></label>
-                  <label><input type="hidden" name="_CCodeCIM10"/></label>
+                <label><input type="hidden" name="_CCodeCIM10" /></label>
               </td>
               <td>
                 <ul id="CCodeCIM10_tags" class="tags">
@@ -131,7 +133,7 @@
                               onclick="$V(this.form.elements.search_thesaurus_entry_target_id, '{{$_target->_id}}');$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"
                               style="display: inline-block !important;"></button>
                     </li>
-                    <br/>
+                    <br />
                   {{/foreach}}
                 </ul>
               </td>
@@ -146,18 +148,19 @@
             <tr>
               <td style="vertical-align: top;">
                 <label><input type="search" id="_codes_ccam" name="_codes_ccam" value="" class="autocomplete" /></label>
-                <label><input type="hidden" name="_CCodeCCAM"/></label>
+                <label><input type="hidden" name="_CCodeCCAM" /></label>
               </td>
               <td>
                 <ul id="CCodeCCAM_tags" class="tags">
                   {{foreach from=$thesaurus_entry->_ccam_targets item=_target}}
-                    <li class="tag" title="{{$_target->_ref_target->libelle_long}}" style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
+                    <li class="tag" title="{{$_target->_ref_target->libelle_long}}"
+                        style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
                       {{$_target->_ref_target->code}}  {{$_target->_ref_target->libelle_court}}
                       <button type="submit" class="delete"
                               onclick="$V(this.form.elements.search_thesaurus_entry_target_id, '{{$_target->_id}}');$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"
                               style="display: inline-block !important;"></button>
                     </li>
-                    <br/>
+                    <br />
                   {{/foreach}}
                 </ul>
               </td>
@@ -171,7 +174,7 @@
             <tr>
               <td style="vertical-align: top;">
                 <label><input type="search" id="keywords_atc" name="keywords_atc" value="" class="autocomplete" /></label>
-                <label><input type="hidden" name="_ClasseATC"/></label>
+                <label><input type="hidden" name="_ClasseATC" /></label>
               </td>
               <td>
                 <ul id="CMedicamentClasseATC_tags" class="tags">
@@ -182,7 +185,7 @@
                               onclick="$V(this.form.elements.search_thesaurus_entry_target_id, '{{$_target->_id}}');$V(this.form.elements.del,'1');  this.form.onsubmit() ; this.up('li').next('br').remove(); this.up('li').remove();"
                               style="display: inline-block !important;"></button>
                     </li>
-                    <br/>
+                    <br />
                   {{/foreach}}
                 </ul>
               </td>
