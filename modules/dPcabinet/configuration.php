@@ -15,7 +15,8 @@ CConfiguration::register(
     "CGroups" => array(
       "dPcabinet" => array(
         "CConsultation" => array(
-          "keep_motif_rdv_multiples"  => "bool default|1"
+          "keep_motif_rdv_multiples"  => "bool default|1",
+          "complete_atcd_mode_grille" => "bool default|0",
         ),
         "CPrescription" => array(
           "view_prescription"         => "bool default|0",

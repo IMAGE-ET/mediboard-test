@@ -43,7 +43,13 @@
                 style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}">
               <label onmouseover="ObjectTooltip.createDOM(this, 'tooltip_{{$curr_aide->_guid}}')">
                 <input type="checkbox" {{if $checked}}checked disabled{{/if}} id="aide_{{$curr_aide->_guid}}"
-                       onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '', '{{$type}}', '{{$appareil}}', this)"/>
+                       onclick="
+                         {{if "dPcabinet CConsultation complete_atcd_mode_grille"|conf:"CGroups-$g"}}
+                           $('tooltip_{{$curr_aide->_guid}}').down('button').click();
+                         {{else}}
+                           addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '', '{{$type}}', '{{$appareil}}', this)
+                         {{/if}}" />
+
                 {{$curr_aide->name}}
               </label>
               <div style="display: none" id="tooltip_{{$curr_aide->_guid}}">
