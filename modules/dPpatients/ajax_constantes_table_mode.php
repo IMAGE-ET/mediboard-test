@@ -16,7 +16,8 @@ CCanDo::checkRead();
 $patient_id = CValue::get('patient_id');
 $context_guid = CValue::get('context_guid');
 $nb_input_display = CValue::get('nb_input_display', 2);
-$selection = CValue::get('selection');
+$selection = json_decode(stripslashes(CValue::get('selection', '[]')));
+$display_search_field = empty($selection);
 
 $context = null;
 if ($context_guid) {
@@ -26,13 +27,6 @@ if ($context_guid) {
 $host = CConstantesMedicales::guessHost($context);
 if ($host instanceof CGroups) {
   $host = CMediusers::get()->loadRefFunction();
-}
-
-if (!$selection || is_null($host)) {
-  $selection = CConstantesMedicales::getConstantsByRank('form', false, $host);
-}
-else {
-  $selection = CConstantesMedicales::selectConstants($selection, 'form', $host);
 }
 
 if ($patient_id) {
@@ -47,7 +41,7 @@ elseif ($context instanceof CMbObject) {
   $context->loadRefPatient();
 }
 
-$latest_constantes = $patient->loadRefLatestConstantes(CMbDT::dateTime(), array(), $context, false);
+$latest_constantes = $patient->loadRefLatestConstantes(CMbDT::dateTime(), $selection, $context, false);
 
 $where = array();
 if ($context) {
@@ -85,6 +79,12 @@ if ($context) {
   $constantes->loadRefContext();
 }
 
+if (empty($selection) || is_null($host)) {
+  $constants_ranks = CConstantesMedicales::getConstantsByRank('form', false, $host);
+}
+else {
+  $constants_ranks = CConstantesMedicales::selectConstants($selection, 'form', $host);
+}
 $list_constantes = $constantes->loadList($where, 'datetime DESC', $limit);
 
 $smarty = new CSmartyDP();
@@ -94,5 +94,7 @@ $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('list_constantes', $list_constantes);
 $smarty->assign('context', $context);
 $smarty->assign('context_guid', $context_guid);
+$smarty->assign('constants_ranks', $constants_ranks);
 $smarty->assign('selection', $selection);
+$smarty->assign('display_search_field', $display_search_field);
 $smarty->display('inc_constantes_table_mode.tpl');
