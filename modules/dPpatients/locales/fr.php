@@ -3922,6 +3922,7 @@ $locales['mod-dPpatients-tab-vw_recherche_dossier_clinique'] = 'Recherche dossie
 $locales['mod-dPpatients-tab-vw_supervision_graph'] = 'Graphiques de supervision';
 $locales['mod-dPsante400-tab-ajax_show_id400'] = 'Liste des identifiants externes';
 $locales['mod-ecap-tab-ajax_refresh_dhe_service'] = 'Choix du service';
+$locales['mod-patients-tab-ajax_constantes_table_mode'] = 'Constantes';
 $locales['mod-patients-tab-ajax_custom_constants_graph'] = 'Visualisation d\'un graphique de constantes';
 $locales['mod-patients-tab-ajax_display_constantes'] = 'Derniers relevés de constantes';
 $locales['mod-patients-tab-ajax_do_autocomplete_constants'] = 'Recherche de constantes';
