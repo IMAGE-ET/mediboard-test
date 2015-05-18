@@ -18,8 +18,10 @@
     </th>
   </tr>
   <tr>
-    <th>{{mb_title class=CTraitementDossier field=traitement}}</th>
-    <th>{{mb_title class=CTraitementDossier field=validate}}</th>
+    {{if 'CModule::getActive'|static_call:'atih'}}
+      <th>{{mb_title class=CTraitementDossier field=traitement}}</th>
+      <th>{{mb_title class=CTraitementDossier field=validate}}</th>
+    {{/if}}
     <th>{{mb_title class=CSejour field=facture}}</th>
     <th>{{mb_title class=CSejour field=_NDA}}</th>
     <th>{{mb_label class=CSejour field=praticien_id}}</th>
@@ -33,25 +35,27 @@
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     <tr>
-      <td class="text {{if $_sejour->_count_actes < 1}}empty{{/if}}">
-        {{if $_sejour->_ref_traitement_dossier->traitement}}
-          <img src="images/icons/tick.png" alt="Dossier traité par le PMSI" />
-        {{else}}
-          <img src="images/icons/cross.png" alt="Dossier non traité par le PMSI" />
-        {{/if}}
-      </td>
+      {{if 'CModule::getActive'|static_call:'atih'}}
+        <td class="text {{if $_sejour->_count_actes < 1}}empty{{/if}}">
+          {{if $_sejour->_ref_traitement_dossier->traitement}}
+            <img src="images/icons/tick.png" alt="Dossier traité par le PMSI" />
+          {{else}}
+            <img src="images/icons/cross.png" alt="Dossier non traité par le PMSI" />
+          {{/if}}
+        </td>
 
-      <td class="text {{if $_sejour->_count_actes < 1}}empty{{/if}}">
-        {{if $_sejour->_ref_traitement_dossier->validate}}
-          <span>
-            <img src="images/icons/tick.png" alt="Dossier validé par le PMSI" />
-          </span>
-        {{else}}
-          <span>
-            <img src="images/icons/cross.png" alt="Dossier non validé par le PMSI" />
-          </span>
-        {{/if}}
-      </td>
+        <td class="text {{if $_sejour->_count_actes < 1}}empty{{/if}}">
+          {{if $_sejour->_ref_traitement_dossier->validate}}
+            <span>
+              <img src="images/icons/tick.png" alt="Dossier validé par le PMSI" />
+            </span>
+          {{else}}
+            <span>
+              <img src="images/icons/cross.png" alt="Dossier non validé par le PMSI" />
+            </span>
+          {{/if}}
+        </td>
+      {{/if}}
 
       <td {{if !$_sejour->facture}}class="empty"{{/if}}>
         {{if $_sejour->facture}}
