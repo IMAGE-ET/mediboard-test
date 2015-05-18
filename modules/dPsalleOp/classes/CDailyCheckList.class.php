@@ -155,7 +155,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       "daily_check_list_type_link" => "daily_check_list_type_link.list_type_id = daily_check_list_type.daily_check_list_type_id",
     );
     /** @var CDailyCheckListType[] $daily_check_list_types  */
-    $daily_check_list_types = $daily_check_list_type->loadList($where, "title", null, null, $ljoin);
+    $daily_check_list_types = $daily_check_list_type->loadGroupList($where, "title", null, null, $ljoin);
 
     /** @var CDailyCheckList[] $daily_check_lists  */
     $daily_check_lists = array();
