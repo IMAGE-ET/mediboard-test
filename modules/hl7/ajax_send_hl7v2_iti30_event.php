@@ -29,7 +29,7 @@ $event         = CValue::get("event");
 /** @var CReceiverHL7v2 $receiver */
 $receiver = CMbObject::loadFromGuid($receiver_guid);
 $receiver->loadConfigValues();
-$receiver->getInternationalizationCode($transacton);
+$receiver->getInternationalizationCode($transaction);
 
 $patient = new CPatient();
 $patient->load($patient_id);
