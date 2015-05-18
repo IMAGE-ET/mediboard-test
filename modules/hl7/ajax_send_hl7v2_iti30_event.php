@@ -19,18 +19,20 @@ if (!$receiver_guid || $receiver_guid == "none") {
   CAppUI::stepAjax("Aucun destinataire HL7v2", UI_MSG_ERROR);
 }
 
-$patient_id    = CValue::get("patient_id");
-$event         = CValue::get("event");
-
-$receiver = CMbObject::loadFromGuid($receiver_guid);
-$receiver->loadConfigValues();
-
-$patient = new CPatient();
-$patient->load($patient_id);
-
 $profil      = "PAM";
 $transaction = "ITI30";
 $message     = "ADT";
+
+$patient_id    = CValue::get("patient_id");
+$event         = CValue::get("event");
+
+/** @var CReceiverHL7v2 $receiver */
+$receiver = CMbObject::loadFromGuid($receiver_guid);
+$receiver->loadConfigValues();
+$receiver->getInternationalizationCode($transaction);
+
+$patient = new CPatient();
+$patient->load($patient_id);
 
 $ack_data    = null;
 $iti_handler = new CITI30DelegatedHandler();
