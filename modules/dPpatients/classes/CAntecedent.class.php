@@ -23,6 +23,7 @@ class CAntecedent extends CMbObject {
   public $rques;
   public $dossier_medical_id;
   public $annule;
+  public $majeur;
 
   public $owner_id;
   public $creation_date;
@@ -83,6 +84,7 @@ class CAntecedent extends CMbObject {
     $props["rques"]              = "text helped|type|appareil";
     $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     $props["annule"]             = "bool";
+    $props["majeur"]             = "bool";
     $props["owner_id"]           = "ref class|CMediusers";
     $props["creation_date"]      = "dateTime";
     $props["_search"]            = "str";

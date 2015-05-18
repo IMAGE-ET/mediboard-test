@@ -2848,7 +2848,12 @@ class CSetupdPpatients extends CSetup {
       ADD `indication_group_id` INT (11);";
     $this->addQuery($query);
 
-    $this->mod_version = '2.38';
+    $this->makeRevision("2.38");
+    $query = "ALTER TABLE `antecedent`
+      ADD `majeur` ENUM ('0','1') DEFAULT '0' AFTER `annule`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.39';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

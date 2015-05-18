@@ -123,7 +123,7 @@
     {{if $traitement_enabled && $vw_traitement_texte_libre}}
       <tr id="tp_texte_simple{{$addform}}">
         <td class="text">
-          {{mb_include module=cabinet template=inc_antecedent_texte_libre}}
+          {{mb_include module=cabinet template=inc_traitement_texte_libre}}
         </td>
       </tr>
     {{/if}}

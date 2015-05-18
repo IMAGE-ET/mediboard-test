@@ -131,6 +131,9 @@ showModalTP = function() {
               if (window.reloadAtcd) {
                 reloadAtcd();
               }
+              if (window.reloadAtcdMajeur) {
+                reloadAtcdMajeur();
+              }
             })">
             {{tr}}Delete{{/tr}}
           </button>
@@ -143,7 +146,7 @@ showModalTP = function() {
           {{/if}}
         </form>
 
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
+        <span {{if $_antecedent->majeur}}style="color: #f00;"{{/if}} onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
           <strong>
             {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
             {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}

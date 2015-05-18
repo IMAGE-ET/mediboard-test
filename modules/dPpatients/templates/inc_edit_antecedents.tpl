@@ -64,7 +64,7 @@
         {{else}}
           <td colspan="2"></td>
         {{/if}}
-        <td rowspan="{{$type|ternary:2:3}}" style="width: 60%">
+        <td rowspan="{{$type|ternary:3:4}}" style="width: 60%">
           {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm-`$antecedent->_guid`"
             aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
         </td>
@@ -107,15 +107,18 @@
 
       {{if !$type}}
         <tr>
-          <th>{{mb_label object=$antecedent field="type"}}</th>
+          <th style="height: 20px">{{mb_label object=$antecedent field="type"}}</th>
           <td>{{mb_field object=$antecedent field="type" emptyLabel="None" alphabet="1" style="width: 9em;" onchange=""}}</td>
         </tr>
       {{/if}}
       <tr>
-        <th style="height: 100%">{{mb_label object=$antecedent field="appareil"}}</th>
+        <th style="height: 20px">{{mb_label object=$antecedent field="appareil"}}</th>
         <td>{{mb_field object=$antecedent field="appareil" emptyLabel="None" alphabet="1" style="width: 9em;"}}</td>
       </tr>
-
+      <tr>
+        <th>{{mb_label object=$antecedent field=majeur}}</th>
+        <td>{{mb_field object=$antecedent field=majeur typeEnum=checkbox}}</td>
+      </tr>
       <tr>
         <td class="button" colspan="4">
           {{if $antecedent->_id}}

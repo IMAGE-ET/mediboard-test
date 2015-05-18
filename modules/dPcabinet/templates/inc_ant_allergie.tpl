@@ -16,7 +16,7 @@
     $V(oFormAllergie._idex_tag, "BCB_COMPOSANT");
 
     return onSubmitAnt(oFormAllergie, '{{$type_see}}');
-  }
+  };
 
   Main.add(function() {
     if (!DossierMedical.patient_id) {
@@ -92,7 +92,7 @@
         {{else}}
           <td colspan="2"></td>
         {{/if}}
-        <td rowspan="3" style="width: 100%">
+        <td rowspan="4" style="width: 100%">
           {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm$addform"
           aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
         </td>
@@ -102,8 +102,12 @@
         <td>{{mb_field object=$antecedent field="type" emptyLabel="None" alphabet="1" style="width: 9em;" onchange=""}}</td>
       </tr>
       <tr>
-        <th>{{mb_label object=$antecedent field="appareil"}}</th>
+        <th style="height: 20px">{{mb_label object=$antecedent field="appareil"}}</th>
         <td>{{mb_field object=$antecedent field="appareil" emptyLabel="None" alphabet="1" style="width: 9em;"}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$antecedent field="majeur"}}</th>
+        <td>{{mb_field object=$antecedent field="majeur" typeEnum="checkbox"}}</td>
       </tr>
       <tr>
         <td class="button" colspan="3">

@@ -23,6 +23,9 @@ onSubmitAnt = function (form, type_see) {
     if (window.reloadAtcd) {
       reloadAtcd();
     }
+    if (window.reloadAtcdMajeur) {
+      reloadAtcdMajeur();
+    }
   }});
 
   // Après l'ajout d'antécédents
@@ -32,6 +35,8 @@ onSubmitAnt = function (form, type_see) {
     $V(form.type    , "");
     $V(form.appareil, "");
   }
+
+  form.__majeur.checked = false;
 
   $V(form.keywords_composant, "");
   $V(form.cds, "");

@@ -230,7 +230,17 @@
   reloadAtcd = function() {
     var url = new Url('soins', 'httpreq_vw_antecedent_allergie');
     url.addParam('sejour_id', "{{$sejour->_id}}");
-    url.requestUpdate('atcd_allergies');
+    url.requestUpdate('atcd_allergies', {insertion: function(element, content) {
+      element.innerHTML = content;
+    } });
+  };
+
+  reloadAtcdMajeur = function() {
+    var url = new Url("patients", "ajax_atcd_majeur");
+    url.addParam("patient_id", "{{$sejour->patient_id}}");
+    url.requestUpdate("atcd_majeur", {insertion: function(element, content) {
+      element.innerHTML = content;
+    } });
   };
 
   toggleListSejour = function() {

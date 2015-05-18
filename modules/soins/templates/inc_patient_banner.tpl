@@ -90,6 +90,10 @@
             <br/>
             {{mb_include module=prescription template=vw_line_important lines=$prescription->_ref_lines_important}}
           {{/if}}
+
+          <span id="atcd_majeur">
+            {{mb_include module=patients template=inc_atcd_majeur}}
+          </span>
         </h2>
       </form>
     </th>

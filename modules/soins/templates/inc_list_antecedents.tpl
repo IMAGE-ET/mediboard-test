@@ -19,7 +19,7 @@
       </tr>
       {{foreach from=$cat item=ant}}
         <tr>
-          <td>
+          <td {{if $ant->majeur}}style="color: #f00;"{{/if}}>
             {{if $dossier_medical->object_class == 'CSejour'}}
               <strong>
             {{/if}}
