@@ -50,7 +50,7 @@ $where['reglement.date'] = "BETWEEN '$date_min' AND '$date_max 23:59:59' ";
 $order = "reglement.date ASC";
 
 $reglement = new CReglement();
-$reglements = $reglement->loadList($where, $order, null, null, $ljoin);
+$reglements = $reglement->loadList($where, $order, null, "reglement.reglement_id", $ljoin);
 
 // Chargements des consultations
 $montantTotal = 0.0;
