@@ -108,8 +108,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
-      // On ne transmet pas les séjours non facturables si le destinataire ne le souhaite pas
-      if (!$receiver->_configs["send_no_facturable"] && !$sejour->facturable) {
+      // Destinataire gère seulement les non facturables
+      if ($receiver->_configs["send_no_facturable"] == "0" && $sejour->facturable) {
+        return;
+      }
+
+      // Destinataire gère seulement les facturables
+      if ($receiver->_configs["send_no_facturable"] == "2" && !$sejour->facturable) {
         return;
       }
 
@@ -276,6 +281,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Affectation non liée à un séjour
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id) {
+        return;
+      }
+
+      // Destinataire gère seulement les non facturables
+      if ($receiver->_configs["send_no_facturable"] == "0" && $sejour->facturable) {
+        return;
+      }
+
+      // Destinataire gère seulement les facturables
+      if ($receiver->_configs["send_no_facturable"] == "2" && !$sejour->facturable) {
         return;
       }
 
