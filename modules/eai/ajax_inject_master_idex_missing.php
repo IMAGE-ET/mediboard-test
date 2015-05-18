@@ -3,7 +3,7 @@
 CCanDo::checkAdmin();
 
 $exchange_class = CValue::get("exchange_class");
-$count          = CValue::get("count");
+$count          = CValue::get("count", 1000);
 $date_min       = CValue::get('date_min');
 $date_max       = CValue::get('date_max');
 
