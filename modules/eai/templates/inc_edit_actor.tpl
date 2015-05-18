@@ -37,18 +37,7 @@
                   
     <table class="form">
       <tr>
-        {{if $actor->_id}}
-        <th class="title modify text" colspan="2">
-          {{mb_include module=system template=inc_object_idsante400 object=$actor}}
-          {{mb_include module=system template=inc_object_history object=$actor}}
-          
-          {{tr}}{{$actor->_class}}-title-modify{{/tr}} '{{$actor}}'
-        </th>
-        {{else}}
-        <th class="title" colspan="2">
-         {{tr}}{{$actor->_class}}-title-create{{/tr}}
-        </th>
-        {{/if}}
+        {{mb_include module=system template=inc_form_table_header object=$actor}}
       </tr>
       <tr>
         <th>{{mb_label object=$actor field="nom"}}</th>

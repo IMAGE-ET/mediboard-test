@@ -322,7 +322,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_patient_with_visit"]                  = "bool default|0";
     $props["send_patient_with_current_admit"]          = "bool default|0";
     $props["mode_identito_vigilance"]                  = "enum list|light|medium|strict default|light";
-    $props["send_no_facturable"]                       = "bool default|1";
+    $props["send_no_facturable"]                       = "enum list|0|1|2 default|1";
     $props["send_a42_onmerge"]                         = "bool default|0";
     $props["send_expected_discharge_with_affectation"] = "bool default|1";
     $props["send_child_admit"]                         = "bool default|1";

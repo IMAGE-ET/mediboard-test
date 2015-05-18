@@ -47,7 +47,8 @@ importConfig = function(object_config_guid) {
   });
 </script>
 
-<form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
+<form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post"
+      onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="del" value="0" /> 
   
@@ -68,6 +69,8 @@ importConfig = function(object_config_guid) {
         {{foreach from=$categories key=cat_name item=_fields}}
           <div id="object-config-{{$cat_name}}" style="display: none">
             <table class="form">
+              {{mb_include module=system template=inc_form_table_header colspan=3}}
+
               <tr>
                 <th class="category">{{tr}}Name{{/tr}}</th>
                 <th class="category">{{tr}}Value{{/tr}}</th>
