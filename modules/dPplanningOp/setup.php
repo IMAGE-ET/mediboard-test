@@ -1991,6 +1991,11 @@ class CSetupdPplanningOp extends CSetup {
       ADD `time_visite_anesth` TIME AFTER `date_visite_anesth`";
     $this->addQuery($query);
 
-    $this->mod_version = '2.15';
+    $this->makeRevision("2.15");
+    $query = "ALTER TABLE `operations`
+      ADD `suture_fin` TIME AFTER `induction_fin`";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.16';
   }
 }

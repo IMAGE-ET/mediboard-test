@@ -23,6 +23,7 @@ $dPconfig["dPsalleOp"] = array(
     "use_debut_fin_op"        => "1",
     "use_entree_bloc"         => "0",
     "use_remise_chir"         => "0",
+    "use_suture"              => "0",
     "use_check_timing"        => "0"
   ),
   "CActeCCAM"                 => array(

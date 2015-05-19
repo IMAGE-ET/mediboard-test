@@ -106,6 +106,7 @@ class COperation extends CCodable implements IPatientRelated, IIndexableObject {
   public $sortie_reveil_reel;
   public $induction_debut;
   public $induction_fin;
+  public $suture_fin;
 
   // Vérification du côté
   public $cote_admission;
@@ -346,6 +347,7 @@ class COperation extends CCodable implements IPatientRelated, IIndexableObject {
     $props["sortie_reveil_reel"]   = "time show|0";
     $props["induction_debut"]      = "time show|0";
     $props["induction_fin"]        = "time show|0";
+    $props["suture_fin"]           = "time show|0";
     $props["entree_bloc"]          = "time show|0";
     $props["anapath"]              = "enum list|1|0|? default|? show|0";
     $props["flacons_anapath"]      = "num max|255 show|0";

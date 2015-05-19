@@ -147,4 +147,11 @@
     </td>
   </tr>
 
+  <tr>
+    <td>
+      <strong>{{tr}}COperation-suture_fin{{/tr}} :</strong>
+      {{$operation->suture_fin}}
+    </td>
+  </tr>
+
 </table>

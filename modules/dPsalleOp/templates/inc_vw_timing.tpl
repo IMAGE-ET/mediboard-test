@@ -63,8 +63,12 @@
       {{if "CAppUI::conf"|static_call:"dPsalleOp COperation use_tto":"CGroups-$g"}}
         <td></td>
       {{/if}}
-      {{if $conf.dPsalleOp.COperation.use_remise_chir}}
-        <td></td>
+      {{if $conf.dPsalleOp.COperation.use_suture}}
+        {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=suture_fin}}
+      {{else}}
+        {{if $conf.dPsalleOp.COperation.use_remise_chir}}
+          <td></td>
+        {{/if}}
       {{/if}}
       {{if $conf.dPsalleOp.COperation.use_garrot}}
         {{mb_include module="salleOp" template="inc_field_timing" object=$selOp field=retrait_garrot}}

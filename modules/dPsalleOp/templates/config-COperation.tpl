@@ -75,11 +75,12 @@
     <tr>
       <th class="title" colspan="2">Affichage des timings</th>
     </tr>
+    {{mb_include module=system template=inc_config_bool var=use_entree_bloc}}
     {{mb_include module=system template=inc_config_bool var=use_entree_sortie_salle}}
+    {{mb_include module=system template=inc_config_bool var=use_remise_chir}}
+    {{mb_include module=system template=inc_config_bool var=use_suture}}
     {{mb_include module=system template=inc_config_bool var=use_garrot}}
     {{mb_include module=system template=inc_config_bool var=use_debut_fin_op}}
-    {{mb_include module=system template=inc_config_bool var=use_entree_bloc}}
-    {{mb_include module=system template=inc_config_bool var=use_remise_chir}}
 
     <tr>
       <td class="button" colspan="2">
