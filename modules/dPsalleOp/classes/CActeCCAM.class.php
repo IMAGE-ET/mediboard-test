@@ -1293,7 +1293,7 @@ class CActeCCAM extends CActe {
     $this->loadRefCodeCCAM();
     $ligne = new CFactureItem();
     $ligne->libelle       = $this->_ref_code_ccam->libelleCourt;
-    $ligne->code          = $this->code_acte;
+    $ligne->code          = "$this->code_acte $this->modificateurs";
     $ligne->type          = $this->_class;
     $ligne->object_id     = $facture->_id;
     $ligne->object_class  = $facture->_class;
