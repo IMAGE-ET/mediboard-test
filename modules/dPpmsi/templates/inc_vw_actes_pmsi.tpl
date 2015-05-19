@@ -13,7 +13,7 @@
     {{foreach from=$sejour->_ref_operations item=_op}}
       PMSI.loadExportActes('{{$_op->_id}}', 'COperation');
     {{/foreach}}
-
+    PMSI.loadExportActes('{{$sejour->_id}}', 'CSejour', null, "{{$m}}" );
     PMSI.loadDiagsDossier('{{$sejour->_id}}');
     PMSI.loadDiagsPMSI('{{$sejour->_id}}');
   });
