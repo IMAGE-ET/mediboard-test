@@ -39,6 +39,8 @@
     {{mb_include module=system template=inc_config_enum var=send_only_with_type values=|$list_types_sejour}}
 
     {{mb_include module=system template=inc_config_bool var=send_diags_with_actes}}
+
+    {{mb_include module=system template=inc_config_bool var=facture_codable_with_sejour}}
     
     <tr>
       <td class="button" colspan="10">

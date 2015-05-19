@@ -195,6 +195,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_print_ipp;
 
   // Behaviour fields
+  public $_no_synchro = false;
   public $_adjust_sejour;
   public $_operation_id;
   public $_dossier_anesth_completed_id;
