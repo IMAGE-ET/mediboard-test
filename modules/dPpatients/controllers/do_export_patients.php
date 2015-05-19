@@ -14,12 +14,14 @@
 CCanDo::checkAdmin();
 
 $praticien_id = CValue::post("praticien_id");
-$step         = CValue::post("step");
-$start        = CValue::post("start");
+$all_prats    = CValue::post("all_prats");
+$step         = (int)CValue::post("step");
+$start        = (int)CValue::post("start");
 $directory    = CValue::post("directory");
+$ignore_files = CValue::post("ignore_files");
 
-if (!$praticien_id) {
-  CAppUI::stepAjax("Veuillez choisir un praticien", UI_MSG_WARNING);
+if (!$all_prats && !$praticien_id) {
+  CAppUI::stepAjax("Veuillez choisir au moins un praticien, ou cocher 'Tous les praticiens'", UI_MSG_WARNING);
   return;
 }
 
@@ -28,14 +30,16 @@ if (!is_dir($directory)) {
   return;
 }
 
+$directory = str_replace("\\\\", "\\", $directory);
+
 CValue::setSession("praticien_id", $praticien_id);
+CValue::setSession("all_prats", $all_prats);
 CValue::setSession("step", $step);
 CValue::setSession("start", $start);
 CValue::setSession("directory", $directory);
+CValue::setSession("ignore_files", $ignore_files);
 
 $step = min($step, 1000);
-
-$praticien = CMediusers::get($praticien_id);
 
 CStoredObject::$useObjectCache = false;
 
@@ -98,7 +102,9 @@ $fwdrefs_tree = array(
     "chir_id",
   ),
   "CSejour" => array(
+    "patient_id",
     "praticien_id",
+    "service_id",
     "group_id",
     "grossesse_id",
   ),
@@ -106,9 +112,13 @@ $fwdrefs_tree = array(
     "group_id",
     "parturiente_id",
   ),
+  "CMediusers" => array(
+    "user_id",
+  ),
 );
 
 $patient = new CPatient();
+$ds = $patient->getDS();
 
 $order = array(
   "patients.nom",
@@ -118,40 +128,54 @@ $order = array(
   "patients.patient_id",
 );
 
-$ljoin_consult = array(
-  "consultation" => "consultation.patient_id = patients.patient_id",
-  "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
-);
+if ($all_prats) {
+  $limit = "$start, $step";
+  /** @var CPatient[] $patients */
+  $patients = $patient->loadList(null, $order, $limit);
 
-$where_consult = array(
-  "plageconsult.chir_id = '$praticien_id'",
-);
+  $patient_count = count($patients);
 
-$patient_ids_consult = $patient->loadIds($where_consult, $order, null, "patients.patient_id", $ljoin_consult);
+  $patient_total = $patient->countList();
+}
+else {
+  $ljoin_consult = array(
+    "consultation" => "consultation.patient_id = patients.patient_id",
+    "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
+  );
 
-$ljoin_sejour = array(
-  "sejour"      => "sejour.patient_id = patients.patient_id",
-);
+  $where_consult                         = array();
+  $where_consult["plageconsult.chir_id"] = $ds->prepareIn($praticien_id);
 
-$where_sejour = array(
-  "sejour.praticien_id = '$praticien_id'",
-);
+  $patient_ids_consult = $patient->loadIds($where_consult, $order, null, "patients.patient_id", $ljoin_consult);
 
-$patient_ids_sejour  = $patient->loadIds($where_sejour,  $order, null, "patients.patient_id", $ljoin_sejour);
+  $ljoin_sejour = array(
+    "sejour" => "sejour.patient_id = patients.patient_id",
+  );
 
-$patient_ids = array_merge($patient_ids_consult, $patient_ids_sejour);
-$patient_ids = array_unique($patient_ids);
+  $where_sejour                        = array();
+  $where_sejour["sejour.praticien_id"] = $ds->prepareIn($praticien_id);
 
-CAppUI::stepAjax("%d patients à exporter", UI_MSG_OK, count($patient_ids));
+  $patient_ids_sejour = $patient->loadIds($where_sejour, $order, null, "patients.patient_id", $ljoin_sejour);
 
-$patient_ids = array_slice($patient_ids, $start, $step);
+  $patient_ids = array_merge($patient_ids_consult, $patient_ids_sejour);
+  $patient_ids = array_unique($patient_ids);
 
-$where = array(
-  "patient_id" => $patient->getDS()->prepareIn($patient_ids),
-);
+  $patient_total = count($patient_ids);
 
-/** @var CPatient[] $patients */
-$patients = $patient->loadList($where);
+  $patient_ids = array_slice($patient_ids, $start, $step);
+
+  $patient_count = count($patients);
+
+  $where = array(
+    "patient_id" => $patient->getDS()->prepareIn($patient_ids),
+  );
+
+  /** @var CPatient[] $patients */
+  $patients = $patient->loadList($where);
+}
+
+CAppUI::stepAjax("%d patients à exporter", UI_MSG_OK, $patient_total);
+
 //$date = CMbDT::format(null, "%Y-%m-%d_%H-%M-%S");
 $date = CMbDT::format(null, "%Y-%m-%d");
 
@@ -167,7 +191,7 @@ foreach ($patients as $_patient) {
 
     $export = new CMbObjectExport($_patient, $backrefs_tree);
 
-    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir) {
+    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir, $ignore_files) {
       switch ($object->_class) {
         case "CCompteRendu":
           /** @var CCompteRendu $object */
@@ -175,6 +199,10 @@ foreach ($patients as $_patient) {
           break;
 
         case "CFile":
+          if ($ignore_files) {
+            break;
+          }
+
           /** @var CFile $object */
           $_dir = "$dir/$object->object_class/$object->object_id";
           CMbPath::forceDir($_dir);
@@ -187,6 +215,7 @@ foreach ($patients as $_patient) {
       }
     };
 
+    $export->empty_values = false;
     $export->setObjectCallback($callback);
     $export->setForwardRefsTree($fwdrefs_tree);
 
@@ -200,9 +229,9 @@ foreach ($patients as $_patient) {
   }
 }
 
-CAppUI::stepAjax("%d patients exportés", UI_MSG_OK, count($patient_ids));
+CAppUI::stepAjax("%d patients au total", UI_MSG_OK, $patient_count);
 
-if (count($patient_ids)) {
-  CAppUI::js("nextStep()");
+if ($patient_count) {
+  CAppUI::js("nextStepPatients()");
 }
 
