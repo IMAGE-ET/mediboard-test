@@ -149,6 +149,9 @@ class COperation extends CCodable implements IPatientRelated {
   public $_types_ressources_ids;
   public $_is_urgence;
 
+  // Behaviour fields
+  public $_no_synchro = false;
+
   // Distant fields
   public $_datetime;
   public $_datetime_reel;
