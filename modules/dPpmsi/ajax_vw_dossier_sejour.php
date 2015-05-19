@@ -33,14 +33,13 @@ $sejour  = new CSejour();
 $sejour_maman  = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 if ($sejour->patient_id == $patient->_id) {
-  $sejour->_ref_patient = $patient;
   $sejour->canDo();
   $sejour->loadNDA();
   $sejour->loadExtDiagnostics();
   $sejour->loadRefsAffectations();
-  $sejour->loadRefsOperations();
   $sejour->loadSuiviMedical();
-  foreach ($sejour->_ref_operations as $_op) {
+  $sejour->_ref_patient = $patient;
+  foreach ($sejour->loadRefsOperations() as $_op) {
     $_op->loadRefPraticien();
     $_op->loadRefPlageOp();
     $_op->loadRefAnesth();
