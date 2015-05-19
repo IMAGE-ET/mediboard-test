@@ -10,7 +10,6 @@
  */
 
 CCanDO::checkEdit();
-
 global $m;
 $current_m = CValue::get("current_m", $m);
 
@@ -27,6 +26,7 @@ $date             = CValue::getOrSession("date", $today);
 $prat_id          = CValue::getOrSession("chirSel", $user->_id);
 $selConsult       = CValue::getOrSession("selConsult");
 $vue              = CValue::getOrSession("vue2", 0);
+$withClosed       = CValue::getOrSession("withClosed", 1);
 
 $consult = new CConsultation();
 // Test compliqué afin de savoir quelle consultation charger
@@ -83,7 +83,7 @@ CMbObject::massCountBackRefs($listPlage, "notes");
 
 foreach ($listPlage as $_plage) {
   $_plage->_ref_chir =& $userSel;
-  $consultations = $_plage->loadRefsConsultations(false, !$vue);
+  $consultations = $_plage->loadRefsConsultations(false, !$vue && $withClosed);
   $_plage->loadRefsNotes();
   
   // Mass preloading
@@ -124,5 +124,6 @@ $smarty->assign("current_m", $current_m);
 $smarty->assign("fixed_width", CValue::get("fixed_width", "0"));
 $smarty->assign("mode_urgence", false);
 $smarty->assign("current_date", $current_date);
+$smarty->assign("withClosed"  , $withClosed);
 
 $smarty->display("inc_list_consult.tpl");

@@ -32,13 +32,16 @@
 Consultation.useModal();
 Operation.useModal();
 
-updateListConsults = function() {
+updateListConsults = function(withClosed) {
   var url = new Url("cabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
+  if (!Object.isUndefined(withClosed)) {
+    url.addParam('withClosed', withClosed);
+  }
   url.requestUpdate("consultations");
 };
 

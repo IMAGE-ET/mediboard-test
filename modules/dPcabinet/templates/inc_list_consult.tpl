@@ -59,7 +59,15 @@ putArrivee = function(oForm) {
 
 <table class="tbl" style="{{if !@$offline}}font-size: 9px;{{/if}} {{if @$fixed_width|default:0}}width: 250px{{/if}}">
   <tr>
-    <th id="inc_list_consult_th_consult" class="title" colspan="10">Consultations</th>
+    <th id="inc_list_consult_th_consult" class="title" colspan="10">
+      Consultations
+    {{if $board}}
+      <label style="float: right;font-size: 10px;margin-left: -125px;color:black;text-shadow:none;">
+        Afficher les terminées
+        <input name="withClosed" type="checkbox" {{if $withClosed}}checked="checked"{{/if}} onchange="updateListConsults(this.checked?1:0);"/>
+      </label>
+    {{/if}}
+    </th>
   </tr>
 
   <tr>
