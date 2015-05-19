@@ -26,7 +26,7 @@ $date             = CValue::getOrSession("date", $today);
 $prat_id          = CValue::getOrSession("chirSel", $user->_id);
 $selConsult       = CValue::getOrSession("selConsult");
 $vue              = CValue::getOrSession("vue2", 0);
-$withClosed       = CValue::getOrSession("withClosed", 1);
+$withClosed       = CValue::getOrSession("withClosed", 0);
 
 $consult = new CConsultation();
 // Test compliqué afin de savoir quelle consultation charger

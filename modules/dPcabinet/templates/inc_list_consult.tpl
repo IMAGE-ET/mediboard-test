@@ -63,8 +63,8 @@ putArrivee = function(oForm) {
       Consultations
     {{if $board}}
       <label style="float: right;font-size: 10px;margin-left: -125px;color:black;text-shadow:none;">
-        Afficher les terminées
-        <input name="withClosed" type="checkbox" {{if $withClosed}}checked="checked"{{/if}} onchange="updateListConsults(this.checked?1:0);"/>
+        Masquer les terminées
+        <input name="withClosed" type="checkbox" {{if !$withClosed}}checked="checked"{{/if}} onchange="updateListConsults(this.checked?0:1);"/>
       </label>
     {{/if}}
     </th>
