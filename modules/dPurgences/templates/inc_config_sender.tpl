@@ -30,6 +30,8 @@
            {{tr}}COrumipSender{{/tr}}</option>
          <option value="CCerveauSender" {{if "CCerveauSender" == $conf.$m.$var}} selected="selected" {{/if}}>
            {{tr}}CCerveauSender{{/tr}}</option>
+         <option value="CORUTSBNSender" {{if "CORUTSBNSender" == $conf.$m.$var}} selected="selected" {{/if}}>
+           {{tr}}CORUTSBNSender{{/tr}}</option>
        </select>
      </td>
     </tr>

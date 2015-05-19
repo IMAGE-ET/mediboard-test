@@ -24,13 +24,13 @@ class CRPUXMLDocument extends CMbXMLDocument {
   /**
    * @see parent::__construct()
    */
-  function __construct($sender = null) {
+  function __construct($sender = null, $schemafilename = null) {
     parent::__construct();
     
-    $this->schemapath = "modules/$sender/xsd";
-    $this->schemafilename = "$this->schemapath/$sender.xsd";
+    $this->schemapath       = "modules/$sender/xsd";
+    $this->schemafilename   = $schemafilename ? "$this->schemapath/$schemafilename.xsd" : "$this->schemapath/$sender.xsd";
     $this->documentfilename = "tmp/document.xml";
-    $this->finalpath = CFile::$directory . "/rpuxml/$sender";
+    $this->finalpath        = CFile::$directory . "/rpuxml/$sender";
     
     $this->now = time();
   }
@@ -83,15 +83,16 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "SEXE", strtoupper($mbObject->_sexe));
     
     $this->addElement($elParent, "ENTREE", CMbDT::transform($sejour->entree, null, "%d/%m/%Y %H:%M"));
-    $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
-    $this->addElement($elParent, "PROVENANCE", $mbObject->_ref_sejour->provenance);
-    if ($mbObject->_ref_sejour->transport == "perso_taxi") {
-      $mbObject->_ref_sejour->transport = "perso";
+    $this->addElement($elParent, "MODE_ENTREE", $sejour->mode_entree);
+
+    $this->addElement($elParent, "PROVENANCE",  ($sejour->provenance == "8") ? "5" : $sejour->provenance);
+    if ($sejour->transport == "perso_taxi") {
+      $sejour->transport = "perso";
     }
-    if ($mbObject->_ref_sejour->transport == "ambu_vsl") {
-      $mbObject->_ref_sejour->transport = "ambu";
+    if ($sejour->transport == "ambu_vsl") {
+      $sejour->transport = "ambu";
     }
-    $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->_ref_sejour->transport));
+    $this->addElement($elParent, "TRANSPORT", strtoupper($sejour->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
 
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
@@ -109,10 +110,10 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));
         
     $liste_da = $this->addElement($elParent, "LISTE_DA");
-    if ($dr = $mbObject->_ref_sejour->_ext_diagnostic_relie) {
+    if ($dr = $sejour->_ext_diagnostic_relie) {
       $this->addDiagAssocie($liste_da, $dr->code[0].preg_replace("/[^\d]/", "", substr($dr->code, 1)));
     }
-    $das = $mbObject->_ref_sejour->_diagnostics_associes;
+    $das = $sejour->_diagnostics_associes;
     if (is_array($das)) {
       foreach ($das as $_da) {
         $_da = $_da[0].preg_replace("/[^\d]/", "", substr($_da, 1));
@@ -121,7 +122,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     }
     
     $liste_actes = $this->addElement($elParent, "LISTE_ACTES");
-    $codes_ccam = $mbObject->_ref_sejour->_ref_consult_atu->_codes_ccam;
+    $codes_ccam = $sejour->_ref_consult_atu->_codes_ccam;
     if (is_array($codes_ccam)) {
       foreach ($codes_ccam as $_code_ccam) {
         $this->addActeCCAM($liste_actes, $_code_ccam);

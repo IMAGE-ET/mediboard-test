@@ -1,5 +1,4 @@
 <?php
-$locales[0] = ' ';
 $locales['CCerveauSender'] = 'Cerveau';
 $locales['CChapitreMotif'] = 'Chapitre de motif d\'urgence';
 $locales['CChapitreMotif-back-motif'] = 'Chapitre du motif';
@@ -314,6 +313,7 @@ $locales['CMotifSFMU.all'] = 'Tous les motifs SFMU';
 $locales['CMotifSFMU.none'] = 'Aucun Motif SFMU';
 $locales['CMotifSFMU.one'] = 'Un motif SFMU';
 $locales['CMotifSFMU.search'] = 'Rechercher les motifs SFMU par catégorie';
+$locales['CORUTSBNSender'] = 'ORU TSBN';
 $locales['COrumipSender'] = 'Oru-Mip';
 $locales['COscourSender'] = 'Oscour';
 $locales['COuralSender'] = 'Oural';
