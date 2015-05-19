@@ -52,16 +52,25 @@
 <td class="text">
   {{if $lite_view && "pharmacie Display show_risq_population"|conf:"CGroups-$g"}}
     <span class="compact" style="float:right">
-    {{if $patient->naissance}}
-      {{if $patient->_annees <= 16}}
-        < 16 ans
-      {{elseif $patient->_annees >= 65}}
-        > 65 ans
+      {{if $patient->naissance}}
+        {{if $patient->_annees <= "pharmacie Risque_pop age_min"|conf:"CGroups-$g"}}
+          < {{"pharmacie Risque_pop age_min"|conf:"CGroups-$g"}} ans
+        {{elseif $patient->_annees >= "pharmacie Risque_pop age_max"|conf:"CGroups-$g"}}
+          > {{"pharmacie Risque_pop age_max"|conf:"CGroups-$g"}} ans
+        {{/if}}
       {{/if}}
-    {{/if}}
       {{if $patient->_ref_last_grossesse && $patient->_ref_last_grossesse->terme_prevu >= $smarty.now}}
         <img onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_last_grossesse->_guid}}')"
              src="style/mediboard/images/icons/grossesse.png" style="background-color: rgb(255, 215, 247);"/>
+      {{/if}}
+
+      {{assign var=score_asa value="pharmacie Risque_pop score_asa"|conf:"CGroups-$g"}}
+      {{if $score_asa}}
+        {{foreach from=$sejour->_ref_operations item=_interv}}
+          {{if $_interv->ASA >= $score_asa}}
+            ASA &ge; {{$score_asa}}
+          {{/if}}
+        {{/foreach}}
       {{/if}}
     </span>
   {{/if}}
