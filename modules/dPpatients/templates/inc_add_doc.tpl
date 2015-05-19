@@ -230,16 +230,18 @@
     </td>
   </tr>
   <tr>
-    <td style="width: 50%; vertical-align: middle;">
-      <fieldset style="width: 95%; height: 100px; display: inline-block;">
-        <legend style="font-size: 13pt;">Schéma</legend>
+    {{if "drawing"|module_active}}
+      <td style="width: 50%; vertical-align: middle;">
+        <fieldset style="width: 95%; height: 100px; display: inline-block;">
+          <legend style="font-size: 13pt;">Schéma</legend>
 
-        <div style="text-align: center;">
-          <button class="big drawing" style="width: 100px;"
-                  onclick="Control.Modal.close(); editDrawing(null, null, '{{$context->_guid}}', refreshAfterAdd)"></button>
-        </div>
-      </fieldset>
-    </td>
+          <div style="text-align: center;">
+            <button class="big drawing" style="width: 100px;"
+                    onclick="Control.Modal.close(); editDrawing(null, null, '{{$context->_guid}}', refreshAfterAdd)"></button>
+          </div>
+        </fieldset>
+      </td>
+    {{/if}}
     {{if $context->_class == "CSejour"}}
       <td style="width: 50%; vertical-align: middle;">
         <fieldset style="width: 95%; height: 100px; display: inline-block;">
