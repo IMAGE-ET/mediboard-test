@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=see_color value=0}}
 <tr>
   <th class="title" colspan="10">
     <strong>
@@ -69,7 +70,7 @@
       {{assign var="classe" value="consult_sejour"}}
     {{/if}}
 
-    <td class="{{$classe}}">
+    <td class="{{$classe}}" {{if $see_color}}style="border-left: 8px #{{$plageSel->color}} solid"{{/if}}}>
       <div style="float: left">
       {{if $patient->_id}}
         <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
@@ -212,6 +213,8 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="7" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+    <td colspan="7" class="empty" {{if $see_color}}style="border-left: 8px #{{$plageSel->color}} solid"{{/if}}}>
+      {{tr}}CConsultation.none{{/tr}}
+    </td>
   </tr>
 {{/foreach}}
