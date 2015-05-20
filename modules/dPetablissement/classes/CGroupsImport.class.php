@@ -33,6 +33,10 @@ class CGroupsImport extends CMbXMLObjectImport {
    * @see parent::storeIdExt()
    */
   protected function storeIdExt(CMbObject $object, $map_to) {
+    if ($object instanceof CIdSante400) {
+      return;
+    }
+
     // Rattachement d'un ID externe
     $idex = CIdSante400::getMatchFor($object, "migration");
     if (!$idex->_id) {
@@ -59,6 +63,10 @@ class CGroupsImport extends CMbXMLObjectImport {
 
     if ($_class == "CGroups") {
       $this->storeIdExt($group, $id);
+
+      $this->map[$id] = $group->_guid;
+
+      $this->imported[$id] = true;
     }
     
     $this->name_suffix = " (import du ".CMbDT::dateTime().")";
@@ -108,7 +116,19 @@ class CGroupsImport extends CMbXMLObjectImport {
             $_object = $this->getObjectFromElement($element);
 
             if ($msg = $_object->store()) {
-              $_object->text .= $this->name_suffix;
+              if (
+                  $_object instanceof CGroups ||
+                  $_object instanceof CFunctions
+              ) {
+                $_object->text .= $this->name_suffix;
+              }
+              elseif (
+                  $_object instanceof CSalle ||
+                  $_object instanceof CService ||
+                  $_object instanceof CBlocOperatoire
+              ) {
+                $_object->nom .= $this->name_suffix;
+              }
             }
 
             if ($msg = $_object->store()) {
