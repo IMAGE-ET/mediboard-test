@@ -195,6 +195,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_print_ipp;
 
   // Behaviour fields
+  public $_no_synchro = false;
   public $_adjust_sejour;
   public $_operation_id;
   public $_dossier_anesth_completed_id;
@@ -1351,6 +1352,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $plage->_ref_remplacant  = $plage->loadFwdRef("remplacant_id" , $cache);
 
     // Distant fields
+    /** @var CMediusers $chir */
     $chir = $plage->_ref_remplacant->_id ?
       $plage->_ref_remplacant :
       $plage->_ref_chir;
@@ -2426,6 +2428,15 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     return $this->loadRefPraticien();
   }
 
+  /**
+   * @param CConsultation   $consult
+   * @param CDossierMedical $dossier_medical
+   * @param CConsultAnesth  $consultAnesth
+   * @param CSejour         $sejour
+   * @param array           $list_etat_dents
+   *
+   * @return array
+   */
   static function  makeTabsCount($consult, $dossier_medical, $consultAnesth, $sejour, $list_etat_dents) {
     $tabs_count = array(
       "AntTrait"            => 0,

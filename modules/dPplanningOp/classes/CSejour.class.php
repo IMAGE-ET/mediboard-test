@@ -182,7 +182,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   // Behaviour fields
   public $_en_mutation;
   public $_unique_lit_id;
-  public $_no_synchro;
+  public $_no_synchro = false;
   public $_admit = false;
   public $_generate_NDA = true;
   public $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
@@ -970,7 +970,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   function createAffectationLitUnique() {
     // Unique affectation de lit
     if (!$this->_unique_lit_id) {
-      return;
+      return null;
     }
 
     // Une affectation maximum
@@ -992,6 +992,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($msg = $unique->store()) {
       return "Impossible d'affecter un lit unique: $msg";
     }
+    return null;
   }
 
   /**
@@ -1013,6 +1014,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         return "Impossible d'affecter un couloir : $msg";
       }
     }
+    return null;
   }
 
   /**
@@ -1682,6 +1684,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       return $do_store_sejour;
     }
+    return null;
   }
 
   /**
@@ -2377,6 +2380,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (isset($this->_back["transmissions"])) {
       $trans_compact = CAppUI::conf("soins Transmissions trans_compact", CGroups::loadCurrent()) && !$print;
       $list_trans    = array();
+      /** @var CTransmissionMedicale $curr_trans **/
       foreach ($this->_back["transmissions"] as $curr_trans) {
         $curr_trans->loadRefsFwd();
         $users[$curr_trans->user_id] = $curr_trans->_ref_user;
@@ -2790,6 +2794,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       return $this->_ref_codages_ccam;
     }
 
+    /** @var CCodageCCAM[] $codages */
     $codages                 = $this->loadBackRefs('codages_ccam', 'activite_anesth desc');
     $this->_ref_codages_ccam = array();
     foreach ($codages as $_codage) {
@@ -4281,6 +4286,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $souhaits = array();
     if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+      /** @var CItemLiaison[] $items_liaisons */
       $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
       CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
       CStoredObject::massLoadFwdRef($items_liaisons, "sous_item_id");
