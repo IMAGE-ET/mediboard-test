@@ -69,7 +69,7 @@
           {{mb_value object=$_besoin->_ref_type_ressource field=libelle}}
         {{/foreach}}
       {{else}}
-        {{if $curr_op->commande_mat == '0' && $curr_op->materiel != '' && $_missing_materiel}}
+        {{if !$curr_op->_ref_commande_mat->_id && $curr_op->materiel != '' && $_missing_materiel}}
           <em>Materiel manquant:</em>
         {{/if}}
         {{$curr_op->materiel|nl2br}}
@@ -95,7 +95,7 @@
           {{mb_value object=$_besoin->_ref_type_ressource field=libelle}}
         {{/foreach}}
       {{else}}
-        {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
+        {{if !$curr_op->_ref_commande_mat->_id && $curr_op->materiel != ''}}
           <em>Materiel manquant:</em>
         {{/if}}
         {{$curr_op->materiel|nl2br}}
