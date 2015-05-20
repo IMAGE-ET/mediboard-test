@@ -1,5 +1,4 @@
 <script>
-
 function submitActeCCAM(oForm, acte_ccam_id, sField){
   if(oForm[sField].value == 1) {
     $V(oForm[sField], 0);
@@ -30,7 +29,6 @@ function viewTarmed(codeacte) {
   url.addParam("dialog", 1);
   url.popup(800, 600, "Code Tarmed");
 }
-
 </script>
 
 <table class="main">
@@ -44,42 +42,45 @@ function viewTarmed(codeacte) {
   <tr>
     <td>
       <table class="main">
+        {{if $bloc->_id}}
+          <tr>
+            <td><strong>{{tr}}CBlocOperatoire{{/tr}}: {{$bloc}}</strong></td>
+          </tr>
+        {{/if}}
         <tr>
           <td>
-            Dr {{$praticien->_view}}
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
           </td>
         </tr>
         <tr>
-          <td>
-            du {{$_date_min|date_format:$conf.longdate}}
-          </td>
+          <td>du {{$_date_min|date_format:$conf.longdate}}</td>
         </tr>
         <tr>
-          <td>
-            au {{$_date_max|date_format:$conf.longdate}}
-          </td>
+          <td>au {{$_date_max|date_format:$conf.longdate}}</td>
         </tr>
       </table>
     </td>
-    <td>
-      <table class="tbl">
+    <td style="width: 50%;">
+      <table class="main tbl" style="float: right;">
         <tr>
           <th>Nombre de séjours</th>
-          <td>
-            {{$nbActes|@count}}
-          </td>
+          <td style="text-align: center;">{{$nbActes|@count}}</td>
         </tr>
         <tr>
           <th>Nombre d'actes</th>
-          <td>
-            {{$totalActes}}
-          </td>
+          <td style="text-align: center;">{{$totalActes}}</td>
+        </tr>
+        <tr>
+          <th>Total Base</th>
+          <td style="text-align: right;">{{$montantTotalActes.base|currency}}</td>
+        </tr>
+        <tr>
+          <th>Total DH</th>
+          <td style="text-align: right;">{{$montantTotalActes.dh|currency}}</td>
         </tr>
         <tr>
           <th>Total</th>
-          <td>
-            {{$montantTotalActes|currency}}
-          </td>
+          <td style="text-align: right;">{{$montantTotalActes.total|currency}}</td>
         </tr>
       </table>
     </td>
@@ -98,12 +99,12 @@ function viewTarmed(codeacte) {
           </table>
           <table class="tbl">
             <tr>
-              <th style="width: 20%">Patient</th>
+              <th style="width: 20%">{{mb_title class=CFactureEtablissement field=patient_id}}</th>
               <th style="width: 05%">Total Séjour</th>
-              <th style="width: 20%">Type</th>
-              <th style="width: 05%">Code</th>
+              <th style="width: 20%">{{mb_title class=CActeCCAM field=object_class}}</th>
+              <th style="width: 05%">{{mb_title class=CActeCCAM field=code_acte}}</th>
               <th style="width: 05%">Act.</th>
-              <th style="width: 05%">Phase</th>
+              <th style="width: 05%">{{mb_label class=CActeCCAM field=code_phase}}</th>
               <th style="width: 05%">Mod</th>
               <th style="width: 05%">ANP</th>
               <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_base}}</th>
@@ -116,25 +117,35 @@ function viewTarmed(codeacte) {
             {{assign var="sejour_id" value=$sejour->_id}}
             <tbody class="hoverable">
             <tr>
-              <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}}){{/if}}</td>
+              <td rowspan="{{$nbActes.$sejour_id}}">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}')">
+                {{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}}){{/if}}
+              </span>
+              </td>
               <td rowspan="{{$nbActes.$sejour_id}}">
                 {{$montantSejour.$sejour_id|currency}}
               </td>
               <td class="text" rowspan="{{$nbActes.$sejour_id}}">
                 {{if $sejour->_ref_actes|@count}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
                   Sejour du {{mb_value object=$sejour field=_entree}}
-                  au {{mb_value object=$sejour field=_sortie}}
+                    au {{mb_value object=$sejour field=_sortie}}
+                  </span>
                 {{/if}}
                 {{foreach from=$sejour->_ref_operations item=operation}}
                   {{if $operation->_ref_actes|@count}}
-                    <br/>Intervention du {{mb_value object=$operation field=_datetime_best}}
-                    {{if $operation->libelle}}<br /> {{$operation->libelle}}{{/if}}
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">
+                      <br/>Intervention du {{mb_value object=$operation field=_datetime_best}}
+                      {{if $operation->libelle}}<br /> {{$operation->libelle}}{{/if}}
+                    </span>
                   {{/if}}
                 {{/foreach}}
                 {{foreach from=$sejour->_ref_consultations item=consult}}
                   {{if $consult->_ref_actes|@count}}
-                    <br/>Consultation du {{$consult->_datetime|date_format:"%d %B %Y"}}
-                    {{if $consult->motif}}: {{$consult->motif}}{{/if}}
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
+                      <br/>Consultation du {{$consult->_datetime|date_format:"%d %B %Y"}}
+                      {{if $consult->motif}}: {{$consult->motif}}{{/if}}
+                    </span>
                   {{/if}}
                 {{/foreach}}
               </td>
@@ -151,7 +162,6 @@ function viewTarmed(codeacte) {
                   {{mb_include module=dPplanningOp template=inc_acte_realise codable=$consult}}
                 {{/foreach}}
               {{/if}}
-
             </tr>
             </tbody>
             {{/foreach}}

@@ -51,6 +51,7 @@
     url.addElement(oForm._date_max);
     url.addElement(oForm.chir);
     url.addElement(oFormcompta.typeVue);
+    url.addElement(oFormcompta.bloc_id);
     url.popup(950, 550, "Rapport des actes réalisés");
 
     return false;
@@ -265,10 +266,24 @@
         <option value="2">Totaux</option>
       </select>
     </td>
-    <td colspan="2" rowspan="2" class="text">
+    <td colspan="2" rowspan="3" class="text">
       <div class="small-info">
-        Affichage de l'état des règlements de la liste des actes réalisés par l'établissement.
+        Affichage de l'état des règlements de la liste des actes réalisés par l'établissement.<br/>
+        La sélection d'un bloc affiche uniquement les séjours ayant des intervention placées dans celui-ci.
       </div>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <label for="bloc_id">{{tr}}CBlocOperatoire{{/tr}}</label>
+    </th>
+    <td>
+      <select name="bloc_id">
+        <option value="">&mdash; Tous</option>
+        {{foreach from=$blocs item=_bloc}}
+          <option value="{{$_bloc->_id}}">{{$_bloc}}</option>
+        {{/foreach}}
+      </select>
     </td>
   </tr>
   <tr>

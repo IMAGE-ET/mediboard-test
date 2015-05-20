@@ -14,12 +14,17 @@ $_date_min  = CValue::getOrSession("_date_min");
 $_date_max  = CValue::getOrSession("_date_max");
 $_prat_id   = CValue::getOrSession("chir");
 $typeVue    = CValue::getOrSession("typeVue");
+$bloc_id    = CValue::get("bloc_id");
 
 $nbActes = array();
 $montantSejour = array();
 $tabSejours = array();
 $totalActes = 0;
-$montantTotalActes = 0;
+$montantTotalActes = array(
+  'total' => 0,
+  'dh' => 0,
+  'base' => 0,
+);
 
 $praticien = new CMediusers();
 $praticien->load($_prat_id);
@@ -35,7 +40,7 @@ $where[] = "acte_ccam.facturable = '1'";
 $where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max'";
 $where[] = "acte_ccam.executant_id = '$_prat_id'";
 $sejour = new CSejour();
-$sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
+$sejours = $bloc_id ? array() : $sejour->loadList($where, null, null, "sejour_id", $ljoin);
 
 $ljoin = array();
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
@@ -45,7 +50,7 @@ $where2[] = "acte_ngap.facturable = '1'";
 $where2[] = "acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
 $where2[] = "acte_ngap.executant_id = '$_prat_id'";
 $sejour = new CSejour();
-$sejours_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
+$sejours_ngap = $bloc_id ? array() : $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
 foreach ($sejours_ngap as $_sejour_ngap) {
   if (!isset($sejours[$_sejour_ngap->_id])) {
     $sejours[$_sejour_ngap->_id] = $_sejour_ngap;
@@ -56,6 +61,12 @@ $ljoin = array();
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
 $where["operations.annulee"] = " = '0'";
+if ($bloc_id) {
+  $ljoin["sallesbloc"]      = "sallesbloc.salle_id = operations.salle_id";
+  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+  $where["operations.salle_id"] = " IS NOT NULL";
+  $where["bloc_operatoire.bloc_operatoire_id"] = " = '$bloc_id'";
+}
 $sejours_consult = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
 foreach ($sejours_consult as $_sejour_consult) {
   if (!isset($sejours[$_sejour_consult->_id])) {
@@ -67,6 +78,12 @@ $ljoin = array();
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
 $where2["operations.annulee"] = " = '0'";
+if ($bloc_id) {
+  $ljoin["sallesbloc"]      = "sallesbloc.salle_id = operations.salle_id";
+  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+  $where2["operations.salle_id"] = " IS NOT NULL";
+  $where2["bloc_operatoire.bloc_operatoire_id"] = " = '$bloc_id'";
+}
 $sejours_consult_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
 foreach ($sejours_consult_ngap as $_sejour_consult_ngap) {
   if (!isset($sejours[$_sejour_consult_ngap->_id])) {
@@ -108,6 +125,8 @@ foreach ($sejours as $sejour) {
           if ($acte->executant_id == $_prat_id) {
             $nbActes[$sejour->_id]++;
             $montantSejour[$sejour->_id] += $acte->_montant_facture;
+            $montantTotalActes['base']  += $acte->montant_base;
+            $montantTotalActes['dh']    += $acte->montant_depassement;
           }
         }
       }
@@ -120,6 +139,8 @@ foreach ($sejours as $sejour) {
             if ($acte->executant_id == $_prat_id) {
               $nbActes[$sejour->_id]++;
               $montantSejour[$sejour->_id] += $acte->_montant_facture;
+              $montantTotalActes['base']  += $acte->montant_base;
+              $montantTotalActes['dh']    += $acte->montant_depassement;
             }
           }
         }
@@ -132,18 +153,23 @@ foreach ($sejours as $sejour) {
             if ($acte->executant_id == $_prat_id) {
               $nbActes[$sejour->_id]++;
               $montantSejour[$sejour->_id] += $acte->_montant_facture;
+              $montantTotalActes['base']  += $acte->montant_base;
+              $montantTotalActes['dh']    += $acte->montant_depassement;
             }
           }
         }
       }
     }
     $totalActes        += $nbActes[$sejour->_id];
-    $montantTotalActes += $montantSejour[$sejour->_id];
+    $montantTotalActes['total'] += $montantSejour[$sejour->_id];
   }
 }
 
 // Tri par date du tableau de sejours
 ksort($tabSejours);
+
+$bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -157,6 +183,7 @@ $smarty->assign("praticien"        , $praticien);
 $smarty->assign("_date_min"        , $_date_min);
 $smarty->assign("_date_max"        , $_date_max);
 $smarty->assign("typeVue"          , $typeVue);
+$smarty->assign("bloc"             , $bloc);
 
 if (CAppUI::conf("ref_pays") == 1) {
   $smarty->display("vw_actes_realises.tpl");

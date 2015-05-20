@@ -26,20 +26,21 @@ function editReglement(reglement_id){
   <tr>
     <td>
       <table class="main">
+        {{if $bloc->_id}}
+          <tr>
+            <td><strong>{{tr}}CBlocOperatoire{{/tr}}: {{$bloc}}</strong></td>
+          </tr>
+        {{/if}}
         <tr>
           <td>
-            Dr {{$praticien->_view}}
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
           </td>
         </tr>
         <tr>
-          <td>
-            du {{$_date_min|date_format:$conf.longdate}}
-          </td>
+          <td>du {{$_date_min|date_format:$conf.longdate}}</td>
         </tr>
         <tr>
-          <td>
-            au {{$_date_max|date_format:$conf.longdate}}
-          </td>
+          <td>au {{$_date_max|date_format:$conf.longdate}}</td>
         </tr>
       </table>
     </td>
@@ -47,21 +48,23 @@ function editReglement(reglement_id){
       <table class="tbl">
         <tr>
           <th>Nombre de séjours</th>
-          <td>
-            {{$nbActes|@count}}
-          </td>
+          <td>{{$nbActes|@count}}</td>
         </tr>
         <tr>
           <th>Nombre d'actes</th>
-          <td>
-            {{$totalActes}}
-          </td>
+          <td>{{$totalActes}}</td>
+        </tr>
+        <tr>
+          <th>Total Base</th>
+          <td style="text-align: right;">{{$montantTotalActes.base|currency}}</td>
+        </tr>
+        <tr>
+          <th>Total DH</th>
+          <td style="text-align: right;">{{$montantTotalActes.dh|currency}}</td>
         </tr>
         <tr>
           <th>Total</th>
-          <td>
-            {{$montantTotalActes|currency}}
-          </td>
+          <td style="text-align: right;">{{$montantTotalActes.total|currency}}</td>
         </tr>
       </table>
     </td>
@@ -110,7 +113,11 @@ function editReglement(reglement_id){
             
           {{assign var=_facture value=$sejour->_ref_last_facture}}
           <td style="text-align:right;">{{$montantSejour.$sejour_id}} CHF</td>
-          <td style="text-align:right;">{{mb_value object=$_facture field="remise"}}</td>
+          <td style="text-align:right;">
+            {{if $_facture && $_facture->_id}}
+              {{mb_value object=$_facture field="remise"}}
+            {{/if}}
+          </td>
           <td style="text-align:right;">{{$montantSejour.$sejour_id - $_facture->remise}} CHF</td>
            
           {{if $sejour->_ref_last_facture->_id}}

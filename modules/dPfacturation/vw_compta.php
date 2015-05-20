@@ -36,6 +36,9 @@ $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 $listPrat = CConsultation::loadPraticiensCompta();
 
+$bloc = new CBlocOperatoire();
+$blocs = $bloc->loadGroupList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -50,5 +53,6 @@ $smarty->assign("week_fin"          , $week_fin);
 $smarty->assign("month_deb"         , $month_deb);
 $smarty->assign("three_month_deb"   , $three_month_deb);
 $smarty->assign("month_fin"         , $month_fin);
+$smarty->assign("blocs"             , $blocs);
 
 $smarty->display("vw_compta.tpl");
