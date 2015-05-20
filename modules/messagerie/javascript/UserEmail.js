@@ -13,6 +13,7 @@ messagerie = {
   mode : "unread",
   account_id : '0',
   url:   null,
+  account_url: null,
   tab:  null,
   page: 0,
 
@@ -26,7 +27,7 @@ messagerie = {
   refreshAccount:function(account_id) {
     var url = new Url(messagerie.module, "vw_user_external_mail");
     url.addParam("account_id", account_id);
-    url.requestUpdate("account_mail");
+    url.requestUpdate("account");
   },
 
   refreshList:function (account_id, mode, page) {
@@ -281,5 +282,19 @@ messagerie = {
         }
       });
     });
+  },
+
+  manageAccounts: function() {
+    messagerie.account_url = new Url('messagerie', 'ajax_manage_accounts');
+    messagerie.account_url.requestModal();
+  },
+
+  refreshManageAccounts: function() {
+    messagerie.account_url.refreshModal();
+  },
+
+  addAccount: function() {
+    var url = new Url('messagerie', 'ajax_add_account');
+    url.requestModal(500, 600, {onClose: messagerie.refreshManageAccounts.curry()});
   }
 };

@@ -8,7 +8,16 @@
 */
 
 CCanDo::checkRead();
-$user = CMediusers::get();
+
+$user_id = CValue::get('user_id');
+
+$user = new CMediusers();
+$user->load($user_id);
+
+if (!$user->_id) {
+  $user = CMediusers::get();
+}
+
 $selected_folder = CValue::get('selected_folder', 'inbox');
 
 // Liste des messages reçus

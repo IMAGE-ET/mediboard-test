@@ -72,7 +72,6 @@ if (!array_key_exists($account_id, $accounts_user)) {
   else {
     $account_id = null;
   }
-
 }
 
 //smarty

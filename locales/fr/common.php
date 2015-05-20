@@ -5,6 +5,7 @@ $locales['Action'] = 'Action';
 $locales['Actions'] = 'Actions';
 $locales['Activities'] = 'Activités';
 $locales['Add'] = 'Ajouter';
+$locales['Address'] = 'Adresse';
 $locales['Advanced-Search'] = 'Recherche avancée';
 $locales['All'] = 'Tous';
 $locales['Archive'] = 'Archiver';

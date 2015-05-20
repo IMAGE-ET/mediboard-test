@@ -45,6 +45,11 @@
 </form>
 {{/if}}
 
+<button type="button" onclick="messagerie.manageAccounts();" style="float: right;">
+  <i class="msgicon fa fa-gear"></i>
+  Gestion des comptes
+</button>
+
 
 <div id="account_mail">
   {{if !$account_id}}
