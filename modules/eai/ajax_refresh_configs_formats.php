@@ -26,9 +26,16 @@ foreach ($formats_tabular as &$_format_tabular) {
   $_format_tabular->getConfigs($actor_guid);
 }
 
+$formats_binary = CExchangeDataFormat::getAll('CExchangeBinary');
+foreach ($formats_binary as &$_format_binary) {
+  $_format_binary = new $_format_binary;
+  $_format_binary->getConfigs($actor_guid);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("actor_guid"      , $actor_guid);
 $smarty->assign("formats_xml"     , $formats_xml);
 $smarty->assign("formats_tabular" , $formats_tabular);
+$smarty->assign('formats_binary'  , $formats_binary);
 $smarty->display("inc_configs_formats.tpl");

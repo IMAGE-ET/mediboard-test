@@ -311,4 +311,28 @@ class CExchangeDicom extends CExchangeBinary {
     }
     return false;
   }
+
+  /**
+   * Get the Dicom configs for the given actor
+   *
+   * @param string $actor_guid Actor GUID
+   *
+   * @return CDicomConfig|void
+   */
+  function getConfigs($actor_guid = null) {
+    if ($actor_guid) {
+      list($sender_class, $sender_id) = explode('-', $actor_guid);
+    }
+    else {
+      $sender_class = $this->sender_class;
+      $sender_id = $this->sender_id;
+    }
+
+    $sender_dicom_config               = new CDicomConfig();
+    $sender_dicom_config->sender_class = $sender_class;
+    $sender_dicom_config->sender_id    = $sender_id;
+    $sender_dicom_config->loadMatchingObject();
+
+    return $this->_configs_format = $sender_dicom_config;
+  }
 }

@@ -136,6 +136,17 @@ class CSetupdicom extends CSetup {
                 ADD `libelle` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = '0.5';
+    $this->makeRevision('0.5');
+
+    $query = "CREATE TABLE `dicom_configs` (
+                `dicom_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sender_id` INT (11) UNSIGNED,
+                `sender_class` ENUM ('CDicomSender'),
+                `send_0032_1032` ENUM('0', '1') DEFAULT '0',
+                `value_0008_0060` VARCHAR(100)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.6';
   }
 }

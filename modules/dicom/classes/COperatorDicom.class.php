@@ -68,23 +68,22 @@ class COperatorDicom extends CEAIOperator {
         // The PDV contain a header
         $msg = $last_pdv->getMessage();
         switch ($msg->getCommandField()->getValue()) {
-          case 0x0030 :
+          case 0x0030:
             $response = self::handleCEchoRQ($last_pdv, $dicom_exchange);
             break;
-          case 0x8030 :
+          case 0x8030:
             $response = self::handleCEchoRSP($last_pdv, $dicom_exchange);
             break;
-          case 0x0020 :
+          case 0x0020:
             $response = self::handleCFindRQ($last_pdv, $dicom_exchange);
             break;
-          case 0x8020 :
+          case 0x8020:
             $response = self::handleCFindRSP();
             break;
-          case 0x0FFF :
+          case 0x0FFF:
             $response = self::handleCCancelFindRQ();
             break;
-          default :
-            break;
+          default:
         }
       }
     }
@@ -234,7 +233,7 @@ class COperatorDicom extends CEAIOperator {
       $find_rsp_pending = CDicomPDUFactory::encodePDU(0x04, $find_rsp_pending_datas, $dicom_exchange->_presentation_contexts);
 
       $calling_ae_title = self::getRequestedAETitle($requested_datas);
-      $modality = self::getRequestedModality($requested_datas);
+      $modality = self::getRequestedModality($requested_datas, $dicom_exchange);
 
       /** Getting the requested encoding **/
       $encoding = null;
@@ -261,7 +260,7 @@ class COperatorDicom extends CEAIOperator {
                 "message_control_header" => 0x02,
                 "message"                => array(
                   "type"  => "data",
-                  "datas" => self::getDataFromObject($_object, $encoding, $modality, $calling_ae_title),
+                  "datas" => self::getDataFromObject($_object, $encoding, $modality, $calling_ae_title, $dicom_exchange->getConfigs()),
                 )
               ),
             )
@@ -317,7 +316,7 @@ class COperatorDicom extends CEAIOperator {
   protected static function loadObjectsFromLinkedObjects($linked_objects) {
     $linked_object = reset($linked_objects);
 
-    switch($linked_object->object_class) {
+    switch ($linked_object->object_class) {
       case 'CSalle':
         $objects = self::loadOperationsFromLinkedObjects($linked_objects);
         break;
@@ -433,20 +432,21 @@ class COperatorDicom extends CEAIOperator {
   /**
    * Prepare the data to send from the given object
    *
-   * @param CMbObject $object           The object
-   * @param string    $encoding         The encoding
-   * @param string    $modality         The target modality
-   * @param string    $calling_ae_title The AE title who requested the worklist
+   * @param CMbObject    $object           The object
+   * @param string       $encoding         The encoding
+   * @param string       $modality         The target modality
+   * @param string       $calling_ae_title The AE title who requested the worklist
+   * @param CDicomConfig $dicom_config     The Exchange Dicom
    *
    * @return array
    */
-  protected static function getDataFromObject($object, $encoding, $modality, $calling_ae_title) {
+  protected static function getDataFromObject($object, $encoding, $modality, $calling_ae_title, $dicom_config) {
     switch ($object->_class) {
       case 'COperation':
-        $data = self::getDataFromOperation($object, $encoding, $modality, $calling_ae_title);
+        $data = self::getDataFromOperation($object, $encoding, $modality, $calling_ae_title, $dicom_config);
         break;
       case 'CSejour':
-        $data = self::getDataFromSejour($object, $encoding, $modality, $calling_ae_title);
+        $data = self::getDataFromSejour($object, $encoding, $modality, $calling_ae_title, $dicom_config);
         break;
       default:
         $data = array();
@@ -458,14 +458,15 @@ class COperatorDicom extends CEAIOperator {
   /**
    * Prepare the data to send from the given operation
    *
-   * @param COperation $operation        The operation
-   * @param string     $encoding         The encoding
-   * @param string     $modality         The target modality
-   * @param string     $calling_ae_title The AE title who requested the worklist
+   * @param COperation   $operation        The operation
+   * @param string       $encoding         The encoding
+   * @param string       $modality         The target modality
+   * @param string       $calling_ae_title The AE title who requested the worklist
+   * @param CDicomConfig $dicom_config     The Exchange Dicom
    *
    * @return array
    */
-  protected static function getDataFromOperation($operation, $encoding, $modality, $calling_ae_title) {
+  protected static function getDataFromOperation($operation, $encoding, $modality, $calling_ae_title, $dicom_config) {
     $patient = $operation->loadRefPatient();
     $operation->updateFormFields();
     $operation->loadRefPlageOp();
@@ -545,20 +546,36 @@ class COperatorDicom extends CEAIOperator {
       ),
     );
 
+    /* We had the field 0x0032,0x1032 if it's configured */
+    if ($dicom_config->send_0032_1032) {
+      if (!array_key_exists(0x0032, $data)) {
+        $data[0x0032] = array();
+      }
+
+      $data[0x0032][0x1032] = self::encodeValue($chir_name, $encoding);
+
+      /* Add the field into the sequence of item 0x0040,0x0100 */
+      /*$data[0x0040][0x0100][0][] = array(
+        "group_number" => 0x0032,
+        "element_number" => 0x1032, "value" => self::encodeValue($chir_name, $encoding)
+      );*/
+    }
+
     return $data;
   }
 
   /**
    * Prepare the data to send from the given sejour
    *
-   * @param CSejour $sejour           The sejour
-   * @param string  $encoding         The encoding
-   * @param string  $modality         The target modality
-   * @param string  $calling_ae_title The AE title who requested the worklist
+   * @param CSejour      $sejour           The sejour
+   * @param string       $encoding         The encoding
+   * @param string       $modality         The target modality
+   * @param string       $calling_ae_title The AE title who requested the worklist
+   * @param CDicomConfig $dicom_config     The Exchange Dicom
    *
    * @return array
    */
-  protected function getDataFromSejour($sejour, $encoding, $modality, $calling_ae_title) {
+  protected function getDataFromSejour($sejour, $encoding, $modality, $calling_ae_title, $dicom_config) {
     $libelle = '';
     $date = '';
     $time = '';
@@ -647,6 +664,22 @@ class COperatorDicom extends CEAIOperator {
       ),
     );
 
+    /* We add the field 0x0032,0x1032 if it's configured */
+    if ($dicom_config->send_0032_1032) {
+      if (!array_key_exists(0x0032, $data)) {
+        $data[0x0032] = array();
+      }
+
+      $data[0x0032][0x1032] = self::encodeValue($chir_name, $encoding);
+
+      /* Add the field into the sequence of item 0x0040,0x0100 */
+      /*$data[0x0040][0x0100][0][] = array(
+        "group_number" => 0x0032,
+        "element_number" => 0x1032,
+        "value" => self::encodeValue($chir_name, $encoding)
+      );*/
+    }
+
     return $data;
   }
 
@@ -664,10 +697,10 @@ class COperatorDicom extends CEAIOperator {
     if (array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0001, $requested_datas[0x0040])) {
       $ae_title = $requested_datas[0x0040][0x0001]->getValue();
     }
-    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
     elseif (
-      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
-      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0040, 0x0001)
+        /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+        array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+        $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0040, 0x0001)
     ) {
       $ae_title = $dataset->getValue();
     }
@@ -678,21 +711,27 @@ class COperatorDicom extends CEAIOperator {
   /**
    * Return the value of the Modality (dataset 0x0008,0x0060)
    *
-   * @param array $requested_datas The the data of the CFind request
+   * @param array          $requested_datas The the data of the CFind request
+   * @param CExchangeDicom $dicom_exchange  The Exchange Dicom
    *
    * @return string
    */
-  protected static function getRequestedModality($requested_datas) {
+  protected static function getRequestedModality($requested_datas, $dicom_exchange) {
     $modality = '';
 
-    /* We check if the dataset is in the data */
-    if (array_key_exists(0x0008, $requested_datas) && array_key_exists(0x0060, $requested_datas[0x0008])) {
+    $config = $dicom_exchange->getConfigs();
+    /* Check if a value is configured for the modality */
+    if (isset($config->value_0008_0060)) {
+      $modality = $config->value_0008_0060;
+    }
+    elseif (array_key_exists(0x0008, $requested_datas) && array_key_exists(0x0060, $requested_datas[0x0008])) {
+      /* We check if the dataset is in the data */
       $modality = $requested_datas[0x0008][0x0060]->getValue();
     }
-    /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
     elseif (
-      array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
-      $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0008, 0x0060)
+        /* Check if the dataset is in the sequence of the dataset 0x0040,0x0100 */
+        array_key_exists(0x0040, $requested_datas) && array_key_exists(0x0100, $requested_datas[0x0040]) &&
+        $dataset = $requested_datas[0x0040][0x0100]->getSequenceDataSet(0x0008, 0x0060)
     ) {
       $modality = $dataset->getValue();
     }

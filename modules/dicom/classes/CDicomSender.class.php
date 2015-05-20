@@ -44,6 +44,7 @@ class CDicomSender extends CInteropSender {
 
     $backProps["exchange_dicom"] = "CExchangeDicom sender_id";
     $backProps["session_dicom"]  = "CDicomSession sender_id";
+    $backProps['config']         = 'CDicomConfig sender_id';
 
     return $backProps;
   }

@@ -411,7 +411,7 @@ class CDicomSession extends CMbObject {
     $props["dicom_exchange_id"]     = "ref class|CExchangeDicom";
     $props["group_id"]              = "ref notNull class|CGroups autocomplete|text";
     $props["sender_id"]             = "ref class|CDicomSender autocomplete|nom";
-    $props["receiver_id"]           = "ref class|CDicomReceiver autocomplete|nom";
+    //$props["receiver_id"]           = "ref class|CDicomReceiver autocomplete|nom";
     $props["state"]                 = "str notNull show|0";
     $props["presentation_contexts"] = "str show|0";
     
