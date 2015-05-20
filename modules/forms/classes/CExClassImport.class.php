@@ -52,7 +52,7 @@ class CExClassImport extends CMbXMLObjectImport {
     switch ($element->getAttribute("class")) {
       // --------------------
       case "CExClass":
-        $values = $this->getValuesFromElement($element);
+        $values = self::getValuesFromElement($element);
 
         $ex_class = new CExClass();
         $ex_class->name                       = $this->options["ex_class_name"];
@@ -89,7 +89,7 @@ class CExClassImport extends CMbXMLObjectImport {
           $_elements = $this->getElementsByFwdRef("CExListItem", "list_id", $id);
           foreach ($_elements as $_element) {
             $_list_item = new CExListItem();
-            bindHashToObject($this->getValuesFromElement($_element), $_list_item);
+            bindHashToObject(self::getValuesFromElement($_element), $_list_item);
             $_list_item->list_id = $_ex_list->_id;
 
             if ($msg = $_list_item->store()) {
