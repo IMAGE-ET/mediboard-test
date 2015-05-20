@@ -151,7 +151,6 @@
 {{if $patient->_id}}
 
 <div id="view_dossier_pmsi">
-  {{*mb_include module=pmsi template=inc_view_dossier_pmsi*}}
 
   <ul id="tabs-pmsi" class="control_tabs">
     <li onmousedown="PMSI.loadDossierSejour('{{$patient->_id}}', '{{$sejour->_id}}'); this.onmousedown='';">
