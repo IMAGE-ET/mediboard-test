@@ -18,6 +18,7 @@ $step         = CValue::postOrSession("step", 100);
 $start        = CValue::postOrSession("start", 0);
 $directory    = CValue::postOrSession("directory");
 $all_prats    = CValue::postOrSession("all_prats");
+$ignore_files = CValue::postOrSession("ignore_files");
 
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
@@ -33,4 +34,5 @@ $smarty->assign("all_prats", $all_prats);
 $smarty->assign("step", $step);
 $smarty->assign("start", $start);
 $smarty->assign("directory", $directory);
+$smarty->assign("ignore_files", $ignore_files);
 $smarty->display("vw_export_patients.tpl");
