@@ -137,7 +137,7 @@ class CMbObjectExport {
       // Forward Refs Fields
       $_fwd_spec = $object->_specs[$key];
       if ($_fwd_spec instanceof CRefSpec) {
-        if ($key === $object->_spec->key) {
+        if ($key === $object->_spec->key && $object->_specs[$key]->className !== $object->_class) {
           continue;
         }
 
@@ -211,35 +211,43 @@ class CMbObjectExport {
 
   /**
    * Stream in text/xml mimetype
+   *
+   * @param bool $download Force download
    * 
    * @return void
    */
-  function streamXML(){
-    $this->stream("text/xml");
+  function streamXML($download = true){
+    $this->stream("text/xml", $download);
   }
 
   /**
    * Stream in text/plain mimetype
    *
+   * @param bool $download Force download
+   *
    * @return void
    */
-  function streamXMLText(){
-    $this->stream("text/plain");
+  function streamXMLText($download = true){
+    $this->stream("text/plain", $download);
   }
 
   /**
    * Stream the DOM
-   * 
+   *
    * @param string $mimetype Mime type type
-   * 
+   * @param bool   $download Force download
+   *
    * @return void
    */
-  function stream($mimetype){
+  function stream($mimetype, $download = true){
     $xml = $this->toDOM()->saveXML();
     $date = CMbDT::dateTime();
-    
+
+    if ($download) {
+      header("Content-Disposition: attachment;filename=\"{$this->object} - $date.xml\"");
+    }
+
     header("Content-Type: $mimetype");
-    header("Content-Disposition: attachment;filename=\"{$this->object} - $date.xml\"");
     header("Content-Length: ".strlen($xml));
     
     echo $xml;
