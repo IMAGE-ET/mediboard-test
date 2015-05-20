@@ -82,8 +82,8 @@
         <label for="patient_id" title="Choisissez un patient">{{tr}}CPatient{{/tr}}</label>
       </th>
       <td>
-        <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
-        <input type="text" readonly="readonly" name="patient" value="{{$patient->_view}}" onclick="PatSelector.init()" />
+        <input type="hidden" name="patient_id" value="{{$patient->patient_id}}"/>
+        <input type="text" readonly="readonly" name="patient" value="{{$patient->_view}}" onchange="this.form.submit()" onclick="PatSelector.init()" />
         <button class="search notext compact" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
         <script>
           PatSelector.init = function(){
