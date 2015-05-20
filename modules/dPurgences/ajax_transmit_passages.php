@@ -28,18 +28,25 @@ if ($extract_passages_id) {
   if (!$extractPassages->_id) {
     CAppUI::stepAjax("Impossible de charger le document XML.", UI_MSG_ERROR);
   }
-  
+
   $file = new CFile();
   $file->setObject($extractPassages);
   $file->loadMatchingObject();
-  
+
   if (!$file->_id) {
     CAppUI::stepAjax("Impossible de récupérer le document.", UI_MSG_ERROR);
   }
   $tentative = 5;
-  while ($tentative-- && $rpuSender->transmit($extractPassages)) {
-    sleep($attente);
-  }  
+  if ($extractPassages->type == "activite") {
+    while ($tentative-- && $rpuSender->transmitActivite($extractPassages)) {
+      sleep($attente);
+    }
+  }
+  else {
+    while ($tentative-- && $rpuSender->transmit($extractPassages)) {
+      sleep($attente);
+    }
+  }
 }
 else {
   $leftjoin["files_mediboard"] = "files_mediboard.object_id = extract_passages.extract_passages_id
@@ -49,15 +56,22 @@ else {
   $where["extract_passages.date_echange"]   = "IS NULL";
   $where['extract_passages.message_valide'] = " = '1'";
   $where['extract_passages.group_id']       = " = '".CGroups::loadCurrent()->_id."'";
-  
+
   $order = "extract_passages.date_extract DESC";
 
   /** @var CExtractPassages[] $passages */
   $passages = $extractPassages->loadList($where, $order, null, null, $leftjoin);
   foreach ($passages as $_passage) {
     $tentative = 5;
-    while ($tentative-- && $rpuSender->transmit($_passage)) {
-      sleep($attente);
+    if ($_passage->type == "activite") {
+      while ($tentative-- && $rpuSender->transmitActivite($_passage)) {
+        sleep($attente);
+      }
+    }
+    else {
+      while ($tentative-- && $rpuSender->transmit($_passage)) {
+        sleep($attente);
+      }
     }
   }
 }

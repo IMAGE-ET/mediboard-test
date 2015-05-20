@@ -87,6 +87,7 @@
   <tr>
     <th>{{mb_title object=$extractPassages field="extract_passages_id"}}</th>
     <th>{{mb_title object=$extractPassages field="type"}}</th>
+    <th>{{mb_title object=$extractPassages field="rpu_sender"}}</th>
     <th>{{mb_title object=$extractPassages field="date_extract"}}</th>
     <th>{{mb_title object=$extractPassages field="debut_selection"}}</th>
     <th>{{mb_title object=$extractPassages field="fin_selection"}}</th>
@@ -108,6 +109,9 @@
     </td>
     <td class="narrow">
       {{mb_value object=$_passage field="type"}}
+    </td>
+    <td class="narrow">
+      {{tr}}{{mb_value object=$_passage field="rpu_sender"}}{{/tr}}
     </td>
     <td class="narrow">
       <label title='{{mb_value object=$_passage field="date_extract"}}'>

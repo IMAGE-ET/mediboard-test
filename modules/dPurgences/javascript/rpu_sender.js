@@ -1,4 +1,6 @@
 RPU_Sender = {
+  extract_passages_id: null,
+
   popupImport: function(module) {
     new Url("dPurgences", "ajax_import_key")
       .addParam("module", module)
@@ -17,5 +19,38 @@ RPU_Sender = {
   showEncryptKey: function() {
     var url = new Url("dPurgences", "ajax_show_encrypt_key");
     url.requestUpdate('show_encrypt_key');
+  },
+
+  extract: function(form, type) {
+    if (!checkForm(form)) {
+      return;
+    }
+
+    new Url("dPurgences", "ajax_extract_passages_"+type)
+      .addParam("debut_selection", $V(form.debut_selection))
+      .addParam("fin_selection"  , $V(form.fin_selection))
+      .requestUpdate('td_extract_'+type, {
+        onComplete: function(){
+          if (!$('td_extract_'+type).select('.error, .warning').length) {
+            $('encrypt_'+type).disabled = false;
+          }
+      }});
+  },
+
+   encrypt: function(type) {
+    new Url("dPurgences", "ajax_encrypt_passages")
+      .addParam("extract_passages_id", RPU_Sender.extract_passages_id)
+      .requestUpdate('td_encrypt_'+type, {
+        onComplete: function(){
+        if (!$('td_encrypt_'+type).select('.error, .warning').length) {
+          $('transmit_'+type).disabled = false;
+        }
+      }});
+  },
+
+   transmit: function(type) {
+    new Url("dPurgences", "ajax_transmit_passages")
+      .addParam("extract_passages_id", RPU_Sender.extract_passages_id)
+      .requestUpdate('td_transmit_'+type);
   }
 };

@@ -35,6 +35,50 @@ abstract class CRPUSender {
   }
 
   /**
+   * Extract RPU
+   *
+   * @param CExtractPassages $extractPassages Passage
+   * @param CRPU[]           $rpus            RPUS
+   *
+   * @return void
+   */
+  function extractRPU(CExtractPassages $extractPassages, $rpus) {
+  }
+
+  /**
+   * Extract URG
+   *
+   * @param CExtractPassages $extractPassages Passage
+   * @param CRPU[]           $rpus            RPUS
+   *
+   * @return void
+   */
+  function extractURG(CExtractPassages $extractPassages, $rpus) {
+  }
+
+  /**
+   * Extract UHCD
+   *
+   * @param CExtractPassages $extractPassages Passage
+   * @param CRPU[]           $rpus            RPUS
+   *
+   * @return void
+   */
+  function extractUHCD(CExtractPassages $extractPassages, $rpus) {
+  }
+
+  /**
+   * Extract acticity
+   *
+   * @param CExtractPassages $extractPassages Passage
+   * @param CRPU[]           $rpus            RPUS
+   *
+   * @return void
+   */
+  function extractActivite(CExtractPassages $extractPassages, $rpus) {
+  }
+
+  /**
    * Encrypt extract passages
    *
    * @param CExtractPassages $extractPassages Passages

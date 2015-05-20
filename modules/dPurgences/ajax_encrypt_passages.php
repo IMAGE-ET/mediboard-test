@@ -33,7 +33,12 @@ if (!$extractPassages->message_valide) {
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();
-$extractPassages = $rpuSender->encrypt($extractPassages);
+if ($extractPassages->type == "activite") {
+  $extractPassages = $rpuSender->encryptActivite($extractPassages);
+}
+else {
+  $extractPassages = $rpuSender->encrypt($extractPassages);
+}
 
 if ($view) {
   $extractPassages->loadRefsFiles();
@@ -45,6 +50,6 @@ if ($view) {
   $smarty->display("inc_extract_file.tpl");
 }
 else {
-  echo "<script>extract_passages_id = $extractPassages->_id;</script>";
+  echo "<script>RPU_Sender.extract_passages_id = $extractPassages->_id;</script>";
 }
 

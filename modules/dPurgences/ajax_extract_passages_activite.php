@@ -188,5 +188,5 @@ else {
   CAppUI::stepAjax("Le document produit est valide.", UI_MSG_OK);
 }
 
-echo "<script>extract_passages_id = $extractPassages->_id;</script>";
+echo "<script>RPU_Sender.extract_passages_id = $extractPassages->_id;</script>";
 

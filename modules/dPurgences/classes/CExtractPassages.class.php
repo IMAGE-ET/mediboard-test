@@ -26,6 +26,7 @@ class CExtractPassages extends CMbObject {
   public $message_valide;
   public $type;
   public $group_id;
+  public $rpu_sender;
   
   // Form fields
   public $_nb_rpus;
@@ -65,8 +66,9 @@ class CExtractPassages extends CMbObject {
     $props["nb_tentatives"]   = "num";
     $props["message"]         = "xml show|0";
     $props["message_valide"]  = "bool";
-    $props["type"]            = "enum list|rpu|urg|activite default|rpu";
+    $props["type"]            = "enum list|rpu|urg|activite|uhcd default|rpu";
     $props["group_id"]        = "ref notNull class|CGroups";
+    $props["rpu_sender"]      = "str";
     
     $props["_nb_rpus"]        = "num";
     return $props;
