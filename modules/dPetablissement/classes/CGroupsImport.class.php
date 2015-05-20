@@ -117,15 +117,15 @@ class CGroupsImport extends CMbXMLObjectImport {
 
             if ($msg = $_object->store()) {
               if (
-                $_object instanceof CGroups ||
-                $_object instanceof CFunctions
+                  $_object instanceof CGroups ||
+                  $_object instanceof CFunctions
               ) {
                 $_object->text .= $this->name_suffix;
               }
               elseif (
-                $_object instanceof CSalle ||
-                $_object instanceof CService ||
-                $_object instanceof CBlocOperatoire
+                  $_object instanceof CSalle ||
+                  $_object instanceof CService ||
+                  $_object instanceof CBlocOperatoire
               ) {
                 $_object->nom .= $this->name_suffix;
               }
