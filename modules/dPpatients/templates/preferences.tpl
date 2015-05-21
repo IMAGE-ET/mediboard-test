@@ -13,6 +13,7 @@
 {{mb_include template=inc_pref spec=bool var=sort_atc_by_date}}
 {{mb_include template=inc_pref spec=bool var=new_date_naissance_selector}}
 {{mb_include template=inc_pref spec=bool var=constantes_show_comments_tooltip}}
+{{mb_include template=inc_pref spec=bool var=constantes_show_view_tableau}}
 
 <tr>
   <th colspan="5" class="category">Carte Vitale</th>

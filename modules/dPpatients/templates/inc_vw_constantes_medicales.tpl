@@ -81,7 +81,10 @@
         }
       });
 
-      Control.Tabs.create("tabs-constantes-graph-table", true);
+      var tabs_graph = Control.Tabs.create("tabs-constantes-graph-table", true);
+      {{if $app->user_prefs.constantes_show_view_tableau}}
+        tabs_graph.setActiveTab('constantes-table');
+      {{/if}}
 
       var header_constants = $('header-constants');
       var content_dossier = $('content-dossier-soins');

@@ -2853,7 +2853,10 @@ class CSetupdPpatients extends CSetup {
       ADD `majeur` ENUM ('0','1') DEFAULT '0' AFTER `annule`;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.39';
+    $this->addPrefQuery('constantes_show_view_tableau', '0');
+    $this->makeRevision("2.39");
+    
+    $this->mod_version = '2.40';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
