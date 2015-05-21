@@ -526,7 +526,7 @@ class CObservationResultSet extends CMbObject {
         );
         $_view = "";
         if ($_line instanceof CPrescriptionLineElement) {
-          $_view = $_line->_chapitre;
+          $_view = $_line->_view;
         }
         elseif ($_line instanceof CPrescriptionLineMix) {
           foreach ($_line->_ref_lines as $_mix_item) {
