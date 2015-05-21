@@ -21,7 +21,7 @@ $date         = CValue::getOrSession("date", CMbDT::date());
 $type         = CValue::getOrSession("type");
 $services_ids = CValue::getOrSession("services_ids");
 $prat_id      = CValue::getOrSession("prat_id");
-
+$heure        = CValue::getOrSession("heure");
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
@@ -49,5 +49,6 @@ $smarty->assign("order_col"    , $order_col);
 $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
+$smarty->assign("heure"        , $heure);
 
 $smarty->display("vw_idx_present.tpl");

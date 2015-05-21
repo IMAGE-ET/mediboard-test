@@ -20,6 +20,7 @@ $prat_id        = CValue::getOrSession("prat_id");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", CMbDT::date());
+$heure          = CValue::getOrSession("heure");
 $next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
@@ -32,9 +33,14 @@ $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
-
-$date_min = CMbDT::dateTime("00:00:00", $date);
-$date_max = CMbDT::dateTime("23:59:59", $date);
+if ($heure) {
+  $date_min = CMbDT::dateTime($heure, $date);
+  $date_max = CMbDT::dateTime($heure, $date);
+}
+else {
+  $date_min = CMbDT::dateTime("00:00:00", $date);
+  $date_max = CMbDT::dateTime("23:59:59", $date);
+}
 
 // Entrées de la journée
 $sejour = new CSejour();
@@ -96,6 +102,16 @@ $show_curr_affectation = CAppUI::conf("dPadmissions show_curr_affectation");
 
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+if ($heure) {
+  $date_min = CMbDT::dateTime("00:00:00", $date);
+  $date_max = CMbDT::dateTime("23:59:59", $date);
+  $where["sejour.entree"]   = "<= '$date_max'";
+  $where["sejour.sortie"]   = ">= '$date_min'";
+  $total_sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+}
+else {
+  $total_sejours = null;
+}
 
 $patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
@@ -183,6 +199,7 @@ $smarty->assign("date"          , $date);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("sejours"       , $sejours);
+$smarty->assign("total_sejours" , $total_sejours);
 $smarty->assign("prestations"   , CPrestation::loadCurrentList());
 $smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
@@ -190,5 +207,6 @@ $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 $smarty->assign("which"         , $show_curr_affectation ? "curr" : "first");
+$smarty->assign("heure"         , $heure);
 
 $smarty->display("inc_vw_presents.tpl");

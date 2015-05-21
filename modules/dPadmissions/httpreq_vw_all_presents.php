@@ -58,7 +58,7 @@ if (count($services_ids)) {
 
 // filtre sur le praticien
 if ($prat_id) {
-  $where["praticien_id"] = "= '$prat_id'";
+  $where["sejour.praticien_id"] = "= '$prat_id'";
 }
 
 $group = CGroups::loadCurrent();

@@ -14,6 +14,7 @@
   Main.add(function() {
     Admissions.restoreSelection('listPresents');
     Calendar.regField(getForm("changeDatePresents").date, null, {noView: true});
+    Calendar.regField(getForm("changeHeurePresents").heure, null);
     Prestations.callback = reloadPresent;
   });
 </script>
@@ -30,13 +31,20 @@
         <input type="hidden" name="tab" value="vw_idx_present" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
+
+      <form name="changeHeurePresents" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_present" />
+        <input type="hidden" name="heure" class="time" value="{{$heure}}" onchange="this.form.submit()" />
+      </form>
       <a href="?m=dPadmissions&tab=vw_idx_present&date={{$demain}}" style="display: inline">&gt;&gt;&gt;</a>
       <br />
       
       <em style="float: left; font-weight: normal;">
-        {{$sejours|@count}} présents ce jour
+        {{$sejours|@count}} {{if $heure}} / {{$total_sejours|@count}} {{/if}} présents ce jour
+        {{if $heure}} à {{$heure|date_format:$conf.time}}{{/if}}
       </em>
-  
+
       <select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadPresent(this.value);">
         <option value=""> &mdash; Toutes les fonctions</option>
         {{foreach from=$functions item=_function}}
