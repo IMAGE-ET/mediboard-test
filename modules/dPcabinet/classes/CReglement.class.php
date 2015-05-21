@@ -9,7 +9,6 @@
  * @version    $Revision$
  */
 
-
 /**
  * Les règlements
  */
@@ -35,7 +34,8 @@ class CReglement extends CMbMetaObject {
   public $lock;
 
   // Behaviour fields
-  public $_update_facture = true;
+  public $_update_facture   = true;
+  public $_force_regle_acte = 0;
 
   // References
   /** @var CBanque */
@@ -82,6 +82,8 @@ class CReglement extends CMbMetaObject {
     $props["debiteur_id"]   = "ref class|CDebiteur";
     $props["debiteur_desc"] = "str";
     $props["lock"]          = "bool default|0";
+
+    $props["_force_regle_acte"] = "bool default|0";
     return $props;
   }
   
@@ -142,10 +144,10 @@ class CReglement extends CMbMetaObject {
     $facture->loadRefPraticien();
     return $this->_ref_facture = $facture;
   }
-  
+
   /**
    * Acquite la facture automatiquement
-   * 
+   *
    * @return string|null
    */
   function acquiteFacture() {
@@ -162,10 +164,71 @@ class CReglement extends CMbMetaObject {
     if ($this->emetteur == "tiers" && $facture->du_tiers) {
       $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? CMbDT::date() : "";
     }
-    
-    return $facture->store();
+    if ($msg = $facture->store()) {
+      return $msg;
+    }
+
+    $this->completeField("_force_regle_acte");
+    if ($this->_force_regle_acte) {
+      $this->changeActesCCAM();
+    }
   }
-  
+
+  /**
+   * Règle les actes ccam lors de l'acquittement
+   *
+   * @return string|null
+   */
+  function changeActesCCAM() {
+    $facture = $this->_ref_facture;
+    $actes = array();
+    foreach ($facture->loadRefsConsultation() as $consult) {
+      /* @var CConsultation $consult*/
+      foreach ($consult->loadRefsActesCCAM($facture->numero) as $acte_ccam) {
+        $actes[] = $acte_ccam;
+      }
+    }
+    foreach ($facture->loadRefsSejour() as $sejour) {
+      /* @var CSejour $sejour*/
+      foreach ($sejour->loadRefsOperations() as $op) {
+        foreach ($op->loadRefsActesCCAM($facture->numero) as $acte_ccam) {
+          $actes[] = $acte_ccam;
+        }
+      }
+      foreach ($sejour->loadRefsActesCCAM($facture->numero) as $acte_ccam) {
+        $actes[] = $acte_ccam;
+      }
+    }
+
+    $actes_non_regle = array();
+    $actes_to_regle = array();
+    foreach ($actes as $_acte_ccam) {
+      if ((!$_acte_ccam->regle && $_acte_ccam->montant_base) || (!$_acte_ccam->regle_dh && $_acte_ccam->montant_depassement)) {
+        $actes_non_regle[] = $_acte_ccam;
+      }
+      else {
+        $actes_to_regle[] = $_acte_ccam;
+      }
+    }
+    //Pour l'acquittement,
+    if (!$facture->_du_restant && count($actes_non_regle)) {
+      foreach ($actes_non_regle as $_acte_ccam) {
+        /* @var CActeCCAM $acte */
+        $_acte_ccam->regle = 1;
+        $_acte_ccam->regle_dh = 1;
+        if ($msg = $_acte_ccam->store()) {mbLog($msg);}
+      }
+    }
+    else if ($facture->_du_restant && count($actes_to_regle)) {
+      foreach ($actes_to_regle as $_acte_ccam) {
+        /* @var CActeCCAM $acte */
+        $_acte_ccam->regle = 0;
+        $_acte_ccam->regle_dh = 0;
+        if ($msg = $_acte_ccam->store()) {mbLog($msg);}
+      }
+    }
+  }
+
   /**
    * Redéfinition du store
    * 

@@ -71,6 +71,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_total_caisse;
   public $_autre_tarmed;
 
+  public $_du_restant;
   public $_du_restant_patient;
   public $_du_restant_tiers;
   public $_reglements_total_patient;
@@ -115,6 +116,8 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_ref_reglements_patient;
   /** @var CReglement[] */
   public $_ref_reglements_tiers;
+  /** @var CReglement[] */
+  public $_new_reglement_patient;
   /** @var CSejour[] */
   public $_ref_sejours;
   /** @var CRelance[] */
@@ -525,8 +528,8 @@ class CFacture extends CMbObject implements IPatientRelated {
           foreach ($this->_ref_sejours as $sejour) {
             foreach ($sejour->_ref_operations as $op) {
               foreach ($op->_ref_actes as $acte) {
-                $this->_secteur1      += $acte->montant_base;
-                $this->_secteur2      += $acte->montant_depassement;
+                $this->_secteur1 += $acte->montant_base;
+                $this->_secteur2 += $acte->montant_depassement;
               }
             }
             foreach ($sejour->_ref_actes as $acte) {
@@ -685,10 +688,11 @@ class CFacture extends CMbObject implements IPatientRelated {
     $this->_reglements_total_tiers   = 0.00;
     $this->_ref_reglements_patient = array();
     $this->_ref_reglements_tiers   = array();
+    $this->_du_restant = $this->_montant_avec_remise;
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque();
       $_reglement->loadRefDebiteur();
-
+      $this->_du_restant -= $_reglement->montant;
       if ($_reglement->emetteur == "patient") {
         $this->_ref_reglements_patient[] = $_reglement;
         $this->_du_restant_patient       -= $_reglement->montant;
@@ -701,6 +705,7 @@ class CFacture extends CMbObject implements IPatientRelated {
       }
     }
     $this->_du_restant_patient = round($this->_du_restant_patient, 2);
+    $this->_du_restant         = round($this->_du_restant, 2);
 
     $this->loadDebiteurs();
     return $this->_ref_reglements;
@@ -1089,20 +1094,17 @@ class CFacture extends CMbObject implements IPatientRelated {
    **/
   function creationLignesFacture() {
     $this->loadRefCoeffFacture();
-    $this->loadRefsConsultation();
-    foreach ($this->_ref_consults as $consult) {
-      $consult->loadRefsFraisDivers($this->numero);
-      $consult->loadRefsActes($this->numero, 1);
-      foreach ($consult->_ref_frais_divers as $_frais) {
+    foreach ($this->loadRefsConsultation() as $consult) {
+      foreach ($consult->loadRefsFraisDivers($this->numero) as $_frais) {
         $consult->_ref_actes[] = $_frais;
       }
-      foreach ($consult->_ref_actes as $acte) {
+      foreach ($consult->loadRefsActes($this->numero, 1) as $acte) {
         /* @var CActeTarmed $acte */
         $acte->creationItemsFacture($this, $consult->_date);
       }
     }
-    $this->loadRefsSejour();
-    foreach ($this->_ref_sejours as $sejour) {
+
+    foreach ($this->loadRefsSejour() as $sejour) {
       foreach ($sejour->_ref_operations as $op) {
         $op->loadRefPlageOp();
         foreach ($op->_ref_actes as $acte) {

@@ -1,20 +1,11 @@
-{{* $Id: $ *}}
-
-{{*
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision: 11962 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{assign var=form value="Edit-`$reglement->_guid`"}}
 
 <form name="{{$form}}" method="post" onsubmit="return onSubmitFormAjax(this, Control.Modal.close);">
   {{mb_class object=$reglement}}
   {{mb_key   object=$reglement}}
-  {{mb_field object=$reglement field=object_class hidden=1}}
-  {{mb_field object=$reglement field=object_id    hidden=1}}
+  {{mb_field object=$reglement field=object_class     hidden=1}}
+  {{mb_field object=$reglement field=object_id        hidden=1}}
+  {{mb_field object=$reglement field=_force_regle_acte value=$force_regle_acte hidden=1}}
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$reglement}}
   
@@ -22,7 +13,6 @@
       <th>{{mb_label object=$reglement field=object_id}}</th>
       <td><strong>{{$facture}}</strong></td>
     </tr>
-    
     <tr>
       <th>{{mb_label object=$reglement field=date}}</th>
       <td>{{mb_field object=$reglement field=date form=$form register=true}}</td>
@@ -79,6 +69,5 @@
         {{/if}}
       </td>
     </tr>
-  
   </table>
 </form>

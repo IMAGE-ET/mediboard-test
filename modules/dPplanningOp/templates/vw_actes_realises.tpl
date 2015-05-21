@@ -1,3 +1,7 @@
+{{if "dPfacturation"|module_active && $conf.dPplanningOp.CFactureEtablissement.use_facture_etab}}
+  {{mb_script module=facturation script=rapport ajax=true}}
+  {{mb_script module=cabinet script=reglement ajax=true}}
+{{/if}}
 <script>
 function submitActeCCAM(oForm, acte_ccam_id, sField){
   if(oForm[sField].value == 1) {
@@ -110,12 +114,16 @@ function viewTarmed(codeacte) {
               <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_base}}</th>
               <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
               <th style="width: 05%">{{mb_title class=CActeCCAM field=_montant_facture}}</th>
+              {{if "dPfacturation"|module_active && $conf.dPplanningOp.CFactureEtablissement.use_facture_etab}}
+                <th style="width: 05%">Dû établissement</th>
+              {{/if}}
             </tr>
 
             <!-- Parcours des sejours -->
             {{foreach from=$jour item="sejour"}}
             {{assign var="sejour_id" value=$sejour->_id}}
-            <tbody class="hoverable">
+            {{assign var=facture value=$sejour->_ref_last_facture}}
+            <tbody class="hoverable" {{if $facture && $facture->_id}}id="line_{{$facture->_guid}}"{{/if}}>
             <tr>
               <td rowspan="{{$nbActes.$sejour_id}}">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}')">

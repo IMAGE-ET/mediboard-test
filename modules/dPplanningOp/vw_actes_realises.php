@@ -114,6 +114,24 @@ foreach ($sejours as $sejour) {
     unset($sejours[$sejour->_id]);
   }
   else {
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab") && CAppUI::conf("ref_pays") == 1) {
+      if (!$sejour->_ref_last_facture->_id) {
+        if ($msg = $sejour->store()) {mbLog($msg);}
+        $sejour->loadRefsFactureEtablissement();
+      }
+
+      $facture = $sejour->_ref_last_facture;
+      $facture->_ref_sejours = array($sejour->_id => $sejour);
+      $facture->updateMontants();
+
+      if ($msg = $facture->store()) {mbLog($msg);}
+      // Ajout de reglements
+      $facture->_new_reglement_patient = new CReglement();
+      $facture->_new_reglement_patient->setObject($facture);
+      $facture->_new_reglement_patient->montant = $facture->_du_restant;
+      $use_mode_default = CAppUI::conf("dPfacturation CReglement use_mode_default");
+      $facture->_new_reglement_patient->mode = $use_mode_default != "none"  ? $use_mode_default : "autre";
+    }
     $sejour->loadRefPatient();
     $tabSejours[CMbDT::date($sejour->sortie)][$sejour->_id] = $sejour;
     $nbActes[$sejour->_id] = 0;

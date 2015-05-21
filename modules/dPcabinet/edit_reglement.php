@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDO::checkEdit();
@@ -45,5 +45,6 @@ $smarty->assign("reglement", $reglement);
 $smarty->assign("object"   , $object);
 $smarty->assign("facture"  , $facture);
 $smarty->assign("banques"  , $banques);
+$smarty->assign("force_regle_acte", CValue::get("force_regle_acte"));
 
 $smarty->display("edit_reglement.tpl");

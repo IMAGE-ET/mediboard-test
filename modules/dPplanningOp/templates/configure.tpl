@@ -14,9 +14,7 @@
   <li><a href="#configure-CSejour"    >{{tr}}CSejour{{/tr}}        </a></li>
   <li><a href="#configure-CProtocole" >{{tr}}CProtocole{{/tr}}     </a></li>
   <li><a href="#configure-CLibelleOp" >{{tr}}CLibelleOp{{/tr}}     </a></li>
-  {{if $conf.ref_pays == 2}}
-    <li><a href="#configure-CFactureEtablissement"    >{{tr}}CFactureEtablissement{{/tr}} </a></li>
-  {{/if}}
+  <li><a href="#configure-CFactureEtablissement">{{tr}}CFactureEtablissement{{/tr}} </a></li>
   <li><a href="#configure-blocage"    >Blocage                     </a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}    </a></li>
@@ -44,11 +42,9 @@
   {{mb_include template=CLibelleOp_config}}
 </div>
 
-{{if $conf.ref_pays == 2}}
-  <div id="configure-CFactureEtablissement" style="display: none;">
-    {{mb_include template=CFactureEtablissement_config}}
-  </div>
-{{/if}}
+<div id="configure-CFactureEtablissement" style="display: none;">
+  {{mb_include template=CFactureEtablissement_config}}
+</div>
 
 <div id="configure-blocage" style="display: none;">
   {{mb_include template=inc_config_blocage}}
