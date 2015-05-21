@@ -144,6 +144,7 @@ $locales['CEchelleTri.rep_verbale.incomprehensible'] = 'Son';
 $locales['CEchelleTri.rep_verbale.oriente'] = 'Normale';
 $locales['CEtabExterne-back-'] = 'Séjours reçus';
 $locales['CExtractPassages'] = 'Extraction des passages';
+$locales['CExtractPassages-_selection'] = 'Sélection';
 $locales['CExtractPassages-_nb_rpus'] = 'Nombre de RPUs';
 $locales['CExtractPassages-_nb_rpus-court'] = 'Nb. RPUs';
 $locales['CExtractPassages-_nb_rpus-desc'] = 'Nombre de RPUs';

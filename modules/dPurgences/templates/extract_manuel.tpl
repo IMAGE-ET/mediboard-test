@@ -13,14 +13,19 @@
     $('encrypt_rpu').disabled = true;
     $('transmit_rpu').disabled = true;
 
+    {{if array_key_exists('activite', $types)}}
+      $('encrypt_activite').disabled = true;
+      $('transmit_activite').disabled = true;
+    {{/if}}
+
     {{if array_key_exists('urg', $types)}}
       $('encrypt_urg').disabled = true;
       $('transmit_urg').disabled = true;
     {{/if}}
 
     {{if array_key_exists('uhcd', $types)}}
-    $('encrypt_uhcd').disabled = true;
-    $('transmit_uhcd').disabled = true;
+      $('encrypt_uhcd').disabled = true;
+      $('transmit_uhcd').disabled = true;
     {{/if}}
   });
 

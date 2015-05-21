@@ -32,6 +32,10 @@ class CExtractPassages extends CMbObject {
   public $_nb_rpus;
   public $_nb_urgences;
 
+  // Filter fields
+  public $_date_min;
+  public $_date_max;
+
   /** @var CGroups */
   public $_ref_group;
 
@@ -71,6 +75,9 @@ class CExtractPassages extends CMbObject {
     $props["rpu_sender"]      = "str";
     
     $props["_nb_rpus"]        = "num";
+    $props["_date_min"]       = "dateTime";
+    $props["_date_max"]       = "dateTime";
+
     return $props;
   }
 

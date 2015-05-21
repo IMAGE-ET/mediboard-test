@@ -16,12 +16,7 @@
   </tr>
 
   <tr>
-    <th class="category narrow">{{tr}}Action{{/tr}}</th>
-    <th class="category">{{tr}}Status{{/tr}}</th>
-  </tr>
-
-  <tr>
-    <td>
+    <td class="narrow">
       <form name="formExtraction_{{$type}}" action="?" method="get">
         <table class="form">
           <tr>
@@ -45,14 +40,14 @@
 
   <tr>
     <td>
-      <button class="tick" type="button" id="encrypt_{{$type}}" onclick="RPU_Sender.encrypt('{{$type}}')">{{tr}}Encrypt{{/tr}}</button>
+      <button class="lock" type="button" id="encrypt_{{$type}}" onclick="RPU_Sender.encrypt('{{$type}}')">{{tr}}Encrypt{{/tr}}</button>
     </td>
     <td id="td_encrypt_{{$type}}"></td>
   </tr>
 
   <tr>
     <td>
-      <button class="tick" type="button" id="transmit_{{$type}}" onclick="RPU_Sender.transmit('{{$type}}')">{{tr}}Transmit{{/tr}}</button>
+      <button class="send" type="button" id="transmit_{{$type}}" onclick="RPU_Sender.transmit('{{$type}}')">{{tr}}Transmit{{/tr}}</button>
     </td>
     <td id="td_transmit_{{$type}}"></td>
   </tr>
