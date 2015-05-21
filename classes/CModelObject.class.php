@@ -179,8 +179,9 @@ class CModelObject {
     unset($vars["_backProps"]);
     unset($vars["_backSpecs"]);
     unset($vars["_ref_module"]);
-    // Removing null values would purge empty arrays
-    CMbArray::removeValue("", $vars);
+    // Non strict value Removing would purge empty arrays
+    CMbArray::removeValue(null, $vars, true);
+    CMbArray::removeValue(""  , $vars, true);
     return array_keys($vars);
   }
   

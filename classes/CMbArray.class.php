@@ -100,12 +100,13 @@ abstract class CMbArray {
    *
    * @param mixed $needle    Value to remove
    * @param array &$haystack Array to alter
+   * @param bool  $strict    Strict search
    *
    * @return int Occurences count
-   **/
-  static function removeValue($needle, &$haystack) {
+   */
+  static function removeValue($needle, &$haystack, $strict = false) {
     $count = 0;
-    while (($key = array_search($needle,  $haystack)) !== false) {
+    while (($key = array_search($needle,  $haystack, $strict)) !== false) {
       unset($haystack[$key]);
       $count++;
     }
