@@ -76,11 +76,11 @@ class CStoredObject extends CModelObject {
   /** @var CUserLog Log related to the current store or delete */
   public $_ref_current_log;
   
-  /**
-   * The object in database
-   * @var self
-   */
+  /** @var self The object in database */
   public $_old;
+
+  /** @var int Field modified count when storing */
+  public $_count_modified;
   
   // Behaviour fields
   public $_merging;
@@ -1176,7 +1176,7 @@ class CStoredObject extends CModelObject {
    */
   protected function prepareLog() {
     $this->_ref_current_log = null;
-    
+
     // If the object is not loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return null;
@@ -1189,7 +1189,10 @@ class CStoredObject extends CModelObject {
         $fields[] = $name;
       }
     }
-    
+
+    // Change field count for SQL update prevention
+    $this->_count_modified = count($fields);
+
     $object_id = $this->_id;
     $old = $this->_old;
     
@@ -1475,8 +1478,6 @@ class CStoredObject extends CModelObject {
     // Properties checking
     $this->updatePlainFields();
 
-    $this->loadOldObject();
-    
     if (CAppUI::conf("readonly")) {
       return CAppUI::tr($this->_class) . 
         CAppUI::tr("CMbObject-msg-store-failed") .
@@ -1488,16 +1489,25 @@ class CStoredObject extends CModelObject {
         CAppUI::tr("CMbObject-msg-check-failed") .
         CAppUI::tr($msg);
     }
-    
+
+    // Old object has to be loaded before all notifications
+    $this->loadOldObject();
+
     // Trigger before event
     $this->notify("BeforeStore");
 
+    // Log has to be prepared prior to actual SQL query, for update preventionL
+    $this->prepareLog();
+
+    // SQL query
     $spec = $this->_spec;
     $vars = $this->getPlainFields();
-    
-    // DB query
     if ($this->_old->_id) {
-      $ret = $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings);
+      // Update prevention when possible to prevent SQL cache invalidation
+      // May still be null for non loggable objects
+      $ret = $this->_count_modified !== 0 ?
+        $spec->ds->updateObject($spec->table, $vars, $spec->key, $spec->nullifyEmptyStrings) :
+        true;
     }
     else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
@@ -1510,14 +1520,10 @@ class CStoredObject extends CModelObject {
         $spec->ds->error();
     }
     
-    // Préparation du log, doit être fait AVANT $this->load()
-    $this->prepareLog();
-
-
     // Load the object to get all properties
     $this->load();
     
-    // Enregistrement du log une fois le store terminé
+    // Log storing after successful SQL query
     $this->doLog();
 
     // Trigger event
