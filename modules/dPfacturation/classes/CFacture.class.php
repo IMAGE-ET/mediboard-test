@@ -65,7 +65,7 @@ class CFacture extends CMbObject implements IPatientRelated {
   public $_montant_dh = 0.0;
   //Champ à supprimer
   public $_montant_total;
-  public $_no_round = true;
+  public $_no_round = false;
 
   public $_total_tarmed;
   public $_total_caisse;
@@ -704,8 +704,8 @@ class CFacture extends CMbObject implements IPatientRelated {
         $this->_reglements_total_tiers += $_reglement->montant;
       }
     }
-    $this->_du_restant_patient = round($this->_du_restant_patient, 2);
-    $this->_du_restant         = round($this->_du_restant, 2);
+    $this->_du_restant_patient = CFacture::roundValue($this->_du_restant_patient, $this->_no_round);
+    $this->_du_restant         = CFacture::roundValue($this->_du_restant, $this->_no_round);
 
     $this->loadDebiteurs();
     return $this->_ref_reglements;
@@ -893,6 +893,7 @@ class CFacture extends CMbObject implements IPatientRelated {
    * @return string
    **/
   function getNoControle($noatraiter){
+    if (!is_int($noatraiter)) {return 0;}
     if (!$noatraiter) {
       $noatraiter = $this->du_patient + $this->du_tiers;
     }
@@ -920,9 +921,9 @@ class CFacture extends CMbObject implements IPatientRelated {
       $this->_autre_tarmed = 0;
       $this->loadTotaux();
 
-      $round = $this->_no_round ? 2 : 1 ;
-      $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, $round);
-      $this->_total_caisse = round($this->_total_caisse, $round);
+      $montant_temporaire = $this->_total_tarmed * $this->_coeff + $this->_autre_tarmed;
+      $montant_prem        = CFacture::roundValue($montant_temporaire, $this->_no_round);
+      $this->_total_caisse = CFacture::roundValue($this->_total_caisse, $this->_no_round);
 
       if ($montant_prem < 0) {
         $montant_prem = 0;
@@ -934,8 +935,8 @@ class CFacture extends CMbObject implements IPatientRelated {
         $this->_montant_factures_caisse[1] = $this->_total_caisse;
       }
 
-      $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, $round);
-      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, $round);
+      $this->_montant_sans_remise = CFacture::roundValue($montant_prem + $this->_total_caisse, $this->_no_round);
+      $this->_montant_avec_remise = CFacture::roundValue($this->_montant_sans_remise - $this->remise, $this->_no_round);
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
       }
@@ -966,7 +967,7 @@ class CFacture extends CMbObject implements IPatientRelated {
       $adherent = $this->loadNumAdherent($this->_ref_praticien->adherent);
       $adherent2 = $adherent["bvr"];
       foreach ($this->_montant_factures_caisse as $montant_facture) {
-        $montant = sprintf('%010d', $montant_facture*100);
+        $montant = sprintf('%010d', CFacture::roundValue($montant_facture, true)*100);
         $cle = $this->getNoControle($genre.$montant);
         $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->num_reference."+ ".$adherent2.">";
       }
@@ -1379,4 +1380,23 @@ class CFacture extends CMbObject implements IPatientRelated {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
+
+  static function roundValue($value ,$option = false) {
+    if ($option == false) {
+      $modulo = substr(round($value, 2)*100 % 10, 0, 1);
+      if ($modulo < 5) {
+        $value = sprintf("%.1f", $value);
+      }
+      elseif ($modulo > 5) {
+        $value = sprintf("%.1f", round($value, 2));
+      }
+      elseif ($modulo == 5) {
+        $value = round($value*20, 0)/20;
+      }
+    }
+    else {
+      $value = sprintf("%.2f", $value);
+    }
+    return $value;
+  }
 }

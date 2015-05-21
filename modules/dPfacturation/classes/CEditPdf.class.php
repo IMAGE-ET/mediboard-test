@@ -197,6 +197,7 @@ class CEditPdf{
     foreach ($this->factures as $the_facture) {
       $this->facture = $the_facture;
       $this->facture->loadRefsItems();
+      $this->_no_round = false;
       if ($this->facture->cloture && !count($this->facture->_ref_items)) {
         $this->facture->creationLignesFacture();
       }
@@ -476,7 +477,7 @@ class CEditPdf{
     $total = $total_temp<0 ? 0.00 : $total_temp;
     
     $this->editCell(130, $ligne+9, $l, "Montant dû", "R");
-    $this->pdf->Cell(20, "", sprintf("%.2f", $total), null, null, "R");
+    $this->pdf->Cell(20, "", CFacture::roundValue($total, $this->facture->_no_round), null, null, "R");
   }
   
   /**
