@@ -2459,9 +2459,18 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($consultations as $_consultation) {
       $_consultation->canEdit();
       $_consultation->loadRefConsultAnesth();
+      $unset = false;
       foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
         $_dossier_anesth->loadRefOperation();
         $_dossier_anesth->loadRefsTechniques();
+        // Retrait des dossiers d'anesthésie non liés à une intervention du séjour
+        if (!$_dossier_anesth->operation_id) {
+          $unset = true;
+          continue;
+        }
+      }
+      if ($unset) {
+        continue;
       }
       $_consultation->loadRefPlageConsult();
       $_consultation->loadRefPraticien()->loadRefFunction();
