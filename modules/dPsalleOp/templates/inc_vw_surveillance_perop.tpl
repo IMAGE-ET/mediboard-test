@@ -468,7 +468,7 @@ printSurveillance = function(operation_id) {
           <tr>
             <th style="text-align: right; padding: 2px;">
               <strong onmouseover="ObjectTooltip.createEx(this, '{{$_subitem.line->_guid}}');">
-                {{$_subitem.label}}
+                {{$_subitem.label|truncate:50}}
               </strong>
   {{*
               <button class="add notext compact" style="float: right;" disabled
