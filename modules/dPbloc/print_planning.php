@@ -30,15 +30,24 @@ $filterSejour = new CSejour();
 $filterSejour->type = CValue::getOrSession("type");
 
 $tomorrow  = CMbDT::date("+1 day", $now);
+$j2        = CMbDT::date("+2 day", $now);
+$j3        = CMbDT::date("+3 day", $now);
 
 $week_deb  = CMbDT::date("last sunday", $now);
 $week_fin  = CMbDT::date("next sunday", $week_deb);
 $week_deb  = CMbDT::date("+1 day"     , $week_deb);
 
+$next_week_deb = CMbDT::date("+1 day"     , $week_fin);
+$next_week_fin = CMbDT::date("next sunday", $next_week_deb);
+
 $rectif     = CMbDT::transform("+0 DAY", $now, "%d")-1;
 $month_deb  = CMbDT::date("-$rectif DAYS", $now);
 $month_fin  = CMbDT::date("+1 month", $month_deb);
 $month_fin  = CMbDT::date("-1 day", $month_fin);
+
+$next_month_deb = CMbDT::date("+1 day", $month_fin);
+$next_month_fin = CMbDT::date("+1 month", $month_fin);
+$next_month_fin = CMbDT::date("-1 day", $next_month_fin);
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -66,10 +75,16 @@ $smarty->assign("filter"       , $filter);
 $smarty->assign("filterSejour" , $filterSejour);
 $smarty->assign("now"          , $now);
 $smarty->assign("tomorrow"     , $tomorrow);
+$smarty->assign("j2"           , $j2);
+$smarty->assign("j3"           , $j3);
+$smarty->assign("next_week_deb", $next_week_deb);
+$smarty->assign("next_week_fin", $next_week_fin);
 $smarty->assign("week_deb"     , $week_deb);
 $smarty->assign("week_fin"     , $week_fin);
 $smarty->assign("month_deb"    , $month_deb);
 $smarty->assign("month_fin"    , $month_fin);
+$smarty->assign("next_month_deb", $next_month_deb);
+$smarty->assign("next_month_fin", $next_month_fin);
 $smarty->assign("listPrat"     , $listPrat);
 $smarty->assign("listSpec"     , $listSpec);
 $smarty->assign("listBlocs"    , $listBlocs);

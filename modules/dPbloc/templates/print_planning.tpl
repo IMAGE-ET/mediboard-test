@@ -76,6 +76,10 @@
     oForm.select_days[1].checked = false;
     oForm.select_days[2].checked = false;
     oForm.select_days[3].checked = false;
+    oForm.select_days[4].checked = false;
+    oForm.select_days[5].checked = false;
+    oForm.select_days[6].checked = false;
+    oForm.select_days[7].checked = false;
 
     var minElement = oForm._datetime_min,
         maxElement = oForm._datetime_max,
@@ -114,7 +118,7 @@
       <td class="halfPane">
         <table class="form">
           <tr>
-            <th class="category" colspan="3">Choix de la période</th>
+            <th class="category" colspan="4">Choix de la période</th>
           </tr>
           <tr>
             <th>{{mb_label object=$filter field="_datetime_min"}}</th>
@@ -140,21 +144,43 @@
                 Mois courant
               </label>
             </td>
+            <td rowspan="2">
+              <label>
+                <input type="radio" name="select_days" onclick="changeDate('{{$now}} 00:00:00','{{$j2}} 23:59:59');"  value="j+2"/>
+                J+2
+              </label>
+              <br />
+              <label>
+                <input type="radio" name="select_days" onclick="changeDate('{{$now}} 00:00:00','{{$j3}} 23:59:59');"  value="j+3"/>
+                J+3
+              </label>
+              <br />
+              <label>
+                <input type="radio" name="select_days" onclick="changeDate('{{$next_week_deb}} 00:00:00','{{$next_week_fin}} 23:59:59');"  value="next_week"/>
+                Semaine prochaine
+              </label>
+              <br />
+              <label>
+                <input type="radio" name="select_days" onclick="changeDate('{{$next_month_deb}} 00:00:00','{{$next_month_fin}} 23:59:59');"  value="next_month"/>
+                Mois prochain
+              </label>
+              <br />
+            </td>
           </tr>
           <tr>
              <th>{{mb_label object=$filter field="_datetime_max"}}</th>
              <td>{{mb_field object=$filter field="_datetime_max" form="paramFrm" canNull="false" onchange="changeDateCal(false)" register=true}} </td>
           </tr>
           <tr>
-            <th class="category" colspan="3">Types d'intervention</th>
+            <th class="category" colspan="4">Types d'intervention</th>
           </tr>
           <tr class="not-full">
             <th>{{mb_label object=$filter field=_ranking}}</th>
-            <td colspan="2">{{mb_field object=$filter field=_ranking emptyLabel=All typeEnum=radio}}</td>
+            <td colspan="3">{{mb_field object=$filter field=_ranking emptyLabel=All typeEnum=radio}}</td>
           </tr>
           <tr class="not-full">
             <th>{{mb_label object=$filterSejour field="type"}}</th>
-            <td colspan="2">
+            <td colspan="3">
               {{mb_field object=$filterSejour field="type" canNull=true style="width: 15em;" emptyLabel="CSejour.type.all"}}
             </td>
           </tr>
@@ -163,7 +189,7 @@
       <td>
         <table class="form">
           <tr>
-            <th class="category" colspan="2">Autres filtres</th>
+            <th class="category" colspan="3">Autres filtres</th>
           </tr>
           <tr class="not-full">
             <th>{{mb_label object=$filter field="_prat_id"}}</th>
