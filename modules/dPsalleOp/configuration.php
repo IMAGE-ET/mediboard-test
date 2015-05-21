@@ -20,6 +20,10 @@ CConfiguration::register(
           "use_tto"                => "bool default|0",
           "password_sortie"        => "bool default|0",
           "use_time_vpa"           => "bool default|0"
+        ),
+        "hors_plage" => array(
+          "type_anesth"         => "bool default|0",
+          "heure_entree_sejour" => "bool default|0",
         )
       )
     )

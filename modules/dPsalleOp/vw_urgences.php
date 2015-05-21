@@ -16,7 +16,8 @@ $ds = CSQLDataSource::get("std");
 $date  = CValue::getOrSession("date", CMbDT::date());
 
 // Toutes les salles des blocs
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+$group =  CGroups::loadCurrent();
+$listBlocs = $group->loadBlocs(PERM_READ);
 
 // Les salles autorisées
 $salle = new CSalle();
@@ -79,15 +80,21 @@ foreach ($urgences as &$urgence) {
 $anesth = new CMediusers();
 $anesths = $anesth->loadAnesthesistes(PERM_READ);
 
+// Liste des types d'anesthésie
+$listAnesthType = new CTypeAnesth();
+$listAnesthType = $listAnesthType->loadGroupList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 
-$smarty->assign("urgences"  , $urgences);
-$smarty->assign("listBlocs",  $listBlocs);
-$smarty->assign("listSalles", $listSalles);
-$smarty->assign("anesths",    $anesths);
-$smarty->assign("date", $date);
+$smarty->assign("urgences"       , $urgences);
+$smarty->assign("listBlocs"      ,  $listBlocs);
+$smarty->assign("listSalles"     , $listSalles);
+$smarty->assign("anesths"        ,    $anesths);
+$smarty->assign("date"           , $date);
+$smarty->assign("group"          , $group);
+$smarty->assign("listAnesthType" , $listAnesthType);
 
 $smarty->display("../../dPsalleOp/templates/vw_urgences.tpl");

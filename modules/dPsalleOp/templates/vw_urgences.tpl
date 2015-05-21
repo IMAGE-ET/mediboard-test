@@ -31,6 +31,12 @@
     <th>{{tr}}COperation-anesth_id{{/tr}}</th>
     <th>{{tr}}COperation-time_operation{{/tr}}</th>
     <th>{{tr}}CSalle{{/tr}}</th>
+    {{if "dPsalleOp hors_plage type_anesth"|conf:"CGroups-$g"}}
+      <th>{{tr}}COperation-type_anesth{{/tr}}</th>
+    {{/if}}
+    {{if "dPsalleOp hors_plage heure_entree_sejour"|conf:"CGroups-$g"}}
+      <th>{{tr}}CSejour-entree{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}COperation{{/tr}}</th>
     <th>{{tr}}COperation-cote{{/tr}}</th>
     <th>{{tr}}COperation-rques{{/tr}}</th>

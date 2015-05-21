@@ -73,12 +73,17 @@ if (!$toRemove) {
   }
 }
 
+// Liste des types d'anesthésie
+$listAnesthType = new CTypeAnesth();
+$listAnesthType = $listAnesthType->loadGroupList();
+
 $smarty = new CSmartyDP();
 $smarty->assign("op"  , $operation);
 $smarty->assign("anesths",    $anesths);
 $smarty->assign("listSalles", $listSalles);
 $smarty->assign("listBlocs",  $listBlocs);
 $smarty->assign("to_remove",   $toRemove);
+$smarty->assign("listAnesthType" , $listAnesthType);
 
 
 $smarty->display("../../dPsalleOp/templates/inc_line_hors_plage.tpl");

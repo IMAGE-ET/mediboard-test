@@ -113,6 +113,40 @@
         {{mb_include module=dPbloc template=inc_button_besoins_ressources type=operation_id usage=1 object_id=$op->_id}}
       {{/if}}
     </td>
+    {{if "dPsalleOp hors_plage type_anesth"|conf:"CGroups-$g"}}
+      <td>
+        <form name="editTypeAnesthFrm{{$op->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : refreshLine.curry('{{$op->_id}}')})">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_operation_aed" />
+          <input type="hidden" name="operation_id" value="{{$op->_id}}" />
+          <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+          <input type="hidden" name="chir_id" value="{{$op->_ref_chir->_id}}" />
+          <select name="type_anesth" style="width: 12em;" onchange="this.form.onsubmit()">
+            <option value="">&mdash; Anesthésie</option>
+            {{foreach from=$listAnesthType item=curr_anesth}}
+              {{if $curr_anesth->actif || $op->type_anesth == $curr_anesth->type_anesth_id}}
+                <option value="{{$curr_anesth->type_anesth_id}}" {{if $op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                  {{$curr_anesth->name}} {{if !$curr_anesth->actif && $op->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+                </option>
+              {{/if}}
+            {{/foreach}}
+          </select>
+        </form>
+      </td>
+    {{/if}}
+    {{if "dPsalleOp hors_plage heure_entree_sejour"|conf:"CGroups-$g"}}
+      <td>
+        <form name="editEntreeFrm{{$op->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : refreshLine.curry('{{$op->_id}}')})">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_sejour_aed" />
+          <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+          {{assign var=op_id value=$op->_id}}
+          {{mb_field object=$sejour field=entree_reelle form="editEntreeFrm$op_id" register=true onchange="this.form.onsubmit()"}}
+        </form>
+      </td>
+    {{/if}}
   {{/if}}
 
   <td class="text">
