@@ -16,6 +16,6 @@ CSessionHandler::writeClose();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("module", "dPdeveloppement");
-$smarty->assign("action", "view_logs");
+$smarty->assign("module", "system");
+$smarty->assign("action", "about");
 $smarty->display("benchmark.tpl");
