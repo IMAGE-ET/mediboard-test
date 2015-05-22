@@ -86,8 +86,9 @@ class CPathologie extends CMbObject {
   function store() {
     // Save owner and creation date
     if (!$this->_id) {
-      $now = CMbDT::dateTime();
-      $this->creation_date = $now;
+      if (!$this->creation_date) {
+        $this->creation_date = CMbDT::dateTime();
+      }
 
       if (!$this->owner_id) {
         $this->owner_id = CMediusers::get()->_id;
