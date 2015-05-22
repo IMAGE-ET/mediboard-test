@@ -2854,7 +2854,16 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->addPrefQuery('constantes_show_view_tableau', '0');
+
     $this->makeRevision("2.39");
+    $query = "ALTER TABLE `dossier_medical`
+                ADD `medecin_traitant_id` INT (11) UNSIGNED AFTER `dossier_medical_id`,
+                ADD `derniere_mapa` DATE AFTER `absence_traitement`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `dossier_medical`
+                ADD INDEX (`medecin_traitant_id`),
+                ADD INDEX (`derniere_mapa`);";
+    $this->addQuery($query);
     
     $this->mod_version = '2.40';
 

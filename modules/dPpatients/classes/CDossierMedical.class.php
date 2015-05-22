@@ -13,6 +13,10 @@
  * Dossier Médical liés aux notions d'antécédents, traitements et diagnostics
  */
 class CDossierMedical extends CMbMetaObject {
+
+  // Medecin traitant interne
+  public $medecin_traitant_id;
+
   // DB Fields
   public $dossier_medical_id;
   public $codes_cim;
@@ -22,6 +26,7 @@ class CDossierMedical extends CMbMetaObject {
   public $risque_MCJ_patient;
   public $facteurs_risque;
   public $absence_traitement;
+  public $derniere_mapa;
 
   // Dossier medical Sejour
   public $risque_thrombo_chirurgie;
@@ -80,13 +85,15 @@ class CDossierMedical extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["object_class"]   = "enum list|CPatient|CSejour";
-    $props["codes_cim"]      = "text";
-    $props["absence_traitement"] = "bool";
+    $props["object_class"]        = "enum list|CPatient|CSejour";
+    $props["medecin_traitant_id"] = "ref class|CMediusers";
 
-    $props["groupe_sanguin"]  = "enum list|?|O|A|B|AB default|? show|0";
-    $props["rhesus"]          = "enum list|?|NEG|POS default|? show|0";
-    $props["groupe_ok"]       = "bool default|0 show|0";
+    $props["codes_cim"]          = "text";
+    $props["absence_traitement"] = "bool";
+    $props["derniere_mapa"]      = "date";
+    $props["groupe_sanguin"]     = "enum list|?|O|A|B|AB default|? show|0";
+    $props["rhesus"]             = "enum list|?|NEG|POS default|? show|0";
+    $props["groupe_ok"]          = "bool default|0 show|0";
 
     $props["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
     $props["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
