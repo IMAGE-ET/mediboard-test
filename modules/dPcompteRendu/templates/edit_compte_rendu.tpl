@@ -55,7 +55,7 @@
   Main.add(function() {
     Thumb.instance = CKEDITOR.instances.htmlarea;
 
-    {{if $compte_rendu->valide}}
+    {{if $compte_rendu->_is_locked}}
       Thumb.doc_lock = true;
     {{/if}}
 
