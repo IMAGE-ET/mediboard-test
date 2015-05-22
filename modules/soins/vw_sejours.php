@@ -46,12 +46,13 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
     $default_service_id = reset(explode("|", $default_services->{"g$group_id"}));
   }
 
-  // Récupération d'un éventuel praticien_id en session
+  // Récupération d'un éventuel praticien_id ou function_id en session
   if (!$service_id) {
     $praticien_id = CValue::getOrSession("praticien_id");
+    $function_id  = CValue::getOrSession("function_id");
   }
 
-  if (!$service_id && $default_service_id && !$praticien_id) {
+  if (!$service_id && $default_service_id && !$praticien_id && !$function_id) {
     $service_id = $default_service_id;
   }
 
@@ -61,7 +62,7 @@ if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour
 // Chargement de l'utilisateur courant
 $userCourant = CMediusers::get();
 // Preselection du praticien_id
-if (!$praticien_id && $userCourant->isPraticien() && !$service_id && !$praticien_id) {
+if (!$praticien_id && $userCourant->isPraticien() && !$service_id && !$praticien_id && !$function_id) {
   $praticien_id = $userCourant->user_id;
 }
 
