@@ -61,7 +61,7 @@ $where["sejour.type_pec"] = CSQLDataSource::prepareIn($type_pec);
 
 // filtre sur les types d'admission
 if ($type == "ambucomp") {
-  $where["sejour.type"] = " = 'ambu' OR `sejour`.`type` = 'comp')";
+  $where["sejour.type"] = " = 'ambu' OR `sejour`.`type` = 'comp'";
 }
 elseif ($type) {
   $where["sejour.type"] = " = '$type'";
