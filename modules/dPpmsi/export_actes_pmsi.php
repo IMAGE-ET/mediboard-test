@@ -98,9 +98,12 @@ switch ($object_class) {
 }
 
 // Facturation de l'opération où du séjour
-$object->facture = 1;
+$object->facture     = 1;
 if ($unlock_dossier) {
   $object->facture = 0;
+}
+else {
+  $object->_force_sent = true;
 }
 
 $object->loadLastLog();

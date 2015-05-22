@@ -63,10 +63,10 @@ class CSaObjectHandler extends CEAIObjectHandler {
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
           return;  
         }
-        
+
         switch (CAppUI::conf("sa trigger_sejour")) {
           case 'sortie_reelle':
-            if ($sejour->fieldModified('sortie_reelle')) {
+            if ($sejour->fieldModified('sortie_reelle') || isset($sejour->_force_sent) && $sejour->_force_sent === true) {
               $this->sendFormatAction("onAfterStore", $sejour);
 
               if (CAppUI::conf("sa facture_codable_with_sejour")) {
