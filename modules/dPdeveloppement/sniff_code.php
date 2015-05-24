@@ -24,8 +24,10 @@ $count = CMbArray::countLeafs($files);
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
 $types = $stats["-root-"];
-//mbTrace($stats, "Stats");
-//mbTrace($types, "Types");
+
+$existing_reports = $reports;
+CMbArray::removeValue("none", $existing_reports);
+$existing_count = count($existing_reports);
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
@@ -37,5 +39,6 @@ $smarty->assign("files", $files);
 $smarty->assign("count", $count);
 $smarty->assign("types", $types);
 $smarty->assign("reports", $reports);
+$smarty->assign("existing_count", $existing_count);
 $smarty->assign("stats", $stats);
 $smarty->display("sniff_code.tpl");

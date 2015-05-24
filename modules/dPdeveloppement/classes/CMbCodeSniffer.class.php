@@ -204,7 +204,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     }
 
     sumCounts(null, $this->stats);
-    
+
     return $this->stats;
   }
 

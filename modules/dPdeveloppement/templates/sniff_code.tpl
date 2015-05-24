@@ -58,7 +58,17 @@
 
 <div style="width: 45%; float: right;">
   <h1>Rapport des erreurs par type</h1>
-  <div id="tree-types">
-    {{mb_include template=tree_error_types dir=mediboard type=mediboard item=$types}}
-  </div>
+  {{if !$existing_count}}
+    <div class="small-info">
+      No code sniffing reports available.
+    </div>
+  {{elseif !count($types)}}
+    <div class="small-success">
+      No single warning found!
+    </div>
+  {{else}}
+    <div id="tree-types">
+      {{mb_include template=tree_error_types dir=mediboard type=mediboard item=$types}}
+    </div>
+  {{/if}}
 </div>
