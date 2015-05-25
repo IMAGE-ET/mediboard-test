@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -27,6 +27,8 @@ class CEchelleTri extends CMbObject {
   public $antidiabetique;
   public $pupille_droite;
   public $pupille_gauche;
+  public $reactivite_droite;
+  public $reactivite_gauche;
   public $ouverture_yeux;
   public $rep_verbale;
   public $rep_motrice;
@@ -49,19 +51,20 @@ class CEchelleTri extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["rpu_id"]          = "ref class|CRPU notNull";
-    $props["proteinurie"]     = "enum list|positive|negative";
-    $props["liquide"]         = "enum list|meconial|teinte";
-    $props["pupille_droite"]  = "num notNull min|0 max|3 default|0";
-    $props["pupille_gauche"]  = "num notNull min|0 max|3 default|0";
-    $props["antidiabet_use"]  = "enum list|NP|oui|non default|NP";
-    $props["anticoagul_use"]  = "enum list|NP|oui|non default|NP";
-    $props["antidiabetique"]  = "enum list|oral|insuline|oral_insuline";
-    $props["anticoagulant"]   = "enum list|sintrom|other";
-    $props["ouverture_yeux"]  = "enum list|jamais|douleur|bruit|spontane";
-    $props["rep_verbale"]     = "enum list|aucune|incomprehensible|inapproprie|confuse|oriente";
-    $props["rep_motrice"]     = "enum list|rien|decerebration|decortication|evitement|oriente|obeit";
-
+    $props["rpu_id"]            = "ref class|CRPU notNull";
+    $props["proteinurie"]       = "enum list|positive|negative";
+    $props["liquide"]           = "enum list|meconial|teinte";
+    $props["pupille_droite"]    = "num notNull min|0 max|3 default|0";
+    $props["pupille_gauche"]    = "num notNull min|0 max|3 default|0";
+    $props["antidiabet_use"]    = "enum list|NP|oui|non default|NP";
+    $props["anticoagul_use"]    = "enum list|NP|oui|non default|NP";
+    $props["antidiabetique"]    = "enum list|oral|insuline|oral_insuline";
+    $props["anticoagulant"]     = "enum list|sintrom|other";
+    $props["ouverture_yeux"]    = "enum list|jamais|douleur|bruit|spontane";
+    $props["rep_verbale"]       = "enum list|aucune|incomprehensible|inapproprie|confuse|oriente";
+    $props["rep_motrice"]       = "enum list|rien|decerebration|decortication|evitement|oriente|obeit";
+    $props["reactivite_droite"] = "enum list|reactif|non_reactif";
+    $props["reactivite_gauche"] = "enum list|reactif|non_reactif";
     return $props;
   }
 

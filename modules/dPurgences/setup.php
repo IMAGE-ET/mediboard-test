@@ -494,19 +494,22 @@ class CSetupdPurgences extends CSetup {
     $query = "ALTER TABLE `echelle_tri`
                 ADD INDEX (`rpu_id`);";
     $this->addQuery($query);
-
     $this->makeRevision("0.55");
 
     $query = "ALTER TABLE `extract_passages`
                 CHANGE `type` `type` ENUM ('rpu','urg','activite','uhcd') DEFAULT 'rpu';";
     $this->addQuery($query);
-
     $this->makeRevision("0.56");
 
     $query = "ALTER TABLE `extract_passages`
                 ADD `rpu_sender` VARCHAR (255);";
     $this->addQuery($query);
+    $this->makeRevision("0.57");
 
-    $this->mod_version = "0.57";
+    $query = "ALTER TABLE `echelle_tri`
+                ADD `reactivite_droite` ENUM ('reactif','non_reactif'),
+                ADD `reactivite_gauche` ENUM ('reactif','non_reactif')";
+    $this->addQuery($query);
+    $this->mod_version = "0.58";
   }  
 }

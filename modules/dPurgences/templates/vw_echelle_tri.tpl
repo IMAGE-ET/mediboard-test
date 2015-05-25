@@ -22,8 +22,10 @@
       {{mb_class  object=$echelle_tri}}
       {{mb_key    object=$echelle_tri}}
       <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-      <input type="hidden" name="pupille_gauche" value="{{$echelle_tri->pupille_gauche|default:0}}" />
-      <input type="hidden" name="pupille_droite" value="{{$echelle_tri->pupille_droite|default:0}}" />
+      <input type="hidden" name="pupille_gauche"    value="{{$echelle_tri->pupille_gauche|default:0}}" />
+      <input type="hidden" name="pupille_droite"    value="{{$echelle_tri->pupille_droite|default:0}}" />
+      <input type="hidden" name="reactivite_droite" value="{{$echelle_tri->reactivite_droite}}" />
+      <input type="hidden" name="reactivite_gauche" value="{{$echelle_tri->reactivite_gauche}}" />
       <table class="form">
         <tr>
           <td colspan="3" class="button">
@@ -33,12 +35,26 @@
         <tr>
           <th><span onmouseover="ObjectTooltip.createDOM(this,'pupilles_tooltip');">Pupilles</span></th>
           <td>
+            <div style="float: left;margin-right: 5px;font-size: 1.4em;text-align: center;cursor: default;">
+              <div style="height:12px;{{if $echelle_tri->reactivite_gauche == 'reactif'}}font-weight: bold;{{/if}}margin-top: -3px;"
+                   onclick="Motif.setReactivite('reactivite_gauche', 'reactif');" id="reactivite_gauche_reactif">+</div>
+              <div style="height:12px;{{if $echelle_tri->reactivite_gauche == 'non_reactif'}}font-weight: bold;{{/if}}"
+                   onclick="Motif.setReactivite('reactivite_gauche', 'non_reactif');" id="reactivite_gauche_non_reactif">-</div>
+            </div>
+
             <div style="border: 1px solid black;display: inline-block;width:20px;height:20px;border-radius: 50%;float: left;margin-right: 5px;" onclick="Motif.setPupilles('pupille_gauche', 1);">
               <div style="display: inline-block;width:0px;height:0px;border-radius: 50%;border: 2px solid black;margin:8px;" id="pupille_gauche_circle"></div>
             </div>
 
-            <div style="border: 1px solid black;display: inline-block;width:20px;height:20px;border-radius: 50%;" onclick="Motif.setPupilles('pupille_droite', 1);">
+            <div style="border: 1px solid black;display: inline-block;width:20px;height:20px;border-radius: 50%;float: left;" onclick="Motif.setPupilles('pupille_droite', 1);">
               <div style="border: 2px solid black;display: inline-block; width:0px;height:0px;border-radius: 50%;margin:8px;" id="pupille_droite_circle"></div>
+            </div>
+
+            <div style="float: left;margin-left: 6px;font-size: 1.4em;text-align: center;cursor: default;">
+              <div  style="height:12px;{{if $echelle_tri->reactivite_droite == 'reactif'}}font-weight: bold;{{/if}}margin-top: -3px;"
+                    onclick="Motif.setReactivite('reactivite_droite', 'reactif');" id="reactivite_droite_reactif">+</div>
+              <div  style="height:12px;{{if $echelle_tri->reactivite_droite == 'non_reactif'}}font-weight: bold;{{/if}}"
+                    onclick="Motif.setReactivite('reactivite_droite', 'non_reactif');" id="reactivite_droite_non_reactif">-</div>
             </div>
           </td>
           <td></td>

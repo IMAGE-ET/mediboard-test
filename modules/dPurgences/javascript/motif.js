@@ -164,6 +164,32 @@ Motif= {
     url.requestUpdate('form-echelle_tri');
   },
 
+  setReactivite: function(cote, new_value) {
+    form = getForm('formEchelleTri');
+    var value_change = new_value;
+    if (cote == 'reactivite_gauche') {
+      if ($V(form.reactivite_gauche) == new_value) {
+        value_change = '';
+      }
+      $V(form.reactivite_gauche, value_change);
+    }
+    else {
+      if ($V(form.reactivite_droite) == value_change) {
+        value_change = '';
+      }
+      $V(form.reactivite_droite, value_change);
+    }
+    return onSubmitFormAjax(form, {
+      onComplete: function() {
+        $(cote+'_reactif').setStyle({"font-weight": "normal"});
+        $(cote+'_non_reactif').setStyle({"font-weight": "normal"});
+        if (new_value == value_change) {
+          $(cote+'_'+new_value).setStyle({"font-weight": "bold"});
+        }
+      }
+    });
+  },
+
   setPupilles: function(cote, add) {
     form = getForm('formEchelleTri');
     var niveau = form.pupille_droite.value;
