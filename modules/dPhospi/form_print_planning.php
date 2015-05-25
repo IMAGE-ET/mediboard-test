@@ -27,6 +27,7 @@ $filter->_filter_type  = CValue::getOrSession("_filter_type");
 $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", "1");
 $filter->_coordonnees  = CValue::getOrSession("_coordonnees");
 $filter->_notes        = CValue::getOrSession("_notes");
+$filter->_by_date      = CValue::getOrSession("_by_date");
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -54,8 +55,8 @@ $tomorrow_fin   = "$tomorrow 21:00:00";
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("yesterday_deb"    , $yesterday_deb);
-$smarty->assign("yesterday_fin"    , $yesterday_fin);
+$smarty->assign("yesterday_deb", $yesterday_deb);
+$smarty->assign("yesterday_fin", $yesterday_fin);
 $smarty->assign("today_deb"    , $today_deb);
 $smarty->assign("today_fin"    , $today_fin);
 $smarty->assign("tomorrow_deb" , $tomorrow_deb);
@@ -67,4 +68,3 @@ $smarty->assign("listServ", $services);
 $smarty->assign("filter"  , $filter);
 
 $smarty->display("form_print_planning.tpl");
-

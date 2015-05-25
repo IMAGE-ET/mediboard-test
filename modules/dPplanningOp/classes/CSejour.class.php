@@ -360,6 +360,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ccam_libelle;
   public $_coordonnees;
   public $_notes;
+  public $_by_date;
 
   // Object tool field
   public $_modifier_sortie;
@@ -589,6 +590,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_ccam_libelle"]     = "bool default|0";
     $props["_coordonnees"]      = "bool default|0";
     $props['_notes']            = 'bool default|0';
+    $props['_by_date']          = 'bool default|0';
     $props["_adresse_par"]      = "bool";
     $props["_adresse_par_prat"] = "str";
     $props["_etat"]             = "enum list|preadmission|encours|cloture";

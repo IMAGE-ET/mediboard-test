@@ -30,6 +30,7 @@ $filter->_ccam_libelle  = CValue::get("_ccam_libelle", "1");
 $filter->_coordonnees   = CValue::get("_coordonnees", 0);
 $filter->_notes         = CValue::get("_notes", 0);
 $filter->_nb_days       = CValue::get("_nb_days", 0);
+$filter->_by_date       = CValue::get("_by_date", 0);
 
 if ($filter->_nb_days) {
   $filter->_date_max = CMbDT::date("+$filter->_nb_days days", CMbDT::date($filter->_date_min)) . " 21:00:00";
