@@ -15,7 +15,7 @@
   <input type="hidden" name="del" value="0"/>
   {{mb_key object=$object}}
 
-  <table class="form">
+  <table class="main form">
     {{mb_include module=system template=inc_form_table_header}}
 
     <tr>
@@ -103,16 +103,38 @@
       <td>{{mb_field object=$object field=adeli style="width: 13em;"}}</td>
     </tr>
 
+    {{if $object->_id}}
+      <tr>
+        <th class="category" colspan="2">{{tr}}CSalutation.mine{{/tr}}</th>
+      </tr>
+
+      <tr>
+        <th>{{mb_label object=$object field=_starting_formula}}</th>
+        <td class="text compact">{{mb_value object=$object field=_starting_formula style="width: 90%; box-sizing: border-box;"}}</td>
+      </tr>
+
+      <tr>
+        <th>{{mb_label object=$object field=_closing_formula}}</th>
+        <td class="text compact">{{mb_value object=$object field=_closing_formula style="width: 90%; box-sizing: border-box;"}}</td>
+      </tr>
+    {{/if}}
+
     <tr>
       <td class="button" colspan="2">
         {{if $object->_id}}
           <button class="save">{{tr}}Edit{{/tr}}</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">{{tr}}Delete{{/tr}}</button>
+
+          <button class="search" type="button" onclick="Salutation.manageSalutations('{{$object->_class}}', '{{$object->_id}}');">
+            {{tr}}CSalutation-action-Manage salutations{{/tr}}
+          </button>
+
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{else}}
           <button class="save">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
-
   </table>
 </form>

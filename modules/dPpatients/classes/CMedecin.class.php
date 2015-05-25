@@ -43,6 +43,12 @@ class CMedecin extends CPerson {
   // form fields
   public $_article_long;
 
+  /** @var string Current user starting formula */
+  public $_starting_formula;
+
+  /** @var string Current user closing formula */
+  public $_closing_formula;
+
   // Object References
   public $_ref_patients;
 
@@ -59,9 +65,10 @@ class CMedecin extends CPerson {
    * @see parent::getSpec()
    */
   function getSpec() {
-    $spec = parent::getSpec();
+    $spec        = parent::getSpec();
     $spec->table = 'medecin';
     $spec->key   = 'medecin_id';
+
     return $spec;
   }
 
@@ -69,7 +76,7 @@ class CMedecin extends CPerson {
    * @see parent::getBackProps()
    */
   function getBackProps() {
-    $backProps = parent::getBackProps();
+    $backProps                            = parent::getBackProps();
     $backProps["patients_traites"]        = "CPatient medecin_traitant";
     $backProps["patients_correspondants"] = "CCorrespondant medecin_id";
     $backProps["sejours_adresses"]        = "CSejour adresse_par_prat_id";
@@ -77,6 +84,7 @@ class CMedecin extends CPerson {
     $backProps["echanges_hprim21"]        = "CEchangeHprim21 object_id";
     $backProps["echanges_hprimsante"]     = "CExchangeHprimSante object_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
+
     return $backProps;
   }
 
@@ -85,31 +93,34 @@ class CMedecin extends CPerson {
    */
   function getProps() {
     $props = parent::getProps();
-    
+
     $medecin_strict = (CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '');
 
-    $props["function_id"]         = "ref class|CFunctions";
-    $props["nom"]                 = "str notNull confidential seekable";
-    $props["prenom"]              = "str seekable";
-    $props["jeunefille"]          = "str confidential";
-    $props["sexe"]                = "enum list|u|f|m default|u";
-    $props["adresse"]             = "text$medecin_strict confidential";
-    $props["ville"]               = "str$medecin_strict confidential seekable";
-    $props["cp"]                  = "numchar$medecin_strict maxLength|5 confidential";
-    $props["tel"]                 = "phone confidential$medecin_strict";
-    $props["fax"]                 = "phone confidential";
-    $props["portable"]            = "phone confidential";
-    $props["email"]               = "str confidential";
-    $props["disciplines"]         = "text seekable";
-    $props["orientations"]        = "text";
-    $props["complementaires"]     = "text";
-    $props["type"]                = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|".
-                                    "pharmacie|maison_medicale|autre default|medecin";
-    $props["adeli"]               = "numchar length|9 confidential mask|99S9S99999S9";
-    $props["rpps"]                = "numchar length|11 confidential mask|99999999999 control|luhn";
-    $props["email_apicrypt"]      = "email confidential";
-    $props["last_ldap_checkout"]  = "date";
-    
+    $props["function_id"]        = "ref class|CFunctions";
+    $props["nom"]                = "str notNull confidential seekable";
+    $props["prenom"]             = "str seekable";
+    $props["jeunefille"]         = "str confidential";
+    $props["sexe"]               = "enum list|u|f|m default|u";
+    $props["adresse"]            = "text$medecin_strict confidential";
+    $props["ville"]              = "str$medecin_strict confidential seekable";
+    $props["cp"]                 = "numchar$medecin_strict maxLength|5 confidential";
+    $props["tel"]                = "phone confidential$medecin_strict";
+    $props["fax"]                = "phone confidential";
+    $props["portable"]           = "phone confidential";
+    $props["email"]              = "str confidential";
+    $props["disciplines"]        = "text seekable";
+    $props["orientations"]       = "text";
+    $props["complementaires"]    = "text";
+    $props["type"]               = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|" .
+      "pharmacie|maison_medicale|autre default|medecin";
+    $props["adeli"]              = "numchar length|9 confidential mask|99S9S99999S9";
+    $props["rpps"]               = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $props["email_apicrypt"]     = "email confidential";
+    $props["last_ldap_checkout"] = "date";
+
+    $props["_starting_formula"] = "str";
+    $props["_closing_formula"]  = "str";
+
     return $props;
   }
 
@@ -139,8 +150,10 @@ class CMedecin extends CPerson {
     $sex_found = CFirstNameAssociativeSex::getSexFor($this->prenom);
     if ($sex_found && $sex_found != "u") {
       $this->sexe = $sex_found;
+
       return true;
     }
+
     return false;
   }
 
@@ -160,7 +173,7 @@ class CMedecin extends CPerson {
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->nom = CMbString::upper($this->nom);
+    $this->nom    = CMbString::upper($this->nom);
     $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
 
     $this->mapPerson();
@@ -176,7 +189,7 @@ class CMedecin extends CPerson {
       $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue.$this->sexe");   // Mr, Mme
       if ($this->type) {
         $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
-      } 
+      }
     }
 
     if ($this->type == "medecin") {
@@ -203,7 +216,7 @@ class CMedecin extends CPerson {
    */
   function loadRefs() {
     // Backward references
-    $obj = new CPatient();
+    $obj                 = new CPatient();
     $this->_ref_patients = $obj->loadList("medecin_traitant = '$this->medecin_id'");
   }
 
@@ -224,19 +237,19 @@ class CMedecin extends CPerson {
    * @return self[]
    */
   function loadExactSiblings($strict_cp = true) {
-    $medecin = new self();
+    $medecin         = new self();
     $where           = array();
     $where["nom"]    = $this->_spec->ds->prepare(" = %", $this->nom);
     $where["prenom"] = $this->_spec->ds->prepare(" = %", $this->prenom);
-    
+
     if (!$strict_cp) {
-      $cp = substr($this->cp, 0, 2);
+      $cp          = substr($this->cp, 0, 2);
       $where["cp"] = " LIKE '{$cp}___'";
     }
     else {
       $where["cp"] = " = '$this->cp'";
     }
-    
+
     $medecin->escapeValues();
 
     $siblings = $medecin->loadList($where);
@@ -261,9 +274,9 @@ class CMedecin extends CPerson {
    */
   function toVcard(CMbvCardExport $vcard) {
     $vcard->addName($this->prenom, $this->nom, "");
-    $vcard->addPhoneNumber($this->tel     , 'WORK');
+    $vcard->addPhoneNumber($this->tel, 'WORK');
     $vcard->addPhoneNumber($this->portable, 'CELL');
-    $vcard->addPhoneNumber($this->fax     , 'FAX');
+    $vcard->addPhoneNumber($this->fax, 'FAX');
     $vcard->addEmail($this->email);
     $vcard->addAddress($this->adresse, $this->ville, $this->cp, "", 'WORK');
   }

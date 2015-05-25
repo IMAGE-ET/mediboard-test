@@ -10,6 +10,7 @@
 
 {{mb_script module=patients script=correspondant}}
 {{mb_script module=patients script=medecin}}
+{{mb_script module=patients script=salutation}}
 
 <script>
   Main.add(function() {
@@ -70,7 +71,7 @@
     <input type="hidden" name="start_med" value="{{$start_med}}" />
     <input type="hidden" name="step_med" value="{{$step_med}}" />
 
-    <table class="form">
+    <table class="main form">
       <tr>
         <th class="title" colspan="6">{{tr}}CMedecin.search{{/tr}}</th>
       </tr>

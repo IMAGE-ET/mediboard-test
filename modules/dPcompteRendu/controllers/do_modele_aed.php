@@ -218,6 +218,9 @@ if (isset($_POST["_source"])) {
     
     foreach ($destinataires as &$curr_dest) {
       $fields = array(
+        CMbString::htmlEntities("[Courrier - Formule de politesse - Début]"),
+        CMbString::htmlEntities("[Courrier - Formule de politesse - Fin]"),
+        CMbString::htmlEntities("[Courrier - nom destinataire]"),
         CMbString::htmlEntities("[Courrier - nom destinataire]"),
         CMbString::htmlEntities("[Courrier - adresse destinataire]"),
         CMbString::htmlEntities("[Courrier - cp ville destinataire]"),
@@ -242,6 +245,7 @@ if (isset($_POST["_source"])) {
         $_destinataire = $allDest[$_dest[1]][$_dest[2]];
         $_destinataire->nom = preg_replace("/(.*)(\([^\)]+\))/", '$1', $_destinataire->nom);
         $_destinataire->confraternite = $_destinataire->confraternite ? $_destinataire->confraternite."," : null;
+
         $copyTo .= $_destinataire->nom."; ";
         $copyToMulti .= $_destinataire->nom."<br />";
         $copyToComplet .= $_destinataire->nom. " - " .
@@ -257,6 +261,8 @@ if (isset($_POST["_source"])) {
       }
       
       $values = array(
+        $allDest[$curr_dest[1]][$curr_dest[2]]->starting_formula,
+        $allDest[$curr_dest[1]][$curr_dest[2]]->closing_formula,
         preg_replace("/(.*)(\([^\)]+\))/", '$1', $allDest[$curr_dest[1]][$curr_dest[2]]->nom),
         nl2br($allDest[$curr_dest[1]][$curr_dest[2]]->adresse),
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,

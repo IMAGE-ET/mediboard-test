@@ -69,4 +69,31 @@ class CPerson extends CMbObject {
    */
   function mapPerson() {
   }
+
+  /**
+   * Set starting and closing formulas
+   *
+   * @param integer|null $user_id Given owner id
+   *
+   * @return null
+   */
+  function loadSalutations($user_id = null) {
+    if (!$this->_id) {
+      return null;
+    }
+
+    $salutation               = new CSalutation();
+    $salutation->owner_id     = ($user_id) ? $user_id : CMediusers::get()->_id;
+    $salutation->object_class = $this->_class;
+    $salutation->object_id    = $this->_id;
+
+    if ($salutation->loadMatchingObject()) {
+      $this->_starting_formula = $salutation->starting_formula;
+      $this->_closing_formula  = $salutation->closing_formula;
+    }
+    else {
+      $this->_starting_formula = CAppUI::tr('CSalutation-starting_formula|default');
+      $this->_closing_formula  = CAppUI::tr('CSalutation-closing_formula|default');
+    }
+  }
 }

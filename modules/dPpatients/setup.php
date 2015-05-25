@@ -2865,7 +2865,21 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`derniere_mapa`);";
     $this->addQuery($query);
     
-    $this->mod_version = '2.40';
+    $this->makeRevision("2.40");
+    $query = "CREATE TABLE `salutation` (
+                `salutation_id`    INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `owner_id`         INT(11) UNSIGNED NOT NULL,
+                `object_class`     VARCHAR(255) NOT NULL,
+                `object_id`        INT(11) UNSIGNED NOT NULL,
+                `starting_formula` VARCHAR(255) NOT NULL,
+                `closing_formula`  VARCHAR(255) NOT NULL,
+                INDEX (`owner_id`),
+                INDEX `object` (`object_class`, `object_id`),
+                UNIQUE (`owner_id`, `object_class`, `object_id`)
+                )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.41';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

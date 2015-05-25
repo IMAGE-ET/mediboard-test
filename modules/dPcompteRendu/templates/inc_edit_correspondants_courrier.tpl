@@ -4,6 +4,7 @@
   {{if $patient->_id}}
     {{mb_script module=patients script=correspondant ajax=true}}
     {{mb_script module=patients script=medecin       ajax=true}}
+    {{mb_script module=patients script=salutation    ajax=true}}
   {{/if}}
   <script type="text/javascript">
     Main.add(function () {
@@ -93,6 +94,10 @@
         <td class="narrow">
           <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" id="editFrm__dest_{{$_class}}_{{$_index}}"
             {{if $correspondant->_id}}checked{{/if}} onclick="updateMergeButton()"/>
+
+          {{if $_class == 'CMedecin'}}
+            <button type="button" class="edit notext" onclick="Medecin.editMedecin('{{$_index}}');">{{tr}}Edit{{/tr}}</button>
+          {{/if}}
         </td>
         <td>
           <label for="editFrm__dest_{{$_class}}_{{$_index}}">
