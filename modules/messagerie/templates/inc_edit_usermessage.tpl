@@ -30,6 +30,13 @@
       var url = new Url("system", "ajax_seek_autocomplete");
       url.addParam("object_class", "CMediusers");
       url.addParam("input_field", element.name);
+      {{if $conf.messagerie.resctriction_level_messages == "group"}}
+        url.addParam("ljoin[functions_mediboard]", "functions_mediboard.function_id = users_mediboard.function_id");
+        url.addParam("where[group_id]", "{{$g}}");
+      {{/if}}
+      {{if $conf.messagerie.resctriction_level_messages == "function"}}
+        url.addParam("where[function_id]", "{{$usermessage->_ref_user_creator->function_id}}");
+      {{/if}}
       url.addParam("show_view", true);
       url.autoComplete(element, null, {
         minChars: 3,
