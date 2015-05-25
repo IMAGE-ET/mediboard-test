@@ -71,11 +71,6 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }
         
         if ($sejour->DP || $sejour->DR || (count($sejour->loadRefDossierMedical()->_codes_cim) > 0)) {
-          $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
-                     "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
-                     
-          $this->sendEvenementPMSI($evt, $sejour);
-
           $send_diags = true;
         }
       
