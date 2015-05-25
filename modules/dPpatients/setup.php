@@ -2853,8 +2853,6 @@ class CSetupdPpatients extends CSetup {
       ADD `majeur` ENUM ('0','1') DEFAULT '0' AFTER `annule`;";
     $this->addQuery($query);
 
-    $this->addPrefQuery('constantes_show_view_tableau', '0');
-
     $this->makeRevision("2.39");
     $query = "ALTER TABLE `dossier_medical`
                 ADD `medecin_traitant_id` INT (11) UNSIGNED AFTER `dossier_medical_id`,
@@ -2879,7 +2877,10 @@ class CSetupdPpatients extends CSetup {
                 )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.41';
+    $this->makeRevision("2.41");
+    $this->addPrefQuery('constantes_show_view_tableau', '0');
+
+    $this->mod_version = '2.42';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
