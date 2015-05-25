@@ -102,6 +102,9 @@ $object->facture = 1;
 if ($unlock_dossier) {
   $object->facture = 0;
 }
+else {
+  $object->_force_sent = true;
+}
 
 $object->loadLastLog();
 $object->countExchanges("pmsi", "evenementServeurActe");
