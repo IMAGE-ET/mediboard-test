@@ -109,7 +109,7 @@ class CDestinataire {
       $dest->adresse       = $medecin->adresse;
       $dest->cpville       = "$medecin->cp $medecin->ville";
       $dest->email         = $medecin->email;
-      $dest->civilite_nom  = $medecin->_article_long . " $medecin->_view";
+      $dest->civilite_nom  = $medecin->_longview;
 
       $dest->starting_formula = $medecin->_starting_formula;
       $dest->closing_formula  = $medecin->_closing_formula;

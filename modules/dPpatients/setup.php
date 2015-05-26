@@ -2880,7 +2880,12 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("2.41");
     $this->addPrefQuery('constantes_show_view_tableau', '0');
 
-    $this->mod_version = '2.42';
+    $this->makeRevision("2.42");
+    $query = "ALTER TABLE `medecin`
+            ADD `titre` ENUM ('m', 'mme', 'dr', 'pr') AFTER `sexe`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.43';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

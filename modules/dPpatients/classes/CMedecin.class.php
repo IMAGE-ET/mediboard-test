@@ -24,6 +24,10 @@ class CMedecin extends CPerson {
   public $prenom;
   public $jeunefille;
   public $sexe;
+
+  /** @var string Practitioner title */
+  public $titre;
+
   public $adresse;
   public $ville;
   public $cp;
@@ -41,7 +45,7 @@ class CMedecin extends CPerson {
   public $last_ldap_checkout;
 
   // form fields
-  public $_article_long;
+  public $_titre_long;
 
   /** @var string Current user starting formula */
   public $_starting_formula;
@@ -57,6 +61,9 @@ class CMedecin extends CPerson {
   public $_count_patients_correspondants;
   public $_has_siblings;
   public $_confraternite;
+
+  /** @var string Practitioner long view (with title in full text) */
+  public $_longview;
 
   /** @var CFunctions */
   public $_ref_function;
@@ -101,6 +108,7 @@ class CMedecin extends CPerson {
     $props["prenom"]             = "str seekable";
     $props["jeunefille"]         = "str confidential";
     $props["sexe"]               = "enum list|u|f|m default|u";
+    $props["titre"]              = "enum list|m|mme|dr|pr";
     $props["adresse"]            = "text$medecin_strict confidential";
     $props["ville"]              = "str$medecin_strict confidential seekable";
     $props["cp"]                 = "numchar$medecin_strict maxLength|5 confidential";
@@ -178,22 +186,28 @@ class CMedecin extends CPerson {
 
     $this->mapPerson();
 
-    if ($this->type == 'medecin') {
-      $this->_shortview    = "$this->nom $this->prenom";
-      $this->_view         = "Dr $this->nom $this->prenom";
-      $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue_article.$this->sexe");   // Mr le, Mme le
-    }
-    else {
-      $this->_shortview    = "$this->nom $this->prenom";
-      $this->_view         = "$this->nom $this->prenom";
-      $this->_article_long = CAppUI::tr("CMedecin-_civilite_longue.$this->sexe");   // Mr, Mme
-      if ($this->type) {
-        $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
-      }
-    }
+    $this->_shortview = "{$this->nom} {$this->prenom}";
+    $this->_view      = "{$this->nom} {$this->prenom}";
+    $this->_longview  = "{$this->nom} {$this->prenom}";
 
     if ($this->type == "medecin") {
       $this->_confraternite = $this->sexe == "f" ? "Chère consoeur" : "Cher confrère";
+
+      if (!$this->titre) {
+        $this->_view      = CAppUI::tr("CMedecin.titre.dr") . " {$this->nom} {$this->prenom}";
+        $this->_longview  = CAppUI::tr("CMedecin.titre.dr-long") . " {$this->nom} {$this->prenom}";
+      }
+    }
+
+    if ($this->titre) {
+      $this->_view       = CAppUI::tr("CMedecin.titre.{$this->titre}") . " {$this->_view}";
+      $this->_titre_long = CAppUI::tr("CMedecin.titre.{$this->titre}-long");
+      $this->_longview   = "{$this->_titre_long} {$this->nom} {$this->prenom}";
+    }
+
+    if ($this->type && $this->type != 'medecin') {
+      $this->_view     .= " ({$this->_specs['type']->_locales[$this->type]})";
+      $this->_longview .= " ({$this->_specs['type']->_locales[$this->type]})";
     }
   }
 

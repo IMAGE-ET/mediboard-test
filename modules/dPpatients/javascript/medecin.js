@@ -71,7 +71,12 @@ Medecin = {
         callback();
       });
     }
+  },
 
+  viewPrint : function(medecin_id) {
+    var url = new Url('dPpatients', 'print_medecin');
+    url.addParam('medecin_id', medecin_id);
+    url.popup(700, 550);
   }
 
 };

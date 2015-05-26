@@ -9,6 +9,77 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script>
+  checkSexAndTitle = function(form) {
+    var sex_input   = form.elements.sexe;
+    var title_input = form.elements.titre;
+    var type_input  = form.elements.type;
+
+    var sex = $V(sex_input);
+    var type = $V(type_input);
+
+    switch (sex) {
+      case 'm':
+        var list = ['mme'];
+        if (type == 'medecin') {
+          list.push('m');
+        }
+
+        disableOptions(title_input, list);
+        break;
+
+      case 'f':
+        var list = ['m'];
+        if (type == 'medecin') {
+          list.push('mme');
+        }
+
+        disableOptions(title_input, list);
+        break;
+
+      default:
+        $A(title_input.options).each(function (o) {
+          o.disabled = null;
+        });
+    }
+
+    if (type == 'medecin') {
+      $V(title_input, 'dr');
+    }
+    else {
+      switch (sex) {
+        case 'm':
+          $V(title_input, 'm');
+          break;
+
+        case 'f':
+          $V(title_input, 'mme');
+      }
+    }
+  };
+
+  disableOptions = function (select, list) {
+    $A(select.options).each(function (o) {
+      o.disabled = list.include(o.value);
+    });
+
+    if (select.value == '' || select.options[select.selectedIndex].disabled) {
+      selectFirstEnabled(select);
+    }
+  };
+
+  selectFirstEnabled = function(select){
+    var found = false;
+
+    $A(select.options).each(function (o,i) {
+      if (!found && !o.disabled && o.value != '') {
+        $V(select, o.value);
+        found = true;
+      }
+    });
+  };
+</script>
+
 <form method="post" name="editMedecin_{{$object->_id}}" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
   <input type="hidden" name="m" value="patients"/>
   <input type="hidden" name="dosql" value="do_medecins_aed"/>
@@ -35,7 +106,28 @@
 
     <tr>
       <th>{{mb_label object=$object field=sexe}}</th>
-      <td>{{mb_field object=$object field=sexe}}</td>
+      <td>
+        {{if $object->titre == ''}}
+          {{mb_field object=$object field=sexe onchange="checkSexAndTitle(this.form);"}}
+        {{else}}
+          {{mb_field object=$object field=sexe}}
+        {{/if}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$object field=titre}}</th>
+      <td>
+        {{assign var=titre_locales value=$object->_specs.titre}}
+        <select name="titre">
+          <option value="">&mdash; {{tr}}CMedecin-titre.select{{/tr}}</option>
+          {{foreach from=$titre_locales->_locales key=key item=_titre}}
+            <option value="{{$key}}" {{if $key == $object->titre}}selected="selected"{{/if}}>
+              {{tr}}CMedecin.titre.{{$key}}-long{{/tr}} &mdash; ({{$_titre}})
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
     </tr>
 
     <tr>
@@ -75,7 +167,13 @@
 
     <tr>
       <th>{{mb_label object=$object field=type}}</th>
-      <td>{{mb_field object=$object field=type style="width: 13em;"}}</td>
+      <td>
+        {{if $object->titre == ''}}
+          {{mb_field object=$object field=type onchange="checkSexAndTitle(this.form);" style="width: 13em;"}}
+        {{else}}
+          {{mb_field object=$object field=type style="width: 13em;"}}
+        {{/if}}
+      </td>
     </tr>
 
     <tr>
@@ -126,6 +224,10 @@
 
           <button class="search" type="button" onclick="Salutation.manageSalutations('{{$object->_class}}', '{{$object->_id}}');">
             {{tr}}CSalutation-action-Manage salutations{{/tr}}
+          </button>
+
+          <button class="print notext" type="button" onclick="Medecin.viewPrint('{{$object->_id}}');">
+            {{tr}}Print{{/tr}}
           </button>
 
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">

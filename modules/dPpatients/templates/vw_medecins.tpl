@@ -70,11 +70,11 @@
     <th>{{mb_title class=CMedecin field=nom}}</th>
     <th class="narrow">{{mb_title class=CMedecin field=sexe}}</th>
     <th>{{mb_title class=CMedecin field=adresse}}</th>
-    <th>{{mb_title class=CMedecin field=type}}</th>
+    <th class="narrow">{{mb_title class=CMedecin field=type}}</th>
     <th>{{mb_title class=CMedecin field=disciplines}}</th>
-    <th>{{mb_title class=CMedecin field=tel}}</th>
-    <th>{{mb_title class=CMedecin field=fax}}</th>
-    <th>{{mb_title class=CMedecin field=email}}</th>
+    <th class="narrow">{{mb_title class=CMedecin field=tel}}</th>
+    <th class="narrow">{{mb_title class=CMedecin field=fax}}</th>
+    <th class="narrow">{{mb_title class=CMedecin field=email}}</th>
     {{if $dialog}}
       <th id="vw_medecins_th_select">{{tr}}Select{{/tr}}</th>
     {{/if}}
@@ -115,14 +115,20 @@
       <td class="text">
         {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
       </td>
-      <td {{if $_medecin->sexe == 'u'}}class="empty" {{/if}}>{{mb_value object=$_medecin field=sexe}}</td>
-      <td class="text compact">{{$_medecin->adresse}}<br/>
-        {{mb_value object=$_medecin field=cp}} {{mb_value object=$_medecin field=ville}}</td>
-      <td>{{mb_value object=$_medecin field=type}}</td>
+
+      <td style="text-align: center;" {{if $_medecin->sexe == 'u'}}class="empty"{{/if}}>{{mb_value object=$_medecin field=sexe}}</td>
+
+      <td class="text compact">
+        {{$_medecin->adresse}}<br/>
+        {{mb_value object=$_medecin field=cp}} {{mb_value object=$_medecin field=ville}}
+      </td>
+
+      <td style="text-align: center;">{{mb_value object=$_medecin field=type}}</td>
       <td class="text">{{mb_value object=$_medecin field=disciplines}}</td>
       <td style="text-align: center;">{{mb_value object=$_medecin field=tel}}</td>
       <td style="text-align: center;">{{mb_value object=$_medecin field=fax}}</td>
       <td>{{mb_value object=$_medecin field=email}}</td>
+
       {{if $dialog}}
         <td>
           <button type="button" class="tick" onclick="setClose({{$_medecin->_id}}, '{{$_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
