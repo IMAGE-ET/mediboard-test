@@ -16,24 +16,24 @@ CCanDo::checkRead();
 $nom         = CValue::post("nom");
 $email       = CValue::post("email");
 $subject     = CValue::post("subject");
+$body        = CValue::post("body");
 $object_guid = CValue::post("object_guid");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
 /** @var $exchange_source CSourceSMTP */
-$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
+$exchange_source = CExchangeSource::get("mediuser-" . CMediusers::get()->_id, "smtp");
 
 $exchange_source->init();
 
-$body = '';
 if (CAppUI::pref('hprim_med_header')) {
-  $body .= $object->makeHprimHeader($exchange_source->email, $email);
+  $body = $object->makeHprimHeader($exchange_source->email, $email) . "\n" . $body;
 }
-$body .= 'Ce document vous a été envoyé via l\'application Mediboard.';
+
 try {
   $exchange_source->setRecipient($email, $nom);
   $exchange_source->setSubject($subject);
-  $exchange_source->setBody($body);
+  $exchange_source->setBody(nl2br($body));
 
   switch ($object->_class) {
     case "CCompteRendu":

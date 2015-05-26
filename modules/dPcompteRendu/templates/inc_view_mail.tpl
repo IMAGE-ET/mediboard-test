@@ -74,29 +74,34 @@
         return;
       }
 
-      var oform = getForm("formSendMail");
+      var form = getForm("formSendMail");
 
-      var url = new Url("dPcompteRendu", "ajax_send_mail");
+      var url = new Url("compteRendu", "ajax_send_mail");
       url.addParam("nom", nom);
       url.addParam("email", email);
-      url.addParam("subject", $V(oform.subject));
+      url.addParam("subject", $V(form.subject));
+      url.addParam("body", $V(form.body));
       url.addParam("object_guid", '{{$object_guid}}');
 
       document.body.down("#systemMsg").style.display="block";
-      url.requestUpdate(document.body.down("#systemMsg"), {method: 'post', getParameters: {m: 'dPcompteRendu', a: 'ajax_send_mail'}});
+      url.requestUpdate(document.body.down("#systemMsg"), {method: 'post', getParameters: {m: 'compteRendu', a: 'ajax_send_mail'}});
       Control.Modal.close();
     }
   }    
 </script>
 
 <form name="formSendMail" method="get">
-
   <p>
     <label>{{tr}}CCompteRendu.mail_subject{{/tr}} :
       <input type="text" name="subject" value="{{tr}}CCompteRendu.default_mail_subject{{/tr}}" style="width: 500px;"/>
     </label>
   </p>
-  <div style="height: 200px; overflow: auto;">
+  <p>
+    <label>{{tr}}CCompteRendu.mail_body{{/tr}} :
+      <textarea name="body">{{tr}}CCompteRendu.default_mail_body{{/tr}}</textarea>
+    </label>
+  </p>
+  <div style="overflow: auto;">
     <table style="width: 100%;" id="tabMail" class="tbl">
       <tr>
         <th>
@@ -113,7 +118,7 @@
       </tr>
     </table>
   </div>
-  <div style="padding-top: 20px; width: 100%; text-align: center;">
+  <div style="padding-top: 10px; width: 100%; text-align: center;">
     <button class="cancel" type="button" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
     <button class="tick" type="button" onclick="sendMail();">{{tr}}CCompteRendu.send_mail{{/tr}}</button>
   </div>
