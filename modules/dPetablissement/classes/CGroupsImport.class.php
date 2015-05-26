@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Forms
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -16,9 +16,9 @@
  */
 class CGroupsImport extends CMbXMLObjectImport {
   protected $name_suffix;
-  
+
   protected $imported = array();
-  
+
   protected $import_order = array(
     "//object[@class='CGroups']",
     "//object[@class='CService']",
@@ -68,16 +68,16 @@ class CGroupsImport extends CMbXMLObjectImport {
 
       $this->imported[$id] = true;
     }
-    
+
     $this->name_suffix = " (import du ".CMbDT::dateTime().")";
-    
+
     $map_to = isset($this->map[$id]) ? $this->map[$id] : null;
 
     if (!$map_to) {
       //CAppUI::stepAjax("ID ignoré : '%s'", UI_MSG_OK, $id);
       return;
     }
-    
+
     switch ($_class) {
       // --------------------
       case "CGroups":
@@ -96,12 +96,12 @@ class CGroupsImport extends CMbXMLObjectImport {
             /** @var CMbObject $_object */
             $_object = CStoredObject::loadFromGuid($map_to);
 
-            $this->storeIdExt($_object, $map_to);
+            $this->storeIdExt($_object, $id);
 
             $map_to = $_object->_guid;
         }
         break;
-      
+
       case "CSalle":
       case "CFunctions":
       case "CService":
@@ -117,15 +117,15 @@ class CGroupsImport extends CMbXMLObjectImport {
 
             if ($msg = $_object->store()) {
               if (
-                  $_object instanceof CGroups ||
-                  $_object instanceof CFunctions
+                $_object instanceof CGroups ||
+                $_object instanceof CFunctions
               ) {
                 $_object->text .= $this->name_suffix;
               }
               elseif (
-                  $_object instanceof CSalle ||
-                  $_object instanceof CService ||
-                  $_object instanceof CBlocOperatoire
+                $_object instanceof CSalle ||
+                $_object instanceof CService ||
+                $_object instanceof CBlocOperatoire
               ) {
                 $_object->nom .= $this->name_suffix;
               }
@@ -135,6 +135,8 @@ class CGroupsImport extends CMbXMLObjectImport {
               CAppUI::stepAjax($msg, UI_MSG_WARNING);
               break;
             }
+
+            $this->storeIdExt($_object, $id);
             CAppUI::stepAjax("%s '%s' créé", UI_MSG_OK, CAppUI::tr($_object->_class), $_object);
 
             $map_to = $_object->_guid;
@@ -144,19 +146,19 @@ class CGroupsImport extends CMbXMLObjectImport {
             /** @var CMbObject $_object */
             $_object = CStoredObject::loadFromGuid($map_to);
 
-            $this->storeIdExt($_object, $map_to);
+            $this->storeIdExt($_object, $id);
 
             $map_to = $_object->_guid;
         }
         break;
-      
+
       default:
         // Ignore object
         break;
     }
-    
+
     $this->map[$id] = $map_to;
-    
+
     $this->imported[$id] = true;
   }
 }
