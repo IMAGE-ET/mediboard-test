@@ -62,6 +62,20 @@
     url.requestUpdate("out");
   });
 
+  EditCheckList = {
+    url: null,
+    edit: function (bloc_id, date, type) {
+      var url = new Url('salleOp', 'ajax_edit_checklist');
+      url.addParam('date', date);
+      url.addParam('bloc_id', bloc_id);
+      url.addParam('type', type);
+      url.requestModal();
+      url.modalObject.observe("afterClose", function () {
+        location.reload();
+      });
+    }
+  };
+
   function refreshTabsReveil() {
     refreshTabReveil("preop");
     refreshTabReveil("encours");

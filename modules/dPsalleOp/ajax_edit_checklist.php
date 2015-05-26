@@ -12,6 +12,7 @@
 // Récupération des paramètres
 $date     = CValue::getOrSession("date", CMbDT::date());
 $salle_id = CValue::getOrSession("salle_id");
+$bloc_id  = CValue::getOrSession("bloc_id");
 $type     = CValue::getOrSession("type", "ouverture_salle");
 
 // Récupération de l'utilisateur courant
@@ -24,13 +25,21 @@ $currUser->isPraticien();
 $salle = new CSalle();
 $salle->load($salle_id);
 
+$bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
+
 // Vérification de la check list journalière
 $daily_check_lists = array();
 $daily_check_list_types = array();
 $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
 if ($require_check_list) {
-  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, $type);
+  if ($bloc->_id) {
+    list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($bloc, $date, $type);
+  }
+  else {
+    list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, $type);
+  }
 
   if ($check_list_not_validated == 0) {
     $require_check_list = false;

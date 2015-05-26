@@ -155,7 +155,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       "daily_check_list_type_link" => "daily_check_list_type_link.list_type_id = daily_check_list_type.daily_check_list_type_id",
     );
     /** @var CDailyCheckListType[] $daily_check_list_types  */
-    $daily_check_list_types = $daily_check_list_type->loadGroupList($where, "title", null, null, $ljoin);
+    $daily_check_list_types = $daily_check_list_type->loadGroupList($where, "title", null, "daily_check_list_type_id", $ljoin);
 
     /** @var CDailyCheckList[] $daily_check_lists  */
     $daily_check_lists = array();
@@ -208,7 +208,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $props['_validator_password'] = 'password notNull';
     $props['_date_min']    = 'date';
     $props['_date_max']    = 'date';
-    $props['_type']        = 'enum list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle';
+    $props['_type']        = 'enum list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle|fermeture_sspi|fermeture_preop';
     return $props;
   }
 
@@ -437,7 +437,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $date_last_checklist = null;
 
     $ljoin = array();
-    $ljoin["daily_check_list_type"]      = "daily_check_list_type.daily_check_list_type_id = daily_check_list.list_type_id";
+    $ljoin["daily_check_list_type"] = "daily_check_list_type.daily_check_list_type_id = daily_check_list.list_type_id";
 
     $where = array();
     $where["daily_check_list.object_class"] = " = '$object->_class'";
@@ -451,12 +451,13 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       $log = new CUserLog();
       $log->object_id     = $checklist->_id;
       $log->object_class  = $checklist->_class;
-      $log->loadMatchingObject("date DESC");
+      $log->loadMatchingObject("date DESC", "user_log_id");
       $date_last_checklist = $log->date;
     }
-    else {
+    if (!$checklist->_id || !$date_last_checklist) {
       $date_last_checklist = $checklist->date;
     }
+
     return $date_last_checklist;
   }
 

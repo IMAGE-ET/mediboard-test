@@ -64,7 +64,8 @@ confirmCheckList = function(form) {
     confirm('Tous les points ont-ils été bien vérifiés ?') &&
     onSubmitFormAjax(form, {
       onComplete: function(){
-        if (HAS_classes.indexOf($V(form.object_class)) == -1 && $V(form.ref_type_list) != "fermeture_salle") {
+        if (HAS_classes.indexOf($V(form.object_class)) == -1 && $V(form.ref_type_list) != "fermeture_salle" && $V(form.ref_type_list) != "fermeture_sspi" && $V(form.ref_type_list) != "fermeture_preop"
+        && (($V(form.ref_type_list) != "ouverture_sspi" && $V(form.ref_type_list) != "ouverture_preop") || !$V(form.choose_moment_edit))) {
           location.reload();
         }
       }
@@ -132,10 +133,13 @@ Main.add(function(){
   <input type="hidden" name="type" value="{{$check_list->type}}" />
   <input type="hidden" name="list_type_id" value="{{$check_list->list_type_id}}" />
   <input type="hidden" name="ref_type_list" value="{{$check_list->_ref_list_type->type}}" />
+  <input type="hidden" name="choose_moment_edit" value="{{"dPsalleOp CDailyCheckList choose_moment_edit"|conf:"CGroups-$g"}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
   <input type="hidden" name="group_id" value="{{$check_list->group_id|ternary:$check_list->group_id:$g}}" />
 
-  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->_ref_list_type->type == "fermeture_salle"
+  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) ||
+  ($check_list->_ref_list_type->type == "fermeture_salle" || $check_list->_ref_list_type->type == "fermeture_sspi" || $check_list->_ref_list_type->type == "fermeture_preop" ||
+    ("dPsalleOp CDailyCheckList choose_moment_edit"|conf:"CGroups-$g" && ($check_list->_ref_list_type->type == "ouverture_sspi" || $check_list->_ref_list_type->type == "ouverture_preop")))
   || $check_list->_ref_list_type->type == "intervention"}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}}" />
   {{else}}

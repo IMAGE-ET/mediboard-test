@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 $date              = CValue::getOrSession("date", CMbDT::date());
 $bloc_id           = CValue::getOrSession("bloc_id");
 $type              = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
@@ -132,7 +131,7 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 $nb_sorties_non_realisees = 0;
 $now = CMbDT::time();
 
-$keywords = explode("|", CAppUI::conf("soins Other ignore_allergies", CGroups::loadCurrent()->_guid));
+$keywords = explode("|", CAppUI::conf("soins Other ignore_allergies", $group));
 
 /** @var $op COperation */
 foreach ($listOperations as $op) {
@@ -202,8 +201,11 @@ if (in_array($type, array("ops", "reveil")) && Cmodule::getActive("dPpersonnel")
 $daily_check_lists = array();
 $daily_check_list_types = array();
 $require_check_list = 0;
+$require_check_list_close = 0;
 $listChirs   = array();
 $listAnesths = array();
+$date_close_checklist = null;
+$date_open_checklist  = null;
 
 if ($type == "reveil" || $type == "preop") {
   $bloc = new CBlocOperatoire();
@@ -211,14 +213,25 @@ if ($type == "reveil" || $type == "preop") {
     $salle = reset($listSalles);
     $bloc = $salle->loadRefBloc();
   }
+
   $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil") && $date >= CMbDT::date();
+  $require_check_list_close = $require_check_list;
   $type_checklist = $type == "reveil" ? "ouverture_sspi" : "ouverture_preop";
+  $type_close = $type == "reveil" ? "fermeture_sspi" : "fermeture_preop";
   if ($require_check_list) {
     list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($bloc, $date, $type_checklist);
     if ($check_list_not_validated == 0) {
       $require_check_list = false;
     }
   }
+  if ($require_check_list_close) {
+    list($check_list_not_validated_close, $daily_check_list_types_close, $daily_check_lists_close) = CDailyCheckList::getCheckLists($bloc, $date, $type_close);
+    if ($check_list_not_validated_close == 0) {
+      $require_check_list_close = false;
+    }
+  }
+  $date_close_checklist = CDailyCheckList::getDateLastChecklist($bloc, $type_close);
+  $date_open_checklist  = CDailyCheckList::getDateLastChecklist($bloc, $type_checklist);
 
   if ($require_check_list) {
     // Chargement de la liste du personnel pour le reveil
@@ -255,13 +268,16 @@ if (CValue::getOrSession("order_col_" . $type) == "_patient") {
 $smarty = new CSmartyDP();
 
 // Daily check lists
-$smarty->assign("require_check_list"    , $require_check_list);
-$smarty->assign("daily_check_lists"     , $daily_check_lists);
-$smarty->assign("daily_check_list_types", $daily_check_list_types);
-$smarty->assign("listChirs"             , $listChirs);
-$smarty->assign("listAnesths"           , $listAnesths);
-$smarty->assign("type"                  , $type);
-$smarty->assign("bloc_id"               , $bloc_id);
+$smarty->assign("date_close_checklist"    , $date_close_checklist);
+$smarty->assign("date_open_checklist"     , $date_open_checklist);
+$smarty->assign("require_check_list"      , $require_check_list);
+$smarty->assign("require_check_list_close", $require_check_list_close);
+$smarty->assign("daily_check_lists"       , $daily_check_lists);
+$smarty->assign("daily_check_list_types"  , $daily_check_list_types);
+$smarty->assign("listChirs"               , $listChirs);
+$smarty->assign("listAnesths"             , $listAnesths);
+$smarty->assign("type"                    , $type);
+$smarty->assign("bloc_id"                 , $bloc_id);
 
 $smarty->assign("personnels"              , $personnels);
 $smarty->assign("order_way"               , $order_way);

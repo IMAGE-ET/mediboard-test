@@ -1,13 +1,12 @@
-<?php 
-
+<?php
 /**
- * $Id$
+ * $Id:$
  *  
  * @category SalleOp
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
@@ -24,6 +23,9 @@ CConfiguration::register(
         "hors_plage" => array(
           "type_anesth"         => "bool default|0",
           "heure_entree_sejour" => "bool default|0",
+        ),
+        "CDailyCheckList" => array(
+          "choose_moment_edit"  => "bool default|0",
         )
       )
     )

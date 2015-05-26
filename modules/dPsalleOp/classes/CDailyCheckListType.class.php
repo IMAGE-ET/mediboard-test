@@ -61,7 +61,7 @@ class CDailyCheckListType extends CMbObject {
 
     $props['group_id']        = 'ref notNull class|CGroups';
     $props['check_list_group_id'] = 'ref class|CDailyCheckListGroup';
-    $props['type']            = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle|intervention default|ouverture_salle';
+    $props['type']            = 'enum notNull list|ouverture_salle|ouverture_sspi|ouverture_preop|fermeture_salle|intervention|fermeture_sspi|fermeture_preop default|ouverture_salle';
     $props['title']           = 'str notNull';
     $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur|chir_interv";
     $props['description']     = 'text';

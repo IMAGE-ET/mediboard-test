@@ -1663,7 +1663,11 @@ class CSetupdPsalleOp extends CSetup {
     $query = "ALTER TABLE `daily_check_list_group`
                 ADD INDEX (`group_id`);";
     $this->addQuery($query);
+    $this->makeRevision('0.69');
 
-    $this->mod_version = '0.69';
+    $query = "ALTER TABLE `daily_check_list_type`
+                CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop','fermeture_salle','intervention','fermeture_sspi','fermeture_preop') NOT NULL DEFAULT 'ouverture_salle';";
+    $this->addQuery($query);
+    $this->mod_version = '0.70';
   }
 }

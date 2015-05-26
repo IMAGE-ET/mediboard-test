@@ -1,7 +1,9 @@
 {{mb_script module=salleOp script=check_list}}
-
 <script>
-Main.add(Control.Tabs.create.curry("list_type_tabs", true));
+  Main.add(function () {
+    var tab = Control.Tabs.create('list_type_tabs', true);
+    tab.setActiveTab('tab-'+'{{$list_type->type}}');
+  });
 </script>
 
 <table class="main layout">

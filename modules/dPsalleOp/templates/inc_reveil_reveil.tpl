@@ -2,7 +2,7 @@
 {{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 {{assign var=password_sortie value="dPsalleOp COperation password_sortie"|conf:"CGroups-$g"}}
 
-{{if $require_check_list}}
+{{if $require_check_list && !"dPsalleOp CDailyCheckList choose_moment_edit"|conf:"CGroups-$g"}}
   <table class="main layout">
     <tr>
       {{foreach from=$daily_check_lists item=check_list}}
@@ -23,6 +23,13 @@
     </tr>
   </table>
   {{mb_return}}
+{{/if}}
+
+{{if $require_check_list_close}}
+  {{mb_include module=salleOp template=inc_last_valid_checklist date_checklist=$date_close_checklist object_id=$bloc_id type='fermeture_sspi'}}
+{{/if}}
+{{if "dPsalleOp CDailyCheckList choose_moment_edit"|conf:"CGroups-$g" && $require_check_list}}
+  {{mb_include module=salleOp template=inc_last_valid_checklist date_checklist=$date_open_checklist object_id=$bloc_id type='ouverture_sspi'}}
 {{/if}}
 
 <script>
