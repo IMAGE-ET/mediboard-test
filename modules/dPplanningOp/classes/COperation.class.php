@@ -1040,10 +1040,9 @@ class COperation extends CCodable implements IPatientRelated {
       }
     }
 
-
-
     $this->loadRefPraticien()->loadRefFunction();
     $this->loadRefAnesth()->loadRefFunction();
+    $this->loadRefPlageOp();
     $this->loadRefPatient();
     $this->_ref_sejour->_ref_patient->loadRefPhotoIdentite();
   }
