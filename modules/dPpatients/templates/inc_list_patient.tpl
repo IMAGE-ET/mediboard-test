@@ -11,7 +11,7 @@
 {{/if}}
 
 <script>
-  var Patient = {
+  Patient = {
     create : function(form) {
       var url = new Url("patients", "vw_edit_patients", "tab");
       url.addParam("patient_id", 0);

@@ -126,28 +126,26 @@
           {{tr}}Empty{{/tr}}
         </button>
         <button id="ins_list_patient_button_search" class="search" tabindex="10"
-                type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>
+                type="submit" onclick="Patient.search(this.form);">
           {{tr}}Search{{/tr}}
         </button>
 
-        {{if !$board}}
-          {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
-            <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
-              Lire Vitale
-            </button>
-          {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
-            {{mb_include module=mbHost template=inc_vitale operation='search'}}
-          {{elseif $modFSE && $modFSE->canRead()}}
-            {{mb_include module=fse template=inc_button_vitale}}
-          {{/if}}
+        {{if $app->user_prefs.LogicielLectureVitale == 'vitaleVision'}}
+          <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
+            Lire Vitale
+          </button>
+        {{elseif $app->user_prefs.LogicielLectureVitale == 'mbHost'}}
+          {{mb_include module=mbHost template=inc_vitale operation='search'}}
+        {{elseif $modFSE && $modFSE->canRead()}}
+          {{mb_include module=fse template=inc_button_vitale}}
+        {{/if}}
 
-          {{if $can->edit}}
-            <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
-              {{tr}}Create{{/tr}}
-              {{if $useVitale}}avec Vitale{{/if}}
-              {{if $useCoverCard}}avec Covercard{{/if}}
-            </button>
-          {{/if}}
+        {{if $can->edit}}
+          <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
+            {{tr}}Create{{/tr}}
+            {{if $useVitale}}avec Vitale{{/if}}
+            {{if $useCoverCard}}avec Covercard{{/if}}
+          </button>
         {{/if}}
       </td>
     </tr>
