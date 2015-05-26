@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -145,7 +145,7 @@ class CFactureRejet extends CMbObject {
     }
 
     $doc = new CMbXMLDocument("UTF-8");
-    $doc->loadXML($content_file);
+    $doc->loadXMLSafe($content_file);
 
     $xpath = new CMbXPath($doc);
     $xpath->registerNamespace("invoice", "http://www.forum-datenaustausch.ch/invoice");
@@ -193,10 +193,6 @@ class CFactureRejet extends CMbObject {
           $this->motif_rejet .= "($error_value/$valid_value)";
         }
       }
-    }
-
-    foreach ($rejected as $_rejet) {
-      mbTrace($_rejet, "rejet");
     }
 
     if ($msg = $this->store()) {
