@@ -16,9 +16,19 @@ class CPatientXMLImport extends CMbXMLObjectImport {
   protected $imported = array();
 
   protected $import_order = array(
+    // Structure objects
+    "//object[@class='CGroups']",
+    "//object[@class='CMediusers']",
+    "//object[@class='CUser']",
+    "//object[@class='CService']",
+    "//object[@class='CFunctions']",
+    "//object[@class='CBlocOperatoire']",
+    "//object[@class='CSalle']",
+
     "//object[@class='CPatient']",
     "//object[@class='CDossierMedical']",
     "//object[@class='CSejour']",
+    "//object[@class='COperation']",
     "//object[@class='CConsultation']",
     "//object[@class='CConstanteMedicale']",
     "//object[@class='CFile']",
@@ -43,9 +53,16 @@ class CPatientXMLImport extends CMbXMLObjectImport {
 
     $this->name_suffix = " (import du " . CMbDT::dateTime() . ")";
 
-    $map_to = isset($this->map[$id]) ? $this->map[$id] : null;
-
     $_class = $element->getAttribute("class");
+    $imported_object = null;
+
+    $idex = self::lookupObject($id);
+    if ($idex->_id) {
+      CAppUI::stepAjax("'$id' présent en base", UI_MSG_OK);
+      $this->imported[$id] = true;
+      $this->map[$id] = $idex->loadTargetObject()->_guid;
+      return;
+    }
 
     switch ($_class) {
       case "CPatient":
@@ -69,7 +86,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           CAppUI::stepAjax("Patient '%s' retrouvé", UI_MSG_OK, $_patient->_view);
         }
 
-        $map_to = $_patient->_guid;
+        $imported_object = $_patient;
         break;
 
       case "CDossierMedical":
@@ -88,10 +105,10 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           }
 
           CAppUI::stepAjax(CAppUI::tr($_object->_class) . " '%s' créé", UI_MSG_OK, $_object);
-          $map_to = $_object->_guid;
+          $imported_object = $_object;
         }
         else {
-          $map_to = $_dossier->_guid;
+          $imported_object = $_dossier;
         }
         break;
 
@@ -110,6 +127,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
         $_empty_atcd->loadMatchingObject();
 
         if (!$_empty_atcd->_id) {
+          $_new_atcd->_forwardRefMerging = true; // To accept any ATCD type
           if ($msg = $_new_atcd->store()) {
             CAppUI::stepAjax($msg, UI_MSG_WARNING);
             break;
@@ -118,17 +136,18 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           CAppUI::stepAjax("Antécédent '%s' créé", UI_MSG_OK, $_new_atcd->_view);
         }
 
-        $map_to = $_new_atcd->_guid;
+        $imported_object = $_new_atcd;
         break;
 
+      case "CPlageOp":
       case "CPlageconsult":
-        /** @var CPlageconsult $_plage */
+        /** @var CPlageOp|CPlageconsult $_plage */
         $_plage = $this->getObjectFromElement($element);
         $_plage->hasCollisions();
 
         if (count($_plage->_colliding_plages)) {
           $_plage = reset($_plage->_colliding_plages);
-          CAppUI::stepAjax("Patient '%s' retrouvé", UI_MSG_OK, $_plage->_view);
+          CAppUI::stepAjax("%s '%s' retrouvée", UI_MSG_OK, CAppUI::tr($_plage), $_plage->_view);
         }
         else {
           if ($msg = $_plage->store()) {
@@ -136,10 +155,10 @@ class CPatientXMLImport extends CMbXMLObjectImport {
             break;
           }
 
-          CAppUI::stepAjax("Patient '%s' créé", UI_MSG_OK, $_plage->_view);
+          CAppUI::stepAjax("%s '%s' créée", UI_MSG_OK, CAppUI::tr($_plage), $_plage->_view);
         }
 
-        $map_to = $_plage->_guid;
+        $imported_object = $_plage;
         break;
 
       case "CFile":
@@ -158,7 +177,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           CAppUI::stepAjax("Fichier '%s' créé", UI_MSG_OK, $_file->_view);
         }
 
-        $map_to = $_file->_guid;
+        $imported_object = $_file;
         break;
 
       case "CConsultation":
@@ -183,7 +202,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           CAppUI::stepAjax(CAppUI::tr($_object->_class) . " '%s' créé", UI_MSG_OK, $_object);
         }
 
-        $map_to = $_object->_guid;
+        $imported_object = $_object;
         break;
 
       case "CSejour":
@@ -206,7 +225,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
           CAppUI::stepAjax(CAppUI::tr($_object->_class) . " '%s' créé", UI_MSG_OK, $_object);
         }
 
-        $map_to = $_object->_guid;
+        $imported_object = $_object;
         break;
 
       default:
@@ -223,11 +242,27 @@ class CPatientXMLImport extends CMbXMLObjectImport {
         }
         CAppUI::stepAjax(CAppUI::tr($_object->_class) . " '%s' créé", UI_MSG_OK, $_object);
 
-        $map_to = $_object->_guid;
+        $imported_object = $_object;
         break;
     }
 
-    $this->map[$id] = $map_to;
+    // Store idex on new object
+    if ($imported_object) {
+      $idex->setObject($imported_object);
+      $idex->id400 = $id;
+      if ($msg = $idex->store()) {
+        CAppUI::stepAjax($msg, UI_MSG_WARNING);
+      }
+    }
+    else {
+      if (!in_array($_class, self::$_ignored_classes)) {
+        CAppUI::stepAjax("$id sans objet", UI_MSG_WARNING);
+      }
+    }
+
+    if ($imported_object) {
+      $this->map[$id] = $imported_object->_guid;
+    }
 
     $this->imported[$id] = true;
   }
@@ -267,7 +302,16 @@ class CPatientXMLImport extends CMbXMLObjectImport {
 
       $idex = $this->lookupObject($lookup_guid);
 
-      $this->map[$guid] = "$class-$idex->object_id";
+      if ($idex->_id) {
+        $this->map[$guid] = "$class-$idex->object_id";
+        $this->imported[$guid] = true;
+      }
+      else {
+        if ($class == "CMediusers") {
+          $this->map[$guid] = CMediusers::get()->_guid;
+          $this->imported[$guid] = true;
+        }
+      }
     }
     else {
       /** @var DOMElement $_element */

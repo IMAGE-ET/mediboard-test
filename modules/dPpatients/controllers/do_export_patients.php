@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Patients
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -18,6 +18,7 @@ $all_prats    = CValue::post("all_prats");
 $step         = (int)CValue::post("step");
 $start        = (int)CValue::post("start");
 $directory    = CValue::post("directory");
+$ignore_files = CValue::post("ignore_files");
 
 if (!$all_prats && !$praticien_id) {
   CAppUI::stepAjax("Veuillez choisir au moins un praticien, ou cocher 'Tous les praticiens'", UI_MSG_WARNING);
@@ -36,6 +37,7 @@ CValue::setSession("all_prats", $all_prats);
 CValue::setSession("step", $step);
 CValue::setSession("start", $start);
 CValue::setSession("directory", $directory);
+CValue::setSession("ignore_files", $ignore_files);
 
 $step = min($step, 1000);
 
@@ -61,16 +63,54 @@ $backrefs_tree = array(
     "patient_observation_result_sets",
     "patient_links",
     'arret_travail',
+    "facture_patient_consult",
+    "facture_patient_sejour",
   ),
   "CConsultation" => array(
     "files",
     "documents",
     "notes",
+    "consult_anesth",
+    "examaudio",
+    "examcomp",
+    "examnyha",
+    "exampossum",
+    "sejours_lies",
+    "intervs_liees",
+    "consults_liees",
   ),
+  "CConsultAnesth" => array(
+    "files",
+    "documents",
+    "notes",
+    "techniques",
+  ),
+
   "CSejour" => array(
     "files",
     "documents",
     "notes",
+    "dossier_medical",
+    "operations",
+
+    // Codable
+    "facturable",
+    "actes_ngap",
+    "actes_ccam",
+    "codages_ccam",
+    "actes_caisse",
+  ),
+  "COperation" => array(
+    "files",
+    "documents",
+    "notes",
+    "anesth_perops",
+
+    // Codable
+    "facturable",
+    "actes_ngap",
+    "actes_ccam",
+    "actes_caisse",
   ),
   "CCompteRendu" => array(
     "files",
@@ -79,6 +119,16 @@ $backrefs_tree = array(
     "antecedents",
     "traitements",
     "etats_dent",
+  ),
+
+  "CFactureCabinet" => array(
+    "items",
+    "reglements",
+  ),
+
+  "CFactureEtablissement" => array(
+    "items",
+    "reglements",
   ),
 );
 
@@ -95,6 +145,14 @@ $fwdrefs_tree = array(
     "plageconsult_id",
     "sejour_id",
     "grossesse_id",
+    "patient_id",
+    "consult_related_id",
+  ),
+  "CConsultAnesth" => array(
+    "consultation_id",
+    "operation_id",
+    "sejour_id",
+    "chir_id",
   ),
   "CPlageconsult" => array(
     "chir_id",
@@ -106,12 +164,86 @@ $fwdrefs_tree = array(
     "group_id",
     "grossesse_id",
   ),
+  "COperation" => array(
+    "sejour_id",
+    "chir_id",
+    "anesth_id",
+    "plageop_id",
+    "salle_id",
+    "type_anesth",
+    "consult_related_id",
+    "prat_visite_anesth_id",
+  ),
   "CGrossesse" => array(
     "group_id",
     "parturiente_id",
   ),
   "CMediusers" => array(
     "user_id",
+  ),
+  "CPlageOp" => array(
+    "chir_id",
+    "anesth_id",
+    "spec_id",
+    "salle_id",
+  ),
+
+  // -- Actes
+  "CActeCCAM" => array(
+    "executant_id",
+  ),
+  "CActeNGAP" => array(
+    "executant_id",
+  ),
+  "CActeCaisse" => array(
+    "executant_id",
+  ),
+  "CFraidDivers" => array(
+    "executant_id",
+  ),
+  // -- Fin Actes
+
+  "CFactureItem" => array(
+    "object_id",
+  ),
+
+  "CFactureLiaison" => array(
+    "facture_id",
+    "object_id",
+  ),
+
+  "CFactureCabinet" => array(
+    "group_id",
+    "patient_id",
+    "praticien_id",
+  ),
+
+  "CFactureEtablissement" => array(
+    "group_id",
+    "patient_id",
+    "praticien_id",
+  ),
+
+  "CTypeAnesth" => array(
+    "group_id",
+  ),
+
+  "CFile" => array(
+    "object_id",
+    "author_id",
+  ),
+
+  "CCompteRendu" => array(
+    "object_id",
+    "author_id",
+
+    "user_id",
+    "function_id",
+    "group_id",
+
+    "content_id",
+
+    "locker_id",
   ),
 );
 
@@ -189,7 +321,7 @@ foreach ($patients as $_patient) {
 
     $export = new CMbObjectExport($_patient, $backrefs_tree);
 
-    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir) {
+    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir, $ignore_files) {
       switch ($object->_class) {
         case "CCompteRendu":
           /** @var CCompteRendu $object */
@@ -197,6 +329,10 @@ foreach ($patients as $_patient) {
           break;
 
         case "CFile":
+          if ($ignore_files) {
+            break;
+          }
+
           /** @var CFile $object */
           $_dir = "$dir/$object->object_class/$object->object_id";
           CMbPath::forceDir($_dir);
@@ -228,4 +364,3 @@ CAppUI::stepAjax("%d patients au total", UI_MSG_OK, $patient_count);
 if ($patient_count) {
   CAppUI::js("nextStepPatients()");
 }
-
