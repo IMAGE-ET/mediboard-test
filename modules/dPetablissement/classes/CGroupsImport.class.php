@@ -96,7 +96,7 @@ class CGroupsImport extends CMbXMLObjectImport {
             /** @var CMbObject $_object */
             $_object = CStoredObject::loadFromGuid($map_to);
 
-            $this->storeIdExt($_object, $map_to);
+            $this->storeIdExt($_object, $id);
 
             $map_to = $_object->_guid;
         }
@@ -135,6 +135,8 @@ class CGroupsImport extends CMbXMLObjectImport {
               CAppUI::stepAjax($msg, UI_MSG_WARNING);
               break;
             }
+
+            $this->storeIdExt($_object, $id);
             CAppUI::stepAjax("%s '%s' créé", UI_MSG_OK, CAppUI::tr($_object->_class), $_object);
 
             $map_to = $_object->_guid;
@@ -144,7 +146,7 @@ class CGroupsImport extends CMbXMLObjectImport {
             /** @var CMbObject $_object */
             $_object = CStoredObject::loadFromGuid($map_to);
 
-            $this->storeIdExt($_object, $map_to);
+            $this->storeIdExt($_object, $id);
 
             $map_to = $_object->_guid;
         }
