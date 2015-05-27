@@ -851,13 +851,14 @@ Main.add( function(){
   </td>
 </tr>
 
-{{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+{{assign var=required_uf_soins value="dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+{{if $required_uf_soins != "no"}}
   <tr {{if !$conf.dPplanningOp.CSejour.easy_uf_soins}} class="modeExpert" {{/if}}>
     <th>
       {{mb_label object=$sejour field="uf_soins_id"}}
     </th>
     <td colspan="3">
-      <select name="uf_soins_id" class="ref notNull" style="width: 15em"
+      <select name="uf_soins_id" class="ref {{if $required_uf_soins == "obl"}}notNull{{/if}}" style="width: 15em"
               onchange="Value.synchronize(this, 'editSejour');">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$ufs.soins item=_uf}}

@@ -192,5 +192,6 @@ $smarty->assign("is_praticien"        , $is_praticien);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("list_mode_entree"    , $list_mode_entree);
+$smarty->assign("ufs"                 , CUniteFonctionnelle::getUFs());
 
 $smarty->display("vw_aed_rpu.tpl");

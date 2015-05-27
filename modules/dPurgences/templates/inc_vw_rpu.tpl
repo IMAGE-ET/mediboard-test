@@ -153,7 +153,7 @@ showEtabEntreeTransfert = function (mode) {
               </td>
 
             </tr>
-            
+
             <tr>
               <th>{{mb_label object=$rpu field="_entree"}}</th>
               <td>{{mb_value object=$rpu field="_entree"}}</td>

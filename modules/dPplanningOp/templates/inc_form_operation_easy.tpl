@@ -101,12 +101,14 @@
     </tr>
   {{/if}}
 
-  {{if $conf.dPplanningOp.CSejour.easy_uf_soins && "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+  {{assign var=required_uf_soins value="dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+  {{if $required_uf_soins != "no"}}
     <!-- Selection de l'unité de soins -->
     <tr>
       <th>{{mb_label object=$sejour field="uf_soins_id"}}</th>
       <td colspan="2">
-        <select name="uf_soins_id" class="ref notNull" onchange="Value.synchronize(this, 'editSejour');" style="width: 15em;">
+        <select name="uf_soins_id" class="ref {{if $required_uf_soins == "obl"}}notNull{{/if}}" style="width: 15em;"
+                onchange="Value.synchronize(this, 'editSejour');">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$ufs.soins item=_uf}}
             <option value="{{$_uf->_id}}" {{if $sejour->uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>

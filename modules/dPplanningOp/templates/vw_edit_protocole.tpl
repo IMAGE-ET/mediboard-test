@@ -437,7 +437,7 @@ updateListCPI = function(form) {
           </td>
         </tr>
 
-        {{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+        {{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g" != "no"}}
           <tr>
             <th>{{mb_label object=$protocole field="uf_soins_id"}}</th>
             <td>
@@ -585,7 +585,7 @@ updateListCPI = function(form) {
   <tr>
     <td colspan="2" style="text-align: center;">
     {{if $protocole->protocole_id}}
-      <button class="submit" type="button" onclick="copier()">Dupliquer</button>
+      <button class="copy" type="button" onclick="copier()">Dupliquer</button>
       <button class="submit" type="button" onclick="this.form.onsubmit();">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax: 1, typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: applyModifProtocole})">
         {{tr}}Delete{{/tr}}

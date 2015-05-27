@@ -27,7 +27,7 @@
     </td>
   </tr>
 
-  {{if !"dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+  {{if "dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g" == "no"}}
   <tr>
     <th>
       {{mb_label object=$object field=uf_soins_id}}

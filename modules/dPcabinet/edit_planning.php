@@ -312,5 +312,6 @@ $smarty->assign("modal"                  , $modal);
 $smarty->assign("callback"               , $callback);
 $smarty->assign("next_consult"           , $count_next_plage);
 $smarty->assign("display_elt"            , $display_elt);
+$smarty->assign("ufs"                    , CUniteFonctionnelle::getUFs());
 
 $smarty->display("edit_planning.tpl");

@@ -611,6 +611,25 @@
                       <th>{{mb_label object=$consult field="_facturable"}}</th>
                       <td>{{mb_field object=$consult field="_facturable" typeEnum="checkbox"}}</td>
                     </tr>
+
+                    {{assign var=required_uf_soins value="dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+                    {{if $required_uf_soins == "obl" && (!$consult->_id || $consult->sejour_id)}}
+                      <tr {{if !$conf.dPplanningOp.CSejour.easy_uf_soins}} class="modeExpert" {{/if}}>
+                        <th>
+                          {{mb_label object=$consult field="_uf_soins_id"}}
+                        </th>
+                        <td colspan="3">
+                          <select name="_uf_soins_id" class="ref {{if $required_uf_soins == "obl"}}notNull{{/if}}" style="width: 15em">
+                            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                            {{foreach from=$ufs.soins item=_uf}}
+                              <option value="{{$_uf->_id}}" {{if $consult->_uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
+                                {{mb_value object=$_uf field=libelle}}
+                              </option>
+                            {{/foreach}}
+                          </select>
+                        </td>
+                      </tr>
+                    {{/if}}
                   {{/if}}
 
                   <tr>

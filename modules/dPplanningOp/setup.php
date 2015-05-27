@@ -9,8 +9,15 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CSetupdPplanningOp
+ */
 class CSetupdPplanningOp extends CSetup {
-
+  /**
+   * Add default config CIP
+   *
+   * @return void
+   */
   protected function addDefaultConfigCIP() {
     $path = 'dPplanningOp CSejour use_charge_price_indicator';
 
@@ -21,6 +28,33 @@ class CSetupdPplanningOp extends CSetup {
     }
   }
 
+  /**
+   * Move config UF soins
+   *
+   * @return void
+   */
+  protected function moveConfigUFSoins() {
+    $affichage_uf = @CAppUI::conf("dPplanningOp CSejour easy_uf_soins");
+    $path         = "dPplanningOp CSejour required_uf_soins";
+
+    $query = "UPDATE `configuration` SET `value` = 'obl' WHERE  `value` = '1' AND `feature` = '$path'";
+    $this->ds->exec($query);
+
+    if ($affichage_uf == "0") {
+      $query = "UPDATE `configuration` SET `value` = 'no' WHERE  `value` = '0' AND `feature` = '$path'";
+    }
+    else {
+      $query = "UPDATE `configuration` SET `value` = 'opt' WHERE  `value` = '0' AND `feature` = '$path'";
+    }
+
+    $this->ds->exec($query);
+
+    return true;
+  }
+
+  /**
+   * @see parent::__construct
+   */
   function __construct() {
     parent::__construct();
 
@@ -1996,6 +2030,10 @@ class CSetupdPplanningOp extends CSetup {
       ADD `suture_fin` TIME AFTER `induction_fin`";
     $this->addQuery($query);
 
-    $this->mod_version = '2.16';
+    $this->makeRevision("2.16");
+
+    $this->addMethod("moveConfigUFSoins");
+
+    $this->mod_version = '2.17';
   }
 }

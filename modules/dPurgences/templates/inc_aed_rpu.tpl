@@ -231,10 +231,27 @@
       <td>{{mb_field object=$rpu field="_transport"  emptyLabel="Choose" onchange="changePecTransport(this);" style="width: 15em;"}}</td>
     </tr>
 
-    <!-- Selection du service -->
     <tr>
-      <th></th>
-      <td></td>
+      {{assign var=required_uf_soins value="dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
+      {{if $required_uf_soins != "no"}}
+      <th>
+        {{mb_label object=$rpu field="_uf_soins_id"}}
+      </th>
+      <td>
+        <select name="_uf_soins_id" class="ref {{if $required_uf_soins == "obl"}}notNull{{/if}}" style="width: 15em">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$ufs.soins item=_uf}}
+            <option value="{{$_uf->_id}}" {{if $rpu->_uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
+              {{mb_value object=$_uf field=libelle}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+      {{else}}
+        <th></th>
+        <td></td>
+      {{/if}}
+
       <th>{{mb_label object=$rpu field="pec_transport"}}</th>
       <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
     </tr>
@@ -261,7 +278,7 @@
         }
       });
     </script>
-
+    <!-- Selection du service -->
     <tr>
       <th>{{mb_label object=$rpu field="box_id"}}</th>
       <td style="vertical-align: middle;">

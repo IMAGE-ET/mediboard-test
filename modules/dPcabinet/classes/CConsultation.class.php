@@ -177,6 +177,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   public $_forfait_se;
   public $_forfait_sd;
   public $_facturable;
+  public $_uf_soins_id;
 
   // Filter Fields
   public $_date_min;
@@ -332,6 +333,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $props["_forfait_se"]               = "bool default|0";
     $props["_forfait_sd"]               = "bool default|0";
     $props["_facturable"]               = "bool default|1";
+    $props["_uf_soins_id"]              = "ref class|CUniteFonctionnelle seekable";
 
     $props["_date"]             = "date";
     $props["_datetime"]         = "dateTime show|1";
@@ -879,6 +881,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $facturable  = $this->_facturable;
     $forfait_se  = $this->_forfait_se;
     $forfait_sd  = $this->_forfait_sd;
+    $uf_soins_id = $this->_uf_soins_id;
 
     $this->_adjust_sejour = false;
     $this->loadRefSejour();
@@ -1134,15 +1137,17 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     // Forfait SE et facturable. A laisser apres le store()
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
       if ($forfait_se !== null || $facturable !== null || $forfait_sd !== null) {
-        $this->_ref_sejour->forfait_se = $forfait_se;
-        $this->_ref_sejour->forfait_sd = $forfait_sd;
-        $this->_ref_sejour->facturable = $facturable;
+        $this->_ref_sejour->forfait_se  = $forfait_se;
+        $this->_ref_sejour->forfait_sd  = $forfait_sd;
+        $this->_ref_sejour->facturable  = $facturable;
+        $this->_ref_sejour->uf_soins_id = $uf_soins_id;
         if ($msg = $this->_ref_sejour->store()) {
           return $msg;
         }
-        $this->_forfait_se = null;
-        $this->_forfait_sd = null;
-        $this->_facturable = null;
+        $this->_forfait_se  = null;
+        $this->_forfait_sd  = null;
+        $this->_facturable  = null;
+        $this->_uf_soins_id = null;
       }
     }
 
@@ -1255,9 +1260,10 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $sejour->loadRefRPU();
 
     if (CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      $this->_forfait_se = $sejour->forfait_se;
-      $this->_forfait_sd = $sejour->forfait_sd;
-      $this->_facturable = $sejour->facturable;
+      $this->_forfait_se  = $sejour->forfait_se;
+      $this->_forfait_sd  = $sejour->forfait_sd;
+      $this->_facturable  = $sejour->facturable;
+      $this->_uf_soins_id = $sejour->uf_soins_id;
     }
 
     return $this->_ref_sejour = $sejour;
