@@ -12,7 +12,7 @@
 {{mb_default var=root value=false}}
 
 {{if "didacticiel"|module_active}}
-  {{mb_script module="didacticiel" script="permanence_didacticiel" ajax=true}}
+  {{mb_script module="didacticiel" script="PermanentDidacticiel" ajax=true}}
   <a href="#1" title="{{tr}}portal-help{{/tr}}" onclick="PermanentDidacticiel.checkTutorials()">
     {{if $show_img}}
       <img src="style/{{if $root}}mediboard{{else}}{{$uistyle}}{{/if}}/images/icons/help.png"/>
