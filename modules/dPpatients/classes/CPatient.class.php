@@ -655,7 +655,7 @@ class CPatient extends CPerson {
 
     // Creation d'un patient
     $manage_identity_status = CAppUI::conf("dPpatients CPatient manage_identity_status", CGroups::loadCurrent());
-    if (!$this->_merging && !$manage_identity_status && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons") {
+    if (!$this->_merging && !$manage_identity_status) {
       if ($this->loadMatchingPatient(true, false) > 0) {
         return "Doublons détectés";
       }
