@@ -58,7 +58,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
       case 'CSejour':
         /** @var CSejour $sejour */
         $sejour = $mbObject;
-        
+
         if ($sejour->_no_synchro) {
           return;
         }
