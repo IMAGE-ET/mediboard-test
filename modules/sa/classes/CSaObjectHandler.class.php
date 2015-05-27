@@ -59,6 +59,10 @@ class CSaObjectHandler extends CEAIObjectHandler {
         /** @var CSejour $sejour */
         $sejour = $mbObject;
 
+        if ($sejour->_no_synchro) {
+          return;
+        }
+
         $send_only_with_type = CAppUI::conf("sa send_only_with_type");
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
           return;  
