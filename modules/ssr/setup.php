@@ -511,7 +511,7 @@ class CSetupssr extends CSetup {
     $this->makeRevision("0.47");
 
     $query = "ALTER TABLE `evenement_ssr`
-                ADD `type_seance` ENUM ('dediee','non_dediee','collective');";
+                ADD `type_seance` ENUM ('dediee','non_dediee','collective') DEFAULT 'dediee';";
     $this->addQuery($query);
 
     $query = "UPDATE `evenement_ssr`
