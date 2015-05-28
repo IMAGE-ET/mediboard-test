@@ -9,6 +9,8 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module=patients script=salutation ajax=true}}
+
 <script>
   checkSexAndTitle = function(form) {
     var sex_input   = form.elements.sexe;

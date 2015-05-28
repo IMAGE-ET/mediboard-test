@@ -10,7 +10,6 @@
 
 {{mb_script module=patients script=correspondant}}
 {{mb_script module=patients script=medecin}}
-{{mb_script module=patients script=salutation}}
 
 <script>
   Main.add(function() {
