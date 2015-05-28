@@ -801,7 +801,8 @@ class CRPU extends CMbObject {
    * @return CMotifReponse[]
    */
   function loadRefsReponses() {
-    return $this->_ref_reponses = $this->loadBackRefs("reponses_rpu");
+    $this->_ref_reponses = $this->loadBackRefs("reponses_rpu");
+    return $this->_ref_reponses = CModelObject::naturalSort($this->_ref_reponses, array("_degre"));
   }
 
   /**
@@ -822,12 +823,18 @@ class CRPU extends CMbObject {
     $this->completeField("ccmu");
     $this->orderCtes();
     $ccmu = 4;
+    $degre4 = array(0 => 0, 1 => 0);
     foreach ($this->loadRefsReponses() as $_reponse) {
-      if ($_reponse->result) {
+      if ($_reponse->result == 1) {
         $ccmu = $_reponse->_degre < $ccmu ? $_reponse->_degre : $ccmu;
       }
+      if ($_reponse->_degre == 4 && $_reponse->result != null) {
+        $degre4[$_reponse->result] ++;
+      }
     }
-    $this->ccmu = count($this->_ref_reponses) && $ccmu != 4 ? $ccmu : $this->_estimation_ccmu;
+
+    $ccmu = ($degre4[0] && !$degre4[1] && $ccmu == 4) ? 3 : $ccmu;
+    $this->ccmu = count($this->_ref_reponses) ? $ccmu : $this->_estimation_ccmu;
     if ($msg = $this->store()) {
       return $msg;
     }
@@ -866,72 +873,18 @@ class CRPU extends CMbObject {
       elseif ($pouls >= 51 && $pouls <= 129) { $degre = 3;}
       $this->_ref_cts_degre[$degre][] = 'pouls';
     }
-    //@todo refactorer la tension!
+
+    //Tensions
     if ($latest_constantes[0]->ta_gauche) {
-      $tas = $latest_constantes[0]->_ta_gauche_systole;
-      $tad = $latest_constantes[0]->_ta_gauche_diastole;
-      $degre = 4;
-      //Si la femme est enceinte et >= 20 SA et 1 mois PP
-      if ($grossesse->_id && $sa_grossesse >= 20) {
-        if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
-        elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
-        elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
-      }
-      else {
-        if ($tas >= 230 || $tas <= 70 || $tad >= 130) { $degre = 1;}
-        elseif (($tas > 180 && $tas < 230) || ($tas > 70 && $tas <= 90) || ($tad >= 115 && $tad < 130)) { $degre = 2;}
-        elseif (($tas > 90 && $tas <= 180) || ($tad < 115)) { $degre = 3;}
-      }
-      $this->_ref_cts_degre[$degre][] = 'ta_gauche';
-
-      if ($echelle_tri->proteinurie && $grossesse->_id && $tas >= 140 && $tad >= 90) {
-        $degre_prot = 3;
-        if ($echelle_tri->proteinurie == 'positive') {
-          $degre_prot = $degre >= 2 ? 1 : 2;
-        }
-        $this->_ref_cts_degre[$degre_prot][] = 'proteinurie';
-      }
-
-      //Index de choc
-      if ($pouls = $latest_constantes[0]->pouls) {
-        $degre = $pouls > $tas ? 2 : 3;
-        $this->_ref_cts_degre[$degre][] = 'index_de_choc';
-      }
+      $this->orderTA("ta_gauche", $latest_constantes[0]->_ta_gauche_systole, $latest_constantes[0]->_ta_gauche_diastole);
     }
-
     if ($latest_constantes[0]->ta_droit) {
-      $tas = $latest_constantes[0]->_ta_droit_systole;
-      $tad = $latest_constantes[0]->_ta_droit_diastole;
-      $degre = 4;
-      //Si la femme est enceinte et >= 20 SA et 1 mois PP
-      if ($grossesse->_id && $sa_grossesse >= 20) {
-        if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
-        elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
-        elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
-      }
-      else {
-        if ($tas >= 230 || $tas <= 70 || $tad >= 130) { $degre = 1; }
-        elseif (($tas > 180 && $tas < 230) || ($tas > 70 && $tas <= 90) || ($tad >= 115 && $tad < 130)) {$degre = 2;}
-        elseif (($tas > 90 && $tas <= 180) || ($tad < 115)) {$degre = 3;}
-      }
-      $this->_ref_cts_degre[$degre][] = 'ta_droit';
-
-      if ($echelle_tri->proteinurie && $grossesse->_id && $tas >= 140 && $tad >= 90) {
-        $degre_prot = 3;
-        if ($echelle_tri->proteinurie == 'positive') {
-          $degre_prot = $degre >= 2 ? 1 : 2;
-        }
-        $this->_ref_cts_degre[$degre_prot][] = 'proteinurie';
-      }
-
-      //Index de choc
-      if ($pouls = $latest_constantes[0]->pouls) {
-        $degre = $pouls > $tas ? 2 : 3;
-        if (!in_array('index_de_choc', $this->_ref_cts_degre[$degre])) {
-          $this->_ref_cts_degre[$degre][] = 'index_de_choc';
-        }
-      }
+      $this->orderTA("ta_droit", $latest_constantes[0]->_ta_droit_systole, $latest_constantes[0]->_ta_droit_diastole);
     }
+    if ($latest_constantes[0]->ta) {
+      $this->orderTA("ta", $latest_constantes[0]->_ta_systole, $latest_constantes[0]->_ta_diastole);
+    }
+
     if ($frequence = $latest_constantes[0]->frequence_respiratoire) {
       $degre = $frequence >35 || $frequence <= 8 ? 1 : 4;
       if (($frequence >= 25 && $frequence <= 35) || ($frequence >= 9 && $frequence <= 12)) { $degre = 2;}
@@ -975,16 +928,11 @@ class CRPU extends CMbObject {
       $degre = $taux > 50 ? 3 : 2;
       $this->_ref_cts_degre[$degre][$depth] = 'peak_flow';
     }
-    if ($eva = $latest_constantes[0]->EVA) {
-      $degre = $eva >= 8 ? 1 : 4;
-      if ($eva >= 2 && $eva <= 7) { $degre = 2;}
-      elseif ($eva < 2) { $degre = 3;}
-      $this->_ref_cts_degre[$degre][] = 'EVA';
-    }
+
     if ($contraction_uterine = $latest_constantes[0]->contraction_uterine) {
       $degre = $contraction_uterine >= 3 ? 1 : 4;
-      if ($contraction_uterine >= 1 && $contraction_uterine <= 2) { $degre = 2;}
-      elseif ($eva <= 1) { $degre = 3;}
+      if ($contraction_uterine > 1 && $contraction_uterine < 3) { $degre = 2;}
+      elseif ($contraction_uterine <= 1) { $degre = 3;}
       $this->_ref_cts_degre[$degre][] = 'contraction_uterine';
     }
     if ($latest_constantes[0]->bruit_foetal && $grossesse->_id && $sa_grossesse > 13) {
@@ -1017,5 +965,40 @@ class CRPU extends CMbObject {
     elseif (count($this->_ref_cts_degre[2])) {$this->_estimation_ccmu = 2;}
     elseif (count($this->_ref_cts_degre[3])) {$this->_estimation_ccmu = 3;}
     ksort($this->_ref_cts_degre);
+  }
+
+  function orderTA($cte, $tas, $tad) {
+    $latest_constantes = $this->_ref_latest_constantes;
+    $echelle_tri = $this->_ref_echelle_tri;
+    $grossesse = $this->_ref_sejour->_ref_grossesse;
+    $sa_grossesse = $grossesse->_semaine_grossesse;
+
+    $degre = 4;
+    //Si la femme est enceinte et >= 20 SA et 1 mois PP
+    if ($grossesse->_id && $sa_grossesse >= 20) {
+      if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
+      elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
+      elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
+    }
+    else {
+      if ($tas >= 230 || $tas <= 70 || $tad >= 130) { $degre = 1;}
+      elseif (($tas > 180 && $tas < 230) || ($tas > 70 && $tas <= 90) || ($tad >= 115 && $tad < 130)) { $degre = 2;}
+      elseif (($tas > 90 && $tas <= 180) || ($tad < 115)) { $degre = 3;}
+    }
+    $this->_ref_cts_degre[$degre][] = $cte;
+
+    if ($echelle_tri->proteinurie && $grossesse->_id && $tas >= 140 && $tad >= 90) {
+      $degre_prot = 3;
+      if ($echelle_tri->proteinurie == 'positive') {
+        $degre_prot = $degre >= 2 ? 1 : 2;
+      }
+      $this->_ref_cts_degre[$degre_prot][] = 'proteinurie';
+    }
+
+    //Index de choc
+    if ($pouls = $latest_constantes[0]->pouls) {
+      $degre = $pouls > $tas ? 2 : 3;
+      $this->_ref_cts_degre[$degre][] = 'index_de_choc';
+    }
   }
 }

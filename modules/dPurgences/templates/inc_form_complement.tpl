@@ -1,6 +1,6 @@
 <table class="form">
   <tr>
-    <th class="title">{{mb_label object=$rpu field="code_diag"}}</th>
+    <th class="title">{{mb_label class=CChapitreMotif field=nom}}</th>
     <th class="title">{{mb_label object=$rpu field="ccmu"}}</th>
   </tr>
   <tr>

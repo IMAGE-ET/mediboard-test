@@ -51,6 +51,9 @@
       refreshAntecedentsPatient();
     }
     requestInfoPatTri();
+    {{if $rpu->_ref_motif->_id}}
+      Motif.edit('{{$rpu->_ref_motif->_id}}', 1, 1);
+    {{/if}}
   });
 
   function searchMotif() {
@@ -61,6 +64,7 @@
   }
 </script>
 {{mb_script module=urgences script=motif ajax=true}}
+{{mb_script module=cabinet  script=dossier_medical ajax=true}}
 
 <table class="form">
   <tr>
@@ -118,11 +122,37 @@
             </td>
           </tr>
           <tr>
+            <th>{{mb_label object=$rpu field="ide_responsable_id"}}</th>
+            <td colspan="3">
+              {{mb_field object=$rpu field="ide_responsable_id" hidden=true}}
+              <input type="text" name="ide_responsable_id_view" class="autocomplete" value="{{$rpu->_ref_ide_responsable->_view}}"
+                     placeholder="&mdash; {{tr}}Choose{{/tr}}"/>
+              <script>
+                Main.add(function () {
+                  var form = getForm("editRPUtri");
+                  new Url("dPurgences", "ajax_ide_responsable_autocomplete")
+                    .autoComplete(form.ide_responsable_id_view, null, {
+                      minChars: 2,
+                      method: "get",
+                      select: "view",
+                      dropdown: true,
+                      updateElement: function(selected) {
+                        var id = selected.get("id");
+                        $V(form.ide_responsable_id, id);
+                        $V(form.ide_responsable_id_view, selected.get("name"));
+                      }.bind(form)
+                    });
+                });
+              </script>
+            </td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$rpu field="_entree"}}</th>
             <td>{{mb_field object=$rpu field="_entree" form="editRPUtri" register=true}}</td>
           </tr>
           <tr>
             <th>
+              {{mb_include module=patients template=inc_button_pat_anonyme form=editRPUtri patient_id=$rpu->_patient_id input_name="_patient_id"}}
               <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPatTri();refreshAntecedentsPatient();refreshConstantesMedicalesTri();" />
               {{mb_label object=$rpu field="_patient_id"}}
             </th>
@@ -232,16 +262,6 @@
           </tr>
 
           <tr>
-            <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
-            <td>
-              {{mb_field object=$rpu field="diag_infirmier" class="autocomplete" form="editRPUtri"
-              aidesaisie="validate: function() { form.onsubmit() },
-                                        validateOnBlur: 0,
-                                        resetSearchField: 0,
-                                        resetDependFields: 0"}}
-            </td>
-          </tr>
-          <tr>
             <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
             <td>
              {{mb_field object=$rpu field="pec_douleur" class="autocomplete" form="editRPUtri"
@@ -279,7 +299,8 @@
                 <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
                   {{tr}}CRPU-title-create{{/tr}}
                 </a>
-                
+
+                <button type="button" class="search" onclick="Modal.open($('modale_dossier_patient'));">Dossier patient</button>
                 {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
                 {{if $ecap_dhe}}
                   {{mb_include module=ecap template=inc_button_dhe_urgence sejour_id=$sejour->_id}}
@@ -308,29 +329,34 @@
       <div id="form-question_motif" style="margin-bottom: 2px;">
         {{mb_include module=urgences template=inc_form_questions_motif}}
       </div>
-      <table class="form">
-        <tr>
-          <th class="category" colspan="2">
-            Dossier Patient
-          </th>
-        </tr>
-        <tr>
-          <td colspan="2" rowspan="3">
-            <div id="antecedentsanesth">
-              {{if !$rpu->_id}}
-                <div class="empty">Aucun patient sélectionné</div>
-              {{/if}}
-            </div>
-          </td>
-        </tr>
-      </table>
-      
-      <fieldSet>
-        <legend>Infos patient</legend>
-        <div class="text" id="infoPat">
-          <div class="empty">Aucun patient sélectionné</div>
-        </div>
-      </fieldSet>
+
+      <div style="display: none;" id="modale_dossier_patient">
+        <table class="form">
+          <tr>
+            <th class="category" colspan="2">
+              Dossier Patient
+              <button type="button" class="cancel notext" style="float: right" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2" rowspan="3">
+              <div id="antecedentsanesth">
+                {{if !$rpu->_id}}
+                  <div class="empty">Aucun patient sélectionné</div>
+                {{/if}}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <fieldSet>
+          <legend>Infos patient</legend>
+          <div class="text" id="infoPat">
+            <div class="empty">Aucun patient sélectionné</div>
+          </div>
+        </fieldSet>
+      </div>
+      <div id="view_motif_rpu"></div>
     </td>
   </tr>
 </table>

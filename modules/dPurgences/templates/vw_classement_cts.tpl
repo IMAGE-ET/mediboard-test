@@ -8,7 +8,7 @@
     <tr>
       <th class="category" style="width: 33%;">Degré 1</th>
       <th class="category" style="width: 33%;">Degré 2</th>
-      <th class="category" style="width: 33%;">Degré 3</th>
+      <th class="category" style="width: 33%;">Degré 3 / Degré 4</th>
     </tr>
     <tr>
       {{foreach from=$rpu->_ref_cts_degre key=degre item=_ctes}}

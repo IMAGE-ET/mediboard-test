@@ -1,17 +1,19 @@
 {{assign var=echelle_tri value=$rpu->_ref_echelle_tri}}
 <script>
   Main.add(function () {
-    var form = getForm('formEchelleTri');
-    form.antidiabetique.hidden = 'hidden';
-    form.anticoagulant.hidden = 'hidden';
-    if (form.antidiabet_use.value == 'oui') {
-      form.antidiabetique.hidden = '';
-    }
-    if (form.anticoagul_use.value == 'oui') {
-      form.anticoagulant.hidden = '';
-    }
-    Motif.setPupilles('pupille_gauche', 0);
-    Motif.setPupilles('pupille_droite', 0);
+    {{if $rpu->_id}}
+      var form = getForm('formEchelleTri');
+      form.antidiabetique.hidden = 'hidden';
+      form.anticoagulant.hidden = 'hidden';
+      if (form.antidiabet_use.value == 'oui') {
+        form.antidiabetique.hidden = '';
+      }
+      if (form.anticoagul_use.value == 'oui') {
+        form.anticoagulant.hidden = '';
+      }
+      Motif.setPupilles('pupille_gauche', 0);
+      Motif.setPupilles('pupille_droite', 0);
+    {{/if}}
   });
 </script>
 

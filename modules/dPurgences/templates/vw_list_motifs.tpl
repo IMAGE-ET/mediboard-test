@@ -50,7 +50,7 @@
           {{if $readonly}}
             <td>
               {{if $motif->degre_min <= $rpu->_estimation_ccmu && $motif->degre_max >= $rpu->_estimation_ccmu}}
-                <button type="button" class="tick notext" onclick="Motif.selectDiag('{{$motif->code_diag}}');"></button>
+                <button type="button" class="tick notext" onclick="Motif.selectDiag('{{$motif->code_diag}}', '{{$motif->_id}}');"></button>
               {{/if}}
             </td>
           {{/if}}

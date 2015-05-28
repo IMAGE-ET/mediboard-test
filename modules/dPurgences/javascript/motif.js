@@ -42,17 +42,24 @@ Chapitre = {
 
 Motif= {
   modal: null,
-  edit: function(motif_id, readonly) {
+  edit: function(motif_id, readonly, modale) {
     var url = new Url('urgences', 'ajax_edit_chapitre_motif');
     url.addParam('motif_id', motif_id);
     if (!Object.isUndefined(readonly)) {
       url.addParam('readonly', readonly);
-      url.requestModal();
+    }
+    if (!Object.isUndefined(modale)) {
+      url.requestUpdate('view_motif_rpu');
     }
     else {
-      url.requestModal(800);
+      if (!Object.isUndefined(readonly)) {
+        url.requestModal();
+      }
+      else {
+        url.requestModal(800);
+      }
+      this.modal = url.modalObject;
     }
-    this.modal = url.modalObject;
   },
 
   onSubmit: function(form) {
@@ -101,7 +108,7 @@ Motif= {
     url.requestUpdate('form-edit-complement');
   },
 
-  selectDiag: function(code_diag) {
+  selectDiag: function(code_diag, motif_id) {
     var form = getForm("choiceMotifRPU");
     $V(form.code_diag, code_diag);
     return onSubmitFormAjax(form, {
@@ -109,6 +116,8 @@ Motif= {
         Control.Modal.close();
         Motif.refreshComplement();
         Motif.loadQuestionsRpu();
+        Motif.edit(motif_id, true, true);
+        $('view_motif_rpu').show();
       }
     });
   },
@@ -121,6 +130,7 @@ Motif= {
         }
         Motif.refreshComplement();
         Motif.loadQuestionsRpu();
+        $('view_motif_rpu').hide();
       }
     });
   },

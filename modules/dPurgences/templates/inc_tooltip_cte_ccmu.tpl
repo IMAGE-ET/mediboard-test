@@ -90,6 +90,32 @@
       <td><strong>Degré 3:</strong> TAS 81-159 ou TAD < 105</td>
     </tr>
   </table>
+  <table class="form" id="ta_tooltip">
+    <tr>
+      <th class="category" style="text-align: center">Tension</th>
+    </tr>
+    <tr>
+      <td><strong>Degré 1:</strong> TAS &ge; 230 ou &le; 70 ou TAD &ge; 130</td>
+    </tr>
+    <tr>
+      <td><strong>Degré 2:</strong> TAS 181-229 ou 71-90 ou TAD 115-129</td>
+    </tr>
+    <tr>
+      <td><strong>Degré 3:</strong> TAS 91-180 ou TAD < 115</td>
+    </tr>
+    <tr>
+      <th class="category" style="text-align: center">Femme enceinte</th>
+    </tr>
+    <tr>
+      <td><strong>Degré 1:</strong> TAS &ge; 180 ou &le; 70 ou TAD &ge; 115</td>
+    </tr>
+    <tr>
+      <td><strong>Degré 2:</strong> TAS 160-179 ou 71-80 ou TAD 105-114</td>
+    </tr>
+    <tr>
+      <td><strong>Degré 3:</strong> TAS 81-159 ou TAD < 105</td>
+    </tr>
+  </table>
   <table class="form" id="frequence_respiratoire_tooltip">
     <tr>
       <th class="category" style="text-align: center">Fréquence respiratoire</th>
@@ -232,13 +258,10 @@
       <th class="category" style="text-align: center">Douleur</th>
     </tr>
     <tr>
-      <td><strong>Degré 1:</strong> 8-10</td>
+      <td><strong>0:</strong> Absence Totale de Douleur</td>
     </tr>
     <tr>
-      <td><strong>Degré 2:</strong> 2-7</td>
-    </tr>
-    <tr>
-      <td><strong>Degré 3:</strong> 0-1</td>
+      <td><strong>10:</strong> Pire douleur inimaginable</td>
     </tr>
   </table>
 
