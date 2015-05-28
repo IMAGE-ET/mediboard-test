@@ -511,7 +511,7 @@ class CSetupssr extends CSetup {
     $this->makeRevision("0.47");
 
     $query = "ALTER TABLE `evenement_ssr`
-                ADD `type_seance` ENUM ('dediee','non_dediee','collective');";
+                ADD `type_seance` ENUM ('dediee','non_dediee','collective') DEFAULT 'dediee';";
     $this->addQuery($query);
 
     $query = "UPDATE `evenement_ssr`
@@ -542,7 +542,17 @@ class CSetupssr extends CSetup {
                 ADD `phases` VARCHAR (3),
                 ADD `nb_patient_seance` INT (11);";
     $this->addQuery($query);
-    $this->mod_version = "0.50";
+    $this->makeRevision("0.50");
+
+    $query = "ALTER TABLE `evenement_ssr`
+                CHANGE `type_seance` `type_seance` ENUM ('dediee','non_dediee','collective') DEFAULT 'dediee';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `evenement_ssr`
+        SET `evenement_ssr`.`type_seance` = 'dediee'
+        WHERE  `evenement_ssr`.`type_seance` IS NULL";
+    $this->addQuery($query);
+    $this->mod_version = "0.51";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";
