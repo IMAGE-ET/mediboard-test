@@ -27,12 +27,13 @@
 
 <table class="main layout">
   <tr>
-    <td class="narrow">
+    <td class="narrow" style="white-space: nowrap;">
       <ul id="tabs-main_patient_state" class="control_tabs_vertical">
         <li><a href="#patient_manage">{{tr}}CPatientState.manage{{/tr}}</a></li>
         <li><a href="#patient_stats">{{tr}}Stats{{/tr}}</a></li>
       </ul>
     </td>
+
     <td id="patient_manage">
       <script>
         Main.add(function () {

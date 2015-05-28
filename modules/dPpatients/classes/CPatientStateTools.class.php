@@ -2,7 +2,7 @@
 
 /**
  * $Id$
- *  
+ *
  * @category DPpatients
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -10,12 +10,11 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * Tools for state patient
  */
 class CPatientStateTools {
-
   static $color = array(
     "PROV"   => "#33B1FF",
     "VALI"   => "#CC9900",
@@ -32,7 +31,7 @@ class CPatientStateTools {
    *
    * @return int
    */
-  static function createStatus($state="PROV") {
+  static function createStatus($state = "PROV") {
     $ds = CSQLDataSource::get("std");
 
     $ds->exec("UPDATE `patients` SET `status`='$state' WHERE `status` IS NULL;");
@@ -47,7 +46,7 @@ class CPatientStateTools {
    */
   static function verifyStatus() {
     $patient = new CPatient();
-    $where = array(
+    $where   = array(
       "status" => "IS NULL"
     );
 
@@ -63,7 +62,7 @@ class CPatientStateTools {
    * @return array
    */
   static function getPatientStateByDate($before, $now) {
-    $ds = CSQLDataSource::get("std");
+    $ds      = CSQLDataSource::get("std");
     $request = new CRequest();
     $request->addSelect("DATE(datetime) AS 'date', state, count(*) as 'total'");
     $request->addTable("patient_state");
@@ -88,9 +87,12 @@ class CPatientStateTools {
       "type = 'merge'",
       "object_class = 'CPatient'"
     );
+
     $ds = CSQLDataSource::get("std");
+    $ds->exec("SET SESSION group_concat_max_len = 100000;");
+
     $request = new CRequest();
-    $request->addSelect("DATE(date) AS 'date', COUNT(*) AS 'total'");
+    $request->addSelect("DATE(date) AS 'date', COUNT(*) AS 'total', GROUP_CONCAT( object_id  SEPARATOR '-') as ids");
     $request->addTable("user_log");
     $request->addWhere($where);
     $request->addGroup("DATE(date)");
@@ -109,7 +111,7 @@ class CPatientStateTools {
     $series = array(
       "title"   => "CPatientState.proportion",
       "count"   => null,
-      "unit"    => CAppUI::tr("CPatient"),
+      "unit"    => lcfirst(CAppUI::tr("CPatient|pl")),
       "datum"   => array(),
       "options" => null
     );
@@ -122,19 +124,19 @@ class CPatientStateTools {
       $series["datum"][] = array(
         "label" => utf8_encode(CAppUI::tr("CPatient.status.$status")),
         "data"  => $count,
-        "color" => self::$color[$status],
+        "color" => self::$color[$status]
       );
     }
 
-    $series["count"] = $total;
+    $series["count"]   = $total;
     $series["options"] = array(
       "series" => array(
-        "unit"    => CAppUI::tr("CPatient"),
-        "pie" => array(
+        "unit" => lcfirst(CAppUI::tr("CPatient|pl")),
+        "pie"  => array(
           "innerRadius" => 0.5,
-          "show" => true,
-          "label" => array(
-            "show" => true,
+          "show"        => true,
+          "label"       => array(
+            "show"      => true,
             "threshold" => 0.02
           )
         )
@@ -142,7 +144,7 @@ class CPatientStateTools {
       "legend" => array(
         "show" => false
       ),
-      "grid" => array(
+      "grid"   => array(
         "hoverable" => true
       )
     );
@@ -161,15 +163,15 @@ class CPatientStateTools {
   static function createGraphBar($values, $interval) {
     $series2 = array(
       "title"   => "CPatientState.dayproportion",
-      "unit"    => CAppUI::tr("CPatient"),
-      "count"   => null,
+      "unit"    => lcfirst(CAppUI::tr("CPatient|pl")),
+      "count"   => 0,
       "datum"   => null,
       "options" => array(
         "xaxis"  => array(
           "position" => "bottom",
           "min"      => 0,
-          "max"      => $interval+1,
-          "ticks"    => array()
+          "max"      => $interval + 1,
+          "ticks"    => array(),
         ),
         "yaxes"  => array(
           "0" => array(
@@ -192,30 +194,53 @@ class CPatientStateTools {
       )
     );
 
+    if (array_key_exists('merged', $values)) {
+      $series2['options']['grid']['clickable'] = true;
+    }
+
+    $total = 0;
     $datum = array();
     foreach ($values as $_status => $_result) {
       $abscisse = -1;
-      $data = array();
-      foreach ($_result as $_day => $_count) {
-        $abscisse += 1;
-        $series2["options"]["xaxis"]["ticks"][] = array($abscisse+0.5, utf8_encode(CMbDT::transform(null, $_day, "%d")));
+      $data     = array();
 
-        $data[] = array($abscisse, $_count);
+      foreach ($_result as $_day => $_count) {
+        // When merged patients searched, value if count + patient IDs
+        if (is_array($_count) && $_status == 'merged') {
+          $_ids   = $_count['ids'];
+          $_count = $_count['count'];
+        }
+        else {
+          $_ids = null;
+        }
+
+        $abscisse += 1;
+        $series2["options"]["xaxis"]["ticks"][] = array($abscisse + 0.5, utf8_encode(CMbDT::transform(null, $_day, "%d/%m")));
+
+        $data[] = array(
+          $abscisse,
+          $_count,
+          'day' => utf8_encode(CMbDT::transform(null, $_day, "%d/%m/%Y")),
+          'ids' => $_ids
+        );
+
+        $total += $_count;
       }
 
       $datum[] = array(
-        "data" => $data,
+        "data"  => $data,
         "yaxis" => 1,
-        "label" => utf8_encode(CAppUI::tr("CPatient.status.".$_status)),
+        "label" => utf8_encode(CAppUI::tr("CPatient.status." . $_status)),
         "color" => self::$color[$_status],
-        "unit"  => CAppUI::tr("CPatient"),
-        "bars" => array(
+        "unit"  => lcfirst(CAppUI::tr("CPatient|pl")),
+        "bars"  => array(
           "show" => true
-        ),
-        "name" => $_day
+        )
       );
     }
+
     $series2["datum"] = $datum;
+    $series2['count'] = $total;
 
     return $series2;
   }
