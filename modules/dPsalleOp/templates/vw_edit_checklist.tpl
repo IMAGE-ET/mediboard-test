@@ -1,4 +1,4 @@
-<h2 style="text-align: center">{{$salle->_view}}, le {{$date|date_format:$conf.date}}</h2>
+<h2 style="text-align: center">{{if $salle->_id}}{{$salle->_view}}{{else}}{{$bloc->_view}}{{/if}}, le {{$date|date_format:$conf.date}}</h2>
 {{if $nb_op_no_close}}
   <div class="small-warning">
     Il reste {{$nb_op_no_close}} opération(s) non terminée(s).

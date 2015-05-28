@@ -92,6 +92,7 @@ $smarty = new CSmartyDP();
 
 // Daily check lists
 $smarty->assign("salle"                 , $salle);
+$smarty->assign("bloc"                  , $bloc);
 $smarty->assign("type"                  , $type);
 $smarty->assign("date"                  , $date);
 $smarty->assign("nb_op_no_close"        , $nb_op_no_close);
