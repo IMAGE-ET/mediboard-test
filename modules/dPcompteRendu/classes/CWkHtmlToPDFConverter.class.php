@@ -36,7 +36,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     
     // Changer les srs pour les images
     $this->html = preg_replace("/src=\"\/".$rootName."/", "src=\"../", $this->html);
-    
+
     if (is_array($format)) {
       $this->width  = $format[2];
       $this->height = $format[3];
@@ -262,10 +262,46 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   static $to_autoprint = "/Pages 2 0 R\n/OpenAction << /Type /Action /S /Named /N /Print >>";
 
   static function addAutoPrint($content) {
-    return str_replace(self::$from_autoprint, self::$to_autoprint, $content);
+    $content = str_replace(self::$from_autoprint, self::$to_autoprint, $content);
+    return self::ajustXref($content);
   }
 
   static function removeAutoPrint($content) {
-    return str_replace(self::$to_autoprint, self::$from_autoprint, $content);
+    $content = str_replace(self::$to_autoprint, self::$from_autoprint, $content);
+    return self::ajustXref($content);
+  }
+
+  static function ajustXref($content) {
+    preg_match_all("/^[0-9]+ 0 obj$/m", $content, $matches, PREG_OFFSET_CAPTURE);
+    $matches_obj = $matches[0];
+
+    preg_match_all("/^([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]) 00000/m", $content, $matches_xref);
+    $matches_xref = $matches_xref[1];
+
+    function compareObj($obj1, $obj2) {
+      $split1 = explode(" ", $obj1[0]);
+      $split1 = intval($split1[0]);
+
+      $split2 = explode(" ", $obj2[0]);
+      $split2 = intval($split2[0]);
+
+      return $split1 > $split2;
+    }
+
+    usort($matches_obj, "compareObj");
+
+    $matches_new_obj = array();
+    foreach ($matches_obj as $_match) {
+      $matches_new_obj[] = str_pad($_match[1], 10, "0", STR_PAD_LEFT);
+    }
+
+    // Remplacement des références dans la table xref
+    $content = str_replace($matches_xref, $matches_new_obj, $content);
+
+    // Remplacement de la position d'indication du début de la table xref
+    preg_match("/^xref/m", $content, $match, PREG_OFFSET_CAPTURE);
+    $content = preg_replace("/startxref\n([0-9]+)/", "startxref\n".$match[0][1], $content);
+
+    return $content;
   }
 }
