@@ -42,6 +42,22 @@
     url.requestModal();
   };
 
+  DisplayGraph.listInterventions = function() {
+    var oForm = getForm("stats_params");
+    var url = new Url("dPstats", "download_csv_interventions", "raw");
+    url.addParam("_date_min"        , $V(oForm._date_min));
+    url.addParam("_date_max"        , $V(oForm._date_max));
+    url.addParam("codes_ccam"       , $V(oForm.codes_ccam));
+    url.addParam("type"             , $V(oForm.type));
+    url.addParam("prat_id"          , $V(oForm.prat_id));
+    url.addParam("func_id"          , $V(oForm.func_id));
+    url.addParam("service_id"       , $V(oForm.service_id));
+    url.addParam("discipline_id"    , $V(oForm.discipline_id));
+    url.addParam("bloc_id"          , $V(oForm.bloc_id));
+    url.addParam("salle_id"         , $V(oForm.salle_id));
+    url.addParam("hors_plage"       , $V(oForm.hors_plage));
+    url.popup(200, 100, "Extraction CSV");
+  };
 </script>
 
 <form name="stats_params" action="?" method="get" onsubmit="return checkForm(this)">
@@ -115,7 +131,7 @@
     <td>
       <select name="func_id" style="width: 15em;">
         <option value="">&mdash; Tous les cabinets</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listFuncs selected=$filtre->_func_id}}
+        {{mb_include module=mediusers template=inc_options_function list=$listFuncs selected=$filtre->_func_id}}
       </select>
     </td>
     <th></th>
@@ -266,6 +282,16 @@
         <br />
         <button type="button" class="stats"
                 onclick="DisplayGraph.launchStats('workflowoperation')">
+          {{tr}}View{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="button" style="width: 50%">
+      <div class="small-info" style="text-align: center">
+        Liste des interventions au format CSV
+        <br />
+        <button type="button" class="download"
+                onclick="DisplayGraph.listInterventions()">
           {{tr}}View{{/tr}}
         </button>
       </div>
