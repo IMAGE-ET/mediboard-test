@@ -65,7 +65,7 @@ confirmCheckList = function(form) {
     onSubmitFormAjax(form, {
       onComplete: function(){
         if (HAS_classes.indexOf($V(form.object_class)) == -1 && $V(form.ref_type_list) != "fermeture_salle" && $V(form.ref_type_list) != "fermeture_sspi" && $V(form.ref_type_list) != "fermeture_preop"
-        && (($V(form.ref_type_list) != "ouverture_sspi" && $V(form.ref_type_list) != "ouverture_preop") || !$V(form.choose_moment_edit))) {
+        && (($V(form.ref_type_list) != "ouverture_sspi" && $V(form.ref_type_list) != "ouverture_preop") || $V(form.choose_moment_edit) == 0)) {
           location.reload();
         }
       }
