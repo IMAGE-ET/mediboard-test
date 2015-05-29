@@ -51,6 +51,17 @@ $line = array(
   "UF médicale",
   "Facturable",
   "Médical",
+  "Exam. extempo. prévu",
+  "Côté",
+  "Bilan préop",
+  "Matériel à prévoir",
+  "Examens per-op",
+  "Dépassement d'honoraires",
+  "Forfait clinique",
+  "Fournitures",
+  "Remarques sur l'intervention",
+  "Convalescence",
+  "Remarques sur le séjour"
 );
 $csv->writeLine($line);
 
@@ -84,6 +95,17 @@ foreach ($protocoles as $_protocole) {
     $_protocole->_ref_uf_soins->code,
     $_protocole->facturable,
     $_protocole->for_sejour,
+    $_protocole->exam_extempo,
+    $_protocole->cote,
+    $_protocole->examen,
+    $_protocole->materiel,
+    $_protocole->exam_per_op,
+    $_protocole->depassement,
+    $_protocole->forfait,
+    $_protocole->fournitures,
+    $_protocole->rques_operation,
+    $_protocole->convalescence,
+    $_protocole->rques_sejour
   );
   $csv->writeLine($_line);
 }
