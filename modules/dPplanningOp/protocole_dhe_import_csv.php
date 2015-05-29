@@ -34,26 +34,37 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     // Parsing
     $line = array_map("trim"      , $line);
     $line = array_map("addslashes", $line);
-    $results[$i]["function_name"]       = CMbArray::get($line,  0);
-    $results[$i]["praticien_lastname"]  = CMbArray::get($line,  1);
-    $results[$i]["praticien_firstname"] = CMbArray::get($line,  2);
-    $results[$i]["motif"]               = CMbArray::get($line,  3);
-    $results[$i]["libelle_sejour"]      = CMbArray::get($line,  4);
-    $results[$i]["temp_operation"]      = CMbArray::get($line,  5);
-    $results[$i]["codes_ccam"]          = CMbArray::get($line,  6);
-    $results[$i]["DP"]                  = CMbArray::get($line,  7);
-    $results[$i]["type_hospi"]          = CMbArray::get($line,  8);
-    $results[$i]["duree_hospi"]         = CMbArray::get($line,  9);
-    $results[$i]["duree_uscpo"]         = CMbArray::get($line, 10);
-    $results[$i]["duree_preop"]         = CMbArray::get($line, 11);
-    $results[$i]["presence_preop"]      = CMbArray::get($line, 12);
-    $results[$i]["presence_postop"]     = CMbArray::get($line, 13);
-    $results[$i]["uf_hebergement"]      = CMbArray::get($line, 14);
-    $results[$i]["uf_medicale"]         = CMbArray::get($line, 15);
-    $results[$i]["uf_soins"]            = CMbArray::get($line, 16);
-    $results[$i]["facturable"]          = CMbArray::get($line, 17);
-    $results[$i]["for_sejour"]          = CMbArray::get($line, 18);
-    
+    $results[$i]["function_name"]           = CMbArray::get($line,  0);
+    $results[$i]["praticien_lastname"]      = CMbArray::get($line,  1);
+    $results[$i]["praticien_firstname"]     = CMbArray::get($line,  2);
+    $results[$i]["motif"]                   = CMbArray::get($line,  3);
+    $results[$i]["libelle_sejour"]          = CMbArray::get($line,  4);
+    $results[$i]["temp_operation"]          = CMbArray::get($line,  5);
+    $results[$i]["codes_ccam"]              = CMbArray::get($line,  6);
+    $results[$i]["DP"]                      = CMbArray::get($line,  7);
+    $results[$i]["type_hospi"]              = CMbArray::get($line,  8);
+    $results[$i]["duree_hospi"]             = CMbArray::get($line,  9);
+    $results[$i]["duree_uscpo"]             = CMbArray::get($line, 10);
+    $results[$i]["duree_preop"]             = CMbArray::get($line, 11);
+    $results[$i]["presence_preop"]          = CMbArray::get($line, 12);
+    $results[$i]["presence_postop"]         = CMbArray::get($line, 13);
+    $results[$i]["uf_hebergement"]          = CMbArray::get($line, 14);
+    $results[$i]["uf_medicale"]             = CMbArray::get($line, 15);
+    $results[$i]["uf_soins"]                = CMbArray::get($line, 16);
+    $results[$i]["facturable"]              = CMbArray::get($line, 17);
+    $results[$i]["for_sejour"]              = CMbArray::get($line, 18);
+    $results[$i]["Exam_extempo_prevu"]      = CMbArray::get($line, 19);
+    $results[$i]["cote"]                    = CMbArray::get($line, 20);
+    $results[$i]["bilan_preop"]             = CMbArray::get($line, 21);
+    $results[$i]["materiel_a_prevoir"]      = CMbArray::get($line, 22);
+    $results[$i]["examens_perop"]           = CMbArray::get($line, 23);
+    $results[$i]["depassement_honoraires"]  = CMbArray::get($line, 24);
+    $results[$i]["forfait_clinique"]        = CMbArray::get($line, 25);
+    $results[$i]["fournitures"]             = CMbArray::get($line, 26);
+    $results[$i]["rques_interv"]            = CMbArray::get($line, 27);
+    $results[$i]["convalesence"]            = CMbArray::get($line, 28);
+    $results[$i]["rques_sejour"]            = CMbArray::get($line, 29);
+
     // Type d'hopistalisation
     $results[$i]["type_hospi"] = CValue::first(strtolower($results[$i]["type_hospi"]), "comp");
     if ($results[$i]["type_hospi"] == "hospi") {
@@ -120,7 +131,18 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $protocole->presence_preop  = $results[$i]["presence_preop"]  ? $results[$i]["presence_preop"]  . ":00" : "";
     $protocole->presence_postop = $results[$i]["presence_postop"] ? $results[$i]["presence_postop"] . ":00" : "";
     $protocole->facturable      = $results[$i]["facturable"];
-    
+    $protocole->exam_extempo    = $results[$i]["Exam_extempo_prevu"];
+    $protocole->cote            = $results[$i]["cote"];
+    $protocole->examen          = $results[$i]["bilan_preop"];
+    $protocole->materiel        = $results[$i]["materiel_a_prevoir"];
+    $protocole->exam_per_op     = $results[$i]["examens_perop"];
+    $protocole->depassement     = $results[$i]["depassement_honoraires"];
+    $protocole->forfait         = $results[$i]["forfait_clinique"];
+    $protocole->fournitures     = $results[$i]["fournitures"];
+    $protocole->rques_operation = $results[$i]["rques_interv"];
+    $protocole->convalescence   = $results[$i]["convalesence"];
+    $protocole->rques_sejour    = $results[$i]["rques_sejour"];
+
     // UF Hébergement
     if ($uf_hebergement = $results[$i]["uf_hebergement"]) {
       $uf = new CUniteFonctionnelle();
@@ -170,7 +192,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     
     // Field check final
     if (
-        (!$protocole->for_sejour && ($protocole->libelle == "" || $protocole->duree_hospi === "" || $protocole->temp_operation == "")) ||
+        (!$protocole->for_sejour && (($protocole->libelle == "" && $protocole->codes_ccam == "" ) || $protocole->duree_hospi === "" || $protocole->temp_operation == "")) ||
         ($protocole->for_sejour && ($protocole->duree_hospi === "" || !isset($protocole->facturable)))
     ) {
       $results[$i]["errors"][] = "Champs manquants";
