@@ -31,8 +31,23 @@
   <li>{{mb_label class=CProtocole field=uf_hebergement_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_medicale_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_soins_id}}</li>
-  <li>{{mb_label class=CProtocole field=facturable}}</li>
+  <li><strong>mb_label class=CProtocole field=facturable}}</strong>(<code>0</code> pour un protocole non facturable, <code>1</code> pour un protocole facturable)</li>
   <li><strong>{{mb_label class=CProtocole field=for_sejour}}</strong> (<code>0</code> pour un protocole d'intervention, <code>1</code> pour un protocole de séjour uniquement)</li>
+  <li>{{mb_label class=CProtocole field=exam_extempo}}</li>
+  <li>
+    {{mb_label class=CProtocole field=cote}}
+    (parmi <code>comp</code>, <code>droit</code>, <code>gauche</code>, <code>haut</code>, <code>bas</code>, <code>bilatéral</code>, <code>total</code> ou <code>inconnu</code>)
+  </li>
+  <li>{{mb_label class=CProtocole field=examen}}</li>
+  <li>{{mb_label class=CProtocole field=materiel}}</li>
+  <li>{{mb_label class=CProtocole field=exam_per_op}}</li>
+  <li>{{mb_label class=CProtocole field=depassement}}</li>
+  <li>{{mb_label class=CProtocole field=forfait}}</li>
+  <li>{{mb_label class=CProtocole field=fournitures}}</li>
+  <li>{{mb_label class=CProtocole field=rques_operation}}</li>
+  <li>{{mb_label class=CProtocole field=convalescence}}</li>
+  <li>{{mb_label class=CProtocole field=rques_sejour}}</li>
+
 {{mb_include module=system template=inc_import_csv_info_outro}}
 
 <form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1&amp;" name="import" enctype="multipart/form-data">
@@ -48,7 +63,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">{{$results|@count}} protocoles trouvés</th>
+    <th class="title" colspan="31">{{$results|@count}} protocoles trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -71,6 +86,17 @@
     <th>{{mb_title class=CProtocole field=uf_soins_id}}</th>
     <th>{{mb_title class=CProtocole field=facturable}}</th>
     <th>{{mb_title class=CProtocole field=for_sejour}}</th>
+    <th>{{mb_title class=CProtocole field=exam_extempo}}</th>
+    <th>{{mb_title class=CProtocole field=cote}}</th>
+    <th>{{mb_title class=CProtocole field=examen}}</th>
+    <th>{{mb_title class=CProtocole field=materiel}}</th>
+    <th>{{mb_title class=CProtocole field=exam_per_op}}</th>
+    <th>{{mb_title class=CProtocole field=depassement}}</th>
+    <th>{{mb_title class=CProtocole field=forfait}}</th>
+    <th>{{mb_title class=CProtocole field=fournitures}}</th>
+    <th>{{mb_title class=CProtocole field=rques_operation}}</th>
+    <th>{{mb_title class=CProtocole field=convalescence}}</th>
+    <th>{{mb_title class=CProtocole field=rques_sejour}}</th>
   </tr>
   {{foreach from=$results item=_protocole}}
   <tr>
@@ -105,6 +131,17 @@
     <td class="text">{{$_protocole.uf_soins}}</td>
     <td class="text">{{$_protocole.facturable}}</td>
     <td class="text">{{$_protocole.for_sejour}}</td>
+    <td class="text">{{$_protocole.Exam_extempo_prevu}}</td>
+    <td class="text">{{$_protocole.cote}}</td>
+    <td class="text">{{$_protocole.bilan_preop}}</td>
+    <td class="text">{{$_protocole.materiel_a_prevoir}}</td>
+    <td class="text">{{$_protocole.examens_perop}}</td>
+    <td class="text">{{$_protocole.depassement_honoraires}}</td>
+    <td class="text">{{$_protocole.forfait_clinique}}</td>
+    <td class="text">{{$_protocole.fournitures}}</td>
+    <td class="text">{{$_protocole.rques_interv}}</td>
+    <td class="text">{{$_protocole.convalesence}}</td>
+    <td class="text">{{$_protocole.rques_sejour}}</td>
   </tr>
   {{/foreach}}
 </table>
