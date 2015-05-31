@@ -1198,17 +1198,20 @@ class CStoredObject extends CModelObject {
     
     $type = "store";
     $extra = null;
-    
+
+    // Creation
     if ($old->_id == null) {
       $type = "create";
       $fields = array();
     }
-    
+
+    // Merging
     if ($this->_merging) {
       $type = "merge";
     }
-      
-    if ($this->_id == null) {
+
+    // Deletion
+    if ($old->_id && !$this->_id) {
       $type = "delete";
       $object_id = $old->_id;
       $extra = $old->_view;
@@ -1263,7 +1266,7 @@ class CStoredObject extends CModelObject {
       $log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
       $log->extra = $extra;
     }
-    
+
     return $this->_ref_last_log = $log;
   }
   
@@ -1273,13 +1276,21 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   protected function doLog() {
+    $log = $this->_ref_last_log;
+
     // Aucun log à produire (non loggable, pas de modifications, etc.)
-    if (!$this->_ref_last_log) {
+    if (!$log) {
       return;
     }
-    
-    $this->_ref_current_log = $this->_ref_last_log;
-    $this->_ref_last_log->store();
+
+    // Mandatory for create log
+    if ($log->type == "create") {
+      $log->object_id = $this->_id;
+    }
+
+    // Make it current log and store it
+    $this->_ref_current_log = $log;
+    $log->store();
   }
 
   /**
@@ -1496,7 +1507,7 @@ class CStoredObject extends CModelObject {
     // Trigger before event
     $this->notify("BeforeStore");
 
-    // Log has to be prepared prior to actual SQL query, for update preventionL
+    // Log has to be prepared prior to actual SQL query, for update prevention
     $this->prepareLog();
 
     // SQL query
