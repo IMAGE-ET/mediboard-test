@@ -51,6 +51,13 @@
         </td>
       {{/foreach}}
     </tr>
+    {{if isset($rpu->_ref_latest_constantes.0->comment|smarty:nodefaults)}}
+      <tr>
+        <td colspan="6" class="compact">
+          Commentaire: {{$rpu->_ref_latest_constantes.0->comment}}
+        </td>
+      </tr>
+    {{/if}}
     {{if !$rpu->_ref_cts_degre[1]|@count && !$rpu->_ref_cts_degre[2]|@count && !$rpu->_ref_cts_degre[3]|@count}}
       <tr>
         <td colspan="3" class="empty">Les informations renseignées ne permettent pas de déterminer le degré de l'urgence</td>

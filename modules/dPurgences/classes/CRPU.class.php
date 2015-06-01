@@ -856,6 +856,18 @@ class CRPU extends CMbObject {
     );
     $this->_estimation_ccmu = 4;
     $this->_ref_latest_constantes = CConstantesMedicales::getLatestFor($this->_patient_id, null, array(), $this->_ref_sejour, false);
+
+    $where = array();
+    $where["patient_id"]    = " = '".$this->_patient_id."'";
+    $where["context_class"] = " = '".$this->_ref_sejour->_class."'";
+    $where["context_id"]    = " = '".$this->_ref_sejour->_id."'";
+    $where["comment"]       = " IS NOT NULL";
+    $constante = new CConstantesMedicales();
+    $constante->loadObject($where, "datetime ASC");
+    if ($constante->_id) {
+      $this->_ref_latest_constantes[0]->comment = $constante->comment;
+    }
+
     $latest_constantes = $this->_ref_latest_constantes;
     $echelle_tri = $this->loadRefEchelleTri();
     $grossesse = $this->_ref_sejour->loadRefGrossesse();
