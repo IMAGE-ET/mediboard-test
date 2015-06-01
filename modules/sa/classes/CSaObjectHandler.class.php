@@ -65,35 +65,41 @@ class CSaObjectHandler extends CEAIObjectHandler {
 
         $send_only_with_type = CAppUI::conf("sa send_only_with_type");
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
-          return;  
+          return;
         }
-        
+
+        $trigger = false;
         switch (CAppUI::conf("sa trigger_sejour")) {
           case 'sortie_reelle':
             if ($sejour->fieldModified('sortie_reelle') || isset($sejour->_force_sent) && $sejour->_force_sent === true) {
+              $trigger = true;
+
               $this->sendFormatAction("onAfterStore", $sejour);
 
               if (CAppUI::conf("sa facture_codable_with_sejour")) {
-                $sejour->facture     = 1;
-                $no_synchro          = $sejour->_no_synchro;
-                $sejour->_no_synchro = true;
-                $sejour->store();
-                $sejour->_no_synchro = $no_synchro;
+                $sejour->facture = 1;
+                $sejour->rawStore();
               }
             }
             break;
-            
+
           case 'testCloture':
             if ($sejour->testCloture()) {
+              $trigger = true;
               $this->sendFormatAction("onAfterStore", $sejour);
             }
             break;
-            
+
           default:
             if ($sejour->fieldModified('facture', 1)) {
+              $trigger = true;
               $this->sendFormatAction("onAfterStore", $sejour);
             }
             break;
+        }
+
+        if (!$trigger) {
+          return;
         }
 
         if (CAppUI::conf("sa send_actes_consult")) {
@@ -107,9 +113,8 @@ class CSaObjectHandler extends CEAIObjectHandler {
               $this->sendFormatAction("onAfterStore", $_consultation);
 
               if (CAppUI::conf("sa facture_codable_with_sejour")) {
-                $_consultation->facture     = 1;
-                $_consultation->_no_synchro = true;
-                $_consultation->store();
+                $_consultation->facture = 1;
+                $_consultation->rawStore();
               }
             }
           }
@@ -121,16 +126,15 @@ class CSaObjectHandler extends CEAIObjectHandler {
               $this->sendFormatAction("onAfterStore", $_operation);
 
               if (CAppUI::conf("sa facture_codable_with_sejour")) {
-                $_operation->facture     = 1;
-                $_operation->_no_synchro = true;
-                $_operation->store();
+                $_operation->facture = 1;
+                $_operation->rawStore();
               }
             }
           }
         }
 
         break;
-      
+
       // COperation
       // Envoi des actes soit quand l'interv est facturée, soit quand on a la clôture sur l'interv
       case 'COperation':
@@ -140,7 +144,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
         if ($operation->_no_synchro) {
           return;
         }
-        
+
         switch (CAppUI::conf("sa trigger_operation")) {
           case 'testCloture':
             if ($operation->testCloture()) {
@@ -155,7 +159,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
             break;
         }
         break;
-      
+
       // CConsultation
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
@@ -165,7 +169,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
         if ($consultation->_no_synchro) {
           return;
         }
-        
+
         if (!$consultation->sejour_id) {
           return;
         }
@@ -188,6 +192,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
 
       default:
         return;
-    } 
+    }
   }
 }
