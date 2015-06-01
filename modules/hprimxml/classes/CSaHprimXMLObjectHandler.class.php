@@ -85,8 +85,8 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       case 'COperation':
         /** @var COperation $operation */
         $operation = $mbObject;
-        
-        $sejour  = $operation->_ref_sejour;
+
+        $sejour  = $operation->loadRefSejour();
         $sejour->loadNDA($receiver->group_id);
         
         $patient = $sejour->loadRefPatient();
