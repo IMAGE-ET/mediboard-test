@@ -32,6 +32,7 @@ class CEchelleTri extends CMbObject {
   public $ouverture_yeux;
   public $rep_verbale;
   public $rep_motrice;
+  public $enceinte;
 
   /** @var CRPU */
   public $_ref_rpu;
@@ -65,6 +66,7 @@ class CEchelleTri extends CMbObject {
     $props["rep_motrice"]       = "enum list|rien|decerebration|decortication|evitement|oriente|obeit";
     $props["reactivite_droite"] = "enum list|reactif|non_reactif";
     $props["reactivite_gauche"] = "enum list|reactif|non_reactif";
+    $props["enceinte"]          = "bool default|0";
     return $props;
   }
 

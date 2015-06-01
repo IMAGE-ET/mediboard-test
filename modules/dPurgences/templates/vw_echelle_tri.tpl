@@ -81,6 +81,12 @@
           </tr>
         {{/if}}
 
+        {{if (!"maternite"|module_active || !@$modules.maternite->_can->read) && ($patient && $patient->sexe == "f" && ($patient->_annees >= 10 || $patient->_annees <= 55))}}
+          <tr>
+            <th style="width: 33%;">{{mb_label object=$echelle_tri field=enceinte}}</th>
+            <td colspan="2">{{mb_field object=$echelle_tri field=enceinte onchange="Motif.deleteDiag(this.form, 1);"}}</td>
+          </tr>
+        {{/if}}
         <tr>
           <th colspan="3" class="category ">Traitements</th>
         </tr>

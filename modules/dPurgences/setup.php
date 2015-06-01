@@ -510,6 +510,11 @@ class CSetupdPurgences extends CSetup {
                 ADD `reactivite_droite` ENUM ('reactif','non_reactif'),
                 ADD `reactivite_gauche` ENUM ('reactif','non_reactif')";
     $this->addQuery($query);
-    $this->mod_version = "0.58";
+    $this->makeRevision("0.58");
+
+    $query = "ALTER TABLE `echelle_tri`
+                ADD `enceinte` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $this->mod_version = "0.59";
   }  
 }

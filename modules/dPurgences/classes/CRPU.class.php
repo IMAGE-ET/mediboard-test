@@ -857,9 +857,9 @@ class CRPU extends CMbObject {
     $this->_estimation_ccmu = 4;
     $this->_ref_latest_constantes = CConstantesMedicales::getLatestFor($this->_patient_id, null, array(), $this->_ref_sejour, false);
     $latest_constantes = $this->_ref_latest_constantes;
-    $grossesse = $this->_ref_sejour->loadRefGrossesse();
-    $sa_grossesse = $grossesse->_semaine_grossesse;
     $echelle_tri = $this->loadRefEchelleTri();
+    $grossesse = $this->_ref_sejour->loadRefGrossesse();
+    $sa_grossesse =  CModule::getActive("maternite") && $grossesse->terme_prevu ? $grossesse->_semaine_grossesse : $echelle_tri->enceinte == 1 ? : 0;
 
     if ($glasgow = $latest_constantes[0]->glasgow) {
       $degre = $glasgow <= 8 ? 1 : 4;
@@ -935,7 +935,7 @@ class CRPU extends CMbObject {
       elseif ($contraction_uterine <= 1) { $degre = 3;}
       $this->_ref_cts_degre[$degre][] = 'contraction_uterine';
     }
-    if ($latest_constantes[0]->bruit_foetal && $grossesse->_id && $sa_grossesse > 13) {
+    if ($latest_constantes[0]->bruit_foetal && $sa_grossesse >= 20) {
       $bruit_foetal = $latest_constantes[0]->bruit_foetal;
       $degre = 4;
       if ($sa_grossesse > 24) {
@@ -971,11 +971,11 @@ class CRPU extends CMbObject {
     $latest_constantes = $this->_ref_latest_constantes;
     $echelle_tri = $this->_ref_echelle_tri;
     $grossesse = $this->_ref_sejour->_ref_grossesse;
-    $sa_grossesse = $grossesse->_semaine_grossesse;
+    $sa_grossesse =  CModule::getActive("maternite") && $grossesse->terme_prevu ? $grossesse->_semaine_grossesse : $echelle_tri->enceinte == 1 ? : 0;
 
     $degre = 4;
     //Si la femme est enceinte et >= 20 SA et 1 mois PP
-    if ($grossesse->_id && $sa_grossesse >= 20) {
+    if ($sa_grossesse >= 20) {
       if ($tas >= 180 || $tas <= 70 || $tad >= 115) { $degre = 1;}
       elseif (($tas >= 160 && $tas < 180) || ($tas > 70 && $tas <= 80) || ($tad >= 105 && $tad < 115)) { $degre = 2;}
       elseif (($tas > 80 && $tas <= 159) || ($tad < 105)) { $degre = 3;}
