@@ -31,15 +31,15 @@
 
   {{foreach from=$mediusers item=_user}}
   <tr class="{{if $_user->_id == $user_id}}selected{{/if}} {{if !$_user->actif}}hatching{{/if}}">
-    <td>
+    <td class="compact">
       <button class="edit notext" onclick="editMediuser('{{$_user->_id}}', this)"></button>
     </td>
 
     {{if $_user->_ref_user->_id}}
      <td class="text">
-         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')" class="mediuser" style="border-left-color: #{{$_user->_color}};">
-           {{mb_value object=$_user field=_user_username}}
-         </span>
+       <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}')" class="mediuser" style="border-left-color: #{{$_user->_color}};">
+         {{mb_value object=$_user field=_user_username}}
+       </span>
      </td>
      
      <td class="text">

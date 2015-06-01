@@ -1,29 +1,19 @@
 {{mb_script module="mediusers" script="color_selector"}}
 {{mb_script module="system" script="object_selector"}}
 {{mb_script module="patients" script="autocomplete"}}
+{{mb_script module="mediusers" script="CFunctions"}}
 
 <script>
-  showFunction = function(function_id, element) {
-    if (element && !element._class) {
-      element.up('tr').addUniqueClassName('selected');
-    }
-    var url = new Url("mediusers", "ajax_edit_function");
-    url.addParam("function_id", function_id);
-    url.requestUpdate("vw_function");
-  };
-
-  function changePage(page) {
-    $V(getForm('listFilter').page,page);
-  }
-
-  Main.add(showFunction.curry('{{$function_id}}'));
+  Main.add(function() {
+    getForm('listFilter').onsubmit();
+  });
 </script>
 
 <table class="main">
   {{if $can->edit}}
   <tr>
     <td style="width: 60%">
-      <a href="#" class="button new" onclick="showFunction(0);">
+      <a href="#" class="button new" onclick="CFunctions.editFunction('0');">
        {{tr}}CFunctions-title-create{{/tr}}
       </a>
     </td>
@@ -31,43 +21,54 @@
   {{/if}}
   <tr>
     <td>
-      <form name="listFilter" action="?m={{$m}}" method="get">
+      <form name="listFilter" action="?m={{$m}}" method="get" onsubmit="return onSubmitFormAjax(this, null, 'list_functions')">
         <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
-        <table class="form">
+        <input type="hidden" name="a" value="ajax_search_function" />
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()"/>
+        <input type="hidden" name="order_col" value="text"/>
+        <input type="hidden" name="order_way" value="ASC""/>
+
+        <table class="main layout">
           <tr>
-            <th class="title" colspan="10"> {{tr}}Filter{{/tr}} </th>
-          </tr>
-          <tr> 
-            <th>Type</th> 
+            <td class="separator expand" onclick="MbObject.toggleColumn(this, $(this).next())"></td>
+
             <td>
-              <select name="type" onchange="$V(this.form.page, 0)"> 
-                <option value="" {{if !$type}}selected="selected"{{/if}}>Tous</option> 
-                <option value="administratif" {{if $type == "administratif"}}selected="selected"{{/if}}>Administratif</option> 
-                <option value="cabinet" {{if $type == "cabinet"}}selected="selected"{{/if}}>Cabinet</option> 
-              </select>
-            </td> 
-          </tr> 
-          <tr>
-            <th></th>
-            <td>
-              <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
+              <table class="form">
+                <tr>
+                  <th> Mots clés : </th>
+                  <td> <input type="text" name="filter" value="" style="width: 20em;" onchange="$V(this.form.page, 0)" /> </td>
+
+                  <th>Type</th>
+                  <td>
+                    <label>{{tr}}All{{/tr}} <input name="type" value="" type="radio"
+                                                   {{if $type != "administratif" && $type != "cabinet"}}checked{{/if}}
+                                                   onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Administratif <input name="type" value="administratif" type="radio"
+                                                {{if $type == "administratif"}}checked{{/if}}
+                                                onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Cabinet <input name="type" value="cabinet" type="radio"
+                                          {{if $type == "cabinet"}}checked{{/if}}
+                                          onchange="$V(this.form.page, 0, false)"/></label>
+                  </td>
+
+                  <th> Inactif </th>
+                  <td>
+                    <label>{{tr}}All{{/tr}} <input name="inactif" value="" type="radio" {{if !$inactif}}checked{{/if}} onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Inactifs <input name="inactif" value="1" type="radio" {{if $inactif}}checked{{/if}} onchange="$V(this.form.page, 0, false)"/></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="6">
+                    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
-          <tr>
-            <td colspan="2" style="text-align: center">
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-            </td>
-          </tr>
-        </table>  
-        {{if $total_functions != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_functions current=$page change_page='changePage' step=25}}
-        {{/if}}
+        </table>
       </form>
-      {{mb_include template=vw_list_functions}}
-    </td>
-    <td style="width: 40%" id="vw_function">
     </td>
   </tr>
 </table>
+
+<div id="list_functions" style="overflow: hidden"></div>

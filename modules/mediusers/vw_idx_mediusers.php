@@ -13,10 +13,10 @@
 
 CCanDo::checkRead();
 
-$filter       = CValue::getOrSession("filter",    "");
-$user_id      = CValue::get("user_id");
-$type         = CValue::getOrSession("_user_type");
-$locked       = CValue::getOrSession("locked");
+$filter  = CValue::getOrSession("filter",    "");
+$user_id = CValue::get("user_id");
+$type    = CValue::getOrSession("_user_type");
+$locked  = CValue::getOrSession("locked");
 
 //ldap
 $no_association         = CValue::get("no_association");

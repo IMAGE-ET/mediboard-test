@@ -117,7 +117,8 @@ class CDiscipline extends CMbObject {
    */
   function updateFormFields () {
     parent::updateFormFields();
-    $this->_view = strtolower($this->text);
+
+    $this->_view      = ucwords(strtolower($this->text));
     $this->_shortview = CMbString::truncate($this->_view);
   }
 

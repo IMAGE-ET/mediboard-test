@@ -16,7 +16,7 @@ CCanDo::checkRead();
 $function_id    = CValue::getOrSession("function_id");
 $page_function  = intval(CValue::get('page_function', 0));
 
-$step_sec_function = 10;
+$step_sec_function = 25;
 $primary_users = array();
 $total_sec_functions = null;
 

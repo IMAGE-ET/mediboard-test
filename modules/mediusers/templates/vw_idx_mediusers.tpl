@@ -48,25 +48,27 @@
   });
 </script>
 
-{{if $can->edit}}
-  <a href="#" onclick="editMediuser(0)" class="button new">
-    {{tr}}CMediusers-title-create{{/tr}}
-  </a>
-  {{if $configLDAP}}
-    <button class="new" onclick="createUserFromLDAP()">
-      {{tr}}CMediusers_create-ldap{{/tr}}
-    </button>
+<div style="padding-bottom: 5px">
+  {{if $can->edit}}
+    <a href="#" onclick="editMediuser(0)" class="button new">
+      {{tr}}CMediusers-title-create{{/tr}}
+    </a>
+    {{if $configLDAP}}
+      <button class="new" onclick="createUserFromLDAP()">
+        {{tr}}CMediusers_create-ldap{{/tr}}
+      </button>
+    {{/if}}
   {{/if}}
-{{/if}}
 
-<style>
-  fieldset.fieldset_search div {
-    display: inline-block;
-  }
-</style>
+  <style>
+    fieldset.fieldset_search div {
+      display: inline-block;
+    }
+  </style>
 
-<button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
-<hr/>
+  <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
+</div>
+
 <form name="listFilter" action="?m={{$m}}" method="get" onsubmit="return onSubmitFormAjax(this, null, 'result_search_mb')">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="a" value="ajax_search_mediusers" />
@@ -74,98 +76,87 @@
   <input type="hidden" name="order_col" value="function_id"/>
   <input type="hidden" name="order_way" value="ASC""/>
 
-  <fieldset class="fieldset_search">
-      <legend>Recherche d'{{tr}}CMediusers{{/tr}}</legend>
-    <table class="main">
-      <tr>
-        <td style="vertical-align: middle">
-          <label>
-            Mots clés :
-            <input type="text" name="filter" value="{{$filter}}" style="width: 10em;" onchange="$V(this.form.page, 0)" />
-          </label>
-        </td>
-        <td>
-          <table class="main">
-            <tr>
-              <th>{{tr}}CFunctions{{/tr}}</th>
-              <td>
-                  <select name="function_id" style="width: 15em;">
-                    <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
-                    {{foreach from=$group->_ref_functions item=_function}}
-                      <option value="{{$_function->_id}}">{{$_function}}</option>
-                    {{/foreach}}
-                  </select>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                {{mb_label class="CMediusers" field="_user_type"}}
-              </th>
-              <td>
-                <select name="_user_type" style="width: 15em;">
-                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
-                  <option value="ps"> > Professionnel de santé</option>
-                  {{foreach from=$utypes key=curr_key item=_type}}
-                    <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
-                      {{$_type}}
-                    </option>
-                  {{/foreach}}
-                </select>
-              </td>
-            </tr>
-          </table>
-        </td>
+  <table class="main layout">
+    <tr>
+      <td class="separator expand" onclick="MbObject.toggleColumn(this, $(this).next())"></td>
 
-        <td>
-          <table class="main">
-            <tr>
-              <th><label>Verrouillage</th></label>
-              <td>
-                <select name="locked" onchange="$V(this.form.page, 0, false)" style="width: 15em;">
-                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
-                  <option value="1">Verrouillés seulement</option>
-                  <option value="0">Non Verrouillés seulement</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                <label>Inactif</label>
-              </th>
-              <td>
-                <select name="inactif" onchange="$V(this.form.page, 0, false)" style="width: 15em;">
-                  <option value="">&mdash; {{tr}}All{{/tr}}</option>
-                  <option value="1">Inactifs seulement</option>
-                  <option value="0">Actifs seulement</option>
-                </select>
-              </td>
-            </tr>
-          </table>
-        </td>
-        <td  style="vertical-align: middle">
-          <label>
-            Type d'utilisateur
-            <select name="user_loggable">
-              <option value="">&mdash; {{tr}}All{{/tr}}</option>
-              <option value="human">Humain</option>
-              <option value="robot">robot</option>
-            </select>
-          </label>
-        </td>
-        {{if $configLDAP}}
-          <td>
-            <label>
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" />
-              Associé au LDAP,
-            </label>
-          </td>
-        {{/if}}
-        <td  style="vertical-align: middle">
-          <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-        </td>
-      </tr>
-    </table>
-  </fieldset>
+      <td>
+        <table class="main form">
+          <tr>
+            <th> Mots clés : </th>
+            <td> <input type="text" name="filter" value="{{$filter}}" style="width: 20em;" onchange="$V(this.form.page, 0)" /> </td>
+
+            <th> {{tr}}CFunctions{{/tr}} </th>
+            <td>
+              <select name="function_id" style="width: 15em;">
+                <option value="">&mdash; {{tr}}CFunctions.all{{/tr}}</option>
+                {{foreach from=$group->_ref_functions item=_function}}
+                  <option value="{{$_function->_id}}">{{$_function}}</option>
+                {{/foreach}}
+              </select>
+            </td>
+
+            <th> {{mb_label class="CMediusers" field="_user_type"}} </th>
+            <td>
+              <select name="_user_type" style="width: 15em;">
+                <option value="">&mdash; {{tr}}All{{/tr}}</option>
+                <option value="ps"> > Professionnel de santé</option>
+                {{foreach from=$utypes key=curr_key item=_type}}
+                  <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
+                    {{$_type}}
+                  </option>
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <th> Verrouillage </th>
+            <td>
+              <label>{{tr}}All{{/tr}} <input name="locked" value="" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Verrouillés <input name="locked" value="1" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Non verrouillés <input name="locked" value="0" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+            </td>
+
+            <th> Inactif </th>
+            <td>
+              <label>{{tr}}All{{/tr}} <input name="inactif" value="" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Inactifs <input name="inactif" value="1" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Actifs <input name="inactif" value="0" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+            </td>
+
+            <th> Type d'utilisateur </th>
+            <td>
+              <label>{{tr}}All{{/tr}} <input name="user_loggable" value="" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Humain <input name="user_loggable" value="human" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+              <label>Robot <input name="user_loggable" value="robot" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+            </td>
+          </tr>
+
+          {{if $configLDAP}}
+          <tr>
+            <th> LDAP </th>
+            <td>
+              <label> Associés <input onchange="$V(this.form.page, 0, false)" type="radio" name="ldap_bound" /> </label>
+            </td>
+
+            <th></th>
+            <td></td>
+
+            <th></th>
+            <td></td>
+          </tr>
+          {{/if}}
+
+          <tr>
+            <td colspan="6">
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+            </td>
+          </tr>
+       </table>
+      </td>
+    </tr>
+  </table>
 </form>
 
 <div id="result_search_mb" style="overflow: hidden"></div>

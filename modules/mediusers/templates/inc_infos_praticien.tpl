@@ -9,7 +9,7 @@
 
 <tr>
   <th>{{mb_label object=$object field=discipline_id}}</th>
-  <td>{{mb_field object=$object field=discipline_id options=$disciplines style="width: 250px;"}}</td> 
+  <td>{{mb_field object=$object field=discipline_id options=$disciplines style="width: 250px;"}}</td>
 </tr>
 
 
@@ -102,7 +102,7 @@
     <th>{{mb_label object=$object field="compte"}}</th>
     <td>{{mb_field object=$object field="compte"}}</td>
   </tr>
-  
+
   {{if is_array($banques)}}
   <!-- Choix de la banque quand disponible -->
   <tr>

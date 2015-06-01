@@ -1,95 +1,52 @@
-<table class="main">
-  <tr>
-    <td class="halfPane">
-    {{if $can->edit}}
-      <a class="button new" href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
-        Ajouter une nouvelle spécialité médicale
-      </a>
-      {{/if}}
-      <table class="tbl">
-        <tr>
-          <th>Spécialité Médicale</th>
-          <th>Catégorie</th>
-          <th>
-            Praticiens
-            <br />
-            ({{$group->_view}})
-          </th>
-        </tr>
-        {{foreach from=$listDiscipline item=curr_discipline}}
-        <tr>
-          <td class="text">
-            <a href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
-              {{$curr_discipline->_view}}
-            </a>
-          </td>
-          <td>
-            <a href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
-              {{$curr_discipline->categorie}}
-            </a>
-          </td>
-          <td>
-            {{$curr_discipline->_ref_users|@count}}
-          </td>      
-        </tr>
-        {{/foreach}}
-      </table>
-    </td>
-    <td class="halfPane">
-      {{if $can->edit}}
-      <form name="editSpeMed" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_discipline_aed" />
-      {{mb_key object=$specialite}}
+{{mb_script module="mediusers" script="CDiscipline"}}
 
-      <input type="hidden" name="del" value="0" />
-      <table class="form">
-        <tr>
-          {{if $specialite->_id}}
-          <th class="title modify" colspan="2">{{$specialite->_view}}</th>
-          {{else}}
-          <th class="title" colspan="2">Création d'une spécialité Médicale</th>
-          {{/if}}
-        </tr>
-        <tr>
-          <th>{{mb_label object=$specialite field="text"}}</th>
-          <td>{{mb_field object=$specialite field="text"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$specialite field="categorie"}}</th>
-          <td>{{mb_field object=$specialite field="categorie" emptyLabel="Choose"}}</td>
-        </tr>
-        <tr>
-          <td class="button" colspan="2">
-            {{if $specialite->discipline_id}}
-              <button class="modify" type="submit">Modifier</button>
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la spécialité médicale',objName:'{{$specialite->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
-            {{else}}
-              <button class="submit" type="submit">Créer</button>
-            {{/if}}
-          </td>
-        </tr> 
-      </table>
+<script>
+  Main.add(function() {
+    getForm('listFilter').onsubmit();
+  });
+</script>
+
+<table class="main">
+  {{if $can->edit}}
+    <tr>
+      <td style="width: 60%">
+        <a class="button new" onclick="CDiscipline.edit('0')">
+          {{tr}}CDiscipline-title-create{{/tr}}
+        </a>
+      </td>
+    </tr>
+  {{/if}}
+  <tr>
+    <td>
+      <form name="listFilter" action="?" method="get"
+            onsubmit="return onSubmitFormAjax(this, null, 'list_disciplines')">
+        <input type="hidden" name="m" value="mediusers" />
+        <input type="hidden" name="a" value="ajax_search_discipline" />
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()"/>
+
+        <table class="main layout">
+          <tr>
+            <td class="separator expand" onclick="MbObject.toggleColumn(this, $(this).next())"></td>
+
+            <td>
+              <table class="form">
+                <tr>
+                  <th style="width: 8%"> Mots clés : </th>
+                  <td> <input type="text" name="filter" value="" style="width: 20em;" onchange="$V(this.form.page, 0)" /> </td>
+                </tr>
+
+                <tr>
+                  <td colspan="2">
+                    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+                  </td>
+                </tr>
+               </table>
+             </td>
+          </tr>
+        </table>
       </form>
-      {{/if}}
-      {{if $specialite->discipline_id}}
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="4">Utilisateur(s) correspondant(s)</th>
-        </tr>
-        <tr>
-           <th>Nom Prénom</th>
-         </tr>
-         {{foreach from=$specialite->_ref_users item=curr_user}}
-         <tr>
-           <td class="text"><a href="?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr {{$curr_user->_view}}</a></td>
-         </tr>
-         {{foreachelse}}
-         <tr>
-           <td class="button" colspan="4">Aucun utilisateur trouvé</td>
-         </tr>
-         {{/foreach}}
-       </table>
-       {{/if}}      
     </td>
   </tr>
 </table>
+
+<div id="list_disciplines" style="overflow: hidden"></div>

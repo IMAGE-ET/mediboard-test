@@ -1,23 +1,37 @@
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class="CFunctions" field="text" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-    <th>{{mb_colonne class="CFunctions" field="type" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-    <th class="narrow" colspan="2">{{tr}}CFunctions-back-users{{/tr}}</th>
+    <th></th>
+    <th>{{mb_colonne class="CFunctions" field="text" order_col=$order_col order_way=$order_way function="CFunctions.changeFilter"}}</th>
+    <th>{{mb_colonne class="CFunctions" field="type" order_col=$order_col order_way=$order_way function="CFunctions.changeFilter"}}</th>
+    <th colspan="2">{{tr}}CFunctions-back-users{{/tr}}</th>
   </tr>
+  <tr>
+    <th colspan="3"></th>
+    <th>Principaux</th>
+    <th>Secondaires</th>
+  </tr>
+
   {{foreach from=$functions item=_function}}
-  <tr {{if $_function->_id == $function_id}}class="selected"{{/if}}>
-    <td class="text">
-      <a href="#{{$_function->_guid}}" onclick="showFunction('{{$_function->_id}}', this)">
-        {{$_function->text}}
-      </a>
+  <tr class="{{if $_function->_id == $function_id}}selected{{/if}} {{if !$_function->actif}}hatching{{/if}}">
+    <td style="width: 1%" class="compact">
+      <button class="edit notext" onclick="CFunctions.editFunction('{{$_function->_id}}', this)"></button>
     </td>
-    <td>
+
+    <td class="text" style="width: 50%">
+      <span onmouseover="ObjectTooltip.createEx(this,'{{$_function->_guid}}')" class="mediuser" style="border-left-color: #{{$_function->color}};">
+        {{$_function->text}}
+      </span>
+    </td>
+
+    <td style="width: 20%">
       {{tr}}CFunctions.type.{{$_function->type}}{{/tr}}
     </td>
-    <td style="text-align: right; background: #{{$_function->color}}">
+
+    <td style="width: 7%; text-align: center;">
       {{$_function->_count.users|nozero}}
     </td>
-    <td style="text-align: right; background: #{{$_function->color}}">
+
+    <td style="width: 7%; text-align: center;">
       {{$_function->_count.secondary_functions|nozero}}
     </td>
   </tr>
