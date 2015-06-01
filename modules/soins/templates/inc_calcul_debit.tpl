@@ -30,7 +30,7 @@
     volume = {{$line->_quantite_totale}};
     
     if (poids.length) {
-      poids = parseInt(poids[0].innerHTML);
+      poids = parseInt(poids[0].down("span").innerHTML);
       $("view_poids").update("<strong>"+poids+" kg</strong>");
       $V(form._poids, poids);
     }
