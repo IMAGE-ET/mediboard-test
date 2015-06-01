@@ -24,20 +24,24 @@ $create_affectation = CAppUI::conf("urgences create_affectation");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-$curr_affectation = $sejour->loadRefCurrAffectation();
 
 $rpu = $sejour->loadRefRPU();
 
+if ($rpu->mutation_sejour_id) {
+  $sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
+}
+
+$sejour_hospit = new CSejour();
+$sejour_hospit->load($sejour_id);
+
+$curr_affectation_hospit = $sejour_hospit->loadRefCurrAffectation();
+
 // Pour un séjour ayant comme mode de sortie urgence:
 if ($create_affectation && $mode_sortie == "mutation" &&
-    $rpu && $rpu->_id && ($curr_affectation->lit_id != $lit_id || $sejour->service_sortie_id != $service_sortie_id)
+    $rpu && $rpu->_id &&
+    (($lit_id && $curr_affectation_hospit->lit_id != $lit_id) ||
+    ($service_sortie_id && $curr_affectation_hospit->service_id != $service_sortie_id))
 ) {
-  if ($rpu->mutation_sejour_id) {
-    $sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
-  }
-
-  $sejour_hospit = new CSejour();
-  $sejour_hospit->load($sejour_id);
 
   // Création de l'affectation d'hospitalisation
   $affectation_hospit = new CAffectation();
