@@ -1442,7 +1442,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     // Calcul du début de l'intervention
     $mbOpDate = CValue::first(
-      $operation->_ref_plageop->date,
+      $operation->loadRefPlageOp()->date,
       $operation->date
     );
 
