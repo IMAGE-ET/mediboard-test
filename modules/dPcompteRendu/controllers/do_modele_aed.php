@@ -221,7 +221,6 @@ if (isset($_POST["_source"])) {
         CMbString::htmlEntities("[Courrier - Formule de politesse - Début]"),
         CMbString::htmlEntities("[Courrier - Formule de politesse - Fin]"),
         CMbString::htmlEntities("[Courrier - nom destinataire]"),
-        CMbString::htmlEntities("[Courrier - nom destinataire]"),
         CMbString::htmlEntities("[Courrier - adresse destinataire]"),
         CMbString::htmlEntities("[Courrier - cp ville destinataire]"),
         CMbString::htmlEntities("[Courrier - confraternite]"),

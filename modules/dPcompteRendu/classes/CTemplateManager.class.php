@@ -55,7 +55,6 @@ class CTemplateManager {
       $this->addProperty("Courrier - Formule de politesse - Début", "[Courrier - Formule de politesse - Début]");
       $this->addProperty("Courrier - Formule de politesse - Fin", "[Courrier - Formule de politesse - Fin]");
       $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
-      $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
       $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
       $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
       $this->addProperty("Courrier - confraternite"        , "[Courrier - confraternite]");
