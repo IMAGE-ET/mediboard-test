@@ -2280,6 +2280,12 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet`
                 CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi','enfant','enceinte');";
     $this->addQuery($query);
-    $this->mod_version = '2.56';
+
+    $this->makeRevision("2.56");
+
+    $query = "ALTER TABLE `consultation` ADD INDEX `consult_related_id` (`consult_related_id`)";
+    $this->addQuery($query, true);
+
+    $this->mod_version = '2.57';
   }
 }
