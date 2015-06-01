@@ -1614,6 +1614,7 @@ $locales['CSejour._type_admission.psy'] = 'Psychiatrie';
 $locales['CSejour._type_admission.seances'] = 'Séance(s)';
 $locales['CSejour._type_admission.ssr'] = 'SSR';
 $locales['CSejour._type_admission.urg'] = 'Urgences';
+$locales['CSejour._type_admission.tous'] = 'Tous les séjours (dont urgences et séances)';
 $locales['CSejour._type_sejour.'] = '-';
 $locales['CSejour._type_sejour.accident'] = 'Accident';
 $locales['CSejour._type_sejour.esthetique'] = 'Esthétique';

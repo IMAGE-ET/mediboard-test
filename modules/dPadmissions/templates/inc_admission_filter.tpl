@@ -35,7 +35,13 @@
               <label title="Chirurgie">C<input title="Chirurgie" type="checkbox" name="type_pec[]" value="C" checked onclick="reloadFullAdmissions();"/></label>
               <label title="Obstétrique">O<input title="Obstétrique" type="checkbox" name="type_pec[]" value="O" checked onclick="reloadFullAdmissions();"/></label>
               <br/>
-              {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullAdmissions()"}}
+              <select name="_type_admission" onchange="reloadFullAdmissions();" style="width:15em;">
+                <option value="">&mdash; {{tr}}CSejour.all{{/tr}}</option>
+                <option value="tous">&mdash; {{tr}}CSejour._type_admission.tous{{/tr}}</option>
+                {{foreach from=$list_type_ad item=_admission}}
+                  <option value="{{$_admission}}">{{tr}}CSejour._type_admission.{{$_admission}}{{/tr}}</option>
+                {{/foreach}}
+              </select>
             </td>
             <td>
               <br />

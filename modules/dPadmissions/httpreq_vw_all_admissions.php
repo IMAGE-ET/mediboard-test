@@ -64,7 +64,9 @@ if ($type == "ambucomp") {
   $where["sejour.type"] = " = 'ambu' OR `sejour`.`type` = 'comp'";
 }
 elseif ($type) {
-  $where["sejour.type"] = " = '$type'";
+  if ($type !== 'tous') {
+    $where["sejour.type"] = " = '$type'";
+  }
 }
 else {
   $where["sejour.type"] = "!= 'urg' AND `sejour`.`type` != 'seances'";
