@@ -18,7 +18,7 @@ $error       = "";
 
 // Remplissage de la table temporaire avec le bouton "Remplir table temporaire"
 if ($table) {
-  $ds    = CSQLDataSource::get("std");
+  $ds              = CSQLDataSource::get("std");
   $search_indexing = new CSearchIndexing();
   foreach ($names_types as $name_type) {
     $queries = $search_indexing->firstIndexingStore($name_type);
@@ -50,7 +50,7 @@ if ($log) {
   $client_index = new CSearchLog();
   //create a client
   $client_index->createClient();
-  $index = $client_index->getIndex(CAppUI::conf("db std dbname")."_log")->exists();
+  $index = $client_index->getIndex(CAppUI::conf("db std dbname") . "_log")->exists();
   $client_index->createLogMapping($index);
 }
 

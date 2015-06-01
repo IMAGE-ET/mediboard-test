@@ -1,19 +1,20 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @link     http://www.mediboard.org */
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org
+ */
 CCanDo::checkRead();
 
 $prescription_id = CValue::get("prescription_id", null);
-$sejour_id = CValue::get("sejour_id");
-$contexte = CValue::get("contexte");
-$user = CMediusers::get();
+$sejour_id       = CValue::get("sejour_id");
+$contexte        = CValue::get("contexte");
+$user            = CMediusers::get();
 
 $_ref_object = new CSejour();
 if ($sejour_id) {
@@ -35,13 +36,13 @@ if ($prescription_id) {
   }
 }
 
-$favoris = new CSearchThesaurusEntry();
+$favoris             = new CSearchThesaurusEntry();
 $favoris_sans_cibles = new CSearchThesaurusEntry();
-$targets = new CSearchTargetEntry();
-$actes_ccam = array();
-$diags_cim = array();
-$results = array();
-$tab_favoris = array();
+$targets             = new CSearchTargetEntry();
+$actes_ccam          = array();
+$diags_cim           = array();
+$results             = array();
+$tab_favoris         = array();
 
 $date  = CMbDT::date("-1 month");
 $types = array();
@@ -55,8 +56,8 @@ $test_search->testConnection($group);
 
 // On récupère les favoris
 if ($_ref_object instanceof CSejour) {
-  $date  = CMbDT::format($_ref_object->entree_reelle, "%Y-%m-%d");
-  /** @var  $_ref_object CSejour*/
+  $date = CMbDT::format($_ref_object->entree_reelle, "%Y-%m-%d");
+  /** @var  $_ref_object CSejour */
   // actes CCAM du séjour
   foreach ($_ref_object->loadRefsActesCCAM() as $_ccam) {
     $diags_actes[] = $_ccam->code_acte;
@@ -86,10 +87,10 @@ if ($_ref_object instanceof CSejour) {
   $meds = $_ref_object->_ref_prescription_sejour->loadRefsLinesMed();
   foreach ($_ref_object->_ref_prescription_sejour->_ref_prescription_lines as $_med) {
     if ($_med->atc) {
-      $arbre = $_med->atc;
+      $arbre         = $_med->atc;
       $diags_actes[] = $_med->atc;
       do {
-        $med = new CMedicamentClasseATC();
+        $med   = new CMedicamentClasseATC();
         $arbre = $med->getCodeNiveauSup($arbre);
         if ($arbre) {
           $diags_actes[] = $arbre;
@@ -102,10 +103,10 @@ if ($_ref_object instanceof CSejour) {
   foreach ($_ref_object->_ref_prescription_sejour->_ref_prescription_line_mixes as $_mix) {
     foreach ($_mix->loadRefsLines() as $item) {
       if ($item->atc) {
-        $arbre = $item->atc;
+        $arbre         = $item->atc;
         $diags_actes[] = $item->atc;
         do {
-          $med = new CMedicamentClasseATC();
+          $med   = new CMedicamentClasseATC();
           $arbre = $med->getCodeNiveauSup($arbre);
           if ($arbre) {
             $diags_actes[] = $arbre;
@@ -117,45 +118,45 @@ if ($_ref_object instanceof CSejour) {
 
   // récupération des favoris avec cibles pour le dossier de soins
   if (isset($diags_actes)) {
-    $diags_actes = array_unique($diags_actes);
-    $list = array("CCodeCIM10", "CCodeCCAM", "CMedicamentClasseATC");
-    $where["object_class"] = " ". CSQLDataSource::prepareIn($list);
-    $where["object_id"] = " ". CSQLDataSource::prepareIn($diags_actes);
-    $targets = $targets->loadList($where);
+    $diags_actes           = array_unique($diags_actes);
+    $list                  = array("CCodeCIM10", "CCodeCCAM", "CMedicamentClasseATC");
+    $where["object_class"] = " " . CSQLDataSource::prepareIn($list);
+    $where["object_id"]    = " " . CSQLDataSource::prepareIn($diags_actes);
+    $targets               = $targets->loadList($where);
 
     $tab_favoris_id = array();
     foreach ($targets as $_target) {
-      /** @var  $_target CSearchTargetEntry*/
+      /** @var  $_target CSearchTargetEntry */
       $tab_favoris_id[] = $_target->search_thesaurus_entry_id;
     }
     $whereFavoris["search_thesaurus_entry_id"] = CSQLDataSource::prepareIn(array_unique($tab_favoris_id));
-    $whereFavoris["contextes"] = CSQLDataSource::prepareIn(array("generique", $contexte));
+    $whereFavoris["contextes"]                 = CSQLDataSource::prepareIn(array("generique", $contexte));
 
     $whereFavoris["function_id"] = " IS NULL";
-    $whereFavoris["group_id"] = " IS NULL";
-    $whereFavoris["user_id"] = "= '$user->_id'";
-    $tab_favoris_user = $favoris->loadList($whereFavoris);
+    $whereFavoris["group_id"]    = " IS NULL";
+    $whereFavoris["user_id"]     = "= '$user->_id'";
+    $tab_favoris_user            = $favoris->loadList($whereFavoris);
 
     unset($whereFavoris["user_id"]);
-    $function_id = $user->loadRefFunction()->_id;
+    $function_id                 = $user->loadRefFunction()->_id;
     $whereFavoris["function_id"] = " = '$function_id'";
-    $tab_favoris_function =  $favoris->loadList($whereFavoris);
+    $tab_favoris_function        = $favoris->loadList($whereFavoris);
 
     unset($whereFavoris["function_id"]);
-    $group_id = $user->loadRefFunction()->group_id;
+    $group_id                 = $user->loadRefFunction()->group_id;
     $whereFavoris["group_id"] = " = '$group_id'";
-    $tab_favoris_group =  $favoris->loadList($whereFavoris);
+    $tab_favoris_group        = $favoris->loadList($whereFavoris);
 
     $tab_favoris = $tab_favoris_user + $tab_favoris_function + $tab_favoris_group;
   }
 
   // récupération des favoris sans cibles avec search_auto à "oui"
-  $whereFavorisSansCibles["contextes"] = CSQLDataSource::prepareIn(array("generique", $contexte));
+  $whereFavorisSansCibles["contextes"]   = CSQLDataSource::prepareIn(array("generique", $contexte));
   $whereFavorisSansCibles["function_id"] = " IS NULL";
-  $whereFavorisSansCibles["group_id"] = " IS NULL";
-  $whereFavorisSansCibles["user_id"] = "= '$user->_id'";
+  $whereFavorisSansCibles["group_id"]    = " IS NULL";
+  $whereFavorisSansCibles["user_id"]     = "= '$user->_id'";
   $whereFavorisSansCibles["search_auto"] = " LIKE '1'";
-  $tab_favoris_user_sans_cibles = $favoris_sans_cibles->loadList($whereFavorisSansCibles);
+  $tab_favoris_user_sans_cibles          = $favoris_sans_cibles->loadList($whereFavorisSansCibles);
 
 
   unset($whereFavorisSansCibles["user_id"]);
@@ -164,9 +165,9 @@ if ($_ref_object instanceof CSejour) {
   $tab_favoris_function_sans_cibles =  $favoris_sans_cibles->loadList($whereFavorisSansCibles);
 
   unset($whereFavorisSansCibles["function_id"]);
-  $group_id = $user->loadRefFunction()->group_id;
+  $group_id                           = $user->loadRefFunction()->group_id;
   $whereFavorisSansCibles["group_id"] = " = '$group_id'";
-  $tab_favoris_group_sans_cibles =  $favoris->loadList($whereFavorisSansCibles);
+  $tab_favoris_group_sans_cibles      = $favoris->loadList($whereFavorisSansCibles);
 
   $tab_favoris += $tab_favoris_user_sans_cibles + $tab_favoris_function_sans_cibles + $tab_favoris_group_sans_cibles;
 }
@@ -174,7 +175,7 @@ if ($_ref_object instanceof CSejour) {
 // On effectue la recherche automatique
 if (isset($tab_favoris)) {
   try {
-    $search = new CSearch();
+    $search  = new CSearch();
     $results = $search->searchAuto($tab_favoris, $_ref_object);
   }
   catch (Exception $e) {
@@ -185,15 +186,15 @@ if (isset($tab_favoris)) {
 
 // Récupération des rss items pour le marquage pmsi (preuves de recherche PMSI)
 $rss_items = array();
-$items = array();
+$items     = array();
 if ($contexte == "pmsi" && CModule::getActive("atih")) {
-  $rss = new CRSS();
+  $rss            = new CRSS();
   $rss->sejour_id = $sejour_id;
   $rss->loadMatchingObject();
   $rss_items = $rss->loadRefsSearchItems();
 
   foreach ($rss_items as $_items) {
-    $items[] = $_items->search_class."-".$_items->search_id;
+    $items[] = $_items->search_class . "-" . $_items->search_id;
   }
 }
 

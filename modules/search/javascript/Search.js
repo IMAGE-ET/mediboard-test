@@ -25,18 +25,11 @@ Search = window.Search || {
     return false;
   },
 
-  /**
-   * Method to show the différence between two mapping
-   *
-   * @param {Element} before the mapping before
-   * @param {Element} after  the mapping after
-   *
-   */
-  showdiff: function (before, after) {
-    var url = new Url('search', 'ajax_show_diff_mapping');
-    url.addParam("before", before);
-    url.addParam("after", after);
+  requestCluster: function (form) {
+    var url = new Url("search", "ajax_request_cluster");
+    url.addFormData(form);
     url.requestModal("85%", "50%");
+    return false;
   },
 
   /**

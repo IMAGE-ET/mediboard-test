@@ -11,6 +11,8 @@
 <script>
   Main.add(function () {
     Search.updateListStats();
+    var tree = new TreeView("mapping");
+    tree.collapseAll();
   });
 </script>
 <table class="main tbl" id="cartographie_systeme">
@@ -32,34 +34,54 @@
         {{mb_include module=search template=inc_carto_log_infos}}
       {{/if}}
     </td>
-    <td class="halfPane">
-      {{if $infos_index|@count !==0}}
-        <table class="tbl" id="table-mapping">
-          <tr>
-            <th class="category"> Visualisation du mapping</th>
-          </tr>
-          <tr>
-            <td class="text compact" style="background-color:#FAF6D9 " id="mapping">
-              {{$infos_index.mapping|@mbTrace}}
-            </td>
-          </tr>
-          <tr>
-            <th class="category"> Modification du mapping</th>
-          </tr>
-          <tr>
-            <td>
-             <label><textarea name="mappingjson" id="mappingjson">
-                {{$infos_index.mappingjson}}
-              </textarea></label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button class="new" onclick="Search.showdiff('{{$infos_index.mappingjson}}', $V($('mappingjson')))">Prévisualiser</button>
-            </td>
-          </tr>
-        </table>
-      {{/if}}
+    <td class="halfPane" style="vertical-align: top;">
+      <form method="get" name="requestSearch" action="?m=search" class="watched prepared" onsubmit="return Search.requestCluster(this);">
+        {{if $infos_index|@count !==0}}
+          <table class="tbl" id="table-mapping">
+            <tr>
+              <th class="category">Visualisation du mapping</th>
+            </tr>
+            <tr>
+              <td class="text compact" id="mapping">
+                <ul style="font-family: monospace;">
+                  {{foreach from=$infos_index.mapping item=_type key=_title}}
+                    <li>
+                      <span>{{$_title}}</span>
+                      <ul>
+                        {{foreach from=$_type item=_data key=_title}}
+                          <li style="background-color:#FAF6D9;">
+                            <span class="text empty">{{$_data|@mbTrace}}</span>
+                          </li>
+                        {{/foreach}}
+                      </ul>
+                    </li>
+                  {{/foreach}}
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th class="category">Requête Cluster ES</th>
+            </tr>
+            <tr>
+              <td>
+                <label><input type="radio" name="type_request" value="get" checked/> GET</label>
+                <label><input type="radio" name="type_request" value="post"/> POST</label>
+                <label><input type="radio" name="type_request" value="put"/> PUT</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><textarea name="request" id="request"></textarea></label>
+              </td>
+            </tr>
+            <tr>
+              <td class="button">
+                <button class="new" type="submit">Effectuer la requête</button>
+              </td>
+            </tr>
+          </table>
+        {{/if}}
+      </form>
     </td>
   </tr>
 </table>

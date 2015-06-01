@@ -1,24 +1,25 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Search
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @link     http://www.mediboard.org */
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org
+ */
 
-$date  = CMbDT::date("-1 month");
-$user  = CMediusers::get();
+$date = CMbDT::date("-1 month");
+$user = CMediusers::get();
 $user->loadRefFunction()->loadRefGroup();
 
 
-$entry = new CSearchThesaurusEntry();
-$entry->user_id =  "$user->_id";
-$thesaurus = $entry->loadMatchingList();
+$entry          = new CSearchThesaurusEntry();
+$entry->user_id = "$user->_id";
+$thesaurus      = $entry->loadMatchingList();
 foreach ($thesaurus as $_thesaurus) {
-  /** @var $_thesaurus  CSearchThesaurusEntry*/
+  /** @var $_thesaurus  CSearchThesaurusEntry */
   $_thesaurus->loadRefsTargets();
 }
 

@@ -992,7 +992,7 @@ class CFile extends CDocumentItem implements IIndexableObject {
   /**
    * Redesign the content of the body you will index
    *
-   * @param string $content The content you want to redesign
+   * @param string $content The filename you want to index
    *
    * @return string
    */

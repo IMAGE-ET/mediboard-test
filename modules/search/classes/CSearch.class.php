@@ -284,8 +284,8 @@ class CSearch {
   /**
    * First indexing create mapping
    *
-   * @param array          $names_types the name of types we want to create
-   * @param Elastica\Index $index       the index where we want to create those types
+   * @param array $names_types the name of types we want to create
+   * @param bool  $index       the index where we want to create those types
    *
    * @return void
    */
@@ -369,7 +369,7 @@ class CSearch {
         break;
       case 'merge':
         //nothing to do
-        /* supprimer un des deux et faire un update de l'autre.*/
+        /*supprimer un des deux et faire un update de l'autre.*/
         break;
       default:
         return false;
