@@ -65,7 +65,7 @@ class CTraitement extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->traitement;
+    $this->_view = CMbString::truncate($this->traitement, 40);
   }
 
   /**
@@ -122,8 +122,6 @@ class CTraitement extends CMbObject {
    */
   function loadView(){
     parent::loadView();
-    $this->loadLogs();
-    $this->updateOwnerAndDates();
     $this->loadRefDossierMedical();
   }
 }

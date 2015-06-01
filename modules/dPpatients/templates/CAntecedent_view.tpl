@@ -7,53 +7,17 @@
 
 {{mb_script module=patients script=antecedents}}
 
+{{mb_include template=CMbObject_view}}
+
+{{if $object->annule == 1}}
 <table class="tbl">
   <tr>
-    <th class="category">{{tr}}CAntecedent{{/tr}}
-      {{mb_include module=system template=inc_object_idsante400 object=$object}}
+    <th class="category cancelled" colspan="3">
+      {{tr}}CAntecedent-annule{{/tr}}
     </th>
   </tr>
-  
-  {{if $object->type}}
-  <tr>
-    <td>
-      <strong>{{mb_label object=$object field=type}}</strong>
-      {{mb_value object=$object field=type}}
-      <br/>
-    </td>
-  </tr>
-  {{/if}}
-
-  {{if $object->appareil}}
-  <tr>
-    <td>
-      <strong>{{mb_label object=$object field=appareil}}</strong>
-      {{mb_value object=$object field=appareil}}
-      <br/>
-    </td>
-  </tr>
-  {{/if}}
-
-  {{if $object->date}}
-  <tr>
-    <td>
-      <strong>{{mb_label object=$object field=date}}</strong>
-      {{mb_value object=$object field=date}}
-      <br/>
-    </td>
-  </tr>
-  {{/if}}
-
-  {{if $object->rques}}
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field=rques}}</strong>
-      {{mb_value object=$object field=rques}}
-      <br/>
-    </td>
-  </tr>
-  {{/if}}
 </table>
+{{/if}}
 
 {{assign var=dossier_medical value=$object->_ref_dossier_medical}}
 <table class="form">
@@ -105,19 +69,4 @@
     </td>
   </tr>
 
-</table>
-  
-<table class="tbl" id="{{$object->_guid}}_tooltip">
-
-  <tr>
-    <th colspan="2">Historique</th>
-  </tr>
-  
-  {{foreach from=$object->_ref_logs item=_log}}
-  <tr>
-    <td>{{$_log->_ref_user->_view}}
-    <td>{{mb_value object=$_log field=date}}</td>
-  </tr>
-  {{/foreach}}
-  
 </table>

@@ -82,8 +82,8 @@ class CAntecedent extends CMbObject {
     $props["appareil"]           = "enum list|" . CAppUI::conf("patients CAntecedent appareils");
     $props["date"]               = "date progressive";
     $props["rques"]              = "text helped|type|appareil";
-    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
-    $props["annule"]             = "bool";
+    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
+    $props["annule"]             = "bool show|0";
     $props["majeur"]             = "bool";
     $props["owner_id"]           = "ref class|CMediusers";
     $props["creation_date"]      = "dateTime";
@@ -106,7 +106,7 @@ class CAntecedent extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->rques;
+    $this->_view = CMbString::truncate($this->rques, 40);
   }
 
   /**
@@ -124,8 +124,6 @@ class CAntecedent extends CMbObject {
    */
   function loadView(){
     parent::loadView();
-    $this->loadLogs();
-    $this->updateOwnerAndDates();
     $this->loadRefDossierMedical();
   }
 

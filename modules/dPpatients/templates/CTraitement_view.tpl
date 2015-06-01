@@ -5,7 +5,19 @@
   {{mb_return}}
 {{/if}}
 
-{{include file=CMbObject_view.tpl}}
+{{mb_script module=patients script=tratements}}
+
+{{mb_include template=CMbObject_view}}
+
+{{if $object->annule == 1}}
+  <table class="tbl">
+    <tr>
+      <th class="category cancelled" colspan="3">
+        {{tr}}CTraitement-annule{{/tr}}
+      </th>
+    </tr>
+  </table>
+{{/if}}
 
 {{if $object->_ref_dossier_medical->object_class == "CPatient"}}
   {{assign var=reload value="DossierMedical.reloadDossierPatient"}}
@@ -44,18 +56,4 @@
       </form>
     </td>
   </tr>
-</table>
-<table class="tbl" id="{{$object->_guid}}_tooltip">
-
-  <tr>
-    <th colspan="2">Historique</th>
-  </tr>
-  
-  {{foreach from=$object->_ref_logs item=_log}}
-  <tr>
-    <td>{{$_log->_ref_user->_view}}
-    <td>{{mb_value object=$_log field=date}}</td>
-  </tr>
-  {{/foreach}}
-  
 </table>
