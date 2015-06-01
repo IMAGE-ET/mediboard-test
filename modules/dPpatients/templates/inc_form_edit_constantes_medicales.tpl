@@ -216,7 +216,9 @@ Main.add(function () {
                   style="display: none;" class="secondary"
                   {{assign var=at_least_one_hidden value=true}}
                   {{/if}}>
-                  <td><input name="_displayGraph" type="checkbox" data-constant="{{$_constant}}" onclick="checkGraph();"/></td>
+                  <td>
+                    <input name="_displayGraph" type="checkbox" data-constant="{{$_constant}}" onclick="checkGraph();" tabindex="-1"/>
+                  </td>
                   <th style="text-align: left;" class="text">
                     <button type="button" class="stats notext" style="float: right; display: none;" onclick="displayConstantGraph('{{$_constant}}');">
                       {{tr}}CConstantGraph-msg-display{{/tr}}
