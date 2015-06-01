@@ -37,7 +37,6 @@
     <tr>
       <th>Trans.</th>
       <th>N° adhérent</th>
-      <th>Code clinique</th>
       <th>Dossier</th>
       <th>Facture</th>
       <th>Débiteur</th>
@@ -56,7 +55,6 @@
       <tr>
         <td class="text">{{$_reglement.genre}}</td>
         <td class="text">{{$_reglement.num_client}}</td>
-        <td class="warning">Code clinique</td>
         <td class="text">
           {{if $facture->_class == "CFactureEtablissement"}}
             {{$facture->_ref_last_sejour->_id}}
@@ -72,12 +70,13 @@
         <td class="text">{{$_reglement.code_rejet}}</td>
         <td class="text">{{$facture->_ref_relances|@count}}</td>
         <td class="text">{{$_reglement.num_microfilm}}</td>
-        <td class="text {{if count($_reglement.errors)}}warning compact{{else}}ok{{/if}}">
-          {{if count($_reglement.errors)}}
-            {{foreach from=$_reglement.errors item=_error}}
-              <div>{{$_error}}</div>
-            {{/foreach}}
-          {{/if}}
+        <td class="text {{if $_reglement.errors|@count}}error{{elseif $_reglement.warning|@count}}warning{{else}}ok{{/if}} compact">
+          {{foreach from=$_reglement.errors item=_error}}
+            <div>{{$_error}}</div>
+          {{/foreach}}
+          {{foreach from=$_reglement.warning item=_error}}
+            <div>{{$_error}}</div>
+          {{/foreach}}
         </td>
       </tr>
     {{/foreach}}

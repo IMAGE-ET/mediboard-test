@@ -10,9 +10,9 @@
  */
 
 CCanDo::checkEdit();
-
-$file = CValue::files("import");
+$file   = CValue::files("import");
 $dryrun = CValue::post("dryrun");
+
 $facture_class = CValue::post("facture_class");
 if (!$facture_class) {
   $facture_class = CValue::get("facture_class");
@@ -57,6 +57,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["prix"]            = substr($line, 96, 4);
 
     $results[$i]["errors"] = array();
+    $results[$i]["warning"] = array();
 
 
     if (!$results[$i]["reference"]) {
@@ -101,8 +102,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       if ($reglement->date == "") {
         $results[$i]["errors"][] = "Date de dépot manquant";
       }
+
       if ($facture->_id && ($facture->patient_date_reglement || ($facture->_du_restant_patient-$reglement->montant) < 0)) {
-        $results[$i]["errors"][] = "Solde créditeur";
+        $type_error = CAppUI::conf("dPfacturation Other autorise_excess_amount", CGroups::loadCurrent()) ? "warning" : "errors";
+        $results[$i][$type_error][] = "Solde créditeur";
       }
 
       $results[$i]["facture"] = $facture;
@@ -116,9 +119,19 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         $totaux["rejete"]["total"] += $reglement->montant;
         continue;
       }
+      else {
+        $totaux["impute"]["count"] ++;
+        $totaux["impute"]["total"] += $reglement->montant;
+
+        if (!isset($totaux["impute"]["dates"]["$reglement->date"])) {
+          $totaux["impute"]["dates"]["$reglement->date"] = array("count" => 0, "total" => 0.00);
+        }
+        $totaux["impute"]["dates"]["$reglement->date"]["count"] ++;
+        $totaux["impute"]["dates"]["$reglement->date"]["total"] += $reglement->montant;
+      }
 
       if (($facture->_du_restant_patient-$reglement->montant) >0) {
-        $results[$i]["errors"][] = "Paiement partiel";
+        $results[$i]["warning"][] = "Paiement partiel";
       }
 
       // Dry run to check references
@@ -132,16 +145,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         $results[$i]["errors"][] = $msg;
         continue;
-      }
-      else {
-        $totaux["impute"]["count"] ++;
-        $totaux["impute"]["total"] += $reglement->montant;
-
-        if (!isset($totaux["impute"]["dates"]["$reglement->date"])) {
-          $totaux["impute"]["dates"]["$reglement->date"] = array("count" => 0, "total" => 0.00);
-        }
-        $totaux["impute"]["dates"]["$reglement->date"]["count"] ++;
-        $totaux["impute"]["dates"]["$reglement->date"]["total"] += $reglement->montant;
       }
 
       CAppUI::setMsg($existing ? "CReglement-msg-modify" : "CReglement-msg-create", UI_MSG_OK);

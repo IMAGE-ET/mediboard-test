@@ -37,6 +37,7 @@ if (CAppUI::conf("ref_pays") == "2") {
           "Other" => array(
             "see_reject_xml"        => "bool default|0",
             "delfile_read_reject"   => "bool default|1",
+            "autorise_excess_amount"=> "bool default|1",
           ),
         )
       )
