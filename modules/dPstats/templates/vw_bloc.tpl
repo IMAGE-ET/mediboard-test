@@ -99,7 +99,7 @@
     <td>
       <select name="prat_id" style="width: 15em;">
         <option value="">&mdash; Tous les praticiens</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$filtre->_prat_id}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$filter->_prat_id}}
       </select>
     </td>
 
@@ -131,7 +131,7 @@
     <td>
       <select name="func_id" style="width: 15em;">
         <option value="">&mdash; Tous les cabinets</option>
-        {{mb_include module=mediusers template=inc_options_function list=$listFuncs selected=$filtre->_func_id}}
+        {{mb_include module=mediusers template=inc_options_function list=$listFuncs selected=$filter->_func_id}}
       </select>
     </td>
     <th></th>
