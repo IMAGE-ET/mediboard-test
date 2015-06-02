@@ -34,7 +34,7 @@ if ($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")) {
   $patientsCount = 0;
   $patientsSoundexCount = 0;
 
-  $patient = new CPatient;
+  $patient = new CPatient();
   $patient->_IPP = $patient_ipp;
   $patient->loadFromIPP();
   if ($patient->_id) {
@@ -115,6 +115,13 @@ else {
   $patientsLimited = array();
 
   if ($where) {
+
+    // Séparation des patients par fonction
+    if (CAppUI::conf('dPpatients CPatient function_distinct') && !CMediusers::get()->isAdmin()) {
+      $function_id = CMediusers::get()->function_id;
+      $where["function_id"] = $whereLimited["function_id"] = $whereSoundex["function_id"] = "= '$function_id'";
+    }
+
     $patients = $pat->loadList($where, $order, $limit);
     if ($nbExact = ($showCount - count($patients))) {
       $limit = "0, $nbExact";

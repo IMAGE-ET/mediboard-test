@@ -60,7 +60,7 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")) {
   $patientsCount = 0;
   $patientsSoundexCount = 0;
 
-  $patient = new CPatient;
+  $patient = new CPatient();
   $patient->_IPP = $patient_ipp;
   $patient->loadFromIPP();
   if ($patient->_id) {
