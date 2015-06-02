@@ -26,7 +26,7 @@
     $('_adresse_par_prat').show().update('Autres : '+view);
     $V(this.form.adresse_par_prat_id, id);
     $V(this.form._correspondants_medicaux, '', false);
-  }
+  };
 
   /**
    * used to edit multiple plages
@@ -197,6 +197,9 @@
     url.addParam("field", "patient_id");
     url.addParam("view_field", "_patient_view");
     url.addParam("input_field", "_seek_patient");
+    {{if $conf.dPpatients.CPatient.function_distinct && !$app->_ref_user->isAdmin()}}
+      url.addParam("where[function_id]", "{{$app->_ref_user->function_id}}");
+    {{/if}}
     url.autoComplete(form.elements._seek_patient, null, {
       minChars: 3,
       method: "get",
@@ -228,7 +231,7 @@
     {{/if}}
 
     {{if $display_elt}}
-      var url = new Url("prescription", "httpreq_do_element_autocomplete");
+      url = new Url("prescription", "httpreq_do_element_autocomplete");
       {{if !$app->_ref_user->isPraticien()}}
         url.addParam("user_id", $V(form.chir_id));
       {{/if}}
@@ -509,7 +512,7 @@
                           {{/if}}
                         </button>
                       {{else}}
-                        <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
+                        <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)">Consultation multiple</button>
                       {{/if}}
                       </td>
                     </tr>
