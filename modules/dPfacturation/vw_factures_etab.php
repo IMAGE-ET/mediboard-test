@@ -36,6 +36,7 @@ $patient->load($patient_id);
 
 $ljoin = array();
 $where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 if ($etat_relance || $search_easy == 7) {
   $ljoin["facture_relance"] = "facture_relance.object_id = facture_etablissement.facture_id";
   $where["facture_relance.object_class"] = " = 'CFactureEtablissement'";
@@ -54,8 +55,8 @@ if ($no_finish_reglement || $search_easy == 6) {
 if ($chirSel == -1) {
   $where["praticien_id"] = CSQLDataSource::prepareIn(array_keys($listChir));
 }
-elseif ($chirSel) {
-  $where["praticien_id"] =" = '$chirSel' ";
+else{
+  $where["praticien_id"] = $chirSel ? " = '$chirSel'" : CSQLDataSource::prepareIn(array_keys($listChir));
 }
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id' ";
