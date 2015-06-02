@@ -27,12 +27,17 @@ $numero             = CValue::getOrSession("numero", 0);
 $search_easy        = CValue::getOrSession("search_easy", "0");
 $xml_etat           = CValue::getOrSession("xml_etat", "");
 
+// Liste des chirurgiens
+$user = new CMediusers();
+$listChir =  $user->loadPraticiens(PERM_EDIT);
+
 //Patient sélectionné
 $patient = new CPatient();
 $patient->load($patient_id);
 
 $ljoin = array();
 $where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 if ($etat_relance || $search_easy == 7) {
   $ljoin["facture_relance"] = "facture_relance.object_id = facture_cabinet.facture_id";
   $where["facture_relance.object_class"] = " = 'CFactureCabinet'";
@@ -49,9 +54,7 @@ elseif (($etat_cloture == "2" || $search_easy == 2) && $type_date_search != "clo
 if ($no_finish_reglement || $search_easy == 6) {
   $where["patient_date_reglement"] = "IS NOT NULL";
 }
-if ($chirSel) {
-  $where["praticien_id"] =" = '$chirSel'";
-}
+$where["praticien_id"] = $chirSel ? " = '$chirSel'" : CSQLDataSource::prepareIn(array_keys($listChir));
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id'";
 }
@@ -114,10 +117,6 @@ $banques = $banque->loadList(null, "nom");
 $filter = new CConsultation();
 $filter->_date_min = $date_min;
 $filter->_date_max = $date_max;
-
-// Liste des chirurgiens
-$user = new CMediusers();
-$listChir =  $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
