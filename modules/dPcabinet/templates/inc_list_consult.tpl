@@ -61,7 +61,7 @@ putArrivee = function(oForm) {
   <tr>
     <th id="inc_list_consult_th_consult" class="title" colspan="10">
       Consultations
-    {{if $board}}
+    {{if $board && isset($withClosed|smarty:nodefaults)}}
       <label style="float: right;font-size: 10px;margin-left: -125px;color:black;text-shadow:none;">
         Masquer les terminées
         <input name="withClosed" type="checkbox" {{if !$withClosed}}checked="checked"{{/if}} onchange="updateListConsults(this.checked?0:1);"/>
