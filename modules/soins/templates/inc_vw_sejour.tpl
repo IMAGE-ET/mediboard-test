@@ -59,7 +59,8 @@
           > {{"pharmacie Risque_pop age_max"|conf:"CGroups-$g"}} ans
         {{/if}}
       {{/if}}
-      {{if $patient->_ref_last_grossesse && $patient->_ref_last_grossesse->terme_prevu >= $smarty.now}}
+      {{assign var=grossesse value=$patient->_ref_last_grossesse}}
+      {{if $grossesse && $grossesse->_id && $grossesse->active}}
         <img onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_last_grossesse->_guid}}')"
              src="style/mediboard/images/icons/grossesse.png" style="background-color: rgb(255, 215, 247);"/>
       {{/if}}
