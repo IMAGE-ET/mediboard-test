@@ -48,6 +48,7 @@
     url.addParam("selAdmis"  , $V(form.selAdmis));
     url.addParam("selSaisis" , $V(form.selSaisis));
     url.addParam("type_pec[]" , $V(form.elements['type_pec[]']), true);
+    url.addParam("active_filter_services" , $V(form.elements['active_filter_services']));
     url.requestUpdate('allAdmissions' , reloadAdmission);
   }
 
@@ -64,6 +65,7 @@
     url.addParam("selAdmis"  , $V(form.selAdmis));
     url.addParam("selSaisis" , $V(form.selSaisis));
     url.addParam("type_pec[]" , $V(form.elements['type_pec[]']), true);
+    url.addParam("active_filter_services" , $V(form.elements['active_filter_services']));
     url.addParam("filterFunction", $V(form.filterFunction));
     url.requestUpdate('listAdmissions');
   }

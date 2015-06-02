@@ -14,17 +14,18 @@
 CCanDo::checkRead();
 
 // Type d'admission
-$type           = CValue::getOrSession("type");
-$services_ids   = CValue::getOrSession("services_ids");
-$prat_id        = CValue::getOrSession("prat_id");
-$selAdmis       = CValue::getOrSession("selAdmis", "0");
-$selSaisis      = CValue::getOrSession("selSaisis", "0");
-$order_col      = CValue::getOrSession("order_col", "patient_id");
-$order_way      = CValue::getOrSession("order_way", "ASC");
-$date           = CValue::getOrSession("date", CMbDT::date());
-$filterFunction = CValue::getOrSession("filterFunction");
-$period         = CValue::getOrSession("period");
-$type_pec       = CValue::get("type_pec" , array("M", "C", "O"));
+$type            = CValue::getOrSession("type");
+$services_ids    = CValue::getOrSession("services_ids");
+$enabled_service = CValue::getOrSession("active_filter_services", 0);
+$prat_id         = CValue::getOrSession("prat_id");
+$selAdmis        = CValue::getOrSession("selAdmis", "0");
+$selSaisis       = CValue::getOrSession("selSaisis", "0");
+$order_col       = CValue::getOrSession("order_col", "patient_id");
+$order_way       = CValue::getOrSession("order_way", "ASC");
+$date            = CValue::getOrSession("date", CMbDT::date());
+$filterFunction  = CValue::getOrSession("filterFunction");
+$period          = CValue::getOrSession("period");
+$type_pec        = CValue::get("type_pec", array("M", "C", "O"));
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -58,11 +59,11 @@ $group = CGroups::loadCurrent();
 
 // Lien avec les patients et les praticiens
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$ljoin["users"] = "sejour.praticien_id = users.user_id";
+$ljoin["users"]    = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if (count($services_ids)) {
-  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+if (count($services_ids) && $enabled_service) {
+  $ljoin["affectation"]            = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
 
@@ -117,7 +118,7 @@ $where["sejour.type_pec"] = CSQLDataSource::prepareIn($type_pec);
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 // Mass preloading
-$patients   = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
 CStoredObject::massLoadFwdRef($sejours, "etablissement_entree_id");
 $praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CStoredObject::massLoadFwdRef($praticiens, "function_id");
@@ -168,7 +169,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
-  $operations = $_sejour->loadRefsOperations($whereOperations);
+  $operations      = $_sejour->loadRefsOperations($whereOperations);
   $operations_total += $operations;
 }
 
@@ -184,7 +185,7 @@ CStoredObject::massLoadBackRefs($operations_total, "dossiers_anesthesie", "date 
 
 foreach ($operations_total as $operation) {
   $operation->loadRefsActes();
-  $consult_anesth = $operation->loadRefsConsultAnesth();
+  $consult_anesth                              = $operation->loadRefsConsultAnesth();
   $dossiers_anesth_total[$consult_anesth->_id] = $consult_anesth;
 }
 
@@ -211,8 +212,8 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
 
 $list_mode_entree = array();
 if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
-  $mode_entree = new CModeEntreeSejour();
-  $where = array(
+  $mode_entree      = new CModeEntreeSejour();
+  $where            = array(
     "actif" => "= '1'",
   );
   $list_mode_entree = $mode_entree->loadGroupList($where);
@@ -221,25 +222,26 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("hier"          , $hier);
-$smarty->assign("demain"        , $demain);
-$smarty->assign("date_min"      , $date_min);
-$smarty->assign("date_max"      , $date_max);
-$smarty->assign("date_demain"   , $date_demain);
-$smarty->assign("date_actuelle" , $date_actuelle);
-$smarty->assign("date"          , $date);
-$smarty->assign("selAdmis"      , $selAdmis);
-$smarty->assign("selSaisis"     , $selSaisis);
-$smarty->assign("order_col"     , $order_col);
-$smarty->assign("order_way"     , $order_way);
-$smarty->assign("sejours"       , $sejours);
-$smarty->assign("prestations"   , CPrestation::loadCurrentList());
-$smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
-$smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
-$smarty->assign("functions"     , $functions);
-$smarty->assign("filterFunction", $filterFunction);
-$smarty->assign("period"        , $period);
-$smarty->assign("list_mode_entree", $list_mode_entree);
+$smarty->assign("hier"              , $hier);
+$smarty->assign("demain"            , $demain);
+$smarty->assign("date_min"          , $date_min);
+$smarty->assign("date_max"          , $date_max);
+$smarty->assign("date_demain"       , $date_demain);
+$smarty->assign("date_actuelle"     , $date_actuelle);
+$smarty->assign("date"              , $date);
+$smarty->assign("selAdmis"          , $selAdmis);
+$smarty->assign("selSaisis"         , $selSaisis);
+$smarty->assign("order_col"         , $order_col);
+$smarty->assign("order_way"         , $order_way);
+$smarty->assign("sejours"           , $sejours);
+$smarty->assign("prestations"       , CPrestation::loadCurrentList());
+$smarty->assign("canAdmissions"     , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPatients"       , CModule::getCanDo("dPpatients"));
+$smarty->assign("canPlanningOp"     , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("functions"         , $functions);
+$smarty->assign("filterFunction"    , $filterFunction);
+$smarty->assign("period"            , $period);
+$smarty->assign("list_mode_entree"  , $list_mode_entree);
+$smarty->assign('enabled_service'   , $enabled_service);
 
 $smarty->display("inc_vw_admissions.tpl");
