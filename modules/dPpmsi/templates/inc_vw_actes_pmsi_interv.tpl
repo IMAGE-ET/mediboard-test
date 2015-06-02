@@ -73,7 +73,7 @@
     </tr>
   {{/if}}
   <tr>
-    <td colspan="4" id="export_{{$operation->_guid}}">
+    <td colspan="4" id="export_{{$operation->_class}}_{{$operation->_id}}">
     </td>
   </tr>
 </table>

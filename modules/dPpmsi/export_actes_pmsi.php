@@ -107,7 +107,7 @@ else {
 }
 
 $object->loadLastLog();
-$object->countExchanges("pmsi", "evenementServeurActe");
+
 try {
   $object->store();
 }
@@ -121,6 +121,8 @@ catch(CMbException $e) {
 
   $e->stepAjax();
 }
+
+$object->countExchanges("pmsi", "evenementServeurActe");
 
 if (!$unlock_dossier) {
   // Flag les actes CCAM en envoyés
