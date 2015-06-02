@@ -24,7 +24,12 @@ Tarif = {
   submit: function(form) {
     return onSubmitFormAjax(form, {
       onComplete : function() {
-        Tarif.modal.close();
+        if (Tarif.modal) {
+          Tarif.modal.close();
+        }
+        else {
+          Control.Modal.close();
+        }
       }
     });
   },
