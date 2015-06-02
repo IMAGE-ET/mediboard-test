@@ -6,7 +6,7 @@
 
 {{assign var=modFSE value="fse"|module_active}}
 <script type="text/javascript">
-var Patient = {
+var PatientFromSelector = {
   create: function(useVitale) {
     this.edit(0, useVitale);
   },
@@ -25,7 +25,7 @@ var Patient = {
       url.addElement(oForm.Date_Year, "naissance_year");
     }
     
-    if (useVitale || (oForm = document.patientEdit)) {
+    if (useVitale || (oForm == document.patientEdit)) {
       url.addParam("useVitale", 1);
     }
 
@@ -36,7 +36,7 @@ var Patient = {
     var oForm = document.patientEdit;
     oForm.patient_id.value = patient_id;
     onSubmitFormAjax(oForm);
-    Patient.select(patient_id, oForm.nom.value);
+    PatientFromSelector.select(patient_id, oForm.nom.value);
   },
   
   select: function(patient_id, patient_view, sexe) {
@@ -59,7 +59,7 @@ var Patient = {
 
 {{if $patient}}
   Main.add(function () {
-    Patient.select('{{$patient->_id}}', '{{$patient->_view}}', '{{$patient->sexe}}');
+    PatientFromSelector.select('{{$patient->_id}}', '{{$patient->_view}}', '{{$patient->sexe}}');
   });
 {{/if}}
 </script>
@@ -161,7 +161,7 @@ var Patient = {
     <tr>
       <td colspan="2" class="button">
         {{if $can->edit}}
-          <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
+          <button class="new" type="button" onclick="PatientFromSelector.create({{$useVitale}});">
             {{tr}}Create{{/tr}} avec Vitale
           </button>
         {{/if}}
@@ -229,7 +229,7 @@ var Patient = {
       <td class="button">
         {{if $can->edit}}
           {{if $name || $firstName || $patient_ipp || ($datePat && $datePat != "--")}}
-          <button class="new" id="pat_selector_create_pat_button" type="button" onclick="Patient.create({{$useVitale}});">
+          <button class="new" id="pat_selector_create_pat_button" type="button" onclick="PatientFromSelector.create({{$useVitale}});">
             {{tr}}Create{{/tr}}
           </button>
           {{/if}}

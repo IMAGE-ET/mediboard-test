@@ -72,6 +72,8 @@
 
     {{if "covercard"|module_active}}
       <input type="hidden" name="covercard" value="{{$covercard}}"/>
+    {{else}}
+      <input type="hidden" name="covercard" value=""/>
     {{/if}}
 
     <tr>
@@ -126,7 +128,7 @@
           {{tr}}Empty{{/tr}}
         </button>
         <button id="ins_list_patient_button_search" class="search" tabindex="10"
-                type="submit" onclick="Patient.search(this.form);">
+                type="submit" onclick="$('useVitale').value = 0;">
           {{tr}}Search{{/tr}}
         </button>
 
@@ -141,7 +143,7 @@
         {{/if}}
 
         {{if $can->edit}}
-          <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
+          <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.createModal(this.form, null, function() {getForm('find').onsubmit()});" style="display:none;">
             {{tr}}Create{{/tr}}
             {{if $useVitale}}avec Vitale{{/if}}
             {{if $useCoverCard}}avec Covercard{{/if}}

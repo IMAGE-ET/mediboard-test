@@ -80,7 +80,7 @@
       </button>
       
       <!-- Dossier résumé -->
-      <button class="search" onclick="new Url('dPcabinet', 'vw_resume').addParam('patient_id', '{{$patient->_id}}').popup(800, 500, '{{tr}}Summary{{/tr}}');">
+      <button class="search" onclick="Patient.showSummary('{{$patient->_id}}')">
         {{tr}}Summary{{/tr}}
       </button>
       

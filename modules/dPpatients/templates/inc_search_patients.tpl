@@ -37,7 +37,7 @@
       {{if (((!$merge_only_admin || $can->admin)) && $can->edit) || $show_patient_link}}
         <th class="narrow">
           {{if ((!$merge_only_admin || $can->admin)) && $can->edit}}
-            <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" onclick="doMerge(this.form);">
+            <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" onclick="Patient.doMerge(this.form);">
               {{tr}}Merge{{/tr}}
             </button>
           {{/if}}

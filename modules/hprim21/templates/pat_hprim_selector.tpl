@@ -10,10 +10,10 @@
 
 <script type="text/javascript">
 
-var Patient = {
+var PatientHprim = {
   
   select: function(IPP) {
-		window.opener.PatHprimSelector.set(IPP);
+    window.opener.PatHprimSelector.set(IPP);
     window.close();
   }
 }
@@ -112,7 +112,7 @@ var Patient = {
   </tr>
   <tr>
     <td colspan="5" class="button">
-      <form onSubmit="if(checkForm(this)) {Patient.select(this.IPP.value);} return false;">
+      <form onSubmit="if(checkForm(this)) {PatientHprim.select(this.IPP.value);} return false;">
         <label for="IPP">IPP</label>
         <input class="notNull" name="IPP" type="text" value="{{$IPP}}" tabindex="7"/>
         <button class="submit" type="submit">

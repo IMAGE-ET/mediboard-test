@@ -11,41 +11,6 @@
 {{/if}}
 
 <script>
-  Patient = {
-    create : function(form) {
-      var url = new Url("patients", "vw_edit_patients", "tab");
-      url.addParam("patient_id", 0);
-      url.addParam("useVitale", $V(form.useVitale));
-      url.addParam("name",      $V(form.nom));
-      url.addParam("firstName", $V(form.prenom));
-      url.addParam("naissance_day",  $V(form.Date_Day));
-      url.addParam("naissance_month",$V(form.Date_Month));
-      url.addParam("naissance_year", $V(form.Date_Year));
-      {{if "covercard"|module_active}}url.addParam("covercard", $V(form.covercard));{{/if}}
-      url.redirect();
-    },
-    search : function(from) {
-      $("useVitale").value = 0;
-      return true;
-    },
-
-    doLink : function(oForm) {
-      new Url("patients", "do_link", "dosql")
-        .addParam("objects_id", $V(oForm["objects_id[]"]).join("-"))
-        .requestUpdate("systemMsg", {
-          method: 'post'
-        });
-    }
-  };
-
-  doMerge = function(oForm) {
-    var url = new Url();
-    url.setModuleAction("system", "object_merger");
-    url.addParam("objects_class", "CPatient");
-    url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
-    url.popup(800, 600, "merge_patients");
-  };
-
   onMergeComplete = function() {
     location.reload();
   };

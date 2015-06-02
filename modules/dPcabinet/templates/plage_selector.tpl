@@ -442,7 +442,7 @@
       {{if $multipleMode}}
         <td>
           <button type="button" id="consult_multiple_button_validate" class="button tick" onclick="RDVmultiples.sendData(); Control.Modal.close()">Valider</button>
-          <button type="button" class="button cleanup notext" onclick="RDVmultiples.resetSlots()">Vider les plages créées</button>
+          <button type="button" class="button erase notext" onclick="RDVmultiples.resetSlots()">Vider les plages créées</button>
           <button type="button" class="help" onclick="Modal.open('help_consult_multiple');">{{tr}}Help{{/tr}}</button>
         </td>
       {{/if}}
@@ -455,9 +455,15 @@
   <button onclick="Control.Modal.close();" class="tick button" style="float:right;">Merci</button>
   <h2>Aide consultations multiple</h2>
   <ul>
-    <li>La plage active selectionnée est de couleur brune, il faut selectionner la plage puis cliquer à gauche dans le selecteur pour changer de plage de consultation</li>
+    <li>
+      La plage active selectionnée est de couleur brune, il faut selectionner la plage puis cliquer à droite dans le selecteur pour
+      choisir l'heure de la consultation
+    </li>
     <li>Toutes vos actions ne seront appliquées qu'à l'enregistrement de la page de modification de la consultation</li>
-    <li>En mode édition, l'appui sur le bouton corbeille va annuler la consultation et non la supprimer</li>
+    <li>
+      En mode édition, l'appui sur <button type="button" class="erase notext"></button> va annuler la consultation et non la
+      supprimer
+    </li>
   </ul>
 </div>
 
@@ -487,7 +493,7 @@
       {{if $multipleMode}}
         <div id="tools_plage_{{$j-1}}" class="tools_plage" style="text-align: center;">
           <button class="button target" onclick="RDVmultiples.selRank('{{$j-1}}')"> RDV {{$j}}</button>
-          <button type="button" class="trash notext" onclick="RDVmultiples.removeSlot('{{$j-1}}')"></button>
+          <button type="button" class="erase notext" onclick="RDVmultiples.removeSlot('{{$j-1}}')"></button>
           <input type="hidden" name="consult_id" value=""/>
           <div id="cancel_plage_{{$j-1}}" style="display: none;">Ce RDV sera annulé</div>
           <div id="discancel_plage_{{$j-1}}" style="display: none;">Ce RDV ne sera pas annulé</div>

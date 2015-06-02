@@ -20,7 +20,7 @@
   <td>{{mb_value object=$_patient field=telephone1}}</td>
   <td>{{mb_value object=$_patient field=telephone2}}</td>
   <td class="button" rowspan="{{$nbSejours+1}}">
-    <button class="tick" type="button" onclick="Patient.select('{{$_patient->external_id}}')">
+    <button class="tick" type="button" onclick="PatientHprim.select('{{$_patient->external_id}}')">
       {{tr}}Select{{/tr}}
     </button>
   </td>

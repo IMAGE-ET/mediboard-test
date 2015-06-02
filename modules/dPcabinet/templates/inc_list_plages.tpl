@@ -45,14 +45,14 @@
             </select>
             <br/>
           {{/if}}
-          <a href="#1" onclick="{{if $as_place}}changePlageChir('{{$chir_id}}', '{{$pdate}}', this); return false;{{else}}updatePlage('{{$pdate}}'){{/if}}">&lt;&lt;&lt;</a>
+          <a href="#1" onclick="{{if $as_place}}changePlageChir('{{$chir_id}}', '{{$pdate}}', this); return false;{{else}}updatePlage('{{$pdate}}');{{/if}}">&lt;&lt;&lt;</a>
           <strong>
             {{if $period == "day"  }}{{$refDate|date_format:" %A %d %B %Y"}}{{/if}}
             {{if $period == "week" || $period == "4weeks"}}{{$refDate|date_format:" semaine du %d %B %Y (%U)"}}{{/if}}
             {{if $period == "month"}}{{$refDate|date_format:" %B %Y"}}{{/if}}
           </strong>
-          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="{{if $as_place}}changePlageChir('{{$chir_id}}', $V(this), this);{{else}}updatePlage( $V(this) ){{/if}}" />
-          <a href="#1" onclick="{{if $as_place}}changePlageChir('{{$chir_id}}', '{{$ndate}}', this); return false;{{else}}updatePlage('{{$ndate}}'){{/if}}">&gt;&gt;&gt;</a>
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="{{if $as_place}}changePlageChir('{{$chir_id}}', $V(this), this);{{else}}updatePlage( $V(this) );{{/if}}" />
+          <a href="#1" onclick="{{if $as_place}}changePlageChir('{{$chir_id}}', '{{$ndate}}', this); return false;{{else}}updatePlage('{{$ndate}}');{{/if}}">&gt;&gt;&gt;</a>
         </td>
       </tr>
     </table>
@@ -65,9 +65,8 @@
     <th>{{mb_title class=CPlageconsult field=chir_id}}</th>
     <th>
       {{if !$offline}}
-        <input type="text" class="compact search" style="float: left;" size="10" onkeyup="searchPlages(this.up('table'), this.value)" />
+        <input type="text" placeholder="{{tr}}CPlageconsult-libelle{{/tr}}" class="compact search" style="float: left;" size="10" onkeyup="searchPlages(this.up('table'), this.value)" />
       {{/if}}
-      {{mb_title class=CPlageconsult field=libelle}}
     </th>
     <th>Nb patients</th>
     <th>Disponibles</th>

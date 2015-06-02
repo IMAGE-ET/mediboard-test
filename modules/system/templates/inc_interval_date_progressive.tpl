@@ -8,8 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=from_date value=`$object->$from_field`}}
-{{assign var=to_date   value=`$object->$to_field`  }}
+{{if $from_field}}
+  {{assign var=from_date value=`$object->$from_field`}}
+{{else}}
+  {{assign var=from_date value=""}}
+{{/if}}
+{{if $to_field}}
+  {{assign var=to_date value=`$object->$to_field`}}
+{{else}}
+  {{assign var=to_date value=""}}
+{{/if}}
 
 {{if $from_field && $from_date}} 
   {{if $to_field && $to_date}}
@@ -20,7 +28,7 @@
       En {{mb_value object=$object field=$from_field}} 
     {{/if}}
   {{else}}
-	Depuis {{mb_value object=$object field=$from_field}} 
+    Depuis {{mb_value object=$object field=$from_field}}
   {{/if}}
     
 {{else}}

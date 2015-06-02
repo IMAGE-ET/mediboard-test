@@ -11,16 +11,16 @@
 
 CCanDo::checkEdit();
 
-$patient_id = CValue::getOrSession("patient_id");
-$name       = CValue::get("name");
-$firstName  = CValue::get("firstName");
+$patient_id      = CValue::getOrSession("patient_id");
+$name            = CValue::get("name");
+$firstName       = CValue::get("firstName");
 $naissance_day   = CValue::get("naissance_day");
 $naissance_month = CValue::get("naissance_month");
 $naissance_year  = CValue::get("naissance_year");
-$useVitale  = CValue::get("useVitale");
-$covercard  = CValue::get("covercard");
-$callback   = CValue::get("callback");
-$modal      = CValue::get("modal", 0);
+$useVitale       = CValue::get("useVitale");
+$covercard       = CValue::get("covercard");
+$callback        = CValue::get("callback");
+$modal           = CValue::get("modal", 0);
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -52,8 +52,8 @@ if (!$modal) {
 }
 
 if (!$patient_id) {
-  $patient->nom    = $name;
-  $patient->prenom = $firstName;
+  $patient->nom           = $name;
+  $patient->prenom        = $firstName;
   $patient->assure_nom    = $name;
   $patient->assure_prenom = $firstName;
   $patient->unescapeValues();
