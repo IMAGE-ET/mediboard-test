@@ -650,6 +650,8 @@ class CConfiguration extends CMbMetaObject {
    * @return void
    */
   static protected function _getObjectTree(&$subtree, $classes, $parent_fwd = null, $parent_id = null) {
+    static $cache = array();
+
     if (empty($classes)) {
       return;
     }
@@ -667,12 +669,20 @@ class CConfiguration extends CMbMetaObject {
       $where[$parent_fwd] = "= '$parent_id'";
     }
 
-    /** @var CMbObject $_obj */
-    $_obj = new $class;
+    $_cache_key = "$parent_fwd-$parent_id-$class";
+    if (isset($cache[$_cache_key])) {
+      $_list = $cache[$_cache_key];
+    }
+    else {
+      /** @var CMbObject $_obj */
+      $_obj = new $class;
 
-    // Attention il faut generer les configurations de TOUS les objets, donc ne pas utiliser loadListWitfPerms
-    $_list = $_obj->loadList($where);
-    $_list = self::naturalSort($_list, array("_view"));
+      // Attention il faut generer les configurations de TOUS les objets, donc ne pas utiliser loadListWitfPerms
+      $_list = $_obj->loadList($where);
+      $_list = self::naturalSort($_list, array("_view"));
+
+      $cache[$_cache_key] = $_list;
+    }
 
     foreach ($_list as $_object) {
       $subtree[$_object->_guid] = array(
@@ -830,7 +840,7 @@ class CConfiguration extends CMbMetaObject {
           $ancestors[] = $prev_object;
         }
         elseif ($fwd) {
-          $object = $prev_object->loadFwdRef($fwd);
+          $object = $prev_object->loadFwdRef($fwd, true);
           $ancestors[] = $object;
           $prev_object = $object;
         }
