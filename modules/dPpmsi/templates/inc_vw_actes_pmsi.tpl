@@ -277,7 +277,7 @@
             </tr>
             {{/if}}
             <tr>
-              <td colspan="4" id="export_{{$_op->_guid}}">
+              <td colspan="4" id="export_{{$_op->_class}}_{{$_op->_id}}">
               </td>
             </tr>
           </table>
