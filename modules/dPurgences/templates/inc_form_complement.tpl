@@ -20,6 +20,14 @@
       {{if $rpu->ccmu || $rpu->_estimation_ccmu}}
         <strong style="font-size: 2em;">{{tr}}CRPU.ccmu.{{if $rpu->ccmu}}{{$rpu->ccmu}}{{else}}{{$rpu->_estimation_ccmu}}{{/if}}-court{{/tr}}</strong> {{if !$rpu->ccmu}}(Estimation){{/if}}
       {{/if}}
+      {{if $rpu->ccmu && $rpu->ccmu <=4 && $rpu->ccmu > 1}}
+        <form name="modifCcmuRPU" action="#" method="post" onsubmit="return Motif.deleteDiag(this, 0);">
+          {{mb_class  object=$rpu}}
+          {{mb_key    object=$rpu}}
+          <input type="hidden" name="ccmu" value="{{math equation="x-1" x=$rpu->ccmu}}" />
+          <button type="button" class="up notext" onclick="this.form.onsubmit();" style="float: right;">Augmenter le dégré de l'urgence</button>
+        </form>
+      {{/if}}
     </td>
   </tr>
   {{if $rpu->code_diag}}
