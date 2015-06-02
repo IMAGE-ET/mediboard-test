@@ -29,7 +29,7 @@ $NDA = "";
 $IPP = "";
 
 switch ($object_class) {
-  case "COperation" :
+  case "COperation":
     $object = new COperation();
 
     // Chargement de l'opération et génération du document
@@ -75,7 +75,7 @@ switch ($object_class) {
     }
     break;
 
-  case "CSejour" :
+  case "CSejour":
     $object = new CSejour();
 
     // Chargement du séjour et génération du document
@@ -107,7 +107,7 @@ else {
 }
 
 $object->loadLastLog();
-$object->countExchanges("pmsi", "evenementServeurActe");
+
 try {
   $object->store();
 }
@@ -121,6 +121,8 @@ catch(CMbException $e) {
 
   $e->stepAjax();
 }
+
+$object->countExchanges("pmsi", "evenementServeurActe");
 
 if (!$unlock_dossier) {
   // Flag les actes CCAM en envoyés
