@@ -210,7 +210,7 @@
 
     <tr>
       <td class="button" colspan="2">
-        <button id="vw_edit_tarif_button_save" class="save" type="button" onclick="this.form.submit();">{{tr}}Save{{/tr}}</button>
+        <button id="vw_edit_tarif_button_save" class="save" type="button" onclick="return Tarif.submit(this.form);">{{tr}}Save{{/tr}}</button>
         {{if $tarif->_id}}
           {{*{{if count($tarif->_new_actes) && !$tarif->_has_mto && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
             <input type="hidden" name="_add_mto" value="0" />

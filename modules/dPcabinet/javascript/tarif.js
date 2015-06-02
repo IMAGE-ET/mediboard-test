@@ -10,6 +10,7 @@ Tarif = {
     url.addParam('codable_class', codable_class);
     url.addParam('prat_id',       prat_id);
     url.requestModal();
+    Tarif.modal = url.modalObject;
   },
 
   edit: function(tarif_id, prat_id) {
@@ -23,7 +24,12 @@ Tarif = {
   submit: function(form) {
     return onSubmitFormAjax(form, {
       onComplete : function() {
-        Control.Modal.close();
+        if (Tarif.modal) {
+          Tarif.modal.close();
+        }
+        else {
+          Control.Modal.close();
+        }
       }
     });
   },
