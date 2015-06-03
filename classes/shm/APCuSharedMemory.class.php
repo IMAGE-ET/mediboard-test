@@ -17,7 +17,7 @@ require_once __DIR__."/APCSharedMemory.class.php";
  * Alternative PHP User Cache (APCu) based Memory class
  */
 class APCuSharedMemory extends APCSharedMemory {
-  protected $_cache_key = "key";
+  protected $_cache_key = "info";
 
   /**
    * @see parent::modDate()
