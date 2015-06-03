@@ -61,7 +61,11 @@ $line = array(
   "Fournitures",
   "Remarques sur l'intervention",
   "Convalescence",
-  "Remarques sur le séjour"
+  "Remarques sur le séjour",
+  "Septique",
+  "Durée en heure d'hospitalisation",
+  "Pathologie",
+  "Type de prise en charge"
 );
 $csv->writeLine($line);
 
