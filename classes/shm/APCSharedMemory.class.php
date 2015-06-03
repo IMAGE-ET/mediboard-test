@@ -111,6 +111,8 @@ class APCSharedMemory implements ISharedMemory {
       return false;
     }
 
+    $cache_key = $this->_cache_key;
+
     $cache_info = array(
       "creation_date"     => null,
       "modification_date" => null,
@@ -120,7 +122,7 @@ class APCSharedMemory implements ISharedMemory {
     );
 
     foreach ($user_cache["cache_list"] as $_cache_info) {
-      if ($_cache_info["info"] == $key) {
+      if ($_cache_info[$cache_key] == $key) {
         $cache_info["creation_date"]     = strftime(CMbDT::ISO_DATETIME, $_cache_info["creation_time"]);
         $cache_info["modification_date"] = strftime(CMbDT::ISO_DATETIME, $_cache_info["mtime"]);
         $cache_info["num_hits"]          = $_cache_info["num_hits"];
