@@ -57,7 +57,7 @@ class APCuSharedMemory extends APCSharedMemory {
     );
 
     foreach ($user_cache["cache_list"] as $_cache_info) {
-      if ($_cache_info["key"] == $key) {
+      if ($_cache_info["info"] == $key) {
         $cache_info["creation_date"]     = strftime(CMbDT::ISO_DATETIME, isset($_cache_info["ctime"]) ? $_cache_info["ctime"] : $_cache_info["creation_time"]);
         $cache_info["modification_date"] = strftime(CMbDT::ISO_DATETIME, isset($_cache_info["mtime"]) ? $_cache_info["mtime"] : $_cache_info["modification_time"]);
         $cache_info["num_hits"]          = $_cache_info["nhits"];
