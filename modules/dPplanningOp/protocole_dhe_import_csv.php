@@ -25,12 +25,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Each line
   while ($line = fgetcsv($fp, null, ";")) {
     $i++;
-    
+
     // Skip empty lines
     if ((!isset($line[0]) || $line[0] == "") && ((!isset($line[2]) || $line[1] == "") && (!isset($line[3]) || $line[3] == ""))) {
       continue;
     }
-    
+
     // Parsing
     $line = array_map("trim"      , $line);
     $line = array_map("addslashes", $line);
@@ -64,6 +64,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["rques_interv"]            = CMbArray::get($line, 27);
     $results[$i]["convalesence"]            = CMbArray::get($line, 28);
     $results[$i]["rques_sejour"]            = CMbArray::get($line, 29);
+    $results[$i]["septique"]                = CMbArray::get($line, 30);
+    $results[$i]["duree_heure_hospi"]       = CMbArray::get($line, 31);
+    $results[$i]["pathologie"]              = CMbArray::get($line, 32);
+    $results[$i]["type_pec"]                = CMbArray::get($line, 33);
 
     // Type d'hopistalisation
     $results[$i]["type_hospi"] = CValue::first(strtolower($results[$i]["type_hospi"]), "comp");
@@ -73,15 +77,15 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     if ($results[$i]["type_hospi"] == "ambu") {
       $results[$i]["duree_hospi"] = 0;
     }
-    
+
     $results[$i]["errors"] = array();
-    
+
     // Fonction
     $function = new CFunctions();
     $function->group_id = CGroups::loadCurrent()->_id;
     $function->text     = $results[$i]["function_name"];
     $function->loadMatchingObject();
-    
+
     // Praticien
     $prat = new CMediusers();
     $lastname  = $results[$i]["praticien_lastname"];
@@ -117,31 +121,35 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     else {
       $protocole->function_id = $function->_id;
     }
-    
+
     // Mise à jour du protocole éventuel existant
     $protocole->loadMatchingObject();
 
-    $protocole->type            = $results[$i]["type_hospi"];
-    $protocole->duree_hospi     = $results[$i]["duree_hospi"];
-    $protocole->temp_operation  = $results[$i]["temp_operation"] . ":00";
-    $protocole->codes_ccam      = $results[$i]["codes_ccam"];
-    $protocole->DP              = $results[$i]["DP"];
-    $protocole->duree_uscpo     = $results[$i]["duree_uscpo"];
-    $protocole->duree_preop     = $results[$i]["duree_preop"]     ? $results[$i]["duree_preop"]     . ":00" : "";
-    $protocole->presence_preop  = $results[$i]["presence_preop"]  ? $results[$i]["presence_preop"]  . ":00" : "";
-    $protocole->presence_postop = $results[$i]["presence_postop"] ? $results[$i]["presence_postop"] . ":00" : "";
-    $protocole->facturable      = $results[$i]["facturable"];
-    $protocole->exam_extempo    = $results[$i]["Exam_extempo_prevu"];
-    $protocole->cote            = $results[$i]["cote"];
-    $protocole->examen          = $results[$i]["bilan_preop"];
-    $protocole->materiel        = $results[$i]["materiel_a_prevoir"];
-    $protocole->exam_per_op     = $results[$i]["examens_perop"];
-    $protocole->depassement     = $results[$i]["depassement_honoraires"];
-    $protocole->forfait         = $results[$i]["forfait_clinique"];
-    $protocole->fournitures     = $results[$i]["fournitures"];
-    $protocole->rques_operation = $results[$i]["rques_interv"];
-    $protocole->convalescence   = $results[$i]["convalesence"];
-    $protocole->rques_sejour    = $results[$i]["rques_sejour"];
+    $protocole->type                = $results[$i]["type_hospi"];
+    $protocole->duree_hospi         = $results[$i]["duree_hospi"];
+    $protocole->temp_operation      = $results[$i]["temp_operation"] . ":00";
+    $protocole->codes_ccam          = $results[$i]["codes_ccam"];
+    $protocole->DP                  = $results[$i]["DP"];
+    $protocole->duree_uscpo         = $results[$i]["duree_uscpo"];
+    $protocole->duree_preop         = $results[$i]["duree_preop"]     ? $results[$i]["duree_preop"]     . ":00" : "";
+    $protocole->presence_preop      = $results[$i]["presence_preop"]  ? $results[$i]["presence_preop"]  . ":00" : "";
+    $protocole->presence_postop     = $results[$i]["presence_postop"] ? $results[$i]["presence_postop"] . ":00" : "";
+    $protocole->facturable          = $results[$i]["facturable"];
+    $protocole->exam_extempo        = $results[$i]["Exam_extempo_prevu"];
+    $protocole->cote                = $results[$i]["cote"];
+    $protocole->examen              = $results[$i]["bilan_preop"];
+    $protocole->materiel            = $results[$i]["materiel_a_prevoir"];
+    $protocole->exam_per_op         = $results[$i]["examens_perop"];
+    $protocole->depassement         = $results[$i]["depassement_honoraires"];
+    $protocole->forfait             = $results[$i]["forfait_clinique"];
+    $protocole->fournitures         = $results[$i]["fournitures"];
+    $protocole->rques_operation     = $results[$i]["rques_interv"];
+    $protocole->convalescence       = $results[$i]["convalesence"];
+    $protocole->rques_sejour        = $results[$i]["rques_sejour"];
+    $protocole->septique            = $results[$i]["septique"];
+    $protocole->duree_heure_hospi   = $results[$i]["duree_heure_hospi"];
+    $protocole->pathologie          = $results[$i]["pathologie"];
+    $protocole->type_pec            = $results[$i]["type_pec"];
 
     // UF Hébergement
     if ($uf_hebergement = $results[$i]["uf_hebergement"]) {
@@ -155,10 +163,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       else {
         $results[$i]["errors"][] = "UF hébergement non trouvée";
         $unfound["uf_hebergement"][$uf_hebergement] = true;
-          
+
       }
     }
-    
+
     // UF Médicale
     if ($uf_medicale = $results[$i]["uf_medicale"]) {
       $uf = new CUniteFonctionnelle();
@@ -173,8 +181,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         $unfound["uf_medicale"][$uf_medicale] = true;
       }
     }
-    
-    
+
+
     // UF Soins
     if ($uf_soins = $results[$i]["uf_soins"]) {
       $uf = new CUniteFonctionnelle();
@@ -185,29 +193,29 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         $protocole->uf_soins_id = $uf->_id ? $uf->_id : "";
       }
       else {
-        $results[$i]["errors"][] = "UF de soins non trouvée";        
+        $results[$i]["errors"][] = "UF de soins non trouvée";
         $unfound["uf_soins"][$uf_soins] = true;
       }
     }
-    
+
     // Field check final
     if (
-        (!$protocole->for_sejour && (($protocole->libelle == "" && $protocole->codes_ccam == "" ) || $protocole->duree_hospi === "" || $protocole->temp_operation == "")) ||
-        ($protocole->for_sejour && ($protocole->duree_hospi === "" || !isset($protocole->facturable)))
+      (!$protocole->for_sejour && (($protocole->libelle == "" && $protocole->codes_ccam == "" ) || $protocole->duree_hospi === "" || $protocole->temp_operation == "")) ||
+      ($protocole->for_sejour && ($protocole->duree_hospi === "" || !isset($protocole->facturable)))
     ) {
       $results[$i]["errors"][] = "Champs manquants";
     }
-    
+
     // No store on errors
     if (count($results[$i]["errors"])) {
       continue;
-    } 
-    
+    }
+
     // Dry run to check references
     if ($dryrun) {
       continue;
     }
-    
+
     // Creation
     $protocole->unescapeValues();
     $existing = $protocole->_id;
@@ -216,7 +224,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $results[$i]["errors"][] = $msg;
       continue;
     }
-    
+
     CAppUI::setMsg($existing ? "CProtocole-msg-modify" : "CProtocole-msg-create", UI_MSG_OK);
   }
 

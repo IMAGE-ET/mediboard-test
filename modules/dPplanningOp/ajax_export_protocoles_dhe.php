@@ -61,7 +61,11 @@ $line = array(
   "Fournitures",
   "Remarques sur l'intervention",
   "Convalescence",
-  "Remarques sur le séjour"
+  "Remarques sur le séjour",
+  "Septique",
+  "Durée en heure d'hospitalisation",
+  "Pathologie",
+  "Type de prise en charge"
 );
 $csv->writeLine($line);
 
@@ -105,7 +109,11 @@ foreach ($protocoles as $_protocole) {
     $_protocole->fournitures,
     $_protocole->rques_operation,
     $_protocole->convalescence,
-    $_protocole->rques_sejour
+    $_protocole->rques_sejour,
+    $_protocole->septique,
+    $_protocole->duree_heure_hospi,
+    $_protocole->pathologie,
+    $_protocole->type_pec
   );
   $csv->writeLine($_line);
 }
