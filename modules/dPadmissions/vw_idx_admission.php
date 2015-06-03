@@ -15,29 +15,29 @@ CCanDo::checkRead();
 
 // Filtres d'affichage
 
-$selAdmis     = CValue::getOrSession("selAdmis", "0");
-$selSaisis    = CValue::getOrSession("selSaisis", "0");
-$order_way    = CValue::getOrSession("order_way", "ASC");
-$order_col    = CValue::getOrSession("order_col", "patient_id");
-$date         = CValue::getOrSession("date", CMbDT::date());
-$type         = CValue::getOrSession("type");
-$services_ids = CValue::getOrSession("services_ids");
-$prat_id      = CValue::getOrSession("prat_id");
-$period       = CValue::getOrSession("period");
-$filterFunction = CValue::getOrSession("filterFunction");
-
-$date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain = CMbDT::dateTime("00:00:00", "+ 1 day");
-$hier = CMbDT::date("- 1 day", $date);
-$demain = CMbDT::date("+ 1 day", $date);
+$selAdmis        = CValue::getOrSession("selAdmis", "0");
+$selSaisis       = CValue::getOrSession("selSaisis", "0");
+$order_way       = CValue::getOrSession("order_way", "ASC");
+$order_col       = CValue::getOrSession("order_col", "patient_id");
+$date            = CValue::getOrSession("date", CMbDT::date());
+$type            = CValue::getOrSession("type");
+$services_ids    = CValue::getOrSession("services_ids");
+$prat_id         = CValue::getOrSession("prat_id");
+$period          = CValue::getOrSession("period");
+$filterFunction  = CValue::getOrSession("filterFunction");
+$enabled_service = CValue::getOrSession("active_filter_services", 0);
+$date_actuelle   = CMbDT::dateTime("00:00:00");
+$date_demain     = CMbDT::dateTime("00:00:00", "+ 1 day");
+$hier            = CMbDT::date("- 1 day", $date);
+$demain          = CMbDT::date("+ 1 day", $date);
 
 $services_ids = CService::getServicesIdsPref($services_ids);
 
 // Récupération de la liste des praticiens
-$prat = CMediusers::get();
+$prat  = CMediusers::get();
 $prats = $prat->loadPraticiens();
 
-$sejour = new CSejour();
+$sejour                  = new CSejour();
 $sejour->_type_admission = $type;
 $sejour->praticien_id    = $prat_id;
 
