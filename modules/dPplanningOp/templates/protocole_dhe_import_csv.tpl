@@ -47,6 +47,10 @@
   <li>{{mb_label class=CProtocole field=rques_operation}}</li>
   <li>{{mb_label class=CProtocole field=convalescence}}</li>
   <li>{{mb_label class=CProtocole field=rques_sejour}}</li>
+  <li>{{mb_label class=CProtocole field=septique}}</li>
+  <li>{{mb_label class=CProtocole field=duree_heure_hospi}}</li>
+  <li>{{mb_label class=CProtocole field=pathologie}}</li>
+  <li>{{mb_label class=CProtocole field=type_pec}}</li>
 
 {{mb_include module=system template=inc_import_csv_info_outro}}
 
@@ -63,7 +67,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="31">{{$results|@count}} protocoles trouvés</th>
+    <th class="title" colspan="35">{{$results|@count}} protocoles trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -97,6 +101,10 @@
     <th>{{mb_title class=CProtocole field=rques_operation}}</th>
     <th>{{mb_title class=CProtocole field=convalescence}}</th>
     <th>{{mb_title class=CProtocole field=rques_sejour}}</th>
+    <th>{{mb_title class=CProtocole field=septique}}</th>
+    <th>{{mb_title class=CProtocole field=duree_heure_hospi}}</th>
+    <th>{{mb_title class=CProtocole field=pathologie}}</th>
+    <th>{{mb_title class=CProtocole field=type_pec}}</th>
   </tr>
   {{foreach from=$results item=_protocole}}
   <tr>
@@ -142,6 +150,10 @@
     <td class="text">{{$_protocole.rques_interv}}</td>
     <td class="text">{{$_protocole.convalesence}}</td>
     <td class="text">{{$_protocole.rques_sejour}}</td>
+    <td class="text">{{$_protocole.septique}}</td>
+    <td class="text">{{$_protocole.duree_heure_hospi}}</td>
+    <td class="text">{{$_protocole.pathologie}}</td>
+    <td class="text">{{$_protocole.type_pec}}</td>
   </tr>
   {{/foreach}}
 </table>

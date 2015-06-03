@@ -64,6 +64,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["rques_interv"]            = CMbArray::get($line, 27);
     $results[$i]["convalesence"]            = CMbArray::get($line, 28);
     $results[$i]["rques_sejour"]            = CMbArray::get($line, 29);
+    $results[$i]["septique"]                = CMbArray::get($line, 30);
+    $results[$i]["duree_heure_hospi"]       = CMbArray::get($line, 31);
+    $results[$i]["pathologie"]              = CMbArray::get($line, 32);
+    $results[$i]["type_pec"]                = CMbArray::get($line, 33);
 
     // Type d'hopistalisation
     $results[$i]["type_hospi"] = CValue::first(strtolower($results[$i]["type_hospi"]), "comp");
@@ -121,27 +125,31 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     // Mise à jour du protocole éventuel existant
     $protocole->loadMatchingObject();
 
-    $protocole->type            = $results[$i]["type_hospi"];
-    $protocole->duree_hospi     = $results[$i]["duree_hospi"];
-    $protocole->temp_operation  = $results[$i]["temp_operation"] . ":00";
-    $protocole->codes_ccam      = $results[$i]["codes_ccam"];
-    $protocole->DP              = $results[$i]["DP"];
-    $protocole->duree_uscpo     = $results[$i]["duree_uscpo"];
-    $protocole->duree_preop     = $results[$i]["duree_preop"]     ? $results[$i]["duree_preop"]     . ":00" : "";
-    $protocole->presence_preop  = $results[$i]["presence_preop"]  ? $results[$i]["presence_preop"]  . ":00" : "";
-    $protocole->presence_postop = $results[$i]["presence_postop"] ? $results[$i]["presence_postop"] . ":00" : "";
-    $protocole->facturable      = $results[$i]["facturable"];
-    $protocole->exam_extempo    = $results[$i]["Exam_extempo_prevu"];
-    $protocole->cote            = $results[$i]["cote"];
-    $protocole->examen          = $results[$i]["bilan_preop"];
-    $protocole->materiel        = $results[$i]["materiel_a_prevoir"];
-    $protocole->exam_per_op     = $results[$i]["examens_perop"];
-    $protocole->depassement     = $results[$i]["depassement_honoraires"];
-    $protocole->forfait         = $results[$i]["forfait_clinique"];
-    $protocole->fournitures     = $results[$i]["fournitures"];
-    $protocole->rques_operation = $results[$i]["rques_interv"];
-    $protocole->convalescence   = $results[$i]["convalesence"];
-    $protocole->rques_sejour    = $results[$i]["rques_sejour"];
+    $protocole->type                = $results[$i]["type_hospi"];
+    $protocole->duree_hospi         = $results[$i]["duree_hospi"];
+    $protocole->temp_operation      = $results[$i]["temp_operation"] . ":00";
+    $protocole->codes_ccam          = $results[$i]["codes_ccam"];
+    $protocole->DP                  = $results[$i]["DP"];
+    $protocole->duree_uscpo         = $results[$i]["duree_uscpo"];
+    $protocole->duree_preop         = $results[$i]["duree_preop"]     ? $results[$i]["duree_preop"]     . ":00" : "";
+    $protocole->presence_preop      = $results[$i]["presence_preop"]  ? $results[$i]["presence_preop"]  . ":00" : "";
+    $protocole->presence_postop     = $results[$i]["presence_postop"] ? $results[$i]["presence_postop"] . ":00" : "";
+    $protocole->facturable          = $results[$i]["facturable"];
+    $protocole->exam_extempo        = $results[$i]["Exam_extempo_prevu"];
+    $protocole->cote                = $results[$i]["cote"];
+    $protocole->examen              = $results[$i]["bilan_preop"];
+    $protocole->materiel            = $results[$i]["materiel_a_prevoir"];
+    $protocole->exam_per_op         = $results[$i]["examens_perop"];
+    $protocole->depassement         = $results[$i]["depassement_honoraires"];
+    $protocole->forfait             = $results[$i]["forfait_clinique"];
+    $protocole->fournitures         = $results[$i]["fournitures"];
+    $protocole->rques_operation     = $results[$i]["rques_interv"];
+    $protocole->convalescence       = $results[$i]["convalesence"];
+    $protocole->rques_sejour        = $results[$i]["rques_sejour"];
+    $protocole->septique            = $results[$i]["septique"];
+    $protocole->duree_heure_hospi   = $results[$i]["duree_heure_hospi"];
+    $protocole->pathologie          = $results[$i]["pathologie"];
+    $protocole->type_pec            = $results[$i]["type_pec"];
 
     // UF Hébergement
     if ($uf_hebergement = $results[$i]["uf_hebergement"]) {
