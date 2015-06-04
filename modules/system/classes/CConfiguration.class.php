@@ -321,8 +321,14 @@ class CConfiguration extends CMbMetaObject {
     $tree = array();
 
     foreach ($array as $_key => $_value) {
-      $path = explode($separator, $_key);
-      self::_unflattenFeatureList($path, $_value, $tree);
+      $_parts = explode($separator, $_key);
+
+      $node =& $tree;
+      foreach ($_parts as $_part) {
+        $node =& $node[$_part];
+      }
+
+      $node = $_value;
     }
 
     return $tree;
@@ -354,10 +360,17 @@ class CConfiguration extends CMbMetaObject {
       self::$hosts  = $hosts;
 
       self::$dirty = false;
+
+      mbLog("'config-values' already present, skipping regeneration");
+
       return;
     }
 
+    $t = microtime(true);
+
     self::buildAllConfig();
+
+    $t1 = microtime(true) - $t;
 
     $datetime = strftime(CMbDT::ISO_DATETIME);
 
@@ -378,6 +391,10 @@ class CConfiguration extends CMbMetaObject {
         "content" => array_keys(self::$values),
       )
     );
+
+    $t2 = microtime(true) - $t - $t1;
+
+    mbLog(sprintf("'config-values' gerenated in %f ms, written in %f ms", $t1*1000, $t2*1000));
 
     $mutex->release();
 
@@ -463,26 +480,6 @@ class CConfiguration extends CMbMetaObject {
     }
 
     return self::STATUS_OK;
-  }
-
-  /**
-   * Unflatten a feature list so that it becames a tree
-   *
-   * @param string $path  Config path
-   * @param string $value Config value
-   * @param array  &$tree Subtree
-   *
-   * @return void
-   */
-  static protected function _unflattenFeatureList($path, $value, &$tree) {
-    $level = array_shift($path);
-
-    if (empty($path)) {
-      $tree[$level] = $value;
-    }
-    else {
-      self::_unflattenFeatureList($path, $value, $tree[$level]);
-    }
   }
 
   /**
@@ -704,28 +701,57 @@ class CConfiguration extends CMbMetaObject {
    * @return array The configuration values
    */
   static protected function getSelfConfig($object_class = null, $object_id = null, $config_keys = null) {
-    $where = array();
-    $spec = self::_getSpec();
+    static $cache_data = null;
+    static $cache = null;
+
+    $key = "$object_class/$object_id/".($config_keys ? implode("-", $config_keys) : "");
+    if (isset($cache[$key])) {
+      return $cache[$key];
+    }
+
+    if ($cache_data === null) {
+      $spec = self::_getSpec();
+
+      $request = new CRequest;
+      $request->addTable($spec->table);
+      $request->addSelect(array("feature", "value", "object_class", "object_id"));
+
+      $cache_data = $spec->ds->loadList($request->makeSelect());
+    }
 
     if ($object_class && $object_id) {
-      $where["object_class"] = "= '$object_class'";
-      $where["object_id"]    = "= '$object_id'";
+      $data = array_filter(
+        $cache_data,
+        function ($v) use ($object_class, $object_id) {
+          return $v["object_class"] === $object_class && $v["object_id"] === $object_id;
+        }
+      );
     }
     else {
-      $where["object_class"] = "IS NULL";
-      $where["object_id"]    = "IS NULL";
+      $data = array_filter(
+        $cache_data,
+        function ($v) {
+          return $v["object_class"] === null && $v["object_id"] === null;
+        }
+      );
     }
 
     if ($config_keys) {
-      $where["feature"] = $spec->ds->prepareIn($config_keys);
+      $data = array_filter(
+        $data,
+        function ($v) use ($config_keys) {
+          return in_array($v["feature"], $config_keys);
+        }
+      );
     }
 
-    $request = new CRequest;
-    $request->addWhere($where);
-    $request->addTable($spec->table);
-    $request->addSelect(array("feature", "value"));
+    $final_data = array();
 
-    return $spec->ds->loadHashList($request->makeSelect());
+    foreach ($data as $_data) {
+      $final_data[$_data["feature"]] = $_data["value"];
+    }
+
+    return $cache[$key] = $final_data;
   }
 
   /**
