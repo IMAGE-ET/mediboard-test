@@ -28,3 +28,4 @@ $module->registerTab("cache_tester"           , TAB_READ);
 //$module->registerTab("check_zombie_objects"   , TAB_READ);
 $module->registerTab("benchmark"              , TAB_READ);
 $module->registerTab("routage"                , TAB_READ);
+$module->registerTab("vw_performance_profiling_analyzer", TAB_READ);
