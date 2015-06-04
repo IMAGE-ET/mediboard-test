@@ -702,7 +702,7 @@ class CConfiguration extends CMbMetaObject {
    */
   static protected function getSelfConfig($object_class = null, $object_id = null, $config_keys = null) {
     static $cache_data = null;
-    static $cache = null;
+    static $cache = array();
 
     $key = "$object_class/$object_id/".($config_keys ? implode("-", $config_keys) : "");
     if (isset($cache[$key])) {
