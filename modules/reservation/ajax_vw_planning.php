@@ -289,7 +289,7 @@ if ($show_operations) {
 
       //antecedents
       $dossier_medical->countAntecedents(false);
-      $count_atcd = $dossier_medical->_count_cancelled_antecedents;
+      $count_atcd = $dossier_medical->_count_antecedents;
 
       //besoins
       $besoins = $_operation->loadRefsBesoins();
