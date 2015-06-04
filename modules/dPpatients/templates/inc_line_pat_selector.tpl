@@ -34,7 +34,7 @@
     <td>{{mb_value object=$_patient field="matricule"}}</td>
     <td>{{mb_value object=$_patient field="adresse"}}</td>
     <td class="button" rowspan="{{$rowspan}}">
-      <button class="tick" type="button" onclick="Patient.updateFromVitale('{{$_patient->_id}}', '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
+      <button class="tick" type="button" onclick="PatientFromSelector.updateFromVitale('{{$_patient->_id}}', '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
         {{tr}}Select{{/tr}}
       </button>
     </td>
@@ -52,11 +52,11 @@
     </td>
     <td class="button" rowspan="{{$rowspan}}" style="white-space: nowrap;">
       {{if $can->edit}}
-      <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">
+      <button class="edit" type="button" onclick="PatientFromSelector.edit({{$_patient->_id}})">
         {{tr}}Edit{{/tr}}
       </button>
       {{/if}}
-      <button class="tick" id="inc_pat_selector_select_pat" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
+      <button class="tick" id="inc_pat_selector_select_pat" type="button" onclick="PatientFromSelector.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
         {{tr}}Select{{/tr}}
       </button>
     </td>
