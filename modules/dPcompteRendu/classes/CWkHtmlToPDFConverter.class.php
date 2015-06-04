@@ -278,17 +278,18 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     preg_match_all("/^([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]) 00000/m", $content, $matches_xref);
     $matches_xref = $matches_xref[1];
 
-    function compareObj($obj1, $obj2) {
-      $split1 = explode(" ", $obj1[0]);
-      $split1 = intval($split1[0]);
+    usort(
+      $matches_obj,
+      function ($obj1, $obj2) {
+        $split1 = explode(" ", $obj1[0]);
+        $split1 = intval($split1[0]);
 
-      $split2 = explode(" ", $obj2[0]);
-      $split2 = intval($split2[0]);
+        $split2 = explode(" ", $obj2[0]);
+        $split2 = intval($split2[0]);
 
-      return $split1 > $split2;
-    }
-
-    usort($matches_obj, "compareObj");
+        return $split1 > $split2;
+      }
+    );
 
     $matches_new_obj = array();
     foreach ($matches_obj as $_match) {
