@@ -47,7 +47,7 @@ $where['date_echange']            = "IS NULL";
 $where["date_production"]         = "BETWEEN '$date_min' AND '$date_max'";
 
 
-$where[] = "master_idex_missing = '0' OR master_idex_missing IS NULL";
+$where[] ="master_idex_missing = '0' OR master_idex_missing IS NULL";
 
 $order = $exchange->_spec->key . " ASC";
 
