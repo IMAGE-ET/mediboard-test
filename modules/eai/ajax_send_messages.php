@@ -14,12 +14,12 @@
 CCanDo::checkRead();
 
 $exchange_class = CValue::get("exchange_class");
-$count          = CValue::get("count", 20);
+$count          = CValue::get("count", 100);
 $date_min       = CValue::get('date_min');
 $date_max       = CValue::get('date_max');
 
 if (!$date_min) {
-  $date_min = CMbDT::dateTime("-3 day");
+  $date_min = CMbDT::dateTime("-1 day");
 }
 
 if (!$date_max) {
