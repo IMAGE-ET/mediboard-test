@@ -1476,9 +1476,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           return null;
         }
 
-        $affectation =  $newVenue->getCurrAffectation($datetime);
+        $affectation = $newVenue->getCurrAffectation($datetime);
 
-        // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+        // Si le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
         if (!$movement->affectation_id && $affectation->_id) {
           return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
         }

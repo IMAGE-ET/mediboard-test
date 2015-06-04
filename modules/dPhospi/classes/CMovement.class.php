@@ -83,7 +83,9 @@ class CMovement extends CMbObject {
     if ($this->movement_type != "AABS" && $this->movement_type != "RABS") {
       $movement = new self;
       $this->completeField("affectation_id");
+      $movement->movement_type  = $this->movement_type;
       $movement->affectation_id = $this->affectation_id;
+      $movement->cancel         = 0;
       $movement->loadMatchingObject();
 
       if ($this->affectation_id && $movement->_id && $this->_id != $movement->_id) {

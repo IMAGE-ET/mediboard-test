@@ -38,7 +38,7 @@ $ack_data    = null;
 $iti_handler = new CITI30DelegatedHandler();
 
 switch ($event) {
-  case "A28" :
+  case "A28":
     if (!$iti_handler->isMessageSupported($iti_handler->transaction, $iti_handler->message, $event, $receiver)) {
       CAppUI::setMsg("CEAIDispatcher-_family_message_no_supported_for_this_actor", UI_MSG_ERROR, $receiver);
     }
@@ -49,6 +49,8 @@ switch ($event) {
     $iti_handler->sendITI($iti_handler->profil, $iti_handler->transaction, $iti_handler->message, $event, $patient);
 
     break;
+
+  default:
 }
 
 echo CAppUI::getMsg();
