@@ -39,13 +39,15 @@ $where['receiver_id']             = "IS NOT NULL";
 
 $where['statut_acquittement']     = "IS NULL";
 $where['message_valide']          = "= '1'";
-$where['master_idex_missing']     = "!= '1'";
 $where['acquittement_valide']     = "!= '1'";
 $where['acquittement_content_id'] = "IS NULL";
 $where['statut_acquittement']     = "IS NULL";
 
 $where['date_echange']            = "IS NULL";
 $where["date_production"]         = "BETWEEN '$date_min' AND '$date_max'";
+
+
+$where[] = "master_idex_missing = '0' OR master_idex_missing IS NULL";
 
 $order = $exchange->_spec->key . " ASC";
 
