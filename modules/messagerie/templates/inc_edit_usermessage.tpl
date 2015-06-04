@@ -69,7 +69,7 @@
 
 </script>
 
-<form method="post" action="?" name="edit_usermessage" onsubmit="return onSubmitFormAjax(this);">
+<form method="post" action="?" name="edit_usermessage" onsubmit="$V(this.content, CKEDITOR.instances.htmlarea.getData()); return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="messagerie"/>
   <input type="hidden" name="dosql" value="do_usermessage_aed"/>
   <input type="hidden" name="del" value="0" />

@@ -73,7 +73,10 @@ class CUserMessage extends CMbObject {
    * @see parent::uodateFormFields()
    */
   public function updateFormFields() {
+    parent::updateFormFields();
+
     $this->_abstract = str_replace(array("\n", "\t", "\r"), ' ', substr(strip_tags($this->content), 0, 50)) . '...';
+    $this->_view = ($this->subject ? "$this->subject  - " : "") . $this->_abstract;
   }
 
   /**
