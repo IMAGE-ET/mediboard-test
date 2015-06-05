@@ -112,7 +112,14 @@
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
-      {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullPresents()"}}
+
+      <select name="_type_admission" onchange="reloadFullPresents();" style="width:15em;">
+        <option value="">&mdash; {{tr}}CSejour.all{{/tr}}</option>
+        <option value="tous">&mdash; {{tr}}CSejour._type_admission.tous{{/tr}}</option>
+        {{foreach from=$list_type_ad item=_admission}}
+          <option value="{{$_admission}}">{{tr}}CSejour._type_admission.{{$_admission}}{{/tr}}</option>
+        {{/foreach}}
+      </select>
 
       <input type="checkbox" name="_active_filter_services" title="Prendre en compte le filtre sur les services"
              onclick="$V(this.form.active_filter_services, this.checked ? 1 : 0); this.form.filter_services.disabled = !this.checked;"

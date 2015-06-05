@@ -49,11 +49,14 @@ for ($day = $month_min; $day < $nextmonth; $day = CMbDT::date("+1 DAY", $day)) {
 }
 
 // filtre sur les types de sortie
+$filterType = "";
 if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
 }
 elseif ($type) {
+  if ($type !== 'tous') {
     $filterType = "AND `sejour`.`type` = '$type'";
+  }
 }
 else {
   $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";

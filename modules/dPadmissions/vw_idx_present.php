@@ -38,6 +38,9 @@ $sejour = new CSejour();
 $sejour->_type_admission = $type;
 $sejour->praticien_id    = $prat_id;
 
+// Liste des types d'admission possibles
+$list_type_admission = $sejour->_specs["_type_admission"]->_list;
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -51,6 +54,7 @@ $smarty->assign("prats"           , $prats);
 $smarty->assign("hier"            , $hier);
 $smarty->assign("demain"          , $demain);
 $smarty->assign("heure"           , $heure);
+$smarty->assign("list_type_ad"    , $list_type_admission);
 $smarty->assign('enabled_service' , $enabled_service);
 
 $smarty->display("vw_idx_present.tpl");
