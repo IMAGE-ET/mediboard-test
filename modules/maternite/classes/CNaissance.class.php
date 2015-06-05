@@ -181,10 +181,12 @@ class CNaissance extends CMbObject {
    * @return int
    */
   static function countNaissances() {
+    $group_id = CGroups::loadCurrent()->_id;
     $where = array(
       "fausse_couche IS NULL OR fausse_couche = 'sup_15'",
       "DATE_FORMAT(naissance, '%Y') = " . CMbDT::transform(CMbDT::date(), null, "%Y"),
-      "num_naissance IS NOT NULL"
+      "num_naissance IS NOT NULL",
+      "sejour.group_id = '$group_id'"
     );
     $ljoin = array(
       "sejour"  => "naissance.sejour_enfant_id = sejour.sejour_id",
