@@ -39,7 +39,6 @@ $where['receiver_id']             = "IS NOT NULL";
 
 $where['statut_acquittement']     = "IS NULL";
 $where['message_valide']          = "= '1'";
-$where['master_idex_missing']     = "!= '1'";
 $where['acquittement_valide']     = "!= '1'";
 $where['acquittement_content_id'] = "IS NULL";
 $where['statut_acquittement']     = "IS NULL";
@@ -47,8 +46,9 @@ $where['statut_acquittement']     = "IS NULL";
 $where['date_echange']            = "IS NULL";
 $where["date_production"]         = "BETWEEN '$date_min' AND '$date_max'";
 
-$order = $exchange->_spec->key . " ASC";
+$where[] = "master_idex_missing = '0' OR master_idex_missing IS NULL";
 
+$order = $exchange->_spec->key . " ASC";
 $notifications = $exchange->loadList($where, $order, $limit);
 
 // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
