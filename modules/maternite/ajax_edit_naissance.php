@@ -66,7 +66,9 @@ else {
     $naissance->by_caesarean = "1";
   }
 
-  $num_naissance = CAppUI::conf("maternite CNaissance num_naissance");
+  $num_naissance = CAppUI::conf("maternite CNaissance num_naissance") != 1 ?
+    CAppUI::conf("maternite CNaissance num_naissance") :
+    CAppUI::conf("maternite CNaissance num_naissance", "CGroups-".$sejour->group_id);
   $naissance->num_naissance = $num_naissance + CNaissance::countNaissances();
 
   if (!$anonmymous) {

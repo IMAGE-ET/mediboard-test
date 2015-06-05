@@ -19,6 +19,9 @@ CConfiguration::register(
           "min_check_terme"  => "num default|7",
           "max_check_terme"  => "num default|21",
           "lock_partogramme" => "bool default|0",
+        ),
+        "CNaissance" => array(
+          "num_naissance"   => "num default|1"
         )
       )
     )
