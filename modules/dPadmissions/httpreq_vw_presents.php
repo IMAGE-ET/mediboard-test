@@ -14,15 +14,16 @@
 CCanDo::checkRead();
 
 // Type d'admission
-$type           = CValue::getOrSession("type");
-$services_ids   = CValue::getOrSession("services_ids");
-$prat_id        = CValue::getOrSession("prat_id");
-$order_col      = CValue::getOrSession("order_col", "patient_id");
-$order_way      = CValue::getOrSession("order_way", "ASC");
-$date           = CValue::getOrSession("date", CMbDT::date());
-$heure          = CValue::getOrSession("heure");
-$next           = CMbDT::date("+1 DAY", $date);
-$filterFunction = CValue::getOrSession("filterFunction");
+$type            = CValue::getOrSession("type");
+$services_ids    = CValue::getOrSession("services_ids");
+$prat_id         = CValue::getOrSession("prat_id");
+$order_col       = CValue::getOrSession("order_col", "patient_id");
+$order_way       = CValue::getOrSession("order_way", "ASC");
+$date            = CValue::getOrSession("date", CMbDT::date());
+$heure           = CValue::getOrSession("heure");
+$next            = CMbDT::date("+1 DAY", $date);
+$filterFunction  = CValue::getOrSession("filterFunction");
+$enabled_service = CValue::getOrSession("active_filter_services", 0);
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -52,7 +53,7 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if (count($services_ids)) {
+if (count($services_ids) && $enabled_service) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
@@ -62,7 +63,7 @@ if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
 }
 elseif ($type) {
-  $where["sejour.type"] = " = '$type'";
+    $where["sejour.type"] = " = '$type'";
 }
 else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
@@ -189,24 +190,25 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("hier"          , $hier);
-$smarty->assign("demain"        , $demain);
-$smarty->assign("date_min"      , $date_min);
-$smarty->assign("date_max"      , $date_max);
-$smarty->assign("date_demain"   , $date_demain);
-$smarty->assign("date_actuelle" , $date_actuelle);
-$smarty->assign("date"          , $date);
-$smarty->assign("order_col"     , $order_col);
-$smarty->assign("order_way"     , $order_way);
-$smarty->assign("sejours"       , $sejours);
-$smarty->assign("total_sejours" , $total_sejours);
-$smarty->assign("prestations"   , CPrestation::loadCurrentList());
-$smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
-$smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
-$smarty->assign("functions"     , $functions);
-$smarty->assign("filterFunction", $filterFunction);
-$smarty->assign("which"         , $show_curr_affectation ? "curr" : "first");
-$smarty->assign("heure"         , $heure);
+$smarty->assign("hier"            , $hier);
+$smarty->assign("demain"          , $demain);
+$smarty->assign("date_min"        , $date_min);
+$smarty->assign("date_max"        , $date_max);
+$smarty->assign("date_demain"     , $date_demain);
+$smarty->assign("date_actuelle"   , $date_actuelle);
+$smarty->assign("date"            , $date);
+$smarty->assign("order_col"       , $order_col);
+$smarty->assign("order_way"       , $order_way);
+$smarty->assign("sejours"         , $sejours);
+$smarty->assign("total_sejours"   , $total_sejours);
+$smarty->assign("prestations"     , CPrestation::loadCurrentList());
+$smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
+$smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("functions"       , $functions);
+$smarty->assign("filterFunction"  , $filterFunction);
+$smarty->assign("which"           , $show_curr_affectation ? "curr" : "first");
+$smarty->assign("heure"           , $heure);
+$smarty->assign('enabled_service' , $enabled_service);
 
 $smarty->display("inc_vw_presents.tpl");
