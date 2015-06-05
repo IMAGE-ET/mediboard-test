@@ -162,6 +162,7 @@ $locales['CSejour-back-naissance'] = 'Naissances';
 $locales['CSejour-back-naissance.empty'] = 'Naissances';
 $locales['CSejour-back-naissances'] = 'Naissances';
 $locales['CSejour-back-naissances.empty'] = 'Naissances';
+$locales['config-maternite-CNaissance'] = 'Grossesse';
 $locales['config-maternite-CGrossesse'] = 'Grossesse';
 $locales['config-maternite-CGrossesse-date_regles_obligatoire'] = 'Date des dernières règles obligatoire';
 $locales['config-maternite-CGrossesse-date_regles_obligatoire-desc'] = 'Date des dernières règles obligatoire';
