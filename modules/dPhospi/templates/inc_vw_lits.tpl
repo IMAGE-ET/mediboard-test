@@ -22,6 +22,9 @@
     <th class="section">{{mb_label class=CLit field=nom}}</th>
     <th class="section">{{mb_label class=CLit field=nom_complet}}</th>
     <th class="section">{{mb_label class=CLit field=annule}}</th>
+    {{if "atih"|module_active }}
+      <th class="section">{{mb_label class=CLit field=identifie}}</th>
+    {{/if}}
     <th class="section">{{tr}}CItemPrestation{{/tr}}</th>
     <th class="section"></th>
     <th class="section"></th>

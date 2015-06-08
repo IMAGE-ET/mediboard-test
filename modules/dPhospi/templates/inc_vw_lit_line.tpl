@@ -43,6 +43,17 @@
       </form>
     </td>
 
+    {{if "atih"|module_active }}
+      <td>
+        <form name="editLitIdentifie{{$_lit->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Infrastructure.reloadLitLine('{{$_lit->_id}}', '{{$chambre->_id}}')}})">
+          {{mb_key object=$_lit}}
+          {{mb_class object=$_lit}}
+          <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
+          {{mb_field object=$_lit field=identifie  onchange="this.form.onsubmit()"}}
+        </form>
+      </td>
+    {{/if}}
+
     <td class="text" id="edit_liaisons_items-{{$_lit->_id}}" style="width: 30%">
       {{if $_lit->_id}}
         <script type="text/javascript">
@@ -106,6 +117,17 @@
       </form>
     </td>
 
+    {{if "atih"|module_active }}
+      <td>
+        <form name="saveIdentifieLit{{$_lit->_guid}}" method="post" onsubmit="getForm('editLit{{$_lit->_guid}}').onsubmit(); return false;">
+          {{mb_key object=$_lit}}
+          {{mb_class object=$_lit}}
+          <label><input type="radio" name="__identifie" value="1" onclick="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'identifie', this.value);"/> Oui </label>
+          <label><input type="radio" name="__identifie" value="0" onclick="Infrastructure.setValueForm('editLit{{$_lit->_guid}}', 'identifie', this.value);" checked/> Non </label>
+          <button type="submit" style="display:none;"></button>
+        </form>
+      </td>
+    {{/if}}
     <td></td>
     <td></td>
 
@@ -119,7 +141,9 @@
         <input type="hidden" id="code" name="code" value="{{$_lit->nom}}" />
         <input type="hidden" id="nom_complet" name="nom_complet" value="{{$_lit->nom_complet}}" />
         <input type="hidden" id="annule" name="annule" value="{{$_lit->annule}}"/>
-
+        {{if "atih"|module_active }}
+          <input type="hidden" id="identifie" name="identifie" value="{{$_lit->identifie}}"/>
+        {{/if}}
         <button class="save notext" type="submit"></button>
       </form>
     </td>

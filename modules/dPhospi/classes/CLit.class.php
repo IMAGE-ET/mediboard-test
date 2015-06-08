@@ -26,6 +26,7 @@ class CLit extends CInternalStructure {
   public $nom_complet;
   public $annule;
   public $rank;
+  public $identifie; // Type d'autorisation de lit identifié (dédié) -> pmsi
 
   // Form Fields
   public $_overbooking;
@@ -90,11 +91,12 @@ class CLit extends CInternalStructure {
    */
   function getProps() {
     $specs = parent::getProps();
-    $specs["chambre_id"]  = "ref notNull class|CChambre seekable";
-    $specs["nom"]         = "str notNull seekable";
-    $specs["nom_complet"] = "str seekable";
-    $specs["annule"]      = "bool default|0";
-    $specs["rank"]        = "num max|999";
+    $specs["chambre_id"]    = "ref notNull class|CChambre seekable";
+    $specs["nom"]           = "str notNull seekable";
+    $specs["nom_complet"]   = "str seekable";
+    $specs["annule"]        = "bool default|0";
+    $specs["rank"]          = "num max|999";
+    $specs["identifie"]     = "bool default|0";
     return $specs;
   }
 

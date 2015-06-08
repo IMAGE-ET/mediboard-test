@@ -181,10 +181,10 @@
       </li>
     {{/if}}
     {{if "atih"|module_active}}
-      <li onmousedown="PMSI.loadRSS('{{$sejour->_id}}'); this.onmousedown=''">
+      <li onmousedown="PMSI.loadRSS('{{$sejour->_id}}');">
         <a href="#tab-rss">{{tr}}PMSI.RSS{{/tr}}</a>
       </li>
-      <li onmousedown="PMSI.loadGroupage('{{$sejour->_id}}'); this.onmousedown=''">
+      <li onmousedown="PMSI.loadGroupage('{{$sejour->_id}}');">
         <a href="#tab-groupage">{{tr}}PMSI.Groupage{{/tr}}</a>
       </li>
     {{/if}}
