@@ -2,6 +2,7 @@
 
 /**
  * $Id$
+ * $Id$
  *
  * @category Admissions
  * @package  Mediboard
@@ -44,18 +45,19 @@ $sejour->praticien_id    = $prat_id;
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"       , $sejour);
-$smarty->assign("date_demain"  , $date_demain);
-$smarty->assign("date_actuelle", $date_actuelle);
-$smarty->assign("date"         , $date);
-$smarty->assign("selAdmis"     , $selAdmis);
-$smarty->assign("selSaisis"    , $selSaisis);
-$smarty->assign("order_way"    , $order_way);
-$smarty->assign("order_col"    , $order_col);
-$smarty->assign("prats"        , $prats);
-$smarty->assign("hier"         , $hier);
-$smarty->assign("demain"       , $demain);
-$smarty->assign("period"       , $period);
-$smarty->assign("filterFunction", $filterFunction);
+$smarty->assign("sejour"          , $sejour);
+$smarty->assign("date_demain"     , $date_demain);
+$smarty->assign("date_actuelle"   , $date_actuelle);
+$smarty->assign("date"            , $date);
+$smarty->assign("selAdmis"        , $selAdmis);
+$smarty->assign("selSaisis"       , $selSaisis);
+$smarty->assign("order_way"       , $order_way);
+$smarty->assign("order_col"       , $order_col);
+$smarty->assign("prats"           , $prats);
+$smarty->assign("hier"            , $hier);
+$smarty->assign("demain"          , $demain);
+$smarty->assign("period"          , $period);
+$smarty->assign("filterFunction"  , $filterFunction);
+$smarty->assign('enabled_service' , $enabled_service);
 
 $smarty->display("vw_idx_admission.tpl");
