@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Forms
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -13,12 +13,12 @@
 
 class CExClassImport extends CMbXMLObjectImport {
   protected $name_suffix;
-  
+
   protected $imported = array();
-  
+
   /** @var CExClassFieldPredicate[] */
   protected $predicates_to_fix = array();
-  
+
   protected $import_order = array(
     "//object[@class='CExClass']",
     "//object[@class='CExList']",
@@ -37,22 +37,22 @@ class CExClassImport extends CMbXMLObjectImport {
       }
     }
   }
-  
+
   function importObject(DOMElement $element) {
     $id = $element->getAttribute("id");
-    
+
     if (isset($this->imported[$id])) {
       return;
     }
-    
+
     $this->name_suffix = " (import du ".CMbDT::dateTime().")";
-    
+
     $map_to = isset($this->map[$id]) ? $this->map[$id] : null;
-    
+
     switch ($element->getAttribute("class")) {
       // --------------------
       case "CExClass":
-        $values = $this->getValuesFromElement($element);
+        $values = self::getValuesFromElement($element);
 
         $ex_class = new CExClass();
         $ex_class->name                       = $this->options["ex_class_name"];
@@ -66,7 +66,7 @@ class CExClassImport extends CMbXMLObjectImport {
         }
 
         CAppUI::stepAjax("Formulaire '%s' créé", UI_MSG_OK, $ex_class->name);
-        
+
         $map_to = $ex_class->_guid;
         break;
 
@@ -75,11 +75,11 @@ class CExClassImport extends CMbXMLObjectImport {
         if ($map_to == "__create__") {
           /** @var CExList $_ex_list */
           $_ex_list = $this->getObjectFromElement($element);
-          
+
           if ($msg = $_ex_list->store()) {
             $_ex_list->name .= $this->name_suffix;
           }
-          
+
           if ($msg = $_ex_list->store()) {
             CAppUI::stepAjax($msg, UI_MSG_WARNING);
             break;
@@ -89,7 +89,7 @@ class CExClassImport extends CMbXMLObjectImport {
           $_elements = $this->getElementsByFwdRef("CExListItem", "list_id", $id);
           foreach ($_elements as $_element) {
             $_list_item = new CExListItem();
-            bindHashToObject($this->getValuesFromElement($_element), $_list_item);
+            bindHashToObject(self::getValuesFromElement($_element), $_list_item);
             $_list_item->list_id = $_ex_list->_id;
 
             if ($msg = $_list_item->store()) {
@@ -131,7 +131,7 @@ class CExClassImport extends CMbXMLObjectImport {
           if ($msg = $_ex_concept->store()) {
             $_ex_concept->name .= $this->name_suffix;
           }
-          
+
           if ($msg = $_ex_concept->store()) {
             CAppUI::stepAjax($msg, UI_MSG_WARNING);
             break;
@@ -141,7 +141,7 @@ class CExClassImport extends CMbXMLObjectImport {
           $map_to = $_ex_concept->_guid;
         }
         break;
-      
+
       case "CExClassField":
         /** @var CExClassField $_ex_field */
         $_ex_field = $this->getObjectFromElement($element);
@@ -149,7 +149,7 @@ class CExClassImport extends CMbXMLObjectImport {
           break;
         }
         $_ex_field->_make_unique_name = false;
-        
+
         // Met à jour default|XXX des champs enum pour garder la bonne référence
         // @FIXME Ne fonctionne pas à cause du fait qu'il y a un concept_id ....
         $_spec_obj = $_ex_field->getSpecObject();
@@ -183,11 +183,11 @@ class CExClassImport extends CMbXMLObjectImport {
 
         $map_to = $_object->_guid;
         break;
-      
+
       case "CExClassFieldPredicate":
         /** @var CExClassFieldPredicate $_object */
         $_object = $this->getObjectFromElement($element);
-        
+
         if ($_object->value) {
           $_field = $_object->loadRefExClassField();
           if ($_field->getSpecObject() instanceof CEnumSpec) {
@@ -203,14 +203,14 @@ class CExClassImport extends CMbXMLObjectImport {
 
         $map_to = $_object->_guid;
         break;
-      
+
       default:
         // Ignore object
         break;
     }
-    
+
     $this->map[$id] = $map_to;
-    
+
     $this->imported[$id] = true;
   }
 }
