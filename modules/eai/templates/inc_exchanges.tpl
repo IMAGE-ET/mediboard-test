@@ -13,54 +13,55 @@
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}
 
 <script type="text/javascript">
-orderColonne = function(order_col, order_way) {
-  var form = getForm("filterExchange");
-  $V(form.order_col, order_col);
-  $V(form.order_way, order_way);
-  form.onsubmit();
-};
+  orderColonne = function (order_col, order_way) {
+    var form = getForm("filterExchange");
+    $V(form.order_col, order_col);
+    $V(form.order_way, order_way);
+    form.onsubmit();
+  };
 
-filterColonne = function(input, type) {
-  var table = $("exchanges-list");
-  table.select(".table-row").invoke("show");
+  filterColonne = function (input, type) {
+    var table = $("exchanges-list");
+    table.select(".table-row").invoke("show");
 
-  var term = $V(input);
-  if (!term) return;
-
-  table.select(".exchange-"+type).each(function(e) {
-    if (!e.getText().like(term)) {
-      e.up(".table-row").hide();
+    var term = $V(input);
+    if (!term) {
+      return;
     }
-  });
-};
 
-togglePrint = function(status) {
-  $("exchanges-list").select("input[name=checked]").each(function(elt) {
-    elt.checked = status ? "checked" : "";
-  });
-};
+    table.select(".exchange-" + type).each(function (e) {
+      if (!e.getText().like(term)) {
+        e.up(".table-row").hide();
+      }
+    });
+  };
 
-sendMessageForElementsSelected = function() {
-  var elements_selected = new Array();
-  $("exchanges-list").select("input[name=checked").each(function(elt) {
-    if(elt.checked == true) {
-      var tbody = elt.parentNode.parentNode.parentNode;
-      elements_selected.push(tbody.getAttribute("id"));
-    }
-  });
- elements_selected.reverse();
+  togglePrint = function (status) {
+    $("exchanges-list").select("input[name=checked]").each(function (elt) {
+      elt.checked = status ? "checked" : "";
+    });
+  };
 
-  for(var i=0; i<elements_selected.length; i++) {
-    ExchangeDataFormat.sendMessage(elements_selected[i].substring(9));
+  sendMessageForElementsSelected = function () {
+    var elements_selected = [];
+    $("exchanges-list").select("input[name=exchange_checkbox]:checked").each(function (elt) {
+      var tbody = elt.up('tbody');
+      elements_selected.push(tbody.get("exchange"));
+    });
+    elements_selected.reverse();
+    elements_selected.each(function (guid) {
+      ExchangeDataFormat.sendMessage(guid);
+    });
   }
-}
 </script>
+
+<button style="float: left;" class="tick" onclick="sendMessageForElementsSelected();">Envoyer pour la sélection</button>
 
 {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
 
-<div id="send_for_selection"><button class="tick"><a href="#" onclick="sendMessageForElementsSelected();">Envoyer pour la sélection</a></button></div>
 <form name="search-exchange_id" action="" method="get"
-      onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));" style="float: right; clear: both;">
+      onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));"
+      style="float: right; clear: both;">
   <input type="search" id="exchange_id" name="exchange_id" required placeholder="{{tr}}CExchangeDataFormat-exchange_id{{/tr}}" />
   <button type="submit" class="lookup notext">{{tr}}search_exchange_by_id-button{{/tr}}</button>
 </form>
@@ -69,7 +70,7 @@ sendMessageForElementsSelected = function() {
   <tr>
     <th class="narrow"></th>
     <th class="narrow"></th>
-    <th class="narrow"><input type="checkbox" onclick="togglePrint(this.checked);"/></th>
+    <th class="narrow"><input type="checkbox" onclick="togglePrint(this.checked);" /></th>
     <th class="narrow">{{tr}}Actions{{/tr}}</th>
     <th>{{mb_title object=$exchange field=$exchange->_spec->key}}</th>
     <th>{{mb_title object=$exchange field="object_id"}}</th>
@@ -98,10 +99,10 @@ sendMessageForElementsSelected = function() {
     <th>{{mb_title object=$exchange field="acquittement_valide"}}</th>
   </tr>
   {{foreach from=$exchanges item=_exchange}}
-    <tbody id="exchange_{{$_exchange->_guid}}" class="table-row">
-      {{mb_include template=inc_exchange object=$_exchange}}
+    <tbody id="exchange_{{$_exchange->_guid}}" class="table-row" data-exchange="{{$_exchange->_guid}}">
+    {{mb_include template=inc_exchange object=$_exchange}}
     </tbody>
-  {{foreachelse}}
+    {{foreachelse}}
     <tr>
       <td colspan="21" class="empty">
         {{tr}}{{$exchange->_class}}.none{{/tr}}
