@@ -121,7 +121,7 @@ class CInteropReceiver extends CInteropActor {
         //$_receiver->lastMessage();
       }
     }
-    
+
     return $objects;
   }
 

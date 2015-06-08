@@ -119,7 +119,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
       if (!$_receivers) {
         continue;
       }
-
+      /** @var CInteropReceiver $_receiver */
       foreach ($_receivers as $_receiver) {
         // Destinataire non actif on envoi pas
         if (!$_receiver->actif) {

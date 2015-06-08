@@ -41,6 +41,7 @@
   <td class="narrow">
     {{mb_include module=system template=inc_object_notes object=$object float="none"}}
   </td>
+  <td><input type="checkbox" name="checked"/></td>
   <td class="narrow">
     <form name="del{{$object->_guid}}" action="" method="post">
       {{mb_class object=$object}}

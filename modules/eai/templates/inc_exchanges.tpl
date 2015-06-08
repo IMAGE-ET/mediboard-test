@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=eai script=exchange_data_format ajax=true}}
+
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}
 
 <script type="text/javascript">
@@ -31,10 +33,32 @@ filterColonne = function(input, type) {
     }
   });
 };
+
+togglePrint = function(status) {
+  $("exchanges-list").select("input[name=checked]").each(function(elt) {
+    elt.checked = status ? "checked" : "";
+  });
+};
+
+sendMessageForElementsSelected = function() {
+  var elements_selected = new Array();
+  $("exchanges-list").select("input[name=checked").each(function(elt) {
+    if(elt.checked == true) {
+      var tbody = elt.parentNode.parentNode.parentNode;
+      elements_selected.push(tbody.getAttribute("id"));
+    }
+  });
+ elements_selected.reverse();
+
+  for(var i=0; i<elements_selected.length; i++) {
+    ExchangeDataFormat.sendMessage(elements_selected[i].substring(9));
+  }
+}
 </script>
 
 {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
 
+<div id="send_for_selection"><button class="tick"><a href="#" onclick="sendMessageForElementsSelected();">Envoyer pour la sélection</a></button></div>
 <form name="search-exchange_id" action="" method="get"
       onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));" style="float: right; clear: both;">
   <input type="search" id="exchange_id" name="exchange_id" required placeholder="{{tr}}CExchangeDataFormat-exchange_id{{/tr}}" />
@@ -45,6 +69,7 @@ filterColonne = function(input, type) {
   <tr>
     <th class="narrow"></th>
     <th class="narrow"></th>
+    <th class="narrow"><input type="checkbox" onclick="togglePrint(this.checked);"/></th>
     <th class="narrow">{{tr}}Actions{{/tr}}</th>
     <th>{{mb_title object=$exchange field=$exchange->_spec->key}}</th>
     <th>{{mb_title object=$exchange field="object_id"}}</th>
