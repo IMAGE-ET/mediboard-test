@@ -29,6 +29,7 @@ $type           = CValue::getOrSession("type");
 $services_ids   = CValue::getOrSession("services_ids");
 $prat_id        = CValue::getOrSession("prat_id");
 $only_confirmed = CValue::getOrSession("only_confirmed");
+$enabled_service = CValue::getOrSession("active_filter_services", 0);
 $bank_holidays  = CMbDate::getHolidays($date);
 
 if (is_array($services_ids)) {
@@ -52,14 +53,14 @@ if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
 }
 elseif ($type) {
-  $filterType = "AND `sejour`.`type` = '$type'";
+    $filterType = "AND `sejour`.`type` = '$type'";
 }
 else {
   $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // filtre sur les services
-if (count($services_ids)) {
+if (count($services_ids) && $enabled_service) {
   $leftjoinService = "LEFT JOIN affectation
                         ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $filterService   = "AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids);
@@ -167,15 +168,14 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("current_m", $current_m);
 
-$smarty->assign("hier", $hier);
-$smarty->assign("demain", $demain);
-
-$smarty->assign("selSortis", $selSortis);
-
-$smarty->assign("bank_holidays", $bank_holidays);
-$smarty->assign('date', $date);
-$smarty->assign('lastmonth', $lastmonth);
-$smarty->assign('nextmonth', $nextmonth);
-$smarty->assign('days', $days);
+$smarty->assign("hier"            , $hier);
+$smarty->assign("demain"          , $demain);
+$smarty->assign("selSortis"       , $selSortis);
+$smarty->assign("bank_holidays"   , $bank_holidays);
+$smarty->assign('date'            , $date);
+$smarty->assign('lastmonth'       , $lastmonth);
+$smarty->assign('nextmonth'       , $nextmonth);
+$smarty->assign('days'            , $days);
+$smarty->assign('enabled_service' , $enabled_service);
 
 $smarty->display('inc_vw_all_sorties.tpl');

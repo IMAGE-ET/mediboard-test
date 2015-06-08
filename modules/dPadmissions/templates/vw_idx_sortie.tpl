@@ -71,6 +71,7 @@
     url.addParam("service_id", [$V(form.service_id)].flatten().join(","));
     url.addParam("prat_id"   , $V(form.prat_id));
     url.addParam("only_confirmed", $V(form.only_confirmed));
+    url.addParam("active_filter_services" , $V(form.elements['active_filter_services']));
     url.requestUpdate('allSorties');
     reloadSorties();
   }
@@ -88,6 +89,7 @@
     url.addParam("only_confirmed", $V(form.only_confirmed));
     url.addParam("period"    , $V(form.period));
     url.addParam("filterFunction" , $V(form.filterFunction));
+    url.addParam("active_filter_services" , $V(form.elements['active_filter_services']));
     url.requestUpdate("listSorties");
   }
 
@@ -243,7 +245,11 @@
         </select>
         {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();" style="max-width: 15em;"}}
 
-        <button type="button" onclick="Admissions.selectServices('sortie');" class="search">Services</button>
+        <input type="checkbox" name="_active_filter_services" title="Prendre en compte le filtre sur les services"
+               onclick="$V(this.form.active_filter_services, this.checked ? 1 : 0); this.form.filter_services.disabled = !this.checked;"
+               {{if $enabled_service == 1}}checked{{/if}} />
+        <input type="hidden" name="active_filter_services" onchange="reloadFullSorties();" value="{{$enabled_service}}"/>
+        <button type="button" name ="filter_services" onclick="Admissions.selectServices('sortie');" class="search" {{if $enabled_service == 0}}disabled{{/if}}>Services</button>
 
         <select name="prat_id" onchange="reloadFullSorties();" style="max-width: 15em;">
           <option value="">&mdash; Tous les praticiens</option>

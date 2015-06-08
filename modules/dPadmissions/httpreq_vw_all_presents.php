@@ -16,14 +16,14 @@ CCanDo::checkRead();
 // Initialisation de variables
 $date = CValue::getOrSession("date", CMbDT::date());
 
-$month_min     = CMbDT::date("first day of +0 month", $date);
-$lastmonth     = CMbDT::date("last day of -1 month" , $date);
-$nextmonth     = CMbDT::date("first day of +1 month", $date);
-
-$type          = CValue::getOrSession("type");
-$services_ids  = CValue::getOrSession("services_ids");
-$prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CMbDate::getHolidays($date);
+$month_min       = CMbDT::date("first day of +0 month", $date);
+$lastmonth       = CMbDT::date("last day of -1 month" , $date);
+$nextmonth       = CMbDT::date("first day of +1 month", $date);
+$enabled_service = CValue::getOrSession("active_filter_services", 0);
+$type            = CValue::getOrSession("type");
+$services_ids    = CValue::getOrSession("services_ids");
+$prat_id         = CValue::getOrSession("prat_id");
+$bank_holidays   = CMbDate::getHolidays($date);
 
 CMbArray::removeValue("", $services_ids);
 
@@ -44,14 +44,14 @@ if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
 }
 elseif ($type) {
-  $where["sejour.type"] = "= '$type'";
-}
+    $where["sejour.type"] = "= '$type'";
+  }
 else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // filtre sur les services
-if (count($services_ids)) {
+if (count($services_ids) && $enabled_service) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
@@ -79,13 +79,13 @@ foreach ($days as $_date => $num) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("hier"         , $hier);
-$smarty->assign("demain"       , $demain);
-
-$smarty->assign("bank_holidays", $bank_holidays);
-$smarty->assign('date'         , $date);
-$smarty->assign('lastmonth'    , $lastmonth);
-$smarty->assign('nextmonth'    , $nextmonth);
-$smarty->assign('days'         , $days);
+$smarty->assign("hier"            , $hier);
+$smarty->assign("demain"          , $demain);
+$smarty->assign("bank_holidays"   , $bank_holidays);
+$smarty->assign('date'            , $date);
+$smarty->assign('lastmonth'       , $lastmonth);
+$smarty->assign('nextmonth'       , $nextmonth);
+$smarty->assign('days'            , $days);
+$smarty->assign('enabled_service' , $enabled_service);
 
 $smarty->display('inc_vw_all_presents.tpl');
