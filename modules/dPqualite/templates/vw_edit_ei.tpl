@@ -11,10 +11,10 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{include file="inc_ei_categorie.tpl"}}
+      {{mb_include module=dPqualite template=inc_ei_categorie}}
     </td>
     <td class="halfPane">
-      {{include file="inc_ei_item.tpl"}}
+      {{mb_include module=dPqualite template=inc_ei_item}}
     </td>
   </tr>
 </table>
