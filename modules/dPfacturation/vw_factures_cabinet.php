@@ -69,9 +69,7 @@ if ($search_easy == 1) {
 }
 
 if ($num_facture) {
-  $ljoin = array();
-  $where = array();
-  $where["facture_id"] =" = '$num_facture' ";
+  $where["facture_id"]   =" = '$num_facture' ";
 }
 if ($xml_etat != "") {
   $where["facture"] =" = '$xml_etat' ";
