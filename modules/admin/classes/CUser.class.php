@@ -701,4 +701,16 @@ class CUser extends CPerson {
 
     return $this->_user_last_login = $last_login;
   }
+
+  /**
+   * get profiles
+   *
+   * @return CUser[]
+   */
+  static function getProfiles() {
+    // Récupération des profils
+    $profile = new CUser();
+    $profile->template = 1;
+    return $profile->loadMatchingList();
+  }
 }
