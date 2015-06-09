@@ -208,6 +208,9 @@ if ($selOp->_id) {
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
+$anesth = new CMediusers();
+$anesth->load($anesth_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -225,6 +228,7 @@ $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
 $smarty->assign("_is_dentiste"           , $selOp->_ref_chir->isDentiste());
 $smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("anesth_id"              , $anesth_id);
+$smarty->assign("anesth"                 , $anesth);
 $smarty->assign("create_dossier_anesth"  , 1);
 $smarty->assign("require_check_list"     , 0);
 // Operation check lists
@@ -234,6 +238,5 @@ $smarty->assign("check_lists_no_has"              , $check_lists_no_has);
 $smarty->assign("check_items_no_has_categories"   , $check_items_no_has_categories);
 $smarty->assign("list_chirs"                      , $listChirs);
 $smarty->assign("listValidateurs_no_has"          , $listValidateurs_no_has);
-
 
 $smarty->display("inc_operation.tpl");
