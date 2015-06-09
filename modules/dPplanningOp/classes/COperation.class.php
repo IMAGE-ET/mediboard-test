@@ -1699,6 +1699,7 @@ class COperation extends CCodable implements IPatientRelated, IIndexableObject {
     $template->addTimeProperty("Opération - entrée SSPI"      , $this->entree_reveil);
     $template->addTimeProperty("Opération - sortie SSPI"      , $this->sortie_reveil_reel);
     $template->addProperty("Opération - dépassement anesth"   , $this->depassement_anesth);
+    $template->addProperty("Opération - Passage USCPO"        , "$this->duree_uscpo nuit(s)");
 
     if (CModule::getActive("mvsante")) {
       $template->addTimeProperty("Opération - Remise au chirurgien", $this->remise_chir);
