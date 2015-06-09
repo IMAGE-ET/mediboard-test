@@ -330,72 +330,44 @@
 <!-- Planifier -->
 <table class="tbl">
   <tr>
-    <th colspan="2" class="title">Planifier</th>
+    <th class="title">Planifier</th>
   </tr>
 
   <tbody id="planifier">
-    <tr><th class="category" colspan="2">Evènements</th></tr>
-    {{if $app->user_prefs.simpleCabinet}}
     <tr>
-      <td class="button" colspan="2">
-        <a class="button new" href="?m=cabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
-          Consultation
-        </a>
-      </td>
-    </tr>
-    {{else}}
-      {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
-      <tr>
-        <td class="button" {{if $ecap_dhe}} colspan="2" {{/if}}>
-          <a class="button new" href="?m=cabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
-            Consultation
-          </a>
-        </td>
-        {{if !$ecap_dhe}}
-        <td class="button">
-          <a class="button new" href="?m=planningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-            Intervention
-          </a>
-        </td>
-        {{/if}}
-      </tr>
-      <tr>
+      <td class="button">
+        {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
         {{if $ecap_dhe}}
-        <td class="button" colspan="2">
           {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
         {{else}}
-        <td class="button">
-          <a class="button new" href="?m=planningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
-            Séjour
-          </a>
-        </td>
-        <td class="button">
-          <a class="button new" href="?m=planningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
-            Interv. hors plage
-          </a>
+          {{if !$app->user_prefs.simpleCabinet}}
+            {{if $canPlanningOp->edit}}
+              <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+                {{tr}}COperation{{/tr}}
+              </a>
+            {{/if}}
+            {{if $canPlanningOp->read}}
+              <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+                Interv. hors plage
+              </a>
+              <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
+                {{tr}}CSejour{{/tr}}
+              </a>
+            {{/if}}
+          {{/if}}
         {{/if}}
-        </td>
-      </tr>
-    {{/if}}
+      </td>
+    </tr>
+    <tr>
+      <td class="button">
+        {{if $canCabinet->read}}
+          <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
+            {{tr}}CConsultation{{/tr}}
+          </a>
 
-    {{if $listPrat|@count && $canCabinet->read}}
-      <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
-      <tr>
-        <td class="button" colspan="2">
-          <form name="addConsFrm" action="?m=cabinet" method="post" onsubmit="return checkForm(this)">
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="dosql" value="do_consult_now" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->patient_id}}" />
-          <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
-          <select name="prat_id" class="notNull ref"  style="width: 140px;">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$app->user_id}}
-          </select>
-          <button class="new" type="submit">Consulter</button>
-          </form>
-        </td>
-      </tr>
-    {{/if}}
+          {{mb_include module="cabinet" template="inc_button_consult_immediate" patient_id=$patient->_id}}
+        {{/if}}
+      </td>
+    </tr>
   </tbody>
 </table>

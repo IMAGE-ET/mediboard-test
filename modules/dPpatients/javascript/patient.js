@@ -88,4 +88,5 @@ Patient = Object.extend({
         method: 'post'
       });
   }
+
 }, window.Patient);

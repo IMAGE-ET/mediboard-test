@@ -21,10 +21,6 @@ $consultation_id = CValue::get("consultation_id", 0);
 $sejour_id       = CValue::get("sejour_id", 0);
 $operation_id    = CValue::get("operation_id", 0);
 
-// Liste des Praticiens
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -95,14 +91,14 @@ $can_view_dossier_medical =
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
+$smarty->assign("canCabinet"              , CModule::getCanDo("dPcabinet"));
+$smarty->assign("canPlanningOp"           , CModule::getCanDo("dPplanningOp"));
 
 $smarty->assign("consultation_id"         , $consultation_id);
 $smarty->assign("sejour_id"               , $sejour_id);
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("operation_id"            , $operation_id);
 $smarty->assign("patient"                 , $patient);
-$smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("object"                  , $patient);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("nb_sejours_annules"      , $nb_sejours_annules);

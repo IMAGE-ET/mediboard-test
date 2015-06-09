@@ -59,10 +59,10 @@ Document.refreshList = function() {
 
 <table class="form">
   <tr>
-    <th class="category" colspan="4">Planifier</th>
+    <th class="category">Planifier</th>
   </tr>
   <tr>
-    <td class="button" colspan="10">
+    <td class="button">
       {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
       {{if $ecap_dhe}}
         {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
@@ -83,38 +83,19 @@ Document.refreshList = function() {
           {{/if}}
         {{/if}}
       {{/if}}
-
+    </td>
+  </tr>
+  <tr>
+    <td class="button">
       {{if $canCabinet->read}}
         <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
           {{tr}}CConsultation{{/tr}}
         </a>
+
+        {{mb_include module="cabinet" template="inc_button_consult_immediate" patient_id=$patient->_id}}
       {{/if}}
     </td>
   </tr>
-  {{if $listPrat|@count && $canCabinet->read}}
-  <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
-  <tr>
-    <td class="button" colspan="4">
-      <form name="addConsFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
-
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="dosql" value="do_consult_now" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->_id}}" />
-
-      <label for="prat_id" class="checkNull" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
-
-      <select name="prat_id" class="notNull ref">
-        <option value="">&mdash; Choisir un praticien</option>
-        {{mb_include module=mediusers template=inc_options_mediuser selected=$app->user_id list=$listPrat}}
-      </select>
-
-      <button id="inc_vw_patient_button_consult_now" class="new" type="submit">Consulter</button>
-
-      </form>
-    </td>
-  </tr>
-  {{/if}}
 </table>
 
 <table class="form">

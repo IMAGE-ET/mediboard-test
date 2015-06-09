@@ -113,6 +113,7 @@
     <tr>
       <td><em>Aucun dossier d'anesthésie existant pour ce patient</em></td>
     </tr>
+    </tr>
   {{/foreach}}
   {{if $create_dossier_anesth == 1}}
     <tr>
@@ -129,7 +130,7 @@
         <input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
         <input type="hidden" name="_redirect" value="?" />
         <input type="hidden" name="patient_id" value="{{$selOp->_ref_sejour->patient_id}}" />
-        <select name="prat_id">
+        <select name="_prat_id">
           {{foreach from=$listAnesths item=curr_anesth}}
           <option value="{{$curr_anesth->user_id}}" {{if $selOp->_ref_anesth->user_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
             {{$curr_anesth->_view}}

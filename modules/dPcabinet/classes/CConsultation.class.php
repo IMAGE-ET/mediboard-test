@@ -809,6 +809,7 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
 
     $this->annule = $this->annule === null || $this->annule === '' ? 0 : $this->annule;
 
+    $uf_soins_id = $this->_uf_soins_id;
 
     // Consultation dans un séjour
     $sejour = new CSejour();
@@ -857,11 +858,12 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
 
       // Si pas de séjour et config alors le créer en type consultation
       if (!$sejour->_id && CAppUI::conf("dPcabinet CConsultation create_consult_sejour")) {
-        $sejour->patient_id = $this->patient_id;
+        $sejour->patient_id   = $this->patient_id;
         $sejour->praticien_id = $this->_ref_chir->_id;
-        $sejour->group_id = $function->group_id;
-        $sejour->type = "consult";
-        $sejour->facturable = $facturable;
+        $sejour->group_id     = $function->group_id;
+        $sejour->type         = "consult";
+        $sejour->facturable   = $facturable;
+        $sejour->uf_soins_id  = $uf_soins_id;
         $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : null;
         if ($this->chrono == self::PLANIFIE) {
           $sejour->entree_prevue = $datetime;
@@ -881,7 +883,6 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
     $facturable  = $this->_facturable;
     $forfait_se  = $this->_forfait_se;
     $forfait_sd  = $this->_forfait_sd;
-    $uf_soins_id = $this->_uf_soins_id;
 
     $this->_adjust_sejour = false;
     $this->loadRefSejour();

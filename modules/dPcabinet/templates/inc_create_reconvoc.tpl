@@ -11,9 +11,9 @@ choosePatient = function() {
   var to = getForm("Create-Reconvocation");
 
   // Les nouvelles valeurs sont mises dans le formulaire
-  $V(to.motif, $V(from.motif));
+  $V(to.motif    , $V(from.motif));
   $V(to._datetime, $V(from._datetime));
-  $V(to.prat_id, $V(from.prat_id));
+  $V(to._prat_id , $V(from.prat_id));
   
   Control.Modal.close();
   PatSelector.init();

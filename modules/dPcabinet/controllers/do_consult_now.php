@@ -16,7 +16,7 @@ global $m;
 //$canModule = $module->canDo();
 //$canModule->needsEdit();
 
-$prat_id       = CValue::post("prat_id");
+$prat_id       = CValue::post("_prat_id");
 $patient_id    = CValue::post("patient_id");
 $_operation_id = CValue::post("_operation_id");
 $_datetime     = CValue::post("_datetime");
@@ -24,6 +24,7 @@ $callback      = CValue::post("callback");
 $type          = CValue::post("type");
 $_in_suivi     = CValue::post("_in_suivi", 0);
 $grossesse_id  = CValue::post("grossesse_id");
+$uf_soins_id   = CValue::post("_uf_soins_id");
 
 if (!$_datetime || $_datetime == "now") {
   $_datetime = CMbDT::dateTime();
@@ -133,21 +134,26 @@ $ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->_id;
-$consult->sejour_id = $sejour->_id;
-$consult->grossesse_id = $grossesse_id;
-$consult->patient_id = $patient_id;
-$consult->heure = $time_now;
-$consult->arrivee = "$day_now $time_now";
-$consult->duree = 1;
-$consult->chrono = CConsultation::PATIENT_ARRIVE;
-$consult->date_at = CValue::post("date_at");
-$consult->_operation_id = $_operation_id;
+$consult->sejour_id       = $sejour->_id;
+$consult->grossesse_id    = $grossesse_id;
+$consult->patient_id      = $patient_id;
+$consult->heure           = $time_now;
+$consult->arrivee         = "$day_now $time_now";
+$consult->duree           = 1;
+$consult->chrono          = CConsultation::PATIENT_ARRIVE;
+$consult->date_at         = CValue::post("date_at");
+$consult->_operation_id   = $_operation_id;
+$consult->_uf_soins_id    = $uf_soins_id;
 
 if ($type) {
   $consult->type = $type;
 }
+
 // Cas standard
-$consult->motif = CValue::post("motif", CAppUI::conf('dPcabinet CConsultation show_motif_consult_immediate') ? "Consultation immédiate" : null);
+$consult->motif = CValue::post(
+  "motif", CAppUI::conf('dPcabinet CConsultation show_motif_consult_immediate') ? "Consultation immédiate" : null
+);
+
 if ($type == "entree") {
   $consult->motif = CAppUI::conf('soins Other default_motif_observation', CGroups::loadCurrent()->_guid);
 }

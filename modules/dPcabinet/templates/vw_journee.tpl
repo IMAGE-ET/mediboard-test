@@ -66,7 +66,7 @@ Reconvocation = {
   checkPraticien: function() {
     var form = getForm('Create-Reconvocation');
     
-    if ($V(form.prat_id) == '') {
+    if ($V(form._prat_id) == '') {
       alert('Veuillez sélectionner un praticien');
       return false;
     }
@@ -121,7 +121,7 @@ Reconvocation = {
 
           <input type="hidden" name="patient_id" class="ref notNull" onchange="Reconvocation.submit();"/>
           <input type="hidden" name="_patient_view" />
-          <input type="hidden" name="prat_id" value="" />
+          <input type="hidden" name="_prat_id" value="" />
           <input type="hidden" name="motif" value="" />
           <button type="submit" class="new">Reconvocation immédiate</button>
         </form>

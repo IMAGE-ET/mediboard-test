@@ -362,7 +362,7 @@
 <form name="addConsultation" method="post" action="?">
   <input type="hidden" name="m" value="cabinet" />
   <input type="hidden" name="dosql" value="do_consult_now" />
-  <input type="hidden" name="prat_id" value="{{$app->_ref_user->_id}}" />
+  <input type="hidden" name="_prat_id" value="{{$app->_ref_user->_id}}" />
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_operation_id" value="" />

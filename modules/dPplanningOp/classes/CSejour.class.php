@@ -4629,6 +4629,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $dates = array();
 
+
     // Calcul des dates de début et fin par liaison
     foreach ($liaisons_j as $prestation_id => $_liaisons) {
       $last_liaison = end($_liaisons);

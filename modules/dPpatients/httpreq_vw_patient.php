@@ -62,17 +62,14 @@ if ($patient->_id) {
   }
 }
 
-$listPrat = CConsultation::loadPraticiens(PERM_EDIT);
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("patient"         , $patient);
-$smarty->assign("listPrat"        , $listPrat);
-$smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
-$smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
-$smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet"));
+$smarty->assign("patient"             , $patient);
+$smarty->assign("canPatients"         , CModule::getCanDo("dPpatients"));
+$smarty->assign("canAdmissions"       , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp"       , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"          , CModule::getCanDo("dPcabinet"));
 $smarty->assign("nb_sejours_annules"  , $nb_sejours_annules);
 $smarty->assign("nb_ops_annulees"     , $nb_ops_annulees);
 $smarty->assign("nb_consults_annulees", $nb_consults_annulees);

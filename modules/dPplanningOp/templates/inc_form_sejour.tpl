@@ -853,7 +853,7 @@ Main.add( function(){
 
 {{assign var=required_uf_soins value="dPplanningOp CSejour required_uf_soins"|conf:"CGroups-$g"}}
 {{if $required_uf_soins != "no"}}
-  <tr {{if !$conf.dPplanningOp.CSejour.easy_uf_soins}} class="modeExpert" {{/if}}>
+  <tr>
     <th>
       {{mb_label object=$sejour field="uf_soins_id"}}
     </th>

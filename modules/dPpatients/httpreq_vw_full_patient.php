@@ -18,10 +18,6 @@ if (!$patient_id) {
   CAppUI::redirect("m=dPpatients&tab=0");
 }
 
-// Liste des Praticiens
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -49,9 +45,9 @@ $can_view_dossier_medical =
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
+$smarty->assign("canCabinet"              , CModule::getCanDo("dPcabinet"));
+$smarty->assign("canPlanningOp"           , CModule::getCanDo("dPplanningOp"));
 
-$smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("patient"                 , $patient);
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));

@@ -871,7 +871,7 @@ class CCodable extends CMbObject {
     }
 
     if (!$this->_forwardRefMerging && !$this->_merging && CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")) {
-      if ($this->codes_ccam != $this->_old->codes_ccam) {
+      if ($this->_old && $this->codes_ccam != $this->_old->codes_ccam) {
         if ($msg = $this->getMaxCodagesActes()) {
           return $msg;
         }

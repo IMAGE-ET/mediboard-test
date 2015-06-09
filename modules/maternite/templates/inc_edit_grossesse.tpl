@@ -45,7 +45,7 @@
 
   consultNow = function(prat_id, grossesse_id) {
     var form = getForm('editConsultImm');
-    $V(form.prat_id, prat_id);
+    $V(form._prat_id    , prat_id);
     $V(form.grossesse_id, grossesse_id);
     form.onsubmit();
     $V("selector_prat_imm", '', false);
@@ -114,7 +114,7 @@
     <input type="hidden" name="callback" value="afterCreationConsultNow"/>
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="grossesse_id" value="" />
-    <input type="hidden" name="prat_id" value="" />
+    <input type="hidden" name="_prat_id" value="" />
   </form>
 {{/if}}
 
