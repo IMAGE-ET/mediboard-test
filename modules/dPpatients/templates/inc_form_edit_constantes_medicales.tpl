@@ -186,7 +186,7 @@ Main.add(function () {
                   {{assign var=at_least_one_hidden value=true}}
                   {{/if}}>
                   <th style="text-align: left;" class="text">
-                    <button type="button" class="stats notext" style="float: right;" onclick="displayConstantGraph('{{$_constant}}');">
+                    <button type="button" class="stats notext compact" tabindex="-1" style="float: right;" onclick="displayConstantGraph('{{$_constant}}');">
                       {{tr}}CConstantGraph-msg-display{{/tr}}
                     </button>
                     <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}" onmouseover="">
