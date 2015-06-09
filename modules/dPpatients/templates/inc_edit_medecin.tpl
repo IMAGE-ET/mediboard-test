@@ -82,7 +82,7 @@
   };
 </script>
 
-<form method="post" name="editMedecin_{{$object->_id}}" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
+<form method="post" name="editMedecin_{{$object->_id}}" onsubmit="return onSubmitFormAjax(this, Control.Modal.close)">
   <input type="hidden" name="m" value="patients"/>
   <input type="hidden" name="dosql" value="do_medecins_aed"/>
   <input type="hidden" name="del" value="0"/>
@@ -124,7 +124,7 @@
         <select name="titre">
           <option value="">&mdash; {{tr}}CMedecin-titre.select{{/tr}}</option>
           {{foreach from=$titre_locales->_locales key=key item=_titre}}
-            <option value="{{$key}}" {{if $key == $object->titre}}selected="selected"{{/if}}>
+            <option value="{{$key}}" {{if $key == $object->titre}}selected{{/if}}>
               {{tr}}CMedecin.titre.{{$key}}-long{{/tr}} &mdash; ({{$_titre}})
             </option>
           {{/foreach}}
@@ -203,6 +203,11 @@
       <td>{{mb_field object=$object field=adeli style="width: 13em;"}}</td>
     </tr>
 
+    <tr>
+      <th>{{mb_label object=$object field=actif}}</th>
+      <td>{{mb_field object=$object field=actif}}</td>
+    </tr>
+
     {{if $object->_id}}
       <tr>
         <th class="category" colspan="2">{{tr}}CSalutation.mine{{/tr}}</th>
@@ -232,7 +237,7 @@
             {{tr}}Print{{/tr}}
           </button>
 
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax:true},{onComplete: Control.Modal.close})">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form, {ajax: true}, Control.Modal.close)">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}

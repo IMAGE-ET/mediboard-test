@@ -24,6 +24,7 @@ class CMedecin extends CPerson {
   public $prenom;
   public $jeunefille;
   public $sexe;
+  public $actif;
 
   /** @var string Practitioner title */
   public $titre;
@@ -108,6 +109,7 @@ class CMedecin extends CPerson {
     $props["prenom"]             = "str seekable";
     $props["jeunefille"]         = "str confidential";
     $props["sexe"]               = "enum list|u|f|m default|u";
+    $props["actif"]              = "bool default|1";
     $props["titre"]              = "enum list|m|mme|dr|pr";
     $props["adresse"]            = "text$medecin_strict confidential";
     $props["ville"]              = "str$medecin_strict confidential seekable";

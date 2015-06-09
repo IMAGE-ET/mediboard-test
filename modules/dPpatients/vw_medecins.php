@@ -80,6 +80,9 @@ if ($medecin_disciplines) {
   $where["disciplines"] = $ds->prepareLike("%$medecin_disciplines%");
 }
 
+if ($dialog) {
+  $where["actif"] = "= '1'";
+}
 
 if ($medecin_cp && $medecin_cp != "00") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cp);

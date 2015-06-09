@@ -2885,7 +2885,12 @@ class CSetupdPpatients extends CSetup {
             ADD `titre` ENUM ('m', 'mme', 'dr', 'pr') AFTER `sexe`;";
     $this->addQuery($query);
 
-    $this->mod_version = '2.43';
+    $this->makeRevision("2.43");
+    $query = "ALTER TABLE `medecin`
+      ADD `actif` ENUM ('0','1') DEFAULT '1' AFTER `sexe`;";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.44';
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

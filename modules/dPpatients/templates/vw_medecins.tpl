@@ -81,7 +81,7 @@
   </tr>
   {{foreach from=$medecins item=_medecin}}
     {{assign var=medecin_id value=$_medecin->_id}}
-    <tr>
+    <tr {{if !$_medecin->actif}}class="hatching"{{/if}}>
       {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=vw_correspondants&medecin_id=$medecin_id"}}
 
       {{if !$annuaire}}

@@ -28,6 +28,8 @@ $group   = CGroups::loadCurrent();
 $where = array();
 $medecin_cps_prefs = CAppUI::pref("medecin_cps_pref");
 
+$where["actif"] = "= '1'";
+
 if ($medecin_cps_prefs != "") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cps_prefs);
   CMbArray::removeValue("", $cps);
