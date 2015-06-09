@@ -15,7 +15,7 @@
  *
  * @see CCodable
  */
-class CActe extends CMbMetaObject {
+class CActe extends CMbMetaObject{
   public $montant_depassement;
   public $montant_base;
   public $execution;

@@ -287,8 +287,8 @@ class CSetupdPccam extends CSetup {
 
     $this->makeRevision('0.29');
 
-    $this->addPrefQuery('precode_modificateur_7', CAppUi::conf('dPccam CCodable precode_modificateur_7'));
-    $this->addPrefQuery('precode_modificateur_J', CAppUi::conf('dPccam CCodable precode_modificateur_J'));
+   // $this->addPrefQuery('precode_modificateur_7', CAppUi::conf('dPccam CCodable precode_modificateur_7'));
+   // $this->addPrefQuery('precode_modificateur_J', CAppUi::conf('dPccam CCodable precode_modificateur_J'));
 
     $this->makeRevision('0.30');
 

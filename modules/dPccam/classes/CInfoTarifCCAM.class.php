@@ -87,7 +87,7 @@ class CInfoTarifCCAM extends CCCAM {
    */
   static function loadListFromCode($code) {
     $ds = self::$spec->ds;
-
+   // mbTrace($ds);
     $query = "SELECT p_acte_infotarif.*
       FROM p_acte_infotarif
       WHERE p_acte_infotarif.CODEACTE = %
@@ -103,6 +103,28 @@ class CInfoTarifCCAM extends CCCAM {
     }
 
     return $listInfotarif;
+  }
+
+  /**
+   * Chargement des infos historisées pour un code en fonction de sa date
+   *
+   * @param string $code Code CCAM
+   * @param string $date Date
+   *
+   * @return self[] Liste des info historisées pour une date donnée
+   */
+  static function loadFromCodeAndDate($code, $date) {
+    $ds = self::$spec->ds;
+
+    $query = "SELECT p_acte_infotarif.*
+      FROM p_acte_infotarif
+      WHERE p_acte_infotarif.CODEACTE = %
+      AND p_acte_infotarif.DATEEFFET = $date";
+    $query = $ds->prepare($query, $code);
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+
+    return $row;
   }
 
   /**

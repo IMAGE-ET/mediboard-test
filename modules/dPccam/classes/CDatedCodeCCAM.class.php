@@ -38,6 +38,7 @@ class CDatedCodeCCAM {
   public $_default;
   public $_sorted_tarif; // Phases classées par ordre de tarif brut
   public $occ;
+  public $_count_activite;
 
   // Code CCAM de référence
   /** @var  CCodeCCAM */
@@ -672,5 +673,85 @@ class CDatedCodeCCAM {
    */
   function getActeRadio() {
     return CCodeCCAM::getActeRadio($this->code);
+  }
+
+  /**
+   * Chargement des actes voisins
+   */
+  function loadActesVoisins() {
+    $query = "SELECT CODE
+    FROM p_acte
+    WHERE DATEFIN = '00000000' ";
+    foreach ($this->chapitres as $_key => $_chapitre ) {
+      $chapitre_db = $_chapitre["db"];
+      switch ($_key) {
+        case "0":
+          $query .= " AND ARBORESCENCE1 = '$chapitre_db'";
+          break;
+
+        case "1":
+          $query .= " AND ARBORESCENCE2 = '$chapitre_db'";
+          break;
+
+        case "2":
+          $query .= " AND ARBORESCENCE3 = '$chapitre_db'";
+          break;
+
+        case "3":
+          $query .= " AND ARBORESCENCE4 = '$chapitre_db'";
+          break;
+
+        default;
+      }
+    }
+    $query .= " ORDER BY CODE LIMIT 0 , 100";
+    $acte_voisins = array();
+
+    $ds = CSQLDataSource::get("ccamV2");
+    $result       = $ds->exec($query);
+    while ($row = $ds->fetchArray($result)) {
+      $acte_voisin = CDatedCodeCCAM::get($row["CODE"]);
+      $acte_voisin->_ref_code_ccam->date_creation = preg_replace(
+        '/^(\d{4})(\d{2})(\d{2})$/', '\\3/\\2/\\1', $acte_voisin->_ref_code_ccam->date_creation
+      );
+      $acte_voisins[] = $acte_voisin;
+    }
+
+    return $acte_voisins;
+  }
+
+  /**
+   * Change date format yyyyddmm at yyyy/mm/dd
+   *
+   * @param string $dateFrom Date
+   *
+   * @return date format yyyy/mm/dd
+   */
+  static function mapDateFrom($dateFrom) {
+    return preg_replace('/^(\d{4})(\d{2})(\d{2})$/', '\\3/\\2/\\1', $dateFrom);
+  }
+
+  /**
+   * Change date format yyyy/mm/dd at yyyymmdd
+   *
+   * @param string $dateTo Date
+   *
+   * @return date format yyyymmdd
+   */
+  static function mapDateToSlash($dateTo) {
+    $date = explode("/", $dateTo);
+    return $date[2].$date[1].$date[0];
+  }
+
+  /**
+   * Change date format yyyy-mm-dd at yyyymmdd
+   *
+   * @param string $dateTo Date
+   *
+   * @return date format yyyymmdd
+   */
+  static function mapDateToDash($dateTo) {
+    $date = explode("-", $dateTo);
+    return $date[0].$date[1].$date[2];
   }
 }
