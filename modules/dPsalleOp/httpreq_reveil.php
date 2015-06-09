@@ -214,7 +214,7 @@ if ($type == "reveil" || $type == "preop") {
     $bloc = $salle->loadRefBloc();
   }
 
-  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil") && $date >= CMbDT::date();
+  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil", $group) && $date >= CMbDT::date();
   $require_check_list_close = $require_check_list;
   $type_checklist = $type == "reveil" ? "ouverture_sspi" : "ouverture_preop";
   $type_close = $type == "reveil" ? "fermeture_sspi" : "fermeture_preop";

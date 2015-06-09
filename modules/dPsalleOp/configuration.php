@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *  
  * @category SalleOp
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision:$
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
 
@@ -26,6 +26,14 @@ CConfiguration::register(
         ),
         "CDailyCheckList" => array(
           "choose_moment_edit"  => "bool default|0",
+          "active"              => "bool default|0",
+          "active_salle_reveil" => "bool default|0",
+        ),
+        "Default_good_answer" => array(
+          "default_good_answer_COperation"      => "bool default|0",
+          "default_good_answer_CSalle"          => "bool default|0",
+          "default_good_answer_CBlocOperatoire" => "bool default|0",
+          "default_good_answer_CPoseDispositifVasculaire" => "bool default|0"
         )
       )
     )

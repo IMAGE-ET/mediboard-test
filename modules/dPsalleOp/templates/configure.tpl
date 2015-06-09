@@ -21,7 +21,6 @@
   <li><a href="#config-CPlageOp">{{tr}}COperation{{/tr}}</a></li>
   <li><a href="#config-CActe">{{tr}}CActe{{/tr}}</a></li>
   <li><a href="#config-Diagnostics">{{tr}}Diagnostics{{/tr}}</a></li>
-  <li><a href="#config-CDailyCheckList">{{tr}}CDailyCheckList{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPsalleOp', 'CGroups', $('CConfigEtab'))">
     <a href="#CConfigEtab">Config par établissement</a>
   </li>
@@ -37,10 +36,6 @@
 
 <div id="config-Diagnostics" style="display: none;">
   {{mb_include template=config-Diagnostic class=CDossierMedical}}
-</div>
-
-<div id="config-CDailyCheckList" style="display: none;">
-  {{mb_include template=config-CDailyCheckList class=CDailyCheckList}}
 </div>
 
 <div id="CConfigEtab" style="display: none"></div>

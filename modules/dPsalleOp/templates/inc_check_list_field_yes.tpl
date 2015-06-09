@@ -1,7 +1,7 @@
 {{assign var=class value=$check_list->object_class}}
 {{assign var=checked value=false}}
 {{assign var=param_name value="default_good_answer_$class"}}
-{{assign var=good value=$conf.dPsalleOp.CDailyCheckList.$param_name}}
+{{assign var=good value="dPsalleOp Default_good_answer $param_name"|conf:"CGroups-$g"}}
 
 {{if $curr_type->_checked == "yes"}}
   {{assign var=checked value=true}}

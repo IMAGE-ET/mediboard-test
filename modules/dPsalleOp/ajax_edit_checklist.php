@@ -31,7 +31,7 @@ $bloc->load($bloc_id);
 // Vérification de la check list journalière
 $daily_check_lists = array();
 $daily_check_list_types = array();
-$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active", CGroups::loadCurrent()) && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
 if ($require_check_list) {
   if ($bloc->_id) {

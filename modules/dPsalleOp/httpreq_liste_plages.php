@@ -99,7 +99,7 @@ if ($salle->cheklist_man) {
 // Checklist_fermeture bloc
 $date_close_checklist = null;
 $currUser = CMediusers::get();
-$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->isPraticien();
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active", $group_id) && $date >= CMbDT::date() && !$currUser->isPraticien();
 
 if ($require_check_list) {
   list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, "fermeture_salle");

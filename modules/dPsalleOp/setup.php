@@ -1668,6 +1668,14 @@ class CSetupdPsalleOp extends CSetup {
     $query = "ALTER TABLE `daily_check_list_type`
                 CHANGE `type` `type` ENUM ('ouverture_salle','ouverture_sspi','ouverture_preop','fermeture_salle','intervention','fermeture_sspi','fermeture_preop') NOT NULL DEFAULT 'ouverture_salle';";
     $this->addQuery($query);
-    $this->mod_version = '0.70';
+    $this->makeRevision('0.70');
+
+    $this->addDefaultConfig("dPsalleOp CDailyCheckList active_salle_reveil" , "dPsalleOp CDailyCheckList active_salle_reveil");
+    $this->addDefaultConfig("dPsalleOp CDailyCheckList active"              , "dPsalleOp CDailyCheckList active");
+    $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_COperation"     , "dPsalleOp CDailyCheckList default_good_answer_COperation");
+    $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CBlocOperatoire", "dPsalleOp CDailyCheckList default_good_answer_CBlocOperatoire");
+    $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CSalle"         , "dPsalleOp CDailyCheckList default_good_answer_CSalle");
+    $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CPoseDispositifVasculaire", "dPsalleOp CDailyCheckList default_good_answer_CPoseDispositifVasculaire");
+    $this->mod_version = '0.71';
   }
 }

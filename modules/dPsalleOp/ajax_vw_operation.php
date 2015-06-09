@@ -15,6 +15,9 @@ $date           = CValue::getOrSession("date");
 $salle_id       = CValue::get("salle_id");
 $load_checklist = CValue::get("load_checklist", 0);
 
+$group = CGroups::loadCurrent();
+$group->loadConfigValues();
+
 $selOp = new COperation();
 $selOp->load($operation_id);
 
@@ -33,7 +36,7 @@ if ($salle_id) {
 
   $daily_check_lists = array();
   $daily_check_list_types = array();
-  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->isPraticien();
+  $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active", $group) && $date >= CMbDT::date() && !$currUser->isPraticien();
 
   if ($require_check_list) {
     list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
@@ -204,9 +207,6 @@ if ($selOp->_id) {
   $listValidateurs = CPersonnel::loadListPers($type_personnel, true, true);
   $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 }
-
-$group = CGroups::loadCurrent();
-$group->loadConfigValues();
 
 $anesth = new CMediusers();
 $anesth->load($anesth_id);
