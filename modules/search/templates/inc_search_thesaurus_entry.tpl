@@ -19,6 +19,7 @@
       </button>
     </th>
   </tr>
+
   <tr>
     <th class="category narrow" rowspan="2"></th>
     <th class="category" rowspan="2">{{mb_label object=$entry field=titre}}</th>
@@ -27,11 +28,13 @@
     <th class="category" colspan="3" rowspan="1">{{tr}}CSearchTargetEntry{{/tr}}</th>
     <th class="category narrow" rowspan="2"></th>
   </tr>
+
   <tr>
     <th class="section" colspan="1">Codes CCAM</th>
     <th class="section" colspan="1">Codes CIM10</th>
     <th class="section" colspan="1">Classes ATC</th>
   </tr>
+
   {{foreach from=$thesaurus item=_entry}}
     <tr>
       <td>
@@ -43,12 +46,15 @@
           <img src="images/icons/user.png" title="Favori pour {{$user->_view}}">
         {{/if}}
       </td>
+
       <td class="text">
         {{mb_value object=$_entry field=titre}}
       </td>
+
       <td class="text">
         {{mb_value object=$_entry field=entry}}
       </td>
+
       <td class="compact empty">
         {{if $_entry->types !== null}}
           {{assign var=values_search_types value="|"|@explode:$_entry->types}}
@@ -68,7 +74,22 @@
           <span>{{tr}}CSearchThesaurusEntry-all-types{{/tr}}</span>
         {{/if}}
       </td>
+
       {{if $_entry->_cim_targets|@count > 0 || $_entry->_ccam_targets|@count > 0}}
+        <td>
+          <div style="float: right;">
+            <ul class="tags">
+              {{foreach from=$_entry->_ccam_targets item=_target}}
+                <li class="tag" title="{{$_target->_ref_target->libelle_long}}"
+                    style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
+                  <span>{{$_target->_ref_target->code}}</span>
+                </li>
+                <br />
+              {{/foreach}}
+            </ul>
+          </div>
+        </td>
+
         <td>
           <div style="float: right;">
             <ul class="tags">
@@ -81,21 +102,9 @@
             </ul>
           </div>
         </td>
+
         <td>
-          <div>
-            <ul class="tags">
-              {{foreach from=$_entry->_ccam_targets item=_target}}
-                <li class="tag" title="{{$_target->_ref_target->libelle_long}}"
-                    style="background-color: rgba(153, 204, 255, 0.6); cursor:auto">
-                  <span>{{$_target->_ref_target->code}}</span>
-                </li>
-                <br />
-              {{/foreach}}
-            </ul>
-          </div>
-        </td>
-        <td>
-          <div>
+          <div style="float: right;">
             <ul class="tags">
               {{foreach from=$_entry->_atc_targets item=_target}}
                 <li class="tag" title="{{$_target->_libelle}}" style="background-color: rgba(240, 255, 163, 0.6); cursor:auto">
@@ -113,6 +122,7 @@
           </div>
         </td>
       {{/if}}
+
       <td class="button">
         <button class="edit notext" onclick="Thesaurus.addeditThesaurusEntry(null, '{{$_entry->_id}}', null)"></button>
       </td>
