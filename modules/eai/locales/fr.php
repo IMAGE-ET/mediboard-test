@@ -813,6 +813,7 @@ $locales['CSyslogReceiver-title-modify'] = 'Modification d\'un destinataire Sysl
 $locales['CSyslogSource.none'] = 'Aucune source Syslog';
 $locales['Delayed'] = 'Différé';
 $locales['EAITransformationRule-none'] = 'Non applicable';
+$locales['ExchangeDataFormat-action-Send selection'] = 'Envoyer la sélection';
 $locales['Import_asip'] = 'Importation des tables de l\'ASIP';
 $locales['Import_tables'] = 'Import des tables';
 $locales['Message'] = 'Message';

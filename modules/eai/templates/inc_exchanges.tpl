@@ -37,7 +37,7 @@
   };
 
   togglePrint = function (status) {
-    $("exchanges-list").select("input[name=checked]").each(function (elt) {
+    $("exchanges-list").select("input[name=exchange_checkbox]").each(function (elt) {
       elt.checked = status ? "checked" : "";
     });
   };
@@ -53,18 +53,27 @@
       ExchangeDataFormat.sendMessage(guid);
     });
   }
-</script>
 
-<button style="float: left;" class="tick" onclick="sendMessageForElementsSelected();">Envoyer pour la sélection</button>
+</script>
 
 {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
 
-<form name="search-exchange_id" action="" method="get"
-      onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));"
-      style="float: right; clear: both;">
-  <input type="search" id="exchange_id" name="exchange_id" required placeholder="{{tr}}CExchangeDataFormat-exchange_id{{/tr}}" />
-  <button type="submit" class="lookup notext">{{tr}}search_exchange_by_id-button{{/tr}}</button>
-</form>
+<table class="layout">
+  <tr>
+    <td class="narrow">
+      <button class="tick" onclick="sendMessageForElementsSelected();">
+        {{tr}}ExchangeDataFormat-action-Send selection{{/tr}}
+      </button>
+    </td>
+    <td style="text-align: right">
+      <form name="search-exchange_id" action="" method="get"
+            onsubmit="return ExchangeDataFormat.doesExchangeExist('{{$exchange->_class}}', $V($('exchange_id')));">
+        <input type="search" id="exchange_id" name="exchange_id" required placeholder="{{tr}}CExchangeDataFormat-exchange_id{{/tr}}" size="25"/>
+        <button type="submit" class="lookup notext">{{tr}}search_exchange_by_id-button{{/tr}}</button>
+      </form>
+    </td>
+  </tr>
+</table>
 
 <table class="tbl" id="exchanges-list">
   <tr>
