@@ -229,7 +229,7 @@ Main.add(function(){
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
           {{assign var=type_validateur value='|'|explode:$check_list->_ref_list_type->type_validateur}}
 
-          {{if $check_list->object_class == "COperation" && $check_list->list_type_id && in_array("chir_interv", $type_validateur)}}
+          {{if $check_list->object_class == "COperation" && (!$check_list->list_type_id || in_array("chir_interv", $type_validateur))}}
             <optgroup label="Praticiens">
               {{assign var=_obj value=$check_list->_ref_object}}
               <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
@@ -239,22 +239,13 @@ Main.add(function(){
             </optgroup>
           {{/if}}
 
-          {{if $check_list->object_class == "COperation" && !$check_list->list_type_id}}
-            <optgroup label="Praticiens">
-              {{assign var=_obj value=$check_list->_ref_object}}
-              <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
-              {{if $anesth_id && isset($anesth|smarty:nodefaults)}}
-              <option value="{{$anesth->_id}}">{{$anesth}}</option>
-              {{/if}}
-            </optgroup>
-          {{else}}
+          {{if !($check_list->object_class == "COperation" && !$check_list->list_type_id)}}
             {{if $list_chirs && (in_array("chir", $type_validateur) ||
             ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire" && !$check_list->list_type_id))}}
               <optgroup label="Chirurgiens">
                 {{mb_include module=mediusers template=inc_options_mediuser list=$list_chirs selected=$app->user_id}}
               </optgroup>
             {{/if}}
-
             {{if $list_anesths && (in_array("anesth", $type_validateur) ||
             ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire" && !$check_list->list_type_id))}}
               <optgroup label="Anesthésistes">
@@ -284,7 +275,6 @@ Main.add(function(){
       </td>
     </tr>
   </table>
-
 </form>
 
 {{/if}}
