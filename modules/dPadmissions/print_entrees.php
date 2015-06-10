@@ -20,9 +20,9 @@ $period     = CValue::get("period");
 $group_by   = CValue::get("group_by_prat", true);
 $order_by   = CValue::get("order_by", "");
 
-$date_min  = $date;
+$date_min = $date;
 $date_max = CMbDT::date("+ 1 DAY", $date);
-$service = new CService();
+$service  = new CService();
 $service->load($service_id);
 $group = CGroups::loadCurrent();
 
@@ -38,8 +38,8 @@ if ($period) {
   }
 }
 
-$sejour = new CSejour();
-$where = array();
+$sejour                   = new CSejour();
+$where                    = array();
 $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 $where["sejour.group_id"] = "= '$group->_id'";
@@ -54,11 +54,11 @@ else {
   $where["sejour.type"] = "NOT IN ('urg', 'seances')";
 }
 
-$ljoin = array();
-$ljoin["users"] = "users.user_id = sejour.praticien_id";
+$ljoin             = array();
+$ljoin["users"]    = "users.user_id = sejour.praticien_id";
 $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
 if ($service->_id) {
-  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $ljoin["affectation"]            = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $where["affectation.service_id"] = "= '$service->_id'";
 }
 
@@ -82,9 +82,9 @@ switch ($order_by) {
 
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
-CStoredObject::massLoadFwdRef($sejours  , "praticien_id");
-CStoredObject::massLoadFwdRef($sejours  , "patient_id");
-CStoredObject::massLoadFwdRef($sejours  , "prestation_id");
+CStoredObject::massLoadFwdRef($sejours, "praticien_id");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "prestation_id");
 CStoredObject::massLoadBackRefs($sejours, "affectations");
 
 $listByPrat = array();
@@ -93,9 +93,10 @@ foreach ($sejours as $sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefPatient();
   $sejour->loadRefPrestation();
+  $sejour->loadNDA();
   $sejour->_ref_first_affectation->loadRefLit();
   $sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
-  
+
   $curr_prat = $sejour->praticien_id;
   if (!isset($listByPrat[$curr_prat])) {
     $listByPrat[$curr_prat]["praticien"] = $sejour->_ref_praticien;
@@ -105,12 +106,12 @@ foreach ($sejours as $sejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("sejours", $sejours);
+$smarty->assign("sejours"   , $sejours);
 $smarty->assign("date"      , $date);
 $smarty->assign("type"      , $type);
 $smarty->assign("service"   , $service);
 $smarty->assign("listByPrat", $listByPrat);
-$smarty->assign("group_by", $group_by);
+$smarty->assign("group_by"  , $group_by);
 $smarty->assign("total"     , count($sejours));
 
 $smarty->display("print_entrees.tpl");
