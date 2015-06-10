@@ -27,7 +27,7 @@ $sejour->load($sejour_id);
 
 $rpu = $sejour->loadRefRPU();
 
-if ($rpu->mutation_sejour_id) {
+if ($rpu && $rpu->mutation_sejour_id) {
   $sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
 }
 
