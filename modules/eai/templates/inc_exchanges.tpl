@@ -58,7 +58,7 @@
 
 {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
 
-<table class="layout">
+<table class="layout" style="width: 100%">
   <tr>
     <td class="narrow">
       <button class="tick" onclick="sendMessageForElementsSelected();">

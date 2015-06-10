@@ -1489,7 +1489,13 @@ class CSetuphl7 extends CSetup {
                 CHANGE `send_no_facturable` `send_no_facturable` ENUM ('0','1','2') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.18";
+    $this->makeRevision("1.18");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `associate_category_to_a_file` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.19";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

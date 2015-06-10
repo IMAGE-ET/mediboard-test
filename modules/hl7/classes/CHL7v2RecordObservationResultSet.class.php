@@ -393,6 +393,17 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   }
 
   /**
+   * Get observation file name
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
+  function getObservationFilename(DOMNode $node) {
+    return $this->queryTextNode("OBX.3/CE.1", $node);
+  }
+
+  /**
    * Get observation identifier
    *
    * @param DOMNode            $node   DOM node
@@ -469,6 +480,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    * @param DOMNode    $OBX       DOM node
    * @param CPatient   $patient   Person
    * @param COperation $operation Opération
+   * @param string     $date      Date
    *
    * @return bool
    */
@@ -629,7 +641,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return true;
     }
 
-    // Chargement de la source associée à l'expéditeur
+    // Chargement des objets associés à l'expéditeur
     /** @var CInteropSender $sender_link */
     $object_links = $sender->loadRefsObjectLinks();
     if (!$object_links) {
@@ -638,7 +650,22 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       return false;
     }
 
-    $sender_link = reset($object_links)->_ref_object;
+    $sender_link    = new CInteropSender();
+    $files_category = new CFilesCategory();
+
+    // On récupère toujours une seule catégorie, et une seule source associée à l'expéditeur
+    foreach ($object_links as $_object_link) {
+      if ($_object_link->_ref_object instanceof CFilesCategory) {
+        $files_category = $_object_link->_ref_object;
+      }
+
+      if ($_object_link->_ref_object instanceof CInteropSender) {
+        $sender_link = $_object_link->_ref_object;
+
+        continue 1;
+      }
+    }
+
     // Aucun expéditeur permettant de récupérer les fichiers
     if (!$sender_link->_id) {
       $this->codes[] = "E340";
@@ -689,13 +716,18 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
 
     $file_type = $this->getFileType($type);
+    $file_name = $this->getObservationFilename($OBX);
 
     // Gestion du CFile
     $file = new CFile();
     $file->setObject($object);
-    $file->file_name = $name;
+    $file->file_name = $file_name ? $file_name : $name;
     $file->file_type = $file_type;
     $file->loadMatchingObject();
+
+    if ($files_category->_id && $sender->_configs["associate_category_to_a_file"]) {
+      $file->file_category_id = $files_category->_id;
+    }
 
     $file->file_date = "now";
     $file->doc_size  = strlen($content);
