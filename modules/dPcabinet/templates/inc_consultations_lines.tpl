@@ -71,7 +71,7 @@
       {{assign var="style" value=""}}
     {{/if}}
 
-    <td {{$style|smarty:nodefaults}} class="{{$classe}}" {{if $see_color}}style="border-left: 8px #{{$plageSel->color}} solid"{{/if}}}>
+    <td {{$style|smarty:nodefaults}} {{if $see_color}}style="border-left: 8px #{{$plageSel->color}} solid"{{/if}}}>
       <div style="float: left">
       {{if $patient->_id}}
         <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
