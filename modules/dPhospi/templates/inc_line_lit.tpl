@@ -145,7 +145,7 @@
             onmouseover="
               if ($(this).hasClassName('classique')) {
                   this.select('.toolbar_affectation')[0].setStyle({visibility: 'visible'});
-                {{if $smarty.foreach.foreach_aff.last && $object->_width < 6}}
+                {{if $object->_width < 6}}
                   this.setStyle({width: this.down('table').getStyle('width')});
                 {{/if}}
               }"
