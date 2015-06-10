@@ -74,10 +74,17 @@ FilesCategory = {
       });
   },
 
-  edit : function(category_id) {
-    var url = new Url("files", "ajax_edit_category");
-    url.addParam("category_id", category_id);
-    url.requestUpdate('edit_file_category');
+  edit : function(category_id, element) {
+    if (element) {
+      element.up('tr').addUniqueClassName('selected');
+    }
+
+    new Url("files", "ajax_edit_category")
+      .addParam("category_id", category_id)
+      .requestModal(800, 600)
+      .modalObject.observe("afterClose", function() {
+        FilesCategory.loadList();
+      });
   },
 
   callback : function(id) {
@@ -112,6 +119,10 @@ FilesCategory = {
     url.addParam('objects_id', elements);
     url.addParam('mode', 'fast');
     url.popup(800, 600, "merge_patients");
+  },
+
+  changePage: function(page) {
+    $V(getForm('listFilter').page, page);
   }
 };
 

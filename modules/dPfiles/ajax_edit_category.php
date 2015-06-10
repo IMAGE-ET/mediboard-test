@@ -21,7 +21,6 @@ $category->countDocItems();
 $category->loadRefsNotes();
 $listClass = CApp::getChildClasses();
 
-
 $smarty = new CSmartyDP();
 $smarty->assign("category", $category);
 $smarty->assign("listClass"   , $listClass );

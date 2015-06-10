@@ -281,6 +281,7 @@ $locales['CFilesCategory-class'] = 'Type d\'objet';
 $locales['CFilesCategory-class-court'] = 'Type';
 $locales['CFilesCategory-class-desc'] = 'Type d\'objet concerné par cette catégorie';
 $locales['CFilesCategory-eligible_file_view'] = 'Éligible à une remontée d\'alerte';
+$locales['CFilesCategory-eligible_file_view-court'] = 'Éligible alerte';
 $locales['CFilesCategory-eligible_file_view-desc'] = 'Éligible à une remontée d\'alerte si de nouveaux fichiers non lus sont présents';
 $locales['CFilesCategory-file_category_id'] = 'Id';
 $locales['CFilesCategory-file_category_id-court'] = 'Id';
