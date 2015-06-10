@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -123,6 +122,7 @@ CStoredObject::massLoadFwdRef($sejours, "etablissement_entree_id");
 $praticiens = CStoredObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CStoredObject::massLoadFwdRef($praticiens, "function_id");
 CStoredObject::massLoadBackRefs($sejours, "affectations");
+CStoredObject::massLoadBackRefs($sejours, "appels");
 
 // Chargement optimisé des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
@@ -166,6 +166,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
 
   // Chargement de l'affectation
   $affectation = $_sejour->loadRefFirstAffectation();
+
+  // Chargement des appels
+  $_sejour->loadRefsAppel('admission');
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

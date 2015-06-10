@@ -2,6 +2,7 @@
 $locales['Admission'] = 'Admission';
 $locales['CAdmission.none'] = 'Aucune admission';
 $locales['CMediusers.praticiens.all'] = 'Tous les praticiens';
+$locales['CSejour-appel'] = 'Appel';
 $locales['Confirm-allowed-exit'] = 'Confirmation de l\'autorisation de sortie';
 $locales['admissions-Unprepared discharges'] = 'Sorties non préparées';
 $locales['admissions-Unprepared discharges-court'] = 'Non prép.';
@@ -85,5 +86,7 @@ $locales['mod-dPadmissions-tab-vw_idx_present'] = 'Présents';
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = 'Sorties';
 $locales['mod-dPadmissions-tab-vw_legende'] = 'Légende';
 $locales['mod-dPadmissions-tab-vw_sejours_validation'] = 'Validation séjours';
+$locales['mod-dPplanningOp-tab-ajax_edit_appel'] = 'Appel';
+$locales['mod-planningOp-tab-ajax_edit_appel'] = 'Appel';
 $locales['module-dPadmissions-court'] = 'Admissions';
 $locales['module-dPadmissions-long'] = 'Gestion des admissions';

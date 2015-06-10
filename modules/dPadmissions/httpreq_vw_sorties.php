@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -12,7 +11,6 @@
  */
 
 CCanDo::checkRead();
-
 $type            = CValue::getOrSession("type");
 $services_ids    = CValue::getOrSession("services_ids");
 $prat_id         = CValue::getOrSession("prat_id");
@@ -183,7 +181,10 @@ foreach ($sejours as $sejour_id => $_sejour) {
   
   // Chargement des modes de sortie
   $_sejour->loadRefEtablissementTransfert();
-  $_sejour->loadRefServiceMutation();  
+  $_sejour->loadRefServiceMutation();
+  // Chargement des appels
+  $_sejour->loadRefsAppel('sortie');
+
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute

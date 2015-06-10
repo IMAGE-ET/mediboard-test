@@ -56,6 +56,12 @@
   <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
 </td>
 
+{{if "dPplanningOp CSejour use_phone"|conf:"CGroups-$g"}}
+  <td class="button">
+    {{mb_include module=planningOp template=vw_appel_sejour type=admission sejour=$_sejour}}
+  </td>
+{{/if}}
+
 <td colspan="2" class="text">
   {{if $canPlanningOp->read}}
     <div style="float: right;">

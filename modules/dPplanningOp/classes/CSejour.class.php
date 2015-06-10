@@ -324,6 +324,11 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_users_sejour;
   public $_ref_users_by_type;
 
+  /** @var CAppelSejour[] */
+  public $_ref_appels;
+  /** @var CAppelSejour[] */
+  public $_ref_appels_by_type;
+
   // External objects
   /** @var CCodeCIM10 */
   public $_ext_diagnostic_principal;
@@ -457,6 +462,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["contextes_constante"]   = "CConstantesMedicales context_id";
     $backProps["user_sejour"]           = "CUserSejour sejour_id";
     $backProps["traitement_dossier"]    = "CTraitementDossier sejour_id";
+    $backProps["appels"]                = "CAppelSejour sejour_id";
 
     return $backProps;
   }
@@ -5127,6 +5133,31 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->mapDocs($this, $with_cancelled, $tri);
 
     ksort($this->_all_docs);
+  }
+
+  /**
+   * Chargement des appels du séjour
+   *
+   * @param string $type type de l'appel
+   * @param bool   $all  Ne charge pas que le dernier appel
+   *
+   * @return CAppelSejour|CAppelSejour[]
+   */
+  function loadRefsAppel ($type = null, $all = false) {
+    $this->clearBackRefCache("appels");
+    if ($type) {
+      $where = array();
+      $where["type"] = " = '$type'";
+      if (!$all) {
+        $this->_ref_appels_by_type[$type] = $this->loadFirstBackRef("appels", "appel_id DESC, datetime DESC", null, null, null, null, "", $where);
+      }
+      else {
+        $this->_ref_appels_by_type[$type] = $this->loadBackRefs("appels", "appel_id DESC, datetime DESC", null, null, null, null, "", $where);
+      }
+    }
+    else {
+      $this->_ref_appels = $this->loadBackRefs("appels", "appel_id DESC, datetime DESC");
+    }
   }
 }
 

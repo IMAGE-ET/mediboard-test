@@ -2029,16 +2029,29 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `operations`
       ADD `suture_fin` TIME AFTER `induction_fin`";
     $this->addQuery($query);
-
     $this->makeRevision("2.16");
 
     $this->addMethod("moveConfigUFSoins");
-
     $this->makeRevision("2.17");
+
     $query = "ALTER TABLE `sejour`
                 CHANGE `provenance` `provenance` ENUM ('1','2','3','4','5','6','7','8','R');";
     $this->addQuery($query);
+    $this->makeRevision("2.18");
 
-    $this->mod_version = '2.18';
+    $query = "CREATE TABLE `sejour_appel` (
+                `appel_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sejour_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `datetime` DATETIME NOT NULL,
+                `type` ENUM ('admission','sortie') NOT NULL DEFAULT 'admission',
+                `etat` ENUM ('realise','echec') NOT NULL DEFAULT 'realise',
+                `commentaire` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `sejour_appel`
+                ADD INDEX (`sejour_id`),
+                ADD INDEX (`datetime`);";
+    $this->addQuery($query);
+    $this->mod_version = '2.19';
   }
 }

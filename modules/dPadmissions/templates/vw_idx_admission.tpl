@@ -17,6 +17,7 @@
 {{mb_script module=files       script=file}}
 {{mb_script module=planningOp  script=sejour}}
 {{mb_script module=planningOp  script=prestations}}
+{{mb_script module=planningOp  script=appel}}
 {{if "dPsante400"|module_active}}
   {{mb_script module=dPsante400  script=Idex}}
 {{/if}}

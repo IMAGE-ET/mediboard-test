@@ -26,7 +26,7 @@
 
 <table class="tbl" id="sortie">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="{{if "dPplanningOp CSejour use_phone"|conf:"CGroups-$g"}}11{{else}}10{{/if}}">
       <a href="#1" onclick="$V(getForm('selType').date, '{{$hier}}'); reloadFullSorties()" style="display: inline">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateSorties" action="?" method="get">
@@ -59,6 +59,9 @@
     <th class="narrow">
       <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint(this.checked)"/>
     </th>
+    {{if "dPplanningOp CSejour use_phone"|conf:"CGroups-$g"}}
+      <th class="narrow">{{tr}}CSejour-appel{{/tr}}</th>
+    {{/if}}
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function=sortBy}}
     </th>

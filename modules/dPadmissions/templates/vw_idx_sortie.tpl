@@ -14,6 +14,7 @@
 {{mb_script module=files     script=file}}
 {{mb_script module=planningOp  script=sejour}}
 {{mb_script module=planningOp  script=prestations}}
+{{mb_script module=planningOp  script=appel}}
 {{if "web100T"|module_active}}
   {{mb_script module=web100T script=web100T}}
 {{/if}}

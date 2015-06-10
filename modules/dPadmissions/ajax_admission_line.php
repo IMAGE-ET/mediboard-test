@@ -1,18 +1,16 @@
-<?php 
-
+<?php
 /**
- * $Id$
+ * $Id:$
  *  
  * @category Admissions
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
+ * @version  $Revision:$
  * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
-
 $sejour_id = CValue::get("sejour_id");
 $date      = CValue::getOrSession("date");
 
@@ -43,6 +41,9 @@ $sejour->loadRefsNotes();
 
 // Chargement des modes d'entrée
 $sejour->loadRefEtablissementProvenance();
+
+// Chargement des appels
+$sejour->loadRefsAppel('admission');
 
 // Chargement de l'affectation
 $affectation = $sejour->loadRefFirstAffectation();
