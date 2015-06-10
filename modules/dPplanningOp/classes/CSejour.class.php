@@ -538,7 +538,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["discipline_id"]           = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     $props["ald"]                     = "bool default|0";
 
-    $props["provenance"]                    = "enum list|1|2|3|4|5|6|7|8";
+    $props["provenance"]                    = "enum list|1|2|3|4|5|6|7|8|R";
     $props["date_entree_reelle_provenance"] = "dateTime";
     $props["destination"]                   = "enum list|0|" . implode("|", self::$destination_values);
     $props["transport"]                     = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";

@@ -2034,6 +2034,11 @@ class CSetupdPplanningOp extends CSetup {
 
     $this->addMethod("moveConfigUFSoins");
 
-    $this->mod_version = '2.17';
+    $this->makeRevision("2.17");
+    $query = "ALTER TABLE `sejour`
+                CHANGE `provenance` `provenance` ENUM ('1','2','3','4','5','6','7','8','R');";
+    $this->addQuery($query);
+
+    $this->mod_version = '2.18';
   }
 }

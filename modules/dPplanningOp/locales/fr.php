@@ -1687,6 +1687,7 @@ $locales['CSejour.provenance.5'] = 'PEC aux urgences (non org.)';
 $locales['CSejour.provenance.6'] = 'Hospitalisation à domicile';
 $locales['CSejour.provenance.7'] = 'Structure d\'hébergement médico-sociale';
 $locales['CSejour.provenance.8'] = 'PEC aux urgences (org.)';
+$locales['CSejour.provenance.R'] = 'Réanimation';
 $locales['CSejour.recuse.'] = 'Indéterminé';
 $locales['CSejour.recuse.-1'] = 'En attente';
 $locales['CSejour.recuse.0'] = 'Accepté';
