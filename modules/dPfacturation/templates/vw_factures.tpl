@@ -38,7 +38,7 @@
     url.addElement(oForm.search_easy);
   {{/if}}
   url.requestUpdate("factures");
-}
+};
 
 viewPatient = function() {
   var form = getForm("choice-facture");
@@ -47,7 +47,22 @@ viewPatient = function() {
     url.addElement(form.patient_id);
     url.redirect();
   }
-}
+};
+
+updateEtatSearch = function() {
+  {{if !$conf.dPfacturation.Other.use_search_easy}}
+    var form = getForm("choice-facture");
+    if ($V(form.type_date_search) == "cloture") {
+      form.etat_cloture[1].disabled = "disabled";
+      if ($V(form.etat_cloture) == 1) {
+        $V(form.etat_cloture, 0);
+      }
+    }
+    else {
+      form.etat_cloture[1].disabled = "";
+    }
+  {{/if}}
+};
 
 Main.add(function () {
   Calendar.regField(getForm("choice-facture")._date_min);
@@ -160,7 +175,7 @@ Main.add(function () {
             <td>
               <select name="etat_cloture">
                 <option value="0" {{if $etat_cloture == "0"}} selected="selected" {{/if}}>-- Toutes</option>
-                <option value="1" {{if $etat_cloture == "1"}} selected="selected" {{/if}}>Non cloturées</option>
+                <option value="1" {{if $etat_cloture == "1"}} selected="selected" {{/if}} {{if $type_date_search == "cloture"}}disabled="disabled" {{/if}}>Non cloturées</option>
                 <option value="2" {{if $etat_cloture == "2"}} selected="selected" {{/if}}>Cloturées</option>
                 </option>
               </select>
@@ -220,7 +235,7 @@ Main.add(function () {
         {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
           <th>Date de</th>
           <td>
-            <select name="type_date_search">
+            <select name="type_date_search" onchange="updateEtatSearch();">
               <option value="cloture" {{if $type_date_search == "cloture"}} selected="selected" {{/if}}>
                 Cloture
               </option>
