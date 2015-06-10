@@ -37,6 +37,7 @@ onSubmitAnt = function (form, type_see) {
   }
 
   form.__majeur.checked = false;
+  $V(form.majeur, 0);
 
   $V(form.keywords_composant, "");
   $V(form.cds, "");

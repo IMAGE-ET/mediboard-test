@@ -18,6 +18,9 @@ Antecedent = {
     $V(oForm.annule, 1);
     onSubmitFormAjax(oForm, {
       onComplete: function(){
+        if (window.reloadAtcdMajeur) {
+          reloadAtcdMajeur();
+        }
         if (onComplete) {
           onComplete();
         }
