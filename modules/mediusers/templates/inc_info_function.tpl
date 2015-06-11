@@ -17,7 +17,7 @@ Main.add(function () {
 <form name="editFct" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
 
 <input type="hidden" name="dosql" value="do_functions_aed" />
-<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="m" value="mediusuers" />
 <input type="hidden" name="function_id" value="{{$fonction->function_id}}" />
 <input type="hidden" name="del" value="0" />
 {{if !$fonction->canEdit()}}

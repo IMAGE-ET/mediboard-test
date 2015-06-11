@@ -18,7 +18,7 @@
 <form name="editUser" action="?m={{$m}}&amp;a=edit_infos" method="post" onsubmit="return onSubmitFormAjax(this);">
 
 <input type="hidden" name="dosql" value="do_mediusers_aed" />
-<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="m" value="mediusers" />
 <input type="hidden" name="user_id" value="{{$user->user_id}}" />
 <input type="hidden" name="del" value="0" />
 
