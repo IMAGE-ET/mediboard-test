@@ -76,6 +76,13 @@ Grossesse = {
         $V(this.formTo.type_pec, 'O');
         $V(this.formTo._duree_prevue, this.duree_sejour);
       }
+
+      // Pour une nouvelle DHE, on applique la date de terme prévu sur l'entrée prévue
+      if (this.formTo._date_entree_prevue && !$V(this.formTo.sejour_id)) {
+        var date = this.formFrom.unique_grossesse_id.get("date");
+        $V(this.formTo._date_entree_prevue, date);
+        $V(this.formTo._date_entree_prevue_da, new Date(date).format("dd/MM/yyyy"));
+      }
     }
     else {
       $("view_grossesse").update("<div class='empty' style='display: inline'>"+$T("CGrossesse.none_linked")+"</div>");

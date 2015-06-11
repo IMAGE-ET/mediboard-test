@@ -19,6 +19,7 @@
     Grossesse.editGrossesse($V(Grossesse.formFrom.unique_grossesse_id));
   });
 </script>
+
 <form name="bindFormGrossesse" method="get">
   <table class="tbl">
     <tr>
@@ -30,9 +31,11 @@
       <tr>
         <td class="narrow">
           {{if $show_checkbox}}
-            <input type="radio" name="unique_grossesse_id" data-active="{{$_grossesse->active}}"
-            {{if $_grossesse->_id == $object->grossesse_id}}checked{{/if}} value="{{$_grossesse->_id}}"
-            data-view_grossesse="{{$_grossesse}}" />
+            <input type="radio" name="unique_grossesse_id"
+                   data-active="{{$_grossesse->active}}"
+                   data-view_grossesse="{{$_grossesse}}"
+                   data-date="{{$_grossesse->terme_prevu}}"
+                   {{if $_grossesse->_id == $object->grossesse_id}}checked{{/if}} value="{{$_grossesse->_id}}" />
           {{/if}}
         </td>
         <td>
