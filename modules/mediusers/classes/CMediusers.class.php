@@ -469,6 +469,8 @@ class CMediusers extends CPerson {
     $backProps['traitements']                      = 'CTraitement owner_id';
     $backProps['pathologies']                      = 'CPathologie owner_id';
     $backProps['rejets_prat']                      = 'CFactureRejet praticien_id';
+    $backProps['dim']                              = 'CTraitementDossier dim_id';
+
     return $backProps;
   }
 
