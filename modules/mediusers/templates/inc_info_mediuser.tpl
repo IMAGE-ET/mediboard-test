@@ -53,7 +53,7 @@
 
   <tbody {{if ($user->_user_type != 3) && ($user->_user_type != 4) && ($user->_user_type != 13)}}style="display:none"{{/if}}>
 
-    {{mb_include template="inc_infos_praticien" object=$user name_form="editUser"}}
+    {{mb_include module=mediusers template="inc_infos_praticien" object=$user name_form="editUser"}}
 
   </tbody>
 
