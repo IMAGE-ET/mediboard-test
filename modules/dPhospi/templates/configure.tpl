@@ -27,7 +27,7 @@
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
   <li><a href="#config-colors">{{tr}}config-color_type_hospi{{/tr}}</a></li>
   <li><a href="#config-prestations">Prestations</a></li>
-  <li><a href="#CConfigEtab">Config par établissement</a>
+  <li><a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
 </ul>
 

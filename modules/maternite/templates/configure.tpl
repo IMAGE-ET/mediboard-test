@@ -33,7 +33,7 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CGrossesse">{{tr}}CGrossesse{{/tr}}</a></li>
-  <li><a href="#config_etab">Config par établissement</a></li>
+  <li><a href="#config_etab">{{tr}}CConfigEtab{{/tr}}</a></li>
   <li><a href="#tools">Outils</a></li>
   <li><a href="#rattrapage_cesarienne">Rattrapage césariennes</a></li>
 </ul>

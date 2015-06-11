@@ -22,7 +22,7 @@
   <li><a href="#config-permissions">{{tr}}config-permissions{{/tr}}</a></li>
   <li><a href="#config-ldap">{{tr}}config-ldap{{/tr}}</a></li>
   <li><a href="#actions">{{tr}}Maintenance{{/tr}}</a></li>
-  <li><a href="#conf_etab">Config par établissement</a></li>
+  <li><a href="#conf_etab">{{tr}}CConfigEtab{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />

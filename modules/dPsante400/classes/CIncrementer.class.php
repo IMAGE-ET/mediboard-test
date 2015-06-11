@@ -118,6 +118,14 @@ class CIncrementer extends CMbObject {
   }
   
   static function generateIdex(CMbObject $object, $tag, $group_id) {
+    $group = CGroups::loadFromGuid("CGroups-$group_id");
+
+    // On préfère générer un identifiant d'un établissement virtuel pour les séjours non-facturables
+    $group_id_pour_sejour_facturable = CAppUI::conf('dPsante400 CDomain group_id_pour_sejour_facturable', $group);
+    if ($object instanceof CSejour && !$object->facturable && $group_id_pour_sejour_facturable) {
+      $group_id = $group_id_pour_sejour_facturable;
+    }
+
     $group_domain               = new CGroupDomain();
     $group_domain->object_class = $object->_class;
     $group_domain->group_id     = $group_id;

@@ -26,7 +26,7 @@
     
     <tr>
       <th>{{mb_label object=$group_domain field="object_class"}}</th>
-      <td>{{mb_field object=$group_domain field="object_class"}}</td>
+      <td>{{mb_field object=$group_domain field="object_class" typeEnum="radio"}}</td>
     </tr>
     
     <tr>

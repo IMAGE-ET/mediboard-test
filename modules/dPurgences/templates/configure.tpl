@@ -10,11 +10,11 @@
 
 <script>
   Main.add(function () {
-  var tabs = Control.Tabs.create('tabs-configure', true);
-  if (tabs.activeLink.key == "CConfigEtab") {
-    Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'));
-  }
-});
+    var tabs = Control.Tabs.create('tabs-configure', true);
+    if (tabs.activeLink.key == "CConfigEtab") {
+      Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'));
+    }
+  });
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -23,7 +23,7 @@
   <li><a href="#Sender">{{tr}}config-dPurgences-sender{{/tr}}</a></li>
   <li><a href="#Offline">{{tr}}config-dPurgences-offline{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+    <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
   <li><a href="#Maintenance">{{tr}}config-dPurgences-maintenance{{/tr}}</a></li>
 </ul>

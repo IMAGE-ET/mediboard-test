@@ -12,7 +12,7 @@
     <a href="#soins">Dossier de soins</a>
   </li>
   <li onmousedown="Configuration.edit('soins', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+    <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
 </ul>
 

@@ -65,7 +65,7 @@ Domain = {
     var url = new Url("eai", "ajax_edit_group_domain");
     url.addParam("group_domain_id", group_domain_id);
     url.addParam("domain_id"      , domain_id);
-    url.requestModal(400, 150);
+    url.requestModal(600, 200);
     Domain.modal = url.modalObject;
     Domain.modal.observe("afterClose", function(){ 
       Domain.showDomain(domain_id); 

@@ -29,7 +29,7 @@
   <tr>
     <td>
       <ul id="tabs-configure" class="control_tabs">
-        <li><a href="#CConfigEtab">Config par établissement</a></li>
+        <li><a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a></li>
         <li><a href="#CConfigServeur">Config serveur</a></li>
         <li><a href="#CConfigES">Config ES</a></li>
         <li><a href="#CConfigReIndexing">Réindexation</a></li>

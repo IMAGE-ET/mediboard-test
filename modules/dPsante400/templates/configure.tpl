@@ -21,7 +21,7 @@
   <li><a href="#CIdSante400">{{tr}}CIdSante400{{/tr}}</a></li>
   <li><a href="#CIncrementer">{{tr}}CIncrementer{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPsante400', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+    <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
   <li><a href="#mouvements">Mouvements</a></li>
 </ul>

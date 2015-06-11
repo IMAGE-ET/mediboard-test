@@ -18,7 +18,7 @@
   <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
   <li><a href="#Repair">{{tr}}config_facture_hprim{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPpmsi', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+    <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
   {{if "atih"|module_active}}
     <li onmousedown="PMSI.loadConfigUms('{{$g}}')"><a href="#Config-UM">{{tr}}config_atih_um{{/tr}}</a></li>

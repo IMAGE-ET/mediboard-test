@@ -18,7 +18,7 @@
   <li><a href="#configure-blocage"    >Blocage                     </a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}    </a></li>
-  <li><a href="#CConfigEtab"          >Config par établissement    </a></li>
+  <li><a href="#CConfigEtab"          >{{tr}}CConfigEtab{{/tr}} </a></li>
   <li><a href="#Purge"                >{{tr}}Purge{{/tr}}          </a></li>
 </ul>
 

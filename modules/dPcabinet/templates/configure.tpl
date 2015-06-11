@@ -43,7 +43,7 @@
   <li><a href="#actions"        >Autres actions             </a></li>
   <li><a href="#offline"        >Mode offline               </a></li>
   <li><a href="#cabinet_config" onmousedown="configCabinet();">{{tr}}cabinet-creator{{/tr}}</a></li>
-  <li><a href="#CConfigEtab"    >Config par établissement   </a></li>
+  <li><a href="#CConfigEtab"    >{{tr}}CConfigEtab{{/tr}}</a></li>
 </ul>
 
 <!-- Prise de rendez-vous --> 

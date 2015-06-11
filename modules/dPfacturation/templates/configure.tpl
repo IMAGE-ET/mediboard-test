@@ -16,7 +16,7 @@
   <li><a href="#relances">{{tr}}CRelance{{/tr}}</a></li>
   {{if $conf.ref_pays == 2}}
     <li onmousedown="Configuration.edit('dPfacturation', 'CGroups', $('CConfigEtab'))">
-      <a href="#CConfigEtab">Config par établissement</a>
+      <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
     </li>
   {{/if}}
   <li><a href="#resolutions">Résolutions</a></li>

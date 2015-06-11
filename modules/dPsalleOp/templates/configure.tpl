@@ -22,7 +22,7 @@
   <li><a href="#config-CActe">{{tr}}CActe{{/tr}}</a></li>
   <li><a href="#config-Diagnostics">{{tr}}Diagnostics{{/tr}}</a></li>
   <li onmousedown="Configuration.edit('dPsalleOp', 'CGroups', $('CConfigEtab'))">
-    <a href="#CConfigEtab">Config par établissement</a>
+    <a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a>
   </li>
 </ul>
 

@@ -26,6 +26,9 @@ CConfiguration::register(
         "CIncrementer" => array(
           "type_sejour" => $types
         ),
+        "CDomain" => array(
+          "group_id_pour_sejour_facturable" => "num",
+        )
       ),
     ),
   )

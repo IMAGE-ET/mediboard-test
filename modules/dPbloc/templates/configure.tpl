@@ -22,7 +22,7 @@
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-CPlageOp">{{tr}}{{$class}}{{/tr}}</a></li>
   <li><a href="#config-print_planning">{{tr}}mod-dPbloc-tab-print_planning{{/tr}}</a></li>
-  <li><a href="#CConfigEtab">Config par établissement</a></li>
+  <li><a href="#CConfigEtab">{{tr}}CConfigEtab{{/tr}}</a></li>
   <li><a href="#actions">{{tr}}Maintenance{{/tr}}</a></li>
 </ul>
 
