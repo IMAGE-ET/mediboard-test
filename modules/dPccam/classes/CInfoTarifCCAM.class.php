@@ -87,7 +87,6 @@ class CInfoTarifCCAM extends CCCAM {
    */
   static function loadListFromCode($code) {
     $ds = self::$spec->ds;
-   // mbTrace($ds);
     $query = "SELECT p_acte_infotarif.*
       FROM p_acte_infotarif
       WHERE p_acte_infotarif.CODEACTE = %
