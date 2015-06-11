@@ -10,8 +10,6 @@
  */
 
 CCanDo::checkRead();
-
-
 $chirSel        = CValue::getOrSession("chirSel");
 $function_id    = CValue::get("function_id");
 $today          = CMbDT::date();
@@ -22,7 +20,6 @@ $facturated     = CValue::get("facturated");
 $status         = CValue::get("status");
 $actes          = CValue::get("actes");
 $hide_in_conge  = CValue::get("hide_in_conge", 0);
-
 
 $min_hour = 23;
 
@@ -296,21 +293,18 @@ for ($i = 0; $i < $nbDays; $i++) {
         }
       }
 
-
       $_consult->loadPosition();
       $debute = "$jour $_consult->heure";
       $motif = CMbString::htmlEntities($_consult->motif);
       if ($_consult->patient_id) {
         $_consult->loadRefPatient();
-        if ($color = "#cfc") {
-          $color = "#fee";
-          if ($_consult->premiere) {
-            $color = "#faa";
-          } elseif ($_consult->derniere) {
-            $color = "#faf";
-          } elseif ($_consult->sejour_id) {
-            $color = "#CFFFAD";
-          }
+        $color = "#fee";
+        if ($_consult->premiere) {
+          $color = "#faa";
+        } elseif ($_consult->derniere) {
+          $color = "#faf";
+        } elseif ($_consult->sejour_id) {
+          $color = "#CFFFAD";
         }
 
         $style = "";
@@ -340,9 +334,7 @@ for ($i = 0; $i < $nbDays; $i++) {
           false
         );
       } else {
-        if ($color = "#cfc") {
-          $color = "#faa";
-        }
+        $color = "#faa";
         $event = new CPlanningEvent(
           $_consult->_guid,
           $debute, $_consult->duree * $_plage->_freq,
