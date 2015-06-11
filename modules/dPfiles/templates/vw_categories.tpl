@@ -31,14 +31,14 @@
               <table class="form">
                 <tr>
                   <th style="width: 8%"> Mots clés : </th>
-                  <td> <input type="text" name="filter" value="" style="width: 20em;" onchange="$V(this.form.page, 0)" /> </td>
+                  <td> <input type="text" name="filter" value="{{$filter}}" style="width: 20em;" onchange="$V(this.form.page, 0)" /> </td>
 
                   <th> {{mb_label class="CFilesCategory" field="class"}} </th>
                   <td>
                     <select name="class" style="width: 15em;">
                       <option value="">&mdash; {{tr}}All{{/tr}}</option>
                       {{foreach from=$listClass item=_class}}
-                        <option value="{{$_class}}">
+                        <option value="{{$_class}}" {{if $_class == $class}}selected{{/if}}>
                           {{tr}}{{$_class}}{{/tr}}
                         </option>
                       {{/foreach}}
@@ -47,8 +47,12 @@
 
                   <th> {{mb_label class="CFilesCategory" field="eligible_file_view"}} </th>
                   <td>
-                    <label>Oui <input name="eligible_file_view" value="1" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
-                    <label>Non <input name="eligible_file_view" value="0" type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Tous <input name="eligible_file_view" value="" {{if $eligible_file_view == null}}checked{{/if}}
+                                      type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Oui <input name="eligible_file_view" value="1" {{if $eligible_file_view == "1"}}checked{{/if}}
+                                      type="radio" onchange="$V(this.form.page, 0, false)"/></label>
+                    <label>Non <input name="eligible_file_view" value="0" {{if $eligible_file_view == "0"}}checked{{/if}}
+                                      type="radio" onchange="$V(this.form.page, 0, false)"/></label>
                   </td>
                 </tr>
 
