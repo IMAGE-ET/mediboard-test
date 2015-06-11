@@ -82,7 +82,6 @@ for ($i = 0; $i < $nbDays; $i++) {
       $planning->addRange($op);
     }
 
-
     // INTERVENTIONS
     /** @var CPlageOp[] $intervs */
     $interv = new CPlageOp();
@@ -93,9 +92,6 @@ for ($i = 0; $i < $nbDays; $i++) {
       $planning->addRange($range);
     }
   }
-
-
-
 
   $plages = $plage->loadList($where);
   CMbObject::massLoadFwdRef($plages, "chir_id");
@@ -109,21 +105,18 @@ for ($i = 0; $i < $nbDays; $i++) {
     $range->color = $_plage->color;
     $range->type = "plageconsult";
     $planning->addRange($range);
-  
-    $color = "#cfc";
-    if ($_plage->remplacant_id && $_plage->remplacant_id != $chir_id) {
-      $color = "#FAA";
-    }
-    if ($_plage->remplacant_id && $_plage->remplacant_id == $chir_id) {
-      $color = "#FDA";
-    }
-    
+
     foreach ($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
       if ($_consult->patient_id) {
         $_consult->loadRefPatient();
-        if ($color == "cfc") {
-          $color = "#fee";
+        $color = "#fee";
+        if ($_consult->premiere) {
+          $color = "#faa";
+        } elseif ($_consult->derniere) {
+          $color = "#faf";
+        } elseif ($_consult->sejour_id) {
+          $color = "#CFFFAD";
         }
         $event = new CPlanningEvent(
           $_consult->_guid,
@@ -137,10 +130,9 @@ for ($i = 0; $i < $nbDays; $i++) {
         );
       }
       else {
-        if ($color == "cfc") {
-          $color = "#ffa";
-        }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#ffa", true, null, null);
+        $color = "#faa";
+        $motif = $_consult->motif ? $_consult->motif : "[PAUSE]";
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $motif, $color, true, null, null);
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
@@ -157,6 +149,14 @@ for ($i = 0; $i < $nbDays; $i++) {
       //Ajout de l'évènement au planning 
       $event->plage["color"] = $_plage->color;
       $planning->addEvent($event);
+    }
+
+    $color = "#cfc";
+    if ($_plage->remplacant_id && $_plage->remplacant_id != $chir_id) {
+      $color = "#FAA";
+    }
+    if ($_plage->remplacant_id && $_plage->remplacant_id == $chir_id) {
+      $color = "#FDA";
     }
     $utilisation = $_plage->getUtilisation();
     foreach ($utilisation as $_timing => $_nb) {
