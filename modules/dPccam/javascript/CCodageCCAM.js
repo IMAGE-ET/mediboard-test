@@ -176,7 +176,6 @@ CCodageCCAM = {
   },
 
   show_code : function (code_ccam, date_demandee) {
-    console.log(date_demandee);
     new Url("dPccam", "ajax_show_code")
         .addParam("code_ccam", code_ccam)
         .addParam("date_demandee", date_demandee)
@@ -184,7 +183,6 @@ CCodageCCAM = {
   },
 
   refreshModal : function (code_ccam) {
-    console.log(code_ccam);
     Control.Modal.close();
     new Url("dPccam", "ajax_show_code")
         .addParam("code_ccam", code_ccam)
