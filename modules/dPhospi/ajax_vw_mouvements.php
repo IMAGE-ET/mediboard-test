@@ -19,7 +19,9 @@ $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly       = CValue::getOrSession("readonly", 0);
 $prestation_id  = CValue::getOrSession("prestation_id", 0);
 
-if (CAppUI::conf("dPhospi systeme_prestations") == "standard") {
+$group = CGroups::loadCurrent();
+
+if (CAppUI::conf("dPhospi prestations systeme_prestations", $group) == "standard") {
   CValue::setSession("prestation_id", "");
   $prestation_id = "";
 }
@@ -39,8 +41,6 @@ $period = "";
 $datetimes = array();
 $change_month = array();
 $granularites = array("day", "week", "4weeks");
-
-$group = CGroups::loadCurrent();
 
 switch ($granularite) {
   case "day":

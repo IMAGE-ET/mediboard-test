@@ -11,7 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
-$keywords = CValue::get("keywords");
+$keywords   = CValue::get("keywords");
+$type_hospi = CValue::get("type_hospi");
 
 $item_prestation = new CItemPrestation();
 
@@ -22,6 +23,10 @@ $ljoin["prestation_ponctuelle"] = "prestation_ponctuelle.prestation_ponctuelle_i
 
 $where["prestation_ponctuelle.group_id"] = "= '" . CGroups::loadCurrent()->_id . "'";
 $where["item_prestation.object_class"] = "= 'CPrestationPonctuelle'";
+
+if ($type_hospi) {
+  $where[] = "prestation_ponctuelle.type_hospi IS NULL OR prestation_ponctuelle.type_hospi = '$type_hospi'";
+}
 
 $matches = $item_prestation->getAutocompleteList($keywords, $where, null, $ljoin);
 

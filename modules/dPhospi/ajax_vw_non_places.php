@@ -23,7 +23,9 @@ $isolement       = CValue::getOrSession("isolement", "0");
 $prestation_id   = CValue::getOrSession("prestation_id", "");
 $item_prestation_id = CValue::getOrSession("item_prestation_id");
 
-if (CAppUI::conf("dPhospi systeme_prestations") == "standard") {
+$group_id = CGroups::loadCurrent()->_id;
+
+if (CAppUI::conf("dPhospi prestations systeme_prestations", $group_id) == "standard") {
   CValue::setSession("prestation_id", "");
   $prestation_id = "";
 }
@@ -32,7 +34,6 @@ if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
 }
 
-$group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group_id'";

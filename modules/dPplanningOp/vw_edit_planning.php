@@ -188,9 +188,6 @@ foreach ($services as $_service) {
   $_service->loadRefUFSoins();
 }
 
-// Compter les prestations journalières
-$count_prestations = CPrestationJournaliere::countCurrentList();
-
 $sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
@@ -280,7 +277,6 @@ $smarty->assign("list_hours_voulu"  , $list_hours_voulu);
 $smarty->assign("list_minutes_voulu", $list_minutes_voulu);
 
 $smarty->assign("prestations", $prestations);
-$smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("count_etab_externe"    , $count_etab_externe);

@@ -205,7 +205,7 @@ $affectation->entree = CMbDT::addDateTime("08:00:00", $date);
 $affectation->sortie = CMbDT::addDateTime("23:00:00", $date);
 
 // Chargement conf prestation
-$systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+$systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", "CGroups-$g");
 
 // Création du template
 $smarty = new CSmartyDP();

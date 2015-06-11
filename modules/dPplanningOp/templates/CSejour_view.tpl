@@ -106,7 +106,7 @@
         </button>
       {{/if}}
 
-      {{if $conf.dPhospi.systeme_prestations == "expert"}}
+      {{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
         <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}')">Prestations</button>
       {{/if}}
       {{/if}}

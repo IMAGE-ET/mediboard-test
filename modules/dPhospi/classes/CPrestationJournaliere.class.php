@@ -20,6 +20,7 @@ class CPrestationJournaliere extends CMbObject {
   public $nom;
   public $group_id;
   public $desire;
+  public $type_hospi;
 
   // Form fields
   public $_count_items = 0;
@@ -40,9 +41,10 @@ class CPrestationJournaliere extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["nom"]       = "str notNull";
-    $props["group_id"]  = "ref notNull class|CGroups";
-    $props["desire"]    = "bool default|0";
+    $props["nom"]        = "str notNull";
+    $props["group_id"]   = "ref notNull class|CGroups";
+    $props["desire"]     = "bool default|0";
+    $props["type_hospi"] = "enum list|" . implode("|", CSejour::$types) . "|";
 
     return $props;
   }
@@ -67,24 +69,39 @@ class CPrestationJournaliere extends CMbObject {
 
   /**
    * Charge les prestations journalières de l'établissement
+   * pour un éventuel type d'hospitalisation donné
+   *
+   * @param string $type Type d'hospitalisation
    *
    * @return self[]
    */
-  static function loadCurrentList() {
+  static function loadCurrentList($type = null) {
     $prestation = new self();
-    $prestation->group_id = CGroups::loadCurrent()->_id;
-    return $prestation->loadMatchingList("nom");
+    $where = array(
+      "group_id" => "= '" . CGroups::loadCurrent()->_id . "'",
+    );
+    if ($type) {
+      $where[] = "type_hospi IS NULL OR type_hospi = '$type'";
+    }
+
+    return $prestation->loadList($where, "nom");
   }
 
   /**
    * Compte les prestations journalières de l'établissement
-   *
+   * pour un éventuel type d'hospitalisation donné
    * @return int
    */
-  static function countCurrentList() {
+  static function countCurrentList($type = null) {
     $prestation = new self();
-    $prestation->group_id = CGroups::loadCurrent()->_id;
-    return $prestation->countMatchingList();
+    $where = array(
+      "group_id" => "= '" . CGroups::loadCurrent()->_id . "'",
+    );
+    if ($type) {
+      $where[] = "type_hospi IS NULL OR type_hospi = '$type'";
+    }
+
+    return $prestation->countList($where, "nom");
   }
 
   /**

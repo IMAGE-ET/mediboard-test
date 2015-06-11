@@ -115,7 +115,7 @@ $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $prestation_id = CAppUI::pref("prestation_id_hospi");
 
-if (CAppUI::conf("dPhospi systeme_prestations") == "standard" || $prestation_id == "all") {
+if (CAppUI::conf("dPhospi prestations systeme_prestations", $group) == "standard" || $prestation_id == "all") {
   $prestation_id = "";
 }
 

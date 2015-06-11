@@ -123,7 +123,7 @@
     <td>{{mb_value object=$sejour field=type}}</td>
   </tr>
 
-  {{if $conf.dPhospi.systeme_prestations == "standard"}}
+  {{if "dPhospi prestations systeme_prestations"|CGroups-$g == "standard"}}
   <tr>
     <th>{{mb_label object=$sejour field=chambre_seule}}</th>
     <td>{{mb_value object=$sejour field=chambre_seule}}</td>

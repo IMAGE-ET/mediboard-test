@@ -28,7 +28,6 @@ $dPconfig["dPhospi"] = array (
   
   "show_age_patient" => "0",
   "max_affectations_view" => "480",
-  "systeme_prestations" => "standard",
   "use_vue_topologique" => "0",
   "nb_colonnes_vue_topologique" => 10,
   "hide_alertes_temporel" => "0",

@@ -40,7 +40,7 @@
 
 {{math equation=x+1 x=$nb_ticks assign=colspan}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
-{{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
+{{assign var=systeme_presta value="dPhospi prestations systeme_prestations"|conf:"CGroups-$g"}}
 
 <div style="height: 2em; width: 100%;">
   <div id="time_line_temporelle_non_affectes" style="background: #fff; z-index: 200;">

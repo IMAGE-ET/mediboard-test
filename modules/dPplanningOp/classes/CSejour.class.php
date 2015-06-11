@@ -1270,7 +1270,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Changement des liaisons de prestations si besoin
     // Seulement par rapport à l'entrée
-    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+    if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
       $decalage = CMbDT::daysRelative($old->entree, $this->entree);
 
       if ($decalage != 0) {
@@ -3964,7 +3964,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $template->addListProperty("Sejour - Conclusions des consultations", $consults);
 
-    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+    if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
       $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
       CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
       CStoredObject::massLoadFwdRef($items_liaisons, "sous_item_id");
@@ -4302,7 +4302,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation->loadView();
 
     $souhaits = array();
-    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+    if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
       /** @var CItemLiaison[] $items_liaisons */
       $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
       CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
@@ -4334,7 +4334,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       "CHAMBRE COURANTE" => $affectation->_view
     );
 
-    if (CAppUI::conf("dPhospi systeme_prestations") == "expert") {
+    if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
       $fields_sejour["PRESTATIONS SOUHAITEES"] = implode(" - ", $souhaits);
     }
 

@@ -126,7 +126,7 @@
           <option value="0" {{if $vue == 0}}selected{{/if}}>Afficher les validés</option>
           <option value="1" {{if $vue == 1}}selected{{/if}}>Ne pas afficher les validés</option>
         </select>
-        {{if $conf.dPhospi.systeme_prestations == "expert"}}
+        {{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
           &mdash;
 
           Axe de prestation :

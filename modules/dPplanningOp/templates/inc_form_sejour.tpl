@@ -15,7 +15,6 @@
 {{mb_script module=patients   script=correspondant}}
 {{mb_script module=patients   script=patient}}
 
-{{mb_default var=count_prestations value=0}}
 {{mb_default var=_duree_prevue value=0}}
 {{mb_default var=_duree_prevue_heure value=0}}
 {{mb_default var=dialog value=0}}
@@ -1255,7 +1254,7 @@ Main.add( function(){
   {{/if}}
 {{/if}}
 
-{{if $conf.dPhospi.systeme_prestations == "standard"}} 
+{{if "dPhospi prestations systeme_prestations"|conf:CGroups-$g == "standard"}}
   <tr {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
     {{if $conf.dPplanningOp.CSejour.show_chambre_part}}
       <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
@@ -1296,7 +1295,7 @@ Main.add( function(){
   {{/if}}
 {{/if}}
 
-{{if $conf.dPhospi.systeme_prestations == "expert"}}
+{{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
   <tr>
     <td></td>
     <td class="button">

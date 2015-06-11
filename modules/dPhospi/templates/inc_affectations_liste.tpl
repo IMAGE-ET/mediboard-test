@@ -1,4 +1,4 @@
-{{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
+{{assign var=systeme_presta value="dPhospi prestations systeme_prestations"|conf:"CGroups-$g"}}
 
 <table class="tbl">
   <tr>

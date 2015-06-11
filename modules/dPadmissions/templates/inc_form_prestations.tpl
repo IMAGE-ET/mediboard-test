@@ -10,7 +10,7 @@
 
 {{mb_default var=edit value=0}}
 
-{{if $conf.dPhospi.systeme_prestations == "standard"}}
+{{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "standard"}}
   {{if !$edit}}
     {{if $sejour->chambre_seule}}
       <div>{{mb_label object=$sejour field=chambre_seule}}</div>
@@ -39,7 +39,7 @@
   {{/if}}
 {{/if}}
 
-{{if $conf.dPhospi.systeme_prestations == "expert"}}
+{{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
   {{if !$edit}}
     Prestations
     {{mb_return}}

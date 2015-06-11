@@ -21,6 +21,9 @@ CConfiguration::register(
         "vue_tableau" =>  array(
           "show_labo_results" => "bool default|1",
         ),
+        "prestations" => array(
+          "systeme_prestations" => "enum list|standard|expert default|standard"
+        )
       )
     ),
 

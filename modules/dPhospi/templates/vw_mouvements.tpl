@@ -149,7 +149,7 @@
         {{if $mode_vue_tempo == "compacte"}}checked="checked"{{/if}}/> Compacte
     </label>
 
-    {{if $conf.dPhospi.systeme_prestations == "expert"}}
+    {{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
       &mdash;
 
       Axe de prestation :

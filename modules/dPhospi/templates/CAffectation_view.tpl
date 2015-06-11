@@ -40,7 +40,7 @@
           onclick="this.up('div').hide(); Affectation.edit('{{$object->_id}}')">Modifier</button>
         <button type="button" class="cancel"
           onclick="Affectation.delAffectation(getForm('delAffect_{{$object->_id}}'), '{{$object->lit_id}}', 'CSejour-{{$object->sejour_id}}')">{{tr}}Delete{{/tr}}</button>
-        {{if $object->sejour_id && $conf.dPhospi.systeme_prestations == "expert"}}
+        {{if $object->sejour_id && "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
           <button type="button" class="search" onclick="Prestations.edit('{{$object->sejour_id}}')">Prestations</button>
         {{/if}}
       </td>

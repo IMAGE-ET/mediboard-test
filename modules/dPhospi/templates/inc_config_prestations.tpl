@@ -14,7 +14,6 @@
   <input type="hidden" name="m" value="system" />
 
   <table class="form">
-    {{mb_include module=system template=inc_config_enum var=systeme_prestations values=standard|expert}}
     {{mb_include module=system template=inc_config_bool var=show_realise}}
     {{mb_include module=system template=inc_config_bool var=show_souhait_placement}}
 

@@ -39,6 +39,14 @@
     </tr>
     {{/if}}
     <tr>
+      <th>
+        {{mb_label object=$prestation field=type_hospi}}
+      </th>
+      <td>
+        {{mb_field object=$prestation field=type_hospi}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         <button type="button" class="save" onclick="this.form.onsubmit()">
           {{tr}}{{if $prestation->_id}}Save{{else}}Create{{/if}}{{/tr}}

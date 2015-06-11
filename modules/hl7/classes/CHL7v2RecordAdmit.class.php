@@ -2274,7 +2274,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+    $systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", "CGroups-".$newVenue->group_id);
     if ($systeme_presta == "standard") {
       return;
     }

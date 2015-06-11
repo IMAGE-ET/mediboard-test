@@ -7,7 +7,7 @@
 {{/if}}
 
 {{assign var=chambre value=$_lit->_ref_chambre}}
-{{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
+{{assign var=systeme_presta value="dPhospi prestations systeme_prestations"|conf:"CGroups-$g"}}
 
 {{if $prestation_id && !$in_corridor}}
   <th class="text">{{$_lit->_selected_item->nom}}</th>

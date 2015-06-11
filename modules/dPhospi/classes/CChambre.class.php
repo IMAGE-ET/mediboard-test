@@ -238,7 +238,7 @@ class CChambre extends CInternalStructure {
     }
     $this->_nb_affectations = count($listAff);
 
-    $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+    $systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent());
 
     foreach ($listAff as $affectation1) {
       if (!$affectation1->sejour_id) {

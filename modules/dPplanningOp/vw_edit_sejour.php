@@ -181,9 +181,6 @@ foreach ($services as $_service) {
   $_service->loadRefUFSoins();
 }
 
-// Compter les prestations journalières système expert
-$count_prestations = CPrestationJournaliere::countCurrentList();
-
 // Chargement des prestations système standard
 $prestations = CPrestation::loadCurrentList();
 
@@ -245,7 +242,6 @@ $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listServices"  , $services);
 
 $smarty->assign("prestations"      , $prestations);
-$smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);

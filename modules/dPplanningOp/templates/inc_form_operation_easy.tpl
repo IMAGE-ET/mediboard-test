@@ -346,21 +346,21 @@
   
   
   <!-- Selection du type de chambre et du régime alimentaire-->
-  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && $conf.dPhospi.systeme_prestations == "standard"}}
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "standard"}}
     <tr>
       <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
       <td colspan="2">{{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}</td>
     </tr>
   {{/if}}
   
-  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime || $conf.dPbloc.CPlageOp.systeme_materiel == "expert" || $conf.dPhospi.systeme_prestations == "expert"}}
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime || $conf.dPbloc.CPlageOp.systeme_materiel == "expert" || "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert"}}
     <tr>
       <td></td>
       <td colspan="2">
         {{if $conf.dPplanningOp.COperation.easy_materiel && $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
           {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id from_dhe=1}}
         {{/if}}
-      {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && $conf.dPhospi.systeme_prestations == "expert" && $sejour->_id}}
+      {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && "dPhospi prestations systeme_prestations"|conf:"CGroups-$g" == "expert" && $sejour->_id}}
         <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
       {{/if}}
       {{if $conf.dPplanningOp.COperation.easy_regime}}

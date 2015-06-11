@@ -1001,6 +1001,17 @@ class CSetupdPhospi extends CSetup {
                 ADD `identifie` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.03";
+    $this->makeRevision("1.03");
+    $this->addDefaultConfig("dPhospi prestations systeme_prestations", "dPhospi systeme_prestations");
+
+    $query = "ALTER TABLE `prestation_journaliere`
+      ADD `type_hospi` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult','');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `prestation_ponctuelle`
+      ADD `type_hospi` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult','');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.04";
   }
 }

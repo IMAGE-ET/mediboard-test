@@ -64,7 +64,7 @@
               <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
               </div>
              <div class="libelle compact">
-              {{if $conf.dPhospi.systeme_prestations}}
+              {{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g"}}
                 <em style="color: #f00;" title="Chambre {{if $_sejour->chambre_seule}}seule{{else}}double{{/if}}">
                   {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
                   {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}

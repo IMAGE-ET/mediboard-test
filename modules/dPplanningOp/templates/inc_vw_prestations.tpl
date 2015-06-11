@@ -135,6 +135,7 @@
                 Main.add(function() {
                   var form = getForm("edit_prestations");
                   var url = new Url("hospi", "ajax_item_prestation_autocomplete");
+                  url.addParam("type_hospi", "{{$sejour->type}}");
                   url.autoComplete(form.keywords, "prestation_autocomplete", {
                     minChars: 3,
                     method: "get",

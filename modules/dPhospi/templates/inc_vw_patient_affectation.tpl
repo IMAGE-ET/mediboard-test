@@ -36,7 +36,7 @@
     <br/>
     <div class="libelle compact" style="float:left;">
       {{if $conf.dPhospi.show_age_patient}}({{$patient->_age}}){{/if}}
-      {{if $conf.dPhospi.systeme_prestations}}
+      {{if "dPhospi prestations systeme_prestations"|conf:"CGroups-$g"}}
         <em style="color: #f00;" title="Chambre {{if $_sejour->chambre_seule}}seule{{else}}double{{/if}}">
           {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
           {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}&nbsp;

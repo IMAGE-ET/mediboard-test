@@ -25,7 +25,7 @@
 function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "", $prestation_id = "", $with_dossier_medical = true) {
   $service->_nb_lits_dispo = 0;
   $dossiers = array();
-  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+  $systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent());
 
   $lits = $service->loadRefsLits();
 
@@ -139,7 +139,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
  */
 function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $prestation_id = null) {
   $group_id = CGroups::loadCurrent()->_id;
-  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+  $systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", "CGroups-$group_id");
 
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
@@ -201,7 +201,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
  */
 function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $prestation_id = null) {
   $group_id = CGroups::loadCurrent()->_id;
-  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+  $systeme_presta = CAppUI::conf("dPhospi prestations systeme_prestations", "CGroups-$group_id");
 
   $ljoin = array(
     "sejour"          => "affectation.sejour_id = sejour.sejour_id",

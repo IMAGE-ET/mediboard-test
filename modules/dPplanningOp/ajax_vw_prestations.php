@@ -13,7 +13,10 @@ $sejour_id     = CValue::get("sejour_id");
 $context       = CValue::get("context", "all");
 $relative_date = CValue::get("relative_date");
 
-$prestations_j = CPrestationJournaliere::loadCurrentList();
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
+$prestations_j = CPrestationJournaliere::loadCurrentList($sejour->type);
 $dates         = array();
 $prestations_p = array();
 $liaisons_j    = array();
@@ -28,9 +31,6 @@ foreach ($prestations_j as $_prestation) {
     $_item->loadRefsSousItems();
   }
 }
-
-$sejour = new CSejour();
-$sejour->load($sejour_id);
 
 $sejour->loadRefPrescriptionSejour();
 $sejour->loadRefCurrAffectation();

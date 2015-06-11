@@ -16,7 +16,8 @@ class CPrestationPonctuelle extends CMbObject{
   // DB fields
   public $nom;
   public $group_id;
-  
+  public $type_hospi;
+
   // Form fields
   public $_count_items = 0;
 
@@ -34,11 +35,12 @@ class CPrestationPonctuelle extends CMbObject{
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nom"]       = "str notNull seekable";
-    $specs["group_id"]  = "ref notNull class|CGroups";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["nom"]       = "str notNull seekable";
+    $props["group_id"]  = "ref notNull class|CGroups";
+    $props["type_hospi"] = "enum list|" . implode("|", CSejour::$types) . "|";
+
+    return $props;
   }
 
   /**
