@@ -55,22 +55,17 @@ info_script "Flush logs to start a new one"
 mysqladmin -u $1 -p$2 flush-logs
 
 # Move all logs without latest to tmp dir
-info_script "Move all logs without latest to tmp dir"
+info_script "Move logs older than 24 hours to tmp dir"
 index="$dir/$4"
-last=$(tail -n 4 $index);
 
-if [ $(ls $dir/*bin.0*|wc -l) -le 4 ]; then
-  info_script "Too few binlogs to rotate... Exiting..."
-  exit 0
-fi
+find $dir -name "*bin.0*" -cmin +1440 -print > /tmp/binlogs
 
-for log in $dir/*bin.0* ; do
-  if [ $(echo $last|grep -c ${log}) -eq 0 ]; then
-    info_script "Moving $(ls -sh $log)"
-    mv $log $tmpdir
-    check_errs $? "Failed to move $log" "$log moved to tmp dir"
-  fi
-done
+while read log;
+do
+  info_script "Moving $log";
+  mv $log $tmpdir;
+  check_errs $? "Failed to move $log" "$log moved to tmp dir" \;
+done < /tmp/binlogs
 
 # Copy binlog indeces to binlog backup
 info_script "Copying binlog indeces to binlog backup"
