@@ -13,7 +13,7 @@
 
 CCanDo::checkAdmin();
 
-CApp::setTimeLimit(600);
+CApp::setTimeLimit(1200);
 
 $file = CValue::read($_FILES, "import");
 $filename = $file["tmp_name"];
