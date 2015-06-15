@@ -14,6 +14,7 @@
           <input type="hidden" name="a" value="ajax_export_compta" />
           <input type="hidden" name="suppressHeaders" value="1" />
           <input type="hidden" name="dialog" value="1" />
+          <input type="hidden" name="facture_class" value="{{$facture_class}}" />
           <input type="hidden" name="factures" value="{{$factures.factures_id}}" />
           <button type="button" class="agenda notext" onclick="this.form.submit();"></button>
         </form>

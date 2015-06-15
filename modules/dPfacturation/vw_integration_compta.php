@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -90,6 +90,7 @@ foreach ($factures as $_facture) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("mois", $mois);
+$smarty->assign("mois"         , $mois);
+$smarty->assign("facture_class", $facture_class);
 
 $smarty->display("vw_integration_compta.tpl");

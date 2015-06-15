@@ -1,25 +1,26 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $out = fopen('php://output', 'w');
 header('Content-Type: application/csv');
 header('Content-Disposition: attachment; filename="ExportCompta.xls"');
 
+$facture_class = CValue::get("facture_class", 'CFactureEtablissement');
 $factures_id = CValue::get("factures", array());
 $factures_id = explode("|", $factures_id);
 
 $where = array();
 $where["facture_id"] = CSQLDataSource::prepareIn(array_values($factures_id));
 
-$facture = new CFactureEtablissement();
+$facture = new $facture_class;
 $factures = $facture->loadList($where);
 
 // Ligne d'entête

@@ -19,7 +19,7 @@
   }
 </script>
 <form name="printFactures" action="" method="get">
-  <input hidden="hidden" name="facture_class" value="CFactureEtablissement"/>
+  <input hidden="hidden" name="facture_class" value="{{$facture_class}}"/>
   <input hidden="hidden" name="type_pdf" value="impression"/>
   <input hidden="hidden" name="definitive" value="{{$definitive}}"/>
   <input hidden="hidden" name="tiers_soldant" value="{{$tiers_soldant}}"/>

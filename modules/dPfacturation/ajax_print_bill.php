@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 CCanDo::checkEdit();
 $facture_class  = CValue::get("facture_class", "CFactureCabinet");
@@ -15,7 +15,9 @@ $prat_id        = CValue::get("prat_id");
 $definitive     = CValue::get("definitive");
 $tri            = CValue::get("tri");
 $type_fact      = CValue::get("type_fact");
-$tiers_soldant  = CValue::get("tiers_soldant");
+$tiers_soldant  = CValue::get("tiers_soldant", 0);
+$date_min       = CValue::get("_date_min", CMbDT::date());
+$date_max       = CValue::get("_date_max", CMbDT::date());
 
 $factures = array();
 /* @var CFacture $facture*/
@@ -26,7 +28,7 @@ $ljoin = array();
 if ($prat_id) {
   $where["praticien_id"] = " = '$prat_id'";
 }
-$where["cloture"] = "IS NOT NULL";
+$where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
 $where["definitive"] = "= '0'";
 
 if ($facture_id) {
@@ -81,5 +83,6 @@ $smarty->assign("definitive"    , $definitive);
 $smarty->assign("facture"       , $facture);
 $smarty->assign("montant_total" , $montant_total);
 $smarty->assign("uniq_checklist", CValue::get("uniq_checklist"));
+$smarty->assign("facture_class" , $facture_class);
 
 $smarty->display("inc_print_bill.tpl");
