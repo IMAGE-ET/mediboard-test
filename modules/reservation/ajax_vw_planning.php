@@ -262,13 +262,6 @@ if ($show_operations) {
 
       $sejour = $_operation->loadRefSejour();
 
-      $affectation = $sejour->loadRefFirstAffectation();
-      //$affectation->loadRefLit(true);
-
-      $_operation->_ref_affectation = $affectation;
-
-      $lit  = $_operation->_ref_affectation->_ref_lit;
-
       $chir   = $_operation->loadRefChir();
       $chir->loadRefFunction();
       $chir_2 = $_operation->loadRefChir2();
@@ -281,6 +274,13 @@ if ($show_operations) {
       $anesth->loadRefFunction();
 
       $_operation->loadRefPlageOp();
+
+      $affectation = $sejour->loadRefCurrAffectation($_operation->_datetime_best);
+      //$affectation->loadRefLit(true);
+
+      $_operation->_ref_affectation = $affectation;
+
+      $lit  = $_operation->_ref_affectation->_ref_lit;
 
       $charge = $sejour->loadRefChargePriceIndicator();
       $patient = $sejour->loadRefPatient();
