@@ -58,16 +58,21 @@ class CPatientXMLImport extends CMbXMLObjectImport {
 
     $idex = self::lookupObject($id);
     if ($idex->_id) {
-      CAppUI::stepAjax("'$id' présent en base", UI_MSG_OK);
       $this->imported[$id] = true;
       $this->map[$id] = $idex->loadTargetObject()->_guid;
       return;
     }
 
     switch ($_class) {
+      // COperation = Intervention: Données incorrectes, Le code CCAM 'QZEA024 + R + J' n'est pas valide
       case "CPatient":
         /** @var CPatient $_patient */
         $_patient = $this->getObjectFromElement($element);
+
+        if ($_patient->naissance == "0000-00-00") {
+          $_patient->naissance = "1850-01-01";
+        }
+
         $_patient->loadMatchingPatient();
 
         $is_new = !$_patient->_id;
@@ -228,6 +233,20 @@ class CPatientXMLImport extends CMbXMLObjectImport {
         $imported_object = $_object;
         break;
 
+      case "CContentHTML":
+        /** @var CContentHTML $_object */
+        $_object = $this->getObjectFromElement($element);
+        $_object->content = stripslashes($_object->content);
+
+        if ($msg = $_object->store()) {
+          CAppUI::stepAjax($msg, UI_MSG_WARNING);
+          break;
+        }
+        CAppUI::stepAjax(CAppUI::tr($_object->_class) . " '%s' créé", UI_MSG_OK, $_object);
+
+        $imported_object = $_object;
+        break;
+
       default:
         // Ignored classes
         if (in_array($_class, self::$_ignored_classes)) {
@@ -247,7 +266,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
     }
 
     // Store idex on new object
-    if ($imported_object) {
+    if ($imported_object && $imported_object->_id) {
       $idex->setObject($imported_object);
       $idex->id400 = $id;
       if ($msg = $idex->store()) {
@@ -329,9 +348,9 @@ class CPatientXMLImport extends CMbXMLObjectImport {
    * @return CIdSante400
    */
   function lookupObject($guid, $tag = "migration") {
-    list($class, $id) = explode("-", $guid);
+    list($class, ) = explode("-", $guid);
 
-    $idex = CIdSante400::getMatch($class, $tag, null, $id);
+    $idex = CIdSante400::getMatch($class, $tag, $guid);
 
     return $idex;
   }
