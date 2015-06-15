@@ -65,7 +65,7 @@
             <input type="hidden" name="date_at" value="{{$rpu->date_at}}" />
 
             <div style="white-space: nowrap;">
-              <select name="prat_id" class="ref notNull" style="width: 10em;">
+              <select name="_prat_id" class="ref notNull" style="width: 10em;">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$sejour->praticien_id}}
               </select>
@@ -73,7 +73,7 @@
             </div>
             <script>
               checkPraticien = function(oForm){
-                var prat = oForm.prat_id.value;
+                var prat = oForm._prat_id.value;
                 if (prat == ""){
                   alert("Veuillez sélectionner un praticien");
                   return false;
