@@ -41,11 +41,9 @@ else {
 }
 
 // Liste des Catégories
-$categorie = new CEiCategorie();
 $listCategories = $categorie->loadList(null, "nom");
 
 // Liste des Items
-$item = new CEiItem();
 $where = null;
 if ($vue_item) {
   $where = "ei_categorie_id = '$vue_item'";
