@@ -12,150 +12,154 @@
 {{mb_script module=planningOp script=ccam_selector}}
 {{mb_script module=patients script=pat_selector}}
 
-<script type="text/javascript">
-function changePage (start) {
-  $V(getForm('rechercheDossierClinique').start, start);
-}
-
-function updateTokenATC(v) {
-  var i, codes = v.split("|").without("");
-  for (i = 0; i < codes.length; i++) {
-    codes[i] += '<button class="remove notext" type="button" onclick="ATCTokenField.remove(\''+codes[i]+'\')"></button>';
+<script>
+  function changePage (start) {
+    $V(getForm('rechercheDossierClinique').start, start);
   }
-  $("list_atc").update(codes.join(", "));
-  $V(getForm("rechercheDossierClinique").keywords_atc, '');
-}
 
-function updateSection(name) {
-  var sections = ['consult_section', 'sejour_section', 'operation_section'];
-  
-  sections.each(function(section_name) {
-    if (section_name != name) {
-      var section = $(section_name);
-      section.select("input", "select", " button").invoke("setAttribute", "disabled", null);
-      section.addClassName("opacity-30");
+  function updateTokenATC(v) {
+    var i, codes = v.split("|").without("");
+    for (i = 0; i < codes.length; i++) {
+      codes[i] += '<button class="remove notext" type="button" onclick="ATCTokenField.remove(\''+codes[i]+'\')"></button>';
     }
-  });
-  
-  var section = $(name);
-  section.select("input", "select", " button").invoke("writeAttribute", "disabled", null);
-  section.removeClassName("opacity-30");
-}
+    $("list_atc").update(codes.join(", "));
+    $V(getForm("rechercheDossierClinique").keywords_atc, '');
+  }
 
-function emptyProduit() {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.code_cis, '');
-  $V(form.code_ucd, '');
-  $V(form.produit, '');
-}
+  function updateSection(name) {
+    var sections = ['consult_section', 'sejour_section', 'operation_section'];
 
-function emptyATC() {
-  $V(getForm('rechercheDossierClinique').classes_atc, '');
-  updateTokenATC('');
-}
-
-function emptyComposant() {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.composant, '');
-  $V(form.keywords_composant, '');
-}
-
-function emptyIndication() {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.indication, '');
-  $V(form.keywords_indication, '');
-  $V(form.type_indication, '');
-}
-
-function emptyCommentaire() {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.commentaire, '');
-}
-
-function exportResults() {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.export, 1);
-  $V(form.suppressHeaders, 1);
-  form.submit();
-  $V(form.export, 0);
-  $V(form.suppressHeaders, 0);
-}
-
-Main.add(function() {
-  Control.Tabs.create("tabs-prescription", true);
-  
-  var form = getForm("rechercheDossierClinique");
-  
-  // Pat Selector
-  PatSelector.init = function(){
-    this.sForm      = "rechercheDossierClinique";
-    this.sId        = "patient_id";
-    this.sView      = "_pat_name";
-    this.pop();
-  };
-  
-  // Autocomplete des medicaments
-  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  url.addParam("produit_max", 40);
-  url.autoComplete(form.produit, "produit_auto_complete", {
-    minChars: 3,
-    afterUpdateElement: function(input, selected) {
-      var code_cis = selected.select(".code-cis")[0].innerHTML;
-      if (code_cis != "") {
-        $V(input.form.code_cis, code_cis);
+    sections.each(function(section_name) {
+      if (section_name != name) {
+        var section = $(section_name);
+        section.select("input", "select", " button").invoke("setAttribute", "disabled", null);
+        section.addClassName("opacity-30");
       }
-      // Si pas de cis, on recherche par ucd
-      else {
-        $V(input.form.code_ucd, selected.select(".code-ucd")[0].innerHTML);
-      }
-      var libelle_ucd = selected.select("small.libelle")[0].innerHTML;
-      libelle_ucd = libelle_ucd.replace(/(^\s+|\s+$)/g, '').replace(/<em>|<\/em>/g, '');
-      $V(input, libelle_ucd);
-    }
-  } );
-  
-  // Autocomplete et TokenField des classes ATC
-  ATCTokenField = new TokenField(form.classes_atc, { 
-    onChange : updateTokenATC
-  });
-  
-  updateTokenATC($V(form.classes_atc));
-  
-  var urlATC = new Url("medicament", "ajax_atc_autocomplete");
-  urlATC.autoComplete(form.keywords_atc, null, {
-    minChars: 1,
-    updateElement: function(selected) {
-      var form = getForm("rechercheDossierClinique");
-      $V(form.keywords_atc, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
-      ATCTokenField.add($V(form.keywords_atc), true);
-    }
-  });
-  
-  // Autocomplete des composants
-  var urlComposant = new Url("medicament", "ajax_composant_autocomplete");
-  urlComposant.autoComplete(form.keywords_composant, null, {
-    minChars: 3,
-    afterUpdateElement: function(input, selected) {
-      var form = getForm("rechercheDossierClinique");
-      $V(input, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
-      $V(form.composant, selected.get("code"));
-    }
-  });
+    });
 
-  // Autocomplete des indications
-  var urlIndication = new Url("medicament", "ajax_indication_autocomplete");
-  urlIndication.autoComplete(form.keywords_indication, null, {
-    minChars: 3,
-    afterUpdateElement: function(input, selected) {
-      var form = getForm("rechercheDossierClinique");
-      $V(input, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
-      $V(form.indication, selected.get("code"));
-      $V(form.type_indication, selected.get("type"));
-    }
+    var section = $(name);
+    section.select("input", "select", " button").invoke("writeAttribute", "disabled", null);
+    section.removeClassName("opacity-30");
+  }
+
+  function emptyProduit() {
+    var form = getForm("rechercheDossierClinique");
+    $V(form.code_cis, '');
+    $V(form.code_ucd, '');
+    $V(form.produit, '');
+  }
+
+  function emptyLibelleProduit() {
+    $V(getForm("rechercheDossierClinique").libelle_produit, '');
+  }
+
+  function emptyATC() {
+    $V(getForm('rechercheDossierClinique').classes_atc, '');
+    updateTokenATC('');
+  }
+
+  function emptyComposant() {
+    var form = getForm("rechercheDossierClinique");
+    $V(form.composant, '');
+    $V(form.keywords_composant, '');
+  }
+
+  function emptyIndication() {
+    var form = getForm("rechercheDossierClinique");
+    $V(form.indication, '');
+    $V(form.keywords_indication, '');
+    $V(form.type_indication, '');
+  }
+
+  function emptyCommentaire() {
+    var form = getForm("rechercheDossierClinique");
+    $V(form.commentaire, '');
+  }
+
+  function exportResults() {
+    var form = getForm("rechercheDossierClinique");
+    $V(form.export, 1);
+    $V(form.suppressHeaders, 1);
+    form.submit();
+    $V(form.export, 0);
+    $V(form.suppressHeaders, 0);
+  }
+
+  Main.add(function() {
+    Control.Tabs.create("tabs-prescription", true);
+
+    var form = getForm("rechercheDossierClinique");
+
+    // Pat Selector
+    PatSelector.init = function(){
+      this.sForm      = "rechercheDossierClinique";
+      this.sId        = "patient_id";
+      this.sView      = "_pat_name";
+      this.pop();
+    };
+
+    // Autocomplete des medicaments
+    var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+    url.addParam("produit_max", 40);
+    url.autoComplete(form.produit, "produit_auto_complete", {
+      minChars: 3,
+      afterUpdateElement: function(input, selected) {
+        var code_cis = selected.select(".code-cis")[0].innerHTML;
+        if (code_cis != "") {
+          $V(input.form.code_cis, code_cis);
+        }
+        // Si pas de cis, on recherche par ucd
+        else {
+          $V(input.form.code_ucd, selected.select(".code-ucd")[0].innerHTML);
+        }
+        var libelle_ucd = selected.select("small.libelle")[0].innerHTML;
+        libelle_ucd = libelle_ucd.replace(/(^\s+|\s+$)/g, '').replace(/<em>|<\/em>/g, '');
+        $V(input, libelle_ucd);
+      }
+    } );
+
+    // Autocomplete et TokenField des classes ATC
+    ATCTokenField = new TokenField(form.classes_atc, {
+      onChange : updateTokenATC
+    });
+
+    updateTokenATC($V(form.classes_atc));
+
+    var urlATC = new Url("medicament", "ajax_atc_autocomplete");
+    urlATC.autoComplete(form.keywords_atc, null, {
+      minChars: 1,
+      updateElement: function(selected) {
+        var form = getForm("rechercheDossierClinique");
+        $V(form.keywords_atc, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
+        ATCTokenField.add($V(form.keywords_atc), true);
+      }
+    });
+
+    // Autocomplete des composants
+    var urlComposant = new Url("medicament", "ajax_composant_autocomplete");
+    urlComposant.autoComplete(form.keywords_composant, null, {
+      minChars: 3,
+      afterUpdateElement: function(input, selected) {
+        var form = getForm("rechercheDossierClinique");
+        $V(input, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
+        $V(form.composant, selected.get("code"));
+      }
+    });
+
+    // Autocomplete des indications
+    var urlIndication = new Url("medicament", "ajax_indication_autocomplete");
+    urlIndication.autoComplete(form.keywords_indication, null, {
+      minChars: 3,
+      afterUpdateElement: function(input, selected) {
+        var form = getForm("rechercheDossierClinique");
+        $V(input, selected.select(".view")[0].innerHTML.replace(/<em>|<\/em>/g, ''));
+        $V(form.indication, selected.get("code"));
+        $V(form.type_indication, selected.get("type"));
+      }
+    });
+
+    updateSection("consult_section");
   });
-  
-  updateSection("consult_section");
-});
 </script>
 
 <style type="text/css">
@@ -167,7 +171,7 @@ Main.add(function() {
   }
 </style>
 
-<form name="rechercheDossierClinique" method="get" action="?" target="_blank"
+<form name="rechercheDossierClinique" method="get" target="_blank"
       onsubmit="Control.Modal.close(); var url = Url.update(this, null, {openModal: true}); modal_results = url.modalObject; return false;">
   <input type="hidden" name="m" value="patients" />
   <input type="hidden" name="a" value="ajax_recherche_dossier_clinique" />
@@ -267,145 +271,158 @@ Main.add(function() {
           </tr>
            *}}
           </table>
-       </td>
-      </tr>
-      <tr>
-        <td style="width: 50%">
-          <table class="form">
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 50%">
+        <table class="form">
+          <tr>
+            <th colspan="2" class="title">
+              <input type="radio" name="section_choose" value="consult"
+              style="float: left;" checked onclick="updateSection('consult_section')"/> {{tr}}CConsultation{{/tr}}
+            </th>
+          </tr>
+          <tbody id="consult_section">
             <tr>
-              <th colspan="2" class="title">
-                <input type="radio" name="section_choose" value="consult"
-                style="float: left;" checked onclick="updateSection('consult_section')"/> {{tr}}CConsultation{{/tr}}
-              </th>
+              <th>{{mb_label object=$consult field=motif}}</th>
+              <td>{{mb_field object=$consult field=motif prop=str}}</td>
             </tr>
-            <tbody id="consult_section">
-              <tr>
-                <th>{{mb_label object=$consult field=motif}}</th>
-                <td>{{mb_field object=$consult field=motif prop=str}}</td>
-              </tr>
-              
-              <!-- champ inexistant dans la class COperation (libelle = meme nom que le champ dans CSejour) -->
-              <tr>
-                <th><label for="_rques_consult">{{tr}}CConsultation-rques{{/tr}}</label></th>
-                <td><input type="text" name="_rques_consult" value="{{$consult->_rques_consult}}" /></td>
-              </tr>
-              
-              <!-- champ inexistant dans la class COperation (rques = meme nom que le champ dans CSejour) -->
-              <tr>
-                <th><label for="_examen_consult">{{tr}}CConsultation-examen{{/tr}}</label></th>
-                <td><input type="text" name="_examen_consult" value="{{$consult->_examen_consult}}" /></td>
-              </tr>
-              
-              <tr>
-                <th>{{mb_label object=$consult field=conclusion}}</th>
-                <td>{{mb_field object=$consult field=conclusion prop=str}}</td>
-              </tr>
-            </tbody>
-            <tr>
-              <th colspan="2" class="title">
-                <input type="radio" name="section_choose" style="float: left;" value="sejour"
-                onclick="updateSection('sejour_section')" /> {{tr}}CSejour{{/tr}}
-              </th>
-            </tr>
-            <tbody id="sejour_section">
-              <tr>
-                <th>{{mb_label object=$sejour field=libelle}}</th>
-                <td>{{mb_field object=$sejour field=libelle prop=str}}</td>
-              </tr>
-              
-              <tr>
-                <th>{{mb_label object=$sejour field=type}}</th>
-                <td>{{mb_field object=$sejour field=type emptyLabel="Tous" canNull=true}}</td>
-              </tr>
-              
-              <!-- champ inexistant dans la class CSejour (rques = meme nom que le champ dans CAntecedent) -->
-              <tr>
-                <th><label for="_rques_sejour">{{tr}}CSejour-rques{{/tr}}</label></th>
-                <td><input type="text" name="_rques_sejour" value="{{$sejour->_rques_sejour}}" /></td>
-              </tr>
-              
-              <tr>
-                <th>{{mb_label object=$sejour field=convalescence}}</th>
-                <td>{{mb_field object=$sejour field=convalescence prop=str}}</td>
-              </tr>
-            </tbody>
-            
-            
-            <tr>
-              <th colspan="2" class="title">
-                <input type="radio" name="section_choose" style="float: left;" value="operation"
-                onclick="updateSection('operation_section')" /> {{tr}}COperation{{/tr}}
-              </th>
-            </tr>
-            <tbody id="operation_section">
-              <!-- champ inexistant dans la class COperation (libelle = meme nom que le champ dans CSejour) -->
-              <tr>
-                <th><label for="_libelle_interv">{{tr}}COperation-libelle{{/tr}}</label></th>
-                <td><input type="text" name="_libelle_interv" value="{{$interv->_libelle_interv}}" /></td>
-              </tr>
-              
-              <!-- champ inexistant dans la class COperation (rques = meme nom que le champ dans CSejour) -->
-              <tr>
-                <th><label for="_rques_interv">{{tr}}COperation-rques{{/tr}}</label></th>
-                <td><input type="text" name="_rques_interv" value="{{$interv->_rques_interv}}" /></td>
-              </tr>
-              
-              <tr>
-                <th>{{mb_label object=$interv field=examen}}</th>
-                <td>{{mb_field object=$interv field=examen prop=str}}</td>
-              </tr>
-              
-              <tr>
-                <th>{{mb_label object=$interv field=materiel}}</th>
-                <td>{{mb_field object=$interv field=materiel prop=str}}</td>
-              </tr>
 
-              <tr>
-                <th>{{mb_label object=$interv field=exam_per_op}}</th>
-                <td>{{mb_field object=$interv field=exam_per_op prop=str}}</td>
-              </tr>
+            <!-- champ inexistant dans la class COperation (libelle = meme nom que le champ dans CSejour) -->
+            <tr>
+              <th><label for="_rques_consult">{{tr}}CConsultation-rques{{/tr}}</label></th>
+              <td><input type="text" name="_rques_consult" value="{{$consult->_rques_consult}}" /></td>
+            </tr>
 
-              <tr>
-                <th>{{mb_label object=$interv field=codes_ccam}}</th>
-                <td>
-                  {{mb_field object=$interv field=codes_ccam size=12}} 
-                  <button class="search notext" type="button" onclick="CCAMSelector.init()">Rechercher</button>
-                  <script type="text/javascript">   
-                    CCAMSelector.init = function(){
-                      this.sForm = "rechercheDossierClinique";
-                      this.sClass = "object_class";
-                      this.sChir = "user_id";
-                      this.sView = "codes_ccam";
-                      this.pop();
-                    }
-                  </script>
-                  <br />
-                  (codes complets ou partiels séparés par des virgules)
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-        <td style="50%">
-          <table class="form">
+            <!-- champ inexistant dans la class COperation (rques = meme nom que le champ dans CSejour) -->
+            <tr>
+              <th><label for="_examen_consult">{{tr}}CConsultation-examen{{/tr}}</label></th>
+              <td><input type="text" name="_examen_consult" value="{{$consult->_examen_consult}}" /></td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$consult field=conclusion}}</th>
+              <td>{{mb_field object=$consult field=conclusion prop=str}}</td>
+            </tr>
+          </tbody>
+          <tr>
+            <th colspan="2" class="title">
+              <input type="radio" name="section_choose" style="float: left;" value="sejour"
+              onclick="updateSection('sejour_section')" /> {{tr}}CSejour{{/tr}}
+            </th>
+          </tr>
+          <tbody id="sejour_section">
+            <tr>
+              <th>{{mb_label object=$sejour field=libelle}}</th>
+              <td>{{mb_field object=$sejour field=libelle prop=str}}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$sejour field=type}}</th>
+              <td>{{mb_field object=$sejour field=type emptyLabel="Tous" canNull=true}}</td>
+            </tr>
+
+            <!-- champ inexistant dans la class CSejour (rques = meme nom que le champ dans CAntecedent) -->
+            <tr>
+              <th><label for="_rques_sejour">{{tr}}CSejour-rques{{/tr}}</label></th>
+              <td><input type="text" name="_rques_sejour" value="{{$sejour->_rques_sejour}}" /></td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$sejour field=convalescence}}</th>
+              <td>{{mb_field object=$sejour field=convalescence prop=str}}</td>
+            </tr>
+          </tbody>
+
+
+          <tr>
+            <th colspan="2" class="title">
+              <input type="radio" name="section_choose" style="float: left;" value="operation"
+              onclick="updateSection('operation_section')" /> {{tr}}COperation{{/tr}}
+            </th>
+          </tr>
+          <tbody id="operation_section">
+            <!-- champ inexistant dans la class COperation (libelle = meme nom que le champ dans CSejour) -->
+            <tr>
+              <th><label for="_libelle_interv">{{tr}}COperation-libelle{{/tr}}</label></th>
+              <td><input type="text" name="_libelle_interv" value="{{$interv->_libelle_interv}}" /></td>
+            </tr>
+
+            <!-- champ inexistant dans la class COperation (rques = meme nom que le champ dans CSejour) -->
+            <tr>
+              <th><label for="_rques_interv">{{tr}}COperation-rques{{/tr}}</label></th>
+              <td><input type="text" name="_rques_interv" value="{{$interv->_rques_interv}}" /></td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$interv field=examen}}</th>
+              <td>{{mb_field object=$interv field=examen prop=str}}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$interv field=materiel}}</th>
+              <td>{{mb_field object=$interv field=materiel prop=str}}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$interv field=exam_per_op}}</th>
+              <td>{{mb_field object=$interv field=exam_per_op prop=str}}</td>
+            </tr>
+
+            <tr>
+              <th>{{mb_label object=$interv field=codes_ccam}}</th>
+              <td>
+                {{mb_field object=$interv field=codes_ccam size=12}}
+                <button class="search notext" type="button" onclick="CCAMSelector.init()">Rechercher</button>
+                <script>
+                  CCAMSelector.init = function() {
+                    this.sForm = "rechercheDossierClinique";
+                    this.sClass = "object_class";
+                    this.sChir = "user_id";
+                    this.sView = "codes_ccam";
+                    this.pop();
+                  }
+                </script>
+                <br />
+                (codes complets ou partiels séparés par des virgules)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+      <td style="50%">
+        <table class="form">
           <tr>
             <th colspan="2" class="title">{{tr}}CPrescription{{/tr}}</th>
           </tr>
           <tr>
             <th class="category" colspan="2">
-              Produit  
+              Produit
             </th>
           </tr>
           <tr>
             <td colspan="2">
-            <input type="hidden" name="code_cis" value="{{$line_med->code_cis}}"/>
-            <input type="hidden" name="code_ucd" value="{{$line_med->code_ucd}}"/>
-            <input type="text" name="produit"
-              value="{{if $line_med->code_cis || $line_med->code_ucd}}{{$line_med->_ucd_view}}{{else}}&mdash; {{tr}}CPrescription.select_produit{{/tr}}{{/if}}" size="20"
-              style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete"
-              onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"/>
-            <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
-              </div>
+              <input type="hidden" name="code_cis" value="{{$line_med->code_cis}}"/>
+              <input type="hidden" name="code_ucd" value="{{$line_med->code_ucd}}"/>
+              <input type="text" name="produit"
+                     value="{{$line_med->_ucd_view}}"
+                     placeholder="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20"
+                     style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete"
+                     onclick="emptyProduit(); emptyLibelleProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"/>
+              <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
+            </td>
+          </tr>
+          <tr>
+            <th class="category" colspan="2">
+              Libellé de produit
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="text" name="libelle_produit"
+                     value="{{$libelle_produit}}"
+                     style="font-weight: bold; font-size: 1.3em; width: 317px;"
+                     onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();" />
             </td>
           </tr>
           <tr>
@@ -416,7 +433,7 @@ Main.add(function() {
               <input type="hidden" name="classes_atc" value="{{$classes_atc}}"/>
               <input type="text" name="keywords_atc" class="autocomplete" value="{{$keywords_atc}}"
                 style="font-weight: bold; font-size: 1.3em; width: 300px;"
-                onclick="emptyProduit(); emptyComposant(); emptyIndication(); emptyCommentaire();"/>
+                onclick="emptyProduit(); emptyLibelleProduit(); emptyComposant(); emptyIndication(); emptyCommentaire();" />
               <div id="list_atc"></div>
             </td>
           </tr>
@@ -428,8 +445,8 @@ Main.add(function() {
           <tr>
             <td colspan="2">
               <input type="hidden" name="composant" value="{{$composant}}"/>
-              <input type="text" name="keywords_composant" class="autocomplete" 
-              onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"
+              <input type="text" name="keywords_composant" class="autocomplete"
+              onclick="emptyProduit(); emptyLibelleProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"
               style="font-weight: bold; font-size: 1.3em; width: 300px;" value="{{$keywords_composant}}" />
             </td>
           </tr>
@@ -441,7 +458,7 @@ Main.add(function() {
               <input type="hidden" name="indication" value="{{$indication}}"/>
               <input type="hidden" name="type_indication" value="{{$type_indication}}"/>
               <input type="text" name="keywords_indication" class="autocomplete"
-                onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"
+                onclick="emptyProduit(); emptyLibelleProduit(); emptyATC(); emptyComposant(); emptyIndication(); emptyCommentaire();"
                 style="font-weight: bold; font-size: 1.3em; width: 300px;" value="{{$keywords_indication}}"/>
             </td>
           </tr>
@@ -451,7 +468,7 @@ Main.add(function() {
           <tr>
             <td colspan="2">
               <input type="text" name="commentaire" value="{{$commentaire}}"
-                onclick="emptyProduit(); emptyATC(); emptyComposant(); emptyIndication();"
+                onclick="emptyProduit(); emptyLibelleProduit(); emptyATC(); emptyComposant(); emptyIndication();"
                 style="font-size: 1.3em; width: 317px;"/>
             </td>
           </tr>

@@ -14,19 +14,20 @@ CApp::setMemoryLimit("768M");
 $where = array();
 $ljoin = array();
 
-$user_id            = CValue::get("user_id");
-$classes_atc        = CValue::get("classes_atc");
-$keywords_atc       = CValue::get("keywords_atc");
-$code_cis           = CValue::get("code_cis");
-$code_ucd           = CValue::get("code_ucd");
-$keywords_composant = CValue::get("keywords_composant");
-$composant          = CValue::get("composant");
+$user_id             = CValue::get("user_id");
+$classes_atc         = CValue::get("classes_atc");
+$keywords_atc        = CValue::get("keywords_atc");
+$code_cis            = CValue::get("code_cis");
+$code_ucd            = CValue::get("code_ucd");
+$libelle_produit     = CValue::get("libelle_produit");
+$keywords_composant  = CValue::get("keywords_composant");
+$composant           = CValue::get("composant");
 $keywords_indication = CValue::get("keywords_indication");
-$indication         = CValue::get("indication");
-$type_indication    = CValue::get("type_indication");
-$commentaire        = CValue::get("commentaire");
-$section            = CValue::get("section_choose");
-$export             = CValue::get("export", 0);
+$indication          = CValue::get("indication");
+$type_indication     = CValue::get("type_indication");
+$commentaire         = CValue::get("commentaire");
+$section             = CValue::get("section_choose");
+$export              = CValue::get("export", 0);
 
 CValue::setSession("produit"            , CValue::get("produit"));
 CValue::setSession("user_id"            , $user_id);
@@ -34,6 +35,7 @@ CValue::setSession("classes_atc"        , $classes_atc);
 CValue::setSession("keywords_atc"       , $keywords_atc);
 CValue::setSession("code_cis"           , $code_cis);
 CValue::setSession("code_ucd"           , $code_ucd);
+CValue::setSession("libelle_produit"    , $libelle_produit);
 CValue::setSession("keywords_composant" , $keywords_composant);
 CValue::setSession("composant"          , $composant);
 CValue::setSession("keywords_indication", $keywords_indication);
@@ -88,7 +90,16 @@ $fields = array(
   ),
 );
 
-$one_field_presc = $code_cis || $code_ucd || $classes_atc || $composant || $indication || $commentaire;
+$one_field_presc = $code_cis || $code_ucd || $libelle_produit || $classes_atc || $composant || $indication || $commentaire;
+
+$codes_cis = array();
+
+// Si la recherche concerne un produit, on recherche les codes cis correpondant
+if ($libelle_produit) {
+  $medicament = new CMedicamentProduit();
+  $produits = $medicament->searchProduitAutocomplete($libelle_produit, "100", null, 0, 0, 1, null);
+  $codes_cis = array_unique(CMbArray::pluck($produits, "code_cis"));
+}
 
 $one_field = false || $one_field_presc;
 $one_field_traitement = false;
@@ -381,7 +392,11 @@ if ($one_field_presc) {
   }
   else if ($code_ucd) {
     $whereMed[] = "prescription_line_medicament.code_ucd = '$code_ucd'".
-    $whereMix[] = "prescription_line_mix_item.code_ucd = '$code_ucd'";
+      $whereMix[] = "prescription_line_mix_item.code_ucd = '$code_ucd'";
+  }
+  elseif ($libelle_produit) {
+    $whereMed[] = "prescription_line_medicament.code_cis " . CSQLDataSource::prepareIn($codes_cis);
+    $whereMix[] = "prescription_line_mix_item.code_cis " . CSQLDataSource::prepareIn($codes_cis);
   }
   else if ($classes_atc) {
     $whereMed[] = "prescription_line_medicament.atc RLIKE '(^$classes_atc)'";
@@ -690,14 +705,14 @@ if ($export) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("one_field", $one_field);
+$smarty->assign("one_field"      , $one_field);
 $smarty->assign("one_field_presc", $one_field_presc);
-$smarty->assign("start", $start);
-$smarty->assign("user_id", $user_id);
-$smarty->assign("list_patient", $list_patient);
-$smarty->assign("count_patient", $count_patient);
-$smarty->assign("from", $from);
-$smarty->assign("to", $to);
+$smarty->assign("start"          , $start);
+$smarty->assign("user_id"        , $user_id);
+$smarty->assign("list_patient"   , $list_patient);
+$smarty->assign("count_patient"  , $count_patient);
+$smarty->assign("from"           , $from);
+$smarty->assign("to"             , $to);
 
 $smarty->display("inc_recherche_dossier_clinique_results.tpl");
 

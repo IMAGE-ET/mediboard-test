@@ -50,6 +50,8 @@ $line_med->code_ucd = CValue::getOrSession("code_ucd");
 $line_med->code_cis = CValue::getOrSession("code_cis");
 $line_med->_ucd_view = CValue::getOrSession("produit");
 
+$libelle_produit = CValue::getOrSession("libelle_produit");
+
 $classes_atc  = CValue::getOrSession("classes_atc");
 $keywords_atc = CValue::getOrSession("keywords_atc");
 
@@ -74,23 +76,24 @@ if (!CAppUI::$user->isPraticien()) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("users_list", $users_list);
-$smarty->assign("user_id", $user_id);
-$smarty->assign("patient", $patient);
-$smarty->assign("antecedent", $antecedent);
-$smarty->assign("traitement", $traitement);
-$smarty->assign("consult", $consult);
-$smarty->assign("sejour", $sejour);
-$smarty->assign("interv", $interv);
-$smarty->assign("prescription", $prescription);
-$smarty->assign("line_med", $line_med);
-$smarty->assign("classes_atc", $classes_atc);
-$smarty->assign("keywords_atc", $classes_atc);
-$smarty->assign("composant", $composant);
-$smarty->assign("keywords_composant", $keywords_composant);
-$smarty->assign("indication", $indication);
+$smarty->assign("users_list"         , $users_list);
+$smarty->assign("user_id"            , $user_id);
+$smarty->assign("patient"            , $patient);
+$smarty->assign("antecedent"         , $antecedent);
+$smarty->assign("traitement"         , $traitement);
+$smarty->assign("consult"            , $consult);
+$smarty->assign("sejour"             , $sejour);
+$smarty->assign("interv"             , $interv);
+$smarty->assign("prescription"       , $prescription);
+$smarty->assign("line_med"           , $line_med);
+$smarty->assign("libelle_produit"    , $libelle_produit);
+$smarty->assign("classes_atc"        , $classes_atc);
+$smarty->assign("keywords_atc"       , $classes_atc);
+$smarty->assign("composant"          , $composant);
+$smarty->assign("keywords_composant" , $keywords_composant);
+$smarty->assign("indication"         , $indication);
 $smarty->assign("keywords_indication", $keywords_indication);
-$smarty->assign("type_indication", $type_indication);
-$smarty->assign("commentaire", $commentaire);
+$smarty->assign("type_indication"    , $type_indication);
+$smarty->assign("commentaire"        , $commentaire);
 
 $smarty->display("vw_recherche_dossier_clinique.tpl");
