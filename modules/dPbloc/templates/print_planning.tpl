@@ -146,12 +146,12 @@
             </td>
             <td rowspan="2">
               <label>
-                <input type="radio" name="select_days" onclick="changeDate('{{$now}} 00:00:00','{{$j2}} 23:59:59');"  value="j+2"/>
+                <input type="radio" name="select_days" onclick="changeDate('{{$j2}} 00:00:00','{{$j2}} 23:59:59');"  value="j+2"/>
                 J+2
               </label>
               <br />
               <label>
-                <input type="radio" name="select_days" onclick="changeDate('{{$now}} 00:00:00','{{$j3}} 23:59:59');"  value="j+3"/>
+                <input type="radio" name="select_days" onclick="changeDate('{{$j3}} 00:00:00','{{$j3}} 23:59:59');"  value="j+3"/>
                 J+3
               </label>
               <br />
