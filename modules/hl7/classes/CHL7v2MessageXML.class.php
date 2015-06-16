@@ -419,7 +419,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $control_identifier_type_code = CValue::read($sender->_configs, "control_identifier_type_code");
 
     // Notre propre RI
-    if ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id")) {
+    if ($this->queryTextNode("CX.4/HD.1", $node) == CAppUI::conf("hl7 assigning_authority_namespace_id") ||
+        $this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id")
+    ) {
       if ($control_identifier_type_code && $this->queryTextNode("CX.5", $node) != "RI") {
         return;
       }
