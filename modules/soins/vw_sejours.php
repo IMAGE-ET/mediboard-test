@@ -123,7 +123,7 @@ if (!isset($sejours)) {
     // Chargement du service
     $service->load($service_id);
 
-    $order = "sejour.service_id, ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
+    $order = "affectation.service_id, ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
 
     // Chargement des sejours pour le service selectionné
     $ljoin = array();
