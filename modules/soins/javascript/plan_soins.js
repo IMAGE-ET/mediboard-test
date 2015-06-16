@@ -306,49 +306,52 @@ PlanSoins = {
       url.addParam("regroup_lines", PlanSoins.regroup_lines ? "1" : "0");
     }
 
-    if(object_id && object_class){
-      if(object_class == 'CPrescriptionLineMix'){
-        url.requestUpdate("line_"+object_class+"-"+object_id, function() {
-          var elt = $("line_"+object_class+"-"+object_id);
-          elt.hide();
-          PlanSoins.moveDossierSoin(elt);
-        });
+    if (object_id && object_class) {
+      var first_td, last_td;
+
+      if (object_class == 'CPrescriptionLineMix') {
+        first_td = $('first_' + object_id + "_" + object_class);
+        last_td = $('last_' + object_id + "_" + object_class);
       }
       else {
-        unite_prise = (unite_prise+"").replace(/[^a-z0-9_-]/gi, '_');
-        
-        var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-        var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+        unite_prise = (unite_prise + "").replace(/[^a-z0-9_-]/gi, '_');
 
-        // Suppression des td entre les 2 td bornes
-        var td = first_td;
-        var colSpan = 0;
-
-        var next;
-        while((next = td.next()) && (next.id != last_td.id)){
-          if(next.visible()){
-            colSpan++;
-          }
-          next.remove();
-        }
-
-        var IE9 = Prototype.Browser.IEDetail.browser == 9;
-        if (!IE9) {
-          first_td.show();
-          first_td.colSpan = colSpan;
-        }
-                
-        url.requestUpdate(first_td, {
-          insertion: Insertion.After,
-          onComplete: function(){
-            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise), false);
-            if (!IE9) {
-              first_td.hide();
-              first_td.colSpan = 1;
-            }
-          }
-        } );
+        first_td = $('first_' + object_id + "_" + object_class + "_" + unite_prise);
+        last_td = $('last_' + object_id + "_" + object_class + "_" + unite_prise);
       }
+      // Suppression des td entre les 2 td bornes
+      var td = first_td;
+      var colSpan = 0;
+
+      var next;
+      while((next = td.next()) && (next.id != last_td.id)){
+        if(next.visible()){
+          colSpan++;
+        }
+        next.remove();
+      }
+
+      var IE9 = Prototype.Browser.IEDetail.browser == 9;
+      if (!IE9) {
+        first_td.show();
+        first_td.colSpan = colSpan;
+      }
+
+      url.requestUpdate(first_td, {
+        insertion: Insertion.After,
+        onComplete: function() {
+          if (object_class == 'CPrescriptionLineMix') {
+            PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id));
+          }
+          else {
+            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise), false);
+          }
+          if (!IE9) {
+            first_td.hide();
+            first_td.colSpan = 1;
+          }
+        }
+      } );
     } else {
       if (chapitre) {
         if (chapitre == "med" ||
@@ -381,7 +384,12 @@ PlanSoins = {
       }
     }
   },
-  viewDossierSoin: function(element){
+  refreshPauseRetrait: function(line_mix_id) {
+    var url = new Url("prescription", "ajax_pause_retrait_perf");
+    url.addParam("line_mix_id", line_mix_id);
+    url.requestUpdate("pause_retrait_perf_"+line_mix_id);
+  },
+  viewDossierSoin: function(element) {
     if (PlanSoins.manual_planif) {
       var periode_visible = PlanSoins.composition_dossier[PlanSoins.nb_decalage];
       PlanSoins.toggleManualPlanif(periode_visible);

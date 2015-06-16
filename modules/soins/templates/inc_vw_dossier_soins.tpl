@@ -35,12 +35,12 @@
     $V(oForm.dateTime, dateTime);
     $V(oForm.original_dateTime, original_date);
 
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function(){
+    onSubmitFormAjax(oForm, function() {
       PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
-    } } );
+    } );
   };
 
-  refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
+  refreshDossierSoin = function(mode_dossier, chapitre, force_refresh) {
     PlanSoins.toggleAnciennete(chapitre);
     if(!window[chapitre+'SoinLoaded'] || force_refresh) {
       PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre, null, null, '{{$hide_old_lines}}', '{{$hide_line_inactive}}');
@@ -53,7 +53,7 @@
   };
 
 
-  editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
+  editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id) {
     var url = new Url("prescription", "edit_perf_dossier_soin");
     url.addParam("prescription_line_mix_id", prescription_line_mix_id);
     url.addParam("date", date);
@@ -62,29 +62,29 @@
     url.popup(800,600,"Pefusion");
   };
 
-  submitPosePerf = function(oFormPerf){
-    if(confirm('Etes vous sur de vouloir poser la perfusion ?')){
+  submitPosePerf = function(oFormPerf) {
+    if (confirm('Etes vous sur de vouloir poser la perfusion ?')) {
       $V(oFormPerf.date_pose, 'current');
       $V(oFormPerf.time_pose, 'current');
-      submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){
+      onSubmitFormAjax(oFormPerf, function() {
         PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-      } } )
+        PlanSoins.refreshPauseRetrait(oFormPerf.prescription_line_mix_id.value);
+      } );
     }
   };
-
 
   submitRetraitPerf = function(oFormPerf){
-    if(confirm('Etes vous sur de vouloir retirer définitivement la perfusion ?')){
+    if (confirm('Etes vous sur de vouloir retirer définitivement la perfusion ?')) {
       $V(oFormPerf.date_retrait, 'current');
       $V(oFormPerf.time_retrait, 'current');
-      submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){
-        PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-      } } )
+      onSubmitFormAjax(oFormPerf, function() {
+        PlanSoins.loadTraitement('{{$sejour->_id}}', '{{$date}}', PlanSoins.nb_decalage, '{{$mode_dossier}}', oFormPerf.prescription_line_mix_id.value, 'CPrescriptionLineMix', '');
+        PlanSoins.refreshPauseRetrait(oFormPerf.prescription_line_mix_id.value);
+      });
     }
   };
 
-
-  viewLegend = function(){
+  viewLegend = function() {
     var url = new Url("dPhospi", "vw_legende_dossier_soin");
     url.modal({width: 400, height: 200});
   };
