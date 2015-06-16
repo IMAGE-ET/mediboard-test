@@ -1,21 +1,15 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
-if (CModule::getActive("dPprescription")) {
-  CPrescriptionLine::$contexte_recent_modif = 'ssr';
-}
-
 $sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement du sejour
@@ -45,14 +39,19 @@ foreach ($sejours as $_sejour) {
 
   $prescription = $_sejour->loadRefPrescriptionSejour();
   $prescription->loadRefsLinesElementByCat();
-  $prescription->countRecentModif();
+  foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines) {
+    foreach ($_lines as $_line) {
+      /* @var CPrescriptionLineElement $_line*/
+      $_line->getRecentModification();
+    }
+  }
 }
 
 $colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("sejour", $sejour);
-$smarty->assign("sejours", $sejours);
-$smarty->assign("colors", $colors);
+$smarty->assign("sejour"  , $sejour);
+$smarty->assign("sejours" , $sejours);
+$smarty->assign("colors"  , $colors);
 $smarty->display("inc_vw_sejours_patient.tpl");

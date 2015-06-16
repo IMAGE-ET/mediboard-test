@@ -1,21 +1,15 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
-if (CModule::getActive("dPprescription")) {
-  CPrescriptionLine::$contexte_recent_modif = 'ssr';
-}
-
 $group_id = CGroups::loadCurrent()->_id;
 
 $sejour_id = CValue::getOrSession("sejour_id");
@@ -77,6 +71,7 @@ if ($sejour->_id) {
     /** @var CPrescriptionLineElement $_lines */
     $_lines = $line->loadMatchingList("debut ASC");
     foreach ($_lines as $_line) {
+      $line->getRecentModification();
       $lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
     }
   }

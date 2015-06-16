@@ -140,7 +140,7 @@ submitSSR = function(){
   csarr_count += oFormEvenementSSR.select('input.checkbox-other-csarrs').length;
 
   if (csarr_count == 0) {
-    alert("Veuillez selectionner au moins un code CsARR ou CsARR");
+    alert("Veuillez selectionner au moins un code CsARR");
     return false;
   }
 
@@ -436,9 +436,9 @@ Main.add(function(){
                   </span>
 
                   <label>
-                    {{if $_line->_recent_modification}} 
-                    <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
-                    {{/if}}
+                    <div>
+                      {{mb_include module=ssr template=vw_line_alerte_ssr line=$_line include_form=0 name_form="activite" see_alertes=0}}
+                    </div>
 
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
                            onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); hideCodes();" />
@@ -672,6 +672,18 @@ Main.add(function(){
   </form>
 </div>
 
+<div class="activite">
+{{foreach from=$lines_by_element item=_lines_by_chap}}
+  {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+    {{foreach from=$_lines_by_cat item=_lines_by_elt name=category}}
+      {{foreach from=$_lines_by_elt item=_line name=elts}}
+        {{mb_include module=ssr template=vw_line_alerte_ssr line=$_line include_form=0 see_alertes=1 name_form="activite"}}
+      {{/foreach}}
+    {{/foreach}}
+  {{/foreach}}
+{{/foreach}}
+</div>
+
 <div id="outils" style="display: none;">
 
   <script type="text/javascript">
@@ -893,5 +905,4 @@ Main.add(function(){
       </td>
     </tr>
   </table>
-
 </div>

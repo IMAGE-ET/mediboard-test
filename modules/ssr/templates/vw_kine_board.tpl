@@ -1,8 +1,9 @@
 {{mb_script module=ssr script=planning}}
 {{mb_script module=ssr script=planification}}
 {{mb_script module=ssr script=modal_validation}}
+{{mb_script module=system script=alert}}
 
-<script type="text/javascript">
+<script>
 
 PlanningEvent.onDblClic = function(event) {
   var sejour_id = event.className.match(/CSejour-([0-9]+)/)[1];

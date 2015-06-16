@@ -77,10 +77,10 @@
 			{{else}}
 			<tr>
 				<th>
-          {{if $_line->_recent_modification}} 
-          <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
-          {{/if}}
-          
+					{{if $can_edit_prescription}}
+						{{mb_include module=ssr template=vw_line_alerte_ssr line=$_line}}
+					{{/if}}
+
 					{{if !@$offline && $can_edit_prescription}}
 					<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">
 					  {{tr}}Edit{{/tr}}
@@ -98,11 +98,10 @@
         </td>
 	    </tr>
 	    {{/if}}
-	{{/foreach}}
-{{/foreach}}
-
+    {{/foreach}}
+  {{/foreach}}
 {{else}}
-<tr>
-	<td colspan="2">&nbsp;</td>
-</tr>
+  <tr>
+    <td colspan="2">&nbsp;</td>
+  </tr>
 {{/if}}

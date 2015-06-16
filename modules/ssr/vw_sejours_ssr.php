@@ -151,7 +151,12 @@ foreach ($sejours as $_sejour) {
 
   // Modification des prescription
   if ($prescription = $_sejour->_ref_prescription_sejour) {
-    $prescription->countFastRecentModif();
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $prescription->_count_alertes = $prescription->countAlertsNotHandled("medium");
+    }
+    else {
+      $prescription->countFastRecentModif();
+    }
   }
 
   // Praticien demandeur

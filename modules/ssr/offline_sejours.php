@@ -56,7 +56,12 @@ foreach ($sejours as $_sejour) {
   // Prescription
   if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
     $prescription->loadRefsLinesElementByCat();
-    $prescription->countFastRecentModif();
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $prescription->_count_alertes = $prescription->countAlertsNotHandled("medium");
+    }
+    else {
+      $prescription->countFastRecentModif();
+    }
   }
 
   // Chargement du planning du sejour

@@ -1,4 +1,20 @@
+{{mb_script module=system script=alert}}
 <script>
+  function compteurAlerte(level, prescription_guid) {
+    var url = new Url("prescription", "ajax_count_alerte", "raw");
+    url.addParam("prescription_guid", prescription_guid);
+    url.requestJSON(function(count) {
+      var span_ampoule = $('span-icon-alert-'+level+'-'+prescription_guid);
+      if (count[level]) {
+        span_ampoule.down('span').innerHTML = count[level];
+      }
+      else {
+        span_ampoule.down('img').remove();
+        span_ampoule.remove();
+      }
+    });
+  }
+
 printOffline = function(element) {
   var elements = [element];
   
@@ -122,9 +138,9 @@ printOffline = function(element) {
   {{assign var=sejour_id value=$_sejour->_id}}
   {{assign var=ssr_class value=""}}
   {{if !$_sejour->entree_reelle}}
-  {{assign var=ssr_class value=ssr-prevu}}
+    {{assign var=ssr_class value=ssr-prevu}}
   {{elseif $_sejour->sortie_reelle}}
-  {{assign var=ssr_class value=ssr-termine}}
+    {{assign var=ssr_class value=ssr-termine}}
   {{/if}}
 
   <tr class="{{$ssr_class}}">
@@ -149,9 +165,9 @@ printOffline = function(element) {
 
     {{assign var=distance_class value=ssr-far}}
     {{if $_sejour->_entree_relative == "-1"}}
-    {{assign var=distance_class value=ssr-close}}
+      {{assign var=distance_class value=ssr-close}}
     {{elseif $_sejour->_entree_relative == "0"}}
-    {{assign var=distance_class value=ssr-today}}
+      {{assign var=distance_class value=ssr-today}}
     {{/if}}
     <td class="{{$distance_class}}">
       {{mb_value object=$_sejour field=entree format=$conf.date}}
@@ -160,9 +176,9 @@ printOffline = function(element) {
 
     {{assign var=distance_class value=ssr-far}}
     {{if $_sejour->_sortie_relative == "1"}}
-    {{assign var=distance_class value=ssr-close}}
+      {{assign var=distance_class value=ssr-close}}
     {{elseif $_sejour->_sortie_relative == "0"}}
-    {{assign var=distance_class value=ssr-today}}
+      {{assign var=distance_class value=ssr-today}}
     {{/if}}
     <td class="{{$distance_class}}">
       {{mb_value object=$_sejour field=sortie format=$conf.date}}
@@ -221,10 +237,16 @@ printOffline = function(element) {
       <td colspan="2" style="text-align: center;">
         {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
         {{if $prescription && $prescription->_id}}
-          {{if $prescription->_count_fast_recent_modif}}
-            <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+          {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
+            {{assign var=prescription_guid value=$prescription->_guid}}
+            <span id="span-icon-alert-medium-{{$prescription_guid}}">
+              {{mb_include module=system template=inc_icon_alerts object=$prescription callback="function() {compteurAlerte('medium', '$prescription_guid')}" nb_alerts=$prescription->_count_alertes}}
+            </span>
           {{else}}
-            <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+            {{if $prescription->_count_fast_recent_modif}}
+              <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+              {{mb_include module=system template=inc_vw_counter_tip count=$prescription->_count_fast_recent_modif}}
+            {{/if}}
           {{/if}}
         {{/if}}
       </td>

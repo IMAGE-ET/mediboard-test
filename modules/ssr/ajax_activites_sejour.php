@@ -1,23 +1,17 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
-
 $sejour_id = CValue::get("sejour_id");
 $date      = CValue::getOrSession("date", CMbDT::date());
-
-// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
-if (CModule::getActive("dPprescription")) {
-  CPrescriptionLine::$contexte_recent_modif = 'ssr';
-}
 
 // Sejour SSR
 $sejour = new CSejour();

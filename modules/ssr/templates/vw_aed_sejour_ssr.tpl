@@ -1,16 +1,7 @@
-{{* $Id:$ *}}
-
-{{*
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7948 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_script module="dPplanningOp" script="protocole_selector"}}
+{{mb_script module=system script=alert}}
 
 {{if "dPmedicament"|module_active}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
@@ -25,7 +16,7 @@
 {{mb_include module=ssr template=inc_form_sejour_ssr}}
 
 {{if $sejour->_id && $can->read}}
-<script type="text/javascript">
+<script>
   
 Main.add(function() {
   var tabs = Control.Tabs.create('tab-sejour', true);

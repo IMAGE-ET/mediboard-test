@@ -1,26 +1,19 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
-
 CCanDo::checkEdit();
-
-// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
-if (CModule::getActive("dPprescription")) {
-  CPrescriptionLine::$contexte_recent_modif = 'ssr';
-}
-
-$mode = CValue::get("mode", "count");
-$date    = CValue::getOrSession("date", CMbDT::date());
-$kine_id = CValue::getOrSession("kine_id");
-$hide_noevents = CValue::getOrSession("hide_noevents");
+$mode           = CValue::get("mode", "count");
+$date           = CValue::getOrSession("date", CMbDT::date());
+$kine_id        = CValue::getOrSession("kine_id");
+$hide_noevents  = CValue::getOrSession("hide_noevents");
 
 $mediuser = new CMediusers();
 $mediuser->load($kine_id);
@@ -28,7 +21,7 @@ $mediuser->load($kine_id);
 $planning = new CPlanningWeek($date);
 
 // Sejour SSR
-$sejour = new CSejour;
+$sejour = new CSejour();
 $counts = array();
 
 /** @var CSejour[] $sejours */
@@ -190,12 +183,17 @@ foreach ($sejours as $_sejour) {
   // Modification des prescription
   if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
     $prescription->loadRefsLinesElementByCat();
-    $prescription->countRecentModif();
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $prescription->_count_alertes = $prescription->countAlertsNotHandled("medium");
+    }
+    else {
+      $prescription->countFastRecentModif();
+    }
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("sejours", $sejours);
-$smarty->assign("mode", $mode);
+$smarty->assign("sejours" , $sejours);
+$smarty->assign("mode"    , $mode);
 $smarty->display("inc_board_list_sejours.tpl");
