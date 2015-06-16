@@ -414,7 +414,7 @@
           </tr>
           <tr>
             <th class="category" colspan="2">
-              Libellé de produit
+              Libellé de spécialité
             </th>
           </tr>
           <tr>
