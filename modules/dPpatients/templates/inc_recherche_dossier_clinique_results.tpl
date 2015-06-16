@@ -169,7 +169,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td class="empty" colspan="5">
+      <td class="empty" colspan="9">
         Aucun résultat
       </td>
     </tr>
