@@ -222,7 +222,7 @@ submitSSR = function(){
     $V(oFormEvenementSSR._heure_fin_da, '');
     $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
     $V(oFormEvenementSSR.seance_collective_id, '');
-    $V(oFormEvenementSSR.type_seance, '');
+    $V(oFormEvenementSSR.type_seance, 'dediee');
     $$("input[name='type_seance']").each(function(input){
       input.disabled = false;
     });
