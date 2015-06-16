@@ -1,4 +1,4 @@
-{{mb_script module="cabinet" script="consultation" ajax=true}}
+{{mb_script module=cabinet script=edit_consultation}}
 
 {{mb_default var=patient_id value=""}}
 {{mb_default var=sejour_id value=""}}

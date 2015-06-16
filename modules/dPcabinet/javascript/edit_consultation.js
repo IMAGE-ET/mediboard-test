@@ -123,5 +123,18 @@ Consultation = window.Consultation || {
   useModal: function() {
     this.edit    = this.editModal;
     this.editRDV = this.editRDVModal;
+  },
+
+  openConsultImmediate: function(patient_id, sejour_id, operation_id) {
+    new Url("cabinet", "ajax_create_consult_immediate")
+      .addParam("patient_id"  , patient_id)
+      .addParam("sejour_id"   , sejour_id)
+      .addParam("operation_id", operation_id)
+      .requestModal(500, 200);
+  },
+
+  submitAndCallbackConsultImmediate: function(form, callback) {
+    $V(form.callback, callback);
+    return onSubmitFormAjax(form);
   }
 };
