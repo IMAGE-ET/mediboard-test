@@ -134,7 +134,7 @@ if (!isset($sejours)) {
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
     $where["sejour.praticien_id"] = CSQLDataSource::prepareIn(array_keys($praticiens), $praticien_id);
-    $order = "sejour.service_id, ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
+    $order = "affectation.service_id, ISNULL(chambre.rank), chambre.rank, chambre.nom, ISNULL(lit.rank), lit.rank, lit.nom";
 
     if ($_type_admission) {
       $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp', 'ssr')" : "= '$_type_admission'";
