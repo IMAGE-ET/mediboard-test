@@ -15,9 +15,6 @@
         <a href="#" onclick="window.print()">
           Sorties {{tr}}CSejour.type.{{$type}}{{/tr}}
           du {{$date|date_format:$conf.longdate}} ({{$total}} sorties)
-          {{if $service->_id}}
-            &mdash; {{$service->_view}}
-          {{/if}}
         </a>
       </h1>
     </th>
