@@ -9,7 +9,7 @@
  * @link       http://www.mediboard.org
 *}}
 
-<form name="edit-constant-{{$constant->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {Control.Modal.close(); loadConstants.curry();}});">
+<form name="edit-constant-{{$constant->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {loadConstants(); Control.Modal.close(); }});">
   {{mb_class object=$constant}}
   {{mb_key object=$constant}}
 
@@ -19,7 +19,7 @@
   {{mb_field object=$constant field=context_class hidden=1}}
   {{mb_field object=$constant field=context_id hidden=1}}
   {{mb_field object=$constant field=patient_id hidden=1}}
-  <input type="hidden" name="del" value="1"/>
+  <input type="hidden" name="del" value="0"/>
 
   <table class="tbl">
     <tr>
@@ -55,6 +55,10 @@
               {{/foreach}}
             {{else}}
               {{mb_field object=$constant field=$_constant size="3"}}
+              {{* Ugly fix for adding the formfield _poids_g. Without this field, it will be impossible to modify the weight *}}
+              {{if $_constant == 'poids'}}
+                {{mb_field object=$constant field='_poids_g' hidden=true}}
+              {{/if}}
             {{/if}}
           </td>
 
@@ -76,7 +80,7 @@
     </tr>
     <tr>
       <td colspan="3" style="text-align: center;">
-        <button class="modify singleclick" onclick="this.form.onsubmit();">
+        <button class="modify singleclick"  type=submit">
           {{tr}}Save{{/tr}}
         </button>
         <button class="trash" type="button" onclick="$V(this.form.del, 1); this.form.onsubmit();">

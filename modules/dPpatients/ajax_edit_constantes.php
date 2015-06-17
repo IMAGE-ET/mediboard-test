@@ -20,6 +20,7 @@ $constant->load($constant_id);
 $constant->loadRefContext();
 $constant->loadRefPatient();
 $constant->updateFormFields();
+ml($constant->_poids_g);
 
 $smarty = new CSmartyDP();
 $smarty->assign('constant', $constant);
