@@ -11,6 +11,7 @@
       var url = new Url('salleOp', 'ajax_edit_checklist');
       url.addParam('date', '{{$date}}');
       url.addParam('salle_id', salle_id);
+      url.addParam('bloc_id', 0);
       url.addParam('type', 'ouverture_salle');
       url.requestModal();
       url.modalObject.observe("afterClose", function(){
