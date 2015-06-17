@@ -566,6 +566,21 @@ abstract class CMbArray {
   }
 
   /**
+   * Collection natural sort utility with diacritic
+   *
+   * @param array $array The array to sort
+   *
+   * @return array
+   */
+  static function naturalSort(&$array) {
+    usort(
+      $array, function ($a, $b) {
+        return strnatcasecmp(CMbString::removeDiacritics($a), CMbString::removeDiacritics($b));
+      }
+    );
+  }
+
+  /**
    * A recursive version of array_search (works for multidimensional array).
    * The result is an array reproducing the structure of the haystack
    *

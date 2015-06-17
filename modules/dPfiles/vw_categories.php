@@ -20,10 +20,16 @@ $class              = CValue::getOrSession("class");
 
 $listClass = CApp::getChildClasses();
 
+$classes = array();
+foreach ($listClass as $key => $_class) {
+  $classes[$_class] = CAppUI::tr($_class);
+}
+CMbArray::naturalSort($classes);
+
 $smarty = new CSmartyDP();
 $smarty->assign("category_id"       , $category_id);
 $smarty->assign("page"              , $page);
-$smarty->assign("listClass"         , $listClass);
+$smarty->assign("listClass"         , $classes);
 $smarty->assign("filter"            , $filter);
 $smarty->assign("class"             , $class);
 $smarty->assign("eligible_file_view", $eligible_file_view);

@@ -39,7 +39,7 @@
                       <option value="">&mdash; {{tr}}All{{/tr}}</option>
                       {{foreach from=$listClass item=_class}}
                         <option value="{{$_class}}" {{if $_class == $class}}selected{{/if}}>
-                          {{tr}}{{$_class}}{{/tr}}
+                          {{$_class}}
                         </option>
                       {{/foreach}}
                     </select>
