@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -12,18 +11,20 @@
  */
 
 CCanDo::checkRead();
+$date           = CValue::get("date", CMbDT::date());
+$type           = CValue::get("type");
+$services_ids   = CValue::getOrSession("services_ids");
+$period         = CValue::get("period");
+$group_by       = CValue::get("group_by_prat", true);
+$order_by       = CValue::get("order_by", "");
+$enabled_service= CValue::getOrSession("active_filter_services", 0);
 
-$date       = CValue::get("date", CMbDT::date());
-$type       = CValue::get("type");
-$service_id = CValue::get("service_id");
-$period     = CValue::get("period");
-$group_by   = CValue::get("group_by_prat", true);
-$order_by   = CValue::get("order_by", "");
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $date_min = $date;
 $date_max = CMbDT::date("+ 1 DAY", $date);
-$service  = new CService();
-$service->load($service_id);
 $group = CGroups::loadCurrent();
 
 if ($period) {
@@ -57,9 +58,10 @@ else {
 $ljoin             = array();
 $ljoin["users"]    = "users.user_id = sejour.praticien_id";
 $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
-if ($service->_id) {
-  $ljoin["affectation"]            = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $where["affectation.service_id"] = "= '$service->_id'";
+// Filtre sur les services
+if (count($services_ids) && $enabled_service) {
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
 
 switch ($order_by) {
@@ -109,7 +111,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejours"   , $sejours);
 $smarty->assign("date"      , $date);
 $smarty->assign("type"      , $type);
-$smarty->assign("service"   , $service);
 $smarty->assign("listByPrat", $listByPrat);
 $smarty->assign("group_by"  , $group_by);
 $smarty->assign("total"     , count($sejours));
