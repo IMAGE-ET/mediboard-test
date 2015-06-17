@@ -67,7 +67,8 @@
     edit: function (bloc_id, date, type) {
       var url = new Url('salleOp', 'ajax_edit_checklist');
       url.addParam('date', date);
-      url.addParam('bloc_id', bloc_id);
+      url.addParam('bloc_id' , bloc_id);
+      url.addParam('salle_id', 0);
       url.addParam('type', type);
       url.requestModal();
       url.modalObject.observe("afterClose", function () {

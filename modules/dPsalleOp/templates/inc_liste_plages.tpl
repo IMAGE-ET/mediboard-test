@@ -26,6 +26,7 @@
       var url = new Url('salleOp', 'ajax_edit_checklist');
       url.addParam('date'    , date);
       url.addParam('salle_id', salle_id);
+      url.addParam('bloc_id', 0);
       url.addParam('type', type);
       url.requestModal();
       url.modalObject.observe("afterClose", function(){
@@ -113,7 +114,7 @@
       </tr>
     {{/if}}
 
-    {{if $require_check_list_close && $date_close_checklist|date_format:$conf.date != $date|date_format:$conf.date}}
+    {{if $require_check_list_close}}
       <tr>
         <td colspan="2" class="button">
           <button class="checklist" type="button" onclick="EditCheckList.edit('{{$salle->_id}}', '{{$date}}', 'fermeture_salle');">Fermeture de salle</button>
