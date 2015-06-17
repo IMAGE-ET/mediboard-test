@@ -268,12 +268,14 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
           $NDA = $sejour->_NDA;
           if (($build_PID_18 == "sejour_id") && !$sejour->_NDA) {
             $data[] = array(
-              $sejour->_id,
-              null,
-              null,
-              // PID-3-4 Autorité d'affectation
-              $this->getAssigningAuthority("mediboard"),
-              "RI"
+              array(
+                $sejour->_id,
+                null,
+                null,
+                // PID-3-4 Autorité d'affectation
+                $this->getAssigningAuthority("mediboard"),
+                "RI"
+              )
             );
 
             break;
