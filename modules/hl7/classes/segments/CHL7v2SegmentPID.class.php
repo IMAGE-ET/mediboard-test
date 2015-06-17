@@ -275,6 +275,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
               $this->getAssigningAuthority("mediboard"),
               "RI"
             );
+
+            break;
           }
 
           if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
