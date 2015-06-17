@@ -1,6 +1,10 @@
 {{assign var=merge_only_admin value="CAppUI::conf"|static_call:"dPpatients identitovigilance merge_only_admin":"CGroups-$g"}}
 
-<tr class="{{if $patient->_id == $_patient->_id}}selected{{/if}} {{if $_patient->deces != null}}hatching{{/if}}">
+<tr class="patientFile
+  {{if $patient->_id == $_patient->_id && !$board}}selected{{/if}}
+  {{if $_patient->deces != null}}hatching{{/if}}
+  "
+  id="patientFile-{{$_patient->_guid}}">
   {{if (!$merge_only_admin || $can->admin) && $can->edit || $conf.dPpatients.CPatient.show_patient_link}}
     <td style="text-align: center;">
       <input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" class="merge"
@@ -63,7 +67,11 @@
           {{tr}}Show{{/tr}}
         </a>
       {{else}}
-        <button type="button" class="right notext" onclick="TdBTamm.loadTdbPatient('{{$_patient->_id}}');">
+        <button type="button" class="right notext"
+                onclick="
+                  TdBTamm.loadTdbPatient('{{$_patient->_id}}');
+                  TdBTamm.changeCurrentPat('patientFile-{{$_patient->_guid}}')
+                  ">
           {{tr}}Show{{/tr}}
         </button>
       {{/if}}
