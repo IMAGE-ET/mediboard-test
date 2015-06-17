@@ -4015,6 +4015,26 @@ class CSejour extends CFacturable implements IPatientRelated {
       $template->addListProperty("Sejour - Régime", $regimes);
     }
 
+    if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
+      $liaisons_j = $dates = $list_souhaits = array();
+
+      self::getIntervallesPrestations($liaisons_j, $dates);
+      foreach ($liaisons_j as $prestation_id => $_liaisons) {
+        foreach ($_liaisons as $date => $_liaison) {
+          if (!$_liaison->item_souhait_id) {
+            continue;
+          }
+          $_item_souhait = $_liaison->loadRefItem();
+          $_sous_item = $_liaison->loadRefSousItem();
+          $dates_liaison = $dates[$_liaison->_id];
+          $list_souhaits[] = "Du " . CMbDT::dateToLocale($dates_liaison["debut"]) . " au " . CMbDT::dateToLocale($dates_liaison["fin"]) . " : "
+                           . ($_sous_item->_id ? $_sous_item->nom : $_item_souhait->nom);
+        }
+      }
+
+      $template->addListProperty("Sejour - Prestations souhaitées", $list_souhaits);
+    }
+
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Sejour");
     }
@@ -4592,29 +4612,12 @@ class CSejour extends CFacturable implements IPatientRelated {
     return null;
   }
 
-  /**
-   * Charge les items de prestations souhaités et réalisés
-   *
-   * @return CItemPrestation[]
-   */
-  function getPrestations() {
-    $this->_ref_prestations = array();
-
+  function getIntervallesPrestations(&$liaisons = array(), &$dates) {
     /** @var CItemLiaison[] $items_liaisons */
     $items_liaisons = $this->loadBackRefs("items_liaisons", "date");
 
-    CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
-    CMbObject::massLoadFwdRef($items_liaisons, "item_realise_id");
-
-
-    $date_temp = CMbDT::date($this->entree);
-    $dates     = array();
-    while ($date_temp <= CMbDT::date($this->sortie)) {
-      $dates[$date_temp] = '';
-      $date_temp         = CMbDT::date("+1 day", $date_temp);
-    }
-
-    $liaisons_j = array();
+    CStoredObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
+    CStoredObject::massLoadFwdRef($items_liaisons, "item_realise_id");
 
     foreach ($items_liaisons as $_item_liaison) {
       $_item_souhait = $_item_liaison->loadRefItem();
@@ -4629,15 +4632,12 @@ class CSejour extends CFacturable implements IPatientRelated {
         );
       }
       else {
-        $liaisons_j[$_item_realise->object_id ?: $_item_souhait->object_id][$_item_liaison->date] = $_item_liaison;
+        $liaisons[$_item_realise->object_id ?: $_item_souhait->object_id][$_item_liaison->date] = $_item_liaison;
       }
     }
 
-    $dates = array();
-
-
     // Calcul des dates de début et fin par liaison
-    foreach ($liaisons_j as $prestation_id => $_liaisons) {
+    foreach ($liaisons as $prestation_id => $_liaisons) {
       $last_liaison = end($_liaisons);
 
       unset($prev_liaison_id);
@@ -4663,7 +4663,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Dans le cas de liaisons identiques qui se suivent, on les fusionne
     // Résoud le cas des liaisons avec sous-item de niveau nuit
-    foreach ($liaisons_j as $prestation_id => $_liaisons) {
+    foreach ($liaisons as $prestation_id => $_liaisons) {
       foreach ($_liaisons as $date => $_liaison) {
         if (isset($_save_liaison)) {
           if (($_save_liaison->item_souhait_id == $_liaison->item_souhait_id) &&
@@ -4675,7 +4675,7 @@ class CSejour extends CFacturable implements IPatientRelated {
             if (CMbDT::daysRelative($old_fin, $new_debut) == 1 || CMbDT::daysRelative($old_fin, $new_debut) == 0) {
               $dates[$_save_liaison->_id]["fin"] = $dates[$_liaison->_id]["fin"];
               unset($dates[$_liaison->_id]);
-              unset($liaisons_j[$prestation_id][$date]);
+              unset($liaisons[$prestation_id][$date]);
               continue;
             }
           }
@@ -4683,6 +4683,19 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_save_liaison = $_liaison;
       }
     }
+  }
+
+  /**
+   * Charge les items de prestations souhaités et réalisés
+   *
+   * @return CItemPrestation[]
+   */
+  function getPrestations() {
+    $this->_ref_prestations = array();
+
+    $liaisons_j = $dates = array();
+
+    self::getIntervallesPrestations($liaisons_j, $dates);
 
     // Calcul du niveau de réalisation (_quantite)
     foreach ($liaisons_j as $prestation_id => $_liaisons) {
