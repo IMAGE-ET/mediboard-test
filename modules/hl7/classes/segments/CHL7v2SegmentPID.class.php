@@ -258,18 +258,30 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
 
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      switch ($receiver->_configs["build_PID_18"]) {
+      switch ($build_PID_18 = $receiver->_configs["build_PID_18"]) {
         case 'normal':
         case 'simple':
+        case 'sejour_id':
           $sejour = $this->sejour;
           $sejour->loadNDA($group->_id);
 
           $NDA = $sejour->_NDA;
+          if (($build_PID_18 == "sejour_id") && !$sejour->_NDA) {
+            $data[] = array(
+              $sejour->_id,
+              null,
+              null,
+              // PID-3-4 Autorité d'affectation
+              $this->getAssigningAuthority("mediboard"),
+              "RI"
+            );
+          }
+
           if (!$sejour->_NDA && !CValue::read($receiver->_configs, "send_not_master_NDA")) {
             $NDA = "===NDA_MISSING===";
           }
 
-          if ($receiver->_configs["build_PID_18"] == "simple") {
+          if ($build_PID_18 == "simple") {
             $data[] = $NDA;
           }
           else {

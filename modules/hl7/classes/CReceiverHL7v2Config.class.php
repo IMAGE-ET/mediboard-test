@@ -342,7 +342,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PID_6"]    = "enum list|nom_naissance|none default|none";
     $props["build_PID_11"]   = "enum list|simple|multiple default|multiple";
     $props["build_PID_13"]   = "enum list|simple|multiple default|multiple";
-    $props["build_PID_18"]   = "enum list|normal|simple|none default|normal";
+    $props["build_PID_18"]   = "enum list|normal|simple|sejour_id|none default|normal";
     $props["build_PID_19"]   = "enum list|matricule|none default|none";
     $props["build_PID_31"]   = "enum list|avs|none default|none";
 

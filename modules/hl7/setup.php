@@ -1495,7 +1495,13 @@ class CSetuphl7 extends CSetup {
                 ADD `associate_category_to_a_file` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.19";
+    $this->makeRevision("1.19");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                CHANGE `build_PID_18` `build_PID_18` ENUM ('normal','simple', 'sejour_id', 'none') DEFAULT 'normal';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.20";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
