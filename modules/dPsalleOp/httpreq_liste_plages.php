@@ -17,7 +17,8 @@ $operation_id  = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 
 // Récuperation du service par défaut dans les préférences utilisateur
-$group_id = CGroups::loadCurrent()->_id;
+$group = CGroups::loadCurrent();
+$group_id = $group->_id;
 $default_salles_id = CAppUI::pref("default_salles_id");
 // Récuperation de la salle à afficher par défaut
 $default_salle_id = "";
@@ -99,7 +100,7 @@ if ($salle->cheklist_man) {
 // Checklist_fermeture bloc
 $date_close_checklist = null;
 $currUser = CMediusers::get();
-$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active", $group_id) && $date >= CMbDT::date() && !$currUser->isPraticien();
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active", $group) && $date >= CMbDT::date() && !$currUser->isPraticien() ? 1 : 0;
 
 if ($require_check_list) {
   list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date, "fermeture_salle");
