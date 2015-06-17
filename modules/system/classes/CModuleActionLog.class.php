@@ -69,12 +69,10 @@ class CModuleActionLog extends CStoredObject {
       VALUES \n$values
       ON DUPLICATE KEY UPDATE $updates";
 
-    CSQLDataSource::$trace=true;
     $ds = $self->_spec->ds;
     if (!$ds->exec($query)) {
       return $ds->error();
     }
-    CSQLDataSource::$trace=false;
 
     return null;
   }
@@ -140,7 +138,7 @@ class CModuleActionLog extends CStoredObject {
     }
 
     // Buffer logs into file
-    $buffer = CAppUI::getTmpPath("$class-log.buffer");
+    $buffer = CAppUI::getTmpPath("$class.buffer");
     foreach ($logs as $_log) {
       file_put_contents($buffer, serialize($_log) . PHP_EOL, FILE_APPEND);
     }
