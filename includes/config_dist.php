@@ -43,12 +43,13 @@ $dPconfig["debug"]             = "1";
 $dPconfig["readonly"]          = "0";
 
 // Logging
-$dPconfig["log_js_errors"]            = "1";
-$dPconfig["log_datasource_metrics"]   = "1";
-$dPconfig["log_access"]               = "1";
-$dPconfig["human_long_request_level"] = "10";
-$dPconfig["bot_long_request_level"]   = "100";
-$dPconfig["error_logs_in_db"]         = "0";
+$dPconfig["log_js_errors"]              = "1";
+$dPconfig["log_datasource_metrics"]     = "1";
+$dPconfig["log_access"]                 = "1";
+$dPconfig["access_log_buffer_lifetime"] = "100";
+$dPconfig["human_long_request_level"]   = "10";
+$dPconfig["bot_long_request_level"]     = "100";
+$dPconfig["error_logs_in_db"]           = "0";
 
 // Shared memory
 $dPconfig["shared_memory"]             = "none";

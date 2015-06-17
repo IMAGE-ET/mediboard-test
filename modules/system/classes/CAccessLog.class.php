@@ -12,16 +12,19 @@
 /**
  * Access Log
  */
-class CAccessLog extends CMbObject {
+class CAccessLog extends CModuleActionLog {
   public $accesslog_id;
-
   // DB Fields
+
+  // log unique logical key fields (signature)
   public $module_action_id;
   public $period;
+  public $bot;
+  public $aggregate;
+
+  // Log data fields
   public $hits;
   public $duration;
-  //public $session_wait;
-  //public $session_read;
   public $processus;
   public $processor;
   public $request;
@@ -31,23 +34,23 @@ class CAccessLog extends CMbObject {
   public $errors;
   public $warnings;
   public $notices;
-  public $aggregate;
-  public $bot;
+  //public $session_wait;
+  //public $session_read;
 
   // Form fields
-  public $_average_hits = 0;
-  public $_average_duration = 0;
-  //public $_average_session_wait = 0;
-  //public $_average_session_read = 0;
-  public $_average_processus = 0;
-  public $_average_processor = 0;
-  public $_average_request = 0;
-  public $_average_nb_requests = 0;
-  public $_average_peak_memory = 0;
-  public $_average_size = 0;
-  public $_average_errors = 0;
-  public $_average_warnings = 0;
-  public $_average_notices = 0;
+  public $_average_hits;
+  public $_average_duration;
+  public $_average_processus;
+  public $_average_processor;
+  public $_average_request;
+  public $_average_nb_requests;
+  public $_average_peak_memory;
+  public $_average_size;
+  public $_average_errors;
+  public $_average_warnings;
+  public $_average_notices;
+  //public $_average_session_wait;
+  //public $_average_session_read;
 
   public $_module;
   public $_action;
@@ -99,40 +102,10 @@ class CAccessLog extends CMbObject {
   }
 
   /**
-   * Fast store using ON DUPLICATE KEY UPDATE MySQL feature
-   *
-   * @return string Store-like message
+   * @see parent::getSignatureFields();
    */
-  function fastStore() {
-    $fields = $this->getPlainFields();
-    unset($fields[$this->_spec->key]);
-
-    $columns = array();
-    $inserts = array();
-    $updates = array();
-
-    foreach ($fields as $_name => $_value) {
-      $columns[] = "$_name";
-      $inserts[] = "'$_value'";
-      if (!in_array($_name, array("module_action_id", "period", "aggregate", "bot"))) {
-        $updates[] = "$_name = $_name + '$_value'";
-      }
-    }
-
-    $columns = implode(",", $columns);
-    $inserts = implode(",", $inserts);
-    $updates = implode(",", $updates);
-
-    $query = "INSERT INTO access_log ($columns) 
-      VALUES ($inserts)
-      ON DUPLICATE KEY UPDATE $updates";
-
-    $ds = $this->_spec->ds;
-    if (!$ds->exec($query)) {
-      return $ds->error();
-    }
-
-    return null;
+  static function getSignatureFields() {
+    return array("module_action_id", "period", "aggregate", "bot");
   }
 
   /**

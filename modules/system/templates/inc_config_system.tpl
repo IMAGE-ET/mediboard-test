@@ -83,8 +83,9 @@
 
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
     {{mb_include module=system template=inc_config_bool var=error_logs_in_db}}
-    {{mb_include module=system template=inc_config_bool var=log_datasource_metrics}}
     {{mb_include module=system template=inc_config_bool var=log_access}}
+    {{mb_include module=system template=inc_config_num var=access_log_buffer_lifetime}}
+    {{mb_include module=system template=inc_config_bool var=log_datasource_metrics}}
     {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
     {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
     

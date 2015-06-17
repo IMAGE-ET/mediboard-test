@@ -12,20 +12,21 @@
 /**
  * Data source resource usage log
  */
-class CDataSourceLog extends CMbObject {
+class CDataSourceLog extends CModuleActionLog {
   public $datasourcelog_id;
 
-  // DB Fields
+  // log unique logical key fields (signature)
+  public $module_action_id;
   public $datasource;
-  public $requests;
-  public $duration;
   public $period;
   public $aggregate;
   public $bot;
 
-  // Object Reference
-  public $module_action_id;
+  // Log data fields
+  public $requests;
+  public $duration;
 
+  // Object Reference
   public $_module;
   public $_action;
 
@@ -61,40 +62,10 @@ class CDataSourceLog extends CMbObject {
   }
 
   /**
-   * Fast store using ON DUPLICATE KEY UPDATE MySQL feature
-   *
-   * @return string Store-like message
+   * @see parent::getSignatureFields();
    */
-  function fastStore() {
-    $columns = array();
-    $inserts = array();
-    $updates = array();
-
-    $fields = $this->getPlainFields();
-    unset($fields[$this->_spec->key]);
-    foreach ($fields as $_name => $_value) {
-      $columns[] = "$_name";
-      $inserts[] = "'$_value'";
-
-      if (!in_array($_name, array("datasource", "module_action_id", "period", "aggregate", "bot"))) {
-        $updates[] = "$_name = $_name + '$_value'";
-      }
-    }
-
-    $columns = implode(",", $columns);
-    $inserts = implode(",", $inserts);
-    $updates = implode(",", $updates);
-
-    $query = "INSERT INTO datasource_log ($columns) 
-              VALUES ($inserts)
-              ON DUPLICATE KEY UPDATE $updates";
-
-    $ds = $this->_spec->ds;
-    if (!$ds->exec($query)) {
-      return $ds->error();
-    }
-
-    return null;
+  static function getSignatureFields() {
+    return array("module_action_id", "period", "datasource", "aggregate", "bot");
   }
 
   /**
