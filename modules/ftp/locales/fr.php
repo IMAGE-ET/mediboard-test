@@ -343,6 +343,7 @@ $locales['config-ftp-purge-echange'] = 'Purge échanges';
 $locales['config-ftp-timeout'] = 'Timeout';
 $locales['config-read-files-senders'] = 'Lire les fichiers des expéditeurs';
 $locales['config-source-http'] = 'Configuration source HTTP';
+$locales['mod-eai-tab-ajax_show_file_FTP'] = 'Affichage du contenu';
 $locales['mod-ftp-tab-ajax_connexion_ftp'] = 'Connexion FTP';
 $locales['mod-ftp-tab-ajax_dispatch_files'] = 'Envoi des fichiers';
 $locales['mod-ftp-tab-ajax_getFiles_ftp'] = 'Récupération des fichiers ';
