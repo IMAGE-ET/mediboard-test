@@ -44,6 +44,15 @@ $services = $service->loadGroupList($where);
 
 $yesterday  = CMbDT::date("-1 day", $today);
 $tomorrow   = CMbDT::date("+1 day", $today);
+$j2         = CMbDT::date("+2 day", $today);
+$j3         = CMbDT::date("+3 day", $today);
+
+$week_deb  = CMbDT::date("last sunday", $today);
+$week_fin  = CMbDT::date("next sunday", $week_deb);
+$week_deb  = CMbDT::date("+1 day"     , $week_deb);
+
+$next_week_deb = CMbDT::date("+1 day"     , $week_fin);
+$next_week_fin = CMbDT::date("next sunday", $next_week_deb);
 
 $yesterday_deb  = "$yesterday 06:00:00";
 $yesterday_fin  = "$yesterday 21:00:00";
@@ -51,6 +60,12 @@ $today_deb      = "$today 06:00:00";
 $today_fin      = "$today 21:00:00";
 $tomorrow_deb   = "$tomorrow 06:00:00";
 $tomorrow_fin   = "$tomorrow 21:00:00";
+$j2_deb         = "$j2 06:00:00";
+$j2_fin         = "$j2 21:00:00";
+$j3_deb         = "$j3 06:00:00";
+$j3_fin         = "$j3 21:00:00";
+$next_week_deb  = "$next_week_deb 06:00:00";
+$next_week_fin  = "$next_week_fin 21:00:00";
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -61,6 +76,12 @@ $smarty->assign("today_deb"    , $today_deb);
 $smarty->assign("today_fin"    , $today_fin);
 $smarty->assign("tomorrow_deb" , $tomorrow_deb);
 $smarty->assign("tomorrow_fin" , $tomorrow_fin);
+$smarty->assign("j2_deb"       , $j2_deb);
+$smarty->assign("j2_fin"       , $j2_fin);
+$smarty->assign("j3_deb"       , $j3_deb);
+$smarty->assign("j3_fin"       , $j3_fin);
+$smarty->assign("next_week_deb", $next_week_deb);
+$smarty->assign("next_week_fin", $next_week_fin);
 
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("listSpec", $listSpec);
