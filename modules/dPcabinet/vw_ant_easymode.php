@@ -88,7 +88,7 @@ foreach ($aides_antecedent as $_depend_1 => $_aides_by_depend_1) {
   if ($fill_pref) {
     $key = $_depend_1 == "" ? "_empty_" : $_depend_1;
     if (isset($order_decode[$key])) {
-      $keys = explode("|", $order_decode[$key]);
+      $keys = array_intersect(explode("|", $order_decode[$key]), array_keys($_aides_by_depend_1));
       $keys = array_flip($keys);
       $aides_antecedent[$_depend_1] = array_replace_recursive($keys, $_aides_by_depend_1);
       $_aides_by_depend_1 = $aides_antecedent[$_depend_1];
