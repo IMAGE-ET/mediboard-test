@@ -232,9 +232,9 @@ Main.add(function(){
           {{if $check_list->object_class == "COperation" && (!$check_list->list_type_id || in_array("chir_interv", $type_validateur))}}
             <optgroup label="Praticiens">
               {{assign var=_obj value=$check_list->_ref_object}}
-              <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
+              <option value="{{$_obj->_ref_chir->user_id}}" {{if $app->user_id == $_obj->_ref_chir->user_id}}selected="selected"{{/if}}>{{$_obj->_ref_chir}}</option>
               {{if $anesth_id && isset($anesth|smarty:nodefaults)}}
-                <option value="{{$anesth->_id}}">{{$anesth}}</option>
+                <option value="{{$anesth->_id}}" {{if $app->user_id == $anesth->_id}}selected="selected"{{/if}}>{{$anesth}}</option>
               {{/if}}
             </optgroup>
           {{/if}}
