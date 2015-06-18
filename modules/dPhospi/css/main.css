@@ -447,3 +447,7 @@ div.effectue, td.effectue{
 tr.border-bold {
   border: solid 2px black;
 }
+
+td.left_day_week {
+  border-left: 2px solid #bbb !important;
+}
