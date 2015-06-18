@@ -18,7 +18,7 @@
       </th>
     </tr>
   {{/if}}
-  <tr>
+  <tr {{if $curr_op->annulee}}class="hatching"{{/if}}>
     {{if $show_duree_preop}}
       <td>{{mb_value object=$curr_op field=_heure_us}}</td>
     {{/if}}
