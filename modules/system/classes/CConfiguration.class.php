@@ -341,10 +341,10 @@ class CConfiguration extends CMbMetaObject {
    */
   static function refreshDataCache(){
     $mutex = new CMbFileMutex("config-build");
-    $mutex->acquire(10);
+    $mutex->acquire(20);
 
     // If cache was built by another thread
-    if (SHM::exists("config-values-__HOSTS__")) {
+    if (self::getValuesCacheStatus() === self::STATUS_OK) {
       $mutex->release();
 
       $hosts_shm = SHM::get("config-values-__HOSTS__");
