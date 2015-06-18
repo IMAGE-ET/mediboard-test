@@ -274,12 +274,19 @@ class CExchangeDataFormat extends CMbMetaObject {
     
     // Total des messages invalides
     $where = array();
-    $where['message_valide'] = " = '0'";
+    $where['message_valide']     = " = '0'";
+    if (isset($this->_specs["message_content_id"])) {
+      $where['message_content_id'] = "IS NOT NULL";
+    }
     $this->_count_msg_invalide = $this->countList($where);
     
     // Total des acquittements invalides
     $where = array();
-    $where['acquittement_valide'] = " = '0'";
+    $where['acquittement_valide']     = " = '0'";
+
+    if (isset($this->_specs["acquittement_content_id"])) {
+      $where['acquittement_content_id'] = "IS NOT NULL";
+    }
     $this->_count_ack_invalide = $this->countList($where);
   }
 
