@@ -99,7 +99,7 @@
             </strong>
           </span>
 
-          {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
+          {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0) || $sejour->type == "ambu"}}
             {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
           {{/if}}
           </span>
