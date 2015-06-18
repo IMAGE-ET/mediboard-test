@@ -8,11 +8,10 @@
   {{assign var=color value="orange"}}
 {{/if}}
 
-{{if !$appel->_id}}
-  {{assign var=etat value="none"}}
-{{else}}
+{{assign var=etat value="none"}}
+{{if $appel->_id}}
   {{assign var=etat value=$appel->etat}}
 {{/if}}
 
 <button type="button" class="fa fa-phone notext" style="color:{{$color}} !important" title="{{tr}}CAppelSejour.etat.{{$etat}}{{/tr}}{{if $appel->commentaire}} - {{/if}}{{$appel->commentaire}}"
-        {{if $color != "green"}}onclick="Appel.edit(0, '{{$type}}', '{{$_sejour->_id}}');"{{/if}}></button>
+        onclick="Appel.edit(0, '{{$type}}', '{{$_sejour->_id}}');"></button>

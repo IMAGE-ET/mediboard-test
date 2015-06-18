@@ -2052,6 +2052,14 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`sejour_id`),
                 ADD INDEX (`datetime`);";
     $this->addQuery($query);
-    $this->mod_version = '2.19';
+    $this->makeRevision("2.19");
+
+    $query = "ALTER TABLE `sejour_appel`
+                ADD `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `sejour_appel`
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+    $this->mod_version = '2.20';
   }
 }
