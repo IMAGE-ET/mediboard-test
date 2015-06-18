@@ -967,7 +967,7 @@ class CFacture extends CMbObject implements IPatientRelated {
       $adherent = $this->loadNumAdherent($this->_ref_praticien->adherent);
       $adherent2 = $adherent["bvr"];
       foreach ($this->_montant_factures_caisse as $montant_facture) {
-        $montant = sprintf('%010d', CFacture::roundValue($montant_facture, true)*100);
+        $montant = sprintf('%010s', CFacture::roundValue($montant_facture, true)*100);
         $cle = $this->getNoControle($genre.$montant);
         $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->num_reference."+ ".$adherent2.">";
       }
