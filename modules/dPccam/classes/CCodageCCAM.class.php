@@ -327,6 +327,7 @@ class CCodageCCAM extends CMbObject {
    */
   public function check() {
     $this->completeField('codable_class', 'codable_id', 'praticien_id', 'association_mode', 'association_rule', 'locked', 'activite_anesth', 'date');
+    $this->loadOldObject();
 
     $codable = $this->loadCodable();
     if($codable->_class == 'CConsultation') {
@@ -530,11 +531,13 @@ class CCodageCCAM extends CMbObject {
     $count_exclusive_modifiers = self::countExclusiveModifiers($act);
     $store_act = 0;
     $modifiers_to_add = "";
+    $achieved = CMbDate::achievedDurations($patient->naissance, CMbDT::date(null, $act->execution));
+    $patient_age = $achieved["year"];
 
     foreach ($modifiers as $_modifier) {
       switch ($_modifier->code) {
         case 'A':
-          $checked = ($patient->_annees < 4 || $patient->_annees > 80);
+          $checked = ($patient_age < 4 || $patient_age >= 80);
           $_modifier->_state = $checked ? 'prechecked' : 'not_recommended';
           break;
         case 'E':
