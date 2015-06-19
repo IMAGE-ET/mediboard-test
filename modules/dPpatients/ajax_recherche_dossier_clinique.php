@@ -697,8 +697,9 @@ if ($export) {
 
     $csv->writeLine($data_line);
   }
-  
-  $csv->stream("recherche_dossiers_clinique");
+
+  $period = "du_" . ($from ? $from : "_") . "_au_" . ($to ? $to : "_");
+  $csv->stream("dossiers_clinique_" . $period);
   CApp::rip();
 }
 
