@@ -412,8 +412,8 @@ $library->fileName = "PDFMerger-1.0.tar.gz";
 $library->description = "Fusion de PDF";
 $library->sourceDir = "PDFMerger";
 $library->targetDir = "PDFMerger";
-$library->versionFile = "PDFMerger.php";
-$library->versionString = 'v1.0b';
+$library->versionFile = "fpdi/pdf_parser.php";
+$library->versionString = '$this->c = new pdf_context($this->f);';
 
 CLibrary::$all[$library->name] = $library;
 
