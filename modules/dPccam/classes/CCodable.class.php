@@ -929,7 +929,7 @@ class CCodable extends CMbObject {
 
     switch ($code) {
       case "A":
-        return ($patient->_annees < 4 || $patient->_annees > 80);
+        return ($patient->_annees < 4 || $patient->_annees >= 80);
         break;
       case "E":
         return $patient->_annees < 5;
