@@ -551,6 +551,8 @@ var Url = Class.create({
     var content = DOM.div({className: "content"}, iframe);
     modalContainer.insert(content);
     modalContainer.addClassName("modal-iframe");
+    // For Selenium tests
+    modalContainer.writeAttribute("data-url", this.oParams.m + "/" + this.oParams.a);
     iframe.src = href;
 
     /*var href = options.baseUrl + this.make(questionMark);
@@ -1145,6 +1147,9 @@ var Url = Class.create({
       if (window.Didacticiel && Didacticiel.main_didacticiel.state) {
         Didacticiel.main_didacticiel.didacOnComplete();
       }
+
+      // For selenium Test
+      element.setAttribute("data-loaded", "1");
     });
 
     // If we have a custom insertion, we should not touch the origin target
@@ -1184,6 +1189,9 @@ var Url = Class.create({
         currentURL.currentAjax.abort();
       }
     }*/
+
+    // For selenium Test
+    element.setAttribute("data-loaded", "0");
 
     this.currentAjax = new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
     element.store("currentURL", this);

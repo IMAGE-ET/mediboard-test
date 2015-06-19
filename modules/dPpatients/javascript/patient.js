@@ -87,6 +87,15 @@ Patient = Object.extend({
       .requestUpdate("systemMsg", {
         method: 'post'
       });
+  },
+  doPurge: function(patient_id) {
+    new Url(this.modulePatient, "vw_idx_patients")
+      .addParam("dosql", "do_patients_aed")
+      .addParam("del", 1)
+      .addParam("_purge", 1)
+      .addParam("patient_id", patient_id)
+      .requestUpdate("systemMsg", {
+        method: 'post'
+      });
   }
-
 }, window.Patient);

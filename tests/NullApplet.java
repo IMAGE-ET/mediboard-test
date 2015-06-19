@@ -1,1 +1,0 @@
-public class NullApplet extends java.applet.Applet {  public void init() {  }  public void start() {  }  public void stop() {  }}
