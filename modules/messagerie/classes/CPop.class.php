@@ -145,7 +145,7 @@ class CPop{
    * @return array|stdClass
    */
   function header($id) {
-    $header = imap_headerinfo($this->_mailbox, $id);
+    $header = imap_headerinfo($this->_mailbox, imap_msgno($this->_mailbox, $id));
     $header->uid = $id;
 
     return $header;
