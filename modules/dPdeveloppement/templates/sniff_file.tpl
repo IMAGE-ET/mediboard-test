@@ -15,7 +15,7 @@
 
 {{foreach from=$alerts item=_alert}}
   <tr>
-    <td style="text-align: right; font-weight: bold;">{{$file|ide:$_alert.line:$file}}</td>
+    <td style="text-align: right; font-weight: bold;">{{$file|ide:$_alert.line:$_alert.line}}</td>
     <td style="text-align: right;">{{$_alert.column}}</td>
     <td class="text">{{$_alert.message}}</td>
     <td class="text">{{$_alert.source|replace:".":" > "}}</td>
