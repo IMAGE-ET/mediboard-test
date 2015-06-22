@@ -12,7 +12,7 @@
 /**
  * Permet d'ajouter des observations médicales à un séjour
  */
-class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
+class CObservationMedicale extends CMbMetaObject implements IIndexableObject {
 
   // DB Table key
   public $observation_medicale_id;
@@ -31,6 +31,11 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
 
   /** @var CMediusers */
   public $_ref_user;
+
+  /** @var CAlert */
+  public $_ref_alerte;
+
+  static $tag_alerte = "observation";
 
   /**
    * @see parent::getSpec()
@@ -62,7 +67,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
   /**
    * @see parent::canEdit()
    */
-  function canEdit(){
+  function canEdit() {
     $nb_hours = CAppUI::conf("soins Other max_time_modif_suivi_soins", CGroups::loadCurrent()->_guid);
     $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
     return $this->_canEdit = (CMbDT::dateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
@@ -73,7 +78,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
    *
    * @return CSejour
    */
-  function loadRefSejour(){
+  function loadRefSejour() {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 
@@ -82,7 +87,7 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
    *
    * @return CMediusers
    */
-  function loadRefUser(){
+  function loadRefUser() {
     /** @var CMediusers $user */
     $user = $this->loadFwdRef("user_id", true);
     $user->loadRefFunction();
@@ -98,6 +103,78 @@ class CObservationMedicale extends CMbMetaObject implements IIndexableObject{
     $this->loadRefSejour();
     $this->loadRefUser();
     $this->_view = "Observation du Dr ".$this->_ref_user->_view;
+  }
+
+  /**
+   * Chargement de l'alerte
+   *
+   * @return void
+   */
+  function loadRefAlerte() {
+    $this->_ref_alerte = new CAlert();
+    $this->_ref_alerte->setObject($this);
+    $this->_ref_alerte->tag = self::$tag_alerte;
+    $this->_ref_alerte->level = "medium";
+    $this->_ref_alerte->loadMatchingObject();
+  }
+
+  function store() {
+    $msg_alerte = "";
+
+    $manual_alerts = CAppUI::conf("soins Observations manual_alerts", CGroups::loadCurrent());
+    if ($manual_alerts) {
+      $this->completeField("degre", "text");
+      if (!$this->_id || $this->fieldModified("text") || $this->fieldModified("degre")) {
+        $msg_alerte = CAppUI::tr("CObservationMedicale-degre") . ": " . $this->getFormattedValue("degre") . "\n" . $this->text;
+      }
+    }
+
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+
+    if ($manual_alerts) {
+      $this->loadRefAlerte();
+
+      if ($msg_alerte) {
+        $this->_ref_alerte->handled  = 0;
+        $this->_ref_alerte->comments = $msg_alerte;
+        if ($msg = $this->_ref_alerte->store()) {
+          return $msg;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  static function massLoadRefAlerte(&$observations = array(), $handled = true) {
+    $alerte = new CAlert();
+    $where = array(
+      "object_class" => "= 'CObservationMedicale'",
+      "object_id"    => CSQLDataSource::prepareIn(CMbArray::pluck($observations, "_id")),
+      "level"        => "= 'medium'",
+      "tag"          => "= '" . self::$tag_alerte . "'"
+    );
+
+    if (!$handled) {
+      $where["handled"] = "= '0'";
+    }
+
+    $alertes = $alerte->loadList($where);
+
+    CStoredObject::massLoadFwdRef($alertes, "handled_user_id");
+
+    foreach ($alertes as $_alerte) {
+      $observations[$_alerte->object_id]->_ref_alerte = $_alerte;
+    }
+
+    foreach ($observations as $_observation) {
+      if (!$_observation->_ref_alerte) {
+        $_observation->_ref_alerte = new CAlert();
+      }
+      $_observation->_ref_alerte->loadRefHandledUser();
+    }
   }
 
   /**

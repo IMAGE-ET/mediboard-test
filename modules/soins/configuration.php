@@ -59,6 +59,9 @@ CConfiguration::register(
           "cible_mandatory_trans" => "bool default|0",
           "trans_compact"         => "bool default|0",
         ),
+        "Observations" => array(
+          "manual_alerts" => "bool default|0"
+        ),
         "Sejour"  => array(
           "refresh_vw_sejours_frequency" => "enum localize list|disabled|600|1200|1800 default|disabled",
         ),

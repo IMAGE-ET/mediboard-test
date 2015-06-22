@@ -7,7 +7,7 @@
     $V(oForm.object_id, '');
     $V(oForm.libelle_ATC, '');
     oDiv.innerHTML = "";
-  }
+  };
 
   showListTransmissions = function(page, total) {
     page = page || 0;
@@ -24,7 +24,7 @@
     url.addParam("page", page);
     url.addParam("change_page", "showListTransmissions");
     url.requestUpdate("pagination");
-  }
+  };
 
   // Submit d'une ligne d'element
   submitLineElement = function() {
@@ -45,7 +45,7 @@
       Control.Modal.close();
       loadSuivi('{{$sejour->_id}}');
     } );
-  }
+  };
 
   // Submit d'une ligne de commentaire
   submitLineComment = function(){
@@ -61,7 +61,7 @@
       Control.Modal.close();
       loadSuivi('{{$sejour->_id}}');
     } );
-  }
+  };
 
   submitProtocoleSuiviSoins = function() {
     var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
@@ -80,7 +80,7 @@
         loadSuivi('{{$sejour->_id}}');
       }
     } );
-  }
+  };
 
   updatePrescriptionId = function(prescription_id) {
     // Ligne d'element
@@ -105,7 +105,7 @@
     else {
       submitProtocoleSuiviSoins();
     }
-  }
+  };
 
   addTransmissionAdm = function(line_id, line_class) {
     var oFormTransmission = getForm("addTransmissionSuiviFrm");
@@ -113,15 +113,15 @@
     $V(oFormTransmission.object_class, line_class);
     $V(oFormTransmission.text, "Réalisé");
     return onSubmitFormAjax(oFormTransmission, loadSuivi.curry('{{$sejour->_id}}'));
-  }
+  };
 
   highlightTransmissions = function(cible_guid) {
     $('transmissions').select("."+cible_guid+" .libelle_trans").invoke("addClassName", "highlight");
-  }
+  };
 
   removeHighlightTransmissions = function() {
    $('transmissions').select('.highlight').invoke("removeClassName", "highlight");
-  }
+  };
 
   addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, refreshTrans) {
     var url = new Url("hospi", "ajax_transmission");
@@ -148,7 +148,7 @@
       url.addParam("libelle_ATC", libelle_ATC);
     }
     url.requestModal(800, 400);
-  }
+  };
 
   addObservation = function(sejour_id, user_id, observation_id) {
     var url = new Url("hospi", "ajax_observation");
@@ -158,7 +158,7 @@
       url.addParam("observation_id", observation_id);
     }
     url.requestModal(600, 400);
-  }
+  };
 
   addPrescription = function(sejour_id, user_id, object_id, object_class) {
     var url = new Url("hospi", "ajax_prescription_lite");
@@ -172,19 +172,25 @@
     else {
       url.requestModal(800, 180);
     }
-  }
+  };
 
   bindOperation = function(sejour_id) {
     var url = new Url("cabinet", "ajax_bind_operation");
     url.addParam("sejour_id", sejour_id);
     url.requestModal(500, null, {showReload: false, showClose: false});
-  }
+  };
 
   validateAdministration = function(sejour_id) {
     var url = new Url("prescription", "ajax_administration_for_consult");
     url.addParam("sejour_id", sejour_id);
     url.requestModal(500, null, {showReload: false, showClose: false});
-  }
+  };
+
+  refreshAlertObs = function(obs_id) {
+    var url = new Url("hospi", "ajax_refresh_alert_obs");
+    url.addParam("obs_id", obs_id);
+    url.requestUpdate("alert_obs_"+obs_id);
+  };
 
   {{if $count_trans > 0}}
     Main.add(showListTransmissions.curry(0, {{$count_trans}}));

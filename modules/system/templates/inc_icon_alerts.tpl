@@ -21,9 +21,11 @@
 {{/if}}
 
 {{if $nb_alerts}}
-  <img src="images/icons/{{$img_ampoule}}.png"
-       onclick="Alert.showAlerts('{{$object_guid}}', '{{$tag}}', '{{$level}}', {{$callback}}, this);"/>
-  {{mb_include module=system template=inc_vw_counter_tip count=$nb_alerts}}
+  <span id="span-alerts-{{$level}}-{{$tag}}-{{$object->_guid}}">
+    <img src="images/icons/{{$img_ampoule}}.png"
+         onclick="Alert.showAlerts('{{$object_guid}}', '{{$tag}}', '{{$level}}', {{$callback}}, this);"/>
+    {{mb_include module=system template=inc_vw_counter_tip count=$nb_alerts}}
+  </span>
 
   <div id="tooltip-alerts-{{$level}}-{{$object_guid}}" style="display: none; height: 400px; width: 400px; overflow-x:auto;"></div>
 {{/if}}

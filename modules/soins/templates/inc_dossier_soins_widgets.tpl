@@ -9,6 +9,24 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script>
+  compteurAlertesObs = function() {
+    var url = new Url("hospi", "ajax_count_alert_obs", "raw");
+    url.addParam("sejour_id", "{{$sejour->_id}}");
+    url.requestJSON(function(count) {
+      var span_ampoule = $('span-alerts-medium-observation-{{$sejour->_guid}}');
+      if (span_ampoule) {
+        if (count) {
+          span_ampoule.down('span').innerHTML = count;
+        }
+        else {
+          span_ampoule.remove();
+        }
+      }
+    });
+  }
+</script>
+
 <table class="main layout">
   <tr>
     <td style="width: 33%;">
@@ -16,7 +34,11 @@
         <legend>
           Transmissions et observations importantes
           <button class="search notext compact" type="button" onclick="PlanSoins.showModalAllTrans('{{$sejour->_id}}')"></button>
+          {{if "soins Observations manual_alerts"|conf:"CGroups-$g"}}
+            {{mb_include module=system template=inc_icon_alerts object=$sejour tag=observation callback=compteurAlertesObs}}
+          {{/if}}
         </legend>
+        <div id="tooltip-alerts-medium-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px; overflow-x: auto;"></div>
         <div id="dossier_suivi_lite" style="height: 140px; overflow-y: auto;"></div>
       </fieldset>
     </td>

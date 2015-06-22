@@ -17,7 +17,7 @@
     <th class="title" colspan="2">
       {{$alerts|@count}} alertes
       {{if $alerts|@count}}
-        <form name="closeAlertes-{{$level}}-{{$object_guid}}" action="?" method="post"
+        <form name="closeAlertes-{{$level}}-{{$object_guid}}" method="post"
               onsubmit="return onSubmitFormAjax(this, function() {
                 $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().hide();
                 Alert.callback();})">
@@ -35,7 +35,7 @@
   {{foreach from=$alerts item=_alert}}
   <tr>
     <td class="narrow">
-      <form name="editAlert-{{$_alert->_id}}" action="?" method="post"
+      <form name="editAlert-{{$_alert->_id}}" method="post"
             onsubmit="return onSubmitFormAjax(this, function(){
               $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().hide();
               Alert.callback();})">

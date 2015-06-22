@@ -2310,6 +2310,39 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * @see parent::loadAlertsNotHandled
+   */
+  function loadAlertsNotHandled($level = null, $tag = null, $perm = PERM_READ) {
+    if ($tag == "observation") {
+      $alert                          = new CAlert();
+      $where                          = array(
+        "object_class" => "= 'CObservationMedicale'",
+        "object_id"    => CSQLDataSource::prepareIn($this->loadBackIds("observations")),
+        "level"        => "= 'medium'",
+        "handled"      => "= '0'",
+        "tag"          => "= '" . CObservationMedicale::$tag_alerte . "'"
+      );
+      return $this->_refs_alerts_not_handled = $alert->loadList($where);
+    }
+    return parent::loadAlertsNotHandled($level, $tag, $perm);
+  }
+
+  function countAlertsNotHandled($level = null, $tag = null) {
+    if ($tag == "observation") {
+      $alert = new CAlert();
+      $where = array(
+        "object_class" => "= 'CObservationMedicale'",
+        "object_id"    => CSQLDataSource::prepareIn($this->loadBackIds("observations")),
+        "level"        => "= 'medium'",
+        "handled"      => "= '0'",
+        "tag"          => "= '" . CObservationMedicale::$tag_alerte . "'"
+      );
+      return $this->_count_alerts_not_handled = $alert->countList($where);
+    }
+    return parent::countAlertsNotHandled($level, $tag);
+  }
+
+  /**
    * Comptes les tâches en court et réalisées
    *
    * @return int|null
@@ -2372,6 +2405,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_suivi_medical = array();
 
     if (isset($this->_back["observations"])) {
+      CObservationMedicale::massLoadRefAlerte($this->_back["observations"]);
+
       foreach ($this->_back["observations"] as $curr_obs) {
         /** @var CObservationMedicale $curr_obs */
         $curr_obs->loadRefsFwd();

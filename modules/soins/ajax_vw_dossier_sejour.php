@@ -74,6 +74,8 @@ if (CModule::getActive("dPprescription")) {
   CPrescription::$_load_lite = false;
 }
 
+$sejour->countAlertsNotHandled("medium", "observation");
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour"          , $sejour);
