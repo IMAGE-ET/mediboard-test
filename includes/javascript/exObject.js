@@ -224,6 +224,30 @@ var ExObject = {
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
 
+  exportCSV: function(ex_class_id, options) {
+    ex_class_id = ex_class_id || "";
+
+    options = Object.extend({
+      print: 0,
+      start: 0,
+      search_mode: 1,
+      cross_context_class: null,
+      cross_context_id: null
+    }, options);
+
+    var url = new Url("forms", "export_ex_objects", "raw");
+    url.addParam("ex_class_id",     ex_class_id);
+    url.mergeParams(options);
+    url.addParam("a",     "export_ex_objects");
+
+    if (options.cross_context_class && options.cross_context_id) {
+      url.addParam("cross_context_class", options.cross_context_class);
+      url.addParam("cross_context_id",    options.cross_context_id);
+    }
+
+    url.popup(600, 600, "Export CSV formulaires");
+  },
+
   showExClassFormSelect: function(select, guid){
     var selected = select.options[select.selectedIndex];
     var reference_class = selected.get("reference_class");
