@@ -415,13 +415,13 @@ class CUserMail extends CMbObject{
   /**
    * Make the hash for the given headers and mail content
    *
-   * @param $header The headers, returned by the POP source
-   * @param $content The content, returned by the POP source
+   * @param stdOject $header  The headers, returned by the POP source
+   * @param array    $content The content, returned by the POP source
    *
    * @return bool|string
    */
   public function makeHash($header, $content) {
-    if (isset($header->fromaddress) && isset($header->toaddress) && isset($header->subject)) {
+    if (!isset($header->fromaddress) && !isset($header->toaddress) && !isset($header->subject)) {
       return null;
     }
 
