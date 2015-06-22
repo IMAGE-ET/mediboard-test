@@ -47,6 +47,7 @@ CStoredObject::$useObjectCache = false;
 
 $backrefs_tree = array(
   "CPatient" => array(
+    "identifiants",
     "notes",
     "files",
     "documents",
@@ -89,6 +90,7 @@ $backrefs_tree = array(
   ),
 
   "CSejour" => array(
+    "identifiants",
     "files",
     "documents",
     "notes",
