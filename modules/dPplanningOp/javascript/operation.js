@@ -40,6 +40,17 @@ Operation = {
     });
   },
 
+  showDossierSoins: function(sejour_id, default_tab) {
+    var url = new Url("soins", "ajax_vw_dossier_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("modal", "1");
+    url.addParam("default_tab", default_tab);
+    url.requestModal("95%", "90%", {
+      onClose: updateListOperations
+    });
+    modalWindow = url.modalObject;
+  },
+
   useModal: function() {
     this.edit = this.editModal;
   },
