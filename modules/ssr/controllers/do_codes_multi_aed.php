@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $token_evts  = CValue::post("token_evts");
@@ -38,7 +38,11 @@ foreach ($evenement_ids as $_evenement_id) {
   
   // Autres rééducateurs
   global $can;
-  if ($evenement->therapeute_id && ($evenement->therapeute_id != CAppUI::$instance->user_id) && !$can->admin) {
+  $therapeute_id = $evenement->therapeute_id;
+  if ($evenement->seance_collective_id) {
+    $therapeute_id = $evenement->loadRefSeanceCollective()->therapeute_id;
+  }
+  if ($therapeute_id && ($therapeute_id != CAppUI::$instance->user_id) && !$can->admin) {
     CAppUI::displayMsg("Impossible de modifier les événements d'un autre rééducateur", "CEvenementSSR-msg-modify");
     continue;
   }
