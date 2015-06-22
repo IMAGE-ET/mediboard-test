@@ -10,8 +10,6 @@
  */
 
 CCanDo::checkRead();
-
-
 $chirSel        = CValue::getOrSession("chirSel");
 $function_id    = CValue::get("function_id");
 $today          = CMbDT::date();
@@ -96,7 +94,7 @@ $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 $planning->dragndrop = $planning->resizable = $can_edit ? 1 : 0;
 $planning->hour_divider = 60 / CAppUI::conf("dPcabinet CPlageconsult minutes_interval");
-$planning->no_dates = 1;
+$planning->no_dates = 0;
 
 $plage = new CPlageconsult();
 
