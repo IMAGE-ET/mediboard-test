@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -39,10 +39,14 @@ foreach ($sejours as $_sejour) {
 
   $prescription = $_sejour->loadRefPrescriptionSejour();
   $prescription->loadRefsLinesElementByCat();
-  foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines) {
-    foreach ($_lines as $_line) {
-      /* @var CPrescriptionLineElement $_line*/
-      $_line->getRecentModification();
+  foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_chap) {
+    foreach ($_lines_by_chap as $_lines_by_cat) {
+      foreach ($_lines_by_cat as $_lines_by_elt) {
+        foreach ($_lines_by_elt as $_line) {
+        /* @var CPrescriptionLineElement $_line*/
+        $_line->getRecentModification();
+        }
+      }
     }
   }
 }
