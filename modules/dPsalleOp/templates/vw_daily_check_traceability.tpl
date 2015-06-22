@@ -72,6 +72,7 @@ Main.add(function () {
       <table class="main tbl">
         <tr>
           <th>{{mb_title class=CDailyCheckList field=date}}</th>
+          <th class="narrow">{{mb_title class=CDailyCheckList field=date_validate}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_class}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_id}}</th>
           <th>{{mb_title class=CDailyCheckList field=type}}</th>
@@ -86,6 +87,7 @@ Main.add(function () {
               {{mb_value object=$curr_list field=date}}
             </a>
           </td>
+          <td>{{mb_value object=$curr_list field=date_validate}}</td>
           <td>
             {{if $curr_list->list_type_id}}
               {{mb_value object=$curr_list->_ref_list_type field=type}}
@@ -146,7 +148,10 @@ Main.add(function () {
           <th>{{mb_label object=$check_list field=validator_id}}</th>
           <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$check_list->_ref_validator}}</td>
         </tr>
-
+        <tr>
+          <th>{{mb_label object=$check_list field=date_validate}}</th>
+          <td>{{mb_value object=$check_list field=date_validate}}</td>
+        </tr>
         <tr>
           <td colspan="2" style="padding: 0;">
             <table class="main">

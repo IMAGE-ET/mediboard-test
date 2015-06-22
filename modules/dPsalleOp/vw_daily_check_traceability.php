@@ -63,7 +63,7 @@ if ($date_max) {
 }
 
 /** @var CDailyCheckList[] $list_check_lists */
-$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , "$start,40", null, $ljoin);
+$list_check_lists = $check_list->loadList($where, 'date DESC, date_validate DESC, object_class, object_id, type' , "$start,40", null, $ljoin);
 $count_check_lists = $check_list->countList($where, null, $ljoin);
 
 foreach ($list_check_lists as $_check_list) {

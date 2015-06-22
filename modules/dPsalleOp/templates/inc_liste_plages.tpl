@@ -117,7 +117,7 @@
     {{if $require_check_list_close}}
       <tr>
         <td colspan="2" class="button">
-          <button class="checklist" type="button" onclick="EditCheckList.edit('{{$salle->_id}}', '{{$date}}', 'fermeture_salle');">Fermeture de salle</button>
+          <button class="checklist" type="button" onclick="EditCheckList.edit('{{$salle->_id}}', '{{$date}}', 'fermeture_salle');">{{tr}}CDailyCheckList._type.fermeture_salle{{/tr}}</button>
           {{if $date_close_checklist}}
             <div class="info">Dernière validation: {{$date_close_checklist|date_format:$conf.datetime}}</div>
           {{/if}}

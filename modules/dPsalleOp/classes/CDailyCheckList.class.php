@@ -22,6 +22,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   public $type;
   public $comments;
   public $validator_id;
+  public $date_validate;
   public $list_type_id;
   public $group_id;
 
@@ -203,6 +204,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $props['list_type_id'] = 'ref class|CDailyCheckListType';
     $props['type']         = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
     $props['validator_id'] = 'ref class|CMediusers';
+    $props['date_validate']= 'dateTime';
     $props['group_id']     = 'ref class|CGroups';
     $props['comments']     = 'text';
     $props['_validator_password'] = 'password notNull';
@@ -282,6 +284,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       if (!$this->_validator_password && !$old->validator_id) {
         $this->validator_id = "";
       }
+    }
+
+    if ($this->validator_id && ($this->fieldModified("validator_id") || !$this->_id) && !$this->date_validate) {
+      $this->date_validate = CMbDT::dateTime();
     }
 
     if ($msg = parent::store()) {
@@ -448,11 +454,16 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $checklist->loadObject($where, "date DESC", null, $ljoin);
 
     if ($checklist->_id) {
-      $log = new CUserLog();
-      $log->object_id     = $checklist->_id;
-      $log->object_class  = $checklist->_class;
-      $log->loadMatchingObject("date DESC", "user_log_id");
-      $date_last_checklist = $log->date;
+      if ($checklist->date_validate) {
+        $date_last_checklist = $checklist->date_validate;
+      }
+      else {
+        $log = new CUserLog();
+        $log->object_id     = $checklist->_id;
+        $log->object_class  = $checklist->_class;
+        $log->loadMatchingObject("date DESC", "user_log_id");
+        $date_last_checklist = $log->date;
+      }
     }
     if (!$checklist->_id || !$date_last_checklist) {
       $date_last_checklist = $checklist->date;

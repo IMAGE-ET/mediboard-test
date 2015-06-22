@@ -1676,6 +1676,14 @@ class CSetupdPsalleOp extends CSetup {
     $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CBlocOperatoire", "dPsalleOp CDailyCheckList default_good_answer_CBlocOperatoire");
     $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CSalle"         , "dPsalleOp CDailyCheckList default_good_answer_CSalle");
     $this->addDefaultConfig("dPsalleOp Default_good_answer default_good_answer_CPoseDispositifVasculaire", "dPsalleOp CDailyCheckList default_good_answer_CPoseDispositifVasculaire");
-    $this->mod_version = '0.71';
+    $this->makeRevision('0.71');
+
+    $query = "ALTER TABLE `daily_check_list`
+                ADD `date_validate` DATETIME;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list`
+                ADD INDEX (`date_validate`);";
+    $this->addQuery($query);
+    $this->mod_version = '0.72';
   }
 }
