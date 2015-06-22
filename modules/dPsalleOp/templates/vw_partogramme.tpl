@@ -137,7 +137,7 @@
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$object field=exam_per_op}}</th>
+          <th>{{mb_label object=$operation field=exam_per_op}}</th>
           <td class="text">
             {{if $operation->exam_per_op}}
               {{mb_value object=$operation field=exam_per_op}}
