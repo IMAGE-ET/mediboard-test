@@ -130,7 +130,7 @@
                   <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$listDaysSelect item=curr_day}}
                     <option value="{{$curr_day}}"
-                      {{if ($curr_day == $plageSel->date) || ($curr_day == $debut)}} selected="selected" {{/if}}
+                      {{if ($curr_day == $plageSel->date) || (!$plageSel->_id && $curr_day == $debut)}} selected="selected" {{/if}}
                       {{if array_key_exists($curr_day, $holidays) && !$app->user_prefs.allow_plage_holiday}}disabled="disabled"{{/if}}
                       >
                       {{$curr_day|date_format:"%A"}} {{if array_key_exists($curr_day, $holidays)}}(férié){{/if}}
