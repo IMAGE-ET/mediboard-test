@@ -122,7 +122,7 @@ abstract class CSQLDataSource {
    * 
    * @param string $query SQL query
    * 
-   * @return resource result
+   * @return resource|bool Query result, false on failure
    */
   abstract function query($query);
   
@@ -140,13 +140,17 @@ abstract class CSQLDataSource {
    * Get the first table like given name
    * 
    * @param string $table Table name
+   *
+   * @return string Table name, empty if not found
    */
   abstract function loadTable($table);
 
   /**
    * Get all tables with given prefix
    * 
-   * @param array[string] $table Table names 
+   * @param array[string] $table Table names
+   *
+   * @return string[] Table names
    */
   abstract function loadTables($table = null);
   
@@ -155,6 +159,8 @@ abstract class CSQLDataSource {
    * 
    * @param string $table The table
    * @param string $field The field
+   *
+   * @return string Field name, empty if not found
    */
   abstract function loadField($table, $field);
   
@@ -183,6 +189,8 @@ abstract class CSQLDataSource {
    * Free a query result
    * 
    * @param resource $result The result to free
+   *
+   * @return bool Job done boolean
    */
   abstract function freeResult($result);
 
@@ -314,7 +322,7 @@ abstract class CSQLDataSource {
    * 
    * @param string $query SQL Query
    * 
-   * @return resource The result resource on SELECT, true on others, false if failed 
+   * @return resource|bool The result resource on SELECT, true on others, false if failed
    **/
   function exec($query) {
     // Query colouring
@@ -326,13 +334,30 @@ abstract class CSQLDataSource {
     $this->chrono->start();
     $result = $this->query($query);
     $this->chrono->stop();
-    
+
     // Error handling
     if (!$result) {
-      trigger_error($this->error()." on SQL query <em>$query</em>", E_USER_WARNING);
+      // On slave error, retry exact same request on std
+      if ($this->dsn == "slave") {
+        mbTrace("slave error handling");
+        $std = self::$dataSources["std"];
+        $std->chrono->start();
+        $result = $this->query($query);
+        $std->chrono->stop();
+        mbTrace($result, "std result");
+
+        if ($result) {
+          mbTrace("Disabling slave");
+          CView::disableSlave();
+          return $result;
+        }
+      }
+
+      $error = $this->error();
+      trigger_error("SQL Error: $error for DSN '$this->dsn' on SQL query <em>$query</em>", E_USER_WARNING);
       return false;
     }
-  
+
     // Chrono messaging
     if (CSQLDataSource::$trace) {
       $step = $this->chrono->latestStep * 1000;
@@ -456,9 +481,8 @@ abstract class CSQLDataSource {
       
       // Query at line end
       if (preg_match("/;\s*$/", $sqlLine)) {
-        $this->exec($query);
-        if ($msg = $this->error()) {
-          trigger_error("Error reading dump on line $lineNumber : $msg");
+        if (!$this->exec($query)) {
+          trigger_error("Error reading dump on line $lineNumber : " . $this->error());
           return false;
         }
         $nbQueries++;
@@ -472,24 +496,25 @@ abstract class CSQLDataSource {
   /**
    * Loads the first field of the first row returned by the query.
    * 
-   * @param string $sql The SQL query
+   * @param string $query The SQL query
    * 
    * @return string|null The value returned in the query or null if the query failed.
    */
-  function loadResult($sql) {
-    $cur = $this->exec($sql);
-    $cur or CApp::rip();
+  function loadResult($query) {
+    if (!$result = $this->exec($query)) {
+      return false;
+    }
 
     $this->chronoFetch->start();
 
     $ret = null;
-    if ($row = $this->fetchRow($cur)) {
+    if ($row = $this->fetchRow($result)) {
       $ret = reset($row);
     }
 
     $this->chronoFetch->stop();
     
-    $this->freeResult($cur);
+    $this->freeResult($result);
     return $ret;
   }
 
@@ -500,14 +525,14 @@ abstract class CSQLDataSource {
    * If an object is passed to this function, the returned row is bound to the existing elements of $object.
    * If $object has a value of null, then all of the returned query fields returned in the object. 
    * 
-   * @param string $sql     The SQL query
+   * @param string $query   The SQL query
    * @param object &$object The address of variable
    *
    * @return bool
    */
-  function loadObject($sql, &$object) {
+  function loadObject($query, &$object) {
     if ($object != null) {
-      if (null == $hash = $this->loadHash($sql)) {
+      if (null == $hash = $this->loadHash($query)) {
         return false;
       }
       
@@ -515,16 +540,17 @@ abstract class CSQLDataSource {
       return true;
     }
     else {
-      $cur = $this->exec($sql);
-      $cur or CApp::rip();
+      if (!$result = $this->exec($query)) {
+        return false;
+      }
 
       $this->chronoFetch->start();
 
-      $object = $this->fetchObject($cur);
+      $object = $this->fetchObject($result);
 
       $this->chronoFetch->stop();
 
-      $this->freeResult($cur);
+      $this->freeResult($result);
 
       if ($object) {
         return true;
@@ -544,16 +570,18 @@ abstract class CSQLDataSource {
    * @return array The hash, false if failed
    */
   function loadHash($query) {
-    $cur = $this->exec($query);
-    $cur or CApp::rip();
+    if (!$result = $this->exec($query)) {
+      return false;
+    }
 
     $this->chronoFetch->start();
 
-    $hash = $this->fetchAssoc($cur);
+    $hash = $this->fetchAssoc($result);
 
     $this->chronoFetch->stop();
 
-    $this->freeResult($cur);
+    $this->freeResult($result);
+
     return $hash;
   }
 
@@ -565,19 +593,21 @@ abstract class CSQLDataSource {
    * @return array
    */
   function loadHashList($query) {
-    $cur = $this->exec($query);
-    $cur or CApp::rip();
+    if (!$result = $this->exec($query)) {
+      return false;
+    }
 
     $this->chronoFetch->start();
 
     $hashlist = array();
-    while ($hash = $this->fetchArray($cur)) {
+    while ($hash = $this->fetchArray($result)) {
       $hashlist[$hash[0]] = $hash[1];
     }
 
     $this->chronoFetch->stop();
 
-    $this->freeResult($cur);
+    $this->freeResult($result);
+
     return $hashlist;
   }
 
@@ -589,13 +619,14 @@ abstract class CSQLDataSource {
    * @return array
    */
   function loadTree($query) {
-    $cur = $this->exec($query);
-    $cur or CApp::rip();
+    if (!$result = $this->exec($query)) {
+      return false;
+    }
 
     $this->chronoFetch->start();
 
     $tree = array();
-    while ($columns = $this->fetchRow($cur)) {
+    while ($columns = $this->fetchRow($result)) {
       $branch =& $tree;
       $leaf = array_pop($columns);
       foreach ($columns as $_column) {
@@ -609,7 +640,7 @@ abstract class CSQLDataSource {
 
     $this->chronoFetch->stop();
 
-    $this->freeResult($cur);
+    $this->freeResult($result);
     return $tree;
   }
 
@@ -621,20 +652,21 @@ abstract class CSQLDataSource {
    * @return array
    */
   function loadHashAssoc($query) {
-    $cur = $this->exec($query);
-    $cur or CApp::rip();
+    if (!$result = $this->exec($query)) {
+      return false;
+    }
 
     $this->chronoFetch->start();
 
     $hashlist = array();
-    while ($hash = $this->fetchAssoc($cur)) {
+    while ($hash = $this->fetchAssoc($result)) {
       $key = reset($hash);
       $hashlist[$key] = $hash;
     }
 
     $this->chronoFetch->stop();
 
-    $this->freeResult($cur);
+    $this->freeResult($result);
     return $hashlist;
   }
   
@@ -648,8 +680,7 @@ abstract class CSQLDataSource {
    * @return array the query result
    */
   function loadList($query, $maxrows = null) {
-    if (null == $result = $this->exec($query)) {
-      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+    if (!$result = $this->exec($query)) {
       return false;
     }
 
@@ -668,10 +699,16 @@ abstract class CSQLDataSource {
     $this->freeResult($result);
     return $list;
   }
-  
+
+  /**
+   * Count rows for query
+   *
+   * @param string $query The SQL query
+   *
+   * @return bool|int
+   */
   function countRows($query) {
-    if (null == $result = $this->exec($query)) {
-      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+    if (!$result = $this->exec($query)) {
       return false;
     }
 
@@ -694,15 +731,14 @@ abstract class CSQLDataSource {
    * @return array the query result
    */
   function loadColumn($query, $maxrows = null) {
-    if (null == $cur = $this->exec($query)) {
-      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+    if (!$result = $this->exec($query)) {
       return false;
     }
 
     $this->chronoFetch->start();
     
     $list = array();
-    while ($row = $this->fetchRow($cur)) {
+    while ($row = $this->fetchRow($result)) {
       $list[] = $row[0];
       if ($maxrows && $maxrows == count($list)) {
         break;
@@ -711,7 +747,7 @@ abstract class CSQLDataSource {
 
     $this->chronoFetch->stop();
     
-    $this->freeResult($cur);
+    $this->freeResult($result);
     return $list;
   }
     
@@ -780,8 +816,8 @@ abstract class CSQLDataSource {
       }
     }*/
 
-    $result = $this->exec($query);
-    if (!$result) {
+    if (!$result = $this->exec($query)) {
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
 
@@ -794,6 +830,15 @@ abstract class CSQLDataSource {
     return true;
   }
 
+  /**
+   * Delete a row
+   *
+   * @param string $table    Table
+   * @param string $keyName  Primary key name
+   * @param string $keyValue Key value
+   *
+   * @return bool|resource
+   */
   function deleteObject($table, $keyName, $keyValue) {
     if (CAppUI::conf("readonly")  || $this->dsn === "slave") {
       return false;
@@ -803,7 +848,18 @@ abstract class CSQLDataSource {
 
     return $this->exec($query);
   }
-  
+
+  /**
+   * Insert multiple rows using data array
+   *
+   * @param string     $table Table
+   * @param string[][] $data  Collection of fields array
+   * @param int        $step  Create a new insert statement after step rows
+   * @param bool       $trim  Trim values if true
+   *
+   * @return void
+   * @throws CMbException
+   */
   function insertMulti($table, $data, $step, $trim = true){
     $counter = 0;
     
@@ -848,8 +904,7 @@ abstract class CSQLDataSource {
         $query .= implode(",", $queries);
         $query .= ";";
 
-        $result = $this->exec($query);
-        if (!$result) {
+        if (!$this->exec($query)) {
           throw new CMbException($this->error());
         }
       }
@@ -862,6 +917,8 @@ abstract class CSQLDataSource {
    * @param string $table Table name
    * @param mixed  &$k    in/out column name
    * @param string &$v    in/out column value
+   *
+   * @return void
    */
   function quote($table, &$k, &$v) {
     if (!isset($this->unquotable[$table]) || !in_array($k, $this->unquotable[$table])) {
@@ -875,12 +932,11 @@ abstract class CSQLDataSource {
    * null and underscored vars are skipped
    *
    * @param string $table               The table name
-   * @param object $object              The object with fields
    * @param array  $vars                The array containing the object's values
    * @param string $keyName             The variable name of the key to set
    * @param bool   $nullifyEmptyStrings Whether to nullify empty values
    *
-   * @return bool job done
+   * @return bool Job done
    */
   function updateObject($table, $vars, $keyName, $nullifyEmptyStrings = true) {
     if (CAppUI::conf("readonly") || $this->dsn === "slave") {
@@ -925,12 +981,7 @@ abstract class CSQLDataSource {
     $values = implode(",", $tmp);
     $query = "UPDATE $table SET $values WHERE $where";
 
-    $result = $this->exec($query);
-    if (!$result) {
-      return false;
-    }
-
-    return true;
+    return $this->exec($query) ? true : false;
   }
   
   /**
@@ -962,7 +1013,16 @@ abstract class CSQLDataSource {
     
     return strtr($query, $trans);
   }
-  
+
+  /**
+   * Get database table info
+   *
+   * @param string $table          Table name
+   * @param null   $field          Filter on field name (not sure)
+   * @param bool   $reduce_strings Unquote strings and turns them to integer whenever possible
+   *
+   * @return string[][] Collection of properties
+   */
   function getDBstruct($table, $field = null, $reduce_strings = false){
     $list_fields = $this->loadList("SHOW COLUMNS FROM `{$table}`");
     $fields = array();
@@ -1074,7 +1134,16 @@ abstract class CSQLDataSource {
     $str = implode(", ", $quoted);
     return "NOT IN ($str)";
   }
-  
+
+  /**
+   * Produce a replace text SQL statement
+   *
+   * @param string|string[] $search  Search string
+   * @param string|string[] $replace Replace string
+   * @param string          $subject Subject string
+   *
+   * @return string
+   */
   static function getReplaceQuery($search, $replace, $subject) {
     if (!is_array($search)) {
       $search = array($search);
@@ -1105,10 +1174,19 @@ abstract class CSQLDataSource {
     
     return $query;
   }
-  
+
+  /**
+   * Create temporary tables with dates rows
+   *
+   * @param date $date_min Min date
+   * @param date $date_max Max date
+   *
+   * @deprecated
+   * @return string|null
+   */
   static function tempTableDates($date_min, $date_max) {
     if (!$date_min && !$date_max) {
-      return;
+      return null;
     }
     
     $date_temp = $date_min;

@@ -132,6 +132,7 @@ class CModuleActionLog extends CStoredObject {
     $buffer_lifetime = CAppUI::conf("access_log_buffer_lifetime");
     if (!$buffer_lifetime) {
       if ($msg = static::fastMultiStore($logs)) {
+        mbLog("Could not store logs: $msg", $class);
         trigger_error($msg, E_USER_WARNING);
       }
       return;
