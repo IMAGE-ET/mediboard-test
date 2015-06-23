@@ -68,12 +68,11 @@
           <span style="display: inline-block; width: 10px; height: 10px; background-color: #{{$_besoin->_color}};"></span>
           {{mb_value object=$_besoin->_ref_type_ressource field=libelle}}
         {{/foreach}}
-      {{else}}
-        {{if !$curr_op->_ref_commande_mat->_id && $curr_op->materiel != '' && $_missing_materiel}}
-          <em>Materiel manquant:</em>
-        {{/if}}
-        {{$curr_op->materiel|nl2br}}
       {{/if}}
+      {{if !$curr_op->_ref_commande_mat->_id && $curr_op->materiel != '' && $_missing_materiel}}
+        <em>Materiel manquant:</em>
+      {{/if}}
+      {{$curr_op->materiel|nl2br}}
     </td>
   {{/if}}
 {{else}}
