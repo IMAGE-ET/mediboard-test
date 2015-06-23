@@ -45,9 +45,9 @@
         {{else}}
         <select name="class">
           <option value="">&mdash; {{tr}}All{{/tr}}</option>
-          {{foreach from=$listClass item=_class}}
-            <option value="{{$_class}}">
-              {{$_class}}
+          {{foreach from=$listClass key=_class item=_class_view}}
+            <option value="{{$_class}}" {{if $category->class == $_class}}selected{{/if}}>
+              {{$_class_view}}
             </option>
           {{/foreach}}
         </select>

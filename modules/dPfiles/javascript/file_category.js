@@ -88,6 +88,7 @@ FilesCategory = {
   },
 
   callback : function(id) {
+    Control.Modal.close();
     FilesCategory.loadList();
     FilesCategory.edit(id);
   },

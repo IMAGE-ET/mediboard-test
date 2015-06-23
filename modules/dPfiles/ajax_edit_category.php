@@ -26,7 +26,7 @@ $classes = array();
 foreach ($listClass as $key => $_class) {
   $classes[$_class] = CAppUI::tr($_class);
 }
-CMbArray::naturalSort($classes);
+asort($classes);
 
 $smarty = new CSmartyDP();
 $smarty->assign("category" , $category);

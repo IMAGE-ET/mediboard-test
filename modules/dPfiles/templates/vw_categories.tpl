@@ -37,9 +37,9 @@
                   <td>
                     <select name="class" style="width: 15em;">
                       <option value="">&mdash; {{tr}}All{{/tr}}</option>
-                      {{foreach from=$listClass item=_class}}
+                      {{foreach from=$listClass key=_class item=_class_view}}
                         <option value="{{$_class}}" {{if $_class == $class}}selected{{/if}}>
-                          {{$_class}}
+                          {{$_class_view}}
                         </option>
                       {{/foreach}}
                     </select>
