@@ -24,54 +24,59 @@ if ($del && $usermessage->_id) {
   if ($msg = $usermessage->delete()) {
     CAppUI::stepAjax($msg, UI_MSG_ERROR);
   }
-  return;
+  $msg = 'CUserMessage-msg-delete';
+  $message_id = null;
 }
-$usermessage->bind($_POST);
-if ($msg = $usermessage->store()) {
-  CAppUI::stepAjax($msg, UI_MSG_ERROR);
-}
-
-$destinataires = $usermessage->loadRefDests();
-foreach ($destinataires as $_dest) {
-
-  // mine reception
-  if ($_dest->to_user_id == $user->_id) {
-    $_dest->archived = $archive_mine;
-    if (!$_dest->datetime_read) {
-      $_dest->datetime_read = $date;
-    }
-    if ($msg = $_dest->store()) {
-      CAppUI::stepAjax($msg, UI_MSG_ERROR);
-    }
-  }
-
-  // in edit mode, we don't find a dest, (delete it !)
-  if (!$read_only && !in_array($_dest->to_user_id, $dests)) {
-    if ($msg = $_dest->delete()) {
-      CAppUI::stepAjax($msg, UI_MSG_ERROR);
-    }
-    continue;
-  }
-}
-
-foreach ($dests as $_dest) {
-  $destinataire = new CUserMessageDest();
-  $destinataire->user_message_id = $usermessage->_id;
-  $destinataire->from_user_id = $usermessage->creator_id;
-  $destinataire->to_user_id = $_dest;
-  $destinataire->loadMatchingObject();
-  if ($send_it) {
-    $destinataire->datetime_sent = $date;
-  }
-  if ($msg = $destinataire->store()) {
+else {
+  $usermessage->bind($_POST);
+  if ($msg = $usermessage->store()) {
     CAppUI::stepAjax($msg, UI_MSG_ERROR);
   }
+  $message_id = $usermessage->usermessage_id;
+
+  $destinataires = $usermessage->loadRefDests();
+  foreach ($destinataires as $_dest) {
+
+    // mine reception
+    if ($_dest->to_user_id == $user->_id) {
+      $_dest->archived = $archive_mine;
+      if (!$_dest->datetime_read) {
+        $_dest->datetime_read = $date;
+      }
+      if ($msg = $_dest->store()) {
+        CAppUI::stepAjax($msg, UI_MSG_ERROR);
+      }
+    }
+
+    // in edit mode, we don't find a dest, (delete it !)
+    if (!$read_only && !in_array($_dest->to_user_id, $dests)) {
+      if ($msg = $_dest->delete()) {
+        CAppUI::stepAjax($msg, UI_MSG_ERROR);
+      }
+      continue;
+    }
+  }
+
+  foreach ($dests as $_dest) {
+    $destinataire = new CUserMessageDest();
+    $destinataire->user_message_id = $usermessage->_id;
+    $destinataire->from_user_id = $usermessage->creator_id;
+    $destinataire->to_user_id = $_dest;
+    $destinataire->loadMatchingObject();
+    if ($send_it) {
+      $destinataire->datetime_sent = $date;
+    }
+    if ($msg = $destinataire->store()) {
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
+    }
+  }
+
+  $msg = $_POST["usermessage_id"] ? 'CUserMessage-msg-modify' : 'CUserMessage-msg-create';
+  if ($send_it) {
+    $msg = 'CUserMessage-msg-sent';
+  }
 }
 
-$msg = 'CUserMessage-msg-create';
-if ($send_it) {
-  $msg = 'CUserMessage-msg-sent';
-}
 CAppUI::setMsg($msg, UI_MSG_OK);
 
 $smarty = new CSmartyDP;
@@ -81,5 +86,5 @@ $smarty->assign('messages', $messages);
 $smarty->display('inc_callback_modal.tpl');
 
 if($callback) {
-  CAppUI::callbackAjax($callback);
+  CAppUI::callbackAjax($callback, 'internal', $message_id);
 }

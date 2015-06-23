@@ -32,6 +32,7 @@
   sendMail = function(form) {
     $V(form._content, CKEDITOR.instances.htmlarea.getData());
     $V(form.action, 'send');
+    $V(form._closeModal, 1);
     return onSubmitFormAjax(form);
   };
 
@@ -67,6 +68,7 @@
 
   deleteMail = function(form) {
     $V(form.del, 1);
+    $V(form._closeModal, 1);
     onSubmitFormAjax(form, {check: function() {
       return true;
     }});
@@ -111,6 +113,7 @@
   <input type="hidden" name="dosql" value="do_usermail_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="action" value=""/>
+  <input type="hidden" name="_closeModal" id="closeModal" value="0"/>
   <input type="hidden" name="callback" value="callbackModalMessagerie"/>
   
   {{mb_field object=$mail field=account_id hidden=true}}

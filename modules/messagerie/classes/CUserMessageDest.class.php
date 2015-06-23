@@ -230,7 +230,8 @@ class CUserMessageDest extends CMbObject {
       'to_user_id' => "= '$user->_id'",
       'datetime_sent' => "IS NOT NULL",
       'archived' => "!= '1'",
-      'datetime_read' => "IS NULL"
+      'datetime_read' => "IS NULL",
+      'deleted' => "= '0'"
     );
 
     return $user_message->countList($where);
@@ -249,6 +250,7 @@ class CUserMessageDest extends CMbObject {
       'to_user_id' => "= '$user->_id'",
       'datetime_sent' => "IS NOT NULL",
       'archived' => "!= '1'",
+      'deleted' => "= '0'"
     );
 
     return $user_message->countList($where);
@@ -267,6 +269,7 @@ class CUserMessageDest extends CMbObject {
       'to_user_id' => "= '$user->_id'",
       'datetime_sent' => "IS NOT NULL",
       'archived' => "= '1'",
+      'deleted' => "= '0'"
     );
 
     return $user_message->countList($where);
