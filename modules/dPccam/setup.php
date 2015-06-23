@@ -335,10 +335,11 @@ class CSetupdPccam extends CSetup {
     $query = "SHOW TABLES LIKE 'p_acte';";
     $this->addDatasource("ccamV2", $query);
 
-    // Version 39 de la CCAM
-    $table = "p_phase_acte";
-    $column = "PRIXUNITAIRE2";
-    $query = "SHOW COLUMNS FROM `$table` LIKE '$column'";
+    // Version 40 de la CCAM
+    $query = "SELECT *
+              FROM  `c_notesarborescence`
+              WHERE  `CODEMENU` LIKE  '000583'
+                AND TEXTE LIKE 'Facturation : Possibilité de facturation de l\'association des actes GAQE001 et  GCQE001%'";
     $this->addDatasource("ccamV2", $query);
   }
 }
