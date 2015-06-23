@@ -142,9 +142,9 @@ class CProductCategoryXMLImport extends CMbXMLObjectImport {
               $_object = $_similar;
               CAppUI::stepAjax("Produit '%s' retrouvé", UI_MSG_OK, $_object->_view);
             }
-
-            $imported_object = $_object;
           }
+
+          $imported_object = $_object;
         }
         break;
 
