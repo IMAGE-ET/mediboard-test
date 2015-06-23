@@ -25,6 +25,7 @@ $numero             = CValue::getOrSession("numero", "1");
 $search_easy        = CValue::getOrSession("search_easy", "0");
 $page               = CValue::get("page", "0");
 $facture_class      = CValue::getOrSession("facture_class", "CFactureCabinet");
+$xml_etat           = CValue::getOrSession("xml_etat", "");
 
 // Liste des chirurgiens
 $user = new CMediusers();
@@ -32,6 +33,7 @@ $listChir =  $user->loadPraticiens(PERM_EDIT);
 
 $ljoin = array();
 $where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 if ($etat_relance || $search_easy == 7) {
   $ljoin["facture_relance"] = "facture_relance.object_id = facture_etablissement.facture_id";
   $where["facture_relance.object_class"] = " = '$facture_class'";
@@ -67,6 +69,9 @@ if ($search_easy == 5) {
 }
 if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
+}
+if ($xml_etat != "") {
+  $where["facture"] =" = '$xml_etat' ";
 }
 
 $facture = new $facture_class;
