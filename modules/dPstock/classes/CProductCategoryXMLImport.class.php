@@ -85,33 +85,67 @@ class CProductCategoryXMLImport extends CMbXMLObjectImport {
     }
 
     switch ($_class) {
-      case "CSociete":
-        /** @var CSociete $_object */
-        $_object = $this->getObjectFromElement($element);
-
-        if (!$_object->loadMatchingObject()) {
-          if ($msg = $_object->store()) {
-            CAppUI::stepAjax($msg, UI_MSG_WARNING);
-            throw new Exception($msg);
-          }
-
-          CAppUI::stepAjax("Société '%s' créée", UI_MSG_OK, $_object->_view);
-        }
-        else {
-          CAppUI::stepAjax("Société '%s' retrouvée", UI_MSG_OK, $_object->_view);
-        }
-
-        $imported_object = $_object;
-        break;
-
-      case "CProduct":
+      case "CProductCategory":
         $imported_object = $this->findOrCreate(
           $element,
           $_class,
-          array("code_canonical"),
+          array("name"),
+          "Catégorie '%s' retrouvée",
+          "Catégorie '%s' créée"
+        );
+        break;
+
+      case "CSociete":
+        $imported_object = $this->findOrCreate(
+          $element,
+          $_class,
+          array("name"),
           "Société '%s' retrouvée",
           "Société '%s' créée"
         );
+        break;
+
+      case "CProduct":
+        /** @var CProduct $_object */
+        $_object = $this->getObjectFromElement($element);
+
+        $_object_base = new CProduct();
+        $_object_base->name = $_object->name;
+        $_object_base->loadMatchingObjectEsc();
+
+        if (!$_object_base->_id) {
+          $imported_object = $this->findOrCreate(
+            $element,
+            $_class,
+            array("code_canonical"),
+            "Produit '%s' retrouvé",
+            "Produit '%s' créé"
+          );
+          break;
+        }
+        else {
+          if ($_object_base->code != $_object->code) {
+            $_object->name .= " (import du ".CMbDT::dateTime()." - ".substr(uniqid("", true), -5).")";
+
+            $_similar = new CProduct();
+            $_similar->code = $_object->code;
+
+            if (!$_similar->loadMatchingObjectEsc()) {
+              if ($msg = $_object->store()) {
+                CAppUI::stepAjax($msg, UI_MSG_WARNING);
+                throw new Exception($msg);
+              }
+
+              CAppUI::stepAjax("Produit '%s' créé", UI_MSG_OK, $_object->_view);
+            }
+            else {
+              $_object = $_similar;
+              CAppUI::stepAjax("Produit '%s' retrouvé", UI_MSG_OK, $_object->_view);
+            }
+          }
+
+          $imported_object = $_object;
+        }
         break;
 
       case "CProductReference":
@@ -163,7 +197,7 @@ class CProductCategoryXMLImport extends CMbXMLObjectImport {
     }
 
     // Store idex on new object
-    if ($imported_object) {
+    if ($imported_object && $imported_object->_id) {
       $idex->setObject($imported_object);
       $idex->id400 = $id;
       if ($msg = $idex->store()) {
@@ -216,9 +250,9 @@ class CProductCategoryXMLImport extends CMbXMLObjectImport {
    * @return CIdSante400
    */
   function lookupObject($guid, $tag = "migration") {
-    list($class, $id) = explode("-", $guid);
+    list($class,) = explode("-", $guid);
 
-    $idex = CIdSante400::getMatch($class, $tag, null, $id);
+    $idex = CIdSante400::getMatch($class, $tag, $guid);
 
     return $idex;
   }
