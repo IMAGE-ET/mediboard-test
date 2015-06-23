@@ -42,7 +42,7 @@ foreach ($listSejours as $_sejour) {
     $_naissance->loadRefSejourEnfant()->loadRefPatient();
     $_naissance->loadRefOperation();
   }
-  $_sejour->loadRefCurrAffectation($date);
+  $_sejour->loadRefCurrAffectation($date . " " . CMbDT::time());
   $grossesse->getDateAccouchement();
 }
 
