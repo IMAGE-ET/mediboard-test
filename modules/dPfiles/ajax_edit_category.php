@@ -19,9 +19,16 @@ $category = new CFilesCategory();
 $category->load($category_id);
 $category->countDocItems();
 $category->loadRefsNotes();
+
 $listClass = CApp::getChildClasses();
 
+$classes = array();
+foreach ($listClass as $key => $_class) {
+  $classes[$_class] = CAppUI::tr($_class);
+}
+CMbArray::naturalSort($classes);
+
 $smarty = new CSmartyDP();
-$smarty->assign("category", $category);
-$smarty->assign("listClass"   , $listClass );
+$smarty->assign("category" , $category);
+$smarty->assign("listClass", $classes );
 $smarty->display("inc_form_category.tpl");
