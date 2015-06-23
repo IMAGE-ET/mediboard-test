@@ -60,22 +60,42 @@
     if (existing) {
       return;
     }
+    $V(getForm('edit_usermessage')._dest, 1);
     dest_list.insert('<li id="dest_'+id+'" style="border-left:'+style+';">'+name+'<input type="hidden" name="dest[]" value="'+id+'"/><button class="delete notext" type="button" style="display: inline; margin-left: 5px;" onclick="removeDest(\''+id+'\');"></button></li>');
   };
 
   removeDest = function(id) {
     $('dest_'+id).remove();
+    if (!$$('input[name="dest[]"]').length) {
+      $V(getForm('edit_usermessage')._dest, '');
+    }
   };
+
+  submitMessage = function(form, closeModal) {
+    var dests = $$('input[name="dest[]"]');
+    if (dests.length) {
+      {{if $app->user_prefs.inputMode == 'html'}}
+        $V(form.content, CKEDITOR.instances.htmlarea.getData());
+      {{/if}}
+      return onSubmitFormAjax(form);
+    }
+    else {
+      alert('{{tr}}CUserMessage-msg-no_recipient_selected{{/tr}}');
+      return false;
+    }
+  }
 
 </script>
 
-<form method="post" action="?" name="edit_usermessage" onsubmit="$V(this.content, CKEDITOR.instances.htmlarea.getData()); return onSubmitFormAjax(this);">
+<form method="post" action="?" name="edit_usermessage" onsubmit="return submitMessage(this);">
   <input type="hidden" name="m" value="messagerie"/>
   <input type="hidden" name="dosql" value="do_usermessage_aed"/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_send" value="0" />
   <input type="hidden" name="_archive" value="0" />
   <input type="hidden" name="_readonly" value="{{if $usermessage->_can_edit}}0{{else}}1{{/if}}" />
+  <input type="hidden" name="_dest" value="{{$usermessage->_ref_destinataires|@count}}"/>
+  <input type="hidden" name="_closeModal" value="0" id="closeModal"/>
   <input type="hidden" name="usermessage_id" value="{{$usermessage->_id}}" />
   <input type="hidden" name="in_reply_to" value="{{$usermessage->in_reply_to}}" />
   <input type="hidden" name="callback" value="callbackModalMessagerie" />
@@ -132,16 +152,16 @@
     <tr>
       <td colspan="2" class="button">
         {{if $usermessage->_can_edit}}
-          <button type="button" onclick="$V(this.form._send, 1); this.form.onsubmit();">
+          <button type="button" onclick="$V(this.form._send, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
             <i class="msgicon fa fa-send"></i>
             {{tr}}Send{{/tr}}
           </button>
-          <button type="button" onclick="this.form.submit();window.parent.Control.Modal.close();">
+          <button type="button" onclick="this.form.onsubmit();">
             <i class="msgicon fa fa-save"></i>
             {{tr}}Save{{/tr}}
           </button>
           {{if $usermessage->_id}}
-            <button onclick="$V(this.form.del, 1); window.parent.Control.Modal.close();">
+            <button type="button" onclick="$V(this.form.del, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
               <i class="msgicon fa fa-save"></i>
               {{tr}}Delete{{/tr}}
             </button>
