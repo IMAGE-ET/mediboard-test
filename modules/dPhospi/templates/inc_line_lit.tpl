@@ -61,7 +61,7 @@
 
 {{foreach from=0|range:$nb_ticks_r item=_i}}
   {{assign var=datetime value=$datetimes.$_i}}
-  <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}} {{if $_i > 0 && $_i % 4 == 0}}left_day_week{{/if}}"
+  <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}} {{if $granularite == "week" && $_i > 0 && $_i % 4 == 0}}left_day_week{{/if}}"
     data-date="{{$datetime}}"
       {{if $in_corridor && $_i == 0}}
         {{if $_lit->_affectation_id}}
