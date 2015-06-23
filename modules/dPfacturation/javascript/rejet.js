@@ -17,5 +17,10 @@ Rejet = {
     var url = new Url('facturation', 'vw_rejets_facture');
     url.addFormData(form);
     url.requestUpdate("list_rejets_facture");
+  },
+  traiterRejet: function(form) {
+    onSubmitFormAjax(form, {
+      onComplete : function() {Rejet.searchFactureRejet(getForm("choice_rejet_all"));}
+    });
   }
 };

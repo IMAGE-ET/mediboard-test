@@ -52,8 +52,6 @@
         </td>
         <th>{{mb_label object=$rejet field=file_name}}</th>
         <td>{{mb_field object=$rejet field=file_name}}</td>
-        <th>{{mb_label object=$rejet field=motif_rejet}}</th>
-        <td>{{mb_field object=$rejet field=motif_rejet}}</td>
         <th>{{mb_label object=$rejet field=name_assurance}}</th>
         <td>{{mb_field object=$rejet field=name_assurance}}</td>
       </tr>
@@ -63,11 +61,10 @@
         <th>{{mb_label object=$rejet field=date}}</th>
         <td>{{mb_field object=$rejet field=date form="choice_rejet_all" register=true}}</td>
         <th>{{mb_label object=$rejet field=statut}}</th>
-        <td>{{mb_field object=$rejet field=statut}}</td>
-        <td colspan="2"></td>
+        <td>{{mb_field object=$rejet field=statut emptyLabel="Choose"}}</td>
       </tr>
       <tr>
-        <td class="button" colspan="8">
+        <td class="button" colspan="9">
           <button type="button" onclick="Rejet.searchFactureRejet(this.form);" class="submit" >{{tr}}Validate{{/tr}}</button>
         </td>
       </tr>
