@@ -21,7 +21,7 @@ if (!$object->_guid) {
   CApp::rip();
 }
 
-$object->loadAlertsNotHandled($level, $tag);
+$object->loadAlertsNotHandled($level, $tag, null);
 $object->canDo();
 
 $alert_ids = CMbArray::pluck($object->_refs_alerts_not_handled, "_id");

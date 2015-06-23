@@ -721,6 +721,7 @@ else {
     }
 
     $sejour->countTasks();
+    $sejour->countAlertsNotHandled("medium", "observation");
 
     $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
     $smarty->assign("move_dossier_soin"   , false);

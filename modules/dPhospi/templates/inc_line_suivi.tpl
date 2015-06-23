@@ -44,7 +44,7 @@
     </div>
   </td>
   <td class="text">
-
+    {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_observation_aed" />
         <input type="hidden" name="del" value="1" />
@@ -54,7 +54,7 @@
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
       </form>
       <button type="button" class="edit notext" onclick="addObservation(null, null, '{{$_suivi->_id}}');"></button>
-
+    {{/if}}
   </td>
 {{/if}}
 

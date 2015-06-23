@@ -192,9 +192,15 @@
     url.requestUpdate("alert_obs_"+obs_id);
   };
 
-  {{if $count_trans > 0}}
-    Main.add(showListTransmissions.curry(0, {{$count_trans}}));
-  {{/if}}
+  Main.add(function() {
+    {{if $count_trans > 0}}
+      showListTransmissions(0, {{$count_trans}});
+    {{/if}}
+
+    if (window.compteurAlertesObs) {
+      compteurAlertesObs();
+    }
+  });
 </script>
 
 <div style="display: none;" id="legend_suivi">

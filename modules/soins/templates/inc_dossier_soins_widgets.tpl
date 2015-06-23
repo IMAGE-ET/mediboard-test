@@ -17,10 +17,11 @@
       var span_ampoule = $('span-alerts-medium-observation-{{$sejour->_guid}}');
       if (span_ampoule) {
         if (count) {
+          span_ampoule.show();
           span_ampoule.down('span').innerHTML = count;
         }
         else {
-          span_ampoule.remove();
+          span_ampoule.hide();
         }
       }
     });
@@ -35,7 +36,7 @@
           Transmissions et observations importantes
           <button class="search notext compact" type="button" onclick="PlanSoins.showModalAllTrans('{{$sejour->_id}}')"></button>
           {{if "soins Observations manual_alerts"|conf:"CGroups-$g"}}
-            {{mb_include module=system template=inc_icon_alerts object=$sejour tag=observation callback=compteurAlertesObs}}
+            {{mb_include module=system template=inc_icon_alerts object=$sejour tag=observation callback=compteurAlertesObs show_empty=1 show_span=1}}
           {{/if}}
         </legend>
         <div id="tooltip-alerts-medium-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px; overflow-x: auto;"></div>

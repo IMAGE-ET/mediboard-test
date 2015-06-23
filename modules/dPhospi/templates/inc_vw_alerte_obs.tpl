@@ -24,7 +24,7 @@
   <img src="images/icons/{{$img}}.png"
        onmouseover="
          {{if $img == "ampoule"}}
-           Alert.showAlerts('{{$obs->_guid}}', 'observation', 'medium', refreshAlertObs.curry('{{$obs->_id}}'), this);
+           Alert.showAlerts('{{$obs->_guid}}', 'observation', 'medium', function() { refreshAlertObs('{{$obs->_id}}'); compteurAlertesObs(); }, this);
          {{else}}
            ObjectTooltip.createDOM(this, 'tracabilite_obs_{{$obs->_id}}');
          {{/if}}"/>

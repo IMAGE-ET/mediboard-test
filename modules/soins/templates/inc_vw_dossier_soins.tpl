@@ -254,6 +254,23 @@
     });
   };
 
+  compteurAlertesObs = function() {
+    var url = new Url("hospi", "ajax_count_alert_obs", "raw");
+    url.addParam("sejour_id", "{{$sejour->_id}}");
+    url.requestJSON(function(count) {
+      var span_ampoule = $('span-alerts-medium-observation-{{$sejour->_guid}}');
+      if (span_ampoule) {
+        if (count) {
+          span_ampoule.show();
+          span_ampoule.down('span').innerHTML = count;
+        }
+        else {
+          span_ampoule.hide();
+        }
+      }
+    });
+  }
+
   {{if "dPprescription"|module_active}}
     prescriptions_ids = {{$multiple_prescription|@json}};
   {{/if}}
@@ -460,7 +477,10 @@
   <!-- Transmissions -->
   <li onmousedown="loadSuivi('{{$sejour->_id}}')" {{if "soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g"}}style="display: none;"{{/if}}>
     <a href="#dossier_suivi">
-      Trans. <small id="nb_trans"></small> / Obs. / Consult.
+      Trans. <small id="nb_trans"></small> / Obs
+      {{if !"soins Other vue_condensee_dossier_soins"|conf:"CGroups-$g" && "soins Observations manual_alerts"|conf:"CGroups-$g"}}
+        {{mb_include module=system template=inc_icon_alerts object=$sejour tag=observation callback="function() { compteurAlertesObs(); loadSuivi('`$sejour->_id`'); }" show_empty=1 show_span=1 event=onmouseover}}
+      {{/if}} . / Consult.
       {{if "soins CConstantesMedicales constantes_show"|conf:"CGroups-$g"}}/ Const.{{/if}}
     </a>
   </li>
