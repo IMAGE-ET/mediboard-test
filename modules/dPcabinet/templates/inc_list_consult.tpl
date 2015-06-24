@@ -1,37 +1,36 @@
 <script>
-// Notification de l'arrivée du patient
-if (!window.Consultations) {
-  Consultations = {
-    start: function() {
-    window.location.reload();
-    }
+  // Notification de l'arrivée du patient
+  if (!window.Consultations) {
+    Consultations = {
+      start: function() {
+      window.location.reload();
+      }
+    };
+  }
+
+  putArrivee = function(oForm) {
+    var today = new Date();
+    oForm.arrivee.value = today.toDATETIME(true);
+    onSubmitFormAjax(oForm, Consultations.start);
   };
-}
 
-putArrivee = function(oForm) {
-  var today = new Date();
-  oForm.arrivee.value = today.toDATETIME(true);
-  onSubmitFormAjax(oForm, { onComplete: Consultations.start } );
-};
-
-printPlage = function (plage_id) {
-  var url = new Url;
-  url.setModuleAction("cabinet", "print_plages");
-  url.addParam("plage_id", plage_id);
-  url.addParam("_telephone", 1);
-  url.popup(700, 550, "Planning");
-};
+  printPlage = function(plage_id) {
+    var url = new Url("cabinet", "print_plages");
+    url.addParam("plage_id", plage_id);
+    url.addParam("_telephone", 1);
+    url.popup(700, 550, "Planning");
+  };
 </script>
 
 {{if !$board}}
   {{if $canCabinet->read}}
-    <script type="text/javascript">
-      Main.add( function () {
+    <script>
+      Main.add(function() {
         Calendar.regField(getForm("changeView").date, null, {noView: true});
-      } );
+      });
     </script>
   {{/if}}
-  <form name="changeView" action="?" method="get">
+  <form name="changeView" method="get">
     <input type="hidden" name="m" value="{{$current_m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
     <table class="form">
@@ -54,8 +53,8 @@ printPlage = function (plage_id) {
         <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
         <td colspan="10">
           <select name="vue2" onchange="this.form.submit()">
-            <option value="0" {{if $vue == "0"}}selected="selected"{{/if}}>Tout afficher</option>
-            <option value="1" {{if $vue == "1"}}selected="selected"{{/if}}>Cacher les terminées</option>
+            <option value="0" {{if $vue == "0"}}selected{{/if}}>Tout afficher</option>
+            <option value="1" {{if $vue == "1"}}selected{{/if}}>Cacher les terminées</option>
           </select>
         </td>
         {{/if}}

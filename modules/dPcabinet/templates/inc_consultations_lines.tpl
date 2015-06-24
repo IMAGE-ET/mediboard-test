@@ -52,9 +52,11 @@
   <th id="th_inc_consult_etat">{{mb_title class=CConsultation field=_etat}}</th>
 </tr>
 {{foreach from=$plageSel->_ref_consultations item=_consult}}
-  <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching" {{/if}}>
+  <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching"{{/if}}>
     {{assign var=consult_id    value=$_consult->_id}}
     {{assign var=patient       value=$_consult->_ref_patient}}
+    {{assign var=sejour        value=$_consult->_ref_sejour}}
+
     {{assign var=href_consult  value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
     {{assign var=href_planning value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
     {{assign var=href_patient  value="?m=patients&tab=vw_edit_patients&patient_id=$patient->_id"}}
@@ -66,7 +68,7 @@
       {{assign var="classe" value="premiere_consult"}}
     {{elseif $_consult->derniere}}
       {{assign var="classe" value="derniere_consult"}}
-    {{elseif $_consult->_ref_sejour->_id}}
+    {{elseif $sejour->_id}}
       {{assign var="classe" value="consult_sejour"}}
     {{/if}}
 
@@ -93,9 +95,12 @@
         <div style="float: right;">
           {{mb_include module=system template=inc_object_notes object=$patient}}
         </div>
-        <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');">
-        {{mb_value object=$patient}}
+        <a href="#" onclick="Consultation.edit('{{$_consult->_id}}');" style="display: inline-block;">
+          {{mb_value object=$patient}}
         </a>
+        {{if $sejour->entree_reelle}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">({{$sejour->entree_reelle|date_format:$conf.time}})</span>
+        {{/if}}
       {{/if}}
     </td>
 

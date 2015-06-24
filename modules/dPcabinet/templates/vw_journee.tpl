@@ -1,5 +1,5 @@
-{{mb_script module="dPcabinet" script="edit_consultation" ajax=$ajax}}
-{{mb_script module="dPcabinet" script="plage_consultation" ajax=$ajax}}
+{{mb_script module="cabinet" script="edit_consultation" ajax=$ajax}}
+{{mb_script module="cabinet" script="plage_consultation" ajax=$ajax}}
 
 <script>
 
@@ -19,8 +19,9 @@ Main.add(function () {
   }
   
   // Mise à jour du compteur de patients arrivés
-  if($('tab_main_courante')){
-    var link = $('tab_main_courante').select("a[href=#consultations]")[0];
+  var elt_tab_main_courante = $('tab_main_courante');
+  if (elt_tab_main_courante) {
+    var link = elt_tab_main_courante.select("a[href=#consultations]")[0];
     link.update('Reconvocations <small>({{$nb_attente}} / {{$nb_a_venir}})</small>');
     {{if $nb_attente == '0'}}
       link.addClassName('empty');
@@ -94,7 +95,7 @@ Reconvocation = {
   },
   submit: function() {
     var form = getForm('Create-Reconvocation');
-    return onSubmitFormAjax(form, { onComplete: Consultations.start.curry(80) });  
+    return onSubmitFormAjax(form, Consultations.start.curry(80));
   } 
 }
 </script>

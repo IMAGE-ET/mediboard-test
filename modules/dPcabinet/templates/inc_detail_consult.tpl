@@ -2,14 +2,15 @@
 
 {{mb_default var=mode_vue value=vertical}}
 {{assign var=patient value=$_consult->_ref_patient}}
-  
+{{assign var=sejour  value=$_consult->_ref_sejour}}
+
 {{if !$patient->_id}}
-  {{assign var="style" value="background-color: #ffa;"}}          
+  {{assign var="style" value="background-color: #ffa;"}}
 {{elseif $_consult->premiere}} 
-  {{assign var="style" value="background-color: #faa;"}}          
+  {{assign var="style" value="background-color: #faa;"}}
 {{elseif $_consult->derniere}} 
   {{assign var="style" value="background-color: #faf;"}}
-{{elseif $_consult->_ref_sejour->_id}} 
+{{elseif $sejour->_id}}
   {{assign var="style" value="background-color: #cfa;"}}
 {{else}} 
   {{assign var="style" value=""}}
@@ -108,11 +109,11 @@
           {{$patients_fetch.$patient_id|smarty:nodefaults}}
         </div>
         
-        <a href="#1" onclick="modalWindow = Modal.open($('{{$patient->_guid}}-dossier'))">
+        <a href="#1" onclick="modalWindow = Modal.open($('{{$patient->_guid}}-dossier'))" style="display: inline-block;">
       {{elseif $canCabinet->edit}}
-        <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;">
+        <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;" style="display: inline-block;">
       {{else}}
-        <a href="#1" title="Impossible d'accéder à la consultation">
+        <a href="#1" title="Impossible d'accéder à la consultation" style="display: inline-block;">
       {{/if}}
       
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
@@ -122,6 +123,9 @@
           {{/if}}
         </strong>
       </a>
+      {{if $sejour->entree_reelle}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">({{$sejour->entree_reelle|date_format:$conf.time}})</span>
+      {{/if}}
     {{else}}
       [PAUSE]
     {{/if}}

@@ -136,8 +136,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
     $_plage->_ref_chir = $infos_by_prat["prat"];
     $_plage->loadRefsConsultations($canceled, $finished);
     // Collection par référence susceptible d'être modifiée
-    $consultations =& $_plage->_ref_consultations;
-    
+    $consultations = $_plage->_ref_consultations;
     if (!$paid || !$immediate) {
       $_consult = new CConsultation();
       foreach ($consultations as $_consult) {
@@ -167,6 +166,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
     CStoredObject::massLoadFwdRef($consultations, "patient_id");
     CStoredObject::massLoadFwdRef($consultations, "sejour_id");
     CStoredObject::massLoadFwdRef($consultations, "categorie_id");
+
     CMbObject::massCountDocItems($consultations);
     /** @var CConsultAnesth[] $dossiers */
     $dossiers = CStoredObject::massLoadBackRefs($consultations, "consult_anesth");

@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
-{{mb_script module="dPpatients" script="patient" ajax=true}}
+{{mb_script module="cabinet" script="icone_selector" ajax=true}}
+{{mb_script module="patients" script="patient" ajax=true}}
 
 
 <table class="tbl">
