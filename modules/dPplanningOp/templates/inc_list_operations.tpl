@@ -224,7 +224,7 @@
           {{/if}}
         </td>
         <td class="text top">
-          <button type="button" class="soins" style="float: right;" onclick="Operation.showDossierSoins('{{$_operation->sejour_id}}', 'suivi_clinique')">
+          <button type="button" class="soins" style="float: right;" onclick="Operation.showDossierSoins('{{$_operation->sejour_id}}', 'suivi_clinique', updateListOperations)">
             {{tr}}soins.button.Dossier-soins{{/tr}}
           </button>
           <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
@@ -350,7 +350,7 @@
         </form>
       </td>
       <td class="text top">
-        <button type="button" class="soins" style="float: right;" onclick="Operation.showDossierSoins('{{$_operation->sejour_id}}', 'suivi_clinique')">
+        <button type="button" class="soins" style="float: right;" onclick="Operation.showDossierSoins('{{$_operation->sejour_id}}', 'suivi_clinique', updateListOperations)">
           {{tr}}soins.button.Dossier-soins{{/tr}}
         </button>
         <button type="button" class="injection" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">

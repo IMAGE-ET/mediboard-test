@@ -40,13 +40,14 @@ Operation = {
     });
   },
 
-  showDossierSoins: function(sejour_id, default_tab) {
+  showDossierSoins: function(sejour_id, default_tab, callback) {
+    callback = callback || this.modalCallback;
     var url = new Url("soins", "ajax_vw_dossier_sejour");
     url.addParam("sejour_id", sejour_id);
     url.addParam("modal", "1");
     url.addParam("default_tab", default_tab);
     url.requestModal("95%", "90%", {
-      onClose: updateListOperations
+      onClose: callback
     });
     modalWindow = url.modalObject;
   },

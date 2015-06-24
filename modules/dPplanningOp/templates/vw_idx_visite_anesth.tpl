@@ -179,6 +179,9 @@
                   {{if $_operation->_ref_consult_anesth->_id}}
                     <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}');">{{tr}}Print{{/tr}}</button>
                   {{/if}}
+                  <button type="button" class="soins" onclick="Operation.showDossierSoins('{{$_operation->sejour_id}}', 'suivi_clinique');">
+                    {{tr}}soins.button.Dossier-soins{{/tr}}
+                  </button>
                 </td>
               </tr>
               {{/foreach}}
