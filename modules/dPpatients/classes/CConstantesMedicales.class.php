@@ -2622,7 +2622,7 @@ class CConstantesMedicales extends CMbObject {
           }
 
           if (!in_array($_constant, $selection)) {
-            $rank = 'hidden';
+            $rank = 0;
           }
           elseif ($_rank == 0) {
             $rank = 1000;
@@ -2656,14 +2656,15 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
-    if (!$show_cat_tabs) {
-      ksort($result['all']);
-    }
-    else {
-      foreach ($result as $cat => $constants) {
-        if (is_array($result[$cat])) {
-          ksort($result[$cat]);
-        }
+    foreach ($result as $_type => $_ranks) {
+      if (array_key_exists(0, $result[$_type])) {
+        $unselected_constants = $result[$_type][0];
+        unset($result[$_type][0]);
+        $result[$_type]["hidden"] = $unselected_constants;
+      }
+
+      if (array_key_exists(-1, $result[$_type])) {
+        unset($result[$_type][-1]);
       }
     }
 
