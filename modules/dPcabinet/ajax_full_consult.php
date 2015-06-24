@@ -160,8 +160,13 @@ $consult->_ref_chir->loadRefFunction();
 
 // Chargement du dossier medical du patient de la consultation
 if ($consult->patient_id) {
-  $consult->_ref_patient->loadRefDossierMedical();
-  $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
+  $dossier_medical = $consult->_ref_patient->loadRefDossierMedical();
+  $dossier_medical->updateFormFields();
+
+  $dossier_medical->loadRefsAllergies();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAntecedents(false);
+  $dossier_medical->countAllergies();
 }
 
 // Chargement des actes NGAP
@@ -273,6 +278,8 @@ $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("list_etat_dents", $list_etat_dents);
+$smarty->assign("dossier_medical", $dossier_medical);
+$smarty->assign("antecedents"    , $dossier_medical->_ref_antecedents_by_type);
 $smarty->assign("tabs_count"     , CConsultation::makeTabsCount($consult, $dossier_medical, $consultAnesth, $sejour, $list_etat_dents));
 
 if (CModule::getActive("dPprescription")) {

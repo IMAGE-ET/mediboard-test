@@ -9,11 +9,24 @@
  * @version  $Revision:$
  */
 
-$sejour_id = CValue::getOrSession("sejour_id");
-$sejour = new CSejour();
-$sejour->load($sejour_id);
+CCanDo::checkRead();
 
-$sejour->loadRefPatient();
+$sejour_id   = CValue::getOrSession("sejour_id");
+$consult_id  = CValue::get("consult_id");
+
+if ($consult_id) {
+  $consult = new CConsultation();
+  $consult->load($consult_id);
+  $patient = $consult->loadRefPatient();
+  $sejour = $consult->loadRefSejour();
+}
+else {
+  $sejour = new CSejour();
+  $sejour->load($sejour_id);
+  $sejour->loadRefPatient();
+  $patient = $sejour->_ref_patient;
+}
+
 $sejour->loadRefDossierMedical();
 $dossier_medical_sejour =& $sejour->_ref_dossier_medical;
 if ($dossier_medical_sejour->_id) {
@@ -23,9 +36,8 @@ if ($dossier_medical_sejour->_id) {
   $dossier_medical_sejour->countAllergies();
 }
 
-$patient =& $sejour->_ref_patient;
 $patient->loadRefDossierMedical();
-$dossier_medical =& $patient->_ref_dossier_medical;
+$dossier_medical = $patient->_ref_dossier_medical;
 if ($dossier_medical->_id) {
   $dossier_medical->loadRefsAllergies();
   $dossier_medical->loadRefsAntecedents();

@@ -151,6 +151,10 @@ if ($dossier_medical->_id) {
   foreach ($etat_dents as $etat) {
     $list_etat_dents[$etat->dent] = $etat->etat;
   }
+  $dossier_medical->loadRefsAllergies();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAntecedents(false);
+  $dossier_medical->countAllergies();
 }
 
 $sejour = $consult->loadRefSejour();
@@ -192,6 +196,8 @@ $smarty->assign("consult_anesth" , $consultAnesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("userSel"        , $userSel);
+$smarty->assign("dossier_medical", $dossier_medical);
+$smarty->assign("antecedents"    , $dossier_medical->_ref_antecedents_by_type);
 $smarty->assign("tabs_count"     , CConsultation::makeTabsCount($consult, $dossier_medical, $consultAnesth, $sejour, $list_etat_dents));
 $smarty->assign("list_etat_dents", $list_etat_dents);
 

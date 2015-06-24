@@ -2475,8 +2475,9 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
             $count_meds = $prescription->countBackRefs("prescription_line_medicament");
           }
           $dossier_medical->countTraitements();
-          $dossier_medical->countAntecedents();
-          $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds + count($dossier_medical->_ext_codes_cim);
+          $dossier_medical->countAntecedents(false);
+          $dossier_medical->countAllergies();
+          $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_allergies + $dossier_medical->_count_traitements + $count_meds + count($dossier_medical->_ext_codes_cim);
           break;
         case "Constantes":
           if ($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {

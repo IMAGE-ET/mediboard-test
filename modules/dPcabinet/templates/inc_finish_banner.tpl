@@ -1,38 +1,46 @@
 {{mb_default var=current_m value=""}}
 
 <script>
-function checkConsult() {
-  var url = new Url("dPcabinet", "ajax_check_consult_anesth");
-  url.addParam("consult_id", "{{$consult->_id}}");
-  url.requestModal();
-}
-
-function submitConsultWithChrono(chrono) {
-  var oForm = document.editFrmFinish;
-  oForm.chrono.value = chrono;
-  return onSubmitFormAjax(oForm, { onComplete : reloadFinishBanner } );
-}
-
-function reloadFinishBanner() {
-  var url = new Url("dPcabinet", "httpreq_vw_finish_banner");
-  url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  url.addParam("_is_anesth", "{{$_is_anesth}}");
-  url.requestUpdate('finishBanner');
-}
-
-function printConsult() {
-  var url = new Url("dPcabinet", "print_consult");
-  url.addParam("consult_id", "{{$consult->_id}}");
-  url.popup(700, 550, "Consultation");
-}
-
-function changePratPec(prat_id) {
-  if(confirm('Etes-vous sur de vouloir changer le praticien de la consultation ?')) {
-    var oForm = getForm("editPratPec");
-    $V(oForm.prat_id, prat_id);
-    oForm.submit();
+  function checkConsult() {
+    var url = new Url("cabinet", "ajax_check_consult_anesth");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.requestModal();
   }
-}
+
+  function submitConsultWithChrono(chrono) {
+    var oForm = getForm("editFrmFinish");
+    oForm.chrono.value = chrono;
+    return onSubmitFormAjax(oForm, reloadFinishBanner);
+  }
+
+  function reloadFinishBanner() {
+    var url = new Url("cabinet", "httpreq_vw_finish_banner");
+    url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+    url.addParam("_is_anesth", "{{$_is_anesth}}");
+    url.requestUpdate('finishBanner');
+  }
+
+  function printConsult() {
+    var url = new Url("cabinet", "print_consult");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.popup(700, 550, "Consultation");
+  }
+
+  function changePratPec(prat_id) {
+    if (confirm('Etes-vous sur de vouloir changer le praticien de la consultation ?')) {
+      var oForm = getForm("editPratPec");
+      $V(oForm.prat_id, prat_id);
+      oForm.submit();
+    }
+  }
+
+  function reloadAtcd() {
+    var url = new Url('soins', 'httpreq_vw_antecedent_allergie');
+    url.addParam('consult_id', "{{$consult->_id}}");
+    url.requestUpdate('atcd_allergies', {insertion: function(element, content) {
+      element.innerHTML = content;
+    } });
+  }
 </script>
 
 {{mb_script module=dPurgences script=contraintes_rpu}}
@@ -65,6 +73,7 @@ function changePratPec(prat_id) {
     <th colspan="4" class="title text">
       {{assign var=patient value=$consult->_ref_patient}}
       {{assign var=sejour value=$consult->_ref_sejour}}
+      {{assign var=sejour_id value=$sejour->_id}}
       {{if $consult_anesth && $consult_anesth->_id}}
       <button class="print" type="button" style="float: left;" onclick="printFiche()">
         Imprimer la fiche
@@ -101,7 +110,11 @@ function changePratPec(prat_id) {
         {{/if}}   
       </div>
       {{/if}}
-      {{$patient}} - {{$patient->_age}} -
+      {{$patient}}
+      <span id="atcd_allergies">
+        {{mb_include module=soins template=inc_antecedents_allergies patient_guid=$patient->_guid}}
+      </span>
+      - {{$patient->_age}} -
       <select name="prat_id" class="ref notNull" onchange="changePratPec($V(this));" style="width: 16em;" title="Changer le praticien">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$consult->_ref_chir->_id}}
