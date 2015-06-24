@@ -114,7 +114,7 @@ class CActeCCAM extends CActe {
     $props["commentaire"]              = "text helped";
     $props["code_association"]         = "enum list|1|2|3|4|5";
     $props["extension_documentaire"]   = "enum list|1|2|3|4|5|6";
-    $props["rembourse"]                = "bool default|1";
+    $props["rembourse"]                = "bool";
     $props["charges_sup"]              = "bool";
     $props["regle"]                    = "bool default|0";
     $props["regle_dh"]                 = "bool default|0";
