@@ -1094,6 +1094,16 @@ class CCodable extends CMbObject {
             $possible_acte->extension_documentaire = $this->getExtensionDocumentaire($possible_acte->executant_id);
           }
 
+          /* Gestion du champ remboursé */
+          if ($code_ccam->remboursement == 1) {
+            /* Cas ou l'acte est remboursable */
+            $possible_acte->rembourse = '1';
+          }
+          else {
+            /* Cas ou l'acte est non */
+            $possible_acte->rembourse = '0';
+          }
+
           $possible_acte->updateFormFields();
           $possible_acte->loadRefExecutant();
           $possible_acte->loadRefCodeCCAM();
