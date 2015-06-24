@@ -18,6 +18,8 @@ $service_id = CValue::get("service_id");
 $date       = CValue::get("date", CMbDT::date());
 $embed      = CValue::get("embed");
 
+CView::enableSlave();
+
 $service = new CService();
 $service->load($service_id);
 
