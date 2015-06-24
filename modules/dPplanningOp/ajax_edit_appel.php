@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 $appel_id   = CValue::getOrSession("appel_id");
 $sejour_id  = CValue::getOrSession("sejour_id");
 $type       = CValue::getOrSession("type");
