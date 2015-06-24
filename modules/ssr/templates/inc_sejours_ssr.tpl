@@ -6,7 +6,7 @@
     url.requestJSON(function(count) {
       var span_ampoule = $('span-icon-alert-'+level+'-'+prescription_guid);
       if (count[level]) {
-        span_ampoule.down('span').innerHTML = count[level];
+        span_ampoule.down('span').down('span').innerHTML = count[level];
       }
       else {
         span_ampoule.down('img').remove();
