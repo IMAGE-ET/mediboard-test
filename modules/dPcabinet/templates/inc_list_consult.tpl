@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 // Notification de l'arrivée du patient
 if (!window.Consultations) {
   Consultations = {
@@ -12,9 +12,16 @@ putArrivee = function(oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
   onSubmitFormAjax(oForm, { onComplete: Consultations.start } );
-}
-</script>
+};
 
+printPlage = function (plage_id) {
+  var url = new Url;
+  url.setModuleAction("cabinet", "print_plages");
+  url.addParam("plage_id", plage_id);
+  url.addParam("_telephone", 1);
+  url.popup(700, 550, "Planning");
+};
+</script>
 
 {{if !$board}}
   {{if $canCabinet->read}}
