@@ -115,9 +115,9 @@ if (CModule::getActive("maternite")) {
   
   if (!$sejour->_id && $grossesse_id) {
     $sejour->type_pec = 'O';
-    $sejour->_date_entree_prevue = CMbDT::date();
+    $sejour->_date_entree_prevue = $sejour->_ref_grossesse->terme_prevu;
     $duree_sejour = CAppUI::conf("maternite duree_sejour");
-    $sejour->_date_sortie_prevue = CMbDT::date("+ $duree_sejour days");
+    $sejour->_date_sortie_prevue = CMbDT::date("+ $duree_sejour days", $sejour->_date_entree_prevue);
     $sejour->_duree_prevue = $duree_sejour;
     $sejour->type = $duree_sejour > 0 ? "comp" : "ambu";
   }
