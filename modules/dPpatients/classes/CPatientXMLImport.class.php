@@ -81,7 +81,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
 
         if ($msg = $_patient->store()) {
           CAppUI::stepAjax($msg, UI_MSG_WARNING);
-          throw new Exception($msg);
+          break;
         }
 
         if ($is_new) {
@@ -176,7 +176,8 @@ class CPatientXMLImport extends CMbXMLObjectImport {
         }
         else {
           if ($msg = $_file->store()) {
-            throw new Exception($msg);
+            CAppUI::stepAjax($msg, UI_MSG_WARNING);
+            break;
           }
 
           CAppUI::stepAjax("Fichier '%s' créé", UI_MSG_OK, $_file->_view);
