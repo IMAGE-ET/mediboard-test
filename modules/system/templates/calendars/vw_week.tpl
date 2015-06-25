@@ -289,7 +289,7 @@ Main.add(function() {
                                 {{$_event->title|smarty:nodefaults|nl2br}}
                               </span>
                             {{else}}
-                              <span>
+                              <span {{if $_event->onmousover}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}>
                                 {{$_event->title|smarty:nodefaults}}
                               </span>
                             {{/if}}

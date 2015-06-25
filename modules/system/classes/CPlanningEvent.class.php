@@ -54,6 +54,7 @@ class CPlanningEvent  {
   public $useHeight;
   public $important;
   public $css_class;
+  public $onmousover = false;
 
   public $_ref_object;
   public $_disponibilities;
