@@ -67,7 +67,7 @@ Main.add(function(){
         <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
 
         {{if $ex_picture->_id}}
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le sous groupe ',objName:'{{$ex_picture->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'l\'image ',objName:'{{$ex_picture->_view|smarty:nodefaults|JSAttribute}}'},ExClass.edit.curry('{{$ex_group->ex_class_id}}'))">
             {{tr}}Delete{{/tr}}
           </button>
 
