@@ -14,6 +14,8 @@ $dPconfig["dPccam"] = array (
       "COperation" => "0",
       "CSejour" => "0"
     ),
+    'precode_modificateur_7' => '0',
+    'precode_modificateur_J' => '0',
     'lock_codage_ccam' => 'open'
   ),
 );
