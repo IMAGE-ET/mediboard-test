@@ -81,6 +81,13 @@ $backrefs_tree = array(
     "sejours_lies",
     "intervs_liees",
     "consults_liees",
+
+    // Codable
+    "facturable",
+    "actes_ngap",
+    "actes_ccam",
+    "codages_ccam",
+    "actes_caisse",
   ),
   "CConsultAnesth" => array(
     "files",
