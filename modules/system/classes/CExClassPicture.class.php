@@ -78,6 +78,15 @@ class CExClassPicture extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["files"] = "CFile object_id cascade";
+    return $backProps;
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
