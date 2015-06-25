@@ -7,6 +7,7 @@
 
 {{mb_script module=planningOp script=prestations ajax=1}}
 {{mb_script module=hospi script=modele_etiquette ajax=1}}
+{{mb_script module=planningOp script=planning ajax=true}}
 
 {{if @$modules.dPpmsi->_can->edit}}
   {{mb_script module=pmsi script=PMSI ajax=true}}
@@ -164,6 +165,7 @@
       {{if "forms"|module_active}}
         {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event_name=modification cssStyle="display: inline-block;"}}
       {{/if}}
+      <button type="button" class="fa fa-calendar" onclick="PlanningSejour.view('{{$sejour->_id}}');">Planning de séjour</button>
     </td>
   </tr>
 </table>

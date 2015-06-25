@@ -2153,6 +2153,7 @@ $locales['mod-dPplanningOp-tab-ajax_protocoles_autocomplete'] = 'Autocomplétion 
 $locales['mod-dPplanningOp-tab-ajax_purge_sejours'] = 'Purge de séjours';
 $locales['mod-dPplanningOp-tab-ajax_vw_detail_cccam'] = 'Détail du code';
 $locales['mod-dPplanningOp-tab-ajax_vw_operations_sejour'] = 'Intervention du séjour';
+$locales['mod-dPplanningOp-tab-ajax_vw_planning_sejour'] = 'Planning de séjour';
 $locales['mod-dPplanningOp-tab-ajax_vw_prestations'] = 'Modification des prestations';
 $locales['mod-dPplanningOp-tab-check_synchro_hours_sejour'] = 'Recherche synchronisation des heures du séjour';
 $locales['mod-dPplanningOp-tab-code_selector'] = 'Sélecteur du code';
