@@ -16,4 +16,5 @@ CPreferences::$modules["dPfiles"] = array(
   "debug_yoplet",
   "mozaic_disposition",
   "show_file_view",
+  "upload_mbhost",
 );

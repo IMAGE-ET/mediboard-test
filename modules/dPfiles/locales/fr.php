@@ -394,3 +394,5 @@ $locales['pref-mozaic_disposition-3x3'] = '3 lignes, 3 colonnes';
 $locales['pref-mozaic_disposition-desc'] = 'Disposition de la mosaïque par défaut';
 $locales['pref-show_file_view'] = 'Remonter des alertes sur les nouveaux fichiers';
 $locales['pref-show_file_view-desc'] = 'Remonter des alertes sur les nouveaux fichiers dans les dossiers à surveiller';
+$locales['pref-upload_mbhost'] = 'Utiliser Mediboard Host pour l\'envoi automatique de fichiers';
+$locales['pref-upload_mbhost-desc'] = 'Utiliser Mediboard Host pour l\'envoi automatique de fichiers';

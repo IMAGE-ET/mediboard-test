@@ -12,5 +12,16 @@ img#thumb {
 }
 
 .thumb_selected {
-  outline: 2px solid black;
+  background-color: rgba(77, 134, 219, 0.24);
+}
+
+.thumb_mbhost {
+  display: inline-block;
+  width: 160px;
+  height: 180px;
+  border: 1px solid #666;
+  margin: 1px;
+  padding: 2px;
+  vertical-align: top;
+  text-align: center;
 }

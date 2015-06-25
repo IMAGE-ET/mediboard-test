@@ -298,6 +298,9 @@ class CSetupdPfiles extends CSetup {
       ADD INDEX(`compression`, `object_class`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+    $this->addPrefQuery("upload_mbhost", "0");
+
+    $this->mod_version = "0.40";
   }
 }
