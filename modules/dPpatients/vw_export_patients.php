@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 /**
  * $Id$
- *  
+ *
  * @category Patients
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -19,6 +19,7 @@ $start        = CValue::postOrSession("start", 0);
 $directory    = CValue::postOrSession("directory");
 $all_prats    = CValue::postOrSession("all_prats");
 $ignore_files = CValue::postOrSession("ignore_files");
+$generate_pdfpreviews = CValue::postOrSession("generate_pdfpreviews");
 
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
@@ -35,4 +36,5 @@ $smarty->assign("step", $step);
 $smarty->assign("start", $start);
 $smarty->assign("directory", $directory);
 $smarty->assign("ignore_files", $ignore_files);
+$smarty->assign("generate_pdfpreviews", $generate_pdfpreviews);
 $smarty->display("vw_export_patients.tpl");

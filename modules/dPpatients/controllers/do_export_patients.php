@@ -19,6 +19,7 @@ $step         = (int)CValue::post("step");
 $start        = (int)CValue::post("start");
 $directory    = CValue::post("directory");
 $ignore_files = CValue::post("ignore_files");
+$generate_pdfpreviews = CValue::post("generate_pdfpreviews");
 
 if (!$all_prats && !$praticien_id) {
   CAppUI::stepAjax("Veuillez choisir au moins un praticien, ou cocher 'Tous les praticiens'", UI_MSG_WARNING);
@@ -38,6 +39,7 @@ CValue::setSession("step", $step);
 CValue::setSession("start", $start);
 CValue::setSession("directory", $directory);
 CValue::setSession("ignore_files", $ignore_files);
+CValue::setSession("generate_pdfpreviews", $generate_pdfpreviews);
 
 $step = min($step, 1000);
 
@@ -79,6 +81,13 @@ $backrefs_tree = array(
     "sejours_lies",
     "intervs_liees",
     "consults_liees",
+
+    // Codable
+    "facturable",
+    "actes_ngap",
+    "actes_ccam",
+    "codages_ccam",
+    "actes_caisse",
   ),
   "CConsultAnesth" => array(
     "files",
@@ -179,6 +188,10 @@ $fwdrefs_tree = array(
   "CGrossesse" => array(
     "group_id",
     "parturiente_id",
+  ),
+  "CCorrespondant" => array(
+    "patient_id",
+    "medecin_id",
   ),
   "CMediusers" => array(
     "user_id",
@@ -323,11 +336,13 @@ foreach ($patients as $_patient) {
 
     $export = new CMbObjectExport($_patient, $backrefs_tree);
 
-    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir, $ignore_files) {
+    $callback = function (CStoredObject $object, $node, $depth) use ($export, $dir, $ignore_files, $generate_pdfpreviews) {
       switch ($object->_class) {
         case "CCompteRendu":
           /** @var CCompteRendu $object */
-          $object->makePDFpreview(true);
+          if ($generate_pdfpreviews) {
+            $object->makePDFpreview(true);
+          }
           break;
 
         case "CFile":

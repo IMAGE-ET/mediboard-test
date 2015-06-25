@@ -196,8 +196,15 @@
               <th>
                 <label for="ignore_files">Ne pas copier les fichiers utilisateur</label>
               </th>
-              <td colspan="3">
+              <td>
                 <input type="checkbox" name="ignore_files" value="1" {{if $ignore_files}}checked{{/if}} />
+              </td>
+
+              <th>
+                <label for="generate_pdfpreviews">Forcer la génération des PDF des CR</label>
+              </th>
+              <td>
+                <input type="checkbox" name="generate_pdfpreviews" value="1" {{if $generate_pdfpreviews}}checked{{/if}} />
               </td>
             </tr>
 
