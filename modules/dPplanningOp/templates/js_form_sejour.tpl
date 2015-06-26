@@ -206,6 +206,7 @@ updateHeureSortie = function() {
   var heure_sortie = oForm._hour_sortie_prevue;
   var heure_entree_prevue = oForm._hour_entree_prevue;
   var heure_sortie_prevue = oForm._hour_sortie_prevue;
+  var min_entree   = oForm._min_entree_prevue;
   var min_sortie   = oForm._min_sortie_prevue;
 
   if (!duree_prevu_heure.value) {
@@ -241,7 +242,7 @@ updateHeureSortie = function() {
     }
   }
 
-  min_sortie.value = "0";
+  min_sortie.value = min_entree.value;
 };
 
 updateDureePrevueHeure = function () {
