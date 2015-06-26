@@ -99,8 +99,6 @@
   <li><a href="#fdrConsult">{{tr}}soins.tab.documents{{/tr}}</a></li>
 </ul>
 
-<hr class="control_tabs" />
-
 <div id="antecedents" style="display: none">
   {{if $patient->_ref_dossier_medical && !$patient->_ref_dossier_medical->_canEdit}}
     {{mb_include module=dPpatients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}

@@ -15,7 +15,7 @@
     // Autocomplete des medicaments
     var oForm = getForm('editFrmExams');
     if (oForm && oForm.produit) {
-      var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+      var urlAuto = new Url("medicament", "httpreq_do_medicament_autocomplete");
       urlAuto.autoComplete(oForm.produit, "_traitement_auto_complete", {
         minChars: 3,
         updateElement: updateFieldTraitement,
@@ -38,7 +38,14 @@
       count_tab += $("examDialog-"+consult_id).select("li:not(.empty)").length;
       Control.Tabs.setTabCount("Examens", count_tab);
     }
-  }
+  };
+
+  showConsults = function() {
+    var url = new Url("cabinet", "ajax_conclusions_consults");
+    url.addParam("sejour_id", "{{$consult->sejour_id}}");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.popup(800, 500);
+  };
 </script>
 
 {{mb_default var=readonly value=0}}
@@ -137,6 +144,9 @@
               {{if $field == "traitement" && $isPrescriptionInstalled && !$readonly}}
                 <input type="text" name="produit" value="" size="12" class="autocomplete" style="margin-top: -3px; margin-bottom: -2px;" />
                 <div style="display:none; width: 350px;" class="autocomplete" id="_traitement_auto_complete"></div>
+              {{/if}}
+              {{if $field == "conclusion" && $consult->sejour_id}}
+                <button type="button" class="search notext" onclick="showConsults();" title="{{tr}}CConsultation-_list_conclusions{{/tr}}"></button>
               {{/if}}
             </legend>
             {{if $readonly}}

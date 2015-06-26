@@ -13,7 +13,7 @@ CCanDo::checkRead();
 $consult_id = CValue::get("consult_id");
 $sejour_id  = CValue::get("sejour_id");
 
-$consult = new CConsultation;
+$consult = new CConsultation();
 $consult->load($consult_id);
 $consult->canDo();
 
