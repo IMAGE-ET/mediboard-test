@@ -15,20 +15,21 @@ $printer_id   = CValue::get("printer_id");
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $modele_etiquette_id = CValue::get("modele_etiquette_id");
+$params       = CValue::get("params", array());
 
 $object = new $object_class;
 $object->load($object_id);
 
 $fields = array();
 
-$object->completeLabelFields($fields);
+$object->completeLabelFields($fields, $params);
 
 // Chargement des modèles d'étiquettes
-$modele_etiquette = new CModeleEtiquette;
+$modele_etiquette = new CModeleEtiquette();
 $modele_etiquette->load($modele_etiquette_id);
 
 if ($modele_etiquette->_id) {
-  $modele_etiquette->completeLabelFields($fields);
+  $modele_etiquette->completeLabelFields($fields, $params);
   $modele_etiquette->replaceFields($fields);
   $modele_etiquette->printEtiquettes($printer_id);
   CApp::rip();
@@ -42,7 +43,7 @@ $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 if (count($modeles_etiquettes = $modele_etiquette->loadList($where))) {
   // TODO: faire une modale pour proposer les modèles d'étiquettes
   $first_modele = reset($modeles_etiquettes);
-  $first_modele->completeLabelFields($fields);
+  $first_modele->completeLabelFields($fields, $params);
   $first_modele->replaceFields($fields);
   $first_modele->printEtiquettes($printer_id);
 }

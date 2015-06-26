@@ -18,7 +18,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   static $types = array("comp", "ambu", "exte", "seances", "ssr", "psy", "urg", "consult");
   static $fields_etiq = array(
     "NDOS", "NRA", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
-    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE", "PRESTATIONS SOUHAITEES"
+    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE", "SERVICE COURANT",
+    "PRESTATIONS SOUHAITEES", "MEDICAMENTS DISPENSES"
   );
 
   static $destination_values = array("1", "2", "3", "4", "6", "7");
@@ -4342,19 +4343,20 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * @see parent::completeLabelFields()
    */
-  function completeLabelFields(&$fields) {
+  function completeLabelFields(&$fields, $params) {
     if (!isset($this->_from_op)) {
       $this->loadRefLastOperation()->_from_sejour = 1;
-      $this->_ref_last_operation->completeLabelFields($fields);
+      $this->_ref_last_operation->completeLabelFields($fields, $params);
     }
 
-    $this->loadRefPatient()->completeLabelFields($fields);
+    $this->loadRefPatient()->completeLabelFields($fields, $params);
     $this->loadRefPraticien();
     $this->loadNDA();
     $this->loadNRA();
     $now         = CMbDT::dateTime();
     $affectation = $this->getCurrAffectation($this->entree > $now ? $this->entree : null);
     $affectation->loadView();
+    $affectation->loadRefService();
 
     $souhaits = array();
     if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {
@@ -4377,6 +4379,29 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
+    $meds_dispenses = array();
+
+    if (isset($params["debut_dispensation"]) && isset($params["fin_dispensation"])) {
+      $from = $params["debut_dispensation"];
+      $to   = $params["fin_dispensation"];
+
+      $delivery = new CProductDelivery();
+
+      $where = array(
+        "date_dispensation" => "BETWEEN '$from' AND '$to'",
+        "sejour_id" => "= '$this->_id'"
+      );
+
+      $deliveries = $delivery->loadList($where);
+      $stocks = CStoredObject::massLoadFwdRef($deliveries, "stock_id");
+      $products = CStoredObject::massLoadFwdRef($stocks, "product_id");
+
+      /** @var CProduct $_product */
+      foreach ($products as $_product) {
+        $meds_dispenses[] = $_product->code . " " . $_product->name;
+      }
+    }
+
     $fields_sejour = array(
       "DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
       "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
@@ -4386,7 +4411,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       "NDOS"             => $this->_NDA,
       "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
       "CODE BARRE NDOS"  => "@BARCODE_" . $this->_NDA . "@",
-      "CHAMBRE COURANTE" => $affectation->_view
+      "CHAMBRE COURANTE" => $affectation->_view,
+      "SERVICE COURANT"  => $affectation->_ref_service->_view,
+      "MEDICAMENTS DISPENSES" => implode("\n", $meds_dispenses)
     );
 
     if (CAppUI::conf("dPhospi prestations systeme_prestations", CGroups::loadCurrent()) == "expert") {

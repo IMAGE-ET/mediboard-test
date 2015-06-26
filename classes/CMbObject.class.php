@@ -802,10 +802,11 @@ class CMbObject extends CStoredObject {
    * This function registers fields for the label printing
    *
    * @param array &$fields Array of fields
+   * @param array $params  Array of params
    *
    * @return void
    */
-  function completeLabelFields(&$fields) {
+  function completeLabelFields(&$fields, $params) {
   }
   
   /**

@@ -398,6 +398,7 @@ $locales['CModeleEtiquette-_write_bold-desc'] = 'Ajouter le champ en gras';
 $locales['CModeleEtiquette-_write_upper'] = 'Champ en majuscule';
 $locales['CModeleEtiquette-_write_upper-court'] = 'Champ en majuscule';
 $locales['CModeleEtiquette-_write_upper-desc'] = 'Ajouter le champ en majuscule';
+$locales['CModeleEtiquette-court'] = 'Etiquettes';
 $locales['CModeleEtiquette-font'] = 'Police de caractère';
 $locales['CModeleEtiquette-font-court'] = 'Police';
 $locales['CModeleEtiquette-font-desc'] = 'Police de caractère';

@@ -49,7 +49,7 @@
         {{if "soins dossier_soins show_bouton_plan_soins"|conf:"CGroups-$g"}}
           <button type="button" class="print" onclick="Admissions.printPlanSoins()">Imprimer les plans de soins</button>
         {{/if}}
-        <button type="button" class="print" onclick="Admissions.chooseEtiquette()">Imprimer les étiquettes</button>
+        <button type="button" class="print" onclick="Admissions.chooseEtiquette()">{{tr}}CModeleEtiquette.print_labels{{/tr}}</button>
         <br />
         <button type="button" class="close" onclick="Admissions.afterPrint();">{{tr}}Close{{/tr}}</button>
       </td>

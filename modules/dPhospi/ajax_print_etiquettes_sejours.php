@@ -41,10 +41,10 @@ CSejour::massLoadNRA($sejours);
 
 foreach ($sejours as $_sejour) {
   $fields = array();
-  $_sejour->completeLabelFields($fields);
+  $_sejour->completeLabelFields($fields, array());
 
   $_modele = unserialize(serialize($modele_etiquette));
-  $_modele->completeLabelFields($fields);
+  $_modele->completeLabelFields($fields, array());
   $_modele->replaceFields($fields);
   $etiquettes[$_sejour->_id] = tempnam("", "etiq_$uniqid");
   file_put_contents($etiquettes[$_sejour->_id], $_modele->printEtiquettes(null, 0));

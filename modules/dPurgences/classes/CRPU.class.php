@@ -698,12 +698,12 @@ class CRPU extends CMbObject {
   /**
    * @see parent::completeLabelFields()
    */
-  function completeLabelFields(&$fields) {
+  function completeLabelFields(&$fields, $params) {
     $sejour = $this->loadRefSejour();
-    $sejour->completeLabelFields($fields);
+    $sejour->completeLabelFields($fields, $params);
 
     $patient = $sejour->loadRefPatient();
-    $patient->completeLabelFields($fields);
+    $patient->completeLabelFields($fields, $params);
   }
   
   /**

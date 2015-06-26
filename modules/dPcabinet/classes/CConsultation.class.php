@@ -1985,8 +1985,8 @@ class CConsultation extends CFacturable implements IPatientRelated, IIndexableOb
   /**
    * @see parent::completeLabelFields()
    */
-  function completeLabelFields(&$fields) {
-    $this->loadRefPatient()->completeLabelFields($fields);
+  function completeLabelFields(&$fields, $params) {
+    $this->loadRefPatient()->completeLabelFields($fields, $params);
   }
 
   /**

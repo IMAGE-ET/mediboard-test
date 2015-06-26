@@ -100,13 +100,13 @@ class CModeleEtiquette extends CMbMetaObject {
     $search = array();
     $replace = array();
     foreach ($array_fields as $_key=>$_field) {
-      // Normal
+      // Normal
       $search[]  = "[$_key]";
       $replace[] = $_field;
       // Gras
       $search[]  = "*$_key*";
       $replace[] = "<b>$_field</b>";
-      // Majuscule
+      // Majuscule
       $search[]  = "+$_key+";
       $replace[] = strtoupper($_field);
       // Gras + majuscule
@@ -120,7 +120,7 @@ class CModeleEtiquette extends CMbMetaObject {
     $this->texte_4 = str_replace($search, $replace, $this->texte_4);
   }
   
-  function completeLabelFields(&$fields) {
+  function completeLabelFields(&$fields, $params) {
     $fields = array_merge($fields, array(
       "DATE COURANTE"  => CMbDT::dateToLocale(CMbDT::date()),
       "HEURE COURANTE" => CMbDT::format(null, "%H:%M")
