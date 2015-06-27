@@ -11,7 +11,8 @@
 CCanDo::checkRead();
 
 $canSante400 = CModule::getCanDo("dPsante400");
-$dialog = CValue::get("dialog");
+$dialog      = CValue::get("dialog");
+$page        = intval(CValue::get('page', 0));
 
 // Chargement du filtre
 $filter = new CIdSante400;
@@ -20,10 +21,6 @@ $filter->object_class = CValue::get("object_class");
 $filter->tag          = CValue::get("tag"         );
 $filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
-
-// Par défaut, édition du premier id400
-$list = $filter->loadMatchingList(null, 1);
-$firstId400 = reset($list);
 
 // Récupération de la liste des classes disponibles
 if ($filter->object_class && $filter->object_id) {
@@ -35,11 +32,9 @@ else {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("filter", $filter);
-$smarty->assign("idSante400_id", $firstId400 ? $firstId400->_id : 0);
+$smarty->assign("page"       , $page);
+$smarty->assign("filter"     , $filter);
 $smarty->assign("canSante400", $canSante400);
 $smarty->assign("listClasses", $listClasses);
-$smarty->assign("dialog", $dialog);
+$smarty->assign("dialog"     , $dialog);
 $smarty->display("view_identifiants.tpl");
-
-?>

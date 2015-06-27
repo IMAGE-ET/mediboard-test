@@ -1,7 +1,11 @@
 {{mb_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
-  editId400 = function(idex_id) {
+  editId400 = function(idex_id, element) {
+    if (element) {
+      element.up('tr').addUniqueClassName('selected');
+    }
+
     new Url('sante400', 'ajax_edit_identifiant')
       .addParam('idex_id'     , idex_id)
       .addParam('object_class', '{{$filter->object_class}}')
@@ -44,7 +48,11 @@
   reloadId400 = function(idex_id) {
     refreshListId400(idex_id);
   }
-  
+
+  changePage = function(page) {
+    $V(getForm('filterFrm').page, page);
+  }
+
   Main.add(refreshListId400);
 </script>
 

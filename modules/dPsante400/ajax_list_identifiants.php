@@ -1,4 +1,4 @@
-<?php /* $Id $ */
+<?php
 
 /**
  * List idexs
@@ -13,6 +13,7 @@
 
 $idex_id = CValue::get("idex_id");
 $dialog  = CValue::get("dialog");
+$page    = intval(CValue::get('page', 0));
 
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
@@ -30,22 +31,24 @@ if ($filter->object_id && $filter->object_class) {
 }
 
 // Requête du filtre
-$max   = CValue::get("max", 30);
-$limit = "0, $max";
-
-$idexs = $filter->loadMatchingList(null, $limit);
+$step  = 25;
+$idexs = $filter->loadMatchingList(null, "$page, $step");
 foreach ($idexs as $_idex) {
   $_idex->loadRefs();
   $_idex->getSpecialType();
 }
 
+$total_idexs = $filter->countMatchingList();
+
 // Création du template
 $smarty = new CSmartyDP;
 
-$smarty->assign("idexs"  , $idexs);
-$smarty->assign("filter" , $filter);
-$smarty->assign("idex_id", $idex_id);
-$smarty->assign("dialog" , $dialog);
-$smarty->assign("target" , $target);
+$smarty->assign("idexs"      , $idexs);
+$smarty->assign("total_idexs", $total_idexs);
+$smarty->assign("filter"     , $filter);
+$smarty->assign("idex_id"    , $idex_id);
+$smarty->assign("dialog"     , $dialog);
+$smarty->assign("page"       , $page);
+$smarty->assign("target"     , $target);
 
 $smarty->display("inc_list_identifiants.tpl");
