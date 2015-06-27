@@ -547,4 +547,4 @@ $locales['pref-allowed_check_entry_bloc-desc'] = 'Autoriser la saisie de l\'entr
 $locales['pref-startAutoRefreshAtStartup'] = 'Rechargement auto. dès le premier affichage';
 $locales['pref-startAutoRefreshAtStartup-desc'] = 'Démarrer le rechargement automatique des pages dès le premier affichage';
 $locales['pref-suivisalleAutonome'] = 'Date du suivi de salle autonome';
-$locales['pref-suivisalleAutonome-desc'] = 'Date du suivi de salle autonome';
+$locales['pref-suivisalleAutonome-desc'] = 'Date du suivi de salle autonome (date du jour / date sélectionnée)';
