@@ -8,7 +8,7 @@
  * @version    $Revision:$
  *}}
 
-<script type="text/javascript">
+<script>
   insertField = function(field) {
     var form = getForm("editConfig");
     var elt = window.text_focused;
@@ -52,7 +52,7 @@
     {{mb_include module=system template=inc_config_str var=subject_mail size=100}}
     {{mb_include module=system template=inc_config_str var=text_mail textarea=1}}
     {{mb_include module=system template=inc_config_bool var=use_color_patient}}
-
+    {{mb_include module=system template=inc_config_bool var=other_display_plage}}
 
     <tr>
       <th class="title" colspan="2">Affichage</th>

@@ -516,19 +516,22 @@ $m = $save_m;
 $planning->rearrange(true); //ReArrange the planning
 
 $bank_holidays = CMbDate::getHolidays($date_planning);
-$smarty        = new CSmartyDP();
-$smarty->assign("planning", $planning);
-$smarty->assign("salles", $salles);
-$smarty->assign("salles_ids", $salles_ids);
-$smarty->assign("date_planning", $date_planning);
-$smarty->assign("scroll_top", $scroll_top);
-$smarty->assign("show_cancelled", $show_cancelled);
-$smarty->assign("show_operations", $show_operations);
-$smarty->assign("bank_holidays", $bank_holidays);
-$smarty->assign("bloc_id", $bloc_id);
-$smarty->assign("prestations", $prestations_journalieres);
+
+$smarty = new CSmartyDP();
+
+$smarty->assign("planning"            , $planning);
+$smarty->assign("salles"              , $salles);
+$smarty->assign("salles_ids"          , $salles_ids);
+$smarty->assign("date_planning"       , $date_planning);
+$smarty->assign("scroll_top"          , $scroll_top);
+$smarty->assign("show_cancelled"      , $show_cancelled);
+$smarty->assign("show_operations"     , $show_operations);
+$smarty->assign("bank_holidays"       , $bank_holidays);
+$smarty->assign("bloc_id"             , $bloc_id);
+$smarty->assign("prestations"         , $prestations_journalieres);
 $smarty->assign("height_planning_resa", CAppUI::pref("planning_resa_height", 1500));
-$smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
-$smarty->assign("nbIntervHorsPlage", $nbIntervHorsPlage);
-$smarty->assign("nbAlertesInterv", $nbAlertesInterv);
+$smarty->assign("nbIntervNonPlacees"  , $nbIntervNonPlacees);
+$smarty->assign("nbIntervHorsPlage"   , $nbIntervHorsPlage);
+$smarty->assign("nbAlertesInterv"     , $nbAlertesInterv);
+
 $smarty->display("inc_vw_planning.tpl");
