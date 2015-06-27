@@ -177,6 +177,18 @@ class CSetupdPsante400 extends CSetup {
       $this->addDefaultConfig("dPsante400 CIdSante400 admit_ipp_nda_obligatory", "hprim21 mandatory_num_dos_ipp_adm");
     }
 
-    $this->mod_version = '0.29';
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `id_sante400`
+      ADD `datetime_create` DATETIME NOT NULL;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `id_sante400` ADD INDEX ( `datetime_create` ) ;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `id_sante400`
+      SET `datetime_create` = `last_update`";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.30';
   } 
 }

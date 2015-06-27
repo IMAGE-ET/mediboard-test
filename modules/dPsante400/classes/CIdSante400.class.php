@@ -21,6 +21,7 @@ class CIdSante400 extends CMbMetaObject {
   // DB fields
   public $id400;
   public $tag;
+  public $datetime_create;
   public $last_update;
 
   // Derivate fields
@@ -51,12 +52,13 @@ class CIdSante400 extends CMbMetaObject {
    */
   function getProps() {
     $specs = parent::getProps();
-    $specs["id400"]        = "str notNull maxLength|80";
-    $specs["tag"]          = "str maxLength|80";
-    $specs["last_update"]  = "dateTime notNull";
-    
-    $specs["_start_date"]  = "dateTime";
-    $specs["_end_date"]    = "dateTime";
+    $specs["id400"]           = "str notNull maxLength|80";
+    $specs["tag"]             = "str maxLength|40";
+    $specs["datetime_create"] = "dateTime notNull";
+    $specs["last_update"]     = "dateTime notNull";
+
+    $specs["_start_date"]    = "dateTime";
+    $specs["_end_date"]      = "dateTime";
     return $specs;
   }
 
@@ -363,9 +365,14 @@ class CIdSante400 extends CMbMetaObject {
    * @see parent::store()
    */
   function store() {
+    if (!$this->_id) {
+      $this->datetime_create = "now";
+    }
+
     if (!$this->_id && !$this->last_update) {
       $this->last_update = "now";
     }
+
     return parent::store();
   }
 

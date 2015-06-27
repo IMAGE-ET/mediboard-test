@@ -32,6 +32,7 @@ $locales['CIdSante400-_start_date-court'] = 'Date min.';
 $locales['CIdSante400-_start_date-desc'] = 'Date minimale de modification de l\'identifiant';
 $locales['CIdSante400-_type'] = 'Type';
 $locales['CIdSante400-create-IPP-NDA'] = 'Créer l\'IPP et le NDA';
+$locales['CIdSante400-datetime_create'] = 'Création';
 $locales['CIdSante400-id400'] = 'Identifiant';
 $locales['CIdSante400-id400-court'] = 'Identifiant';
 $locales['CIdSante400-id400-desc'] = 'Identifiant Externe de l\'objet';

@@ -1,11 +1,11 @@
 {{if !$dialog}}
-  {{mb_include module=system template=inc_pagination total=$total_idexs current=$page change_page='Idex.changePage' jumper=100}}
+  {{mb_include module=system template=inc_pagination total=$total_idexs current=$page change_page='changePage' jumper=100}}
 {{/if}}
 
 <table class="tbl">
   {{if $dialog}}
   <tr>
-    <th colspan="5" class="title">
+    <th colspan="6" class="title">
       {{if $target}}
         Identifiants pour '{{$target->_view}}' (#{{$target->_id}})
       {{else}}
@@ -22,14 +22,13 @@
       <th>{{tr}}CIdSante400-object_id-court{{/tr}}</th>
       <th>{{tr}}CIdSante400-object{{/tr}}</th>
     {{/if}}
+    <th class="narrow">{{tr}}CIdSante400-datetime_create{{/tr}}</th>
     <th class="narrow">{{tr}}CIdSante400-last_update{{/tr}}</th>
     <th>{{tr}}CIdSante400-id400-court{{/tr}}</th> 
     <th>{{tr}}CIdSante400-tag{{/tr}}</th>
     <th>{{tr}}CIdSante400-_type{{/tr}}</th>
   </tr>
-  
-  {{assign var=href value="?m=sante400&$actionType=$action&dialog=$dialog"}}
-  
+
   {{foreach from=$idexs item=_idex}}
     <tr {{if $_idex->_id == $idex_id}}class="selected"{{/if}}>
       <td>
@@ -49,7 +48,9 @@
           {{/if}}
         </td>
       {{/if}}
-
+      <td>
+        {{$_idex->datetime_create|date_format:$conf.datetime}}
+      </td>
       <td>
         {{$_idex->last_update|date_format:$conf.datetime}}
       </td>

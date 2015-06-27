@@ -72,7 +72,7 @@
   
     <tr>
       <th>{{mb_label object=$idex field="last_update"}}</th>
-      <td>{{mb_field object=$idex field="last_update" form="edit`$idex->_guid`" canNull="false" register=true}} </td>
+      <td>{{mb_field object=$idex field="last_update" form="edit`$idex->_guid`" canNull="false" register=true value="$dtnow"}} </td>
     </tr>
   
     <tr>
