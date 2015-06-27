@@ -13,7 +13,7 @@
 
 CCanDo::checkRead();
 
-$date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", CMbDT::date()) : CValue::getOrSession("date", CMbDT::date());
+$date_suivi = CAppUI::pref("suivisalleAutonome") ? CMbDT::date() : CValue::getOrSession("date", CMbDT::date());
 $bloc_id    = CValue::getOrSession("bloc_id");
 $page       = CValue::get("page");
 
