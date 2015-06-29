@@ -106,7 +106,7 @@ class CView {
     }
 
     // Check the value
-    if ($msg = $spec->checkProperty(self::$params)) {
+    if ($msg = $spec->checkPropertyValue(self::$params)) {
       $truncated = CMbString::truncate($value);
       $error = "View parameter '$name' with spec '$prop' has inproper value '$truncated': $msg";
       trigger_error($error, E_USER_WARNING);
