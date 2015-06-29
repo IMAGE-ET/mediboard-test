@@ -466,6 +466,7 @@ table.form th.category {
 
 table.form th.section, 
 table.tbl th.section {
+  text-align: center;
   font-size: 0.9em; 
   font-weight: normal; 
   line-height: 100%;

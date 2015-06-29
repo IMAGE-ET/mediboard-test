@@ -1,7 +1,7 @@
 <?php
 /**
  * $Id$
- *  
+ *
  * @category Cabinet
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -22,6 +22,9 @@ CConfiguration::register(
           "view_prescription"         => "bool default|0",
           "view_prescription_externe" => "bool default|0"
         ),
+        'Planning'     => array(
+          'show_print_order_mode' => 'bool default|0'
+        )
       )
     )
   )
