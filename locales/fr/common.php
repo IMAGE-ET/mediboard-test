@@ -300,6 +300,7 @@ $locales['No'] = 'Non';
 $locales['No-one'] = 'Personne';
 $locales['None'] = 'Aucun';
 $locales['No result'] = 'Aucun résultat';
+$locales['No filter'] = 'Aucun filtre';
 $locales['Normal'] = 'Normal';
 $locales['Now'] = 'Maintenant';
 $locales['OK'] = 'OK';

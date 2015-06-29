@@ -15,12 +15,24 @@ $idex_id = CValue::get("idex_id");
 $dialog  = CValue::get("dialog");
 $page    = intval(CValue::get('page', 0));
 
+$object_id    = CValue::get("object_id");
+$object_class = CValue::get("object_class");
+$tag          = CValue::get("tag");
+$id400        = CValue::get("id400");
+
+if (!$object_id && !$object_class && !$tag && !$id400) {
+  CAppUI::stepMessage(UI_MSG_WARNING, "No filter");
+
+  CApp::rip();
+}
+
+
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
-$filter->object_id    = CValue::get("object_id");
-$filter->object_class = CValue::get("object_class");
-$filter->tag          = CValue::get("tag");
-$filter->id400        = CValue::get("id400");
+$filter->object_id    = $object_id;
+$filter->object_class = $object_class;
+$filter->tag          = $tag;
+$filter->id400        = $id400;
 $filter->nullifyEmptyFields();
 
 // Chargement de la cible si objet unique

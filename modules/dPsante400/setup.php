@@ -179,10 +179,8 @@ class CSetupdPsante400 extends CSetup {
 
     $this->makeRevision("0.29");
     $query = "ALTER TABLE `id_sante400`
-      ADD `datetime_create` DATETIME NOT NULL;";
-    $this->addQuery($query);
-
-    $query = "ALTER TABLE `id_sante400` ADD INDEX ( `datetime_create` ) ;";
+                ADD `datetime_create` DATETIME NOT NULL,
+                ADD INDEX ( `datetime_create` ) ;";
     $this->addQuery($query);
 
     $query = "UPDATE `id_sante400`
