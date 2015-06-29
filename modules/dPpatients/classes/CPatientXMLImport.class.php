@@ -152,7 +152,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
 
         if (count($_plage->_colliding_plages)) {
           $_plage = reset($_plage->_colliding_plages);
-          CAppUI::stepAjax("%s '%s' retrouvée", UI_MSG_OK, CAppUI::tr($_plage), $_plage->_view);
+          CAppUI::stepAjax("%s '%s' retrouvée", UI_MSG_OK, CAppUI::tr($_plage->_class), $_plage->_view);
         }
         else {
           if ($msg = $_plage->store()) {
@@ -160,7 +160,7 @@ class CPatientXMLImport extends CMbXMLObjectImport {
             break;
           }
 
-          CAppUI::stepAjax("%s '%s' créée", UI_MSG_OK, CAppUI::tr($_plage), $_plage->_view);
+          CAppUI::stepAjax("%s '%s' créée", UI_MSG_OK, CAppUI::tr($_plage->_class), $_plage->_view);
         }
 
         $imported_object = $_plage;
@@ -232,6 +232,42 @@ class CPatientXMLImport extends CMbXMLObjectImport {
         }
 
         $imported_object = $_object;
+        break;
+
+      case "COperation":
+        /** @var COperation $_interv */
+        $_interv = $this->getObjectFromElement($element);
+        $_ds = $_interv->getDS();
+
+        $where = array(
+          "sejour_id"                  => $_ds->prepare("= ?", $_interv->sejour_id),
+          "chir_id"                    => $_ds->prepare("= ?", $_interv->chir_id),
+          "date"                       => $_ds->prepare("= ?", $_interv->date),
+          "cote"                       => $_ds->prepare("= ?", $_interv->cote),
+          "id_sante400.id_sante400_id" => "IS NULL",
+        );
+        $ljoin = array(
+          "id_sante400" => "id_sante400.object_id = operations.operation_id AND
+                            id_sante400.object_class = 'COperation' AND
+                            id_sante400.tag = 'migration'",
+        );
+
+        $_matching = $_interv->loadList($where, null, null, null, $ljoin);
+
+        if (count($_matching)) {
+          $_interv = reset($_matching);
+          CAppUI::stepAjax("%s '%s' retrouvée", UI_MSG_OK, CAppUI::tr($_interv->_class), $_interv->_view);
+        }
+        else {
+          if ($msg = $_interv->store()) {
+            CAppUI::stepAjax($msg, UI_MSG_WARNING);
+            break;
+          }
+
+          CAppUI::stepAjax("%s '%s' créée", UI_MSG_OK, CAppUI::tr($_interv->_class), $_interv->_view);
+        }
+
+        $imported_object = $_interv;
         break;
 
       case "CContentHTML":
