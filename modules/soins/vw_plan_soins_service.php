@@ -13,7 +13,6 @@ $service_id    = CValue::getOrSession("service_id");
 $date          = CValue::getOrSession("date");
 $real_time     = CValue::getOrSession("real_time", 0);
 $nb_decalage   = CValue::get("nb_decalage");
-$date_max      = CMbDT::date("+ 1 DAY", $date);
 
 // Chargement du service
 $service = new CService();
@@ -47,75 +46,7 @@ if (!$nb_decalage) {
   $nb_decalage = $configs["Nombre postes avant"];
 }
 
-// Chargement des sejours pour le service selectionné
-$affectation = new CAffectation();
-
-$where = array();
-if ($real_time) {
-  $time = CMbDT::time();
-  $where[] = "'$date $time' <= affectation.sortie && '$date $time' >= affectation.entree";
-}
-else {
-  $where[] = "'$date' <= affectation.sortie && '$date_max' >= affectation.entree";
-}
-$where["affectation.service_id"] = " = '$service_id'";
-
-$affectations = $affectation->loadList($where);
-
-CMbObject::massLoadFwdRef($affectations, "sejour_id");
-
-foreach ($affectations as $_affectation) {
-  $_affectation->loadRefLit()->loadCompleteView();
-  $_affectation->_view = $_affectation->_ref_lit->_view;
-  
-  $sejour = $_affectation->loadRefSejour(1);
-  $sejour->_ref_current_affectation = $_affectation;
-}
-
-$sorter = CMbArray::pluck($affectations, "_ref_lit", "_view");
-array_multisort($sorter, SORT_ASC, $affectations);
-$sejours = CMbArray::pluck($affectations, "_ref_sejour");
-
-$sejours_id = CMbArray::pluck($sejours, "_id");
-
-/*
- * Chargement des elements prescrits pour ces sejours
- */
-
-// Chargement des elements de prescription
-$element = new CElementPrescription();
-$ljoin = array();
-$ljoin["prescription_line_element"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
-$ljoin["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id AND prescription.type = 'sejour'";
-$ljoin["sejour"] = "sejour.sejour_id = prescription.object_id AND prescription.object_class = 'CSejour'";
-
-$where = array();
-$where["sejour.sejour_id"] = CSQLDataSource::prepareIn($sejours_id);
-$where["prescription_line_element.active"] = " = '1'";
-
-$elements = $element->loadList($where, null, null, "element_prescription_id", $ljoin);
-
-CMbObject::massLoadFwdRef($elements, "category_prescription_id");
-
-// Chargement des catégories des elements
-$categories = array();
-$categories_by_names = array();
-foreach ($elements as $_element) {
-  $_element->loadRefCategory();
-  $_category = $_element->_ref_category_prescription;
-  $categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
-  $categories_by_names[$_category->chapitre][$_category->nom] = $_category->_id;
-}
-
-// Tri par chapitre
-$sorted_category = array('med', 'med_elt', 'anapath', 'biologie', 'imagerie', 'consult', 'kine', 'soin', 'dm', 'dmi', 'ds');
-$categories = CMbArray::ksortByArray($categories, $sorted_category);
-
-// Tri par catégorie
-foreach ($categories_by_names as $key => $category) {
-  ksort($category);
-  $categories[$key] = CMbArray::ksortByArray($categories[$key], $category);
-}
+$categories = CPrescription::getCategoriesForPeriod($service_id, $date, $real_time);
 
 // Récupération de la liste des services
 $where = array();
@@ -135,4 +66,5 @@ $smarty->assign("services"     , $services);
 $smarty->assign("categories_id", $categories_id);
 $smarty->assign('real_time'    , $real_time);
 $smarty->assign('day'          , CMbDT::date());
+
 $smarty->display('vw_plan_soins_service.tpl');

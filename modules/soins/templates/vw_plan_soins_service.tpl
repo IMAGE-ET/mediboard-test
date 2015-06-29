@@ -30,56 +30,6 @@
     }
   };
 
-  // Selection ou deselection de tous les elements d'une catégorie
-  selectCategory = function(oCheckboxCat) {
-    var checked = oCheckboxCat.checked;
-    var checkboxs = $('categories').select('input.'+oCheckboxCat.value);
-    var count_cat   = checkboxs.length;
-
-    checkboxs.each(function(oCheckbox){
-      oCheckbox.checked = checked;
-    });
-
-    var counter = $("countSelected_"+oCheckboxCat.value);
-    counter.update(checked ? count_cat : 0);
-    selectTr(counter);
-  };
-
-  resetCheckbox = function() {
-    $('categories').select('input[type=checkbox]').each(function(oCheckbox) {
-      oCheckbox.checked = null;
-    });
-    $('categories').select('tr').each(function(tr){
-      tr.removeClassName('selected');
-    });
-
-    $('categories').select('.counter').each(function(oSpan){
-      oSpan.update('0');
-    });
-  };
-
-  // Mise a jour du compteur lors de la selection d'un element
-  updateCountCategory = function(checkbox, category_guid) {
-    var counter = $('countSelected_'+category_guid);
-    var count = parseInt(counter.innerHTML);
-    count = checkbox.checked ? count+1 : count-1;
-    counter.update(count);
-    selectTr(counter);
-    var all_checked = $$("."+category_guid).all(function(elt) { return elt.checked });
-    var input_category = $("categories").select("input[value="+category_guid+"]")[0];
-    input_category.checked = all_checked;
-  };
-
-  // Affichage des elements au sein des catégories
-  toggleElements = function(category_guid) {
-    $('categories').select('.category_'+category_guid).invoke('toggle');
-  };
-
-  selectTr = function(counter) {
-    var count = parseInt(counter.innerHTML);
-    count ? counter.up("tr").addClassName("selected") : counter.up("tr").removeClassName("selected");
-  };
-
   addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
     var url = new Url("hospi", "ajax_transmission");
     url.addParam("sejour_id", sejour_id);
@@ -110,18 +60,8 @@
     url.popup(800, 500);
   };
 
-  Main.add(function(){
-    {{if $service->_id}}
-      var table_categories = $("categories");
-      if (table_categories) {
-        {{foreach from=$categories_id item=_category_id}}
-          var elts = table_categories.select("input[value={{$_category_id}}]");
-          if (elts.length > 0) {
-            elts[0].click();
-          }
-        {{/foreach}}
-      }
-    {{/if}}
+  Main.add(function() {
+    fillCategories();
     updatePlanSoinsPatients();
     Calendar.regField(getForm("updateActivites").date);
   });
@@ -186,55 +126,7 @@
   {{if $service->_id}}
     <tr>
       <td style="width: 20%;" id="categories">
-        <form name="selectElts" action="?" method="get">
-          <!-- Checkbox vide permettant d'eviter que le $V considere qu'il faut retourner true ou false s'il n'y a qu'une seule checkbox -->
-          <input type="checkbox" name="elts" value="" style="display: none;"/>
-
-          <table class="tbl" >
-            <tr>
-              <th class="title">
-                <small style="float: right">
-                  <input type="checkbox" name="premedication" /> {{mb_label class="CPrescriptionLineElement" field="premedication"}}
-                </small>
-                <button type="button" class="cancel notext" style="float: left" onclick="resetCheckbox();">{{tr}}Reset{{/tr}}</button>
-                Activités
-              </th>
-            </tr>
-            {{foreach from=$categories key=_chapitre item=_cats_by_chap}}
-              <tr>
-                <th>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</th>
-              </tr>
-              {{foreach from=$_cats_by_chap item=_elements}}
-                {{foreach from=$_elements item=_element name=elts}}
-                  {{if $smarty.foreach.elts.first}}
-                    {{assign var=category value=$_element->_ref_category_prescription}}
-                    <tr>
-                      <td>
-                        <span style="float: right;"><strong>(<span id="countSelected_{{$category->_guid}}" class="counter">0</span>/{{$_elements|@count}})</strong></span>
-                        <input type="checkbox" onclick="selectCategory(this);" value="{{$category->_guid}}" />
-                        <strong onclick="toggleElements('{{$category->_guid}}');">
-                          <a href="#" style="display: inline;">{{$category}}</a>
-                        </strong>
-                      </td>
-                    </tr>
-                  {{/if}}
-                  <tr class="category_{{$category->_guid}}" style="display: none;">
-                    <td style="text-indent: 2em;">
-                      <label>
-                        <input type="checkbox" name="elts" value="{{$_element->_id}}" class="{{$category->_guid}}" onclick="updateCountCategory(this, '{{$category->_guid}}');" />
-                        {{$_element}}
-                      </label>
-                    </td>
-                  </tr>
-                {{/foreach}}
-              {{/foreach}}
-            {{foreachelse}}
-              <tr>
-                <td class="empty">Aucune activité</td>
-              </tr>
-            {{/foreach}}
-          </table>
-        </form>
+        {{mb_include module=soins template=inc_form_elements}}
       </td>
       <td id="content_plan_soins_service">
       </td>

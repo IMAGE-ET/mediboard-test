@@ -12,10 +12,11 @@
 
 $group = CGroups::loadCurrent();
 
-$service_id = CValue::getOrSession("service_id");
-$real_time  = CValue::getOrSession("real_time", 0);
+$service_id              = CValue::getOrSession("service_id");
+$real_time               = CValue::getOrSession("real_time", 0);
+$categories_id_pancarte  = CValue::getOrSession("categories_id_pancarte");
 
-if($service_id == "NP"){
+if ($service_id == "NP") {
   $service_id = "";
 }
 
@@ -26,9 +27,13 @@ $service = new CService();
 $service->load($service_id);
 
 // Si le service en session n'est pas dans l'etablissement courant
-if(CGroups::loadCurrent()->_id != $service->group_id){
+if (CGroups::loadCurrent()->_id != $service->group_id) {
   $service_id = "";
   $service = new CService();
+}
+
+if (is_array($categories_id_pancarte)) {
+  CMbArray::removeValue("", $categories_id_pancarte);
 }
 
 $date = CValue::getOrSession("debut");
@@ -140,39 +145,15 @@ foreach ($tabHours as $_key_date => $_period_date) {
   }
 }
 
+$with_med = in_array("med", $categories_id_pancarte);
+CMbArray::removeValue("med", $categories_id_pancarte);
+
 $date_max = CMbDT::dateTime("+ 1 HOUR", $date_max);
-
-$sejours = CMbArray::pluck($prescriptions, "_ref_object");
-CStoredObject::massLoadFwdRef($sejours, "patient_id");
-$praticiens = CStoredObject::massLoadFwdRef($prescriptions, "praticien_id");
-CStoredObject::massLoadFwdRef($praticiens, "function_id");
-
-//CPrescriptionLineMedicament::$_load_lite = true;
-//CPrescriptionLine::$_load_for_delete = true;
-
-/* @var CPrescription[] $prescriptions*/
-foreach ($prescriptions as $_prescription) {
-  $_prescription->calculAllPlanifSysteme();
-  $_prescription->loadJourOp(CMbDT::date());
-
-  $_prescription->loadRefPatient();
-  $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
-
-  // Stockage de l'affectation courante dans _ref_curr_affectation du sejour
-  $_prescription->_ref_object->_ref_curr_affectation = $_prescription->_ref_object->getCurrAffectation($date);
-  $_prescription->_ref_object->_ref_curr_affectation->loadRefLit()->loadCompleteView();
-  $_prescription->_ref_object->_ref_curr_affectation->_view = $_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view;
-
-  $lits[$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
-  $_prescription->loadRefPraticien();
-  $_prescription->_ref_praticien->loadRefFunction();
-  $_prescription->_ref_patient->loadRefPhotoIdentite();
-}
 
 // Chargement des planifications systemes
 $planif = new CPlanificationSysteme();
 $where = array();
-$where["sejour_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($sejours, "sejour_id"));
+$where["sejour_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prescriptions, "object_id"));
 $where["dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
 $planifs_systeme = $planif->loadList($where, "sejour_id ASC, dateTime ASC");
 
@@ -186,128 +167,146 @@ foreach ($planifs_systeme as $_planif) {
   $line = $_planif->loadTargetObject();
   $_date = CMbDT::date($_planif->dateTime);
 
-  if($line instanceof CPrescriptionLineMedicament || $line instanceof CPrescriptionLineElement){
-    $_prescription_id = $line->prescription_id;
-    // Chargement de la prise
-    $_planif->loadRefPrise();
-    if($line instanceof CPrescriptionLineMedicament){
-      $type = $line->_is_injectable ? "inj" : "med";
-    }
-    if($line instanceof CPrescriptionLineElement){
-      $type = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
-    }
-    $list_lines[$type][$line->_id] = $line;
-
-    $qte_adm = $_planif->_ref_prise->_quantite_administrable ? $_planif->_ref_prise->_quantite_administrable : 1;
-
-    $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
-
-    if(!isset($pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"])){
-      $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"] = 0;
-    }
-    $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"] += $qte_adm;
-
-    if($line->_recent_modification){
-      $new[$_prescription_id]["$_date $time"] = 1;
-      $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["new"] = 1;
-    }
-
-    if(!isset($cond[$_prescription_id]["$_date $time"][$type])){
-      $cond[$_prescription_id]["$_date $time"][$type] = true;
-    }
-    if($line->_current_active){
-      $cond[$_prescription_id]["$_date $time"][$type] = false;
-    }
-
-    $urg = false;
-    // Creation du tableau d'urgences
-    if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
-      if($line->_urgence){
-        $urg = true;
-      }
-    } else {
-      if(is_array($line->_dates_urgences) && array_key_exists($_date, $line->_dates_urgences) &&
-        in_array("$_date $time",  $line->_dates_urgences[$_date])){
-        $urg = true;
-      }
-    }
-
-    if($urg){
-      $urgences[$_prescription_id]["$_date $time"] = 1;
-      $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["urgence"] = 1;
-    }
-  }
-
-  if($line instanceof CPrescriptionLineMixItem){
-    $type_line = $line->_ref_prescription_line_mix->type_line;
-    $_prescription_id = $line->_ref_prescription_line_mix->prescription_id;
-    if($type_line == "oxygene"){
-      continue;
-    }
-
-    if ($line->_ref_prescription_line_mix->continuite == "discontinue") {
-      $planification = new CAdministration();
-      $where = array();
-      $where["object_class"] = " = 'CPrescriptionLineMixItem'";
-      $where["object_id"] = " = '$_planif->object_id'";
-
-      $_line_mix_datetime = CMbDT::format($_planif->dateTime, "%Y-%m-%d %H:00:00");
-
-      $where[] = "original_dateTime = '$_line_mix_datetime'";
-      $where["planification"] = " = '1'";
-      $count_planif = $planification->countList($where);
-
-      if ($count_planif) {
+  switch ($line->_class) {
+    case "CPrescriptionLineMedicament":
+    case "CPrescriptionLineElement":
+      if ($line instanceof CPrescriptionLineMedicament && !$with_med) {
         continue;
       }
-    } elseif (CAppUI::conf("dPprescription CPrescription planif_manuelle", CGroups::loadCurrent()->_guid)) {
-      continue;
-    }
-    if(!isset($cond[$_prescription_id]["$_date $time"][$type_line])){
-      $cond[$_prescription_id]["$_date $time"][$type_line] = true;
-    }
-    if($line->_ref_prescription_line_mix->_current_active){
-      $cond[$_prescription_id]["$_date $time"][$type_line] = false;
-    }
+      elseif ($line instanceof CPrescriptionLineElement && !in_array($line->element_prescription_id, $categories_id_pancarte)) {
+        continue;
+      }
+      $_prescription_id = $line->prescription_id;
+      // Chargement de la prise
+      $_planif->loadRefPrise();
+      if ($line instanceof CPrescriptionLineMedicament) {
+        $type = $line->_is_injectable ? "inj" : "med";
+      }
+      if ($line instanceof CPrescriptionLineElement) {
+        $type = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
+      }
+      $list_lines[$type][$line->_id] = $line;
 
-    $line->updateQuantiteAdministration();
-    $list_lines[$type_line][$line->_ref_prescription_line_mix->_id] = $line->_ref_prescription_line_mix;
-    $list_lines["perf_line"][$line->_id] = $line;
-    $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
-    $_date = CMbDT::date($_planif->dateTime);
-    if(!isset($pancarte[$_prescription_id]["$_date $time"][$type_line][$line->prescription_line_mix_id][$_planif->object_id]["prevue"])){
-      $pancarte[$_prescription_id]["$_date $time"][$type_line][$line->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
-    }
-    $pancarte[$_prescription_id]["$_date $time"][$type_line][$line->prescription_line_mix_id][$_planif->object_id]["prevue"] += $line->_quantite_administration;
+      $qte_adm = $_planif->_ref_prise->_quantite_administrable ? $_planif->_ref_prise->_quantite_administrable : 1;
 
-    if($line->_ref_prescription_line_mix->_recent_modification){
-      $new[$_prescription_id]["$_date $time"] = 1;
-      $pancarte[$_prescription_id]["$_date $time"][$type_line][$line->prescription_line_mix_id][$_planif->object_id]["new"] = 1;
-    }
+      $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
+
+      if (!isset($pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"])) {
+        $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"] = 0;
+      }
+      $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["prevue"] += $qte_adm;
+      if ($line->_recent_modification) {
+        $new[$_prescription_id]["$_date $time"] = 1;
+        $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["new"] = 1;
+      }
+
+      if (!isset($cond[$_prescription_id]["$_date $time"][$type])) {
+        $cond[$_prescription_id]["$_date $time"][$type] = true;
+      }
+      if ($line->_current_active) {
+        $cond[$_prescription_id]["$_date $time"][$type] = false;
+      }
+
+      $urg = false;
+      // Creation du tableau d'urgences
+      if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+        if ($line->_urgence) {
+          $urg = true;
+        }
+      } else {
+        if (is_array($line->_dates_urgences) && array_key_exists($_date, $line->_dates_urgences) &&
+          in_array("$_date $time",  $line->_dates_urgences[$_date])) {
+          $urg = true;
+        }
+      }
+
+      if ($urg) {
+        $urgences[$_prescription_id]["$_date $time"] = 1;
+        $pancarte[$_prescription_id]["$_date $time"][$type][$_planif->object_id]["urgence"] = 1;
+      }
+      break;
+    case "CPrescriptionLineMixItem":
+      if (!$with_med) {
+        continue;
+      }
+
+      $line_mix = $line->_ref_prescription_line_mix;
+      $type_line = $line_mix->type_line;
+      $_prescription_id = $line_mix->prescription_id;
+      if ($type_line == "oxygene") {
+        continue;
+      }
+
+      if ($line_mix->continuite == "discontinue") {
+        $planification = new CAdministration();
+        $where = array();
+        $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+        $where["object_id"] = " = '$_planif->object_id'";
+
+        $_line_mix_datetime = CMbDT::format($_planif->dateTime, "%Y-%m-%d %H:00:00");
+
+        $where[] = "original_dateTime = '$_line_mix_datetime'";
+        $where["planification"] = " = '1'";
+        $count_planif = $planification->countList($where);
+
+        if ($count_planif) {
+          continue;
+        }
+      } elseif (CAppUI::conf("dPprescription CPrescription planif_manuelle", CGroups::loadCurrent()->_guid)) {
+        continue;
+      }
+      if (!isset($cond[$_prescription_id]["$_date $time"][$type_line])) {
+        $cond[$_prescription_id]["$_date $time"][$type_line] = true;
+      }
+      if ($line_mix->_current_active) {
+        $cond[$_prescription_id]["$_date $time"][$type_line] = false;
+      }
+
+      $line->updateQuantiteAdministration();
+      $list_lines[$type_line][$line_mix->_id] = $line_mix;
+      $list_lines["perf_line"][$line->_id] = $line;
+      $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
+      $_date = CMbDT::date($_planif->dateTime);
+      if (!isset($pancarte[$_prescription_id]["$_date $time"][$type_line][$line_mix->_id][$_planif->object_id]["prevue"])) {
+        $pancarte[$_prescription_id]["$_date $time"][$type_line][$line_mix->_id][$_planif->object_id]["prevue"] = 0;
+      }
+      $pancarte[$_prescription_id]["$_date $time"][$type_line][$line_mix->_id][$_planif->object_id]["prevue"] += $line->_quantite_administration;
+
+      if ($line_mix->_recent_modification) {
+        $new[$_prescription_id]["$_date $time"] = 1;
+        $pancarte[$_prescription_id]["$_date $time"][$type_line][$line_mix->_id][$_planif->object_id]["new"] = 1;
+      }
   }
 }
 
 // Chargement des administrations
 $administration = new CAdministration();
 $ljoin = array();
-$ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = administration.object_id)
-                                           AND (administration.object_class = 'CPrescriptionLineMedicament')";
 
-$ljoin["prescription_line_element"] = "(prescription_line_element.prescription_line_element_id = administration.object_id)
-                                           AND (administration.object_class = 'CPrescriptionLineElement')";
+if ($with_med) {
+  $ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = administration.object_id)
+                                             AND (administration.object_class = 'CPrescriptionLineMedicament')";
+  $ljoin["prescription_line_mix_item"]   = "(prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id)
+                                             AND (administration.object_class = 'CPrescriptionLineMixItem')";
+  $ljoin["prescription_line_mix"]        = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
+}
 
-$ljoin["prescription_line_mix_item"] = "(prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id)
-                                           AND (administration.object_class = 'CPrescriptionLineMixItem')";
+if (count($categories_id_pancarte)) {
+  $ljoin["prescription_line_element"] = "(prescription_line_element.prescription_line_element_id = administration.object_id)
+                                             AND (administration.object_class = 'CPrescriptionLineElement')";
+}
 
-$ljoin["prescription_line_mix"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
+$ljoin["prescription"] = ($with_med ? "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_mix.prescription_id = prescription.prescription_id)" : "") .
+                         (count($categories_id_pancarte) ? ($with_med ? "OR " : "") . "(prescription_line_element.prescription_id = prescription.prescription_id)" : "");
 
-$ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
-                          (prescription_line_element.prescription_id = prescription.prescription_id) OR
-                          (prescription_line_mix.prescription_id = prescription.prescription_id)";
-$where = array();
-$where["prescription.prescription_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prescriptions, "prescription_id"));
-$where["administration.dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
-$administrations = $administration->loadList($where, "prescription.prescription_id ASC, administration.dateTime ASC", null, null, $ljoin);
+$administrations = array();
+if ($with_med || count($categories_id_pancarte)) {
+  $where                                 = array();
+  $where["prescription.prescription_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prescriptions, "prescription_id"));
+  $where["administration.dateTime"]      = "BETWEEN '$date_min' AND '$date_max'";
+  $administrations                       = $administration->loadList($where, "prescription.prescription_id ASC, administration.dateTime ASC", null, null, $ljoin);
+}
 
 /*
 // Chargement des administrations
@@ -414,6 +413,39 @@ foreach ($administrations as $_administration) {
   }
 }
 
+foreach ($prescriptions as $_prescription) {
+  if (!isset($pancarte[$_prescription->_id])) {
+    unset($prescriptions[$_prescription->_id]);
+  }
+}
+
+$sejours = CMbArray::pluck($prescriptions, "_ref_object");
+CStoredObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CStoredObject::massLoadFwdRef($prescriptions, "praticien_id");
+CStoredObject::massLoadFwdRef($praticiens, "function_id");
+
+//CPrescriptionLineMedicament::$_load_lite = true;
+//CPrescriptionLine::$_load_for_delete = true;
+
+/* @var CPrescription[] $prescriptions*/
+foreach ($prescriptions as $_prescription) {
+  $_prescription->calculAllPlanifSysteme();
+  $_prescription->loadJourOp(CMbDT::date());
+
+  $_prescription->loadRefPatient();
+  $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
+
+  // Stockage de l'affectation courante dans _ref_curr_affectation du sejour
+  $_prescription->_ref_object->_ref_curr_affectation = $_prescription->_ref_object->getCurrAffectation($date);
+  $_prescription->_ref_object->_ref_curr_affectation->loadRefLit()->loadCompleteView();
+  $_prescription->_ref_object->_ref_curr_affectation->_view = $_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view;
+
+  $lits[$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
+  $_prescription->loadRefPraticien();
+  $_prescription->_ref_praticien->loadRefFunction();
+  $_prescription->_ref_patient->loadRefPhotoIdentite();
+}
+
 
 foreach ($pancarte as $_prescription_id => $pancarte_by_prescription) {
   foreach ($pancarte_by_prescription as $_dateTime => $prescription_by_datetime) {
@@ -463,7 +495,6 @@ foreach ($pancarte as $_prescription_id => $pancarte_by_prescription) {
 //CPrescriptionLineMedicament::$_load_lite = false;
 //CPrescriptionLine::$_load_for_delete = false;
 
-
 // Classement par lit
 ksort($lits);
 $_prescriptions = array();
@@ -473,29 +504,30 @@ foreach ($lits as $_prescription_id) {
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("pancarte", $pancarte);
-$smarty->assign("list_lines", $list_lines);
-$smarty->assign("tabHours", $tabHours);
-$smarty->assign("count_composition_dossier", $count_composition_dossier);
-$smarty->assign("service_id", $service_id);
-$smarty->assign("services", $services);
-$smarty->assign("prescriptions", $_prescriptions);
-$smarty->assign("date"     , $date);
-$smarty->assign("date_min", $date_min);
-$smarty->assign("service", $service);
-$smarty->assign("patients", $patients);
-$smarty->assign("alertes", $alertes);
-$smarty->assign("configs", $configs);
-$smarty->assign("nb_adm", $nb_adm);
-$smarty->assign("composition_dossier", $composition_dossier);
+
+$smarty->assign("pancarte"                  , $pancarte);
+$smarty->assign("list_lines"                , $list_lines);
+$smarty->assign("tabHours"                  , $tabHours);
+$smarty->assign("service_id"                , $service_id);
+$smarty->assign("services"                  , $services);
+$smarty->assign("prescriptions"             , $_prescriptions);
+$smarty->assign("date"                      , $date);
+$smarty->assign("date_min"                  , $date_min);
+$smarty->assign("service"                   , $service);
+$smarty->assign("patients"                  , $patients);
+$smarty->assign("alertes"                   , $alertes);
+$smarty->assign("configs"                   , $configs);
+$smarty->assign("nb_adm"                    , $nb_adm);
+$smarty->assign("composition_dossier"       , $composition_dossier);
+$smarty->assign("count_composition_dossier" , $count_composition_dossier);
 $smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
-$smarty->assign("nb_decalage", abs($nb_decalage));
-$smarty->assign("manual_planif", $planif_manuelle);
-$smarty->assign("new", $new);
-$smarty->assign("urgences", $urgences);
-$smarty->assign("filter_line", $filter_line);
-$smarty->assign("cond", $cond);
-$smarty->assign("images", CPrescription::$images);
+$smarty->assign("nb_decalage"               , abs($nb_decalage));
+$smarty->assign("manual_planif"             , $planif_manuelle);
+$smarty->assign("new"                       , $new);
+$smarty->assign("urgences"                  , $urgences);
+$smarty->assign("filter_line"               , $filter_line);
+$smarty->assign("cond"                      , $cond);
+$smarty->assign("images"                    , CPrescription::$images);
 
 if ($prescription_id) {
   $smarty->assign("_prescription_id", $prescription->_id);

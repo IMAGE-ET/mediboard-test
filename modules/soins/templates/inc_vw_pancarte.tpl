@@ -10,15 +10,14 @@
 *}}
 
 
-<script type="text/javascript">
-
-  viewDossierSoin = function(sejour_id){
+<script>
+  viewDossierSoin = function(sejour_id) {
     var oForm = document.viewSoin;
     oForm.sejour_id.value = sejour_id;
     oForm.submit();
-  }
+  };
 
-  showDossierSoins = function(sejour_id, date){
+  showDossierSoins = function(sejour_id) {
     PlanSoins.save_nb_decalage = PlanSoins.nb_decalage;
     var url = new Url("soins", "ajax_vw_dossier_sejour");
     url.addParam("sejour_id", sejour_id);
@@ -27,10 +26,9 @@
       showClose: false
     });
     modalWindow = url.modalObject;
-  }
+  };
 
-
-  refreshLinePancarte = function(prescription_id){
+  refreshLinePancarte = function(prescription_id) {
     PlanSoins.init({
       composition_dossier: {{$composition_dossier|@json}},
       date: "{{$date}}",
@@ -43,7 +41,7 @@
     var url = new Url("soins", "ajax_vw_pancarte");
     url.addParam("prescription_id", prescription_id);
     url.requestUpdate("pancarte_line_"+prescription_id, {onComplete: PlanSoins.moveDossierSoin.curry($('plan_soin_pancarte'))});
-  }
+  };
 
   loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const, show_header) {
     if(!sejour_id) return;
@@ -65,9 +63,9 @@
       urlSuivi.addParam("show_header", show_header);
     }
     urlSuivi.requestUpdate("dossier_suivi");
-  }
+  };
 
-  Main.add(function () {
+  Main.add(function() {
     {{if "dPprescription"|module_active}}
     PlanSoins.init({
       composition_dossier: {{$composition_dossier|@json}},
@@ -82,12 +80,13 @@
     PlanSoins.moveDossierSoin($('plan_soin_pancarte'));
     {{/if}}
   });
-
 </script>
 
 <table class="form">
   <tr>
     <th class="title">
+      <button class="hslip notext" type="button" style="float:left" onclick="$('categories').toggle();"></button>
+      <button class="change" style="float: left" onclick="viewPancarte();">{{tr}}Search{{/tr}}</button>
       Pancarte du service {{$service->_view}}
     </th>
   </tr>
@@ -152,7 +151,7 @@
     {{foreachelse}}
     <tr>
       <td colspan="30" class="empty">
-        Aucune prise
+        {{tr}}CPrisePosologie.none{{/tr}}
       </td>
     </tr>
   {{/foreach}}
