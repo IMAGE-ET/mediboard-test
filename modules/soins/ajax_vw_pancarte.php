@@ -304,6 +304,9 @@ $administrations = array();
 if ($with_med || count($categories_id_pancarte)) {
   $where                                 = array();
   $where["prescription.prescription_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($prescriptions, "prescription_id"));
+  if (count($categories_id_pancarte)) {
+    $where["prescription_line_element.element_prescription_id"] = CSQLDataSource::prepareIn($categories_id_pancarte);
+  }
   $where["administration.dateTime"]      = "BETWEEN '$date_min' AND '$date_max'";
   $administrations                       = $administration->loadList($where, "prescription.prescription_id ASC, administration.dateTime ASC", null, null, $ljoin);
 }
