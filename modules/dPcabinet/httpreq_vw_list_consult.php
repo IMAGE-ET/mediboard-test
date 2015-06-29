@@ -27,6 +27,13 @@ $prat_id          = CValue::getOrSession("chirSel", $user->_id);
 $selConsult       = CValue::getOrSession("selConsult");
 $vue              = CValue::getOrSession("vue2", 0);
 $withClosed       = CValue::getOrSession("withClosed", 0);
+$board            = CValue::get("board"   , 0);
+if(!$board) {
+  $withClosed = 1;
+}
+else {
+  $vue = 0;
+}
 
 $consult = new CConsultation();
 // Test compliqué afin de savoir quelle consultation charger
@@ -112,7 +119,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("boardItem", $boardItem);
 $smarty->assign("tab"      , "edit_consultation");
-$smarty->assign("board"    , CValue::get("board"   , 0));
+$smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
 $smarty->assign("hour"     , CMbDT::time());
 $smarty->assign("vue"      , $vue);
