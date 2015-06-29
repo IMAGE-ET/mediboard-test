@@ -762,14 +762,16 @@ Element.addMethods('select', {
       width: '100px'
     }, options);
     
-    var selectedOption = element.options[element.selectedIndex],
-        textInput = new Element('input', {type: 'text', style:'width:'+options.width})
-                                 .addClassName('autocomplete')
-                                 .writeAttribute('autocomplete', false),
-        list = new Element('div').addClassName('autocomplete'),
-        views = [], viewToValue = {};
+    var selectedOption = element.options[element.selectedIndex];
+    var placeholder = !selectedOption.value ? selectedOption.text : null;
+    var textInput = new Element('input', {type: 'text', style:'width:'+options.width, placeholder: placeholder})
+      .addClassName('autocomplete')
+      .writeAttribute('autocomplete', false);
+    var list = new Element('div').addClassName('autocomplete');
+    var views = [];
+    var viewToValue = {};
 
-    textInput.value = selectedOption.disabled ? "" : selectedOption.text;
+    textInput.value = selectedOption.value && !selectedOption.disabled ? selectedOption.text : null;
     element.insert({after: textInput}).insert({after: list}).hide();
     
     textInput.observe("focus", function(e){
@@ -777,7 +779,7 @@ Element.addMethods('select', {
     });
     
     $A(element.options).each(function(e){
-      if (e.disabled) return;
+      if (e.disabled || !e.value) return;
       views.push(e.text);
       viewToValue[e.text] = e.value;
     });

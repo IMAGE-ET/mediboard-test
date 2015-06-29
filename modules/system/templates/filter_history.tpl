@@ -96,15 +96,14 @@
     <tr>
       <th>{{mb_label object=$filter field=user_id}}</th>
       <td>
-        <input type="text" name="_view" class="autocomplete"
-               value="{{if $filter->user_id}}{{$filter->_ref_user}}{{else}}&mdash; Tous les utilisateurs{{/if}}" />
+        <input type="text" name="_view" class="autocomplete" placeholder="&mdash; Tous" value="{{$filter->_ref_user}}" />
         <button type="button" class="cancel notext" onclick="$V(this.form.user_id, ''); $V(this.form._view, '');"></button>
       </td>
 
       <th>{{mb_label object=$filter field=object_class}}</th>
       <td>
-        <select name="object_class" class="str">
-          <option value="0">&mdash; Toutes les classes</option>
+        <select name="object_class" class="str" style="width: 200px;">
+          <option value="">&mdash; Toutes les classes</option>
           {{foreach from=$listClasses item=curr_class}}
             <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected{{/if}}>
               {{tr}}{{$curr_class}}{{/tr}} - {{$curr_class}}

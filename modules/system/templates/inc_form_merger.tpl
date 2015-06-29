@@ -65,7 +65,8 @@ Main.add(function() {
           <input type="hidden" name="objects_class" value="{{$objects_class}}" />
           <strong>{{tr}}{{$objects_class}}{{/tr}}</strong>
         {{else}}
-          <select name="objects_class">
+          <select name="objects_class" style="width:300px;">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$list_classes item=class}}
               <option value="{{$class}}" {{if $objects_class == $class}}selected="selected"{{/if}}>{{$class}} - {{tr}}{{$class}}{{/tr}}</option>
             {{/foreach}}
