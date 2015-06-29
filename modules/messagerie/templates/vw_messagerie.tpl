@@ -19,7 +19,12 @@
   }
 
   Main.add(function() {
-    selectInternalMessagerie('{{$selected_user->_id}}');
+    {{if $user->_id == $selected_user->_id}}
+      selectInternalMessagerie('{{$selected_user->_id}}');
+    {{elseif $pop_accounts|@count != 0}}
+    {{assign var=pop_account value=$pop_accounts|@reset}}
+      messagerie.refreshAccount('{{$pop_account->_id}}');
+    {{/if}}
   });
 </script>
 
@@ -47,19 +52,33 @@
   </span>
 
   <span>
-    <span class="circled">
-      <input type="radio" name="selected_account" onclick="selectInternalMessagerie('{{$selected_user->_id}}');" value="internal" checked="checked"/>
-      Messagerie interne
-    </span>
+    {{if $user->_id == $selected_user->_id}}
+      <span class="circled">
+        <input type="radio" name="selected_account" onclick="selectInternalMessagerie('{{$selected_user->_id}}');" value="internal" checked="checked"/>
+        <i class="fa fa-users msgicon"></i>
+        Messagerie interne
+      </span>
+    {{/if}}
 
     {{foreach from=$pop_accounts item=_account}}
       <span class="circled">
         <label>
-          <input type="radio" name="selected_account" onclick="messagerie.refreshAccount('{{$_account->_id}}')" value="{{$_account->_guid}}"/>
+          <input type="radio" name="selected_account" onclick="messagerie.refreshAccount('{{$_account->_id}}')" value="{{$_account->_guid}}"{{if $user->_id != $selected_user->_id && $pop_account->_id == $_account->_id}}checked="checked"{{/if}}/>
+          <i class="fa fa-envelope msgicon"></i>
           {{$_account->libelle}}
         </label>
       </span>
     {{/foreach}}
+
+    {{if $apicrypt_account}}
+      <span class="circled">
+        <label>
+          <input type="radio" name="selected_account" onclick="messagerie.refreshAccount('{{$apicrypt_account->_id}}')" value="{{$apicrypt_account->_guid}}"/>
+          <img title="Apicrypt" src="modules/apicrypt/images/icon_min.png">
+          {{$apicrypt_account->libelle}}
+        </label>
+      </span>
+    {{/if}}
 
     {{if $mssante_account}}
       {{mb_script module=mssante script=Folder ajax=1}}
@@ -68,6 +87,7 @@
       <span class="circled">
         <label>
           <input type="radio" name="selected_account" onclick="Account.select('{{$mssante_account->_id}}');" value="{{$mssante_account->_guid}}"/>
+          <img title="MSSante" src="modules/mssante/images/icon_min.png">
           MSSanté
         </label>
       </span>
@@ -75,6 +95,6 @@
   </span>
 </div>
 
-<div id="account">
+<div id="account" style="position: relative;">
 
 </div>

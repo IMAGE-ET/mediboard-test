@@ -95,7 +95,7 @@
         </button>
       </td>
       <td>{{mb_value object=$apicrypt_account field=libelle}}</td>
-      <td>{{tr}}CExchangeSource.smtp-desc{{/tr}}</td>
+      <td>Compte Apicrypt</td>
       <td>{{mb_value object=$apicrypt_account field=user}}</td>
       <td>{{mb_value object=$apicrypt_account field=active}}</td>
       <td class="button">

@@ -88,7 +88,10 @@ messagerie = {
       url.addParam('answer_to_all', answer_to_all);
     }
 
-    url.modal({width: -40, height: -40, onClose: messagerie.refreshList()});
+    url.modal({width: -40, height: -40});
+    url.modalObject.observe('afterClose', function() {
+      messagerie.refreshList()
+    });
   },
 
   /**

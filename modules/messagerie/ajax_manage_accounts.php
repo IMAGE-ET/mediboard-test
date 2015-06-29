@@ -19,7 +19,11 @@ if ($source_smtp->_id) {
   $sources_smtp[] = $source_smtp;
 }
 
-$sources_pop = $user->loadRefsSourcePop();
+$sources_pop = new CSourcePOP();
+$where["source_pop.object_class"] = "= 'CMediusers'";
+$where["source_pop.object_id"] = " = '$user->_id'";
+$where['source_pop.name'] = " NOT LIKE '%apicrypt'";
+$sources_pop = $sources_pop->loadList($where);
 
 if (CModule::getActive('mssante') && CModule::getCanDo('mssante')->read) {
   $mssante_account = CMSSanteUserAccount::getAccountForCurrentUser();

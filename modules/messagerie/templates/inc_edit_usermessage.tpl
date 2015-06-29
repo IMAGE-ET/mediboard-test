@@ -77,7 +77,14 @@
       {{if $app->user_prefs.inputMode == 'html'}}
         $V(form.content, CKEDITOR.instances.htmlarea.getData());
       {{/if}}
-      return onSubmitFormAjax(form);
+      if (!$V(form.del)) {
+        return onSubmitFormAjax(form);
+      }
+      else {
+        return onSubmitFormAjax(form, {check: function() {
+            return true;
+          }});
+        }
     }
     else {
       alert('{{tr}}CUserMessage-msg-no_recipient_selected{{/tr}}');
@@ -152,17 +159,14 @@
     <tr>
       <td colspan="2" class="button">
         {{if $usermessage->_can_edit}}
-          <button type="button" onclick="$V(this.form._send, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
-            <i class="msgicon fa fa-send"></i>
+          <button class="send" type="button" onclick="$V(this.form._send, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
             {{tr}}Send{{/tr}}
           </button>
-          <button type="button" onclick="this.form.onsubmit();">
-            <i class="msgicon fa fa-save"></i>
+          <button type="button" class="save" onclick="this.form.onsubmit();">
             {{tr}}Save{{/tr}}
           </button>
           {{if $usermessage->_id}}
-            <button type="button" onclick="$V(this.form.del, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
-              <i class="msgicon fa fa-save"></i>
+            <button type="button" class="trash" onclick="$V(this.form.del, 1); $V(this.form._closeModal, 1); this.form.onsubmit();">
               {{tr}}Delete{{/tr}}
             </button>
           {{/if}}
@@ -172,8 +176,7 @@
             {{tr}}CUserMail-button-answer{{/tr}}
           </button>
         {{/if}}
-        <button type="button" onclick="window.parent.Control.Modal.close();">
-          <i class="msgicon fa fa-times"></i>
+        <button type="button" class="cancel" onclick="window.parent.Control.Modal.close();">
           {{tr}}Cancel{{/tr}}
         </button>
       </td>

@@ -72,7 +72,6 @@
     onSubmitFormAjax(form, {check: function() {
       return true;
     }});
-    Control.Modal.close();
   };
 
   draftMail = function(form) {
@@ -115,6 +114,9 @@
   <input type="hidden" name="action" value=""/>
   <input type="hidden" name="_closeModal" id="closeModal" value="0"/>
   <input type="hidden" name="callback" value="callbackModalMessagerie"/>
+  {{if 'CModule::getActive'|static_call:'apicrypt' && $account->name|strpos:'apicrypt' !== false}}
+    <input type="hidden" name="_is_apicrypt" value="1"/>
+  {{/if}}
   
   {{mb_field object=$mail field=account_id hidden=true}}
   {{mb_field object=$mail field=account_class hidden=true}}
@@ -169,11 +171,8 @@
         <th><label for="_attachments">{{tr}}Attachments{{/tr}}</label></th>
         <td style="height: 25px;">
           <input type="hidden" value="" name="_attachments"/>
-          <button type="button" style="padding: 1px; display: inline; vertical-align: 25%" onclick="messagerie.addAttachment('{{$mail->_id}}');">
-            <span class="fa-stack fa" style="display: inline-block; width: 14px; height: 12px;">
-              <i class="msgicon fa fa-file fa-stack-1x" style="top: -5px;"></i>
-              <i class="fa fa-plus fa-stack-1x" style="font-size: 0.55em; color: #fff; top: -4px; left: 1px; width: 12px; height: 12px;"></i>
-            </span>
+          <button type="button" style="padding: 1px; display: inline; vertical-align: 25%; height: 25px;" onclick="messagerie.addAttachment('{{$mail->_id}}');">
+            <i class="msgicon fa fa-2x fa-paperclip"></i>
           </button>
           <span id="list_attachments">
             {{mb_include module=messagerie template=inc_mail_attachments attachments=$mail->_attachments}}
@@ -195,7 +194,12 @@
             <i class="msgicon fa fa-save"></i>
             {{tr}}Save{{/tr}}
           </button>
-          <button type="button" title="{{tr}}Cancel{{/tr}}" onclick="deleteMail(this.form);">
+          {{if $mail->_id}}
+            <button type="button" class="trash" onclick="deleteMail(this.form);">
+              {{tr}}Delete{{/tr}}
+            </button>
+          {{/if}}
+          <button type="button" title="{{tr}}Cancel{{/tr}}" onclick="{{if $mail->_id}}window.parent.Control.Modal.close();{{else}}deleteMail(this.form);{{/if}}">
             <i class="msgicon fa fa-times"></i>
             {{tr}}Cancel{{/tr}}
           </button>

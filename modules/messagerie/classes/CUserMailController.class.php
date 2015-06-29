@@ -60,7 +60,7 @@ class CUserMailController extends CDoObjectAddEdit {
 
     $action = CValue::post('action');
 
-    switch($action) {
+    switch ($action) {
       case 'draft':
         $mail->draft = '1';
         CAppUI::setMsg('CUserMail-msg-drafted', UI_MSG_OK);
@@ -71,8 +71,14 @@ class CUserMailController extends CDoObjectAddEdit {
         $mail->draft = '0';
         $account = $mail->loadAccount();
 
-        /** @var CSourceSMTP $smtp */
-        $smtp = CExchangeSource::get("mediuser-$account->object_id", 'smtp');
+        if ($mail->_is_apicrypt) {
+          /** @var CSourceSMTP $smtp */
+          $smtp = CExchangeSource::get("mediuser-$account->object_id-apicrypt", 'smtp');
+        }
+        else {
+          /** @var CSourceSMTP $smtp */
+          $smtp = CExchangeSource::get("mediuser-$account->object_id", 'smtp');
+        }
         $smtp->init();
 
         foreach (explode(',', $mail->to) as $_address) {
@@ -92,7 +98,15 @@ class CUserMailController extends CDoObjectAddEdit {
         }
 
         $smtp->setSubject($mail->subject);
-        $smtp->setBody($mail->_content);
+
+        if ($mail->_is_apicrypt) {
+          $receiver = explode(',', $mail->to);
+          $body = CApicrypt::encryptBody($account->object_id, $receiver[0], $mail->_content);
+          $smtp->setBody($body);
+        }
+        else {
+          $smtp->setBody($mail->_content);
+        }
 
         /** @var CMailAttachments[] $attachments */
         $attachments = $mail->loadAttachments();

@@ -53,6 +53,7 @@ foreach ($accounts_available as $_account) {
 
 //all accounts to the selected user
 $where["source_pop.object_id"] = " = '$selected_user->_id'";
+$where['source_pop.name'] = " NOT LIKE '%apicrypt'";
 
 //if user connected, show the private source pop
 if ($current_user->_id == $selected_user->_id) {
@@ -64,6 +65,25 @@ $accounts_user = $account->loadList($where, null, null, null, $ljoin);
 /** @var CSourcePOP[] $pop_accounts */
 $pop_accounts = $account->loadList($where, null, null, null, $ljoin);
 
+$apicrypt_account = false;
+if (CModule::getActive('apicrypt')) {
+  $apicrypt_account = new CSourcePOP();
+  $where = array();
+  $apicrypt_account->object_class = 'CMediusers';
+  $apicrypt_account->object_id = $selected_user->_id;
+  $apicrypt_account->name = "SourcePOP-$selected_user->_id-apicrypt";
+
+  //if user connected, show the private source pop
+  if ($current_user->_id != $selected_user->_id) {
+    $apicrypt_account->is_private = '0';
+  }
+  $apicrypt_account->loadMatchingObject();
+
+  if (!$apicrypt_account->_id) {
+    $apicrypt_account = null;
+  }
+}
+
 $mssante_account = false;
 if (CModule::getActive('mssante') && CModule::getCanDo('mssante')->read) {
   $mssante_account = CMSSanteUserAccount::getAccountFor($selected_user);
@@ -74,5 +94,6 @@ $smarty->assign('user', $current_user);
 $smarty->assign('selected_user', $selected_user);
 $smarty->assign('users_list', $users);
 $smarty->assign('pop_accounts', $accounts_user);
+$smarty->assign('apicrypt_account', $apicrypt_account);
 $smarty->assign('mssante_account', $mssante_account);
 $smarty->display('vw_messagerie.tpl');
