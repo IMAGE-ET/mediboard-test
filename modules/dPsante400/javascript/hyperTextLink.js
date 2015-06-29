@@ -10,12 +10,15 @@
  */
 
 HyperTextLink = {
-  edit: function(object_id, object_class, link_id) {
+  edit: function(object_id, object_class, link_id, show_widget) {
     var url = new Url('sante400', 'ajax_edit_hypertext_link');
     url.addParam('object_id', object_id);
     url.addParam('object_class', object_class);
     if (link_id) {
       url.addParam('hypertext_link_id', link_id);
+    }
+    if (!Object.isUndefined(show_widget)) {
+      url.addParam('show_widget', show_widget);
     }
 
     url.requestModal();
@@ -26,11 +29,14 @@ HyperTextLink = {
     return false;
   },
 
-  getListFor: function(object_id, object_class) {
+  getListFor: function(object_id, object_class, show_widget) {
     var url = new Url('sante400'  , 'ajax_list_hypertextlinks');
     url.addParam('object_id'      , object_id);
     url.addParam('object_class'   , object_class);
     url.addParam('show_only'      , 0);
+    if (!Object.isUndefined(show_widget)) {
+      url.addParam('show_widget', show_widget);
+    }
     url.requestUpdate('list-hypertext_links');
   },
 

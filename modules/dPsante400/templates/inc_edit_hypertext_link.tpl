@@ -1,20 +1,9 @@
-{{*
- * $Id$
- *  
- * @package    Mediboard
- * @subpackage dPsante400
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
- * @link       http://www.mediboard.org
-*}}
-
 {{mb_script module=sante400 script=hyperTextLink ajax=true}}
 
 <script>
   reloadListHypertextLinks = function() {
     Control.Modal.close();
-    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}');
+    HyperTextLink.getListFor('{{$hypertext_link->object_id}}', '{{$hypertext_link->object_class}}', '{{$show_widget}}');
     return false;
   }
 </script>

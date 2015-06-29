@@ -10,7 +10,6 @@
  */
 
 CCanDo::check();
-
 $object        = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 $only_files    = CValue::get("only_files", 0);
 $name_readonly = CValue::get("name_readonly", 0);
@@ -36,7 +35,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("object",        $object);
 $smarty->assign("can_files",     $file->canClass());
 $smarty->assign("name_readonly", $name_readonly);
-$smarty->assign("mozaic",        $use_mozaic);
-$smarty->assign("show_actions",  $show_actions);
+$smarty->assign("mozaic"       , $use_mozaic);
+$smarty->assign("show_actions" , $show_actions);
+$smarty->assign("show_widget"  , CValue::get('show_widget', 1));
+$smarty->assign('show_only'    , CValue::get('show_only', 0));
 
 $smarty->display($only_files ? "inc_widget_list_files.tpl" : "inc_widget_vw_files.tpl");

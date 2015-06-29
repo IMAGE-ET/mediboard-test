@@ -40,10 +40,12 @@
     Afficher / Masquer {{$object->_nb_cancelled_files}} fichier(s) annulé(s)
   </button>
 {{/if}}
-<table class="form" id="list_{{$object->_class}}{{$object->_id}}">
-  {{mb_include module=cabinet template=inc_widget_list_files}}
-</table>
 
-{{if $object->_ref_hypertext_links}}
-  {{mb_include module=sante400 template=inc_widget_list_hypertext_links}}
-{{/if}}
+<div id="list_{{$object->_class}}{{$object->_id}}">
+  <table class="form">
+    {{mb_include module=cabinet template=inc_widget_list_files}}
+  </table>
+  {{if $object->_ref_hypertext_links}}
+    {{mb_include module=sante400 template=inc_widget_list_hypertext_links}}
+  {{/if}}
+</div>
