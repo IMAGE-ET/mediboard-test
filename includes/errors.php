@@ -381,7 +381,7 @@ function exceptionHandler($exception) {
   $file = mbRelativePath($exception->getFile());
   $line = $exception->getLine();
   $type = "exception";
-  $text = htmlspecialchars($exception->getMessage());
+  $text = $exception->getMessage();
 
   // Stacktrace
   $contexts = $exception->getTrace();
