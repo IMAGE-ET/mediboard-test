@@ -186,6 +186,29 @@
             </tr>
 
             <tr>
+              <th>
+                <label for="all_prats">Tous les praticiens</label>
+              </th>
+              <td>
+                <input type="checkbox" name="all_prats" value="1" {{if $all_prats}}checked{{/if}} />
+              </td>
+
+              <th>
+                <label for="ignore_files">Ne pas copier les fichiers utilisateur</label>
+              </th>
+              <td>
+                <input type="checkbox" name="ignore_files" value="1" {{if $ignore_files}}checked{{/if}} />
+              </td>
+
+              <th>
+                <label for="generate_pdfpreviews">Forcer la génération des PDF des CR</label>
+              </th>
+              <td>
+                <input type="checkbox" name="generate_pdfpreviews" value="1" {{if $generate_pdfpreviews}}checked{{/if}} />
+              </td>
+            </tr>
+
+            <tr>
               <td colspan="6">
                 <button class="change">{{tr}}Export{{/tr}}</button>
               </td>
