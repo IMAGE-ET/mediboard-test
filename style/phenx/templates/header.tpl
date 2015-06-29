@@ -53,6 +53,13 @@
                      onkeyup="filterModule(this, 'li', 'nav')" onsearch="OnSearch(this);" />
             </fieldset>
           {{/if}}
+
+          {{foreach from=$placeholders item=placeholder}}
+            <hr />
+            <div class="minitoolbar">
+              {{mb_include module=$placeholder->module template=$placeholder->minitoolbar}}
+            </div>
+          {{/foreach}}
         </div>
 
         <ul id="nav">
