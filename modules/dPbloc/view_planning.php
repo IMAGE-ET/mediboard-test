@@ -245,6 +245,7 @@ foreach ($plagesop as $plage) {
     $operation->updateHeureUS();
     $operation->updateSalle();
     $operation->loadAffectationsPersonnel();
+    $operation->loadRefCommande();
     $sejour = $operation->loadRefSejour();
     $sejour->loadRefsFwd();
     if ($_print_ipp) {
@@ -319,6 +320,7 @@ foreach ($operations as $key => $operation) {
   $operation->loadExtCodesCCAM();
   $operation->updateHeureUS();
   $operation->loadAffectationsPersonnel();
+  $operation->loadRefCommande();
   $sejour = $operation->loadRefSejour();
   $sejour->loadRefsFwd();
   if ($_print_numdoss) {
