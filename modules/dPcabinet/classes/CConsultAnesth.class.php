@@ -95,7 +95,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
   public $position;
   public $ASA;
   public $rques;
-  
+  public $strategie_antibio;
+
   // Form fields
   public $_date_consult;
   public $_date_op;
@@ -229,6 +230,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $props['position']         = 'enum list|DD|DV|DL|GP|AS|TO|GYN';
     $props['ASA']              = 'enum list|1|2|3|4|5|6';
     $props['rques']            = 'text helped';
+    $props['strategie_antibio']= 'text helped';
 
     // Champs dérivés
     $props["_intub_difficile"] = "";
@@ -673,6 +675,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated, IIndexableObj
     $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
+    $template->addProperty("Anesthésie - Stratégie antibioprophylactique ", $this->strategie_antibio);
 
     // Constantes médicales dans le contexte de la consultation
     $this->loadRefConsultation();

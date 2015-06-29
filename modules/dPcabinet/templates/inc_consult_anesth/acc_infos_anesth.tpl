@@ -223,7 +223,7 @@
         <fieldset>
           <legend>{{mb_label object=$consult field="rques"}}</legend>
           {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()" form="editRquesConsultFrm"
-                    aidesaisie="validateOnBlur: 0"}}
+          aidesaisie="validateOnBlur: 0"}}
         </fieldset>
       </form>
     </td>
@@ -235,5 +235,20 @@
         </div>
       </fieldset>
     </td>
+  </tr>
+  <tr>
+    <td style="width: 50%;">
+      <form name="editStratAntibioConsultFrm" method="post" onsubmit="return onSubmitFormAjax(this);">
+        {{mb_class object=$consult_anesth}}
+        {{mb_key   object=$consult_anesth}}
+        <input type="hidden" name="callback" value="callbackInfoAnesth" />
+        <fieldset>
+          <legend>{{mb_label object=$consult_anesth field="strategie_antibio"}}</legend>
+          {{mb_field object=$consult_anesth field="strategie_antibio" rows="4" onblur="this.form.onsubmit()" form="editStratAntibioConsultFrm"
+          aidesaisie="validateOnBlur: 0"}}
+        </fieldset>
+      </form>
+    </td>
+    <td></td>
   </tr>
 </table>
