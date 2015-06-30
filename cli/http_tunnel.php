@@ -1,5 +1,7 @@
 <?php
 
+// Tunnel HTTP
+
 require_once "../modules/system/classes/CHTTPTunnel.class.php";
 
 declare(ticks = 1);
